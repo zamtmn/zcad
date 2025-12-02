@@ -22,6 +22,7 @@ interface
 uses
   uzegeometrytypes,
   uzedrawingsimple,uzgldrawcontext,uzgldrawergeneral2d,uzgldrawerabstract,
+  uzeroot,
   uzegeometry,uzeconsts,
   uzeiopalette,uzepalette,uzcutils,
   uzbLogIntf,Graphics,Classes,
@@ -35,19 +36,19 @@ type
     Scale:Double;
     Palette:TRasterizeColor;
   end;
-procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:GDBVertex;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
+procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:TzePoint3d;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
 implementation
-procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:GDBVertex;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
+procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:TzePoint3d;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
  var
   dx,dy,sx,sy,scale:Double;
-  tmatrix,_clip:DMatrix4D;
-  _frustum:ClipArray;
+  tmatrix,_clip:TzeTypedMatrix4d;
+  _frustum:TzeFrustum;
   DC:TDrawContext;
 
-  modelMatrix:DMatrix4D;
-  projMatrix:DMatrix4D;
-  viewport:IMatrix4;
-  pd1,pd2:GDBvertex2D;
+  modelMatrix:TzeTypedMatrix4d;
+  projMatrix:TzeTypedMatrix4d;
+  viewport:TzeVector4i;
+  pd1,pd2:TzePoint2d;
 
   oldforegroundindex:integer;
   Actlt:TVisActuality;
@@ -149,7 +150,7 @@ begin
 
 
   //modelMatrix:=onematrix;
-  //projMatrix:DMatrix4D;
+  //projMatrix:TzeTypedMatrix4d;
   viewport.v[0]:=0;
   viewport.v[1]:=0;
   viewport.v[2]:=pw;
@@ -172,7 +173,9 @@ begin
   Actlt.InfrustumActualy:=cdwg^.pcamera^.POSCOUNT;
   Actlt.VisibleActualy:=cdwg^.pcamera^.VISCOUNT;
   cdwg^.GetCurrentROOT^.CalcVisibleByTree(_frustum,Actlt,cdwg^.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.Counters,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
-  cdwg^.GetCurrentROOT^.FormatEntity(cdwg^,dc);
+  //cdwg^.GetCurrentROOT^.FormatEntity(cdwg^,dc);
+  DoFormat(cdwg^.GetCurrentROOT^,cdwg^.GetCurrentROOT^.ObjArray,
+    cdwg^.GetCurrentROOT^.ObjToConnectedArray,cdwg^,DC,0,[]);
   //drawings.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;
 

@@ -45,7 +45,7 @@ type
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
       LW:smallint);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-    procedure DrawExtensionLine(p1,p2:GDBVertex;LineNumber:integer;
+    procedure DrawExtensionLine(p1,p2:TzePoint3d;LineNumber:integer;
       var drawing:TDrawingDef;var DC:TDrawContext;part:integer);
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -53,12 +53,12 @@ type
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     function GetObjTypeName:string;virtual;
     procedure CalcDNVectors;virtual;
-    procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;
+    procedure CalcDefaultPlaceText(dlStart,dlEnd:TzePoint3d;
       var drawing:TDrawingDef);virtual;
-    function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P13ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P14ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+    function P10ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P11ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P13ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P14ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     function GetDimStr(
@@ -66,10 +66,10 @@ type
     function GetObjType:TObjID;virtual;
   end;
 
-function CorrectPointLine(const q:GDBvertex;p1:GDBvertex;const p2:GDBvertex;
-  out d:double):GDBVertex;
-function GetTFromDirNormalizedPoint(const q:GDBvertex;
-  const p1,dirNormalized:GDBvertex):double;
+function CorrectPointLine(const q:TzePoint3d;p1:TzePoint3d;const p2:TzePoint3d;
+  out d:double):TzePoint3d;
+function GetTFromDirNormalizedPoint(const q:TzePoint3d;
+  const p1,dirNormalized:TzePoint3d):double;
 
 implementation
 
@@ -80,10 +80,10 @@ begin
     scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)),drawing);
 end;
 
-function CorrectPointLine(const q:GDBvertex;p1:GDBvertex;const p2:GDBvertex;
-  out d:double):GDBVertex;
+function CorrectPointLine(const q:TzePoint3d;p1:TzePoint3d;const p2:TzePoint3d;
+  out d:double):TzePoint3d;
 var
-  w,l:GDBVertex;
+  w,l:TzePoint3d;
   dist,llength:double;
 begin
   //расстояние от точки до линии
@@ -105,9 +105,9 @@ begin
     Result:=p2;
 end;
 
-function SetPointLine(d:double;const q:GDBvertex;const p1,p2:GDBvertex):GDBVertex;
+function SetPointLine(d:double;const q:TzePoint3d;const p1,p2:TzePoint3d):TzePoint3d;
 var
-  w,l:GDBVertex;
+  w,l:TzePoint3d;
   dist:double;
 begin
   w:=VertexSub(q,p1);
@@ -116,19 +116,19 @@ begin
   Result:=uzegeometry.Vertexmorphabs2(Vertexmorph(p1,p2,dist),q,d);
 end;
 
-function GetTFromLinePoint(const q:GDBvertex;const p1,p2:GDBvertex):double;
+function GetTFromLinePoint(const q:TzePoint3d;const p1,p2:TzePoint3d):double;
 var
-  w,l:GDBVertex;
+  w,l:TzePoint3d;
 begin
   w:=VertexSub(q,p1);
   l:=VertexSub(p2,p1);
   Result:=scalardot(w,l)/scalardot(l,l);
 end;
 
-function GetTFromDirNormalizedPoint(const q:GDBvertex;
-  const p1,dirNormalized:GDBvertex):double;
+function GetTFromDirNormalizedPoint(const q:TzePoint3d;
+  const p1,dirNormalized:TzePoint3d):double;
 var
-  w:GDBVertex;
+  w:TzePoint3d;
 begin
   w:=VertexSub(q,p1);
   Result:=scalardot(w,dirNormalized);
@@ -149,17 +149,17 @@ begin
   dxfvertexout(outStream,14,DimData.P14InWCS);
 end;
 
-procedure GDBObjAlignedDimension.CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;
+procedure GDBObjAlignedDimension.CalcDefaultPlaceText(dlStart,dlEnd:TzePoint3d;
   var drawing:TDrawingDef);
 begin
   DimData.P11InOCS:=VertexMulOnSc(vertexadd(dlStart,dlEnd),0.5);
   DimData.P11InOCS:=VertexAdd(DimData.P11InOCS,getTextOffset(drawing));
 end;
 
-function GDBObjAlignedDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjAlignedDimension.P10ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
   t,tl:double;
-  temp:GDBVertex;
+  temp:TzePoint3d;
 begin
   if uzegeometry.sqrVertexlength(tv,DimData.P14InWCS)>sqreps then begin
     tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
@@ -174,10 +174,10 @@ begin
       SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,temp);
 end;
 
-function GDBObjAlignedDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjAlignedDimension.P11ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
   t,tl:double;
-  tvertex,temp:GDBVERTEX;
+  tvertex,temp:TzePoint3d;
 begin
   Result:=tv;
   DimData.TextMoved:=True;
@@ -202,10 +202,10 @@ Alligned dimension structure in DXF
 X (13,23,33)     X (14,24,34)
 
 *)
-function GDBObjAlignedDimension.P13ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjAlignedDimension.P13ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
   t,dir:double;
-  tvertex:GDBVERTEX;
+  tvertex:TzePoint3d;
 begin
   Result:=tv;
   if (self.DimData.TextMoved)and(PDimStyle.Placing.DIMTMOVE=DTMMoveDimLine) then begin
@@ -245,10 +245,10 @@ begin
   end;
 end;
 
-function GDBObjAlignedDimension.P14ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjAlignedDimension.P14ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
   t,dir:double;
-  tvertex:GDBVERTEX;
+  tvertex:TzePoint3d;
 begin
   Result:=tv;
   if (self.DimData.TextMoved)and(PDimStyle.Placing.DIMTMOVE=DTMMoveDimLine) then begin
@@ -353,7 +353,7 @@ begin
   Result:=GDBAlignedDimensionID;
 end;
 
-procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:GDBVertex;LineNumber:integer;
+procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:TzePoint3d;LineNumber:integer;
   var drawing:TDrawingDef;var DC:TDrawContext;part:integer);
 var
   pl:pgdbobjline;
@@ -393,7 +393,7 @@ end;
 procedure GDBObjAlignedDimension.FormatEntity(var drawing:TDrawingDef;
   var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
-  tv:GDBVertex;
+  tv:TzePoint3d;
   l:double;
 begin
   if assigned(EntExtensions) then

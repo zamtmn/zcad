@@ -33,7 +33,7 @@ uses
   uzeBaseExtender,uzbtypes,uzegeometrytypes,uzeconsts,usimplegenerics;
 
 type
-  TDummyDtawer=procedure(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+  TDummyDtawer=procedure(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:TzePoint3d;const drawing:TDrawingDef;var DC:TDrawContext);
   TSmartTextEntExtender=class(TBaseEntityExtender)
   public
     const
@@ -46,7 +46,7 @@ type
       ExtensionLineStartShiftDef=1;
       ExtensionLeaderStartDrawDist=10;
       ExtensionTextHeightOverrideDef=0;
-      BaseLineOffsetDef:GDBvertex2D=(x:-0.2;y:-0.2);
+      BaseLineOffsetDef:TzePoint2d=(x:-0.2;y:-0.2);
       RotateOverrideValueDef=0;
 
       //выравнивание от смещения по осям
@@ -67,7 +67,7 @@ type
       FExtensionLineStartShift:Double;
 
       FBaseLine:Boolean;
-      FBaseLineOffset:GDBvertex2D;
+      FBaseLineOffset:TzePoint2d;
 
       FTextHeightOverride:Double;
       FHJOverride:Boolean;
@@ -76,19 +76,19 @@ type
       FRotateOverride:Boolean;
     private
       function isDefault:boolean;
-      function getOwnerInsertPoint(pEntity:Pointer):GDBVertex;
+      function getOwnerInsertPoint(pEntity:Pointer):TzePoint3d;
       function getOwnerScale(pEntity:Pointer):Double;
 
-      function getTextInsertPoint(pEntity:Pointer):GDBVertex;
+      function getTextInsertPoint(pEntity:Pointer):TzePoint3d;
       function getTextLinesCount(pEntity:Pointer):Integer;
-      function getTextTangent(pEntity:Pointer):GDBVertex;
-      function getTextNormal(pEntity:Pointer):GDBVertex;
+      function getTextTangent(pEntity:Pointer):TzePoint3d;
+      function getTextNormal(pEntity:Pointer):TzePoint3d;
       function getTextHeight(pEntity:Pointer):Double;
       function getTextWFactor(pEntity:Pointer):Double;
 
-      function getBaseLineStartPoint(pEntity:Pointer):GDBVertex;
-      function getBaseLineOffset(pEntity:Pointer):GDBvertex2D;
-      function getExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
+      function getBaseLineStartPoint(pEntity:Pointer):TzePoint3d;
+      function getBaseLineOffset(pEntity:Pointer):TzePoint2d;
+      function getExtensionLinetStartPoint(pEntity:Pointer):TzePoint3d;
 
       function isNeedLeadert(pEntity:Pointer):Boolean;
     public
@@ -129,12 +129,12 @@ type
 
 implementation
 
-procedure DrawLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure DrawLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:TzePoint3d;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   pEntity.Representation.DrawLineWithLT(pEntity^,onematrix,DC,p1,p2,pEntity.vp);
 end;
 
-procedure SaveLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure SaveLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:TzePoint3d;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   //SaveToDXFObjPrefix(outStream,'LINE','AcDbLine',IODXFContext);
 
@@ -213,7 +213,7 @@ begin
   FRotateOverride:=true;
 end;
 
-function TSmartTextEntExtender.getOwnerInsertPoint(pEntity:Pointer):GDBVertex;
+function TSmartTextEntExtender.getOwnerInsertPoint(pEntity:Pointer):TzePoint3d;
 begin
   result:=PGDBObjWithLocalCS(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.P_insert_in_WCS;
 end;
@@ -226,7 +226,7 @@ begin
     result:=PGDBObjBlockInsert(PGDBObjText(pEntity)^.bp.ListPos.Owner)^.scale.y;
 end;
 
-function TSmartTextEntExtender.getTextInsertPoint(pEntity:Pointer):GDBVertex;
+function TSmartTextEntExtender.getTextInsertPoint(pEntity:Pointer):TzePoint3d;
 begin
   result:=PGDBObjText(pEntity).P_insert_in_WCS;
 end;
@@ -239,18 +239,18 @@ begin
     result:=PGDBObjMText(pEntity).text.Count;
 end;
 
-function getXsign(const p:GDBvertex):integer;
+function getXsign(const p:TzePoint3d):integer;
 begin
   result:=-sign(p.x);
 end;
-function getYsign(const p:GDBvertex):integer;
+function getYsign(const p:TzePoint3d):integer;
 begin
   result:=-sign(p.y);
 end;
 
-function TSmartTextEntExtender.getBaseLineStartPoint(pEntity:Pointer):GDBVertex;
+function TSmartTextEntExtender.getBaseLineStartPoint(pEntity:Pointer):TzePoint3d;
 var
-  t{,n}:GDBvertex;
+  t{,n}:TzePoint3d;
   dx:double;
 begin
   result:=getTextInsertPoint(pEntity);
@@ -273,7 +273,7 @@ begin
   end;
 end;
 
-function TSmartTextEntExtender.getBaseLineOffset(pEntity:Pointer):GDBVertex2D;
+function TSmartTextEntExtender.getBaseLineOffset(pEntity:Pointer):TzePoint2d;
 begin
   result:=FBaseLineOffset;
   if result.x<0 then
@@ -286,9 +286,9 @@ begin
   end;
 end;
 
-function TSmartTextEntExtender.getExtensionLinetStartPoint(pEntity:Pointer):GDBVertex;
+function TSmartTextEntExtender.getExtensionLinetStartPoint(pEntity:Pointer):TzePoint3d;
 var
-  p1,p2:GDBvertex;
+  p1,p2:TzePoint3d;
   scl:double;
 begin
   p1:=getOwnerInsertPoint(pEntity);
@@ -314,14 +314,14 @@ begin
   result:=((Vertexlength(getOwnerInsertPoint(pEntity),getTextInsertPoint(pEntity))/getOwnerScale(pEntity))>FLeaderStartDrawDist)and(FExtensionLine or FBaseLine)
 end;
 
-function TSmartTextEntExtender.getTextTangent(pEntity:Pointer):GDBVertex;
+function TSmartTextEntExtender.getTextTangent(pEntity:Pointer):TzePoint3d;
 begin
-  Result:=PGDBvertex(@PGDBObjMText(pEntity)^.ObjMatrix.mtr[0])^.NormalizeVertex;
+  Result:=PzePoint3d(@PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[0])^.NormalizeVertex;
 end;
 
-function TSmartTextEntExtender.getTextNormal(pEntity:Pointer):GDBVertex;
+function TSmartTextEntExtender.getTextNormal(pEntity:Pointer):TzePoint3d;
 begin
-  Result:=PGDBvertex(@PGDBObjMText(pEntity)^.ObjMatrix.mtr[1])^.NormalizeVertex;
+  Result:=PzePoint3d(@PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[1])^.NormalizeVertex;
 end;
 
 function TSmartTextEntExtender.getTextHeight(pEntity:Pointer):Double;
@@ -340,8 +340,8 @@ end;
 procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 var
   dx:Double;
-  p,pnew,dir,normal:GDBvertex;
-  offs:GDBvertex2D;
+  p,pnew,dir,normal:TzePoint3d;
+  offs:TzePoint2d;
   i:integer;
 begin
   //if FTextHeightOverride>0 then
@@ -395,7 +395,7 @@ procedure TSmartTextEntExtender.onBeforeEntityFormat(pEntity:Pointer;const drawi
 var
   currXDir,currYDir,newXDir,newYDir:integer;
   PD2J:PDir2J;
-  v1{,v2}:GDBVertex;
+  v1{,v2}:TzePoint3d;
   l0:Double;
   a:double;
   sine,cosine:double;
@@ -407,7 +407,7 @@ begin
       if PGDBObjEntity(pEntity)^.bp.ListPos.owner<>nil then begin
 
         if PGDBObjEntity(pEntity)^.bp.ListPos.owner<>nil then begin
-          V1:=PGDBvertex(@PGDBObjEntity(pEntity)^.bp.ListPos.owner^.GetMatrix^.mtr[0])^;
+          V1:=PzePoint3d(@PGDBObjEntity(pEntity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0])^;
           a:=FRotateOverrideValue*pi/180;
           SinCos(a,sine,cosine);
           l0:=scalardot(NormalizeVertex(V1),createvertex(cosine,sine,0));

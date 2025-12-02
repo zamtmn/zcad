@@ -45,7 +45,7 @@ type
     procedure CacheThis(const APValue:PGT;const CalculatedValue:GT);inline;
     procedure ResetCache;inline;
   end;
-  TCachedVertex=GCacheCalculatedValue<GDBvertex,PGDBvertex>;
+  TCachedVertex=GCacheCalculatedValue<TzePoint3d,PzePoint3d>;
 
   PTOneVarData=^TOneVarData;
   TOneVarData=record
@@ -539,7 +539,7 @@ begin
 end;
 procedure PolylineVertex3DControlEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-   tv:PGDBVertex;
+   tv:PzePoint3d;
    cc:TArrayIndex;
 begin
 //     if fistrun then
@@ -587,8 +587,8 @@ begin
 end;
 procedure PolylineVertex3DControlFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-   tv:PGDBVertex;
-   v:GDBVertex;
+   tv:PzePoint3d;
+   v:TzePoint3d;
    pindex:pTArrayIndex;
    PGDBDTypeDesc:PUserTypeDescriptor;
 begin
@@ -698,7 +698,7 @@ begin
   try
     if (ChangedData.PGetDataInEtity<>nil)and(ChangedData.PEntity<>nil) then begin
       if CachedVertex.IsThisNotCached(ChangedData.PGetDataInEtity) then
-        CachedVertex.CacheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PGDBvertex(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
+        CachedVertex.CacheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PzePoint3d(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
       value:=CachedVertex.Cache.x;
     end else
       value:=0;
@@ -737,7 +737,7 @@ begin
   try
     if (ChangedData.PGetDataInEtity<>nil)and(ChangedData.PEntity<>nil) then begin
       if CachedVertex.IsThisNotCached(ChangedData.PGetDataInEtity) then
-        CachedVertex.CacheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PGDBvertex(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
+        CachedVertex.CacheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PzePoint3d(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
       value:=CachedVertex.Cache.y;
     end else
       value:=0;
@@ -776,7 +776,7 @@ begin
   try
     if (ChangedData.PGetDataInEtity<>nil)and(ChangedData.PEntity<>nil) then begin
       if CachedVertex.IsThisNotCached(ChangedData.PGetDataInEtity) then
-        CachedVertex.CacheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PGDBvertex(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
+        CachedVertex.CacheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PzePoint3d(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
       value:=CachedVertex.Cache.z;
     end else
       value:=0;

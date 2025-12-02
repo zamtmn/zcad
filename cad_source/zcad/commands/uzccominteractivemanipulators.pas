@@ -89,7 +89,7 @@ type
   PT3PointPentity=^T3PointPentity;
 
   T3PointPentity=record
-    p1,p2,p3:gdbvertex;
+    p1,p2,p3:TzePoint3d;
     pentity:PGDBObjEntity;
   end;
   TCircleDrawMode=(TCDM_CR,TCDM_CD,TCDM_2P,TCDM_3P);
@@ -97,7 +97,7 @@ type
   PT3PointCircleModePentity=^T3PointCircleModePentity;
 
   T3PointCircleModePEntity=record
-    p1,p2,p3:gdbvertex;
+    p1,p2,p3:TzePoint3d;
     cdm:TCircleDrawMode;
     npoint:integer;
     pentity:PGDBObjEntity;
@@ -105,7 +105,7 @@ type
   PTPointPolygonDrawModePentity=^TPointPolygonDrawModePentity;
 
   TPointPolygonDrawModePentity=record
-    p1:gdbvertex;
+    p1:TzePoint3d;
     cdm:TPolygonDrawMode;
     typeLWPoly:boolean;
     npoint:integer;
@@ -116,53 +116,53 @@ type
 procedure InteractiveLineEndManipulator(
   const PInteractiveData:PGDBObjLine {pointer to the line entity};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 procedure InteractiveADimManipulator(const PInteractiveData:PGDBObjAlignedDimension;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 procedure InteractiveRDimManipulator(const PInteractiveData:PGDBObjRotatedDimension;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 procedure InteractiveDDimManipulator(const PInteractiveData:pgdbObjDiametricDimension;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 procedure InteractiveArcManipulator(const PInteractiveData:PT3PointPentity;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 procedure InteractiveSmartCircleManipulator(
   const PInteractiveData:PT3PointCircleModePentity;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 procedure InteractiveLWRectangleManipulator(
   const PInteractiveData:PGDBObjLWPolyline {pointer to the line entity};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 procedure InteractiveRectangleManipulator(
   const PInteractiveData:PGDBObjPolyline {pointer to the line entity};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 procedure InteractivePolygonManipulator(
   const PInteractiveData:TPointPolygonDrawModePentity {pointer to the line entity};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 procedure InteractiveConstructRootManipulator(
   const PInteractiveData:Pointer {must be nil, no additional data needed};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 procedure InteractivePolyLineNextVertexManipulator(
   const PInteractiveData:Pointer {pointer to the polyline entity};
   Point:
-  GDBVertex  {new vertex coord};
+  TzePoint3d  {new vertex coord};
   Click:
   boolean {true if lmb presseed});
 
@@ -177,13 +177,13 @@ implementation
 procedure InteractiveConstructRootManipulator(
   const PInteractiveData:Pointer {must be nil, no additional data needed};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 var
   ir:itrec;
   p:PGDBObjEntity;
-  t_matrix:DMatrix4D;
+  t_matrix:TzeTypedMatrix4d;
   RC:TDrawContext;
 begin
   if click then begin
@@ -208,7 +208,7 @@ end;
 procedure InteractiveLineEndManipulator(
   const PInteractiveData:PGDBObjLine {pointer to the line entity};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 var
@@ -233,7 +233,7 @@ end;
 {Procedure interactive changes third point of aligned dimensions}
 {Процедура интерактивного изменения третьей точки выровненного размера}
 procedure InteractiveADimManipulator(const PInteractiveData:PGDBObjAlignedDimension;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 var
   ad:PGDBObjAlignedDimension absolute PInteractiveData;
@@ -272,7 +272,7 @@ begin
   end;
 end;
 
-function isRDIMHorisontal(p1,p2,p3,nevp3:gdbvertex):integer;
+function isRDIMHorisontal(p1,p2,p3,nevp3:TzePoint3d):integer;
 var
   minx,maxx,miny,maxy:double;
 begin
@@ -295,7 +295,7 @@ begin
 end;
 {Процедура}
 procedure InteractiveRDimManipulator(const PInteractiveData:PGDBObjRotatedDimension;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 var
   rd:PGDBObjRotatedDimension absolute PInteractiveData;
@@ -325,7 +325,7 @@ begin
 end;
 
 procedure InteractiveDDimManipulator(const PInteractiveData:pgdbObjDiametricDimension;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 var
   dd:pgdbObjDiametricDimension absolute PInteractiveData;
@@ -342,7 +342,7 @@ begin
 end;
 
 procedure InteractiveArcManipulator(const PInteractiveData:PT3PointPentity;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 var
   PointData:TArcrtModify;
@@ -376,7 +376,7 @@ end;
 
 procedure InteractiveSmartCircleManipulator(
   const PInteractiveData:PT3PointCircleModePentity;
-  Point:GDBVertex;
+  Point:TzePoint3d;
   Click:boolean);
 var
   PointData:tarcrtmodify;
@@ -448,26 +448,26 @@ end;
 procedure InteractiveLWRectangleManipulator(
   const PInteractiveData:PGDBObjLWPolyline {pointer to the line entity};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 var
   polyLWObj:PGDBObjLWPolyline absolute PInteractiveData;
-  stPoint:GDBvertex2D;
+  stPoint:TzePoint2d;
 begin
 
   zcSetEntPropFromCurrentDrawingProp(polyLWObj);
 
-  stPoint:=GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(0)^);
+  stPoint:=TzePoint2d(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(0)^);
 
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(1)^).x:=Point.x;
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(1)^).y:=stPoint.y;
+  TzePoint2d(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(1)^).x:=Point.x;
+  TzePoint2d(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(1)^).y:=stPoint.y;
 
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(2)^).x:=Point.x;
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(2)^).y:=Point.y;
+  TzePoint2d(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(2)^).x:=Point.x;
+  TzePoint2d(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(2)^).y:=Point.y;
 
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(3)^).x:=stPoint.x;
-  GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(3)^).y:=Point.y;
+  TzePoint2d(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(3)^).x:=stPoint.x;
+  TzePoint2d(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(3)^).y:=Point.y;
 
   polyLWObj^.YouChanged(drawings.GetCurrentDWG^);
 
@@ -477,26 +477,26 @@ end;
 procedure InteractiveRectangleManipulator(
   const PInteractiveData:PGDBObjPolyline {pointer to the line entity};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 var
   polyObj:PGDBObjPolyline absolute PInteractiveData;
-  stPoint:GDBvertex;
+  stPoint:TzePoint3d;
 begin
 
   zcSetEntPropFromCurrentDrawingProp(polyObj);
 
-  stPoint:=GDBvertex(polyObj^.VertexArrayInOCS.getDataMutable(0)^);
+  stPoint:=TzePoint3d(polyObj^.VertexArrayInOCS.getDataMutable(0)^);
 
-  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(1))^.x:=Point.x;
-  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(1))^.y:=stPoint.y;
+  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(1))^.x:=Point.x;
+  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(1))^.y:=stPoint.y;
 
-  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(2))^.x:=Point.x;
-  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(2))^.y:=Point.y;
+  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(2))^.x:=Point.x;
+  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(2))^.y:=Point.y;
 
-  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(3))^.x:=stPoint.x;
-  PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(3))^.y:=Point.y;
+  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(3))^.x:=stPoint.x;
+  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(3))^.y:=Point.y;
 
   polyObj^.YouChanged(drawings.GetCurrentDWG^);
 end;
@@ -504,12 +504,12 @@ end;
 procedure InteractivePolygonManipulator(
   const PInteractiveData:TPointPolygonDrawModePentity {pointer to the line entity};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 var
   obj:TPointPolygonDrawModePentity absolute PInteractiveData;
-  stPoint:GDBvertex;
+  stPoint:TzePoint3d;
   //dc:TDrawContext;
   i,countVert:integer;
   radius,alpha,stalpha,xyline,xline:double;
@@ -549,9 +549,9 @@ begin
     zcSetEntPropFromCurrentDrawingProp(obj.plwentity);
     for i:=countVert-1 downto 0 do begin
       SinCos(alpha+(2*pi*i/countVert),sine,cosine);
-      GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).x:=
+      TzePoint2d(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).x:=
         stPoint.x+radius*cosine;
-      GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).y:=
+      TzePoint2d(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).y:=
         stPoint.y+radius*sine;
     end;
     obj.plwentity^.YouChanged(drawings.GetCurrentDWG^);
@@ -561,9 +561,9 @@ begin
     zcSetEntPropFromCurrentDrawingProp(obj.pentity);
     for i:=countVert-1 downto 0 do begin
       SinCos(alpha+(2*pi*i/countVert),sine,cosine);
-      PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.x:=
+      PzePoint2d(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.x:=
         stPoint.x+radius*cosine;
-      PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.y:=
+      PzePoint2d(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.y:=
         stPoint.y+radius*sine;
     end;
     obj.pentity^.YouChanged(drawings.GetCurrentDWG^);
@@ -578,7 +578,7 @@ end;
 procedure InteractivePolyLineNextVertexManipulator(
   const PInteractiveData:Pointer {pointer to the polyline entity};
   Point:
-  GDBVertex  {new vertex coord};
+  TzePoint3d  {new vertex coord};
   Click:
   boolean {true if lmb presseed});
 var
@@ -617,7 +617,7 @@ begin
       if vertexCount > 1 then begin
         // Update the last (temporary) vertex position
         // Обновляем позицию последней (временной) вершины
-        PGDBVertex(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^:=Point;
+        PzePoint3d(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^:=Point;
       end else begin
         // Add the first preview vertex
         // Добавляем первую вершину предпросмотра

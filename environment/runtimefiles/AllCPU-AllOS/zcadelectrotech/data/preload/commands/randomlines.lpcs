@@ -1,13 +1,42 @@
+//запускаем скрипт командой:
 //LPCSRun(randomlines)
-var i:int32;
+
+function rndValue(AMax,AOffs:double):double;
 begin
+  result:=AMax*random+AOffs;
+end;
+
+procedure DoRandomLinesTest(ALinesCount:int32;AMax,AOffs:double);
+var
+  i:int32;
+  p1,p2:TzePoint3d;
+  s:string;
+  lpsh:TLPSHandle;
+begin
+  s:='Скрипт про '+ToString(ALinesCount)+' линий';
+  lpsh:=StartLongProcess(s,ALinesCount);
   randomize;
-  for i:=1 to 100 do begin
-    line(1000*random,
-         1000*random,
-         0,
-         1000*random,
-         1000*random,
-         0);
+  p1.z:=0;
+  p2.z:=0;
+  zcUndoStartCommand(s);
+  for i:=1 to ALinesCount do begin
+    if (i and 1) then
+      //вариант1
+      zcEntLine(rndValue(AMax,AOffs),rndValue(AMax,AOffs),0,rndValue(AMax,AOffs),rndValue(AMax,AOffs),0)
+    else begin
+      //вариант2
+      p1.x:=rndValue(AMax,AOffs);
+      p1.y:=rndValue(AMax,AOffs);
+      p2.x:=rndValue(AMax,AOffs);
+      p2.y:=rndValue(AMax,AOffs);
+      zcEntLine(p1,p2);
+    end;
+    ProgressLongProcess(lpsh,i);
   end;
+  zcUndoEndCommand;
+  EndLongProcess(lpsh);
+end;
+
+begin
+  DoRandomLinesTest(5000,100,0);
 end.

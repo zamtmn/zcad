@@ -49,18 +49,21 @@ type
     //**< Ширина полилинии (если в качестве примитива выбран RET_LWPoly)
   end;
 
+function InteractiveDrawRectangle(const Context:TZCADCommandContext;
+  APrompt1,APrompt2:string;ESP:TEntitySetupProc):TCommandResult;
+
 implementation
 
 var
   RectangParam:TRectangParam;
   //**< Переменная содержащая опции команды Rectangle
 
-function DrawRectangle_com(const Context:TZCADCommandContext;
-  operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
+function InteractiveDrawRectangle(const Context:TZCADCommandContext;
+  APrompt1,APrompt2:string;ESP:TEntitySetupProc):TCommandResult;    //< Чертим прямоугольник
 var
-  vertexLWObj:GDBvertex2D;
+  vertexLWObj:TzePoint2d;
   //переменная для добавления вершин в полилинию
-  vertexObj:GDBvertex;
+  vertexObj:TzePoint3d;
   widthObj:GLLWWidth;
   //переменная для добавления веса линии в начале и конце пути
   polyLWObj:PGDBObjLWPolyline;
@@ -70,22 +73,27 @@ var
   //**< Доступ к панели упр в инспекторе
   pf:PfieldDescriptor;
   //**< Управление нашей панелью в инспекторе
+  CommandParamsShowed:boolean;
 begin
-  PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TRectangParam'));
-  //находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
-  pf:=PInternalRTTITypeDesk^.FindField('ET');
-  //находим описание поля ET
-  pf^.base.Attributes:=pf^.base.Attributes-[fldaReadOnly];
-  //сбрасываем ему флаг ридонли
-  pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');
-  //находим описание поля ET
-  //pf^.base.Attributes:=pf^.base.Attributes and (not fldaReadOnly);//сбрасываем ему флаг ридонли
-  //pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
-  //pf^.base.Attributes:=pf^.base.Attributes or fldaHidden;//устанавливаем ему флаг cкрытности
-  //pf^.base.Attributes:=pf^.base.Attributes and (not fldaReadOnly);//сбрасываем ему флаг ридонли
-  zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
+  if not (assigned(ESP) and ESP(ESSSuppressCommandParams,nil))then begin
+    PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TRectangParam'));
+    //находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
+    pf:=PInternalRTTITypeDesk^.FindField('ET');
+    //находим описание поля ET
+    pf^.base.Attributes:=pf^.base.Attributes-[fldaReadOnly];
+    //сбрасываем ему флаг ридонли
+    pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');
+    //находим описание поля ET
+    //pf^.base.Attributes:=pf^.base.Attributes and (not fldaReadOnly);//сбрасываем ему флаг ридонли
+    //pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
+    //pf^.base.Attributes:=pf^.base.Attributes or fldaHidden;//устанавливаем ему флаг cкрытности
+    //pf^.base.Attributes:=pf^.base.Attributes and (not fldaReadOnly);//сбрасываем ему флаг ридонли
+    zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
+    CommandParamsShowed:=true;
+  end else
+    CommandParamsShowed:=false;
 
-  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then begin
+  if commandmanager.get3dpoint(APrompt1,pe.p1)=GRNormal then begin
     pf:=PInternalRTTITypeDesk^.FindField('ET');
     //находим описание поля ET
     pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];
@@ -119,8 +127,10 @@ begin
 
       InteractiveLWRectangleManipulator(polyLWObj,pe.p1,False);
       if commandmanager.Get3DPointInteractive(
-        rscmSpecifySecondPoint,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj)=GRNormal then
+        APrompt2,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj)=GRNormal then
       begin
+        if assigned(ESP) then
+          ESP(ESSSetEntity,polyLWObj);
         zcAddEntToCurrentDrawingWithUndo(polyLWObj);
         //Добавить объект из конструкторской области в чертеж через ундо//
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
@@ -142,6 +152,8 @@ begin
       if commandmanager.Get3DPointInteractive(
         rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj)=GRNormal then
       begin
+        if assigned(ESP) then
+          ESP(ESSSetEntity,polyObj);
         zcAddEntToCurrentDrawingWithUndo(polyObj);
         //Добавить объект из конструкторской области в чертеж через ундо//
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
@@ -151,9 +163,19 @@ begin
       end;
     end;
   end;
-  zcHideCommandParams;
   //< Возвращает инспектор в значение по умолчанию
+  //< если показ команды не был подавлен
+  if CommandParamsShowed then
+    zcHideCommandParams;
+  if assigned(ESP) then
+    ESP(ESSCommandEnd,nil);
   Result:=cmd_ok;
+end;
+
+function DrawRectangle_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
+begin
+  Result:=InteractiveDrawRectangle(Context,rscmSpecifyFirstPoint,rscmSpecifySecondPoint,nil);
 end;
 
 initialization

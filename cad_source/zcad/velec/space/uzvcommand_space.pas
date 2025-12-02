@@ -198,7 +198,7 @@ end;
 // Интерактивный манипулятор для черчения пространства с визуализацией штриховки
 procedure InteractiveSpaceManipulator(
   const PInteractiveData: Pointer;
-  Point: GDBVertex;
+  Point: TzePoint3d;
   Click: boolean);
 var
   spaceData: PSpaceDrawData absolute PInteractiveData;
@@ -208,7 +208,7 @@ var
   vertexCount: integer;
   i: integer;
   pathData: GDBPolyline2DArray;
-  v2d: GDBVertex2D;
+  v2d: TzePoint2d;
 begin
   if spaceData = nil then
     exit;
@@ -230,7 +230,7 @@ begin
       // During mouse movement, update preview vertex
       // При движении мыши обновляем вершину предпросмотра
       if vertexCount > 1 then begin
-        PGDBVertex(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^ := Point;
+        PzePoint3d(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^ := Point;
       end else begin
         pline^.VertexArrayInOCS.PushBackData(Point);
       end;
@@ -281,8 +281,8 @@ var
   ppolyline: PGDBObjPolyLine;
   phatch: PGDBObjHatch;
   spaceData: TSpaceDrawData;
-  point: GDBVertex;
-  firstPoint: GDBVertex;
+  point: TzePoint3d;
+  firstPoint: TzePoint3d;
   getResult: TGetResult;
   pointCount: integer;
   colorIndex: Integer;

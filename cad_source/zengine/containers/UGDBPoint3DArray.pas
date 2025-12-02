@@ -26,10 +26,10 @@ type
 {Export+}
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 PGDBPoint3dArray=^GDBPoint3dArray;
-GDBPoint3dArray= object(GZVector{-}<GDBVertex>{//})
-                function onpoint(const p:gdbvertex;closed:Boolean):Boolean;
-                function onmouse(const mf:ClipArray;const closed:Boolean):Boolean;virtual;
-                function CalcTrueInFrustum(const frustum:ClipArray; const closed:boolean):TInBoundingVolume;virtual;
+GDBPoint3dArray= object(GZVector{-}<TzePoint3d>{//})
+                function onpoint(const p:TzePoint3d;closed:Boolean):Boolean;
+                function onmouse(const mf:TzeFrustum;const closed:Boolean):Boolean;virtual;
+                function CalcTrueInFrustum(const frustum:TzeFrustum; const closed:boolean):TInBoundingVolume;virtual;
                 {procedure DrawGeometry;virtual;
                 procedure DrawGeometry2;virtual;
                 procedure DrawGeometryWClosed(closed:Boolean);virtual;}
@@ -40,7 +40,7 @@ implementation
 function GDBPoint3DArray.getoutbound;
 var
     tt,b,l,r,n,f:Double;
-    ptv:pgdbvertex;
+    ptv:PzePoint3d;
     ir:itrec;
 begin
   l:=Infinity;
@@ -79,7 +79,7 @@ begin
 end;
 
 (*procedure GDBPoint3DArray.drawgeometry;
-var p:PGDBVertex;
+var p:PzePoint3d;
     i:Integer;
 begin
   if count<2 then exit;
@@ -98,7 +98,7 @@ begin
   oglsm.myglend;
 end;
 procedure GDBPoint3DArray.drawgeometry2;
-var p:PGDBVertex;
+var p:PzePoint3d;
     i:Integer;
 begin
   if count<2 then exit;
@@ -117,7 +117,7 @@ begin
   oglsm.myglend;
 end;
 procedure GDBPoint3DArray.DrawGeometryWClosed(closed:Boolean);
-var p:PGDBVertex;
+var p:PzePoint3d;
     i:Integer;
 begin
   if closed then
@@ -145,7 +145,7 @@ end;*)
 function GDBPoint3DArray.CalcTrueInFrustum;
 var i,{counter,}emptycount:Integer;
 //    d:Double;
-    ptpv0,ptpv1:PGDBVertex;
+    ptpv0,ptpv1:PzePoint3d;
     subresult:TInBoundingVolume;
 begin
    //result:=IREmpty;
@@ -200,7 +200,7 @@ end;
 function GDBPoint3DArray.onmouse;
 var i{,counter}:Integer;
 //    d:Double;
-    ptpv0,ptpv1:PGDBVertex;
+    ptpv0,ptpv1:PzePoint3d;
 begin
   result:=false;
    ptpv0:=GetParrayAsPointer;
@@ -235,10 +235,10 @@ begin
    end;
 end;
 
-function GDBPoint3DArray.onpoint(const p:gdbvertex;closed:Boolean):Boolean;
+function GDBPoint3DArray.onpoint(const p:TzePoint3d;closed:Boolean):Boolean;
 var i{,counter}:Integer;
     d:Double;
-    ptpv0,ptpv1:PGDBVertex;
+    ptpv0,ptpv1:PzePoint3d;
     a,b:integer;
 begin
    result:=false;

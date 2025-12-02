@@ -100,8 +100,8 @@ begin
       TMWOHistoryOut);
 end;
 
-function PlaceDelegate_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function PlaceDelegate_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
   Result:=Internal_Insert_com_BeforeClick(Context,wc,mc,button,osp,mclick,@MakeDelegate);
   if Result=cmd_ok then

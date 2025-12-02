@@ -90,26 +90,36 @@ TVisActuality=record
   {-}constructor CreateRec(AV,AI:TActuality);{//}
 end;
 TEntUpgradeInfo=LongWord;
+
+{REGISTERRECORDTYPE GDBCameraBaseProp}
+GDBCameraBaseProp=record
+  point:TzePoint3d;
+  look:TzeVector3d;
+  ydir:TzeVector3d;
+  xdir:TzeVector3d;
+  zoom:double;
+end;
+
 PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}
 GDBBaseCamera=object(GDBaseObject)
-                modelMatrix:DMatrix4D;
+                modelMatrix:TzeTypedMatrix4d;
                 fovy:Double;
                 Counters:TCameraCounters;
                 //totalobj:Integer;
                 prop:GDBCameraBaseProp;
                 anglx,angly,zmin,zmax:Double;
-                projMatrix:DMatrix4D;
-                viewport:IMatrix4;
-                clip:DMatrix4D;
-                frustum:ClipArray;
+                projMatrix:TzeTypedMatrix4d;
+                viewport:TzeVector4i;
+                clip:TzeTypedMatrix4d;
+                frustum:TzeFrustum;
                 //infrustum:Integer;
                 obj_zmax,obj_zmin:Double;
                 DRAWNOTEND:Boolean;
                 DRAWCOUNT:TActuality;
                 POSCOUNT:TActuality;
                 VISCOUNT:TActuality;
-                CamCSOffset:GDBvertex;
+                CamCSOffset:TzePoint3d;
                 procedure NextPosition;virtual; abstract;
           end;
 TDXFEntsInternalStringType=UnicodeString;
@@ -126,7 +136,7 @@ GDBStrWithPoint=record
                   //nearestline:integer;
                   //dir:integer;
                   index:integer;
-                  wc:GDBVertex;
+                  wc:TzePoint3d;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);
   PTLayerControl=^TLayerControl;
@@ -293,6 +303,20 @@ PTZCCodePage=^TZCCodePage;
 TZCCodePage=(ZCCPINVALID,ZCCP874,ZCCP932,ZCCP936,ZCCP949,ZCCP950,
   ZCCP1250,ZCCP1251,ZCCP1252,ZCCP1253,ZCCP1254,ZCCP1255,ZCCP1256,
   ZCCP1257,ZCCP1258);
+
+{REGISTERRECORDTYPE GDBSnap2D}
+GDBSnap2D=record
+  Base:TzePoint2d;(*'Base'*)
+  Spacing:TzePoint2d;(*'Spacing'*)
+end;
+PGDBSnap2D=^GDBSnap2D;
+
+{REGISTERRECORDTYPE GDBPiece}
+GDBPiece=record
+  lbegin:TzePoint3d;
+  dir:TzeVector3d;
+  lend:TzePoint3d;
+end;
 
 {EXPORT-}
 TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;

@@ -42,11 +42,11 @@ type
     function GetObjTypeName:string;virtual;
     function GetDimStr(
       var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
-    function GetCenterPoint:GDBVertex;virtual;
+    function GetCenterPoint:TzePoint3d;virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
-    function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P15ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+    function P10ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P15ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P11ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
     function GetRadius:double;virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
@@ -71,9 +71,9 @@ begin
   Result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
 end;
 
-function GDBObjRadialDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjRadialDimension.P10ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
-  dirv:GDBVertex;
+  dirv:TzePoint3d;
   d:double;
 begin
   d:=Vertexlength(DimData.P15InWCS,DimData.P11InOCS);
@@ -84,9 +84,9 @@ begin
   DimData.P11InOCS:=VertexDmorph(DimData.P15InWCS,dirv,d);
 end;
 
-function GDBObjRadialDimension.P15ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjRadialDimension.P15ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
-  dirv:GDBVertex;
+  dirv:TzePoint3d;
   r:double;
 begin
   r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
@@ -98,9 +98,9 @@ begin
   DimData.P11InOCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
 end;
 
-function GDBObjRadialDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjRadialDimension.P11ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
-  dirv:GDBVertex;
+  dirv:TzePoint3d;
   r:double;
 begin
   r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
@@ -125,7 +125,7 @@ begin
   Result:=tvo;
 end;
 
-function GDBObjRadialDimension.GetCenterPoint:GDBVertex;
+function GDBObjRadialDimension.GetCenterPoint:TzePoint3d;
 begin
   Result:=DimData.P10InWCS;
 end;

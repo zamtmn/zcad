@@ -63,7 +63,7 @@ type
       //procedure getDevVertexConnector:GDBVertex;
       function MyFunc: Integer;
       {**Получить координаты устройсва (коннектора устройства)}
-      function getVertexDevWCS:GDBVertex;
+      function getVertexDevWCS:TzePoint3d;
       {**присоеденить к вершине устройство}
       procedure attachDevice(dev:pGDBObjDevice);
       {**Получить устройство}
@@ -94,7 +94,7 @@ type
   end;
 
 
-  function getDevVertexConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
+  function getDevVertexConnector(pobj:pGDBObjEntity; out pConnect:TzePoint3d):Boolean;
   function getCableLengthIsDev(ppoly:PGDBObjPolyLine):double;
 
 
@@ -115,7 +115,7 @@ implementation
             result:=-1;
     end;
     //*** поиск точки координаты коннектора в устройстве
-    function getDevVertexConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
+    function getDevVertexConnector(pobj:pGDBObjEntity; out pConnect:TzePoint3d):Boolean;
     var
        pObjDevice,currentSubObj:PGDBObjDevice;
        ir_inDevice:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
@@ -162,7 +162,7 @@ implementation
 
   end;
 
-  function TVertexDev.getVertexDevWCS:GDBVertex;
+  function TVertexDev.getVertexDevWCS:TzePoint3d;
   var
     dev:PGDBObjDevice;
   begin

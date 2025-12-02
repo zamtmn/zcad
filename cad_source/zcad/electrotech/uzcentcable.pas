@@ -25,7 +25,7 @@ type
 PTNodeProp=^TNodeProp;
 TNodeProp=record
                 //**Точка в котором кабель был усечен устройством исчез и появился
-                PrevP,NextP:GDBVertex;
+                PrevP,NextP:TzePoint3d;
                 //**Устройство коннектор которого попадает в узел кабеля
                 DevLink:PGDBObjDevice;
           end;
@@ -38,12 +38,12 @@ GDBObjCable= object(GDBObjCurve)
                     а так же показывается PrevP,NextP точка в котором кабель был усечен устройством
                     и точка в которой появился**}
                  NodePropArray:TNodePropArray;(*hidden_in_objinsp*)
-                 str11:GDBVertex;
-                 str12:GDBVertex;
-                 str13:GDBVertex;
-                 str21:GDBVertex;
-                 str22:GDBVertex;
-                 str23:GDBVertex;
+                 str11:TzePoint3d;
+                 str12:TzePoint3d;
+                 str13:TzePoint3d;
+                 str21:TzePoint3d;
+                 str22:TzePoint3d;
+                 str23:TzePoint3d;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
@@ -69,7 +69,7 @@ implementation
 function GDBObjCable.Clone;
 var tvo: PGDBObjCable;
     i:Integer;
-    p:pgdbvertex;
+    p:PzePoint3d;
 begin
   //result:=inherited Clone(own);
   //exit;
@@ -91,7 +91,7 @@ begin
 end;
 procedure GDBObjCable.SaveToDXFFollow;
 var
-    //ptv:pgdbvertex;
+    //ptv:PzePoint3d;
     ir_inNodeArray:itrec;
     ptn1,ptn2:PTNodeProp;
     pl:PGDBLayerProp;
@@ -132,7 +132,7 @@ begin
 end;
 procedure GDBObjCable.SaveToDXF;
 var
-    //ptv:pgdbvertex;
+    //ptv:PzePoint3d;
     //ir:itrec;
     pl:PGDBLayerProp;
 begin
@@ -148,7 +148,7 @@ begin
 end;
 procedure GDBObjCable.FormatFast;
 var
-   ptvnext,ptvprev:pgdbvertex;
+   ptvnext,ptvprev:PzePoint3d;
    ir_inVertexArray:itrec;
    np:TNodeProp;
 begin
@@ -185,13 +185,13 @@ end;
 procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
-    devpoint,{cabpoint,}tp,tp2,tp3,{_XWCS,}_YWCS,_ZWCS:GDBVertex;
-    ptv,ptvpred,ptvnext,ptlast,ptpred:pgdbvertex;
+    devpoint,{cabpoint,}tp,tp2,tp3,{_XWCS,}_YWCS,_ZWCS:TzePoint3d;
+    ptv,ptvpred,ptvnext,ptlast,ptpred:PzePoint3d;
     ptn,{ptnfirst,ptnfirst2,}ptnlastCutted,ptnlast2Cutted:PTNodeProp;
     tn:TNodeProp;
     psldb:pointer;
     I3DPPrev,I3DPNext,I3DP:Intercept3DProp;
-    m,rotmatr:DMatrix4D;
+    m,rotmatr:TzeTypedMatrix4d;
     pvd,{pvd2,}pvds,pvdal,pvdrt:pvardesk;
     {group,pribor,}count:Integer;
     l:Double;
@@ -420,13 +420,13 @@ begin
   tp:=NormalizeVertex(tp);
 
    //rotmatr:=onematrix;
-   //PGDBVertex(@rotmatr.mtr[0])^:=tp;
-   //PGDBVertex(@rotmatr.mtr[1])^:=tp2;
-   //PGDBVertex(@rotmatr.mtr[2])^:=tp3;
+   //PzePoint3d(@rotmatr.mtr[0])^:=tp;
+   //PzePoint3d(@rotmatr.mtr[1])^:=tp2;
+   //PzePoint3d(@rotmatr.mtr[2])^:=tp3;
    rotmatr:=CreateMatrixFromBasis(tp,tp2,tp3);
 
    //m:=onematrix;
-   //PGDBVertex(@m.mtr[3])^:=ptnlastCutted.PrevP;
+   //PzePoint3d(@m.mtr[3])^:=ptnlastCutted.PrevP;
    m:=CreateTranslationMatrix(ptnlastCutted.PrevP);
 
    m:=MatrixMultiply(rotmatr,m);
@@ -522,7 +522,7 @@ begin
 end;
 function Upgrade3DPolyline2Cable(ptu:PExtensionData;pent:PGDBObjCurve;const drawing:TDrawingDef):PGDBObjCable;
 var
-    ptv:pgdbvertex;
+    ptv:PzePoint3d;
     ir:itrec;
 begin
      result:=nil;

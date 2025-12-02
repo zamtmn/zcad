@@ -29,7 +29,7 @@ type
 {REGISTEROBJECTTYPE GDBObjSuperLine}
 PGDBObjSuperLine=^GDBObjSuperLine;
 GDBObjSuperLine= object(GDBObjLine)
-                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
+                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:TzePoint3d);
                   constructor initnul(owner:PGDBObjGenericWithSubordinated);
                   function GetObjTypeName:String;virtual;
                   class function CreateInstance:PGDBObjLine;static;
@@ -43,7 +43,7 @@ function AllocAndInitSuperLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine
 var
     GDBObjSuperLineDXFFeatures:TDXFEntIODataManager;
 implementation
-constructor GDBObjSuperLine.init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
+constructor GDBObjSuperLine.init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:TzePoint3d);
 begin
      inherited;
      GetDXFIOFeatures.AddExtendersToEntity(@self);

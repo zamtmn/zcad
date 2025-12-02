@@ -30,37 +30,37 @@ type
 
   GDBObjWithMatrix=object(GDBObjEntity)
     {-}protected{//}
-    fObjMatrix:DMatrix4D;
-    procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
+    fObjMatrix:TzeTypedMatrix4d;
+    procedure SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);virtual;
     {-}public{//}
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-    function GetMatrix:PDMatrix4D;virtual;
+    function GetMatrix:PzeTypedMatrix4d;virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure createfield;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure ReCalcFromObjMatrix;virtual;abstract;
-    procedure CalcInFrustumByTree(const frustum:ClipArray;
+    procedure CalcInFrustumByTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;
       var enttree:TEntTreeNode;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
-    procedure ProcessTree(const frustum:ClipArray;
+    procedure ProcessTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var enttree:TEntTreeNode;
       OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;
       var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
 
-    {-} property ObjMatrix:DMatrix4D read fObjMatrix write SetObjMatrix;{//}
+    {-} property ObjMatrix:TzeTypedMatrix4d read fObjMatrix write SetObjMatrix;{//}
   end;
 
 implementation
 
-procedure GDBObjWithMatrix.SetObjMatrix(const AObjMatrix:DMatrix4D);
+procedure GDBObjWithMatrix.SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);
 begin
   fObjMatrix:=AObjMatrix;
 end;
 
-procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;
+procedure GDBObjWithMatrix.ProcessTree(const frustum:TzeFrustum;
   const Actuality:TVisActuality;var enttree:TEntTreeNode;
   OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;
   var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
@@ -69,7 +69,7 @@ var
   ImInFrustum:TInBoundingVolume;
   pobj:PGDBObjEntity;
   ir:itrec;
-  v1:gdbvertex;
+  v1:TzePoint3d;
   tx:double;
   inFrustomEnts:integer;
 begin
@@ -282,7 +282,7 @@ begin
   end;
 end;
 
-procedure GDBObjWithMatrix.CalcInFrustumByTree(const frustum:ClipArray;
+procedure GDBObjWithMatrix.CalcInFrustumByTree(const frustum:TzeFrustum;
   const Actuality:TVisActuality;
   var enttree:TEntTreeNode;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
   const zoom,currentdegradationfactor:double);
@@ -291,7 +291,7 @@ begin
     Counters,ProjectProc,zoom,currentdegradationfactor);
 end;
 
-procedure GDBObjWithMatrix.transform(const t_matrix:DMatrix4D);
+procedure GDBObjWithMatrix.transform(const t_matrix:TzeTypedMatrix4d);
 begin
   ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,t_matrix);
 end;

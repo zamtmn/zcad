@@ -109,38 +109,38 @@ type
 //**Применяется для функции возврата прямоугольника построенного по линии
 PTRectangleLine=^TRectangleLine;
 TRectangleLine=record
-                   Pt1,Pt2,Pt3,Pt4:GDBVertex;
+                   Pt1,Pt2,Pt3,Pt4:TzePoint3d;
 end;
 
 //**Перпендикуляр из точки на отрезок. Поиск точки перпендикуляра на линию. Координата Z-обнуляется
 //**p1,p2 - точки отрезка,рр - точка от который прокладывается пенпендикуляр
 //**pointToLine - точка на отрезки перпендикуляра, сама функция возвращает лежит перпендикуляр на отрезке или нет
-function perpendToLine(p1,p2:GDBVertex;pp:GDBVertex;out pointToLine:GDBVertex):boolean;
+function perpendToLine(p1,p2:TzePoint3d;pp:TzePoint3d;out pointToLine:TzePoint3d):boolean;
 
 //**Смещение по направлению линии
 //**pline11,pline21 - одна и таже центральная точка, pline12 точка до центральной точки, pline22 после, если по часовой стрелки рассматривать фигуру
 //**relatLine1,relatLine2 - смещение по одной линии и смещение по ругой линии
-function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:GDBVertex;relatLine1,relatLine2:double):GDBVertex;
+function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:TzePoint3d;relatLine1,relatLine2:double):TzePoint3d;
 
 //**Удлинение линии по ее направлению, от первой ко второй точки **//
-function extendedLine(point1:GDBVertex;point2:GDBVertex;lengthLine:double):GDBVertex;
+function extendedLine(point1:TzePoint3d;point2:TzePoint3d;lengthLine:double):TzePoint3d;
 
 //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
-function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
+function getAreaVertex(vertexPoint:TzePoint3d;accuracy:double):TBoundingBox;
 
 //** Получение области поиска по всей линии, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
-function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
+function getAreaLine(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TBoundingBox;
 
 //**Новый метод путем поворота и линии и пространства, более точный чем герон, но математических операций гораздо больше
 //**Работает только с 2D пространством
 //** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
-function isPointInAreaLine(linePt1,linePt2,vertexPt:GDBVertex;accuracy:double):boolean;
+function isPointInAreaLine(linePt1,linePt2,vertexPt:TzePoint3d;accuracy:double):boolean;
 
 //** Получение реальной координаты точки расположенной внутри устройства
 //** ptdev-точка поиска
 //** insertDev - мировая точка вставленного блока
 //** scale - масштаб блока
-function getRealPointDevice(ptdev,insertDev,scale:GDBVertex):GDBVertex;
+function getRealPointDevice(ptdev,insertDev,scale:TzePoint3d):TzePoint3d;
 
 implementation
 
@@ -148,7 +148,7 @@ implementation
   //** ptdev-точка поиска
   //** insertDev - мировая точка вставленного блока
   //**scale - масштаб блока
-  function getRealPointDevice(ptdev,insertDev,scale:GDBVertex):GDBVertex;
+  function getRealPointDevice(ptdev,insertDev,scale:TzePoint3d):TzePoint3d;
   begin
        result.x:=(ptdev.x * scale.x) + insertDev.x;
        zcUI.TextMessage('result-х = ' + FloatToStr(result.x),TMWOHistoryOut);
@@ -157,7 +157,7 @@ implementation
   end;
 
   //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
-  function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
+  function getAreaVertex(vertexPoint:TzePoint3d;accuracy:double):TBoundingBox;
   begin
       result.LBN.x:=vertexPoint.x - accuracy;
       result.LBN.y:=vertexPoint.y - accuracy;
@@ -170,7 +170,7 @@ implementation
   end;
 
   //** Получение области поиска по всей линии, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
-  function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
+  function getAreaLine(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TBoundingBox;
   begin
        if point1.x <= point2.x  then
          begin
@@ -198,10 +198,10 @@ implementation
   end;
   
 //**преобразование линии в прямоугольник (4 точки) с учетом ее направления и погрешности попадания. Т.е. если погрешность равна нулю то получится прямоугольник в виде линии :) **//
-function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
+function convertLineInRectangleWithAccuracy(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TRectangleLine;
 var
    xline,yline,xyline,xylinenew,xlinenew,ylinenew,xdiffline,ydiffline:double;
-   pt1new,pt2new,pt3new,pt4new:GDBVertex;
+   pt1new,pt2new,pt3new,pt4new:TzePoint3d;
 
 begin
      xline:=abs(point2.x - point1.x);
@@ -256,11 +256,11 @@ end;
   //**Новый метод путем поворота и линии и пространства, более точный чем герон, но математических операций гораздо больше
   //**Работает только с 2D пространством
   //** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
-  function isPointInAreaLine(linePt1,linePt2,vertexPt:GDBVertex;accuracy:double):boolean;
+  function isPointInAreaLine(linePt1,linePt2,vertexPt:TzePoint3d;accuracy:double):boolean;
   var
      //areaLine:TBoundingBox;
      //areaRect,areaTriangle,sumAreaTriangle:double; //площадь прямоугольника
-     tempvert,tempVertex,newEdPtLine:GDBVertex;
+     tempvert,tempVertex,newEdPtLine:TzePoint3d;
      xline{,yline},xyline,angle,anglePerpendCos:double;
      vertexRectangleLine:TRectangleLine;
      sine,cosine:double;
@@ -321,7 +321,7 @@ end;
 
 
 //*** Сортировка списка вершин, внутри списка, так что бы вершины распологались по отдаленности от начальной точки линии которую в данный момент расматриваем
-//procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
+//procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:TzePoint3d);
 //var
 //   tempNumVertex:TInfoTempNumVertex;
 //   IsExchange:boolean;
@@ -348,7 +348,7 @@ end;
   //**Перпендикуляр из точки на отрезок. Поиск точки перпендикуляра на линию. Координата Z-обнуляется
   //**p1,p2 - точки отрезка,рр - точка от который прокладывается пенпендикуляр
   //**pointToLine - точка на отрезки перпендикуляра, сама функция возвращает лежит перпендикуляр на отрезке или нет
-  function perpendToLine(p1,p2:GDBVertex;pp:GDBVertex;out pointToLine:GDBVertex):boolean;
+  function perpendToLine(p1,p2:TzePoint3d;pp:TzePoint3d;out pointToLine:TzePoint3d):boolean;
   var
    a0,a1,a2,a3,k,proverka:double;
   begin
@@ -368,7 +368,7 @@ end;
   end;
 
   //** смещение по 1-й точки по напрявление ко второй точки, по осям переданым двуя другими переменными
-  function offsetOfFirstPointInSecondPointToLine(point1,point2:GDBVertex;xdiff,ydiff:double):GDBVertex;
+  function offsetOfFirstPointInSecondPointToLine(point1,point2:TzePoint3d;xdiff,ydiff:double):TzePoint3d;
   begin
    if point1.x <= point2.x then
          result.x := point1.x + xdiff
@@ -385,7 +385,7 @@ end;
   end;
 
   //**Удлинение линии по ее направлению, от первой ко второй точки **//
-  function extendedLine(point1:GDBVertex;point2:GDBVertex;lengthLine:double):GDBVertex;
+  function extendedLine(point1:TzePoint3d;point2:TzePoint3d;lengthLine:double):TzePoint3d;
   var
      xline,yline,xyline,xylinenew,xlinenew,ylinenew,xdiffline,ydiffline:double;
 
@@ -421,10 +421,10 @@ end;
   end;
 
 //**Поиск точки смещеной от угла образовоного двумя линиями(2-линии заданы точками) в сторону указанную двумя параметрами, каждый осуществляет смещение по своей линии**//
-function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:GDBVertex;relatLine1,relatLine2:double):GDBVertex;
+function getPointRelativeTwoLines(pline11,pline12,pline21,pline22:TzePoint3d;relatLine1,relatLine2:double):TzePoint3d;
 var
    xline1,yline1,xyline1,xylinenew1,xlinenew1,ylinenew1,xline2,yline2,xyline2,xylinenew2,xlinenew2,ylinenew2:double;
-   pt1new,pt2new,centerPt:GDBVertex;
+   pt1new,pt2new,centerPt:TzePoint3d;
    centerline:double;
 
 begin

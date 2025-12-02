@@ -20,6 +20,8 @@ unit uzepalette;
 {$INCLUDE zengineconfig.inc}
 {$ModeSwitch advancedrecords}
 interface
+uses
+  uzbtypes,uzeconsts;
 
 type
 {EXPORT+}
@@ -820,7 +822,18 @@ const
 );
 var
   palette: TGDBPalette;
+
+function NormalizePaletteColor(AColor:TGDBPaletteColor):TGDBPaletteColor;
+
 implementation
+function NormalizePaletteColor(AColor:TGDBPaletteColor):TGDBPaletteColor;
+begin
+  if (AColor<ClByBlock)or(AColor>ClByLayer) then
+    result:=ClWhite
+  else
+    result:=Acolor;
+end;
+
 constructor TRGB.create(AR,AG,AB,AA:Byte);
 begin
   r:=AR;

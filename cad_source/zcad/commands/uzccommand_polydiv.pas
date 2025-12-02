@@ -42,7 +42,7 @@ resourcestring
 
 implementation
 
-function isrect(const p1,p2,p3,p4:GDBVertex2D):boolean;
+function isrect(const p1,p2,p3,p4:TzePoint2d):boolean;
   //var
   //p:Double;
 begin
@@ -65,20 +65,20 @@ begin
       (i<>p4) then begin
       c:=0;
       if _intercept2d(
-        PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(p2))^,
-        PGDBVertex2D(pva.getDataMutable(i))^,1,0) then
+        PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(pva.getDataMutable(p2))^,
+        PzePoint2d(pva.getDataMutable(i))^,1,0) then
         Inc(c);
       if _intercept2d(
-        PGDBVertex2D(pva.getDataMutable(p2))^,PGDBVertex2D(pva.getDataMutable(p3))^,
-        PGDBVertex2D(pva.getDataMutable(i))^,1,0) then
+        PzePoint2d(pva.getDataMutable(p2))^,PzePoint2d(pva.getDataMutable(p3))^,
+        PzePoint2d(pva.getDataMutable(i))^,1,0) then
         Inc(c);
       if _intercept2d(
-        PGDBVertex2D(pva.getDataMutable(p3))^,PGDBVertex2D(pva.getDataMutable(p4))^,
-        PGDBVertex2D(pva.getDataMutable(i))^,1,0) then
+        PzePoint2d(pva.getDataMutable(p3))^,PzePoint2d(pva.getDataMutable(p4))^,
+        PzePoint2d(pva.getDataMutable(i))^,1,0) then
         Inc(c);
       if _intercept2d(
-        PGDBVertex2D(pva.getDataMutable(p4))^,PGDBVertex2D(pva.getDataMutable(p1))^,
-        PGDBVertex2D(pva.getDataMutable(i))^,1,0) then
+        PzePoint2d(pva.getDataMutable(p4))^,PzePoint2d(pva.getDataMutable(p1))^,
+        PzePoint2d(pva.getDataMutable(i))^,1,0) then
         Inc(c);
       if ((c mod 2)=1) then
         exit;
@@ -88,7 +88,7 @@ begin
 end;
 
 function IsSubContur2(const pva:GDBPolyline2DArray;const p1,p2,p3:integer;
-  const p:GDBVertex2D):boolean;
+  const p:TzePoint2d):boolean;
 var
   c,i:integer;
 begin
@@ -98,19 +98,19 @@ begin
     then begin
       c:=0;
       if _intercept2d(
-        PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(p2))^,
-        PGDBVertex2D(pva.getDataMutable(i))^,1,0) then
+        PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(pva.getDataMutable(p2))^,
+        PzePoint2d(pva.getDataMutable(i))^,1,0) then
         Inc(c);
       if _intercept2d(
-        PGDBVertex2D(pva.getDataMutable(p2))^,PGDBVertex2D(pva.getDataMutable(p3))^,
-        PGDBVertex2D(pva.getDataMutable(i))^,1,0) then
+        PzePoint2d(pva.getDataMutable(p2))^,PzePoint2d(pva.getDataMutable(p3))^,
+        PzePoint2d(pva.getDataMutable(i))^,1,0) then
         Inc(c);
       if _intercept2d(
-        PGDBVertex2D(pva.getDataMutable(p3))^,p,PGDBVertex2D(pva.getDataMutable(i))^,1,0)
+        PzePoint2d(pva.getDataMutable(p3))^,p,PzePoint2d(pva.getDataMutable(i))^,1,0)
       then
         Inc(c);
       if _intercept2d(
-        p,PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(pva.getDataMutable(i))^,1,0)
+        p,PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(pva.getDataMutable(i))^,1,0)
       then
         Inc(c);
       if ((c mod 2)=1) then
@@ -137,12 +137,12 @@ begin
   p3:=2;
   p4:=3;
   for i:=1 to pva.Count do begin
-    if isrect(PGDBVertex2D(pva.getDataMutable(p1))^,
-      PGDBVertex2D(pva.getDataMutable(p2))^,
-      PGDBVertex2D(pva.getDataMutable(p3))^,
-      PGDBVertex2D(pva.getDataMutable(p4))^) then
+    if isrect(PzePoint2d(pva.getDataMutable(p1))^,
+      PzePoint2d(pva.getDataMutable(p2))^,
+      PzePoint2d(pva.getDataMutable(p3))^,
+      PzePoint2d(pva.getDataMutable(p4))^) then
       if pva.ispointinside(
-        Vertexmorph(PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(
+        Vertexmorph(PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(
         pva.getDataMutable(p3))^,0.5)) then
         if IsSubContur(pva,p1,p2,p3,p4) then begin
           pvr.PushBackData(pva.getDataMutable(p1)^);
@@ -167,7 +167,7 @@ end;
 function CutRect3(var pva,pvr:GDBPolyline2DArray):boolean;
 var
   p1,p2,p3,p4,i:integer;
-  p:GDBVertex2d;
+  p:TzePoint2d;
 begin
   Result:=False;
   p1:=0;
@@ -175,14 +175,14 @@ begin
   p3:=2;
   p4:=3;
   for i:=1 to pva.Count do begin
-    p.x:=PGDBVertex2D(pva.getDataMutable(p1))^.x+
-      (PGDBVertex2D(pva.getDataMutable(p3))^.x-PGDBVertex2D(pva.getDataMutable(p2))^.x);
-    p.y:=PGDBVertex2D(pva.getDataMutable(p1))^.y+
-      (PGDBVertex2D(pva.getDataMutable(p3))^.y-PGDBVertex2D(pva.getDataMutable(p2))^.y);
-    if distance2piece_2dmy(p,PGDBVertex2D(pva.getDataMutable(p3))^,
-      PGDBVertex2D(pva.getDataMutable(p4))^)<eps then
+    p.x:=PzePoint2d(pva.getDataMutable(p1))^.x+
+      (PzePoint2d(pva.getDataMutable(p3))^.x-PzePoint2d(pva.getDataMutable(p2))^.x);
+    p.y:=PzePoint2d(pva.getDataMutable(p1))^.y+
+      (PzePoint2d(pva.getDataMutable(p3))^.y-PzePoint2d(pva.getDataMutable(p2))^.y);
+    if distance2piece_2dmy(p,PzePoint2d(pva.getDataMutable(p3))^,
+      PzePoint2d(pva.getDataMutable(p4))^)<eps then
       if pva.ispointinside(
-        Vertexmorph(PGDBVertex2D(pva.getDataMutable(p1))^,PGDBVertex2D(
+        Vertexmorph(PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(
         pva.getDataMutable(p3))^,0.5)) then
         if IsSubContur2(pva,p1,p2,p3,p) then begin
           pvr.PushBackData(pva.getDataMutable(p1)^);
@@ -190,8 +190,8 @@ begin
           pvr.PushBackData(pva.getDataMutable(p3)^);
           pvr.PushBackData(p);
 
-          PGDBVertex2D(pva.getDataMutable(p3))^.x:=p.x;
-          PGDBVertex2D(pva.getDataMutable(p3))^.y:=p.y;
+          PzePoint2d(pva.getDataMutable(p3))^.x:=p.x;
+          PzePoint2d(pva.getDataMutable(p3))^.y:=p.y;
           pva.deleteelement(p2);
           pva.optimize;
 
@@ -205,11 +205,11 @@ begin
   end;
 end;
 
-procedure polydiv(var pva,pvr:GDBPolyline2DArray;m:DMatrix4D);
+procedure polydiv(var pva,pvr:GDBPolyline2DArray;m:TzeTypedMatrix4d);
 var
   nstep,i:integer;
   p3dpl:PGDBObjPolyline;
-  wc:gdbvertex;
+  wc:TzePoint3d;
   DC:TDrawContext;
 begin
   nstep:=0;
@@ -243,8 +243,8 @@ begin
     dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
     i:=0;
     while i<pvr.Count do begin
-      wc.x:=PGDBVertex2D(pvr.getDataMutable(i))^.x;
-      wc.y:=PGDBVertex2D(pvr.getDataMutable(i))^.y;
+      wc.x:=PzePoint2d(pvr.getDataMutable(i))^.x;
+      wc.y:=PzePoint2d(pvr.getDataMutable(i))^.y;
       wc.z:=0;
       wc:=uzegeometry.VectorTransform3D(wc,m);
       p3dpl^.AddVertex(wc);

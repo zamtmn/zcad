@@ -31,7 +31,7 @@ GDBControlPointArray= object(GZVector{-}<controlpointdesc>{//})
 
                            procedure done;virtual;
                            procedure draw(var DC:TDrawContext;const SelColor,UnSelColor:TRGB);virtual;
-                           procedure selectcontrolpointinframe(f1,f2: GDBvertex2DI);virtual;
+                           procedure selectcontrolpointinframe(f1,f2: TzePoint2i);virtual;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
                            procedure selectcurrentcontrolpoint(key:Byte;mx,my,h:integer);virtual;
                      end;
@@ -65,7 +65,7 @@ begin
        end;
   end;
 end;
-procedure GDBControlPointArray.selectcontrolpointinframe(f1,f2: GDBvertex2DI);
+procedure GDBControlPointArray.selectcontrolpointinframe(f1,f2: TzePoint2i);
 var point:^controlpointdesc;
     i:Integer;
 begin

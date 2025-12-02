@@ -148,7 +148,7 @@ type
       TVertexTree=record
                          dev:PGDBObjDevice;
                          connector:PGDBObjDevice;
-                         vertex:GDBVertex; // Координаты вершины
+                         vertex:TzePoint3d; // Координаты вершины
                          isDev:boolean;
                          isRiser:boolean;
       end;
@@ -189,22 +189,22 @@ type
 
 
       //function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
-      //function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer;nameLayer:string):TCommandResult;
-      //function visualGraphVertex(p1:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
-      //function visualGraphError(point:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
-      //function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
+      //function visualGraphEdge(p1:TzePoint3d;p2:TzePoint3d;color:integer;nameLayer:string):TCommandResult;
+      //function visualGraphVertex(p1:TzePoint3d;rr:Double;color:integer;nameLayer:string):TCommandResult;
+      //function visualGraphError(point:TzePoint3d;rr:Double;color:integer;nameLayer:string):TCommandResult;
+      //function getPointConnector(pobj:pGDBObjEntity; out pConnect:TzePoint3d):Boolean;
       //
       //function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
-      //function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
-      //function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
-      //procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
-      //function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
-      //function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
-      //function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
+      //function testTempDrawText(p1:TzePoint3d;mText:String):TCommandResult;
+      //function convertLineInRectangleWithAccuracy(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TRectangleLine;
+      //procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:TzePoint3d);
+      //function getAreaLine(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TBoundingBox;
+      //function getAreaVertex(vertexPoint:TzePoint3d;accuracy:double):TBoundingBox;
+      //function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:TzePoint3d):boolean;
       //procedure clearVisualGraph(nameLayer:string);
       //procedure getListSuperline(var listSLname:TGDBlistSLname);
       function getListGroupGraph():TListGraph;
-      procedure buildSSScheme(listGraph:TListGraph;insertPoint:GDBVertex);
+      procedure buildSSScheme(listGraph:TListGraph;insertPoint:TzePoint3d);
 
 implementation
 
@@ -224,7 +224,7 @@ function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperan
  var
     //x, y: Integer;
     //i   : Integer;
-    //tempPoint:GDBVertex;
+    //tempPoint:TzePoint3d;
 
     //listGraph:TListGraph;
     //edgeGraph:PTEdgeTree;
@@ -250,7 +250,7 @@ function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperan
     cman:TCableManager;
     //pv:pGDBObjDevice;
 
-    //coord,currentcoord:GDBVertex;
+    //coord,currentcoord:TzePoint3d;
 //    pbd:PGDBObjBlockdef;
     {pvn,pvm,}pvSegm{,pvSegmLength, pvd}{,pvl}:pvardesk;
 
@@ -341,12 +341,12 @@ function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperan
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
  end;
-  procedure InsertDat2(datname,name:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure InsertDat2(datname,name:String;var currentcoord:TzePoint3d; var root:GDBObjRoot);
 var
    pv:pGDBObjDevice;
    pt:pGDBObjMText;
    lx,{rx,}uy,dy:Double;
-   tv:gdbvertex;
+   tv:TzePoint3d;
    DC:TDrawContext;
 begin
           name:=uzbstrproc.Tria_Utf8ToAnsi(name);
@@ -386,12 +386,12 @@ begin
      currentcoord.y:=currentcoord.y+dy+uy;
 end;
 
-function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
+function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:TzePoint3d; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
 //   lx,rx,uy,dy:Double;
    pl:pgdbobjline;
-   oldcoord,oldcoord2:gdbvertex;
+   oldcoord,oldcoord2:TzePoint3d;
    DC:TDrawContext;
 begin
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -530,8 +530,8 @@ end;
 function createStructureSchema_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    listGraph:TListGraph;
-   insertPoint:gdbvertex;
-   //a:GDBVertex;
+   insertPoint:TzePoint3d;
+   //a:TzePoint3d;
    i,j:integer;
 begin
 
@@ -570,7 +570,7 @@ begin
 end;
 
 
-procedure buildSSScheme(listGraph:TListGraph;insertPoint:GDBVertex);
+procedure buildSSScheme(listGraph:TListGraph;insertPoint:TzePoint3d);
 type
 
  //** Характеристики типов кабелей
@@ -596,7 +596,7 @@ type
 var
    //pv:pGDBObjDevice;
    i:integer;
-   //pt:GDBVertex;
+   //pt:TzePoint3d;
    coord_x,coord_y:double;
 
    //**Получаем общую длину кабельной группы
@@ -748,7 +748,7 @@ var
 
 
    //** Добавляем блок с кабелем
-   procedure AddGroupCable(gGroup:TGraph;var insertPoint:GDBVertex);
+   procedure AddGroupCable(gGroup:TGraph;var insertPoint:TzePoint3d);
     var
        pv:pGDBObjDevice;
        ppvvarext,pvaredge:TVariablesExtender;
@@ -816,7 +816,7 @@ var
     end;
 
 
-   procedure AddDeviceCable(gGroup:TGraph;var insertPoint:GDBVertex);
+   procedure AddDeviceCable(gGroup:TGraph;var insertPoint:TzePoint3d);
       type
    //** Создание информации для списка устройств и их количества
       //PTinfoDev=^TinfoDev;
@@ -969,7 +969,7 @@ var
     oGraphEdge:TEdge;
     stVertexIndex:integer;
 
-    graphVizPt:GDBVertex;
+    graphVizPt:TzePoint3d;
 
     //count: Integer;
     pcabledesk:PTCableDesctiptor;
@@ -983,7 +983,7 @@ var
     cman:TCableManager;
     //pv:pGDBObjDevice;
 
-    //coord,currentcoord:GDBVertex;
+    //coord,currentcoord:TzePoint3d;
 //    pbd:PGDBObjBlockdef;
     {pvn,pvm,}pvSegm,pvSegmLength, pvd{,pvl}:pvardesk;
 
@@ -1015,7 +1015,7 @@ var
            end;
     end;
 
-    function getVertexGraphIndexCoo(oGraph:TGraph;vertex:GDBVertex):integer;
+    function getVertexGraphIndexCoo(oGraph:TGraph;vertex:TzePoint3d):integer;
     var
         i:integer;
     begin

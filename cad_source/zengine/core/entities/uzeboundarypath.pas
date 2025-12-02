@@ -23,7 +23,7 @@ interface
 
 uses
   Math,uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,uzctnrVectorBytes,
-  gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader,uzeSplineUtils,
+  gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader,uzeNURBSTypes,
   uzegluinterface,uzbLogIntf;
 
 type
@@ -39,21 +39,21 @@ type
     procedure CloneTo(var Dest:TBoundaryPath);
     procedure Clear;virtual;
 
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    function getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    function getDataMutableByPlainIndex(index:TArrayIndex):PzePoint2d;
 
-    function DummyCalcTrueInFrustum(pv1:pgdbvertex;
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+    function DummyCalcTrueInFrustum(pv1:PzePoint3d;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
   end;
 
 implementation
 
-function TBoundaryPath.DummyCalcTrueInFrustum(pv1:pgdbvertex;
-  const frustum:ClipArray):TInBoundingVolume;
+function TBoundaryPath.DummyCalcTrueInFrustum(pv1:PzePoint3d;
+  const frustum:TzeFrustum):TInBoundingVolume;
 var
   i,j:integer;
   ppla:PGDBPolyline2DArray;
-  firstp,pv2:pgdbvertex;
+  firstp,pv2:PzePoint3d;
   isAllFull,isAllEmpty:boolean;
 begin
   pv2:=pv1;
@@ -82,12 +82,12 @@ begin
   end;
 end;
 
-procedure TBoundaryPath.transform(const t_matrix:DMatrix4D);
+procedure TBoundaryPath.transform(const t_matrix:TzeTypedMatrix4d);
 var
   i,j:integer;
   ppla:PGDBPolyline2DArray;
-  pv:PGDBVertex2D;
-  tv:GDBvertex;
+  pv:PzePoint2d;
+  tv:TzePoint3d;
 begin
   for i:=0 to paths.Count-1 do begin
     ppla:=paths.getDataMutable(i);
@@ -103,7 +103,7 @@ begin
   end;
 end;
 
-function TBoundaryPath.getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
+function TBoundaryPath.getDataMutableByPlainIndex(index:TArrayIndex):PzePoint2d;
 var
   i,pln:integer;
   ppla:PGDBPolyline2DArray;
@@ -145,10 +145,10 @@ begin
 end;
 
 
-procedure NurbsVertexCallBack(const v:PGDBvertex3S;const Data:Pointer);
+procedure NurbsVertexCallBack(const v:PzePoint3s;const Data:Pointer);
   {$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
-  tv:GDBVertex2D;
+  tv:TzePoint2d;
 begin
   tv.x:=v^.x;
   tv.y:=v^.y;
@@ -163,10 +163,10 @@ end;
 
 function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
 
-  procedure DrawArc(constref p1,p2:GDBVertex2D;
+  procedure DrawArc(constref p1,p2:TzePoint2d;
   const bulge:double;var currpath:GDBPolyline2DArray;divcount:integer);//inline;
   var
-    d,pc,pac,n:GDBVertex2D;
+    d,pc,pac,n:TzePoint2d;
     l,h,nextbulge:double;
   begin
     d:=p2-p1;
@@ -196,7 +196,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
     end;
   end;
 
-  procedure DrawFullArc(constref p1,p2:GDBVertex2D;
+  procedure DrawFullArc(constref p1,p2:TzePoint2d;
     const bulge:double;var currpath:GDBPolyline2DArray);
   begin
     DrawArc(p1,p2,bulge,currpath,-1);
@@ -207,7 +207,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
     out currpath:GDBPolyline2DArray;const VertexCount:integer;
     const Closed:boolean);
   var
-    p1,pcurr,pnext:GDBVertex2D;
+    p1,pcurr,pnext:TzePoint2d;
     j:integer;
     bulge,nextbulge:double;
   begin
@@ -242,7 +242,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
   procedure loadPoly(var currDXFGroupCode:integer;
     out currpath:GDBPolyline2DArray;const VertexCount:integer);
   var
-    p:GDBVertex2D;
+    p:TzePoint2d;
     j:integer;
   begin
     currpath.init(vertexcount,True);
@@ -276,7 +276,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
     vertexcount,k:integer;
     dummy:integer=0;
     knotcount:integer=0;
-    startTg,endTg:GDBVertex2D;
+    startTg,endTg:TzePoint2d;
     Knots:TKnotsVector;
     PCurrKnot:TKnotsVector.PT;
     CP:TCPVector;
@@ -359,7 +359,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
     var currpath:GDBPolyline2DArray);
   var
     k:integer;
-    p,cp:GDBVertex2D;
+    p,cp:TzePoint2d;
     r,sa,ea,a:double;
     IsCounterClockWise:integer;
   begin
@@ -388,7 +388,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
   procedure loadEllipseEdge(var currDXFGroupCode:integer;
     var currpath:GDBPolyline2DArray);
   var
-    p,axis:GDBVertex2D;
+    p,axis:TzePoint2d;
     r,sa,ea,a:double;
     IsCounterClockWise:integer;
   begin
@@ -405,7 +405,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
   procedure loadLineEdge(var currDXFGroupCode:integer;
   var currpath:GDBPolyline2DArray;EdgeNum,EdgesCount:integer);
   var
-    p:GDBVertex2D;
+    p:TzePoint2d;
   begin
     p:=dxfRequiredVertex2D(rdr,10,currDXFGroupCode);
     if (EdgeNum<>1)and(currpath.Count>0) then begin
@@ -479,7 +479,7 @@ end;
 procedure TBoundaryPath.SaveToDXF(var outStream:TZctnrVectorBytes);
 var
   i,j:integer;
-  pv:PGDBvertex2D;
+  pv:PzePoint2d;
 begin
   dxfIntegerout(outStream,91,paths.Count);
   for i:=0 to paths.Count-1 do begin

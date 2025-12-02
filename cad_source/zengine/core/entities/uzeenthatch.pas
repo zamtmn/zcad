@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzeenthatch;
+unit uzeEntHatch;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
@@ -57,24 +57,26 @@ type
     PatternName:string;
     IslandDetection:THatchIslandDetection;
     Angle,Scale:double;
-    Origin:GDBvertex2D;
+    Origin:TzePoint3d;//по идее должно быть TzePoint2d, но в автокаде 3d
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex);
+      LW:smallint;p:TzePoint3d);
     constructor initnul;
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
+      var IODXFContext:TIODXFSaveContext);virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-    procedure ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;
+    procedure ProcessLine(const c:integer;const l1,l2,c1,c2:TzePoint2d;
       var IV:TIntercept2dpropWithLICVector);
-    procedure ProcessLines(const p1,p2:GDBvertex2D;
+    procedure ProcessLines(const p1,p2:TzePoint2d;
       var IV:TIntercept2dpropWithLICVector);
     procedure ProcessStroke(var Strokes:TPatStrokesArray;
       var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
     procedure DrawStrokes(var Strokes:TPatStrokesArray;
-      var st:double;const p1,p2:GDBvertex2D;var DC:TDrawContext);
+      var st:double;const p1,p2:TzePoint2d;var DC:TDrawContext);
     procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
     procedure DrawGeometry(lw:integer;var DC:TDrawContext;
       const inFrustumState:TInBoundingVolume);virtual;
@@ -87,14 +89,14 @@ type
     procedure createpoint;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
   end;
 
 const
@@ -168,7 +170,7 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
-  Origin:=NulVertex2D;
+  Origin:=NulVertex;
 end;
 
 constructor GDBObjHatch.init;
@@ -184,7 +186,7 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
-  Origin:=NulVertex2D;
+  Origin:=NulVertex;
 end;
 
 function GDBObjHatch.GetObjType;
@@ -218,12 +220,21 @@ begin
 
   dxfDoubleout(outStream,47,1.25);
   dxfIntegerout(outStream,98,0);
+
   //убрал потому что повторная запись нормали
   //если она не 0,0,1
   //SaveToDXFObjPostfix(outStream);
 end;
 
-procedure GDBObjHatch.ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;
+procedure GDBObjHatch.SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
+  var IODXFContext:TIODXFSaveContext);
+begin
+  inherited;
+  if not IsVectorNul(Origin) then
+    dxfvertexout(outStream,1010,Origin);
+end;
+
+procedure GDBObjHatch.ProcessLine(const c:integer;const l1,l2,c1,c2:TzePoint2d;
   var IV:TIntercept2dpropWithLICVector);
 var
   iprop:intercept2dprop;
@@ -236,12 +247,12 @@ begin
       end;
 end;
 
-procedure GDBObjHatch.ProcessLines(const p1,p2:GDBvertex2D;
+procedure GDBObjHatch.ProcessLines(const p1,p2:TzePoint2d;
   var IV:TIntercept2dpropWithLICVector);
 var
   i,j:integer;
   ppath:PGDBPolyline2DArray;
-  FirstP,PrevP,CurrP:PGDBvertex2D;
+  FirstP,PrevP,CurrP:PzePoint2d;
 begin
   for i:=0 to Path.paths.Count-1 do begin
     ppath:=Path.paths.getDataMutable(i);
@@ -292,12 +303,12 @@ end;
 
 
 procedure GDBObjHatch.DrawStrokes(var Strokes:TPatStrokesArray;
-  var st:double;const p1,p2:GDBvertex2D;var DC:TDrawContext);
+  var st:double;const p1,p2:TzePoint2d;var DC:TDrawContext);
 var
   t,l,cl,d,drawedlen:double;
   c:integer;
-  dir:GDBvertex2D;
-  p,pp:GDBvertex2D;
+  dir:TzePoint2d;
+  p,pp:TzePoint2d;
   First:boolean;
   newdrawlen:double;
 begin
@@ -356,7 +367,7 @@ end;
 procedure GDBObjHatch.ProcessStroke(var Strokes:TPatStrokesArray;
   var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
 var
-  p1,p2:PGDBvertex2D;
+  p1,p2:PzePoint2d;
   t1:double;
   i,First,current:integer;
   inside:boolean;
@@ -436,8 +447,8 @@ end;
 procedure GDBObjHatch.FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
 var
   Angl,LF,sinA,cosA:double;
-  offs,offs2,dirx,diry,p2,ls:GDBVertex2D;
-  pp:PGDBvertex2D;
+  offs,offs2,dirx,diry,p2,ls:TzePoint2d;
+  pp:PzePoint2d;
   i,j:integer;
   iprop:intercept2dprop;
   tmin,tmax:double;
@@ -461,7 +472,8 @@ begin
   dirx.y:=(Strokes.Offset.y*cosA+Strokes.Offset.x*sinA)*Scale;
 
   offs:=Vertex2dMulOnSc(Strokes.Base,Scale);
-  offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
+  //Origin надо учитывать при копировании паттерна из шаблона
+  //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
   offs2:=VertexAdd(offs,dirx);
 
   First:=True;
@@ -502,7 +514,7 @@ procedure GDBObjHatch.FormatEntity(var drawing:TDrawingDef;
 var
   hatchTess:TTriangulator.TTesselator;
   i,j:integer;
-  pv:PGDBvertex;
+  pv:PzePoint3d;
 begin
   if assigned(EntExtensions) then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -511,8 +523,8 @@ begin
   createpoint;
   calcbb(dc);
   CalcActualVisible(dc.DrawingContext.VActuality);
-  Representation.Clear;
   if not (ESTemp in State)and(DCODrawable in DC.Options) then begin
+    Representation.Clear;
     Representation.Geometry.Lock;
     hatchTess:=Triangulator.NewTesselator;
 
@@ -544,8 +556,8 @@ end;
 procedure GDBObjHatch.createpoint;
 var
   i,j,vc:integer;
-  v:GDBvertex4D;
-  v3d:GDBVertex;
+  v:TzeVector4d;
+  v3d:TzePoint3d;
   ppolyarr:pGDBPolyline2DArray;
 begin
   Vertex3D_in_WCS_Array.Clear;
@@ -563,7 +575,7 @@ begin
       v.z:=0;
       v.w:=1;
       v:=VectorTransform(v,objMatrix);
-      v3d:=PGDBvertex(@v)^;
+      v3d:=PzePoint3d(@v)^;
       Vertex3D_in_WCS_Array.PushBackData(v3d);
     end;
   end;
@@ -574,7 +586,7 @@ end;
 procedure GDBObjHatch.getoutbound;
 var
   t,b,l,r,n,f:double;
-  ptv:pgdbvertex;
+  ptv:PzePoint3d;
   ir:itrec;
 begin
   l:=Infinity;
@@ -630,7 +642,9 @@ begin
             if not dxfLoadGroupCodeDouble(rdr,52,byt,Angle) then
               if not dxfLoadGroupCodeDouble(rdr,41,byt,Scale) then
                 if not dxfLoadGroupCodeString(rdr,2,byt,PatternName) then
-                  rdr.SkipString;
+                  if not dxfLoadGroupCodeString(rdr,2,byt,PatternName) then
+                    if not dxfLoadGroupCodeVertex(rdr,1010,byt,Origin) then
+                      rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   case hstyle of
@@ -674,7 +688,7 @@ end;
 
 function GDBObjHatch.CalcTrueInFrustum;
 var
-  pv1:pgdbvertex;
+  pv1:PzePoint3d;
 begin
   pv1:=Vertex3D_in_WCS_Array.getDataMutable(0);
   if pv1<>nil then
@@ -687,19 +701,19 @@ procedure GDBObjHatch.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
   vertexnumber:integer;
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
   ProjectProc(pdesc.worldcoord,tv);
-  pdesc.dispcoord:=ToVertex2DI(tv);
+  pdesc.dispcoord:=ToTzePoint2i(tv);
 end;
 
 procedure GDBObjHatch.AddControlpoints;
 var
   pdesc:controlpointdesc;
   i:integer;
-  pv:pGDBvertex;
+  pv:PzePoint3d;
 begin
   PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(Vertex3D_in_WCS_Array.Count);
   pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
@@ -718,9 +732,9 @@ end;
 procedure GDBObjHatch.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
   vertexnumber:integer;
-  tv,wwc:gdbvertex;
-  pv:PGDBvertex2D;
-  M:DMatrix4D;
+  tv,wwc:TzePoint3d;
+  pv:PzePoint2d;
+  M:TzeTypedMatrix4d;
 begin
   vertexnumber:=rtmod.point.vertexnum;
   m:=self.ObjMatrix;

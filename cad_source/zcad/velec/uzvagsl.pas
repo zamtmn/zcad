@@ -169,26 +169,26 @@ type
 
   //**Список устройств
   TVertexDevice=record
-           coord:GDBVertex;
+           coord:TzePoint3d;
            pdev:PGDBObjDevice;
            num:integer;
   end;
   TListVertexDevice=specialize TVector<TVertexDevice>;
   //**Список стен с их ориентацией относительно перпендикуляра
   TWallInfo=record
-         p1,p2:GDBVertex;
+         p1,p2:TzePoint3d;
          parallel:boolean;
   end;
   TListWallOrient=specialize TVector<TWallInfo>;
   //**Список суперлиний
   TSLInfo=record
-         p1,p2:GDBVertex;
+         p1,p2:TzePoint3d;
   end;
   TListSL=specialize TVector<TSLInfo>;
 
 
   //**Список вершин
-  TListVertex=specialize TVector<GDBVertex>;
+  TListVertex=specialize TVector<TzePoint3d>;
 
   //**Список номеров
   TListNum=specialize TVector<integer>;
@@ -209,10 +209,10 @@ type
       PTGraphInfoVertex=^TGraphInfoVertex;
       TGraphInfoVertex=record
                          devEnt:PGDBObjDevice;
-                         pt:GDBVertex;
+                         pt:TzePoint3d;
                          //break:boolean;
                          //breakName:string;
-                         //lPoint:GDBVertex;
+                         //lPoint:TzePoint3d;
       end;
       TListGraphVertex=specialize TVector<TGraphInfoVertex>;
 
@@ -221,8 +221,8 @@ type
       TInfoEdgeGraph=record
                          VIndex1:Integer; //номер 1-й вершниы по списку
                          VIndex2:Integer; //номер 2-й вершниы по списку
-                         VPoint1:GDBVertex;  //координаты 1й вершниы
-                         VPoint2:GDBVertex;  //координаты 2й вершниы
+                         VPoint1:TzePoint3d;  //координаты 1й вершниы
+                         VPoint2:TzePoint3d;  //координаты 2й вершниы
                          edgeLength:Double; // длина ребра
       end;
       TListEdgeGraph=specialize TVector<TInfoEdgeGraph>;
@@ -270,7 +270,7 @@ implementation
        //TListString=specialize TVector<string>;
      //**устройство и координата
   tdevcoord=record
-              coord,coordOld:GDBVertex;
+              coord,coordOld:TzePoint3d;
               pdev:PGDBObjDevice;
               angleRoom:double;
         end;
@@ -346,11 +346,11 @@ implementation
     end;
 
     //**поиск перпендикуляра к комнате и к внутреннему контуру прокладки
-    function getVertexPerpendicularRoom(contour2dRoom:pgdbobjlwpolyline;contourRoomEmbedSL:TListVertex;stPoint:gdbvertex;out perpendListVertex:TListVertex):boolean;
+    function getVertexPerpendicularRoom(contour2dRoom:pgdbobjlwpolyline;contourRoomEmbedSL:TListVertex;stPoint:TzePoint3d;out perpendListVertex:TListVertex):boolean;
     var
-       {pt1,pta,ptb,}tempVertex,tempVertex2:gdbvertex;
-       vertb2d,verta2d:GDBVertex2d;
-       vertb,verta:GDBVertex;
+       {pt1,pta,ptb,}tempVertex,tempVertex2:TzePoint3d;
+       vertb2d,verta2d:TzePoint2d;
+       vertb,verta:TzePoint3d;
        i{, num}:integer;
     begin
        result:=false;
@@ -438,8 +438,8 @@ implementation
     //**Получить внутренний контур прокладки кабеля по стенам внутри помещения (тот же контур комнаты, только с отступом от стены, для наглядности на чертеже)
     function getcontourRoomEmbedSL(contour2dRoom:pgdbobjlwpolyline;offsetFromWall:double):TListVertex;
     var
-         pt2d,pta2d,ptb2d:gdbvertex2d;
-         pt,pta,ptb,newVert:gdbvertex;
+         pt2d,pta2d,ptb2d:TzePoint2d;
+         pt,pta,ptb,newVert:TzePoint3d;
          i:integer;
     begin
          result:=TListVertex.Create;
@@ -477,7 +477,7 @@ implementation
 
     function mainElementAutoEmbedSL(contour2dRoom:pgdbobjlwpolyline;out contourRoomEmbedSL:TListVertex;out perpendListVertex:TListVertex;out anglePerpendCos:double;cableDistWall:double):boolean;
     var
-      stPoint,tempVertex:GDBVertex;
+      stPoint,tempVertex:TzePoint3d;
       //perpendListVertex:TListVertex;
       //i:integer;
       xline,{yline,}xyline:double;
@@ -574,7 +574,7 @@ implementation
     function getAreaSelectRoom(contourRoom:PGDBObjPolyLine):TBoundingBox;
     var
         i:integer;
-        pt:gdbvertex;
+        pt:TzePoint3d;
     begin
       result.LBN:=contourRoom^.VertexArrayInOCS.getdata(0);
       result.RTF:=contourRoom^.VertexArrayInOCS.getdata(0);
@@ -597,8 +597,8 @@ implementation
     function getContour2DRoom(contourRoom:PGDBObjPolyLine):pgdbobjlwpolyline;
     var
         i:integer;
-        pt:gdbvertex;
-        vertexLWObj:GDBvertex2D; //для двух серной полилинии
+        pt:TzePoint3d;
+        vertexLWObj:TzePoint2d; //для двух серной полилинии
         widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
     begin
 
@@ -631,8 +631,8 @@ implementation
         i,num:integer;
 
         polyLWObj:pgdbobjlwpolyline;
-        pt:gdbvertex;
-        vertexLWObj:GDBvertex2D; //для двух серной полилинии
+        pt:TzePoint3d;
+        vertexLWObj:TzePoint2d; //для двух серной полилинии
         widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
 
         //drawing:PTSimpleDrawing; //для работы с чертежом
@@ -691,7 +691,7 @@ implementation
       end;
 
     //** линия попадает в 1-ю или 3-ю зону пространства координат
-    function isZona13(p1,p2:GDBVertex):boolean;
+    function isZona13(p1,p2:TzePoint3d):boolean;
     begin
        result:=false;
        //if ((p1.x <= p2.x) and (p1.y>=p2.y)) or ((p1.x >= p2.x) and (p1.y<=p2.y)) then
@@ -703,10 +703,10 @@ implementation
 
 
       //** Определяет ориентированы ли линии друг против друга
-    function isOrientAngle(p1,p2,pr1,pr2:GDBVertex):boolean;
+    function isOrientAngle(p1,p2,pr1,pr2:TzePoint3d):boolean;
     var
         //i:integer;
-        tempVertex:gdbvertex;
+        tempVertex:TzePoint3d;
         pzona13,przona13:boolean; //  находится в пространстве 1 или 3
         xyline,xline,anglewall,angleper:double;
 
@@ -774,7 +774,7 @@ implementation
   function getWallInfoOrient(contourRoomEmbedSL:TListVertex;perpendListVertex:TListVertex):TListWallOrient;
   var
     //{angleper,}{anglewall,}xlineper,xylineper{,xlinewall,xylinewall}:double;
-    tempVertex{,perp1,perp2}:gdbvertex;
+    tempVertex{,perp1,perp2}:TzePoint3d;
     i:integer;
     iwall:Twallinfo;
   begin
@@ -903,7 +903,7 @@ implementation
         //ir:itrec;
         mpd:devcoordarray;
         //pdev:PGDBObjDevice;
-        tempvert:GDBVertex;
+        tempvert:TzePoint3d;
         //index:integer;
         //pvd:pvardesk;
         dcoord:tdevcoord;
@@ -1009,7 +1009,7 @@ implementation
 //      ir:itrec;
 //      mpd:devcoordarray;
 //      pdev:PGDBObjDevice;
-//      //key:GDBVertex;
+//      //key:TzePoint3d;
 //      index:integer;
 //      pvd:pvardesk;
 //      dcoord:tdevcoord;
@@ -1223,7 +1223,7 @@ begin
    end;
 end;
       //*** Сортировка списка вершин, внутри списка, так что бы вершины распологались по отдаленности от начальной точки линии которую в данный момент расматриваем
-procedure listSortVertexAtStPtLine(var listNumVertex:TListNum;listVertex:TListGraphVertex;stVertLine:GDBVertex);
+procedure listSortVertexAtStPtLine(var listNumVertex:TListNum;listVertex:TListGraphVertex;stVertLine:TzePoint3d);
 var
    //tempNumVertex:TInfoTempNumVertex;
    IsExchange:boolean;
@@ -1244,7 +1244,7 @@ begin
 end;
 
 //Проверка списка на дубликаты, при добавлении новой вершины, с учетом погрешности
-function dublicateVertex(listVertex:TListGraphVertex;addVertex:GDBVertex;inaccuracy:Double):Boolean;
+function dublicateVertex(listVertex:TListGraphVertex;addVertex:TzePoint3d;inaccuracy:Double):Boolean;
 var
     i:integer;
 begin
@@ -1332,7 +1332,7 @@ var
   infoVertex:TGraphInfoVertex;
   infoEdge:TInfoEdgeGraph;
   listPerp,listPerp1:TListVertex;
-  tempVertex:GDBVertex;
+  tempVertex:TzePoint3d;
   i,j,k,l,num:integer;
   interceptWall,betweenWall:boolean;
 
@@ -1628,7 +1628,7 @@ end;
 
 //** получение новой координаты суперлинии
 //** смотрим есть ли устройство на конце линии и если да то начинаем смотреть обрязной контур
-function getVertexSL(pt,stpt:GDBVertex;listDeviceinRoom:TListVertexDevice;accuracy:double):GDBVertex;
+function getVertexSL(pt,stpt:TzePoint3d;listDeviceinRoom:TListVertexDevice;accuracy:double):TzePoint3d;
 var
  i:integer;
  {pd,}pObjDevice,{pObjDevice2,}currentSubObj{,currentSubObj2}:PGDBObjDevice;
@@ -1639,7 +1639,7 @@ var
  areaVertex:TBoundingBox;
  pobj: pGDBObjEntity;
  pcdev:PGDBObjLine;
- interceptVertex,{firstPoint,}{pConnect,}tempvert:GDBVertex;
+ interceptVertex,{firstPoint,}{pConnect,}tempvert:TzePoint3d;
  psldb:Pointer;
 
  listVertex:TListVertex;
@@ -1715,7 +1715,7 @@ end;
 procedure cropSLonBorder(var listSL:TListSL;listDeviceinRoom:TListVertexDevice;accuracy:double);
 var
    i:integer;
-   //scaleDev:GDBVertex;
+   //scaleDev:TzePoint3d;
    //pd,pObjDevice,pObjDevice2,currentSubObj,currentSubObj2:PGDBObjDevice;
    //ir,ir_inDevice,ir_inDevice2:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
 begin
@@ -1791,9 +1791,9 @@ var
  listSL:TListSL;
 
  contourRoomEmbedSL,perpendListVertex:TListVertex;
- //stPoint:gdbvertex;
+ //stPoint:TzePoint3d;
 
- //v2d1,v2d2:GDBvertex2D;
+ //v2d1,v2d2:TzePoint2d;
  hor2DListDevice,vert2DListDevice:TListColumnDev; //список устройст
 
  anglePerpendCos:double;

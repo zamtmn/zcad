@@ -1,0 +1,22 @@
+//запускаем скрипт командой:
+//LPCSRun(err)
+
+procedure DoError(ALinesCount:int32);
+var
+  i:int32;
+  s:string;
+  lpsh,lpsherr:TLPSHandle;
+begin
+  s:='Скрипт про StartLongProcess '+ToString(ALinesCount)+' раз';
+  lpsh:=StartLongProcess(s,ALinesCount);
+  for i:=1 to ALinesCount do begin
+    s:='err'+ToString(i);
+    lpsherr:=StartLongProcess(s,ALinesCount);
+    ProgressLongProcess(lpsh,i);
+  end;
+  EndLongProcess(lpsh);
+end;
+
+begin
+  DoError(100000);
+end.

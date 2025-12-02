@@ -90,7 +90,6 @@ var
   RD_Renderer:String;
   RD_Extensions:String;
   RD_Version:String;
-  RD_Restore_Mode:TRestoreMode;
   RD_VSync:TGDB3StateBool;
   SAVE_Auto_Interval:Integer;
   SAVE_Auto_Current_Interval:Integer;
@@ -198,7 +197,6 @@ begin
   RD_Renderer:='';
   RD_Extensions:='';
   RD_Version:='';
-  RD_Restore_Mode:=WND_Texture;
   RD_VSync:=T3SB_Fale;
   SAVE_Auto_Interval:=300;
   SAVE_Auto_Current_Interval:=300;

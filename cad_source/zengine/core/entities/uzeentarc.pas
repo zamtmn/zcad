@@ -25,7 +25,7 @@ uses
   uzeentwithlocalcs,uzecamera,uzestyleslayers,UGDBSelectedObjArray,uzeentity,
   UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,uzegeometrytypes,uzeconsts,
   uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,uzeSnap,Math,
-  uzMVReader,uzCtnrVectorpBaseEntity,uzbLogIntf,uzcinterface,SysUtils;
+  uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
 
@@ -37,11 +37,11 @@ type
     EndAngle:double;
     angle:double;
     Vertex3D_in_WCS_Array:GDBPoint3DArray;
-    q0:GDBvertex;
-    q1:GDBvertex;
-    q2:GDBvertex;
+    q0:TzePoint3d;
+    q1:TzePoint3d;
+    q2:TzePoint3d;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex;RR,S,E:double);
+      LW:smallint;p:TzePoint3d;RR,S,E:double);
     constructor initnul;
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -61,7 +61,7 @@ type
     procedure getoutbound(var DC:TDrawContext);virtual;
     procedure projectpoint;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
       const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
     function beforertmodify:Pointer;virtual;
@@ -73,19 +73,19 @@ type
     procedure rtsave(refp:Pointer);virtual;
     destructor done;virtual;
     function GetObjTypeName:string;virtual;
-    function calcinfrustum(const frustum:ClipArray;
+    function calcinfrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure ReCalcFromObjMatrix;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    //function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    //function GetTangentInPoint(point:TzePoint3d):TzePoint3d;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+      const point:TzePoint3d):boolean;virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     class function CreateInstance:PGDBObjArc;static;
     function GetObjType:TObjID;virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -100,18 +100,18 @@ end;
 
 procedure GDBObjARC.TransformAt;
 var
-  tv:GDBVertex4D;
+  tv:TzeVector4d;
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-  tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
+  tv:=PzeVector4d(@t_matrix.mtr.v[3])^;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=NulVertex4D;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=tv;
   ReCalcFromObjMatrix;
 end;
 
 function GDBObjARC.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 begin
   if Vertex3D_in_WCS_Array.onpoint(point,False) then begin
     Result:=
@@ -125,8 +125,8 @@ end;
 
 procedure GDBObjARC.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var
-  m1:DMatrix4D;
-  dir,tv:gdbvertex;
+  m1:TzeTypedMatrix4d;
+  dir,tv:TzePoint3d;
 begin
   m1:=GetMatrix^;
   MatrixInvert(m1);
@@ -139,146 +139,46 @@ end;
 
 procedure GDBObjARC.transform;
 var
-  sav,eav,pins:gdbvertex;
-  temp:double;
+  sav,eav,pins:TzePoint3d;
 begin
-  { Диагностика: вывод параметров дуги до трансформации }
-  zcUI.TextMessage('=== Трансформация дуги: ДО ===',TMWOHistoryOut);
-  //zDebugLn('=== Трансформация дуги: ДО ===');
-  zcUI.TextMessage(
-     Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
-    [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z])
-    ,TMWOHistoryOut);
-  //zDebugLn(Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z]));
-  //zDebugLn(Format('Центр локальный (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z]));
-  //zDebugLn(Format('Радиус: %.6f', [R]));
-  //zDebugLn(Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
-  //  [StartAngle, StartAngle*180/pi]));
-  //zDebugLn(Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
-  //  [EndAngle, EndAngle*180/pi]));
-  //zDebugLn(Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]));
-   zcUI.TextMessage(
-      Format('Матрица трансформации: det=%.6f',
-     [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]])
-     ,TMWOHistoryOut);
+  precalc;
+  if t_matrix.mtr.v[0].v[0]*t_matrix.mtr.v[1].v[1]*t_matrix.mtr.v[2].v[2]<eps then begin
+    sav:=q2;
+    eav:=q0;
+  end else begin
+    sav:=q0;
+    eav:=q2;
+  end;
+  pins:=P_insert_in_WCS;
+  sav:=VectorTransform3D(sav,t_matrix);
+  eav:=VectorTransform3D(eav,t_matrix);
+  pins:=VectorTransform3D(pins,t_matrix);
+  inherited;
+  sav:=NormalizeVertex(VertexSub(sav,pins));
+  eav:=NormalizeVertex(VertexSub(eav,pins));
 
-       zcUI.TextMessage(
-      Format('Центр в OCS (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-     [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z])
-     ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Радиус: %.6f', [R])
-    ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
-    [StartAngle, StartAngle*180/pi])
-    ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
-    [EndAngle, EndAngle*180/pi])
-    ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
-    [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z])
-    ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Матрица трансформации: det=%.6f',
-    [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]])
-    ,TMWOHistoryOut);
+  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
+  if sav.y<eps then
+    StartAngle:=2*pi-StartAngle;
 
-    precalc;
-     if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] < 0 then begin
-       // Для трансформаций с отрицательным определителем (зеркалирование) меняем порядок точек
-       zcUI.TextMessage(
-         'Определитель < 0: меняем местами начальную и конечную точки'
-       ,TMWOHistoryOut);
-       sav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
-       eav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
-     end else begin
-       zcUI.TextMessage(
-         'Определитель >= 0: используем обычный порядок точек'
-       ,TMWOHistoryOut);
-       sav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
-       eav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
-     end;
-    // Конвертируем векторы из OCS в WCS
-    sav:=VectorTransform3D(sav, objmatrix);
-    eav:=VectorTransform3D(eav, objmatrix);
-    // Трансформируем векторы в WCS
-    sav:=VectorTransform3D(sav,t_matrix);
-    eav:=VectorTransform3D(eav,t_matrix);
-    inherited;
-   // Нормализуем векторы для расчета углов
-   sav:=NormalizeVertex(sav);
-   eav:=NormalizeVertex(eav);
-
-     // Преобразуем векторы в локальные координаты
-     StartAngle:=ArcTan2(scalardot(sav, Local.basis.oy), scalardot(sav, Local.basis.ox));
-     if StartAngle < 0 then
-       StartAngle := StartAngle + 2*pi;
-
-     EndAngle:=ArcTan2(scalardot(eav, Local.basis.oy), scalardot(eav, Local.basis.ox));
-     if EndAngle < 0 then
-       EndAngle := EndAngle + 2*pi;
-
-   { Диагностика: вывод параметров дуги после трансформации }
-  //zDebugLn('=== Трансформация дуги: ПОСЛЕ ===');
-  //zDebugLn(Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z]));
-  //zDebugLn(Format('Центр локальный (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z]));
-  //zDebugLn(Format('Радиус: %.6f', [R]));
-  //zDebugLn(Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
-  //  [StartAngle, StartAngle*180/pi]));
-  //zDebugLn(Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
-  //  [EndAngle, EndAngle*180/pi]));
-  //zDebugLn(Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]));
-  //zDebugLn('=======================================');
-    zcUI.TextMessage(
-     '=== Трансформация дуги: ПОСЛЕ ==='
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
-    [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z])
-    ,TMWOHistoryOut);
-   zcUI.TextMessage(
-      Format('Центр в OCS (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-     [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z])
-     ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Радиус: %.6f', [R])
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
-    [StartAngle, StartAngle*180/pi])
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
-    [EndAngle, EndAngle*180/pi])
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
-    [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z])
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     '======================================='
-    ,TMWOHistoryOut);
+  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
+  if eav.y<eps then
+    EndAngle:=2*pi-EndAngle;
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;
 var
-   scl:GDBvertex;
+  ox,oy:TzePoint3d;
+  m:TzeTypedMatrix4d;
 begin
-   Local:=GetPInsertInOCSBymatrix(objmatrix,scl);
-   // For arcs, P_insert_in_WCS is the center in WCS coordinates
-   P_insert_in_WCS := PGDBVertex(@objmatrix.mtr[3])^;
+  inherited;
 
-   // Calculate radius from the scale
-   self.R:=oneVertexlength(Local.basis.ox);
+  ox:=GetXfFromZ(Local.basis.oz);
+  oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
+  m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
+
+  Local.P_insert:=VectorTransform3D(PzePoint3d(@objmatrix.mtr.v[3])^,m);
+  self.R:=PzePoint3d(@objmatrix.mtr.v[0])^.x/local.basis.OX.x;
 end;
 
 function GDBObjARC.CalcTrueInFrustum;
@@ -286,11 +186,11 @@ var
   i:integer;
   rad:double;
 begin
-  rad:=abs(ObjMatrix.mtr[0].v[0]);
+  rad:=abs(ObjMatrix.mtr.v[0].v[0]);
   for i:=0 to 5 do
-    if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
-      P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+
-      frustum[i].v[3]+rad{+GetLTCorrectH}<0) then
+    if (frustum.v[i].v[0]*P_insert_in_WCS.x+frustum.v[i].v[1]*
+      P_insert_in_WCS.y+frustum.v[i].v[2]*P_insert_in_WCS.z+
+      frustum.v[i].v[3]+rad{+GetLTCorrectH}<0) then
       exit(IREmpty);
   Result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum,False);
 end;
@@ -301,14 +201,14 @@ var
 begin
   Result:=True;
   for i:=0 to 4 do begin
-    if (frustum[i].v[0]*outbound[0].x+frustum[i].v[1]*outbound[0].y+
-        frustum[i].v[2]*outbound[0].z+frustum[i].v[3]<0)  and
-       (frustum[i].v[0]*outbound[1].x+frustum[i].v[1]*outbound[1].y+
-        frustum[i].v[2]*outbound[1].z+frustum[i].v[3]<0)  and
-       (frustum[i].v[0]*outbound[2].x+frustum[i].v[1]*outbound[2].y+
-        frustum[i].v[2]*outbound[2].z+frustum[i].v[3]<0)  and
-       (frustum[i].v[0]*outbound[3].x+frustum[i].v[1]*outbound[3].y+
-        frustum[i].v[2]*outbound[3].z+frustum[i].v[3]<0) then begin
+    if (frustum.v[i].v[0]*outbound[0].x+frustum.v[i].v[1]*outbound[0].y+
+        frustum.v[i].v[2]*outbound[0].z+frustum.v[i].v[3]<0)  and
+       (frustum.v[i].v[0]*outbound[1].x+frustum.v[i].v[1]*outbound[1].y+
+        frustum.v[i].v[2]*outbound[1].z+frustum.v[i].v[3]<0)  and
+       (frustum.v[i].v[0]*outbound[2].x+frustum.v[i].v[1]*outbound[2].y+
+        frustum.v[i].v[2]*outbound[2].z+frustum.v[i].v[3]<0)  and
+       (frustum.v[i].v[0]*outbound[3].x+frustum.v[i].v[1]*outbound[3].y+
+        frustum.v[i].v[2]*outbound[3].z+frustum.v[i].v[3]<0) then begin
       Result:=False;
       system.break;
     end;
@@ -364,14 +264,14 @@ end;
 
 procedure GDBObjARC.CalcObjMatrix;
 var
-  m1:DMatrix4D;
-  v:GDBvertex4D;
+  m1:TzeTypedMatrix4d;
+  v:TzeVector4d;
 begin
   inherited CalcObjMatrix;
   m1:=CreateScaleMatrix(r);
   objmatrix:=matrixmultiply(m1,objmatrix);
 
-  pgdbvertex(@v)^:=local.p_insert;
+  PzePoint3d(@v)^:=local.p_insert;
   v.z:=0;
   v.w:=1;
   m1:=objMatrix;
@@ -381,7 +281,7 @@ end;
 
 procedure GDBObjARC.precalc;
 var
-  v:GDBvertex4D;
+  v:TzeVector4d;
 begin
   angle:=endangle-startangle;
   if angle<0 then
@@ -390,17 +290,17 @@ begin
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q0:=pgdbvertex(@v)^;
+  q0:=PzePoint3d(@v)^;
   SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q1:=pgdbvertex(@v)^;
+  q1:=PzePoint3d(@v)^;
   SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q2:=pgdbvertex(@v)^;
+  q2:=PzePoint3d(@v)^;
 end;
 
 procedure GDBObjARC.FormatEntity(var drawing:TDrawingDef;
@@ -518,8 +418,8 @@ procedure GDBObjARC.createpoints(var DC:TDrawContext);
 var
   i:integer;
   l:double;
-  v:GDBvertex;
-  pv:GDBVertex;
+  v:TzePoint3d;
+  pv:TzePoint3d;
   maxlod:integer;
 begin
   angle:=endangle-startangle;
@@ -595,10 +495,10 @@ var
   i:integer;
   rad:double;
 begin
-  rad:=abs(ObjMatrix.mtr[0].v[0]);
+  rad:=abs(ObjMatrix.mtr.v[0].v[0]);
   for i:=0 to 5 do begin
-    if (mf[i].v[0]*P_insert_in_WCS.x+mf[i].v[1]*P_insert_in_WCS.y+
-        mf[i].v[2]*P_insert_in_WCS.z+mf[i].v[3]+rad<0) then
+    if (mf.v[i].v[0]*P_insert_in_WCS.x+mf.v[i].v[1]*P_insert_in_WCS.y+
+        mf.v[i].v[2]*P_insert_in_WCS.z+mf.v[i].v[3]+rad<0) then
       exit(False);
   end;
   Result:=Vertex3D_in_WCS_Array.onmouse(mf,False);
@@ -610,20 +510,20 @@ end;
 procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_midle then begin
     pdesc.worldcoord:=q1;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=q2;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end;
 end;
 
@@ -720,15 +620,15 @@ end;
 
 procedure GDBObjARC.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  tv3d:gdbvertex;
-  tq0,tq1,tq2:gdbvertex;
+  tv3d:TzePoint3d;
+  tq0,tq1,tq2:TzePoint3d;
   ptdata:tarcrtmodify;
   ad:TArcData;
-  m:DMatrix4D;
+  m:TzeTypedMatrix4d;
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m.mtr[3]:=NulVector4D;
+  m.mtr.v[3]:=NulVector4D;
 
   tq0:=VectorTransform3D(q0*R,m);
   tq1:=VectorTransform3D(q1*R,m);

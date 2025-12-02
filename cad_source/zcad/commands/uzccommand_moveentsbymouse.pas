@@ -84,8 +84,8 @@ end;
 function MoveEntsByMouse_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
-  p1:GDBvertex;
-  t_matrix:DMatrix4D;
+  p1:TzePoint3d;
+  t_matrix:TzeTypedMatrix4d;
   p:PGDBObjEntity;
   ir:itrec;
   RC:TDrawContext;

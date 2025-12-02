@@ -86,8 +86,8 @@ type
 
     procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);override;
 
-    procedure TryConnectToEnts(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
-    procedure TryConnectToDeviceConnectors(const p1,p2:GDBVertex;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure TryConnectToEnts(const p1,p2:TzePoint3d;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure TryConnectToDeviceConnectors(const p1,p2:TzePoint3d;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
     function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;override;
 
     protected
@@ -315,11 +315,11 @@ begin
    dxfStringout(outStream,1000,'SCHConnection=');
 end;
 
-procedure drawArrow(l1,l2:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+procedure drawArrow(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
-  onel,p1,p2:GDBVertex;
-  tp2,tp3:GDBVertex;
-  m,rotmatr:DMatrix4D;
+  onel,p1,p2:TzePoint3d;
+  tp2,tp3:TzePoint3d;
+  m,rotmatr:TzeTypedMatrix4d;
 begin
   onel:=l2-l1;
   if onel.SqrLength>sqreps then begin
@@ -329,12 +329,12 @@ begin
     tp3:=NormalizeVertex(tp3);
     tp2:=NormalizeVertex(tp2);
     //rotmatr:=onematrix;
-    //PGDBVertex(@rotmatr.mtr[0])^:=onel;
-    //PGDBVertex(@rotmatr.mtr[1])^:=tp2;
-    //PGDBVertex(@rotmatr.mtr[2])^:=tp3;
+    //PzePoint3d(@rotmatr.mtr[0])^:=onel;
+    //PzePoint3d(@rotmatr.mtr[1])^:=tp2;
+    //PzePoint3d(@rotmatr.mtr[2])^:=tp3;
     rotmatr:=CreateMatrixFromBasis(onel,tp2,tp3);
     //m:=onematrix;
-    //PGDBVertex(@m.mtr[3])^:=l2;
+    //PzePoint3d(@m.mtr[3])^:=l2;
     m:=CreateTranslationMatrix(l2);
     m:=MatrixMultiply(rotmatr,m);
     p1:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
@@ -343,14 +343,14 @@ begin
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,l2);
   end;
 end;
-procedure drawCross(const p1:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+procedure drawCross(const p1:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 begin
   pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_XY_zVertex,p1+_XY_zVertex);
   pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_MinusXY_zVertex,p1+_MinusXY_zVertex);
 end;
-procedure drawFilledCircle(const p0:GDBVertex;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+procedure drawFilledCircle(const p0:TzePoint3d;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
-  p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12:GDBVertex;
+  p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12:TzePoint3d;
   sine,cosine:Double;
 begin
   if r>bigeps then begin
@@ -404,11 +404,11 @@ begin
   end;
 end;
 
-procedure drawIntersectArc(l1,l2:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+procedure drawIntersectArc(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
-  v,onel,p1,p2:GDBVertex;
-  tp2,tp3:GDBVertex;
-  m,rotmatr:DMatrix4D;
+  v,onel,p1,p2:TzePoint3d;
+  tp2,tp3:TzePoint3d;
+  m,rotmatr:TzeTypedMatrix4d;
   l{,x,y,z}:double;
   sine,cosine:Double;
   chg:boolean;
@@ -436,12 +436,12 @@ begin
     tp3:=NormalizeVertex(tp3);
     tp2:=NormalizeVertex(tp2);
     //rotmatr:=onematrix;
-    //PGDBVertex(@rotmatr.mtr[0])^:=onel;
-    //PGDBVertex(@rotmatr.mtr[1])^:=tp2*l;
-    //PGDBVertex(@rotmatr.mtr[2])^:=tp3*l;
+    //PzePoint3d(@rotmatr.mtr[0])^:=onel;
+    //PzePoint3d(@rotmatr.mtr[1])^:=tp2*l;
+    //PzePoint3d(@rotmatr.mtr[2])^:=tp3*l;
     rotmatr:=CreateMatrixFromBasis(onel,tp2*l,tp3*l);
     m:=onematrix;
-    PGDBVertex(@m.mtr[3])^:=l1;
+    PzePoint3d(@m.mtr.v[3])^:=l1;
     m:=MatrixMultiply(rotmatr,m);
 
     p1:=VectorTransform3D(uzegeometry.CreateVertex(-1,0,0),m);
@@ -466,7 +466,7 @@ begin
   end;
 end;
 
-procedure TSCHConnectionExtender.TryConnectToEnts(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.TryConnectToEnts(const p1,p2:TzePoint3d;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjLine;
   ir:itrec;
@@ -574,7 +574,7 @@ begin
   until p=nil;
 end;
 
-procedure TSCHConnectionExtender.TryConnectToDeviceConnectors(const p1,p2:GDBVertex;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.TryConnectToDeviceConnectors(const p1,p2:TzePoint3d;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjDevice;
   ir:itrec;
@@ -635,7 +635,7 @@ var
   pc:TConnectPoints.PT;
   linelen,l:double;
   knot:TKnot;
-  oldP,P:GDBvertex;
+  oldP,P:TzePoint3d;
 begin
   result:=true;
   for i:=0 to Connections.Count-1 do begin

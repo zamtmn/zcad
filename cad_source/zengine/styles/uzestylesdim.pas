@@ -455,15 +455,15 @@ begin
                 end;
                 176:
                 begin
-                     Lines.DIMCLRD:=strtoint(value);
+                     Lines.DIMCLRD:=NormalizePaletteColor(strtoint(value));
                 end;
                 177:
                 begin
-                     Lines.DIMCLRE:=strtoint(value);
+                     Lines.DIMCLRE:=NormalizePaletteColor(strtoint(value));
                 end;
                 178:
                 begin
-                     Text.DIMCLRT:=strtoint(value);
+                     Text.DIMCLRT:=NormalizePaletteColor(strtoint(value));
                 end;
                 end;
               end;

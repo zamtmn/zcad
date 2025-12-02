@@ -828,7 +828,7 @@ var count: Integer;
     cman:TCableManager;
     pv:pGDBObjDevice;
 
-    coord,currentcoord:GDBVertex;
+    coord,currentcoord:TzePoint3d;
     pvmc:pvardesk;
 
     nodeend,nodestart:PGDBObjDevice;

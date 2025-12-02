@@ -47,7 +47,7 @@ type
     GZVector{-}<TCopyObjectDesc>{//};
   {REGISTEROBJECTTYPE move_com}
   move_com=object(CommandRTEdObject)
-    t3dp:gdbvertex;
+    t3dp:TzePoint3d;
     pcoa:ptpcoavector;
     {-}protected{//}
     function InternalCommandStart(const Context:TZCADCommandContext;
@@ -56,12 +56,12 @@ type
     procedure CommandStart(const Context:TZCADCommandContext;
       Operands:TCommandOperands);virtual;
     procedure CommandCancel(const Context:TZCADCommandContext);virtual;
-    function BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
-    function CalcTransformMatrix(p1,p2:GDBvertex):DMatrix4D;virtual;
-    function Move(const dispmatr:DMatrix4D;UndoMaker:string):integer;
+    function BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
+    function CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;virtual;
+    function Move(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;
     procedure showprompt(mklick:integer);virtual;
   end;
   {EXPORT-}
@@ -161,8 +161,8 @@ begin
   inherited;
 end;
 
-function Move_com.BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function Move_com.BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
   //var i: Integer;
   //  tv,pobj: pGDBObjEntity;
   //     ir:itrec;
@@ -173,18 +173,18 @@ begin
     showprompt(1);
 end;
 
-function Move_com.CalcTransformMatrix(p1,p2:GDBvertex):DMatrix4D;
+function Move_com.CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;
 var
-  dist:gdbvertex;
+  dist:TzePoint3d;
 begin
   dist:=uzegeometry.VertexSub(p2,p1);
   Result:=uzegeometry.CreateTranslationMatrix(dist);
 end;
 
-function Move_com.Move(const dispmatr:DMatrix4D;UndoMaker:string):integer;
+function Move_com.Move(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;
 var
-  //dist:gdbvertex;
-  im:DMatrix4D;
+  //dist:TzePoint3d;
+  im:TzeTypedMatrix4d;
   ir:itrec;
   pcd:PTCopyObjectDesc;
   m:tmethod;
@@ -214,10 +214,10 @@ begin
   Result:=cmd_ok;
 end;
 
-function Move_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function Move_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
-  dispmatr:DMatrix4D;
+  dispmatr:TzeTypedMatrix4d;
   dc:TDrawContext;
 begin
   dispmatr:=CalcTransformMatrix(t3dp,wc);

@@ -32,14 +32,14 @@ uses
   uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,
   uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
   uzccommand_layer,uzcuitypes,uzeNamedObject,uzccommandsimpl,uzedimensionaltypes,
-  uzcOI;
+  uzcOI,uzcdrawing;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);
-                         class procedure GetLength(Pinstance:PtrInt);
-                         class procedure GetVertexX(Pinstance:PtrInt);
-                         class procedure GetVertexY(Pinstance:PtrInt);
-                         class procedure GetVertexZ(Pinstance:PtrInt);
+                         //class procedure GetLength(Pinstance:PtrInt);
+                         //class procedure GetVertexX(Pinstance:PtrInt);
+                         //class procedure GetVertexY(Pinstance:PtrInt);
+                         //class procedure GetVertexZ(Pinstance:PtrInt);
     end;
 procedure DecorateSysTypes;
 procedure ButtonTxtDrawFastEditor(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
@@ -240,7 +240,7 @@ end;
 
 procedure runlayerswnd(PInstance:Pointer);
 begin
-     layer_cmd(TZCADCommandContext.CreateRec,EmptyCommandOperands);
+     layer_cmd(TZCADCommandContext.CreateRec(PTZCADDrawing(drawings.GetCurrentDWG)),EmptyCommandOperands);
 end;
 procedure runcolorswnd(PInstance:Pointer);
 var
@@ -431,7 +431,7 @@ begin
                     end
                 else
                     begin
-                         commandmanager.PushValue('','PGDBVertex',@PInstance);
+                         commandmanager.PushValue('','PzePoint3d',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
                                                   commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PObj)
                                               else
@@ -443,13 +443,8 @@ begin
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
-procedure GetVertexFromDrawing(PInstance:PGDBVertex);
-begin
-     commandmanager.executecommandtotalend;
-     count:=1;
-     Application.QueueAsyncCall(AsyncCommHelper.GetVertex,PtrInt(PInstance));
-end;
-class procedure AsyncCommHelper.GetLength(Pinstance:PtrInt);
+
+(*class procedure AsyncCommHelper.GetLength(Pinstance:PtrInt);
 var
    p:pointer;
 begin
@@ -471,8 +466,8 @@ begin
                          commandmanager.executecommand('GetLength',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
-end;
-class procedure AsyncCommHelper.GetVertexX(Pinstance:PtrInt);
+end;*)
+(*class procedure AsyncCommHelper.GetVertexX(Pinstance:PtrInt);
 var
    p:pointer;
 begin
@@ -540,31 +535,31 @@ begin
                          commandmanager.executecommand('GetVertexZ',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
-end;
-procedure GetLengthFromDrawing(PInstance:PGDBVertex);
+end;*)
+{procedure GetLengthFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetLength,PtrInt(PInstance));
-end;
-procedure GetXFromDrawing(PInstance:PGDBVertex);
+end;}
+{procedure GetXFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetVertexX,PtrInt(PInstance));
 end;
-procedure GetYFromDrawing(PInstance:PGDBVertex);
+procedure GetYFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetVertexY,PtrInt(PInstance));
 end;
-procedure GetZFromDrawing(PInstance:PGDBVertex);
+procedure GetZFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetVertexZ,PtrInt(PInstance));
-end;
+end;}
 procedure DecorateSysTypes;
 begin
   if SysUnit<>nil then begin
@@ -577,9 +572,9 @@ begin
     AddEditorToType(SysUnit.TypeName2PTD('LongWord'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('QWord'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('Double'),TBaseTypesEditors.BaseCreateEditor);
-    AddEditorToType(SysUnit.TypeName2PTD('GDBNonDimensionDouble'),TBaseTypesEditors.BaseCreateEditor);
-    AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDouble'),TBaseTypesEditors.BaseCreateEditor);
-    AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDegDouble'),TBaseTypesEditors.BaseCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TZeDimLess'),TBaseTypesEditors.BaseCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TZeAngle'),TBaseTypesEditors.BaseCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TZeAngleDeg'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('String'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('AnsiString'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('AnsiString1251'),TBaseTypesEditors.BaseCreateEditor);
@@ -628,11 +623,11 @@ begin
     AddFastEditorToType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonDraw,@runlayerswnd);
     AddFastEditorToType(SysUnit.TypeName2PTD('String'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
     AddFastEditorToType(SysUnit.TypeName2PTD('AnsiString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
-    AddFastEditorToType(SysUnit.TypeName2PTD('GDBCoordinates3D'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonCrossDraw,@GetVertexFromDrawing,true);
-    AddFastEditorToType(SysUnit.TypeName2PTD('GDBLength'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@GetLengthFromDrawing,true);
-    AddFastEditorToType(SysUnit.TypeName2PTD('GDBXCoordinate'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonXDrawFastEditor,@GetXFromDrawing,true);
-    AddFastEditorToType(SysUnit.TypeName2PTD('GDBYCoordinate'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonYDrawFastEditor,@GetYFromDrawing,true);
-    AddFastEditorToType(SysUnit.TypeName2PTD('GDBZCoordinate'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonZDrawFastEditor,@GetZFromDrawing,true);
+    //AddFastEditorToType(SysUnit.TypeName2PTD('GDBCoordinates3D'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonCrossDraw,@GetVertexFromDrawing,true);
+    //AddFastEditorToType(SysUnit.TypeName2PTD('GDBLength'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@GetLengthFromDrawing,true);
+    //AddFastEditorToType(SysUnit.TypeName2PTD('TzeXUnits'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonXDrawFastEditor,@GetXFromDrawing,true);
+    //AddFastEditorToType(SysUnit.TypeName2PTD('TzeYUnits'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonYDrawFastEditor,@GetYFromDrawing,true);
+    //AddFastEditorToType(SysUnit.TypeName2PTD('TzeZUnits'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonZDrawFastEditor,@GetZFromDrawing,true);
     AddFastEditorToType(SysUnit.TypeName2PTD('TGDBOSMode'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonDraw,@runOSwnd);
     AddFastEditorToType(SysUnit.TypeName2PTD('TMSPrimitiveDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@DeselectEnts,true);
     AddFastEditorToType(SysUnit.TypeName2PTD('TMSPrimitiveDetector'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonMultiplyDraw,@SelectOnlyThisEnts,true);

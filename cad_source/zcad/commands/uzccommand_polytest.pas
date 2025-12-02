@@ -53,8 +53,8 @@ begin
   end;
 end;
 
-function polytest_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function polytest_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
   //var tb:PGDBObjSubordinated;
 begin
   Result:=mclick+1;

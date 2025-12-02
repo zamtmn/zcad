@@ -156,7 +156,7 @@ begin
   commandmanager.DMShow;
 end;
 
-function IsHavePoint(pent:PGDBObjEntity;out pt:gdbvertex):boolean;
+function IsHavePoint(pent:PGDBObjEntity;out pt:TzePoint3d):boolean;
 begin
   if IsIt(TypeOf(pent^),typeof(GDBObjWithLocalCS)) then
     pt:=PGDBObjWithLocalCS(pent)^.P_insert_in_WCS
@@ -168,7 +168,7 @@ end;
 procedure FillMetrixDictionary(var md:TMetrixDictionary);
 var
   psd:PSelectedObjDesc;
-  pt:GDBvertex;
+  pt:TzePoint3d;
   pent:PGDBObjEntity;
   ir:itrec;
   pvd:pvardesk;
@@ -231,7 +231,7 @@ begin
 end;
 
 procedure AreaSort(mpd:devcoordarray);
-  function ProcessCoord(const coord:GDBVertex):GDBVertex;
+  function ProcessCoord(const coord:TzePoint3d):TzePoint3d;
   begin
     case AreaParam.SortMode of
       TST_YX,TST_UNSORTED:begin
@@ -266,9 +266,9 @@ end;
 procedure PerimetrSort(mpd:devcoordarray);
 var
   i:integer;
-  CenterPoint:GDBvertex;
+  CenterPoint:TzePoint3d;
   dcwa:TDevCoordwithAngleVector;
-  sav:GDBvertex;
+  sav:TzePoint3d;
   a,aa:double;
 begin
   CenterPoint:=NulVertex;

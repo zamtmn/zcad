@@ -18,14 +18,14 @@ uses
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
   uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
   csvdocument,
-  UGDBOpenArrayOfPV,uzeentblockinsert,{devices,}{UGDBTree,}uzcdrawings,
+  UGDBOpenArrayOfPV,uzeentblockinsert,uzcdrawings,
   uzccommandsmanager,uzccomdraw,uzcentelleader,
   uzccommandsabstract,
   uzccommandsimpl,
   uzegeometrytypes,uzbtypes,
   uzcutils,
-  sysutils,
-  {fileutil}LazUTF8,
+  SysUtils,
+  LazUTF8,
   varmandef,
   uzglviewareadata,uzglviewareaabstract,uzglviewareageneral,
   uzcinterface,
@@ -37,55 +37,33 @@ uses
   uzcentnet,
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
-  uzbpaths,uzctnrvectorstrings,math,Masks,uzbstrproc,
-  {uzeentabstracttext,}uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
+  uzbpaths,uzctnrvectorstrings,Math,Masks,uzbstrproc,
+  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
   uzelongprocesssupport,uzcLog,
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
-  uzeparsercmdprompt{,uzctnrvectorpgdbaseobjects},uzeSnap,uzCtnrVectorpBaseEntity,
+  uzeparsercmdprompt,uzeSnap,uzCtnrVectorpBaseEntity,
   uzeEntBase;
 type
-{Export+}
-  TFindType=(
-               TFT_Obozn(*'**обозначении'*),
-               TFT_DBLink(*'**материале'*),
-               TFT_DESC_MountingDrawing(*'**сокращенноммонтажномчертеже'*),
-               TFT_variable(*'??указанной переменной'*)
-             );
-PTBasicFinter=^TBasicFinter;
-{REGISTERRECORDTYPE TBasicFinter}
-TBasicFinter=record
-                   IncludeCable:Boolean;(*'Include filter'*)
-                   IncludeCableMask:String;(*'Include mask'*)
-                   ExcludeCable:Boolean;(*'Exclude filter'*)
-                   ExcludeCableMask:String;(*'Exclude mask'*)
-             end;
-  {REGISTERRECORDTYPE GDBLine}
-     GDBLine=record
-                  lBegin,lEnd:GDBvertex;
-              end;
-  PTELCableComParam=^TELCableComParam;
-  {REGISTERRECORDTYPE TELCableComParam}
   TELCableComParam=record
-                        Traces:TEnumData;(*'Trace'*)
-                        PCable:{PGDBObjCable}Pointer;(*'Cabel'*)
-                        PTrace:{PGDBObjNet}Pointer;(*'Trace (pointer)'*)
-                   end;
-  {REGISTERRECORDTYPE TELLeaderComParam}
+    Traces:TEnumData;(*'Trace'*)
+    PCable:Pointer;(*'Cabel (pointer)'*)
+    PTrace:Pointer;(*'Trace (pointer)'*)
+  end;
+  PTELCableComParam=^TELCableComParam;
   TELLeaderComParam=record
-                        Scale:Double;(*'Scale'*)
-                        Size:Integer;(*'Size'*)
-                        twidth:Double;(*'Width'*)
-                   end;
-{Export-}
+    Scale:double;(*'Scale'*)
+    Size:integer;(*'Size'*)
+    twidth:double;(*'Width'*)
+  end;
   El_Wire_com = object(CommandRTEdObject)
     New_line: PGDBObjLine;
     FirstOwner,SecondOwner,OldFirstOwner:PGDBObjNet;
     constructor init(cn:String;SA,DA:TCStartAttr);
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
     procedure CommandCancel(const Context:TZCADCommandContext); virtual;
-    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 
   {EM_SRBUILD_com = object(FloatInsert_com)
@@ -127,7 +105,7 @@ var
 
    //EM_SRBUILD:EM_SRBUILD_com;
    //EM_SEPBUILD:EM_SEPBUILD_com;
-   em_sepbuild_params:TBasicFinter;
+   //em_sepbuild_params:TBasicFinter;
    KIP_CDBuild:KIP_CDBuild_com;
    KIP_LugTableBuild:KIP_LugTableBuild_com;
 
@@ -242,7 +220,7 @@ begin
               result:=-121.5;
      end;
 end;
-function insertblock(bname:String;obozn:TDXFEntsInternalStringType;p:gdbVertex):TBoundingBox;
+function insertblock(bname:String;obozn:TDXFEntsInternalStringType;p:TzePoint3d):TBoundingBox;
 var
    pgdbins:pgdbobjblockinsert;
    pbdef:PGDBObjBlockdef;
@@ -273,12 +251,12 @@ begin
           end;
 
 end;
-procedure drawlineandtext(pcabledesk:PTCableDesctiptor;p1,p2:GDBVertex);
+procedure drawlineandtext(pcabledesk:PTCableDesctiptor;p1,p2:TzePoint3d);
 var
    pl:pgdbobjline;
    a:Double;
    ptext:PGDBObjMText;
-   v:gdbvertex;
+   v:TzePoint3d;
    DC:TDrawContext;
 begin
      pl:=pointer(AllocEnt(GDBLineID));
@@ -300,10 +278,10 @@ begin
                                v.x:=v.y;
                                v.y:=a;}
                                v:=uzegeometry.VertexMulOnSc(v,-1);
-                               a:=vertexangle(PGDBVertex2d(@p1)^,PGDBVertex2d(@p2)^)*180/pi;
+                               a:=vertexangle(PzePoint2d(@p1)^,PzePoint2d(@p2)^)*180/pi;
                           end
                           else
-                              a:=180+vertexangle(PGDBVertex2d(@p1)^,PGDBVertex2d(@p2)^)*180/pi;
+                              a:=180+vertexangle(PzePoint2d(@p1)^,PzePoint2d(@p2)^)*180/pi;
 
           ptext:=pointer(AllocEnt(GDBMtextID));
           ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'m'),vertexadd(Vertexmorph(p1,p2,0.5),v),2.5,0,0.65,a,jsbc,vertexlength(p1,p2),1);
@@ -318,7 +296,7 @@ begin
      end;
      
 end;
-procedure drawcable(pcabledesk:PTCableDesctiptor;p1,p2:GDBVertex;g1,g2:TBoundingBox;bgm1,bgm2:TBGMode);
+procedure drawcable(pcabledesk:PTCableDesctiptor;p1,p2:TzePoint3d;g1,g2:TBoundingBox;bgm1,bgm2:TBGMode);
 //var
 //   pl:pgdbobjline;
 begin
@@ -350,7 +328,7 @@ else if bgm1<bgm2 then
 
 end;
 //TBGMode=(BGAvtomat,DG1J,BGComm,DG2J,BGNagr);
-(*procedure EM_SEP_build_group(const cman:TCableManager;const node:PGDBEmSEPDeviceNode;var group:Integer;P1:GDBVertex;var BGM:TBGMode;oldgabarit:GDBBoundingBbox);
+(*procedure EM_SEP_build_group(const cman:TCableManager;const node:PGDBEmSEPDeviceNode;var group:Integer;P1:TzePoint3d;var BGM:TBGMode;oldgabarit:GDBBoundingBbox);
 var
    pvd:pvardesk;
    tempbgm,newBGM,nextBGM,TnextBGM:TBGMode;
@@ -361,7 +339,7 @@ var
    name:String;
    gabarit:GDBBoundingBbox;
    y:Double;
-   p:gdbvertex;
+   p:TzePoint3d;
 begin
           drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'EM_PSRS_HEAD');
           drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_EM_PSRS_EL');
@@ -644,8 +622,8 @@ var
   ir:itrec;
   pnevdev:PGDBObjDevice;
   PBH:PGDBObjBlockdef;
-  currentcoord:GDBVertex;
-  t_matrix:DMatrix4D;
+  currentcoord:TzePoint3d;
+  t_matrix:TzeTypedMatrix4d;
   pobj,pcobj:PGDBObjEntity;
   ir2:itrec;
   pvd:pvardesk;
@@ -784,8 +762,8 @@ var
     ir:itrec;
     {pdev,}pnevdev:PGDBObjDevice;
     PBH:PGDBObjBlockdef;
-    currentcoord:GDBVertex;
-    t_matrix:DMatrix4D;
+    currentcoord:TzePoint3d;
+    t_matrix:TzeTypedMatrix4d;
     pobj,pcobj:PGDBObjEntity;
     ir2:itrec;
     pvd:pvardesk;
@@ -1324,7 +1302,7 @@ procedure El_Wire_com.CommandCancel;
 begin
 end;
 
-function El_Wire_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function El_Wire_com.BeforeClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record): Integer;
 var //po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
@@ -1362,7 +1340,7 @@ begin
   end
 end;
 
-function El_Wire_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function El_Wire_com.AfterClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record): Integer;
 var //po:PGDBObjSubordinated;
     mode:Integer;
     TempNet:PGDBObjNet;
@@ -1596,7 +1574,7 @@ begin
   cabcomparam.PTrace:=nil;
   //Freemem(pointer(p3dpl));
 end;
-function _Cable_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _Cable_com_BeforeClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
    pvd:pvardesk;
    domethod,undomethod:tmethod;
@@ -1654,7 +1632,7 @@ begin
     end;
   end
 end;
-procedure AddPolySegmentFromConnIfZnotMatch(const PrevPoint,NextPoint:GDBVertex;cable:PGDBObjCable);
+procedure AddPolySegmentFromConnIfZnotMatch(const PrevPoint,NextPoint:TzePoint3d;cable:PGDBObjCable);
 begin
   if IsDoubleNotEqual(PrevPoint.z,NextPoint.z) then begin
     cable^.AddVertex(CreateVertex(NextPoint.x,NextPoint.y,PrevPoint.z));
@@ -1662,7 +1640,7 @@ begin
   end else
     cable^.AddVertex(NextPoint);
 end;
-procedure AddPolySegmentToConnIfZnotMatch(const PrevPoint,NextPoint:GDBVertex;cable:PGDBObjCable);
+procedure AddPolySegmentToConnIfZnotMatch(const PrevPoint,NextPoint:TzePoint3d;cable:PGDBObjCable);
 begin
   if IsDoubleNotEqual(PrevPoint.z,NextPoint.z) then begin
     cable^.AddVertex(CreateVertex(PrevPoint.x,PrevPoint.y,NextPoint.z));
@@ -1670,9 +1648,9 @@ begin
   end else
     cable^.AddVertex(NextPoint);
 end;
-procedure AddPolySegmentIfZnotMatch(const PrevPoint,NextPoint:GDBVertex;cable:PGDBObjCable);
+procedure AddPolySegmentIfZnotMatch(const PrevPoint,NextPoint:TzePoint3d;cable:PGDBObjCable);
 var
-  MidPoint:GDBVertex;
+  MidPoint:TzePoint3d;
 begin
   if IsDoubleNotEqual(PrevPoint.z,NextPoint.z) then begin
     MidPoint:=Vertexmorph(PrevPoint,NextPoint,0.5);
@@ -1683,13 +1661,13 @@ begin
     cable^.AddVertex(NextPoint);
 end;
 
-procedure rootbytrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:Boolean);
+procedure rootbytrace(firstpoint,lastpoint:TzePoint3d;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:Boolean);
 var //po:PGDBObjSubordinated;
-    //plastw:pgdbvertex;
-    tw1,tw2:gdbvertex;
+    //plastw:PzePoint3d;
+    tw1,tw2:TzePoint3d;
     l1,l2:pgdbobjline;
     pa:GDBPoint3dArray;
-    //prevpoint:GDBVertex;
+    //prevpoint:TzePoint3d;
     //polydata:tpolydata;
     //domethod,undomethod:tmethod;
 begin
@@ -1720,7 +1698,7 @@ begin
                         AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
                                                           //cable^.AddVertex(tw1);
                       pa.copyto(cable.VertexArrayInOCS);
-                      //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
+                      //firstpoint:=PzePoint3d(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
                       //if not IsPointEqual(tw2,firstpoint) then
                         cable^.AddVertex(tw2);
                       if not IsPointEqual(tw2,lastpoint,sqreps) then
@@ -1735,13 +1713,13 @@ begin
     AddPolySegmentIfZnotMatch(firstpoint,lastpoint,cable);
   end;
 end;
-function RootByMultiTrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:Boolean):TZctnrVectorPGDBaseEntity;
+function RootByMultiTrace(firstpoint,lastpoint:TzePoint3d;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:Boolean):TZctnrVectorPGDBaseEntity;
 var //po:PGDBObjSubordinated;
-    //plastw:pgdbvertex;
-    tw1,tw2:gdbvertex;
+    //plastw:PzePoint3d;
+    tw1,tw2:TzePoint3d;
     l1,l2:pgdbobjline;
     pa:GDBPoint3dArray;
-    pv:pGDBVertex;
+    pv:PzePoint3d;
     ir:itrec;
     tcable:PGDBObjCable;
     pvd:pvardesk;
@@ -1803,7 +1781,7 @@ begin
   until pv=nil;
 
 
-                    //firstpoint:=pgdbvertex(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
+                    //firstpoint:=PzePoint3d(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
                     //if not IsPointEqual(tw2,firstpoint) then
                       tcable^.AddVertex(tw2);
                     if not IsPointEqual(tw2,lastpoint,sqreps) then
@@ -1813,10 +1791,10 @@ begin
 end;
 
 
-function _Cable_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _Cable_com_AfterClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var //po:PGDBObjSubordinated;
-    plastw:pgdbvertex;
-    //tw1,tw2:gdbvertex;
+    plastw:PzePoint3d;
+    //tw1,tw2:TzePoint3d;
     //l1,l2:pgdbobjline;
     //pa:GDBPoint3dArray;
     polydata:tpolydata;
@@ -2623,7 +2601,7 @@ function _Cable_com_Join(const Context:TZCADCommandContext;operands:TCommandOper
 var //i: Integer;
     pv:pGDBObjEntity;
     pc1,pc2:PGDBObjCable;
-    pv11,pv12,pv21,pv22:Pgdbvertex;
+    pv11,pv12,pv21,pv22:PzePoint3d;
     ir:itrec;
     DC:TDrawContext;
 begin
@@ -2765,7 +2743,7 @@ begin
   cman.done;
   result:=cmd_ok;
 end;
-function El_Leader_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function El_Leader_com_AfterClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var //po:PGDBObjSubordinated;
     pleader:PGDBObjElLeader;
     domethod,undomethod:tmethod;
@@ -2985,7 +2963,7 @@ var
 
     ir_net,ir_net2,ir_riser,ir_riser2:itrec;
     nline,new_line:pgdbobjline;
-    np:GDBVertex;
+    np:TzePoint3d;
     //net2processed:boolean;
     vd,pvn,pvn2: pvardesk;
     supernetsarray:GDBObjOpenArrayOfPV;
@@ -3339,7 +3317,7 @@ end;
 
 function _test_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
-    p:GDBVertex;
+    p:TzePoint3d;
     pet:CMDLinePromptParser.TGeneralParsedText;
     //ts:utf8string;
     gr:TGetResult;
@@ -3487,6 +3465,21 @@ procedure startup;
 begin
   if SysUnit<>nil then
     SysUnit^.RegisterType(TypeInfo(TLinkType));
+
+  if SysUnit<>nil then begin
+    SysUnit.RegisterType(TypeInfo(TELLeaderComParam));
+    SysUnit.SetTypeDesk(TypeInfo(TELLeaderComParam),['Scale',
+      'Size','Width'],[FNProgram,FNUser]);
+  end;
+
+  if SysUnit<>nil then begin
+    SysUnit.RegisterType(TypeInfo(TELCableComParam));
+    SysUnit.SetTypeDesk(TypeInfo(TELCableComParam),['Traces',
+      'PCable','PTrace'],[FNProgram]);
+    SysUnit.SetTypeDesk(TypeInfo(TELCableComParam),['Traces',
+      'Cabel (pointer)','Trace (pointer)'],[FNUser]);
+    SysUnit.RegisterType(TypeInfo(PTELCableComParam));
+  end;
 
   MainSpecContentFormat.init(100);
   MainSpecContentFormat.loadfromfile(FindInPaths(GetSupportPaths,'main.sf'));

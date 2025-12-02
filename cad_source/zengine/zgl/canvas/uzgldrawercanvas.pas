@@ -25,10 +25,27 @@ uses
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,uzbLogIntf,uzgvertex3sarray;
+    uzegeometrytypes,uzegeometry,
+    uzgldrawergeneral,uzgldrawerabstract,Graphics,uzbLogIntf,
+    uzgprimitivessarray,uzgprimitives,
+    gzctnrVectorTypes,
+    uzgldrawcontext,uzglgeomdata,uzglvectorobject,
+    uzgprimitivescreator,uzgprimitivescreatorabstract,uzgvertex3sarray;
 const
   NeedScreenInvalidrect=true;
 type
+
+  TLLCanvasPrimitivesCreator=class(TLLPrimitivesCreator)
+    function CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;override;
+  end;
+  PTLLCanvasSymbol=^TLLCanvasSymbol;
+  TLLCanvasSymbol=object(TLLSymbol)
+    procedure drawSymbol(drawer:TZGLAbstractDrawer;
+      var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;
+      var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;
+      const inFrustumState:TInBoundingVolume);virtual;
+  end;
+
 TZGLCanvasDrawer=class(TZGLGeneral2DDrawer)
                         public
 
@@ -44,11 +61,33 @@ TZGLCanvasDrawer=class(TZGLGeneral2DDrawer)
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
                         procedure ClearScreen(stencil:boolean);override;
                         procedure _createPen;override;
+                        function GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;override;
                    end;
 var
    CanvasDrawer:TZGLCanvasDrawer;
+   LLCanvasPrimitivesCreator:TLLCanvasPrimitivesCreator;
 implementation
-//uses log;
+procedure TLLCanvasSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);
+begin
+  drawer.pushMatrixAndSetTransform(SymMatr{,true});
+  PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount,inFrustumState);
+  drawer.popMatrix;
+end;
+function TLLCanvasPrimitivesCreator.CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;
+var
+   pcanvassymbol:PTLLCanvasSymbol;
+begin
+  pa.AlignDataSize;
+     result:=pa.count;
+     pointer(pcanvassymbol):=pa.getDataMutable(pa.AllocData(sizeof(TLLCanvasSymbol)));
+     pCanvasSymbol.init;
+end;
+
+function TZGLCanvasDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;
+begin
+  result:=LLCanvasPrimitivesCreator;
+end;
+
 constructor TZGLCanvasDrawer.create;
 begin
      inherited;
@@ -188,8 +227,10 @@ begin
 end;
 initialization
   CanvasDrawer:=TZGLCanvasDrawer.create;
+  LLCanvasPrimitivesCreator:=TLLCanvasPrimitivesCreator.Create;
 finalization
   zDebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   CanvasDrawer.Destroy;
+  LLCanvasPrimitivesCreator.Destroy;
 end.
 

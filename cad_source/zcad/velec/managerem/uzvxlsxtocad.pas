@@ -96,7 +96,7 @@ implementation
 
 
 
-  function drawInsertBlock(pt:GDBVertex;scalex,scaley,iRotate:double;InsertionName:string):PGDBObjBlockInsert;
+  function drawInsertBlock(pt:TzePoint3d;scalex,scaley,iRotate:double;InsertionName:string):PGDBObjBlockInsert;
   var
       rc:TDrawContext;
       entvarext:TVariablesExtender;
@@ -246,13 +246,13 @@ var
   //gr:TGetResult;
   //filename:string;
   //pvd:pvardesk;
-  //p:GDBVertex;
+  //p:TzePoint3d;
   //listHeadDev:TListDev;
   //listNameGroupDev:TListGroupHeadDev;
   //headDev:pGDBObjDevice;
   //graphView:TGraphDev;
   //depthVisual:double;
-  //insertCoordination:GDBVertex;
+  //insertCoordination:TzePoint3d;
   //listAllHeadDev:TListDev;
   //devMaincFunc:PGDBObjDevice;
 
@@ -319,13 +319,13 @@ var
 //  gr:TGetResult;
 //  filename:string;
 //  pvd:pvardesk;
-//  p:GDBVertex;
+//  p:TzePoint3d;
 //  listHeadDev:TListDev;
 //  listNameGroupDev:TListGroupHeadDev;
 //  headDev:pGDBObjDevice;
 //  graphView:TGraphDev;
 //  depthVisual:double;
-//  insertCoordination:GDBVertex;
+//  insertCoordination:TzePoint3d;
 //  listAllHeadDev:TListDev;
 //  devMaincFunc:PGDBObjDevice;
 

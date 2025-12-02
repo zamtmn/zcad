@@ -50,7 +50,7 @@ type
     class procedure TraceIcon(var DC:TDrawContext);
     class procedure NearestIcon(var DC:TDrawContext);
   end;
-  TSetupSnapIconProc=procedure (var DC:TDrawContext;ViewPortRect:TRect;Coord:GDBvertex2D;SSize:single;SLW:Integer;SColor:TRGB) of object;
+  TSetupSnapIconProc=procedure (var DC:TDrawContext;ViewPortRect:TRect;Coord:TzePoint2d;SSize:single;SLW:Integer;SColor:TRGB) of object;
   TDrawSnapIcinProc=procedure (var DC:TDrawContext) of object;
   TSnapInternalType=Integer;
   TSnapNameType=String;

@@ -33,7 +33,7 @@ uses
 implementation
 
 var
-  point:gdbvertex;
+  point:TzePoint3d;
 
 function Line_com_CommandStart(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
@@ -47,12 +47,12 @@ begin
   Result:=cmd_ok;
 end;
 
-function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
   point:=wc;
   if (button and MZW_LBUTTON)<>0 then begin
-    commandmanager.PushValue('','GDBVertex',@wc);
+    commandmanager.PushValue('','TzePoint3d',@wc);
     commandmanager.executecommandend;
     Result:=1;
   end;
@@ -61,11 +61,11 @@ end;
 function DrawRect(mclick:integer):integer;
 var
   vd:vardesk;
-  p1,p2,p4:gdbvertex;
+  p1,p2,p4:TzePoint3d;
   matrixs:tmatrixs;
 begin
   vd:=commandmanager.GetValue;
-  p1:=pgdbvertex(vd.Data.Addr.Instance)^;
+  p1:=PzePoint3d(vd.Data.Addr.Instance)^;
 
   p2:=createvertex(p1.x,point.y,p1.z);
   p4:=createvertex(point.x,p1.y,point.z);

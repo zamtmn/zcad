@@ -11,6 +11,8 @@
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHO05)" Caption='Щит освещения 1/2' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHAO1)" Caption='Щит аварийного освещения' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHAO05)" Caption='Щит аварийного освещения 1/2' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHU1)" Caption='Щит управления вид 1' />
+              <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHU2)" Caption='Щит управления вид 2' />			  
 			</ZTreeNode>	
 		    <ZTreeNode Caption='ElReceiver'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_MOTOR)" Caption='Двигатель' />
@@ -41,8 +43,11 @@
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_2P40BUS)" Caption='Розетка BUS40 2Р' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_3P40BUS)" Caption='Розетка BUS40 3Р' />			  
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_BOXJUNCTION)" Caption='Коробка вводная/проходная' />	
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_DISTRIBUTIONBOX)" Caption='Коробка ответвительная' />			  
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_CABLETERMINATION)" Caption='Концевая кабельная муфта' />	
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_ELFUNNELDRAIN)" Caption='Электрическая воронка с гр кабелем' />	
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_RODENTPROTECT)" Caption='Эл барьер от грызунов' />
+			  
 			</ZTreeNode>	
 		    <ZTreeNode Caption='Lighting'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_YTR)" Caption='Ящик ЯТПР' />

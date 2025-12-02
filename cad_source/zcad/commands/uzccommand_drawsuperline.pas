@@ -78,7 +78,7 @@ type
   end;
 
   TMethod2ltContextSetter=class
-    class procedure SetCtx(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;
+    class procedure SetCtx(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;
       cplr:TLapeCompiler);
   end;
 
@@ -109,13 +109,13 @@ var
   DrawSuperlineParams:TDrawSuperlineParams;
   method2lt:TScriptData;
 
-function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;
+function createSuperLine(p1,p2:TzePoint3d;nameSL:string;changeLayer:boolean;
   LayerNamePrefix:string):TCommandResult;
 
 implementation
 
 
-class procedure TMethod2ltContextSetter.SetCtx(mode:TLapeScriptContextModes;
+class procedure TMethod2ltContextSetter.SetCtx(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;
   ctx:TBaseScriptContext;cplr:TLapeCompiler);
 var
   pvd:pvardesk;
@@ -144,7 +144,7 @@ begin
   end;
 end;
 
-function GetInteractiveLine(prompt1,prompt2:string;out p1,p2:GDBVertex):boolean;
+function GetInteractiveLine(prompt1,prompt2:string;out p1,p2:TzePoint3d):boolean;
 var
   pline:PGDBObjLine;
 begin
@@ -164,7 +164,7 @@ begin
 end;
 
 function GetInteractiveLineFrom1to2(prompt2:string;
-  const p1:GDBVertex;out p2:GDBVertex):tgetresult;
+  const p1:TzePoint3d;out p2:TzePoint3d):tgetresult;
 var
   pline:PGDBObjLine;
 begin
@@ -177,7 +177,7 @@ begin
   drawings.GetCurrentDWG^.FreeConstructionObjects;
 end;
 
-function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;
+function createSuperLine(p1,p2:TzePoint3d;nameSL:string;changeLayer:boolean;
   LayerNamePrefix:string):TCommandResult;
 var
   psuperline:PGDBObjSuperLine;
@@ -232,7 +232,7 @@ function DrawSuperLine_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
   psuperline:PGDBObjSuperLine;
-  p1,p2:gdbvertex;
+  p1,p2:TzePoint3d;
   pvarext:TVariablesExtender;
   psu:ptunit;
   UndoMarcerIsPlazed:boolean;
@@ -268,7 +268,7 @@ var
       //заводим в контекст скрипта в переменную Input наше значение
       (method2lt.Ctx as TMethod2ltContext).FInput:=pvd.GetValueAsString;
       //выполняем скрипт
-      CommandScriptsManager.RunScript(method2lt);
+      CommandScriptsManager.RunScript(context,method2lt);
       //выводим из контекста скрипта выходное значение из переменной Output
       ltname:=(method2lt.Ctx as TMethod2ltContext).FOutput;
       zcUI.TextMessage('ltname:'+ltname,TMWOHistoryOut);

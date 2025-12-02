@@ -33,7 +33,7 @@ uses
 
 {**Проверка находится ли точка внутри полилинии (ray casting алгоритм)}
 function PointInPolyline(
-  const Point: GDBVertex;
+  const Point: TzePoint3d;
   PolylinePtr: PGDBObjPolyLine
 ): Boolean;
 
@@ -73,13 +73,13 @@ implementation
 
 {**Проверка находится ли точка внутри полилинии методом ray casting}
 function PointInPolyline(
-  const Point: GDBVertex;
+  const Point: TzePoint3d;
   PolylinePtr: PGDBObjPolyLine
 ): Boolean;
 var
   i, j: Integer;
   VertexCount: Integer;
-  VertexI, VertexJ: GDBVertex;
+  VertexI, VertexJ: TzePoint3d;
   IntersectCount: Integer;
 begin
   Result := False;
@@ -119,7 +119,7 @@ function PolylineInsidePolyline(
 var
   i: Integer;
   VertexCount: Integer;
-  Vertex: GDBVertex;
+  Vertex: TzePoint3d;
   AllInside: Boolean;
 begin
   Result := False;

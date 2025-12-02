@@ -32,9 +32,21 @@ uses
 
 implementation
 
-procedure AddExtdrSCHConnection(const PEnt:PGDBObjEntity);
+function AddExtdrSCHConnection(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity):boolean;
 begin
-  AddSCHConnectionExtenderToEntity(PEnt);
+  case AStage of
+    ESSSuppressCommandParams:
+      result:=true;
+    ESSSetEntity:begin
+      if APEnt<>nil then begin
+        AddSCHConnectionExtenderToEntity(APEnt);
+        result:=true;
+      end else
+        result:=False;
+      end;
+    ESSCommandEnd:
+      result:=False;
+  end;
 end;
 
 function SCHConnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;

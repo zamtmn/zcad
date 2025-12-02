@@ -42,9 +42,9 @@ type
   end;
 
   mirror_com=object(copy_com)
-    function CalcTransformMatrix(p1,p2:GDBvertex):DMatrix4D;virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    function CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
   end;
 
 var
@@ -53,11 +53,11 @@ var
 
 implementation
 
-function Mirror_com.CalcTransformMatrix(p1,p2:GDBvertex):DMatrix4D;
+function Mirror_com.CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;
 var
-  dist,p3:gdbvertex;
+  dist,p3:TzePoint3d;
   d:double;
-  plane:DVector4D;
+  plane:TzeVector4d;
 begin
   dist:=uzegeometry.VertexSub(p2,p1);
   d:=uzegeometry.oneVertexlength(dist);
@@ -69,11 +69,11 @@ begin
   Result:=CreateReflectionMatrix(plane);
 end;
 
-function Mirror_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function Mirror_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
-  tempmatr,MirrMatr:DMatrix4D;
-  FrPos:GDBvertex;
+  tempmatr,MirrMatr:TzeTypedMatrix4d;
+  FrPos:TzePoint3d;
 begin
   MirrMatr:=CalcTransformMatrix(t3dp,wc);
   if (button and MZW_LBUTTON)<>0 then begin
@@ -89,9 +89,9 @@ begin
       with drawings.GetCurrentDWG^.ConstructObjRoot do begin
 
         tempmatr:=uzegeometry.MatrixMultiply(OneMatrix,MirrMatr);
-        FrPos.x:=tempmatr.mtr[3].x;
-        FrPos.y:=tempmatr.mtr[3].y;
-        FrPos.z:=tempmatr.mtr[3].z;
+        FrPos.x:=tempmatr.mtr.v[3].x;
+        FrPos.y:=tempmatr.mtr.v[3].y;
+        FrPos.z:=tempmatr.mtr.v[3].z;
 
         ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset);
         ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,MirrMatr);

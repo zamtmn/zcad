@@ -43,7 +43,7 @@ type
   {REGISTERRECORDTYPE trenderdeb}
   trenderdeb=record
                    primcount,pointcount,bathcount:Integer;
-                   middlepoint:GDBVertex;
+                   middlepoint:TzePoint3d;
              end;
   {REGISTERRECORDTYPE tlanguadedeb}
   tlanguadedeb=record
@@ -155,12 +155,12 @@ type
              DWG_AUnits:PTAUnits;(*'AUnits (angular units format)'*)
              DWG_AUPrec:PTUPrec;(*'AUPrec (angular units precision)'*)
              DWG_AngDir:PTAngDir;(*'AngDir (direction of positive angles)'*)
-             DWG_AngBase:PGDBAngleDegDouble;(*'AngBase (zero base angle)'*)
+             DWG_AngBase:PTZeAngleDeg;(*'AngBase (zero base angle)'*)
              DWG_UnitMode:PTUnitMode;(*'UnitMode (display format for units)'*)
              DWG_InsUnits:PTInsUnits;(*'InsUnits (value for automatic scaling of blocks)'*)
              DWG_TextSize:PDouble;(*'TextSize (size of new crreated text ents)'*)
              DWG_Snap:PGDBSnap2D;(*'Snap settings'*)
-             DWG_GridSpacing:PGDBvertex2D;(*'Grid spacing'*)
+             DWG_GridSpacing:PzePoint2d;(*'Grid spacing'*)
              DWG_DrawGrid:PBoolean;(*'Display grid'*)
              DWG_SnapGrid:PBoolean;(*'Snap'*)
 

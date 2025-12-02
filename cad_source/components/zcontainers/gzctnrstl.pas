@@ -26,7 +26,7 @@ type
 TMyMapGenOld <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>);
 TMyMapGen <TKey,TValue> = class( TDictionary<TKey,TValue>)
   function MyGetValue(const key:TKey):TValue;inline;
- {$If FPC_FULLVERSION <= 30202}
+ {$If FPC_FULLVERSION <= 30204}
   function GetMutableValue(const AKey: TKey): PValue; inline;
   function TryGetMutableValue(const AKey: TKey; out APValue: PValue): Boolean;
  {$EndIf}
@@ -50,7 +50,7 @@ end;
     //function MyGetValue(key:TKey; out Value:TValue):boolean;
     //function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
     function MyContans(const key:TKey):boolean;
-   {$If FPC_FULLVERSION <= 30202}
+   {$If FPC_FULLVERSION <= 30204}
     function GetMutableValue(key:TKey):PTValue;inline;
     function TryGetMutableValue(key:TKey;out pvalue:PTValue):boolean;inline;
    {$EndIf}
@@ -194,7 +194,7 @@ begin
     PAValue:=@FItems[LIndex].Pair.Value;
   end;
 end;}
-{$If FPC_FULLVERSION <= 30202}
+{$If FPC_FULLVERSION <= 30204}
 function TMyMapGen<TKey, TValue>.GetMutableValue(const AKey: TKey): PValue;
 var
   LIndex: SizeInt;

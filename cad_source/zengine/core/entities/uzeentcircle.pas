@@ -37,25 +37,25 @@ type
   PGDBObjCircle=^GDBObjCircle;
 
   GDBObjCircle=object(GDBObjWithLocalCS)
-    Radius:GDBLength;(*'Radius'*)
-    q0:GDBvertex;
-    q1:GDBvertex;
-    q2:GDBvertex;
-    q3:GDBvertex;
+    Radius:Double;
+    q0:TzePoint3d;
+    q1:TzePoint3d;
+    q2:TzePoint3d;
+    q3:TzePoint3d;
     Outbound:OutBound4V;
     Vertex3D_in_WCS_Array:GDBPoint3DArray;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex;RR:double);
+      LW:smallint;p:TzePoint3d;RR:double);
     constructor initnul;
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-    function calcinfrustum(const frustum:ClipArray;
+    function calcinfrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
@@ -68,7 +68,7 @@ type
     procedure createpoint(var DC:TDrawContext);virtual;
     procedure projectpoint;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
       const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
@@ -85,15 +85,15 @@ type
     function GetObjTypeName:string;virtual;
 
     procedure createfield;virtual;
-    function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
+    function IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
       virtual; //<**Пересечение с линией описанной 2-я точками
     procedure ReCalcFromObjMatrix;virtual;
 
-    function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
+    function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
+      const point:TzePoint3d):boolean;virtual;
     class function CreateInstance:PGDBObjCircle;static;
     function GetObjType:TObjID;virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -107,10 +107,10 @@ begin
 end;
 
 function GDBObjCircle.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 var
-  m1:DMatrix4D;
-  ppoint:GDBVertex;
+  m1:TzeTypedMatrix4d;
+  ppoint:TzePoint3d;
 begin
   m1:=GetMatrix^;
   MatrixInvert(m1);
@@ -126,7 +126,7 @@ end;
 
 procedure GDBObjCircle.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var
-  tv,dir:gdbvertex;
+  tv,dir:TzePoint3d;
 begin
   dir:=VertexSub(P_insert_in_WCS,posr.worldcoord);
   processaxis(posr,dir);
@@ -134,7 +134,7 @@ begin
   processaxis(posr,tv);
 end;
 
-function GDBObjCircle.GetTangentInPoint(const point:GDBVertex):GDBVertex;
+function GDBObjCircle.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 begin
   Result:=normalizevertex(uzegeometry.vectordot(
     uzegeometry.VertexSub(self.P_insert_in_WCS,point),self.Local.basis.oz));
@@ -142,17 +142,17 @@ end;
 
 procedure GDBObjCircle.ReCalcFromObjMatrix;
 var
-  scl:GDBvertex;
+  scl:TzePoint3d;
 begin
   Local:=GetPInsertInOCSBymatrix(objmatrix,scl);
   Radius:=scl.x;
 end;
 
-function GDBObjCircle.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
+function GDBObjCircle.IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
 var
-  m1:DMatrix4D;
+  m1:TzeTypedMatrix4d;
   td,td2,td3,t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
-  llbegin,llend:gdbvertex;
+  llbegin,llend:TzePoint3d;
 begin
   m1:=GetMatrix^;
   MatrixInvert(m1);
@@ -314,9 +314,9 @@ procedure GDBObjCircle.createpoint(var DC:TDrawContext);
 var
   l:integer;
   ir:itrec;
-  pvertex:pgdbvertex2d;
-  tv:gdbvertex;
-  v:gdbvertex;
+  pvertex:PzePoint2d;
+  tv:TzePoint3d;
+  v:TzePoint3d;
 begin
   Vertex3D_in_WCS_Array.Clear;
   if (lod>32)or dc.MaxDetail then begin
@@ -329,7 +329,7 @@ begin
   pvertex:=circlepointoflod[l].beginiterate(ir);
   if pvertex<>nil then
     repeat
-      pgdbvertex2d(@tv)^:=pvertex^;
+      PzePoint2d(@tv)^:=pvertex^;
       tv.z:=0;
       v:=VectorTransform3D(tv,objmatrix);
       Vertex3D_in_WCS_Array.PushBackData(v);
@@ -340,7 +340,7 @@ end;
 
 procedure GDBObjCircle.CalcObjMatrix;
 var
-  m1:DMatrix4D;
+  m1:TzeTypedMatrix4d;
 begin
   inherited CalcObjMatrix;
   m1:=CreateScaleMatrix(Radius);
@@ -388,11 +388,11 @@ var
   i:integer;
   r:double;
 begin
-  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*
-    ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
+  r:=sqrt(ObjMatrix.mtr.v[0].v[0]*ObjMatrix.mtr.v[0].v[0]+ObjMatrix.mtr.v[0].v[1]*
+    ObjMatrix.mtr.v[0].v[1]+ObjMatrix.mtr.v[0].v[2]*ObjMatrix.mtr.v[0].v[2]);
   for i:=0 to 5 do begin
-    if (mf[i].v[0]*P_insert_in_WCS.x+mf[i].v[1]*P_insert_in_WCS.y+
-      mf[i].v[2]*P_insert_in_WCS.z+mf[i].v[3]+r<0) then
+    if (mf.v[i].v[0]*P_insert_in_WCS.x+mf.v[i].v[1]*P_insert_in_WCS.y+
+      mf.v[i].v[2]*P_insert_in_WCS.z+mf.v[i].v[3]+r<0) then
       exit(False);
   end;
   Result:=Vertex3D_in_WCS_Array.onmouse(mf,False);
@@ -412,12 +412,12 @@ var
   i:integer;
   r:double;
 begin
-  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*
-    ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
+  r:=sqrt(ObjMatrix.mtr.v[0].v[0]*ObjMatrix.mtr.v[0].v[0]+ObjMatrix.mtr.v[0].v[1]*
+    ObjMatrix.mtr.v[0].v[1]+ObjMatrix.mtr.v[0].v[2]*ObjMatrix.mtr.v[0].v[2]);
   for i:=0 to 5 do
-    if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
-      P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+
-      frustum[i].v[3]+r{+GetLTCorrectH}<0) then
+    if (frustum.v[i].v[0]*P_insert_in_WCS.x+frustum.v[i].v[1]*
+      P_insert_in_WCS.y+frustum.v[i].v[2]*P_insert_in_WCS.z+
+      frustum.v[i].v[3]+r{+GetLTCorrectH}<0) then
       exit(False);
   Result:=True;
 end;
@@ -427,20 +427,20 @@ var
   i:integer;
   r:double;
 begin
-  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*
-    ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
+  r:=sqrt(ObjMatrix.mtr.v[0].v[0]*ObjMatrix.mtr.v[0].v[0]+ObjMatrix.mtr.v[0].v[1]*
+    ObjMatrix.mtr.v[0].v[1]+ObjMatrix.mtr.v[0].v[2]*ObjMatrix.mtr.v[0].v[2]);
   for i:=0 to 5 do
-    if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
-      P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+
-      frustum[i].v[3]+r{+GetLTCorrectH}<0) then
+    if (frustum.v[i].v[0]*P_insert_in_WCS.x+frustum.v[i].v[1]*
+      P_insert_in_WCS.y+frustum.v[i].v[2]*P_insert_in_WCS.z+
+      frustum.v[i].v[3]+r{+GetLTCorrectH}<0) then
       exit(IREmpty);
   Result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum,False);
 end;
 
 function GDBObjCircle.getsnap;
 var
-  tv,n:gdbvertex;
-  plane:DVector4D;
+  tv,n:TzePoint3d;
+  plane:TzeVector4d;
 begin
   if onlygetsnapcount=6 then begin
     Result:=False;
@@ -513,28 +513,28 @@ end;
 procedure GDBObjCircle.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_center then begin
     pdesc.worldcoord:=P_insert_in_WCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_q0 then begin
     pdesc.worldcoord:=q0;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_q1 then begin
     pdesc.worldcoord:=q1;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_q2 then begin
     pdesc.worldcoord:=q2;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_q3 then begin
     pdesc.worldcoord:=q3;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end;
 end;
 
@@ -594,11 +594,11 @@ end;
 
 procedure GDBObjCircle.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  m:DMatrix4D;
+  m:TzeTypedMatrix4d;
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m.mtr[3]:=NulVector4D;
+  m.mtr.v[3]:=NulVector4D;
   if rtmod.point.pointtype=os_center then begin
     Local.p_insert:=VectorTransform3D(rtmod.wc*Radius,m);
   end else if (rtmod.point.pointtype=os_q0)or(rtmod.point.pointtype=os_q1)or

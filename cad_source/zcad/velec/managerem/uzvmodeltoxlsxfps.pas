@@ -2482,7 +2482,7 @@ var
   //headDev:pGDBObjDevice;
   graphView{,ggg}:TGraphDev;
   depthVisual:double;
-  insertCoordination:GDBVertex;
+  insertCoordination:TzePoint3d;
   listAllHeadDev:TListDev;
   devMaincFunc:PGDBObjDevice;
   isload:boolean;

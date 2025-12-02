@@ -26,26 +26,26 @@ type
 {Export+}
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 PGDBPolyline2DArray=^GDBPolyline2DArray;
-GDBPolyline2DArray= object(GZVector{-}<GDBVertex2D>{//})
+GDBPolyline2DArray= object(GZVector{-}<TzePoint2d>{//})
                       closed:Boolean;
                       constructor init(m:Integer;c:Boolean);
 
-                      //function onmouse(mc:GDBvertex2DI):Boolean;virtual;
+                      //function onmouse(mc:TzePoint2i):Boolean;virtual;
                       procedure optimize;virtual;
                       function _optimize:Boolean;virtual;
-                      function inrect(Frame1, Frame2: GDBvertex2DI;inv:Boolean):Boolean;virtual;
-                      function inrectd(Frame1, Frame2: GDBvertex2D;inv:Boolean):Boolean;virtual;
-                      function ispointinside(const point:GDBVertex2D):Boolean;virtual;
-                      procedure transform(const t_matrix:DMatrix4D);virtual;
+                      function inrect(Frame1, Frame2: TzePoint2i;inv:Boolean):Boolean;virtual;
+                      function inrectd(Frame1, Frame2: TzePoint2d;inv:Boolean):Boolean;virtual;
+                      function ispointinside(const point:TzePoint2d):Boolean;virtual;
+                      procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
                       function getoutbound:TBoundingBox;virtual;
                 end;
 {Export-}
-function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: Double): Boolean;
+function _intercept2d(const p1,p2,p:TzePoint2d;const dirx, diry: Double): Boolean;
 implementation
 function GDBPolyline2DArray.getoutbound;
 var
     tt,b,l,r:Double;
-    ptv:pGDBVertex2D;
+    ptv:PzePoint2d;
     ir:itrec;
 begin
   l:=Infinity;
@@ -77,10 +77,10 @@ begin
   end;
 end;
 
-procedure GDBPolyline2DArray.transform(const t_matrix:DMatrix4D);
+procedure GDBPolyline2DArray.transform(const t_matrix:TzeTypedMatrix4d);
 var
-    pv:PGDBVertex2D;
-    tv:GDBVertex;
+    pv:PzePoint2d;
+    tv:TzePoint3d;
     i{,c}:integer;
 
 begin
@@ -96,7 +96,7 @@ begin
        inc(pv);
     end;
 end;
-function _intercept2d(const p1,p2,p:GDBVertex2D;const dirx, diry: Double): Boolean;
+function _intercept2d(const p1,p2,p:TzePoint2d;const dirx, diry: Double): Boolean;
 var
    t1, t2, d, d1, d2: Double;
 begin
@@ -124,8 +124,8 @@ end;
 
 function GDBPolyline2DArray._optimize;
 var
-    pvprev,pv,pvnext:PGDBVertex2D;
-    v1,v2:gdbvertex;
+    pvprev,pv,pvnext:PzePoint2d;
+    v1,v2:TzePoint3d;
     i{,c}:integer;
 
 begin
@@ -160,9 +160,9 @@ begin
     end;
 end;
 
-function GDBPolyline2DArray.ispointinside(const point:GDBVertex2D):Boolean;
+function GDBPolyline2DArray.ispointinside(const point:TzePoint2d):Boolean;
 var
-    pv,pvnext:PGDBVertex2D;
+    pv,pvnext:PzePoint2d;
     i,c:integer;
 
 begin
@@ -190,7 +190,7 @@ begin
   closed:=c;
 end;
 function GDBPolyline2DArray.inrect;
-var p,pp:PGDBVertex2D;
+var p,pp:PzePoint2d;
 //    counter:Integer;
     i:Integer;
 //    lines:Boolean;
@@ -256,7 +256,7 @@ begin
   end;
 end;
 function GDBPolyline2DArray.inrectd;
-var p,pp:PGDBVertex2D;
+var p,pp:PzePoint2d;
 //    counter:Integer;
     i:Integer;
 //    lines:Boolean;

@@ -233,7 +233,7 @@ function GZVector<T>.getLast;
 begin
   Result:=getData(count-1);
 end;
-function GZVector<T>.getPLast:T;
+function GZVector<T>.getPLast;
 begin
   if count>0 then
     Result:=@parray^[count-1]

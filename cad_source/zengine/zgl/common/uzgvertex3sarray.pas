@@ -26,12 +26,12 @@ type
 {Export+}
 TStoredType=Double;
 TCalcedType=Double;
-TStoredCoordType=GDBvertex;
+TStoredCoordType=TzePoint3d;
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
 {REGISTEROBJECTTYPE ZGLVertex3Sarray}
 ZGLVertex3Sarray= object(GZVector{-}<TStoredCoordType>{//})
-                function AddGDBVertex(const v:GDBvertex):TArrayIndex;overload;
-                function AddGDBVertex(const v:GDBvertex3S):TArrayIndex;overload;
+                function AddGDBVertex(const v:TzePoint3d):TArrayIndex;overload;
+                function AddGDBVertex(const v:TzePoint3s):TArrayIndex;overload;
                 function GetLength(const i:TArrayIndex):TCalcedType;virtual;
              end;
 {Export-}
@@ -48,7 +48,7 @@ begin
   v.z:=pv2.z-pv1.z;
   result:=v.x*v.x+v.y*v.y+v.z*v.z;
 end;
-function ZGLVertex3Sarray.AddGDBVertex(const v:GDBvertex3S):TArrayIndex;overload;
+function ZGLVertex3Sarray.AddGDBVertex(const v:TzePoint3s):TArrayIndex;overload;
 var
     vs:TDataType;
 begin
@@ -58,7 +58,7 @@ begin
      result:=PushBackData(vs);
 end;
 
-function ZGLVertex3Sarray.AddGDBVertex(const v:GDBvertex):TArrayIndex;
+function ZGLVertex3Sarray.AddGDBVertex(const v:TzePoint3d):TArrayIndex;
 var
     vs:TDataType;
 begin

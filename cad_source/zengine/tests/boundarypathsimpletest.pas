@@ -31,7 +31,7 @@ procedure FillPath(var Path:TBoundaryPath);
 var
   i,j:integer;
   ppl:PGDBPolyline2DArray;
-  v:GDBVertex2D;
+  v:TzePoint2d;
   sine,cosine:double;
 begin
   Path.paths.AllocData(1);

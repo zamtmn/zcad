@@ -31,7 +31,7 @@ type
     fAngle:Double;
     //fDir:GDBVertex2D;
 
-    Base,Offset:GDBVertex2D;
+    Base,Offset:TzePoint2d;
 
     //procedure setAngle(AAngle:Double);
 
@@ -110,7 +110,7 @@ var
   i,j,patternscount,dashcount:Integer;
   angle,dash:Double;
   sinA,cosA:Double;
-  base,offset:GDBvertex2D;
+  base,offset:TzePoint2d;
   psa:PTPatStrokesArray;
 begin
   result:=dxfLoadGroupCodeInteger(rdr,78,DXFCode,patternscount);

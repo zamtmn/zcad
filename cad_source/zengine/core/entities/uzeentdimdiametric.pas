@@ -52,16 +52,16 @@ type
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
 
-    function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P15ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    procedure DrawCenterMarker(const cp:GDBVertex;r:double;
+    function P10ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P15ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P11ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    procedure DrawCenterMarker(const cp:TzePoint3d;r:double;
       var drawing:TDrawingDef;var DC:TDrawContext);
     procedure CalcDNVectors;virtual;
 
-    function TextNeedOffset(const dimdir:gdbvertex):boolean;virtual;
+    function TextNeedOffset(const dimdir:TzePoint3d):boolean;virtual;
     function TextAlwaysMoved:boolean;virtual;
-    function GetCenterPoint:GDBVertex;virtual;
+    function GetCenterPoint:TzePoint3d;virtual;
     procedure CalcTextInside;virtual;
     function GetRadius:double;virtual;
     function GetDIMTMOVE:TDimTextMove;virtual;
@@ -102,7 +102,7 @@ begin
   vectorN:=normalizevertex(vectorN);
 end;
 
-procedure GDBObjDiametricDimension.DrawCenterMarker(const cp:GDBVertex;r:double;
+procedure GDBObjDiametricDimension.DrawCenterMarker(const cp:TzePoint3d;r:double;
   var drawing:TDrawingDef;var DC:TDrawContext);
 var
   ls:double;
@@ -126,9 +126,9 @@ begin
   end;
 end;
 
-function GDBObjDiametricDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDiametricDimension.P10ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
-  dirv,center:GDBVertex;
+  dirv,center:TzePoint3d;
   d:double;
 begin
   center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
@@ -142,9 +142,9 @@ begin
   DimData.P11InOCS:=VertexDmorph(center,dirv,-d);
 end;
 
-function GDBObjDiametricDimension.P15ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDiametricDimension.P15ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
-  dirv,center:GDBVertex;
+  dirv,center:TzePoint3d;
   d:double;
 begin
   center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
@@ -158,9 +158,9 @@ begin
   DimData.P11InOCS:=VertexDmorph(center,dirv,d);
 end;
 
-function GDBObjDiametricDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDiametricDimension.P11ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
-  dirv,center:GDBVertex;
+  dirv,center:TzePoint3d;
   d:double;
 begin
   center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
@@ -218,7 +218,7 @@ begin
     Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
 end;
 
-function GDBObjDiametricDimension.GetCenterPoint:GDBVertex;
+function GDBObjDiametricDimension.GetCenterPoint:TzePoint3d;
 begin
   Result:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
 end;
@@ -231,7 +231,7 @@ end;
 procedure GDBObjDiametricDimension.FormatEntity(var drawing:TDrawingDef;
   var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
-  center:GDBVertex;
+  center:TzePoint3d;
   pl:pgdbobjline;
 begin
   if assigned(EntExtensions) then
@@ -262,7 +262,7 @@ begin
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 
-function GDBObjDiametricDimension.TextNeedOffset(const dimdir:gdbvertex):boolean;
+function GDBObjDiametricDimension.TextNeedOffset(const dimdir:TzePoint3d):boolean;
 begin
   Result:=True;
 end;

@@ -213,11 +213,12 @@ begin
       end;
     cctUTF8String:
       begin
-        // Проверяем, есть ли формула
-        if aWorksheet.HasFormula(cell) then
+        // Проверяем, есть ли формула (через ReadFormulaAsString)
+        aChange.TextValue := aWorksheet.ReadFormulaAsString(cell);
+        if aChange.TextValue <> '' then
         begin
           aChange.ContentKind := cckFormula;
-          aChange.TextValue := '=' + aWorksheet.ReadFormulaAsString(cell);
+          aChange.TextValue := '=' + aChange.TextValue;
         end
         else
         begin
@@ -251,6 +252,7 @@ procedure TSpreadsheetUndoManager.RestoreCellFromChange(
 var
   workbook: TsWorkbook;
   worksheet: TsWorksheet;
+  cell: PCell;
 begin
   if FWorkbookSource = nil then
     Exit;
@@ -271,7 +273,12 @@ begin
   // Восстанавливаем содержимое ячейки
   case aChange.ContentKind of
     cckEmpty:
-      worksheet.DeleteCell(aChange.Row, aChange.Col);
+      begin
+        // DeleteCell принимает PCell, не координаты
+        cell := worksheet.FindCell(aChange.Row, aChange.Col);
+        if cell <> nil then
+          worksheet.DeleteCell(cell);
+      end;
     cckNumber:
       worksheet.WriteNumber(aChange.Row, aChange.Col, aChange.NumberValue);
     cckText:

@@ -282,6 +282,10 @@ uses
   uzvcommand_spaceshowhide, //команда показ спрятать
   //****//
 
+  //FPSpreadsheet//
+  uzvspreadsheet_register,
+  //****//
+
   uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
   uzvlightexporter_commandexport,
   uzvdialuxlumimporter_main,

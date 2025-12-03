@@ -38,6 +38,7 @@ uses
   ComCtrls,
   fpspreadsheet,
   fpsTypes,
+  fpsUtils,
   fpspreadsheetgrid,
   fpspreadsheetctrls,
   uzvspreadsheet_actions;

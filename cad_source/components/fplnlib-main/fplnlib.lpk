@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="5">
+    <PathDelim Value="\"/>
+    <Name Value="fplnlib"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <PathDelim Value="\"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="src"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files>
+      <Item>
+        <Filename Value="src\lnenums_capi.pas"/>
+        <UnitName Value="LNEnums_CAPI"/>
+      </Item>
+      <Item>
+        <Filename Value="src\lnobject_capi.pas"/>
+        <UnitName Value="LNObject_CAPI"/>
+      </Item>
+      <Item>
+        <Filename Value="src\matrix4d_capi.pas"/>
+        <UnitName Value="Matrix4d_CAPI"/>
+      </Item>
+      <Item>
+        <Filename Value="src\nurbscurve_capi.pas"/>
+        <UnitName Value="NurbsCurve_CAPI"/>
+      </Item>
+      <Item>
+        <Filename Value="src\nurbssurface_capi.pas"/>
+        <UnitName Value="NurbsSurface_CAPI"/>
+      </Item>
+      <Item>
+        <Filename Value="src\ulnlib.pas"/>
+        <UnitName Value="uLNLib"/>
+      </Item>
+      <Item>
+        <Filename Value="src\uv_capi.pas"/>
+        <UnitName Value="UV_CAPI"/>
+      </Item>
+      <Item>
+        <Filename Value="src\xyz_capi.pas"/>
+        <UnitName Value="XYZ_CAPI"/>
+      </Item>
+      <Item>
+        <Filename Value="src\xyzw_capi.pas"/>
+        <UnitName Value="XYZW_CAPI"/>
+      </Item>
+    </Files>
+    <RequiredPkgs>
+      <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

@@ -1,0 +1,196 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.txt, included in this distribution,                 *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Vladimir Bobrov)
+}
+{$mode objfpc}{$H+}
+
+{** Модуль управления действиями (TAction) для формы электронных таблиц
+    Содержит создание и настройку всех действий, без GUI-кода }
+unit uzvspreadsheet_actions;
+
+{$INCLUDE zengineconfig.inc}
+
+interface
+
+uses
+  Classes,
+  SysUtils,
+  ActnList,
+  fpspreadsheet,
+  fpspreadsheetctrls;
+
+type
+  { TSpreadsheetActions }
+  { Класс для управления действиями формы электронных таблиц }
+  TSpreadsheetActions = class
+  private
+    FActionList: TActionList;
+    FWorkbookSource: TsWorkbookSource;
+
+    // Действия
+    FActNewBook: TAction;
+    FActOpenBook: TAction;
+    FActSaveBook: TAction;
+    FActCalc: TAction;
+    FActAutoCalc: TAction;
+
+    // Флаг автопересчёта
+    FAutoCalcEnabled: Boolean;
+
+    // Обработчики действий
+    procedure OnActNewBookExecute(Sender: TObject);
+    procedure OnActOpenBookExecute(Sender: TObject);
+    procedure OnActSaveBookExecute(Sender: TObject);
+    procedure OnActCalcExecute(Sender: TObject);
+    procedure OnActAutoCalcExecute(Sender: TObject);
+
+  public
+    constructor Create(aActionList: TActionList;
+      aWorkbookSource: TsWorkbookSource);
+    destructor Destroy; override;
+
+    { Инициализирует все действия и привязывает обработчики }
+    procedure InitActions;
+
+    { Возвращает действие "Создать книгу" }
+    property ActNewBook: TAction read FActNewBook;
+
+    { Возвращает действие "Открыть книгу" }
+    property ActOpenBook: TAction read FActOpenBook;
+
+    { Возвращает действие "Сохранить книгу" }
+    property ActSaveBook: TAction read FActSaveBook;
+
+    { Возвращает действие "Пересчитать формулы" }
+    property ActCalc: TAction read FActCalc;
+
+    { Возвращает действие "Автопересчёт" }
+    property ActAutoCalc: TAction read FActAutoCalc;
+
+    { Возвращает/устанавливает флаг автопересчёта }
+    property AutoCalcEnabled: Boolean read FAutoCalcEnabled
+      write FAutoCalcEnabled;
+  end;
+
+implementation
+
+uses
+  uzvspreadsheet_cmdnewbook,
+  uzvspreadsheet_cmdopenbook,
+  uzvspreadsheet_cmdsavebook,
+  uzvspreadsheet_cmdcalc,
+  uzclog,
+  uzcinterface;
+
+{ TSpreadsheetActions }
+
+constructor TSpreadsheetActions.Create(aActionList: TActionList;
+  aWorkbookSource: TsWorkbookSource);
+begin
+  inherited Create;
+  FActionList := aActionList;
+  FWorkbookSource := aWorkbookSource;
+  FAutoCalcEnabled := True;
+
+  InitActions;
+end;
+
+destructor TSpreadsheetActions.Destroy;
+begin
+  // Действия освобождаются автоматически через ActionList
+  inherited Destroy;
+end;
+
+{ Инициализация всех действий }
+procedure TSpreadsheetActions.InitActions;
+begin
+  // Действие "Создать книгу"
+  FActNewBook := TAction.Create(FActionList);
+  FActNewBook.ActionList := FActionList;
+  FActNewBook.Caption := 'Создать';
+  FActNewBook.Hint := 'Создать новую книгу';
+  FActNewBook.OnExecute := @OnActNewBookExecute;
+
+  // Действие "Открыть книгу"
+  FActOpenBook := TAction.Create(FActionList);
+  FActOpenBook.ActionList := FActionList;
+  FActOpenBook.Caption := 'Открыть';
+  FActOpenBook.Hint := 'Открыть файл книги';
+  FActOpenBook.OnExecute := @OnActOpenBookExecute;
+
+  // Действие "Сохранить книгу"
+  FActSaveBook := TAction.Create(FActionList);
+  FActSaveBook.ActionList := FActionList;
+  FActSaveBook.Caption := 'Сохранить';
+  FActSaveBook.Hint := 'Сохранить книгу в файл';
+  FActSaveBook.OnExecute := @OnActSaveBookExecute;
+
+  // Действие "Пересчитать формулы"
+  FActCalc := TAction.Create(FActionList);
+  FActCalc.ActionList := FActionList;
+  FActCalc.Caption := 'Расчёт';
+  FActCalc.Hint := 'Пересчитать все формулы';
+  FActCalc.OnExecute := @OnActCalcExecute;
+
+  // Действие "Автопересчёт"
+  FActAutoCalc := TAction.Create(FActionList);
+  FActAutoCalc.ActionList := FActionList;
+  FActAutoCalc.Caption := 'Автопересчёт';
+  FActAutoCalc.Hint := 'Включить/выключить автопересчёт формул';
+  FActAutoCalc.OnExecute := @OnActAutoCalcExecute;
+
+  zcUI.TextMessage('Действия электронных таблиц инициализированы', TMWOHistoryOut);
+end;
+
+{ Обработчик действия "Создать книгу" }
+procedure TSpreadsheetActions.OnActNewBookExecute(Sender: TObject);
+begin
+  ExecuteNewBook(FWorkbookSource);
+end;
+
+{ Обработчик действия "Открыть книгу" }
+procedure TSpreadsheetActions.OnActOpenBookExecute(Sender: TObject);
+begin
+  ExecuteOpenBook(FWorkbookSource);
+end;
+
+{ Обработчик действия "Сохранить книгу" }
+procedure TSpreadsheetActions.OnActSaveBookExecute(Sender: TObject);
+begin
+  // Вызываем команду сохранения книги
+  // Если файл не был сохранён ранее - откроется диалог "Сохранить как"
+  ExecuteSaveBookAs(FWorkbookSource);
+end;
+
+{ Обработчик действия "Пересчитать формулы" }
+procedure TSpreadsheetActions.OnActCalcExecute(Sender: TObject);
+begin
+  ExecuteCalcFormulas(FWorkbookSource);
+end;
+
+{ Обработчик действия "Автопересчёт" }
+procedure TSpreadsheetActions.OnActAutoCalcExecute(Sender: TObject);
+begin
+  FAutoCalcEnabled := not FAutoCalcEnabled;
+  SetAutoCalcEnabled(FWorkbookSource, FAutoCalcEnabled);
+
+  if FAutoCalcEnabled then
+    zcUI.TextMessage('Автопересчёт формул включён', TMWOHistoryOut)
+  else
+    zcUI.TextMessage('Автопересчёт формул выключен', TMWOHistoryOut);
+end;
+
+end.

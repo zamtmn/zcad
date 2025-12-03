@@ -46,6 +46,8 @@ type
     FActSaveBook: TAction;
     FActCalc: TAction;
     FActAutoCalc: TAction;
+    FActUndo: TAction;
+    FActRedo: TAction;
 
     // Флаг автопересчёта
     FAutoCalcEnabled: Boolean;
@@ -56,6 +58,10 @@ type
     procedure OnActSaveBookExecute(Sender: TObject);
     procedure OnActCalcExecute(Sender: TObject);
     procedure OnActAutoCalcExecute(Sender: TObject);
+    procedure OnActUndoExecute(Sender: TObject);
+    procedure OnActRedoExecute(Sender: TObject);
+    procedure OnActUndoUpdate(Sender: TObject);
+    procedure OnActRedoUpdate(Sender: TObject);
 
   public
     constructor Create(aActionList: TActionList;
@@ -80,6 +86,12 @@ type
     { Возвращает действие "Автопересчёт" }
     property ActAutoCalc: TAction read FActAutoCalc;
 
+    { Возвращает действие "Отменить" (Undo) }
+    property ActUndo: TAction read FActUndo;
+
+    { Возвращает действие "Вернуть" (Redo) }
+    property ActRedo: TAction read FActRedo;
+
     { Возвращает/устанавливает флаг автопересчёта }
     property AutoCalcEnabled: Boolean read FAutoCalcEnabled
       write FAutoCalcEnabled;
@@ -92,6 +104,7 @@ uses
   uzvspreadsheet_cmdopenbook,
   uzvspreadsheet_cmdsavebook,
   uzvspreadsheet_cmdcalc,
+  uzvspreadsheet_cmdundoredo,
   uzclog,
   uzcinterface;
 
@@ -105,11 +118,17 @@ begin
   FWorkbookSource := aWorkbookSource;
   FAutoCalcEnabled := True;
 
+  // Инициализируем менеджер отмены/возврата
+  InitUndoManager(aWorkbookSource);
+
   InitActions;
 end;
 
 destructor TSpreadsheetActions.Destroy;
 begin
+  // Освобождаем менеджер отмены/возврата
+  FreeUndoManager;
+
   // Действия освобождаются автоматически через ActionList
   inherited Destroy;
 end;
@@ -152,6 +171,24 @@ begin
   FActAutoCalc.Hint := 'Включить/выключить автопересчёт формул';
   FActAutoCalc.OnExecute := @OnActAutoCalcExecute;
 
+  // Действие "Отменить" (Назад)
+  FActUndo := TAction.Create(FActionList);
+  FActUndo.ActionList := FActionList;
+  FActUndo.Caption := 'Назад';
+  FActUndo.Hint := 'Отменить последнее изменение (Ctrl+Z)';
+  FActUndo.ShortCut := 16474; // Ctrl+Z
+  FActUndo.OnExecute := @OnActUndoExecute;
+  FActUndo.OnUpdate := @OnActUndoUpdate;
+
+  // Действие "Вернуть" (Вперёд)
+  FActRedo := TAction.Create(FActionList);
+  FActRedo.ActionList := FActionList;
+  FActRedo.Caption := 'Вперёд';
+  FActRedo.Hint := 'Вернуть отменённое изменение (Ctrl+Y)';
+  FActRedo.ShortCut := 16473; // Ctrl+Y
+  FActRedo.OnExecute := @OnActRedoExecute;
+  FActRedo.OnUpdate := @OnActRedoUpdate;
+
   zcUI.TextMessage('Действия электронных таблиц инициализированы', TMWOHistoryOut);
 end;
 
@@ -191,6 +228,30 @@ begin
     zcUI.TextMessage('Автопересчёт формул включён', TMWOHistoryOut)
   else
     zcUI.TextMessage('Автопересчёт формул выключен', TMWOHistoryOut);
+end;
+
+{ Обработчик действия "Отменить" (Назад) }
+procedure TSpreadsheetActions.OnActUndoExecute(Sender: TObject);
+begin
+  ExecuteUndo(FWorkbookSource);
+end;
+
+{ Обработчик действия "Вернуть" (Вперёд) }
+procedure TSpreadsheetActions.OnActRedoExecute(Sender: TObject);
+begin
+  ExecuteRedo(FWorkbookSource);
+end;
+
+{ Обновление состояния кнопки "Отменить" }
+procedure TSpreadsheetActions.OnActUndoUpdate(Sender: TObject);
+begin
+  FActUndo.Enabled := CanUndo;
+end;
+
+{ Обновление состояния кнопки "Вернуть" }
+procedure TSpreadsheetActions.OnActRedoUpdate(Sender: TObject);
+begin
+  FActRedo.Enabled := CanRedo;
 end;
 
 end.

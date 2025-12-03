@@ -79,6 +79,9 @@ type
     FBtnOpen: TToolButton;
     FBtnSave: TToolButton;
     FBtnSeparator1: TToolButton;
+    FBtnUndo: TToolButton;
+    FBtnRedo: TToolButton;
+    FBtnSeparator2: TToolButton;
     FBtnCalc: TToolButton;
     FBtnAutoCalc: TToolButton;
 
@@ -128,7 +131,8 @@ implementation
 
 uses
   uzclog,
-  uzcinterface;
+  uzcinterface,
+  uzvspreadsheet_cmdundoredo;
 
 { TuzvSpreadsheetForm }
 
@@ -172,6 +176,8 @@ begin
   FBtnNew.Action := FSpreadsheetActions.ActNewBook;
   FBtnOpen.Action := FSpreadsheetActions.ActOpenBook;
   FBtnSave.Action := FSpreadsheetActions.ActSaveBook;
+  FBtnUndo.Action := FSpreadsheetActions.ActUndo;
+  FBtnRedo.Action := FSpreadsheetActions.ActRedo;
   FBtnCalc.Action := FSpreadsheetActions.ActCalc;
   FBtnAutoCalc.Action := FSpreadsheetActions.ActAutoCalc;
 end;
@@ -230,11 +236,31 @@ begin
   FBtnSave.Hint := 'Сохранить книгу в файл';
   FBtnSave.ShowHint := True;
 
-  // Разделитель
+  // Разделитель 1
   FBtnSeparator1 := TToolButton.Create(FToolBar);
   FBtnSeparator1.Parent := FToolBar;
   FBtnSeparator1.Style := tbsSeparator;
   FBtnSeparator1.Width := 10;
+
+  // Кнопка "Назад" (Undo)
+  FBtnUndo := TToolButton.Create(FToolBar);
+  FBtnUndo.Parent := FToolBar;
+  FBtnUndo.Caption := 'Назад';
+  FBtnUndo.Hint := 'Отменить последнее изменение';
+  FBtnUndo.ShowHint := True;
+
+  // Кнопка "Вперёд" (Redo)
+  FBtnRedo := TToolButton.Create(FToolBar);
+  FBtnRedo.Parent := FToolBar;
+  FBtnRedo.Caption := 'Вперёд';
+  FBtnRedo.Hint := 'Вернуть отменённое изменение';
+  FBtnRedo.ShowHint := True;
+
+  // Разделитель 2
+  FBtnSeparator2 := TToolButton.Create(FToolBar);
+  FBtnSeparator2.Parent := FToolBar;
+  FBtnSeparator2.Style := tbsSeparator;
+  FBtnSeparator2.Width := 10;
 
   // Кнопка "Пересчитать формулы"
   FBtnCalc := TToolButton.Create(FToolBar);
@@ -389,6 +415,7 @@ var
   worksheet: TsWorksheet;
   row, col: Cardinal;
   content: String;
+  cellAddress: String;
 begin
   if (FWorkbookSource = nil) or (FWorkbookSource.Workbook = nil) then
     Exit;
@@ -402,6 +429,12 @@ begin
   col := FWorksheetGrid.Col - FWorksheetGrid.FixedCols;
 
   content := FEditCellContent.Text;
+
+  // Сохраняем текущее состояние ячейки для возможности отмены
+  cellAddress := GetCellString(row, col);
+  if SpreadsheetUndoManager <> nil then
+    SpreadsheetUndoManager.BeginChange(row, col,
+      'Изменение ячейки ' + cellAddress);
 
   // Если начинается с "=" - это формула
   if (Length(content) > 0) and (content[1] = '=') then

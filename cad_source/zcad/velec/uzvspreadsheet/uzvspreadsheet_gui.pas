@@ -1,0 +1,410 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.txt, included in this distribution,                 *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Vladimir Bobrov)
+}
+{$mode objfpc}{$H+}
+
+{** Модуль главной формы визуализации электронных таблиц
+    Отвечает только за отображение интерфейса, без бизнес-логики }
+unit uzvspreadsheet_gui;
+
+{$INCLUDE zengineconfig.inc}
+
+interface
+
+uses
+  Classes,
+  SysUtils,
+  Forms,
+  Controls,
+  ExtCtrls,
+  StdCtrls,
+  ActnList,
+  ComCtrls,
+  fpspreadsheet,
+  fpsTypes,
+  fpspreadsheetgrid,
+  fpspreadsheetctrls;
+
+const
+  // Размеры по умолчанию для панелей и элементов
+  DEFAULT_CONTROL_PANEL_HEIGHT = 40;
+  DEFAULT_CELL_INFO_HEIGHT = 30;
+  DEFAULT_CELL_ADDRESS_WIDTH = 80;
+  DEFAULT_CELL_CONTENT_MIN_WIDTH = 200;
+
+  // Имена параметров для сохранения состояния
+  SPREADSHEET_PANEL_CONTROL = 'SpreadSheet_PanelControl';
+  SPREADSHEET_PANEL_SHEET = 'SpreadSheet_PanelSheet';
+
+type
+  { TuzvSpreadsheetForm }
+  { Главная форма модуля визуализации электронных таблиц }
+  TuzvSpreadsheetForm = class(TForm)
+  private
+    // Основные панели
+    FPanelControl: TPanel;
+    FPanelSheet: TPanel;
+
+    // Панель информации о ячейке
+    FPanelCellInfo: TPanel;
+    FLabelCellAddress: TLabel;
+    FEditCellContent: TEdit;
+
+    // Компоненты fpspreadsheet
+    FWorkbookSource: TsWorkbookSource;
+    FWorksheetGrid: TsWorksheetGrid;
+    FWorksheetTabControl: TsWorksheetTabControl;
+
+    // Панель инструментов
+    FToolBar: TToolBar;
+    FBtnNew: TToolButton;
+    FBtnOpen: TToolButton;
+    FBtnSave: TToolButton;
+    FBtnSeparator1: TToolButton;
+    FBtnCalc: TToolButton;
+    FBtnAutoCalc: TToolButton;
+
+    // Действия
+    FActionList: TActionList;
+    FSpreadsheetActions: TSpreadsheetActions;
+
+    // Процедуры создания компонентов
+    procedure CreateActions;
+    procedure CreatePanels;
+    procedure CreateToolBar;
+    procedure CreateSpreadsheetComponents;
+    procedure CreateCellInfoPanel;
+
+    // Обработчики событий
+    procedure OnWorksheetGridSelection(Sender: TObject;
+      aCol, aRow: Integer);
+    procedure OnCellContentEditChange(Sender: TObject);
+    procedure OnCellContentEditExit(Sender: TObject);
+    procedure OnCellContentKeyPress(Sender: TObject; var Key: Char);
+
+  protected
+    procedure DoCreate; override;
+    procedure DoDestroy; override;
+
+  public
+    { Возвращает источник данных книги }
+    property WorkbookSource: TsWorkbookSource read FWorkbookSource;
+
+    { Возвращает компонент отображения таблицы }
+    property WorksheetGrid: TsWorksheetGrid read FWorksheetGrid;
+
+    { Возвращает список действий для привязки кнопок }
+    property ActionList: TActionList read FActionList;
+
+    { Обновляет отображение информации о текущей ячейке }
+    procedure UpdateCellInfo;
+
+    { Устанавливает содержимое ячейки из поля редактирования }
+    procedure ApplyCellContent;
+  end;
+
+var
+  uzvSpreadsheetForm: TuzvSpreadsheetForm;
+
+implementation
+
+uses
+  uzclog,
+  uzcinterface,
+  uzvspreadsheet_actions;
+
+{ TuzvSpreadsheetForm }
+
+procedure TuzvSpreadsheetForm.DoCreate;
+begin
+  inherited DoCreate;
+
+  // Настройка основных параметров формы
+  Caption := 'Электронные таблицы / Spreadsheet';
+  Width := 800;
+  Height := 600;
+  Position := poScreenCenter;
+
+  // Создаем компоненты в правильном порядке
+  CreatePanels;
+  CreateToolBar;
+  CreateCellInfoPanel;
+  CreateSpreadsheetComponents;
+  CreateActions;
+
+  zcUI.TextMessage('Форма электронных таблиц создана', TMWOHistoryOut);
+end;
+
+procedure TuzvSpreadsheetForm.DoDestroy;
+begin
+  // Освобождаем объект действий
+  if Assigned(FSpreadsheetActions) then
+    FreeAndNil(FSpreadsheetActions);
+
+  zcUI.TextMessage('Форма электронных таблиц закрыта', TMWOHistoryOut);
+  inherited DoDestroy;
+end;
+
+{ Создание действий и привязка к кнопкам }
+procedure TuzvSpreadsheetForm.CreateActions;
+begin
+  // Создаём объект действий
+  FSpreadsheetActions := TSpreadsheetActions.Create(FActionList, FWorkbookSource);
+
+  // Привязываем действия к кнопкам панели инструментов
+  FBtnNew.Action := FSpreadsheetActions.ActNewBook;
+  FBtnOpen.Action := FSpreadsheetActions.ActOpenBook;
+  FBtnSave.Action := FSpreadsheetActions.ActSaveBook;
+  FBtnCalc.Action := FSpreadsheetActions.ActCalc;
+  FBtnAutoCalc.Action := FSpreadsheetActions.ActAutoCalc;
+end;
+
+{ Создание основных панелей формы }
+procedure TuzvSpreadsheetForm.CreatePanels;
+begin
+  // Верхняя панель управления
+  FPanelControl := TPanel.Create(Self);
+  FPanelControl.Parent := Self;
+  FPanelControl.Align := alTop;
+  FPanelControl.Height := DEFAULT_CONTROL_PANEL_HEIGHT;
+  FPanelControl.BevelOuter := bvNone;
+  FPanelControl.Caption := '';
+
+  // Нижняя панель отображения таблицы
+  FPanelSheet := TPanel.Create(Self);
+  FPanelSheet.Parent := Self;
+  FPanelSheet.Align := alClient;
+  FPanelSheet.BevelOuter := bvNone;
+  FPanelSheet.Caption := '';
+end;
+
+{ Создание панели инструментов с кнопками }
+procedure TuzvSpreadsheetForm.CreateToolBar;
+begin
+  // Создаем список действий
+  FActionList := TActionList.Create(Self);
+
+  // Создаем панель инструментов
+  FToolBar := TToolBar.Create(Self);
+  FToolBar.Parent := FPanelControl;
+  FToolBar.Align := alClient;
+  FToolBar.ShowCaptions := True;
+  FToolBar.ButtonWidth := 80;
+  FToolBar.ButtonHeight := 28;
+
+  // Кнопка "Создать книгу"
+  FBtnNew := TToolButton.Create(FToolBar);
+  FBtnNew.Parent := FToolBar;
+  FBtnNew.Caption := 'Создать';
+  FBtnNew.Hint := 'Создать новую книгу';
+  FBtnNew.ShowHint := True;
+
+  // Кнопка "Открыть книгу"
+  FBtnOpen := TToolButton.Create(FToolBar);
+  FBtnOpen.Parent := FToolBar;
+  FBtnOpen.Caption := 'Открыть';
+  FBtnOpen.Hint := 'Открыть файл книги';
+  FBtnOpen.ShowHint := True;
+
+  // Кнопка "Сохранить книгу"
+  FBtnSave := TToolButton.Create(FToolBar);
+  FBtnSave.Parent := FToolBar;
+  FBtnSave.Caption := 'Сохранить';
+  FBtnSave.Hint := 'Сохранить книгу в файл';
+  FBtnSave.ShowHint := True;
+
+  // Разделитель
+  FBtnSeparator1 := TToolButton.Create(FToolBar);
+  FBtnSeparator1.Parent := FToolBar;
+  FBtnSeparator1.Style := tbsSeparator;
+  FBtnSeparator1.Width := 10;
+
+  // Кнопка "Пересчитать формулы"
+  FBtnCalc := TToolButton.Create(FToolBar);
+  FBtnCalc.Parent := FToolBar;
+  FBtnCalc.Caption := 'Расчёт';
+  FBtnCalc.Hint := 'Пересчитать формулы';
+  FBtnCalc.ShowHint := True;
+
+  // Кнопка "Автопересчёт"
+  FBtnAutoCalc := TToolButton.Create(FToolBar);
+  FBtnAutoCalc.Parent := FToolBar;
+  FBtnAutoCalc.Caption := 'Автопересчёт';
+  FBtnAutoCalc.Hint := 'Включить/выключить автопересчёт формул';
+  FBtnAutoCalc.ShowHint := True;
+  FBtnAutoCalc.Style := tbsCheck;
+  FBtnAutoCalc.Down := True;
+end;
+
+{ Создание панели информации о ячейке }
+procedure TuzvSpreadsheetForm.CreateCellInfoPanel;
+begin
+  // Панель для отображения информации о ячейке
+  FPanelCellInfo := TPanel.Create(Self);
+  FPanelCellInfo.Parent := FPanelSheet;
+  FPanelCellInfo.Align := alTop;
+  FPanelCellInfo.Height := DEFAULT_CELL_INFO_HEIGHT;
+  FPanelCellInfo.BevelOuter := bvNone;
+  FPanelCellInfo.Caption := '';
+
+  // Метка с адресом текущей ячейки
+  FLabelCellAddress := TLabel.Create(Self);
+  FLabelCellAddress.Parent := FPanelCellInfo;
+  FLabelCellAddress.Align := alLeft;
+  FLabelCellAddress.Width := DEFAULT_CELL_ADDRESS_WIDTH;
+  FLabelCellAddress.Caption := 'A1';
+  FLabelCellAddress.Alignment := taCenter;
+  FLabelCellAddress.Layout := tlCenter;
+  FLabelCellAddress.AutoSize := False;
+  FLabelCellAddress.Font.Style := [fsBold];
+
+  // Поле редактирования содержимого ячейки
+  FEditCellContent := TEdit.Create(Self);
+  FEditCellContent.Parent := FPanelCellInfo;
+  FEditCellContent.Align := alClient;
+  FEditCellContent.Text := '';
+  FEditCellContent.OnChange := @OnCellContentEditChange;
+  FEditCellContent.OnExit := @OnCellContentEditExit;
+  FEditCellContent.OnKeyPress := @OnCellContentKeyPress;
+end;
+
+{ Создание компонентов fpspreadsheet }
+procedure TuzvSpreadsheetForm.CreateSpreadsheetComponents;
+begin
+  // Источник данных для книги
+  FWorkbookSource := TsWorkbookSource.Create(Self);
+
+  // Табы для переключения листов книги
+  FWorksheetTabControl := TsWorksheetTabControl.Create(Self);
+  FWorksheetTabControl.Parent := FPanelSheet;
+  FWorksheetTabControl.Align := alBottom;
+  FWorksheetTabControl.Height := 25;
+  FWorksheetTabControl.WorkbookSource := FWorkbookSource;
+
+  // Компонент отображения таблицы
+  FWorksheetGrid := TsWorksheetGrid.Create(Self);
+  FWorksheetGrid.Parent := FPanelSheet;
+  FWorksheetGrid.Align := alClient;
+  FWorksheetGrid.WorkbookSource := FWorkbookSource;
+  FWorksheetGrid.Options := FWorksheetGrid.Options + [goEditing, goColSizing,
+    goRowSizing];
+  FWorksheetGrid.OnSelection := @OnWorksheetGridSelection;
+
+  // Создаём пустую книгу при запуске
+  FWorkbookSource.CreateNewWorkbook;
+end;
+
+{ Обработчик выбора ячейки в таблице }
+procedure TuzvSpreadsheetForm.OnWorksheetGridSelection(Sender: TObject;
+  aCol, aRow: Integer);
+begin
+  UpdateCellInfo;
+end;
+
+{ Обработчик изменения содержимого поля редактирования }
+procedure TuzvSpreadsheetForm.OnCellContentEditChange(Sender: TObject);
+begin
+  // Ничего не делаем при изменении - применяем только при нажатии Enter или
+  // выходе из поля
+end;
+
+{ Обработчик выхода из поля редактирования }
+procedure TuzvSpreadsheetForm.OnCellContentEditExit(Sender: TObject);
+begin
+  ApplyCellContent;
+end;
+
+{ Обработчик нажатия клавиши в поле редактирования }
+procedure TuzvSpreadsheetForm.OnCellContentKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  // При нажатии Enter применяем содержимое
+  if Key = #13 then
+  begin
+    ApplyCellContent;
+    Key := #0;
+    FWorksheetGrid.SetFocus;
+  end;
+end;
+
+{ Обновление информации о текущей ячейке }
+procedure TuzvSpreadsheetForm.UpdateCellInfo;
+var
+  worksheet: TsWorksheet;
+  cell: PCell;
+  cellAddress: String;
+  cellContent: String;
+  row, col: Cardinal;
+begin
+  if (FWorkbookSource = nil) or (FWorkbookSource.Workbook = nil) then
+    Exit;
+
+  worksheet := FWorkbookSource.Workbook.ActiveWorksheet;
+  if worksheet = nil then
+    Exit;
+
+  // Получаем координаты выделенной ячейки
+  row := FWorksheetGrid.Row - FWorksheetGrid.FixedRows;
+  col := FWorksheetGrid.Col - FWorksheetGrid.FixedCols;
+
+  // Формируем адрес ячейки (например, A1, B2)
+  cellAddress := GetCellString(row, col);
+  FLabelCellAddress.Caption := cellAddress;
+
+  // Получаем содержимое ячейки
+  cell := worksheet.FindCell(row, col);
+  if cell <> nil then
+  begin
+    // Если есть формула - показываем формулу, иначе значение
+    cellContent := worksheet.ReadFormulaAsString(cell);
+    if cellContent = '' then
+      cellContent := worksheet.ReadAsText(cell);
+  end
+  else
+    cellContent := '';
+
+  FEditCellContent.Text := cellContent;
+end;
+
+{ Применение содержимого из поля редактирования к ячейке }
+procedure TuzvSpreadsheetForm.ApplyCellContent;
+var
+  worksheet: TsWorksheet;
+  row, col: Cardinal;
+  content: String;
+begin
+  if (FWorkbookSource = nil) or (FWorkbookSource.Workbook = nil) then
+    Exit;
+
+  worksheet := FWorkbookSource.Workbook.ActiveWorksheet;
+  if worksheet = nil then
+    Exit;
+
+  // Получаем координаты выделенной ячейки
+  row := FWorksheetGrid.Row - FWorksheetGrid.FixedRows;
+  col := FWorksheetGrid.Col - FWorksheetGrid.FixedCols;
+
+  content := FEditCellContent.Text;
+
+  // Если начинается с "=" - это формула
+  if (Length(content) > 0) and (content[1] = '=') then
+    worksheet.WriteFormula(row, col, Copy(content, 2, Length(content) - 1))
+  else
+    worksheet.WriteText(row, col, content);
+end;
+
+end.

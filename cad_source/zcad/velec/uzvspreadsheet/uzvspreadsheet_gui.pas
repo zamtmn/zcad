@@ -37,7 +37,8 @@ uses
   fpspreadsheet,
   fpsTypes,
   fpspreadsheetgrid,
-  fpspreadsheetctrls;
+  fpspreadsheetctrls,
+  uzvspreadsheet_actions;
 
 const
   // Размеры по умолчанию для панелей и элементов
@@ -67,7 +68,7 @@ type
     // Компоненты fpspreadsheet
     FWorkbookSource: TsWorkbookSource;
     FWorksheetGrid: TsWorksheetGrid;
-    FWorksheetTabControl: TsWorksheetTabControl;
+    FWorksheetTabControl: TsWorkbookTabControl;
 
     // Панель инструментов
     FToolBar: TToolBar;
@@ -124,8 +125,7 @@ implementation
 
 uses
   uzclog,
-  uzcinterface,
-  uzvspreadsheet_actions;
+  uzcinterface;
 
 { TuzvSpreadsheetForm }
 
@@ -289,7 +289,7 @@ begin
   FWorkbookSource := TsWorkbookSource.Create(Self);
 
   // Табы для переключения листов книги
-  FWorksheetTabControl := TsWorksheetTabControl.Create(Self);
+  FWorksheetTabControl := TsWorkbookTabControl.Create(Self);
   FWorksheetTabControl.Parent := FPanelSheet;
   FWorksheetTabControl.Align := alBottom;
   FWorksheetTabControl.Height := 25;

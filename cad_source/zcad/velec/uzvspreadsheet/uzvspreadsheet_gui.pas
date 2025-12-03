@@ -30,6 +30,8 @@ uses
   SysUtils,
   Forms,
   Controls,
+  Graphics,
+  Grids,
   ExtCtrls,
   StdCtrls,
   ActnList,

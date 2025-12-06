@@ -34,7 +34,9 @@ uses
   gzctnrVectorTypes,
   uzcenitiesvariablesextender,
   uzcvariablesutils,
-  varmandef;
+  varmandef,
+  uzccommandsabstract,
+  uzccommandsimpl;
 
 type
   // Тип вектора для хранения указателей на примитивы
@@ -313,5 +315,171 @@ begin
     LM_Info
   );
 end;
+
+{**
+  Команда для тестирования функции uzvGetEntity
+
+  @param Context - контекст команды ZCAD
+  @param operands - операнды команды (режим и параметр поиска)
+  @return Результат выполнения команды
+**}
+function UzvGetEntity_com(
+  const Context: TZCADCommandContext;
+  operands: TCommandOperands
+): TCommandResult;
+var
+  entities: TEntityVector;
+  mode: Integer;
+  param: String;
+  i: Integer;
+  pObj: PGDBObjEntity;
+begin
+  Result := cmd_ok;
+
+  // Выводим заголовок команды
+  zcUI.TextMessage(
+    '==============================================',
+    TMWOHistoryOut
+  );
+  zcUI.TextMessage(
+    'Команда: UzvGetEntity - тестирование фильтрации примитивов',
+    TMWOHistoryOut
+  );
+  zcUI.TextMessage(
+    '==============================================',
+    TMWOHistoryOut
+  );
+
+  // Логирование вызова команды
+  programlog.LogOutFormatStr(
+    'uzvgetentity: Command UzvGetEntity_com called',
+    [],
+    LM_Info
+  );
+
+  // Парсим операнды: первый - режим, второй - параметр для режима 2
+  mode := 0;
+  param := '';
+
+  // Если есть первый операнд - это режим
+  if operands.Count > 0 then
+  begin
+    try
+      mode := StrToInt(operands[0]);
+    except
+      on E: Exception do
+      begin
+        zcUI.TextMessage(
+          'Ошибка: некорректное значение режима. Используется режим 0',
+          TMWOHistoryOut
+        );
+        programlog.LogOutFormatStr(
+          'uzvgetentity: Invalid mode operand "%s", using mode 0',
+          [operands[0]],
+          LM_Warning
+        );
+        mode := 0;
+      end;
+    end;
+  end;
+
+  // Если есть второй операнд - это параметр для режима 2
+  if operands.Count > 1 then
+    param := operands[1];
+
+  // Выводим информацию о параметрах команды
+  zcUI.TextMessage(
+    'Режим работы: ' + IntToStr(mode),
+    TMWOHistoryOut
+  );
+
+  if mode = 2 then
+    zcUI.TextMessage(
+      'Параметр поиска ENTID_Type: "' + param + '"',
+      TMWOHistoryOut
+    );
+
+  // Вызываем функцию фильтрации
+  entities := uzvGetEntity(mode, param);
+
+  try
+    // Выводим результаты
+    zcUI.TextMessage(
+      '----------------------------------------------',
+      TMWOHistoryOut
+    );
+    zcUI.TextMessage(
+      'Результаты поиска:',
+      TMWOHistoryOut
+    );
+
+    if entities.Count = 0 then
+    begin
+      zcUI.TextMessage(
+        'Примитивов не найдено',
+        TMWOHistoryOut
+      );
+    end
+    else
+    begin
+      zcUI.TextMessage(
+        'Найдено примитивов: ' + IntToStr(entities.Count),
+        TMWOHistoryOut
+      );
+
+      // Выводим детали по каждому найденному примитиву
+      for i := 0 to entities.Count - 1 do
+      begin
+        pObj := entities[i];
+        if pObj <> nil then
+        begin
+          zcUI.TextMessage(
+            IntToStr(i + 1) + '. Тип: ' + pObj^.GetObjTypeName +
+            ', ENTID_Type: "' + GetEntityIDType(pObj) + '"',
+            TMWOHistoryOut
+          );
+        end;
+      end;
+    end;
+
+  finally
+    // Освобождаем вектор
+    entities.Free;
+  end;
+
+  zcUI.TextMessage(
+    '==============================================',
+    TMWOHistoryOut
+  );
+
+  // Логирование завершения команды
+  programlog.LogOutFormatStr(
+    'uzvgetentity: Command UzvGetEntity_com completed',
+    [],
+    LM_Info
+  );
+end;
+
+initialization
+  // Регистрируем команду UzvGetEntity в системе ZCAD
+  CreateZCADCommand(
+    @UzvGetEntity_com,
+    'UzvGetEntity',
+    CADWG,
+    0
+  );
+
+  programlog.LogOutFormatStr(
+    'Unit "%s" initialization',
+    [{$INCLUDE %FILE%}],
+    LM_Info
+  );
+
+finalization
+  programlog.LogOutFormatStr(
+    'Unit "%s" finalization',
+    [{$INCLUDE %FILE%}],
+    LM_Info
+  );
 
 end.

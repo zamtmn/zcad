@@ -246,7 +246,7 @@ begin
     if (SD.LAPEData.FCompiler=nil)or(SD.FileData.Age=-1)or(SD.FileData.Age<>fa)or(CtxCreateMode=LSCMRecreate)then begin
       if SD.LAPEData.FCompiler<>nil then
         SD.LAPEData.FCompiler.Destroy;
-      SD.LAPEData.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(SD.FileData.Name{,TEncoding.UTF8}));
+      SD.LAPEData.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(SD.FileData.Name,TEncoding.UTF8));
       SD.LAPEData.FCompiled:=False;
       SD.FileData.Age:=fa;
       ctxmode:=DoAll;

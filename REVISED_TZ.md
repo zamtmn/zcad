@@ -1,6 +1,6 @@
 # Исправленное техническое задание — Модуль выгрузки данных в MS Access
 
-## Версия: 2.0 (с учетом уточнений veb86)
+## Версия: 3.0 (утверждено veb86 - готово к реализации)
 
 ---
 
@@ -12,7 +12,7 @@
 2. **Пробел №2 (Порядок колонок)**: Принято предложение полностью — использовать имена колонок вместо номеров
 3. **Пробел №3 (Стратегия обновления)**: **ИЗМЕНЕНО** — перед заполнением данных целевая таблица полностью очищается (DELETE). Не используем UPSERT
 4. **Пробел №4 (Связь примитивов и TVElectrDevStruct)**: **ИЗМЕНЕНО** — используем только `uzvgetentity` возвращающий `PGDBObjEntity`. `TVElectrDevStruct` в новом модуле **НЕ ИСПОЛЬЗУЕТСЯ**
-5. **Пробел №5 (Обработка NULL)**: **ИЗМЕНЕНО** — любая ошибка должна приводить к прекращению работы команды импорта с выводом в командную строку `zcUI` причин остановки. Данные имеют значение только тогда, когда они выгружены правильно
+5. **Пробел №5 (Обработка NULL)**: **ИЗМЕНЕНО** — если свойство возвращает nil, вывести сообщение об ошибке в командную строку, **пропустить примитив** и продолжить выгрузку остальных
 6. **Пробел №6 (Валидация типов)**: **ИЗМЕНЕНО** — валидацию типов должен решать пользователь. Если в столбце float, значит тип загружаемых данных должен быть float. Если нет — ошибка и вывод сообщения в командную строку
 7. **Пробел №7 (Batch size)**: Принято предложение полностью
 8. **Пробел №8 (Фильтрация примитивов)**: Принято предложение полностью
@@ -23,10 +23,27 @@
 
 - ✅ Используем **только** `PGDBObjEntity` из `uzvgetentity.pas`
 - ✅ **НЕ используем** `TVElectrDevStruct`
+- ✅ **НЕ используем интерфейсы** - только обычные классы и методы
 - ✅ Перед экспортом **очищаем** целевую таблицу полностью
-- ✅ Любая ошибка → **остановка** всего процесса с выводом причины
-- ✅ Строгая валидация типов: несоответствие типа → **ошибка**
+- ✅ Свойство = nil → **пропустить примитив** и продолжить (не останавливать весь процесс)
+- ✅ Строгая валидация типов: несоответствие типа → **ошибка и пропуск примитива**
 - ✅ Логирование только через `uzclog.pas` с уровнем `LM_Info`
+- ✅ Формат БД: **ACCDB** с Microsoft Access Driver
+- ✅ Кодировка: **UTF-8**
+
+### Важные уточнения от veb86 (финальное утверждение):
+
+1. **Запрет на использование интерфейсов**: Все `IDataSourceProvider` и подобные интерфейсы заменить на обычные классы с виртуальными методами. Не усложнять архитектуру.
+
+2. **Обработка nil-свойств**: Если `FindVariableInEnt()` возвращает nil для свойства:
+   - Вывести сообщение об ошибке в командную строку
+   - **Пропустить текущий примитив**
+   - **Продолжить обработку** следующих примитивов
+   - НЕ останавливать весь процесс экспорта
+
+3. **Формат Access**: Используется **ACCDB** (Access 2007+) с драйвером Microsoft Access Driver
+
+4. **Кодировка**: Все строки в **UTF-8**
 
 ---
 
@@ -75,8 +92,9 @@
 
    f. **Маппинг данных** — для каждого примитива:
       - Извлечь свойства по именам из `setcolumn` через `FindVariableInEnt()`
+      - Если свойство не найдено (nil) → вывод warning, **пропустить примитив**, продолжить
       - Валидировать типы данных (string/integer/float)
-      - При ошибке валидации → **остановка** с выводом ошибки
+      - При ошибке валидации типа → вывод warning, **пропустить примитив**, продолжить
 
    g. **Вставка данных** в целевую таблицу Access:
       - Пакетная вставка (по умолчанию 50 строк за раз)
@@ -102,8 +120,10 @@
 ### 3.1 Обязательные функции модуля
 
 1. **Подключение/отключение к базе Access**
-   - Поддержка ODBC драйвера для `.mdb` и `.accdb`
-   - Строка подключения: `Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=<path>`
+   - Поддержка ODBC драйвера Microsoft Access Driver
+   - Формат БД: **.accdb** (Access 2007+)
+   - Строка подключения: `Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=<path>;Charset=UTF-8`
+   - Кодировка: **UTF-8**
 
 2. **Поиск и перечисление экспортных таблиц**
    - Шаблон: `EXPORT\d+` (EXPORT1, EXPORT2, ... EXPORTN)
@@ -158,7 +178,8 @@
 2. **Архитектура:**
    - Разделение на слои: Data, Logic, Database (см. §5)
    - Каждый класс — одна ответственность
-   - Интерфейсы для расширяемости
+   - **Не использовать интерфейсы** — только обычные классы с виртуальными методами
+   - Расширяемость через наследование и паттерн Registry
 
 3. **Размещение файлов:**
    - Новый модуль в `cad_source/zcad/velec/uzvaccess/`
@@ -301,7 +322,7 @@ setcolumn | Voltage       | integer | VOLTAGE
 
 DATA LAYER (работа с примитивами):
   - uzvaccess_entity_adapter.pas   - TEntityPropertyAdapter
-  - uzvaccess_source_provider.pas  - IDataSourceProvider (interface)
+  - uzvaccess_source_provider.pas  - TEntitySourceProvider (класс)
 
 LOGIC LAYER (парсинг и обработка):
   - uzvaccess_parser.pas           - TExportTableParser
@@ -319,7 +340,7 @@ UTILITY LAYER:
   - uzvaccess_types.pas            - общие типы и константы
 ```
 
-### 5.2 Ключевые классы и интерфейсы
+### 5.2 Ключевые классы
 
 #### 5.2.1 Главный класс — TAccessExporter
 
@@ -329,7 +350,7 @@ type
   private
     FConfig: TExportConfig;
     FConnection: TAccessConnection;
-    FSourceProvider: IDataSourceProvider;
+    FSourceProvider: TEntitySourceProvider;  // НЕ интерфейс, обычный класс
     FParser: TExportTableParser;
     FExecutor: TExportExecutor;
   public
@@ -337,7 +358,7 @@ type
     destructor Destroy; override;
 
     // Главный метод выполнения экспорта
-    // Возвращает результат или выбрасывает исключение при ошибке
+    // Возвращает результат с количеством обработанных примитивов
     function Execute(const AAccessFile: string = ''): TExportResult;
 
     // Вспомогательные методы
@@ -351,53 +372,47 @@ type
 - Управление жизненным циклом компонентов
 - Обработка ошибок верхнего уровня
 
-#### 5.2.2 Интерфейс источника данных — IDataSourceProvider
+#### 5.2.2 Класс источника данных — TEntitySourceProvider
+
+**Важно:** Вместо интерфейсов используем обычный класс с виртуальными методами.
 
 ```pascal
 type
-  IDataSourceProvider = interface
-    ['{GUID-HERE}']
-
-    // Получить список примитивов для экспорта
-    // ATypeData: 'device', 'superline', или 'cable'
-    function GetEntities(const ATypeData: string): TEntityVector;
-
-    // Получить значение свойства примитива по имени
-    // AEntity: PGDBObjEntity
-    // APropName: имя переменной (например 'NMO_BaseName')
-    // Возвращает Variant или Unassigned если не найдено
-    function GetPropertyValue(AEntity: Pointer;
-                             const APropName: string): Variant;
-
-    // Проверить наличие свойства у примитива
-    function HasProperty(AEntity: Pointer;
-                        const APropName: string): Boolean;
-  end;
-```
-
-**Реализация:**
-
-```pascal
-type
-  TEntitySourceProvider = class(TInterfacedObject, IDataSourceProvider)
+  TEntitySourceProvider = class
   private
     FEntityMode: Integer;      // режим uzvGetEntity (0, 1, 2)
     FEntityModeParam: string;  // параметр для режима 2
   public
     constructor Create(AMode: Integer; const AParam: string);
+    destructor Destroy; override;
 
-    function GetEntities(const ATypeData: string): TEntityVector;
+    // Получить список примитивов для экспорта
+    // ATypeData: 'device', 'superline', или 'cable'
+    function GetEntities(const ATypeData: string): TEntityVector; virtual;
+
+    // Получить значение свойства примитива по имени
+    // AEntity: PGDBObjEntity
+    // APropName: имя переменной (например 'NMO_BaseName')
+    // Возвращает Variant или Unassigned если не найдено (nil)
     function GetPropertyValue(AEntity: Pointer;
-                             const APropName: string): Variant;
+                             const APropName: string): Variant; virtual;
+
+    // Проверить наличие свойства у примитива
     function HasProperty(AEntity: Pointer;
-                        const APropName: string): Boolean;
+                        const APropName: string): Boolean; virtual;
   end;
 ```
 
 **Реализация GetPropertyValue:**
 - Использует `FindVariableInEnt()` для поиска переменной
+- Если переменная не найдена → возвращает Unassigned (nil)
 - Получает значение через `pvd^.data.PTD.GetValueAsString()`
 - При необходимости преобразует в нужный тип
+
+**Обработка nil:**
+- Если метод вернул Unassigned → примитив **пропускается**
+- Вывод сообщения об ошибке в zcUI
+- Продолжение обработки следующего примитива
 
 #### 5.2.3 Парсер инструкций — TExportTableParser
 
@@ -499,9 +514,9 @@ type
     destructor Destroy; override;
 
     // Выполнение экспорта для одной EXPORT-таблицы
-    // При ошибке выбрасывает исключение (откат произойдет автоматически)
+    // Пропускает примитивы с nil-свойствами, продолжает обработку
     function ExecuteExport(AInstructions: TExportInstructions;
-                          ADataSource: IDataSourceProvider): TExportTableResult;
+                          ADataSource: TEntitySourceProvider): TExportTableResult;
   private
     // Очистка целевой таблицы
     procedure ClearTargetTable(const ATableName: string);
@@ -630,16 +645,19 @@ type
    │    │  ├─ Для каждого ColumnMapping:
    │    │  │  │
    │    │  │  ├─ Извлечь значение свойства
-   │    │  │  │  └─ IDataSourceProvider.GetPropertyValue(entity, propName)
+   │    │  │  │  └─ TEntitySourceProvider.GetPropertyValue(entity, propName)
    │    │  │  │     └─ FindVariableInEnt() + GetValueAsString()
+   │    │  │  │
+   │    │  │  ├─ Проверка на nil
+   │    │  │  │  └─ Если nil → вывод warning в zcUI → **SKIP примитив** → Continue
    │    │  │  │
    │    │  │  ├─ Валидировать тип
    │    │  │  │  └─ TTypeValidator.ValidateAndConvert(value, dataType)
-   │    │  │  │     └─ При ошибке → исключение + вывод в zcUI
+   │    │  │  │     └─ При ошибке → вывод warning в zcUI → **SKIP примитив** → Continue
    │    │  │  │
    │    │  │  └─ Добавить в строку данных
    │    │  │
-   │    │  └─ Добавить строку в пакет (batch)
+   │    │  └─ Если все свойства OK → добавить строку в пакет (batch)
    │    │
    │    └─ Логирование: "Mapped M rows"
    │
@@ -699,16 +717,16 @@ type
 
 ### 7.1 Стратегия обработки
 
-**Принцип:** Любая ошибка приводит к **немедленной остановке** всего процесса экспорта.
+**Принцип:** Критические ошибки останавливают процесс. Ошибки на уровне отдельных примитивов → пропуск примитива + продолжение.
 
 | Уровень | Ошибка | Действие |
 |---------|--------|----------|
 | Connection | Не удалось подключиться к Access | Вывод ошибки → **STOP** |
 | Parsing | Неверная инструкция в EXPORT | Вывод ошибки → **STOP** |
 | Validation | Отсутствует обязательная инструкция (tTable/typeData) | Вывод ошибки → **STOP** |
-| Data Extraction | Свойство не найдено в примитиве | Вывод ошибки → **STOP** |
-| Type Validation | Неверный тип данных (string → integer) | Вывод ошибки → **STOP** |
-| Execution | SQL ошибка при вставке | Rollback → Вывод ошибки → **STOP** |
+| Data Extraction | Свойство не найдено в примитиве (nil) | Вывод warning → **SKIP примитив** → Continue |
+| Type Validation | Неверный тип данных для примитива (string → integer) | Вывод warning → **SKIP примитив** → Continue |
+| Execution | SQL ошибка при вставке батча | Rollback → Вывод ошибки → **STOP** |
 
 ### 7.2 Формат вывода ошибок
 
@@ -788,15 +806,17 @@ end;
 
 ### 8.2 Добавление новых типов источников
 
-**Возможность:** Реализация дополнительных `IDataSourceProvider`
+**Возможность:** Наследование от `TEntitySourceProvider`
 
 ```pascal
 type
-  TCustomSourceProvider = class(TInterfacedObject, IDataSourceProvider)
+  TCustomSourceProvider = class(TEntitySourceProvider)
   public
     function GetEntities(const ATypeData: string): TEntityVector; override;
-    function GetPropertyValue(...): Variant; override;
-    function HasProperty(...): Boolean; override;
+    function GetPropertyValue(AEntity: Pointer;
+                             const APropName: string): Variant; override;
+    function HasProperty(AEntity: Pointer;
+                        const APropName: string): Boolean; override;
   end;
 ```
 
@@ -831,8 +851,8 @@ cad_source/zcad/velec/uzvaccess/
 │   └── uzvaccess_config.pas            -- TExportConfig
 │
 ├── data/
-│   ├── uzvaccess_source_provider.pas   -- IDataSourceProvider (интерфейс)
-│   └── uzvaccess_entity_adapter.pas    -- TEntitySourceProvider (реализация)
+│   ├── uzvaccess_source_provider.pas   -- TEntitySourceProvider (класс)
+│   └── uzvaccess_entity_adapter.pas    -- TEntityPropertyAdapter (вспомогательный класс)
 │
 ├── logic/
 │   ├── uzvaccess_parser.pas            -- TExportTableParser
@@ -1042,36 +1062,43 @@ interface
 
 ---
 
-## 14. Вопросы для финального уточнения (опционально)
+## 14. Ответы на вопросы (утверждено veb86)
 
 1. **Список доступных свойств:**
-   - Какие именно свойства (переменные) доступны у примитивов device/superline/cable?
-   - Нужен полный список для документации
+   - Свойства определяет пользователь в таблицах EXPORT
+   - Если возвращается nil → вывести сообщение об ошибке, пропустить примитив и продолжить выгрузку
 
 2. **GUI интеграция:**
-   - Нужен ли прогресс-бар при экспорте?
-   - Или достаточно сообщений в командную строку?
+   - Достаточно сообщений в командную строку (zcUI)
+   - Прогресс-бар не требуется
 
 3. **Версии Access:**
-   - Какие версии поддерживать (.mdb, .accdb)?
-   - Есть ли ограничения на ODBC драйверы?
+   - Поддержка: **.accdb** (Access 2007+)
+   - Драйвер: **Microsoft Access Driver**
 
 4. **Encoding:**
-   - Какую кодировку использовать для строк (UTF-8, ANSI)?
+   - Кодировка: **UTF-8**
 
 ---
 
 ## 15. Заключение
 
-Данное исправленное техническое задание учитывает все уточнения от veb86 и предлагает:
+Данное исправленное техническое задание **УТВЕРЖДЕНО veb86** и готово к реализации.
 
-- ✅ Гибкую OOP-архитектуру с разделением по слоям
+### Ключевые характеристики:
+
+- ✅ Гибкая OOP-архитектура с разделением по слоям (без интерфейсов)
 - ✅ Использование только `PGDBObjEntity` из `uzvgetentity.pas`
-- ✅ Строгую обработку ошибок с остановкой процесса
-- ✅ Очистку целевых таблиц перед заполнением
-- ✅ Строгую валидацию типов данных
-- ✅ Логирование через `uzclog.pas`
-- ✅ Расширяемость через паттерны Strategy и Registry
-- ✅ Соответствие стандартам кодирования ZCAD
+- ✅ Обработка ошибок: критические → остановка, на уровне примитивов → пропуск + продолжение
+- ✅ Очистка целевых таблиц перед заполнением (DELETE + INSERT)
+- ✅ Валидация типов с пропуском некорректных примитивов
+- ✅ Логирование через `uzclog.pas` (LM_Info)
+- ✅ Формат БД: ACCDB с Microsoft Access Driver, кодировка UTF-8
+- ✅ Расширяемость через наследование и паттерн Registry
+- ✅ Соответствие стандартам кодирования ZCAD из CLAUDE.md
 
-Модуль готов к реализации в соответствии с данным ТЗ.
+### Статус:
+
+**ГОТОВО К РЕАЛИЗАЦИИ**
+
+Модуль реализуется в соответствии с данным ТЗ в папке `cad_source/zcad/velec/uzvaccess/`

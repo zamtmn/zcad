@@ -26,7 +26,7 @@ interface
 uses
   SysUtils, Classes, DB,
   SQLDB, odbcconn,
-  uzvaccess_types, uzvaccess_logger, uzvaccess_config;
+  uzvaccess_types, uzclog, uzvaccess_config;
 
 type
   {**
@@ -41,7 +41,6 @@ type
     FTransaction: TSQLTransaction;
     FQuery: TSQLQuery;
     FConfig: TExportConfig;
-    FLogger: TExportLogger;
     FConnected: Boolean;
 
     // Попытка подключения с повторами
@@ -51,7 +50,7 @@ type
     procedure DelayRetry(AAttempt: Integer);
 
   public
-    constructor Create(AConfig: TExportConfig; ALogger: TExportLogger);
+    constructor Create(AConfig: TExportConfig);
     destructor Destroy; override;
 
     // Подключиться к базе данных
@@ -92,12 +91,10 @@ uses
 { TAccessConnection }
 
 constructor TAccessConnection.Create(
-  AConfig: TExportConfig;
-  ALogger: TExportLogger
+  AConfig: TExportConfig
 );
 begin
   FConfig := AConfig;
-  FLogger := ALogger;
   FConnected := False;
 
   // Создание компонентов подключения
@@ -134,7 +131,6 @@ begin
   if delay > 10000 then
     delay := 10000; // Максимум 10 секунд
 
-  FLogger.LogDebug(Format('Задержка перед повтором: %d мс', [delay]));
   Sleep(delay);
 end;
 
@@ -148,8 +144,6 @@ begin
     // Получаем строку подключения
     connectionString := FConfig.GetODBCConnectionString;
 
-    FLogger.LogDebug('Попытка подключения к базе данных');
-    FLogger.LogDebug('Строка подключения: ' + connectionString);
 
     // Устанавливаем параметры подключения
     FConnection.Params.Clear;
@@ -162,12 +156,20 @@ begin
     FConnected := True;
     Result := True;
 
-    FLogger.LogInfo('Подключение к базе данных установлено');
+    programlog.LogOutFormatStr(
+      'uzvaccess: Подключение к базе данных установлено',
+      [],
+      LM_Info
+    );
 
   except
     on E: Exception do
     begin
-      FLogger.LogError('Ошибка подключения: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка подключения: %s',
+        [E.Message],
+        LM_Info
+      );
       FConnected := False;
       Result := False;
     end;
@@ -183,7 +185,6 @@ begin
 
   if FConnected then
   begin
-    FLogger.LogDebug('Подключение уже установлено');
     Result := True;
     Exit;
   end;
@@ -192,8 +193,11 @@ begin
 
   for attempt := 1 to maxAttempts do
   begin
-    FLogger.LogInfo(Format('Попытка подключения %d из %d',
-      [attempt, maxAttempts]));
+    programlog.LogOutFormatStr(
+      'uzvaccess: Попытка подключения %d из %d',
+      [attempt, maxAttempts],
+      LM_Info
+    );
 
     if TryConnect then
     begin
@@ -206,7 +210,11 @@ begin
       DelayRetry(attempt);
   end;
 
-  FLogger.LogError('Не удалось подключиться после всех попыток');
+  programlog.LogOutFormatStr(
+    'uzvaccess: Не удалось подключиться после всех попыток',
+    [],
+    LM_Info
+  );
 end;
 
 procedure TAccessConnection.Disconnect;
@@ -219,11 +227,19 @@ begin
       FConnection.Connected := False;
 
     FConnected := False;
-    FLogger.LogInfo('Отключение от базы данных выполнено');
+    programlog.LogOutFormatStr(
+      'uzvaccess: Отключение от базы данных выполнено',
+      [],
+      LM_Info
+    );
 
   except
     on E: Exception do
-      FLogger.LogError('Ошибка отключения: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка отключения: %s',
+        [E.Message],
+        LM_Info
+      );
   end;
 end;
 
@@ -236,12 +252,15 @@ begin
     if not FTransaction.Active then
       FTransaction.StartTransaction;
 
-    FLogger.LogDebug('Транзакция начата');
 
   except
     on E: Exception do
     begin
-      FLogger.LogError('Ошибка начала транзакции: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка начала транзакции: %s',
+        [E.Message],
+        LM_Info
+      );
       raise;
     end;
   end;
@@ -256,12 +275,15 @@ begin
     if FTransaction.Active then
       FTransaction.Commit;
 
-    FLogger.LogDebug('Транзакция зафиксирована');
 
   except
     on E: Exception do
     begin
-      FLogger.LogError('Ошибка фиксации транзакции: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка фиксации транзакции: %s',
+        [E.Message],
+        LM_Info
+      );
       raise;
     end;
   end;
@@ -276,11 +298,14 @@ begin
     if FTransaction.Active then
       FTransaction.Rollback;
 
-    FLogger.LogDebug('Транзакция отменена');
 
   except
     on E: Exception do
-      FLogger.LogError('Ошибка отката транзакции: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка отката транзакции: %s',
+        [E.Message],
+        LM_Info
+      );
   end;
 end;
 
@@ -296,7 +321,11 @@ begin
 
   if not FConnected then
   begin
-    FLogger.LogError('Нет подключения к базе данных');
+    programlog.LogOutFormatStr(
+      'uzvaccess: Нет подключения к базе данных',
+      [],
+      LM_Info
+    );
     Exit;
   end;
 
@@ -321,7 +350,6 @@ begin
           if regex.Exec(tableName) then
           begin
             Result.Add(tableName);
-            FLogger.LogDebug('Найдена таблица экспорта: ' + tableName);
           end;
         end;
 
@@ -336,7 +364,11 @@ begin
     // Сортируем таблицы по номеру (EXPORT1, EXPORT2, ...)
     Result.CustomSort(@CompareExportTableNames);
 
-    FLogger.LogInfo(Format('Найдено таблиц экспорта: %d', [Result.Count]));
+    programlog.LogOutFormatStr(
+      'uzvaccess: Найдено таблиц экспорта: %d',
+      [Result.Count],
+      LM_Info
+    );
 
   finally
     tempQuery.Free;
@@ -382,8 +414,11 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError(Format('Ошибка открытия таблицы %s: %s',
-        [ATableName, E.Message]));
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка открытия таблицы %s: %s',
+        [ATableName, E.Message],
+        LM_Info
+      );
       tempQuery.Free;
       raise;
     end;
@@ -399,13 +434,11 @@ begin
     FQuery.SQL.Text := ASQL;
     FQuery.ExecSQL;
 
-    FLogger.LogDebug('SQL выполнен: ' + ASQL);
 
   except
     on E: Exception do
     begin
       FLogger.LogError('Ошибка выполнения SQL: ' + E.Message);
-      FLogger.LogDebug('SQL: ' + ASQL);
       raise;
     end;
   end;

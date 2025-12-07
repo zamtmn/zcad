@@ -25,7 +25,7 @@ interface
 
 uses
   SysUtils, Classes, Variants, DB, SQLDB,
-  uzvaccess_types, uzvaccess_logger, uzvaccess_config,
+  uzvaccess_types, uzclog, uzvaccess_config,
   uzvaccess_connection, uzvaccess_validator,
   uzvaccess_source_provider;
 
@@ -39,7 +39,6 @@ type
   TExportExecutor = class
   private
     FConnection: TAccessConnection;
-    FLogger: TExportLogger;
     FValidator: TTypeValidator;
     FConfig: TExportConfig;
     FBatchSize: Integer;
@@ -101,7 +100,6 @@ type
   public
     constructor Create(
       AConnection: TAccessConnection;
-      ALogger: TExportLogger;
       AValidator: TTypeValidator;
       AConfig: TExportConfig
     );
@@ -121,13 +119,11 @@ implementation
 
 constructor TExportExecutor.Create(
   AConnection: TAccessConnection;
-  ALogger: TExportLogger;
   AValidator: TTypeValidator;
   AConfig: TExportConfig
 );
 begin
   FConnection := AConnection;
-  FLogger := ALogger;
   FValidator := AValidator;
   FConfig := AConfig;
   FBatchSize := AConfig.BatchSize;
@@ -371,13 +367,11 @@ begin
     begin
       // UPDATE
       sql := BuildUpdateSQL(ATableName, AInstructions);
-      FLogger.LogDebug('Обновление записи: ' + sql);
     end
     else
     begin
       // INSERT
       sql := BuildInsertSQL(ATableName, AInstructions);
-      FLogger.LogDebug('Вставка записи: ' + sql);
     end;
 
     query.SQL.Text := sql;
@@ -389,10 +383,11 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError(Format(
-        'Ошибка при выполнении UPSERT: %s',
-        [E.Message]
-      ));
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка при выполнении UPSERT: %s',
+        [E.Message],
+        LM_Info
+      );
       Result := False;
     end;
   end;
@@ -432,21 +427,17 @@ begin
     except
       on E: Exception do
       begin
-        FLogger.LogError(Format(
-          'Ошибка вставки записи %d: %s',
-          [i + 1, E.Message]
-        ));
+        programlog.LogOutFormatStr(
+          'uzvaccess: Ошибка вставки записи %d: %s',
+          [i + 1, E.Message],
+          LM_Info
+        );
 
         if FConfig.ErrorMode = emStop then
           raise;
       end;
     end;
   end;
-
-  FLogger.LogDebug(Format(
-    'Вставлено записей в пакете: %d из %d',
-    [Result, ABatchData.Count]
-  ));
 end;
 
 function TExportExecutor.ExtractValues(
@@ -484,10 +475,11 @@ begin
       convertedValue
     ) then
     begin
-      FLogger.LogWarning(Format(
-        'Ошибка валидации значения для колонки "%s"',
-        [mapping.ColumnName]
-      ));
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка валидации значения для колонки "%s"',
+        [mapping.ColumnName],
+        LM_Info
+      );
 
       if FConfig.ErrorMode = emStop then
       begin
@@ -527,10 +519,11 @@ begin
   Result.ErrorMessages := TStringList.Create;
   Result.Success := True;
 
-  FLogger.LogInfo(Format(
-    'Начало экспорта из "%s" в "%s"',
-    [AExportTableName, AInstructions.TargetTable]
-  ));
+  programlog.LogOutFormatStr(
+    'uzvaccess: Начало экспорта из "%s" в "%s"',
+    [AExportTableName, AInstructions.TargetTable],
+    LM_Info
+  );
 
   try
     // Получаем список примитивов
@@ -538,11 +531,19 @@ begin
     try
       if entities.Count = 0 then
       begin
-        FLogger.LogWarning('Нет данных для экспорта');
+        programlog.LogOutFormatStr(
+          'uzvaccess: Нет данных для экспорта',
+          [],
+          LM_Info
+        );
         Exit;
       end;
 
-      FLogger.LogInfo(Format('Найдено объектов для экспорта: %d', [entities.Count]));
+      programlog.LogOutFormatStr(
+        'uzvaccess: Найдено объектов для экспорта: %d',
+        [entities.Count],
+        LM_Info
+      );
 
       // Подготовка массива значений
       SetLength(values, AInstructions.ColumnMappings.Count);
@@ -558,7 +559,11 @@ begin
         if hasKeys then
         begin
           // Режим UPSERT (с ключевыми колонками)
-          FLogger.LogInfo('Режим UPSERT (обновление/вставка)');
+          programlog.LogOutFormatStr(
+            'uzvaccess: Режим UPSERT (обновление/вставка)',
+            [],
+            LM_Info
+          );
 
           for i := 0 to entities.Count - 1 do
           begin
@@ -589,13 +594,21 @@ begin
 
             // Прогресс
             if (i + 1) mod 100 = 0 then
-              FLogger.LogInfo(Format('Обработано: %d / %d', [i + 1, entities.Count]));
+              programlog.LogOutFormatStr(
+                'uzvaccess: Обработано: %d / %d',
+                [i + 1, entities.Count],
+                LM_Info
+              );
           end;
         end
         else
         begin
           // Режим только INSERT (пакетная вставка)
-          FLogger.LogInfo('Режим INSERT (пакетная вставка)');
+          programlog.LogOutFormatStr(
+            'uzvaccess: Режим INSERT (пакетная вставка)',
+            [],
+            LM_Info
+          );
 
           batchData := TList.Create;
           try
@@ -630,7 +643,11 @@ begin
 
               // Прогресс
               if (i + 1) mod 100 = 0 then
-                FLogger.LogInfo(Format('Обработано: %d / %d', [i + 1, entities.Count]));
+                programlog.LogOutFormatStr(
+                  'uzvaccess: Обработано: %d / %d',
+                  [i + 1, entities.Count],
+                  LM_Info
+                );
             end;
           finally
             batchData.Free;
@@ -641,10 +658,11 @@ begin
         if not FConfig.DryRun then
           FConnection.CommitTransaction;
 
-        FLogger.LogInfo(Format(
-          'Экспорт завершён: обработано %d, вставлено %d, ошибок %d',
-          [Result.RowsProcessed, Result.RowsInserted, Result.ErrorCount]
-        ));
+        programlog.LogOutFormatStr(
+          'uzvaccess: Экспорт завершён: обработано %d, вставлено %d, ошибок %d',
+          [Result.RowsProcessed, Result.RowsInserted, Result.ErrorCount],
+          LM_Info
+        );
 
       except
         on E: Exception do
@@ -653,7 +671,11 @@ begin
           if not FConfig.DryRun then
             FConnection.RollbackTransaction;
 
-          FLogger.LogError('Ошибка экспорта: ' + E.Message);
+          programlog.LogOutFormatStr(
+            'uzvaccess: Ошибка экспорта: %s',
+            [E.Message],
+            LM_Info
+          );
           Result.ErrorMessages.Add(E.Message);
           Result.Success := False;
 
@@ -669,7 +691,11 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError('Критическая ошибка экспорта: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Критическая ошибка экспорта: %s',
+        [E.Message],
+        LM_Info
+      );
       Result.ErrorMessages.Add(E.Message);
       Result.Success := False;
     end;

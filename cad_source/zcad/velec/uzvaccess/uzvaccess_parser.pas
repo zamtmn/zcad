@@ -32,7 +32,10 @@ type
     Класс для парсинга управляющих таблиц EXPORT
 
     Читает таблицы вида EXPORT1, EXPORT2 и преобразует их строки
-    в структурированные инструкции для выполнения экспорта
+    в структурированные инструкции для выполнения экспорта.
+
+    ВАЖНО: Col1 таблицы EXPORT считается столбцом ID и игнорируется.
+    Парсинг инструкций начинается с Col2 (тип инструкции).
   **}
   TExportTableParser = class
   private
@@ -198,8 +201,8 @@ var
   i: Integer;
   colValue: String;
 begin
-  // Читаем все колонки начиная с Col2
-  for i := 2 to 10 do
+  // Читаем все колонки начиная с Col3 (т.к. Col1 - ID, Col2 - тип инструкции)
+  for i := 3 to 11 do
   begin
     colValue := GetColumnValue(ADataset, i);
 
@@ -244,7 +247,7 @@ function TExportTableParser.Parse(
   ADataset: TDataSet
 ): TExportInstructions;
 var
-  col1, col2, col3, col4: String;
+  col2, col3, col4, col5: String;
   instructionType: TInstructionType;
   rowCount: Integer;
 begin
@@ -266,42 +269,45 @@ begin
       Inc(rowCount);
 
       // Читаем значения колонок
-      col1 := GetColumnValue(ADataset, 1);
+      // Col1 - это ID, пропускаем его
+      // Col2 - тип инструкции (ранее был Col1)
+      // Col3, Col4, Col5 - параметры инструкции
       col2 := GetColumnValue(ADataset, 2);
       col3 := GetColumnValue(ADataset, 3);
       col4 := GetColumnValue(ADataset, 4);
+      col5 := GetColumnValue(ADataset, 5);
 
-      // Пропускаем пустые строки
-      if col1 = '' then
+      // Пропускаем пустые строки (где нет типа инструкции)
+      if col2 = '' then
       begin
         ADataset.Next;
         Continue;
       end;
 
-      // Определяем тип инструкции
-      instructionType := StringToInstructionType(col1);
+      // Определяем тип инструкции из Col2 (ранее Col1)
+      instructionType := StringToInstructionType(col2);
 
       // Парсим инструкцию в зависимости от типа
       case instructionType of
         itTable:
-          ParseTableInstruction(Result, col2);
+          ParseTableInstruction(Result, col3);
 
         itTypeData:
-          ParseTypeDataInstruction(Result, col2);
+          ParseTypeDataInstruction(Result, col3);
 
         itSetColumn:
-          ParseSetColumnInstruction(Result, col2, col3, col4);
+          ParseSetColumnInstruction(Result, col3, col4, col5);
 
         itKeyColumn:
           ParseKeyColumnInstruction(Result, ADataset);
 
         itConst:
-          ParseConstInstruction(Result, col2, col3);
+          ParseConstInstruction(Result, col3, col4);
 
         itUnknown:
           programlog.LogOutFormatStr(
             'uzvaccess: Неизвестная инструкция "%s" в строке %d - пропускается',
-            [col1, rowCount],
+            [col2, rowCount],
             LM_Info
           );
       end;

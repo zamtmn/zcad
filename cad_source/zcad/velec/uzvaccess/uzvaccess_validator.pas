@@ -25,7 +25,7 @@ interface
 
 uses
   SysUtils, Classes, Variants, Math,
-  uzvaccess_types, uzvaccess_logger;
+  uzvaccess_types, uzclog;
 
 type
   {**
@@ -37,7 +37,6 @@ type
   **}
   TTypeValidator = class
   private
-    FLogger: TExportLogger;
     FStrictMode: Boolean;
     FAllowNull: Boolean;
 
@@ -64,7 +63,6 @@ type
 
   public
     constructor Create(
-      ALogger: TExportLogger;
       AStrictMode: Boolean;
       AAllowNull: Boolean
     );
@@ -93,12 +91,10 @@ implementation
 { TTypeValidator }
 
 constructor TTypeValidator.Create(
-  ALogger: TExportLogger;
   AStrictMode: Boolean;
   AAllowNull: Boolean
 );
 begin
-  FLogger := ALogger;
   FStrictMode := AStrictMode;
   FAllowNull := AAllowNull;
 end;
@@ -126,7 +122,6 @@ begin
   begin
     if not FAllowNull then
     begin
-      FLogger.LogWarning('Пустое значение для строкового поля');
       Result := False;
     end;
 
@@ -140,10 +135,11 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError(Format(
-        'Ошибка преобразования в строку: %s',
-        [E.Message]
-      ));
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка преобразования в строку: %s',
+        [E.Message],
+        LM_Info
+      );
       AResult := '';
       Result := False;
     end;
@@ -166,7 +162,6 @@ begin
   begin
     if not FAllowNull then
     begin
-      FLogger.LogWarning('Пустое значение для целочисленного поля');
       Result := False;
     end;
     Exit;
@@ -192,17 +187,14 @@ begin
 
       if not FStrictMode then
       begin
-        FLogger.LogWarning(Format(
-          'Преобразование float→integer: %s → %d',
-          [valueStr, AResult]
-        ));
       end
       else
       begin
-        FLogger.LogError(Format(
-          'Строгий режим: недопустимое преобразование float→integer: %s',
-          [valueStr]
-        ));
+        programlog.LogOutFormatStr(
+          'uzvaccess: Строгий режим: недопустимое преобразование float→integer: %s',
+          [valueStr],
+          LM_Info
+        );
         Result := False;
       end;
     end
@@ -214,10 +206,11 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError(Format(
-        'Ошибка преобразования в integer: "%s" - %s',
-        [valueStr, E.Message]
-      ));
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка преобразования в integer: "%s" - %s',
+        [valueStr, E.Message],
+        LM_Info
+      );
       AResult := 0;
       Result := False;
     end;
@@ -239,7 +232,6 @@ begin
   begin
     if not FAllowNull then
     begin
-      FLogger.LogWarning('Пустое значение для числового поля');
       Result := False;
     end;
     Exit;
@@ -261,10 +253,11 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError(Format(
-        'Ошибка преобразования в float: "%s" - %s',
-        [valueStr, E.Message]
-      ));
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка преобразования в float: "%s" - %s',
+        [valueStr, E.Message],
+        LM_Info
+      );
       AResult := 0.0;
       Result := False;
     end;
@@ -310,10 +303,11 @@ begin
     end;
 
   else
-    FLogger.LogError(Format(
-      'Неизвестный тип данных: %d',
-      [Ord(ATargetType)]
-    ));
+    programlog.LogOutFormatStr(
+      'uzvaccess: Неизвестный тип данных: %d',
+      [Ord(ATargetType)],
+      LM_Info
+    );
     Result := False;
   end;
 

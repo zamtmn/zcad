@@ -25,7 +25,7 @@ interface
 
 uses
   SysUtils, Classes, DB,
-  uzvaccess_types, uzvaccess_logger, uzvaccess_config,
+  uzvaccess_types, uzclog, uzvaccess_config,
   uzvaccess_connection, uzvaccess_parser, uzvaccess_validator,
   uzvaccess_executor, uzvaccess_source_provider;
 
@@ -42,7 +42,6 @@ type
   TAccessExporter = class
   private
     FConfig: TExportConfig;
-    FLogger: TExportLogger;
     FConnection: TAccessConnection;
     FParser: TExportTableParser;
     FValidator: TTypeValidator;
@@ -75,7 +74,6 @@ type
     function GetExportTables: TStringList;
 
     property Config: TExportConfig read FConfig;
-    property Logger: TExportLogger read FLogger;
   end;
 
 implementation
@@ -87,21 +85,21 @@ begin
   FConfig := AConfig;
   FInitialized := False;
 
-  // Создаём логгер
-  FLogger := TExportLogger.Create(
-    FConfig.LogFilePath,
-    FConfig.LogLevel,
-    FConfig.LogToGUI
+  programlog.LogOutFormatStr(
+    'uzvaccess: TAccessExporter создан',
+    [],
+    LM_Info
   );
-
-  FLogger.LogInfo('TAccessExporter создан');
 end;
 
 destructor TAccessExporter.Destroy;
 begin
   Finalize;
-  FLogger.LogInfo('TAccessExporter уничтожен');
-  FLogger.Free;
+  programlog.LogOutFormatStr(
+    'uzvaccess: TAccessExporter уничтожен',
+    [],
+    LM_Info
+  );
   inherited Destroy;
 end;
 
@@ -110,18 +108,21 @@ begin
   if FInitialized then
     Exit;
 
-  FLogger.LogInfo('Инициализация компонентов экспортера');
+  programlog.LogOutFormatStr(
+    'uzvaccess: Инициализация компонентов экспортера',
+    [],
+    LM_Info
+  );
 
   try
     // Создаём подключение
-    FConnection := TAccessConnection.Create(FConfig, FLogger);
+    FConnection := TAccessConnection.Create(FConfig);
 
     // Создаём парсер
-    FParser := TExportTableParser.Create(FLogger);
+    FParser := TExportTableParser.Create;
 
     // Создаём валидатор
     FValidator := TTypeValidator.Create(
-      FLogger,
       FConfig.StrictValidation,
       FConfig.AllowNullValues
     );
@@ -129,25 +130,31 @@ begin
     // Создаём исполнителя
     FExecutor := TExportExecutor.Create(
       FConnection,
-      FLogger,
       FValidator,
       FConfig
     );
 
     // Создаём провайдер источника данных
     FSourceProvider := TEntitySourceProvider.Create(
-      FLogger,
       FConfig.EntityMode,
       FConfig.EntityModeParam
     );
 
     FInitialized := True;
-    FLogger.LogInfo('Инициализация завершена успешно');
+    programlog.LogOutFormatStr(
+      'uzvaccess: Инициализация завершена успешно',
+      [],
+      LM_Info
+    );
 
   except
     on E: Exception do
     begin
-      FLogger.LogError('Ошибка инициализации: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка инициализации: %s',
+        [E.Message],
+        LM_Info
+      );
       Finalize;
       raise;
     end;
@@ -159,7 +166,11 @@ begin
   if not FInitialized then
     Exit;
 
-  FLogger.LogInfo('Освобождение компонентов экспортера');
+  programlog.LogOutFormatStr(
+    'uzvaccess: Освобождение компонентов экспортера',
+    [],
+    LM_Info
+  );
 
   // Освобождаем в обратном порядке
   FSourceProvider := nil;
@@ -195,18 +206,29 @@ function TAccessExporter.ValidateConfiguration(
   out AErrors: TStringList
 ): Boolean;
 begin
-  FLogger.LogInfo('Валидация конфигурации');
+  programlog.LogOutFormatStr(
+    'uzvaccess: Валидация конфигурации',
+    [],
+    LM_Info
+  );
 
   Result := FConfig.Validate(AErrors);
 
   if not Result then
   begin
-    FLogger.LogError('Конфигурация содержит ошибки:');
-    FLogger.LogError(AErrors.Text);
+    programlog.LogOutFormatStr(
+      'uzvaccess: Конфигурация содержит ошибки: %s',
+      [AErrors.Text],
+      LM_Info
+    );
   end
   else
   begin
-    FLogger.LogInfo('Конфигурация валидна');
+    programlog.LogOutFormatStr(
+      'uzvaccess: Конфигурация валидна',
+      [],
+      LM_Info
+    );
   end;
 end;
 
@@ -227,9 +249,21 @@ var
   dataset: TDataSet;
   instructions: TExportInstructions;
 begin
-  FLogger.LogInfo(StringOfChar('=', 70));
-  FLogger.LogInfo(Format('Обработка таблицы: %s', [ATableName]));
-  FLogger.LogInfo(StringOfChar('=', 70));
+  programlog.LogOutFormatStr(
+    'uzvaccess: %s',
+    [StringOfChar('=', 70)],
+    LM_Info
+  );
+  programlog.LogOutFormatStr(
+    'uzvaccess: Обработка таблицы: %s',
+    [ATableName],
+    LM_Info
+  );
+  programlog.LogOutFormatStr(
+    'uzvaccess: %s',
+    [StringOfChar('=', 70)],
+    LM_Info
+  );
 
   dataset := nil;
   instructions := nil;
@@ -243,12 +277,13 @@ begin
       instructions := FParser.Parse(ATableName, dataset);
 
       try
-        FLogger.LogInfo(Format(
-          'Целевая таблица: %s, Тип данных: %s, Маппингов: %d',
+        programlog.LogOutFormatStr(
+          'uzvaccess: Целевая таблица: %s, Тип данных: %s, Маппингов: %d',
           [instructions.TargetTable,
            SourceDataTypeToString(instructions.TypeData),
-           instructions.ColumnMappings.Count]
-        ));
+           instructions.ColumnMappings.Count],
+          LM_Info
+        );
 
         // Выполняем экспорт
         Result := FExecutor.ExecuteExport(
@@ -268,10 +303,11 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError(Format(
-        'Ошибка обработки таблицы %s: %s',
-        [ATableName, E.Message]
-      ));
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка обработки таблицы %s: %s',
+        [ATableName, E.Message],
+        LM_Info
+      );
 
       // Инициализируем результат с ошибкой
       Result.TableName := ATableName;
@@ -300,15 +336,31 @@ begin
   Result := TExportResult.Create;
   Result.StartTime := Now;
 
-  FLogger.LogInfo(StringOfChar('=', 70));
-  FLogger.LogInfo('Начало выполнения экспорта в MS Access');
-  FLogger.LogInfo(StringOfChar('=', 70));
+  programlog.LogOutFormatStr(
+    'uzvaccess: %s',
+    [StringOfChar('=', 70)],
+    LM_Info
+  );
+  programlog.LogOutFormatStr(
+    'uzvaccess: Начало выполнения экспорта в MS Access',
+    [],
+    LM_Info
+  );
+  programlog.LogOutFormatStr(
+    'uzvaccess: %s',
+    [StringOfChar('=', 70)],
+    LM_Info
+  );
 
   try
     // Валидация конфигурации
     if not ValidateConfiguration(errors) then
     begin
-      FLogger.LogError('Ошибки конфигурации, экспорт прерван');
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибки конфигурации, экспорт прерван',
+        [],
+        LM_Info
+      );
       errors.Free;
       Exit;
     end;
@@ -319,13 +371,21 @@ begin
     if AAccessFile <> '' then
     begin
       FConfig.DatabasePath := AAccessFile;
-      FLogger.LogInfo('Использован файл базы: ' + AAccessFile);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Использован файл базы: %s',
+        [AAccessFile],
+        LM_Info
+      );
     end;
 
     // Проверка пути к базе данных
     if not FileExists(FConfig.DatabasePath) then
     begin
-      FLogger.LogError('Файл базы данных не найден: ' + FConfig.DatabasePath);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Файл базы данных не найден: %s',
+        [FConfig.DatabasePath],
+        LM_Info
+      );
       raise Exception.CreateFmt(
         'Файл базы данных не найден: %s',
         [FConfig.DatabasePath]
@@ -338,7 +398,11 @@ begin
     // Подключение к базе данных
     if not FConnection.Connect then
     begin
-      FLogger.LogError('Не удалось подключиться к базе данных');
+      programlog.LogOutFormatStr(
+        'uzvaccess: Не удалось подключиться к базе данных',
+        [],
+        LM_Info
+      );
       raise Exception.Create('Не удалось подключиться к базе данных');
     end;
 
@@ -348,25 +412,28 @@ begin
       try
         if exportTables.Count = 0 then
         begin
-          FLogger.LogWarning(
-            'В базе данных не найдено таблиц экспорта (EXPORT1, EXPORT2, ...)'
+          programlog.LogOutFormatStr(
+            'uzvaccess: В базе данных не найдено таблиц экспорта (EXPORT1, EXPORT2, ...)',
+            [],
+            LM_Info
           );
           Exit;
         end;
 
-        FLogger.LogInfo(Format(
-          'Найдено таблиц экспорта: %d',
-          [exportTables.Count]
-        ));
+        programlog.LogOutFormatStr(
+          'uzvaccess: Найдено таблиц экспорта: %d',
+          [exportTables.Count],
+          LM_Info
+        );
 
         // Обрабатываем каждую EXPORT-таблицу
         for i := 0 to exportTables.Count - 1 do
         begin
-          FLogger.LogInfo('');
-          FLogger.LogInfo(Format(
-            'Обработка таблицы %d из %d',
-            [i + 1, exportTables.Count]
-          ));
+          programlog.LogOutFormatStr(
+            'uzvaccess: Обработка таблицы %d из %d',
+            [i + 1, exportTables.Count],
+            LM_Info
+          );
 
           // Обработка таблицы
           tableResult := ProcessExportTable(exportTables[i]);
@@ -378,7 +445,11 @@ begin
           if (not tableResult.Success) and
              (FConfig.ErrorMode = emStop) then
           begin
-            FLogger.LogError('Остановка обработки из-за ошибки');
+            programlog.LogOutFormatStr(
+              'uzvaccess: Остановка обработки из-за ошибки',
+              [],
+              LM_Info
+            );
             Break;
           end;
         end;
@@ -394,18 +465,37 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError('Критическая ошибка выполнения экспорта: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Критическая ошибка выполнения экспорта: %s',
+        [E.Message],
+        LM_Info
+      );
       raise;
     end;
   end;
 
   Result.EndTime := Now;
 
-  FLogger.LogInfo('');
-  FLogger.LogInfo(StringOfChar('=', 70));
-  FLogger.LogInfo('Экспорт завершён');
-  FLogger.LogInfo(StringOfChar('=', 70));
-  FLogger.LogInfo(Result.GetSummary);
+  programlog.LogOutFormatStr(
+    'uzvaccess: %s',
+    [StringOfChar('=', 70)],
+    LM_Info
+  );
+  programlog.LogOutFormatStr(
+    'uzvaccess: Экспорт завершён',
+    [],
+    LM_Info
+  );
+  programlog.LogOutFormatStr(
+    'uzvaccess: %s',
+    [StringOfChar('=', 70)],
+    LM_Info
+  );
+  programlog.LogOutFormatStr(
+    'uzvaccess: %s',
+    [Result.GetSummary],
+    LM_Info
+  );
 end;
 
 end.

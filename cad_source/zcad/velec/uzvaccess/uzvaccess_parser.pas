@@ -25,7 +25,7 @@ interface
 
 uses
   SysUtils, Classes, DB,
-  uzvaccess_types, uzvaccess_logger;
+  uzvaccess_types, uzclog;
 
 type
   {**
@@ -36,7 +36,6 @@ type
   **}
   TExportTableParser = class
   private
-    FLogger: TExportLogger;
 
     // Получить значение колонки из датасета
     function GetColumnValue(ADataset: TDataSet; AColumnIndex: Integer): String;
@@ -72,7 +71,7 @@ type
     );
 
   public
-    constructor Create(ALogger: TExportLogger);
+    constructor Create;
     destructor Destroy; override;
 
     // Парсинг управляющей таблицы
@@ -86,9 +85,8 @@ implementation
 
 { TExportTableParser }
 
-constructor TExportTableParser.Create(ALogger: TExportLogger);
+constructor TExportTableParser.Create;
 begin
-  FLogger := ALogger;
 end;
 
 destructor TExportTableParser.Destroy;
@@ -123,19 +121,23 @@ procedure TExportTableParser.ParseTableInstruction(
 begin
   if ACol2 = '' then
   begin
-    FLogger.LogWarning('Инструкция tTable без имени таблицы - пропускается');
+    programlog.LogOutFormatStr(
+      'uzvaccess: Инструкция tTable без имени таблицы - пропускается',
+      [],
+      LM_Info
+    );
     Exit;
   end;
 
   // Если имя таблицы уже задано, выводим предупреждение
   if AInstruction.TargetTable <> '' then
-    FLogger.LogWarning(Format(
-      'Переопределение целевой таблицы: %s -> %s',
-      [AInstruction.TargetTable, ACol2]
-    ));
+    programlog.LogOutFormatStr(
+      'uzvaccess: Переопределение целевой таблицы: %s -> %s',
+      [AInstruction.TargetTable, ACol2],
+      LM_Info
+    );
 
   AInstruction.TargetTable := ACol2;
-  FLogger.LogDebug('Целевая таблица: ' + ACol2);
 end;
 
 procedure TExportTableParser.ParseTypeDataInstruction(
@@ -147,14 +149,17 @@ var
 begin
   if ACol2 = '' then
   begin
-    FLogger.LogWarning('Инструкция typeData без типа данных - пропускается');
+    programlog.LogOutFormatStr(
+      'uzvaccess: Инструкция typeData без типа данных - пропускается',
+      [],
+      LM_Info
+    );
     Exit;
   end;
 
   dataType := StringToSourceDataType(ACol2);
   AInstruction.TypeData := dataType;
 
-  FLogger.LogDebug(Format('Тип данных источника: %s', [ACol2]));
 end;
 
 procedure TExportTableParser.ParseSetColumnInstruction(
@@ -167,8 +172,10 @@ begin
   // Проверка обязательных параметров
   if (ACol2 = '') or (ACol3 = '') or (ACol4 = '') then
   begin
-    FLogger.LogWarning(
-      'Инструкция setcolumn с неполными параметрами - пропускается'
+    programlog.LogOutFormatStr(
+      'uzvaccess: Инструкция setcolumn с неполными параметрами - пропускается',
+      [],
+      LM_Info
     );
     Exit;
   end;
@@ -181,11 +188,6 @@ begin
 
   AInstruction.AddColumnMapping(mapping);
 
-  FLogger.LogDebug(Format(
-    'Добавлен маппинг: %s (%s) <- %s',
-    [mapping.ColumnName, ColumnDataTypeToString(mapping.DataType),
-     mapping.SourceParam]
-  ));
 end;
 
 procedure TExportTableParser.ParseKeyColumnInstruction(
@@ -205,7 +207,6 @@ begin
       Break; // Больше нет ключевых колонок
 
     AInstruction.AddKeyColumn(colValue);
-    FLogger.LogDebug('Добавлена ключевая колонка: ' + colValue);
   end;
 end;
 
@@ -219,8 +220,10 @@ begin
   // Проверка обязательных параметров
   if (ACol2 = '') or (ACol3 = '') then
   begin
-    FLogger.LogWarning(
-      'Инструкция const с неполными параметрами - пропускается'
+    programlog.LogOutFormatStr(
+      'uzvaccess: Инструкция const с неполными параметрами - пропускается',
+      [],
+      LM_Info
     );
     Exit;
   end;
@@ -234,10 +237,6 @@ begin
 
   AInstruction.AddColumnMapping(mapping);
 
-  FLogger.LogDebug(Format(
-    'Добавлена константа: %s = "%s"',
-    [mapping.ColumnName, ACol3]
-  ));
 end;
 
 function TExportTableParser.Parse(
@@ -252,7 +251,11 @@ begin
   Result := TExportInstructions.Create;
   rowCount := 0;
 
-  FLogger.LogInfo(Format('Начало парсинга таблицы: %s', [ATableName]));
+  programlog.LogOutFormatStr(
+    'uzvaccess: Начало парсинга таблицы: %s',
+    [ATableName],
+    LM_Info
+  );
 
   try
     // Проход по всем строкам датасета
@@ -296,10 +299,11 @@ begin
           ParseConstInstruction(Result, col2, col3);
 
         itUnknown:
-          FLogger.LogWarning(Format(
-            'Неизвестная инструкция "%s" в строке %d - пропускается',
-            [col1, rowCount]
-          ));
+          programlog.LogOutFormatStr(
+            'uzvaccess: Неизвестная инструкция "%s" в строке %d - пропускается',
+            [col1, rowCount],
+            LM_Info
+          );
       end;
 
       ADataset.Next;
@@ -308,24 +312,37 @@ begin
     // Валидация результатов парсинга
     if Result.TargetTable = '' then
     begin
-      FLogger.LogError('Не найдена инструкция tTable - целевая таблица не задана');
+      programlog.LogOutFormatStr(
+      'uzvaccess: Не найдена инструкция tTable - целевая таблица не задана',
+      [],
+      LM_Info
+    );
       raise Exception.Create('Не задана целевая таблица');
     end;
 
     if Result.ColumnMappings.Count = 0 then
     begin
-      FLogger.LogWarning('Не найдено ни одной инструкции setcolumn');
+      programlog.LogOutFormatStr(
+      'uzvaccess: Не найдено ни одной инструкции setcolumn',
+      [],
+      LM_Info
+    );
     end;
 
-    FLogger.LogInfo(Format(
-      'Парсинг завершен: %d строк, %d маппингов, %d ключевых колонок',
-      [rowCount, Result.ColumnMappings.Count, Result.KeyColumns.Count]
-    ));
+    programlog.LogOutFormatStr(
+      'uzvaccess: Парсинг завершен: %d строк, %d маппингов, %d ключевых колонок',
+      [rowCount, Result.ColumnMappings.Count, Result.KeyColumns.Count],
+      LM_Info
+    );
 
   except
     on E: Exception do
     begin
-      FLogger.LogError('Ошибка парсинга: ' + E.Message);
+      programlog.LogOutFormatStr(
+        'uzvaccess: Ошибка парсинга: %s',
+        [E.Message],
+        LM_Info
+      );
       Result.Free;
       raise;
     end;

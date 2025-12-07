@@ -26,7 +26,7 @@ interface
 uses
   SysUtils, Classes, Variants,
   uzeentity, varmandef, uzcvariablesutils,
-  uzvgetentity, uzvaccess_types, uzvaccess_logger;
+  uzvgetentity, uzvaccess_types, uzclog;
 
 type
   {**
@@ -62,7 +62,6 @@ type
   **}
   TEntitySourceProvider = class(TInterfacedObject, IDataSourceProvider)
   private
-    FLogger: TExportLogger;
     FEntityList: TEntityVector;
     FEntityMode: Integer;
     FEntityModeParam: String;
@@ -78,7 +77,6 @@ type
 
   public
     constructor Create(
-      ALogger: TExportLogger;
       AEntityMode: Integer;
       const AEntityModeParam: String
     );
@@ -104,12 +102,10 @@ uses
 { TEntitySourceProvider }
 
 constructor TEntitySourceProvider.Create(
-  ALogger: TExportLogger;
   AEntityMode: Integer;
   const AEntityModeParam: String
 );
 begin
-  FLogger := ALogger;
   FEntityMode := AEntityMode;
   FEntityModeParam := AEntityModeParam;
   FEntityList := nil;
@@ -149,11 +145,6 @@ var
 begin
   ClearEntities;
 
-  FLogger.LogDebug(Format(
-    'Загрузка примитивов: тип=%s, режим=%d',
-    [SourceDataTypeToString(ATypeData), FEntityMode]
-  ));
-
   // Для режима 2 (поиск по ENTID_Type) используем параметр
   if FEntityMode = 2 then
   begin
@@ -167,10 +158,11 @@ begin
   // Получаем примитивы через uzvGetEntity
   FEntityList := uzvGetEntity(FEntityMode, typeStr);
 
-  FLogger.LogInfo(Format(
-    'Загружено примитивов: %d',
-    [FEntityList.Count]
-  ));
+  programlog.LogOutFormatStr(
+    'uzvaccess: Загружено примитивов: %d',
+    [FEntityList.Count],
+    LM_Info
+  );
 end;
 
 function TEntitySourceProvider.GetEntities(
@@ -213,11 +205,6 @@ begin
     if (targetType = 0) or (objType = targetType) then
       Result.Add(pEntity);
   end;
-
-  FLogger.LogDebug(Format(
-    'Отфильтровано примитивов: %d из %d',
-    [Result.Count, FEntityList.Count]
-  ));
 end;
 
 function TEntitySourceProvider.HasProperty(
@@ -256,7 +243,11 @@ begin
 
   if AEntity = nil then
   begin
-    FLogger.LogWarning('Попытка получить свойство из nil-объекта');
+    programlog.LogOutFormatStr(
+      'uzvaccess: Попытка получить свойство из nil-объекта',
+      [],
+      LM_Info
+    );
     Exit;
   end;
 
@@ -266,13 +257,7 @@ begin
   pvd := pEntity^.specialize GetVariable<string>(APropName);
 
   if pvd = nil then
-  begin
-    FLogger.LogDebug(Format(
-      'Переменная "%s" не найдена в примитиве',
-      [APropName]
-    ));
     Exit;
-  end;
 
   // Получаем значение переменной в зависимости от её типа
   case pvd^.data.PTD^.TypeName of
@@ -300,17 +285,7 @@ begin
     // Для остальных типов пытаемся получить строковое представление
     valueStr := pstring(pvd^.data.Instance)^;
     Result := valueStr;
-
-    FLogger.LogDebug(Format(
-      'Неизвестный тип переменной "%s": %s',
-      [APropName, pvd^.data.PTD^.TypeName]
-    ));
   end;
-
-  FLogger.LogDebug(Format(
-    'Получено значение свойства "%s" = "%s"',
-    [APropName, VarToStr(Result)]
-  ));
 end;
 
 end.

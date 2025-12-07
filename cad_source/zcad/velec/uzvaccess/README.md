@@ -36,49 +36,57 @@
 
 Все колонки имеют строковый тип. Каждая строка — это инструкция.
 
-| Col1       | Col2            | Col3    | Col4                 | Col5+ |
-|------------|-----------------|---------|----------------------|-------|
-| tTable     | TargetTableName |         |                      |       |
-| typeData   | device          |         |                      |       |
-| setcolumn  | DeviceName      | string  | NMO_BaseName         |       |
-| setcolumn  | Power           | float   | VPOWER_Value         |       |
-| setcolumn  | Voltage         | integer | VVOLTAGE_Value       |       |
+**ВАЖНО:** Col1 является столбцом ID с уникальными значениями и игнорируется парсером.
+Инструкции начинаются с Col2.
+
+| Col1 (ID)  | Col2       | Col3            | Col4    | Col5                 | Col6+ |
+|------------|------------|-----------------|---------|----------------------|-------|
+| 1          | tTable     | TargetTableName |         |                      |       |
+| 2          | typeData   | device          |         |                      |       |
+| 3          | setcolumn  | DeviceName      | string  | NMO_BaseName         |       |
+| 4          | setcolumn  | Power           | float   | VPOWER_Value         |       |
+| 5          | setcolumn  | Voltage         | integer | VVOLTAGE_Value       |       |
 
 ### Поддерживаемые инструкции
 
 #### tTable
 Определяет имя целевой таблицы в Access.
 
-- **Col1:** `tTable`
-- **Col2:** Имя целевой таблицы
+- **Col1:** ID (игнорируется)
+- **Col2:** `tTable`
+- **Col3:** Имя целевой таблицы
 
 #### typeData
 Определяет тип источника данных.
 
-- **Col1:** `typeData`
-- **Col2:** Тип данных: `device`, `superline`, `cable`
+- **Col1:** ID (игнорируется)
+- **Col2:** `typeData`
+- **Col3:** Тип данных: `device`, `superline`, `cable`
 
 #### setcolumn
 Определяет маппинг колонки.
 
-- **Col1:** `setcolumn`
-- **Col2:** Имя колонки в целевой таблице
-- **Col3:** Тип данных: `string`, `integer`, `float`
-- **Col4:** Имя свойства источника (например, `NMO_BaseName`)
-- **Col5+:** Зарезервировано для расширений
+- **Col1:** ID (игнорируется)
+- **Col2:** `setcolumn`
+- **Col3:** Имя колонки в целевой таблице
+- **Col4:** Тип данных: `string`, `integer`, `float`
+- **Col5:** Имя свойства источника (например, `NMO_BaseName`)
+- **Col6+:** Зарезервировано для расширений
 
 #### keyColumn (опционально)
 Определяет ключевые колонки для UPSERT.
 
-- **Col1:** `keyColumn`
-- **Col2+:** Имена ключевых колонок
+- **Col1:** ID (игнорируется)
+- **Col2:** `keyColumn`
+- **Col3+:** Имена ключевых колонок
 
 #### const (опционально)
 Задает константное значение.
 
-- **Col1:** `const`
-- **Col2:** Имя колонки
-- **Col3:** Константное значение
+- **Col1:** ID (игнорируется)
+- **Col2:** `const`
+- **Col3:** Имя колонки
+- **Col4:** Константное значение
 
 ## Использование
 
@@ -256,27 +264,27 @@ parser.RegisterInstructionHandler('myinstruction', @HandleMyInstruction);
 
 Таблица `EXPORT1`:
 
-| Col1      | Col2       | Col3    | Col4              | Col5 |
-|-----------|------------|---------|-------------------|------|
-| tTable    | Devices    |         |                   |      |
-| typeData  | device     |         |                   |      |
-| setcolumn | DeviceName | string  | NMO_BaseName      |      |
-| setcolumn | Power      | float   | VPOWER_Value      |      |
-| setcolumn | Voltage    | integer | VVOLTAGE_Value    |      |
-| setcolumn | Phase      | string  | VPHASE_Value      |      |
+| Col1 (ID) | Col2      | Col3       | Col4    | Col5              | Col6 |
+|-----------|-----------|------------|---------|-------------------|------|
+| 1         | tTable    | Devices    |         |                   |      |
+| 2         | typeData  | device     |         |                   |      |
+| 3         | setcolumn | DeviceName | string  | NMO_BaseName      |      |
+| 4         | setcolumn | Power      | float   | VPOWER_Value      |      |
+| 5         | setcolumn | Voltage    | integer | VVOLTAGE_Value    |      |
+| 6         | setcolumn | Phase      | string  | VPHASE_Value      |      |
 
 ### Пример 2: Экспорт с ключевыми колонками
 
 Таблица `EXPORT2`:
 
-| Col1      | Col2       | Col3    | Col4              | Col5 |
-|-----------|------------|---------|-------------------|------|
-| tTable    | Cables     |         |                   |      |
-| typeData  | cable      |         |                   |      |
-| keyColumn | CableName  |         |                   |      |
-| setcolumn | CableName  | string  | NMO_BaseName      |      |
-| setcolumn | Length     | float   | VLENGTH_Value     |      |
-| setcolumn | CrossSection | float | VCROSSSECTION_Value |    |
+| Col1 (ID) | Col2      | Col3       | Col4    | Col5              | Col6 |
+|-----------|-----------|------------|---------|-------------------|------|
+| 1         | tTable    | Cables     |         |                   |      |
+| 2         | typeData  | cable      |         |                   |      |
+| 3         | keyColumn | CableName  |         |                   |      |
+| 4         | setcolumn | CableName  | string  | NMO_BaseName      |      |
+| 5         | setcolumn | Length     | float   | VLENGTH_Value     |      |
+| 6         | setcolumn | CrossSection | float | VCROSSSECTION_Value |    |
 
 При наличии `keyColumn` модуль будет обновлять существующие записи вместо вставки дубликатов.
 
@@ -284,13 +292,13 @@ parser.RegisterInstructionHandler('myinstruction', @HandleMyInstruction);
 
 Таблица `EXPORT3`:
 
-| Col1      | Col2       | Col3    | Col4              | Col5 |
-|-----------|------------|---------|-------------------|------|
-| tTable    | Equipment  |         |                   |      |
-| typeData  | device     |         |                   |      |
-| setcolumn | Name       | string  | NMO_BaseName      |      |
-| const     | Category   | Electrical |                 |      |
-| const     | Status     | Active  |                   |      |
+| Col1 (ID) | Col2      | Col3       | Col4    | Col5              | Col6 |
+|-----------|-----------|------------|---------|-------------------|------|
+| 1         | tTable    | Equipment  |         |                   |      |
+| 2         | typeData  | device     |         |                   |      |
+| 3         | setcolumn | Name       | string  | NMO_BaseName      |      |
+| 4         | const     | Category   | Electrical |                 |      |
+| 5         | const     | Status     | Active  |                   |      |
 
 ## Тестирование
 

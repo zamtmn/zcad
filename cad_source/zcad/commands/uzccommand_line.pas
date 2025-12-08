@@ -46,11 +46,11 @@ begin
     {тут можно настроить параметры команды};
 
   {запрос первой координаты}
-  if commandmanager.get3dpoint(APrompt1,p1)=GRNormal then
+  if commandmanager.get3dpoint(APrompt1,p1)=IRNormal then
     while True do
      {запрос следующей координаты
       с рисованием резиновой линии от базовой точки p1}
-      if commandmanager.Get3DPointWithLineFromBase(APromptNext,p1,p2)=GRNormal then begin
+      if commandmanager.Get3DPointWithLineFromBase(APromptNext,p1,p2)=IRNormal then begin
 
         //создаем и инициализируем примитив
         pline:=AllocEnt(GDBLineID);

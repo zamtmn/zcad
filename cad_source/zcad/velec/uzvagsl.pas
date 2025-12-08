@@ -487,7 +487,7 @@ implementation
       //drawing:PTSimpleDrawing; //для работы с чертежом
     begin
       result:=false;
-      if commandmanager.get3dpoint('Start point automatic placement of super lines:',stPoint)= GRNormal then
+      if commandmanager.get3dpoint('Start point automatic placement of super lines:',stPoint)= IRNormal then
       begin
          contourRoomEmbedSL:=getcontourRoomEmbedSL(contour2dRoom,cableDistWall); // получаем контур прокладки кабеля
          if getVertexPerpendicularRoom(contour2dRoom,contourRoomEmbedSL,stPoint,perpendListVertex) then    //получаем список вершин перпендикуляра

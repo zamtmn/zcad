@@ -44,20 +44,20 @@ var
   pe:T3PointPentity;
   dc:TDrawContext;
 begin
-  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then begin
+  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=IRNormal then begin
     pline:=Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.
       ObjArray.CreateInitObj(
       GDBLineID,drawings.GetCurrentROOT));
     pline^.CoordInOCS.lBegin:=pe.p1;
     InteractiveLineEndManipulator(pline,pe.p1,False);
     if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,
-      pe.p2,@InteractiveLineEndManipulator,pline)=GRNormal then begin
+      pe.p2,@InteractiveLineEndManipulator,pline)=IRNormal then begin
       drawings.GetCurrentDWG^.FreeConstructionObjects;
       pe.pentity:=Pointer(
         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(
         GDBArcID,drawings.GetCurrentROOT));
       if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,
-        pe.p3,@InteractiveArcManipulator,@pe)=GRNormal then begin
+        pe.p3,@InteractiveArcManipulator,@pe)=IRNormal then begin
         drawings.GetCurrentDWG^.FreeConstructionObjects;
         pa:=AllocEnt(GDBArcID);
         pe.pentity:=pa;

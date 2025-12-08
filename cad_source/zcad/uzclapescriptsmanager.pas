@@ -246,7 +246,7 @@ begin
     if (SD.LAPEData.FCompiler=nil)or(SD.FileData.Age=-1)or(SD.FileData.Age<>fa)or(CtxCreateMode=LSCMRecreate)then begin
       if SD.LAPEData.FCompiler<>nil then
         SD.LAPEData.FCompiler.Destroy;
-      SD.LAPEData.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(SD.FileData.Name{,TEncoding.UTF8}));
+      SD.LAPEData.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(SD.FileData.Name,TEncoding.UTF8));
       SD.LAPEData.FCompiled:=False;
       SD.FileData.Age:=fa;
       ctxmode:=DoAll;
@@ -306,13 +306,15 @@ begin
     except
       on E: Exception do
       begin
-        ProgramLog.LogOutFormatStr('TScriptsManager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,MO_SM or MO_SH);
+        ProgramLog.LogOutFormatStr('TScriptsManager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,{MO_SM or} MO_SH);
         FreeAndNil(SD.LAPEData.FCompiler);
       end;
     end;
   finally
     if CtxCreateMode=LSCMRecreate then
-      FreeAndNil(SD.Ctx);
+      FreeAndNil(SD.Ctx)
+    else
+      SD.Ctx.CleanUp;
   end;
 end;
 

@@ -196,7 +196,7 @@ var
        if result = nil then
        begin
           zcUI.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
-            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt) then
+            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt)=IRNormal then
             begin
              //Если выделенный устройство GDBDeviceID тогда
             if selEnt^.GetObjType=GDBDeviceID then
@@ -230,7 +230,7 @@ var
 function generatorOnelineDiagramOneLevel_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
-  //gr:TGetResult;
+  //gr:TzcInteractiveResult;
   //filename:string;
   pvd:pvardesk;
   //p:GDBVertex;
@@ -284,7 +284,7 @@ begin
 //      //gr:=commandmanager.GetInput('',inpt);
 //      gr:=commandmanager.Get3DPoint('',p);
 //      case gr of
-//        GRId:case commandmanager.GetLastId of
+//        IRId:case commandmanager.GetLastId of
 //               CLPIdUser1:zcUI.TextMessage('GRId: CLPIdUser1',TMWOHistoryOut);
 //               CLPIdFileDialog:begin
 //                 zcUI.TextMessage('GRId: CLPIdFileDialog',TMWOHistoryOut);
@@ -294,9 +294,9 @@ begin
 //               end;
 //               else zcUI.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
 //            end;
-//    GRNormal:zcUI.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
+//    IRNormal:zcUI.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
 //      end;
-//    until gr=GRCancel;
+//    until gr=IRCancel;
 
   end;
   result:=cmd_ok;

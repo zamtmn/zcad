@@ -59,7 +59,7 @@ begin
     pdbu:=pum^.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
     //получаем модуль БД чертежа
     if pdbu<>nil then
-      while commandmanager.getentity(rscmSelectDestinationEntity,pEntity) do begin
+      while commandmanager.getentity(rscmSelectDestinationEntity,pEntity)=IRNormal do begin
         EntVarExt:=pEntity^.GetExtension<TVariablesExtender>;
         if EntVarExt<>nil then begin
           pvn:=EntVarExt.entityunit.FindVariable('DB_link');

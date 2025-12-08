@@ -663,6 +663,7 @@ var
 begin
      //Переделать используя ParseStrings или выкинуть нахуй
      if fname='' then exit;
+     DecimalSeparator:='.';
      strings:=TStringList.Create;
      strings.LoadFromFile({$IFNDEF DELPHI}utf8tosys{$ENDIF}(fname));
      WhatNeed:=TSeekInterface;

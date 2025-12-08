@@ -250,7 +250,7 @@ var
        if result = nil then
        begin
           zcUI.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
-            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt) then
+            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt)=IRNormal then
             begin
              //Если выделенный устройство GDBDeviceID тогда
             if selEnt^.GetObjType=GDBDeviceID then
@@ -790,7 +790,7 @@ end;
 function vExportDevToXLSX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
-  //gr:TGetResult;
+  //gr:TzcInteractiveResult;
   {filename,}newfilexlsx:string;
   //pvd:pvardesk;
   //p:GDBVertex;
@@ -863,7 +863,7 @@ end;
 function vExportDevToXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
-  //gr:TGetResult;
+  //gr:TzcInteractiveResult;
   {filename,}newfilexlsx:string;
   //pvd:pvardesk;
   //p:GDBVertex;

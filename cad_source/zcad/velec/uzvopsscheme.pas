@@ -537,7 +537,7 @@ begin
 
 
      //** Получаем точку вставки отработанной функции, в этот момент пользователь настраивает поведения алгоритма
-     if commandmanager.get3dpoint('Specify insert point:',insertPoint) = GRNormal then
+     if commandmanager.get3dpoint('Specify insert point:',insertPoint) = IRNormal then
        zcUI.TextMessage('Coordinate received',TMWOHistoryOut)
      else begin
        zcUI.TextMessage('Coordinate input canceled. Function canceled',TMWOHistoryOut);

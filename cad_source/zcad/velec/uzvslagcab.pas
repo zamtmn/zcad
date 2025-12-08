@@ -234,7 +234,7 @@ end;
 //   end;
 //
 //    if uzvslagcabComParams.settingVizCab.vizFullTreeCab then
-//       if commandmanager.get3dpoint('Input tree visualization coordinates',fTreeVertex)= GRNormal then begin
+//       if commandmanager.get3dpoint('Input tree visualization coordinates',fTreeVertex)= IRNormal then begin
 //         zcUI.TextMessage('Ok',TMWOHistoryOut);
 //       end
 //       else
@@ -242,7 +242,7 @@ end;
 //
 //
 //   if uzvslagcabComParams.settingVizCab.vizEasyTreeCab then
-//         if commandmanager.get3dpoint('Input easy tree visualization coordinates',eTreeVertex)= GRNormal then begin
+//         if commandmanager.get3dpoint('Input easy tree visualization coordinates',eTreeVertex)= IRNormal then begin
 //           zcUI.TextMessage('Ok',TMWOHistoryOut);
 //         end
 //         else

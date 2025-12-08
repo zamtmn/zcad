@@ -448,7 +448,7 @@ var
 
 
        listVertexperpend:=TListVertexinLine.Create;
-        if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
+        if commandmanager.get3dpoint('Specify insert point:',stPoint)= IRNormal then
           begin
            //**получаем перпендикуляр к контурам помещения, от указаной точки до наиболее близко расположеной стене
 

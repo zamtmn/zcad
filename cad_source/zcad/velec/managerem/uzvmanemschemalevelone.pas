@@ -170,7 +170,7 @@ function drawStartGroupSchema(pt:TzePoint3d):PGDBObjDevice;
 var
     rc:TDrawContext;
 begin
-    //if commandmanager.get3dpoint('Specify insert point:',p1)=GRNormal then
+    //if commandmanager.get3dpoint('Specify insert point:',p1)=IRNormal then
     //begin
       //проверяем наличие блока PS_DAT_SMOKE и устройства DEVICE_PS_DAT_SMOKE в чертеже и копируем при необходимости
       //этот момент кривой - AddBlockFromDBIfNeed должна быть функцией чтоб было понятно - есть блок или нет, хотя это можно проверить отдельно
@@ -605,7 +605,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
      columnShema:=0;
      drawSchemaOneLevel(listStructurGraphEM[0].Root,uzegeometry.CreateVertex(0,0,0),listColumnSchemaOneLevel,columnShema,true);
 
-       if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then //двигаем их
+       if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=IRNormal then //двигаем их
           zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace'); //если все ок, копируем в чертеж
         result:=cmd_ok;
      //for i:=0 to vertexDev.ChildCount-1 do

@@ -20,28 +20,30 @@ unit uzegeometry;
 {Inline off}
 
 interface
-uses uzbLogIntf,uzegeometrytypes,math;
+uses
+  SysUtils,math,
+  uzegeometrytypes,uzbLogIntf;
 resourcestring
   rsDivByZero='Divide by zero';
 const
   EmptyMtr:TzeMatrix4d=(v:((v:(0,0,0,0)),
-                      (v:(0,0,0,0)),
-                      (v:(0,0,0,0)),
-                      (v:(0,0,0,0))));
+                           (v:(0,0,0,0)),
+                           (v:(0,0,0,0)),
+                           (v:(0,0,0,0))));
   OneMtr:TzeMatrix4d=(v:((v:(1,0,0,0)),
-                    (v:(0,1,0,0)),
-                    (v:(0,0,1,0)),
-                    (v:(0,0,0,1))));
+                     (v:(0,1,0,0)),
+                     (v:(0,0,1,0)),
+                     (v:(0,0,0,1))));
   EmptyMatrix:TzeTypedMatrix4d=(mtr:(v:((v:(0,0,0,0)),
-                              (v:(0,0,0,0)),
-                              (v:(0,0,0,0)),
-                              (v:(0,0,0,0))));
-                         t:[]);
+                                    (v:(0,0,0,0)),
+                                    (v:(0,0,0,0)),
+                                    (v:(0,0,0,0))));
+                                t:[]);
   OneMatrix:TzeTypedMatrix4d=(mtr:(v:((v:(1,0,0,0)),
-                            (v:(0,1,0,0)),
-                            (v:(0,0,1,0)),
-                            (v:(0,0,0,1))));
-                       t:CMTIdentity);
+                                  (v:(0,1,0,0)),
+                                  (v:(0,0,1,0)),
+                                  (v:(0,0,0,1))));
+                              t:CMTIdentity);
   RightAngle=pi/2;
   DefaultVP:TzeVector4i=(x:2;y:0;z:100;w:100);
   IdentityQuaternion: TzeQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
@@ -224,6 +226,7 @@ function IsNotZero(const d:Double;const _eps:Double=eps):boolean;inline;
 //используется для Arbitrary Axis Algorithm (DXF)
 //TODO: заменить в коде все проверки на функцию
 function IsNearToZ(const v:TzePoint3d):boolean;inline;
+function IsValidRange(const d1,d2:Double):boolean;inline;
 
 procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i; out winx,winy,winz:Double);inline;
 procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i; out wincoord:TzePoint3d);inline;
@@ -268,13 +271,6 @@ function myPickMatrix(const x,y,deltax,deltay:Double;const vp:TzeVector4i): TzeT
 
 function GetPointInOCSByBasis(const ScaledBX,ScaledBY,ScaledBZ:TzePoint3d; const PointInWCS:TzePoint3d; out scale:TzePoint3d):GDBObj2dprop;
 function GetPInsertInOCSBymatrix(constref matrix:TzeTypedMatrix4d;out scale:TzePoint3d):GDBObj2dprop;
-
-var
-  WorldMatrix{,CurrentCS}:TzeTypedMatrix4d;
-  wx:PzePoint3d;
-  wy:PzePoint3d;
-  wz:PzePoint3d;
-  w0:PzePoint3d;
 
 type
   TLineClipArray=array[0..5]of Double;
@@ -464,6 +460,11 @@ begin
   //  result:=true
   //else
   //  result:=false;
+end;
+
+function IsValidRange(const d1,d2:Double):boolean;inline;
+begin
+  result:=abs(d2.Exponent-d1.Exponent)<45;
 end;
 
 function GetXfFromZ(const oz:TzePoint3d):TzePoint3d;
@@ -2795,5 +2796,4 @@ begin
 end;
 
 begin
-  WorldMatrix.CreateRec(OneMtr,CMTIdentity);
 end.

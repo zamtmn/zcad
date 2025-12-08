@@ -44,6 +44,8 @@ begin
       end else
         result:=False;
       end;
+    ESSSetConstructEntity:
+      result:=False;
     ESSCommandEnd:
       result:=False;
   end;

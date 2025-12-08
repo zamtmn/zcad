@@ -409,7 +409,7 @@ var
     //ir:itrec;
 
 begin
-    if commandmanager.getentity('Select Cable: ',pc) then  //просим выбрать примитив
+    if commandmanager.getentity('Select Cable: ',pc)=IRNormal then  //просим выбрать примитив
     begin
 
          //поис пересечения

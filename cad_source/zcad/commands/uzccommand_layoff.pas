@@ -39,15 +39,14 @@ var
   UndoStartMarkerPlaced:boolean;
 begin
   UndoStartMarkerPlaced:=False;
-  while commandmanager.getentity(rscmSelectEntity,_PEntity) do begin
+  while commandmanager.getentity(rscmSelectEntity,_PEntity)=IRNormal do begin
     if _PEntity^.vp.Layer._on then begin
       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayOffCommandName,True);
       with TBooleanChangeCommand.CreateAndPushIfNeed(
-          PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-          TChangedBoolean.CreateRec(
-          _PEntity^.vp.Layer._on),TSharedEmpty(
-          Default(TEmpty)),TAfterChangeEmpty(
-          Default(TEmpty))) do begin
+             PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+             TChangedBoolean.CreateRec(_PEntity^.vp.Layer._on),
+             TSharedEmpty(Default(TEmpty)),
+             TAfterChangeEmpty(Default(TEmpty))) do begin
         _PEntity^.vp.Layer._on:=not _PEntity^.vp.Layer._on;
         //ComitFromObj;
       end;

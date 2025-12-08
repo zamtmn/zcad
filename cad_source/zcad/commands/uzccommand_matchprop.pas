@@ -104,13 +104,13 @@ const
 begin
   USharedDrawing.CreateRec(drawings.GetCurrentDWG);
   UndoStartMarkerPlaced:=False;
-  if commandmanager.getentity(rscmSelectSourceEntity,ps) then begin
+  if commandmanager.getentity(rscmSelectSourceEntity,ps)=IRNormal then begin
     zcShowCommandParams(SysUnit^.TypeName2PTD('TMatchPropParam'),@MatchPropParam);
     drawing:=PTZCADDrawing(drawings.GetCurrentDWG);
     dc:=drawing^.CreateDrawingRC;
     SourceObjType:=ps^.GetObjType;
     isSourceObjText:=isTextEnt(SourceObjType);
-    while commandmanager.getentity(rscmSelectDestinationEntity,pd) do begin
+    while commandmanager.getentity(rscmSelectDestinationEntity,pd)=IRNormal do begin
       USharedEntity.CreateRec(pd);
       EntChange:=False;
       if MatchPropParam.ProcessLayer then

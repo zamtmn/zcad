@@ -50,7 +50,7 @@ var
     pd^.DimData.P15InWCS:=p2;
     InteractiveDDimManipulator(pd,p2,False);
     if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,
-      p3,@InteractiveDDimManipulator,pd)=GRNormal then begin
+      p3,@InteractiveDDimManipulator,pd)=IRNormal then begin
       drawings.GetCurrentDWG^.FreeConstructionObjects;
       pd:=AllocEnt(GDBDiametricDimensionID);
       pd^.initnul(drawings.GetCurrentROOT);
@@ -72,7 +72,7 @@ begin
       FinalCreateDDim;
     end;
   end else begin
-    if commandmanager.GetEntity('Select circle or arc',pcircle) then begin
+    if commandmanager.GetEntity('Select circle or arc',pcircle)=IRNormal then begin
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
       case pcircle^.GetObjType of
         GDBCircleID:begin

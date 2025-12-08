@@ -149,14 +149,14 @@ var
   pline:PGDBObjLine;
 begin
   Result:=False;
-  if commandmanager.get3dpoint(prompt1,p1)=GRNormal then begin
+  if commandmanager.get3dpoint(prompt1,p1)=IRNormal then begin
     pline:=Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.
       ObjArray.CreateInitObj(
       GDBLineID,drawings.GetCurrentROOT));
     pline^.CoordInOCS.lBegin:=p1;
     InteractiveLineEndManipulator(pline,p1,False);
     if commandmanager.Get3DPointInteractive(
-      prompt2,p2,@InteractiveLineEndManipulator,pline)=GRNormal then begin
+      prompt2,p2,@InteractiveLineEndManipulator,pline)=IRNormal then begin
       Result:=True;
     end;
   end;
@@ -164,7 +164,7 @@ begin
 end;
 
 function GetInteractiveLineFrom1to2(prompt2:string;
-  const p1:TzePoint3d;out p2:TzePoint3d):tgetresult;
+  const p1:TzePoint3d;out p2:TzePoint3d):TzcInteractiveResult;
 var
   pline:PGDBObjLine;
 begin
@@ -359,7 +359,7 @@ begin
   if GetInteractiveLine(rscmSpecifyFirstPoint,rscmSpecifySecondPoint,p1,p2) then begin
     createline;
     p1:=p2;
-    while GetInteractiveLineFrom1to2(rscmSpecifySecondPoint,p1,p2)=GRNormal do begin
+    while GetInteractiveLineFrom1to2(rscmSpecifySecondPoint,p1,p2)=IRNormal do begin
       createline;
       p1:=p2;
     end;

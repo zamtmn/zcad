@@ -41,6 +41,17 @@ uses
   uzeentpolyline,
   uzcLog;
 
+var
+  p3dplESP:TEntitySetupProc;
+
+function _3DPoly_com_CommandStart(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
+procedure _3DPoly_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
+function _3DPoly_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
+function _3DPoly_com_AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
+
 implementation
 
 var
@@ -51,6 +62,7 @@ function _3DPoly_com_CommandStart(const Context:TZCADCommandContext;
   //< Команда построитель полилинии начало
 begin
   p3dpl:=nil;
+  p3dplESP:=nil;
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or
     (MRotateCamera));
   zcUI.TextMessage(rscmFirstPoint,TMWOHistoryOut);
@@ -78,6 +90,9 @@ begin
       PTZCADDrawing(
         drawings.GetCurrentDWG)^.UndoStack.ClearFrom(cc);
 
+      if assigned(p3dplESP) then
+        p3dplESP(ESSSetEntity,nil);
+
       SetObjCreateManipulator(domethod,undomethod);
       with PushMultiObjectCreateCommand(
           PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,domethod,undomethod,1) do begin
@@ -88,7 +103,9 @@ begin
         ConstructObjRoot.ObjArray.Count:=0;
       p3dpl:=nil;
     end;
-  //Freemem(pointer(p3dpl));
+
+  if assigned(p3dplESP) then
+    p3dplESP(ESSCommandEnd,nil);
 end;
 
 
@@ -106,15 +123,10 @@ begin
         GDBPolylineID,{drawings.GetCurrentROOT}drawings.GetCurrentDWG^.GetConstructObjRoot));
       zcSetEntPropFromCurrentDrawingProp(p3dpl);
       p3dpl^.AddVertex(wc);
+      if assigned(p3dplESP) then
+        p3dplESP(ESSSetConstructEntity,nil);
       p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-      //drawings.GetCurrentROOT^.ObjArray.ObjTree.AddObjectToNodeTree(p3dpl);
-      //drawings.GetCurrentROOT^.ObjArray.ObjTree.{AddObjectToNodeTree(p3dpl)}CorrectNodeBoundingBox(p3dpl);   vbnvbn
-      //drawings.GetCurrentROOT^.AddObjectToObjArray(addr(p3dpl));
-
-      //if assigned(PrepareObject)then
-      //PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('GDBObjPolyline'),p3dpl,drawings.GetCurrentDWG);
     end;
-
   end;
 end;
 
@@ -134,6 +146,8 @@ begin
     if (p3dpl^.VertexArrayInOCS.Count>1) and
       vertexeq(wc,p3dpl^.VertexArrayInWCS.getData(0)) then begin
       p3dpl^.Closed:=True;
+      if assigned(p3dplESP) then
+        p3dplESP(ESSSetConstructEntity,nil);
       commandmanager.executecommandend;
     end else begin
       polydata.index:=p3dpl^.VertexArrayInOCS.Count;
@@ -145,6 +159,8 @@ begin
         //AutoProcessGDB:=false;
         comit;
       end;
+      if assigned(p3dplESP) then
+        p3dplESP(ESSSetConstructEntity,nil);
       p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
       //p3dpl^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
       Result:=1;

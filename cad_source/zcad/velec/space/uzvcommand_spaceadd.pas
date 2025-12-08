@@ -42,12 +42,19 @@ uses
   uzeconsts,
   uzvcommand_spaceutils;  // Space utilities with shared structures / Утилиты для команд пространств
 
-implementation
+
+function AddExtdrToRectangle(
+  const AStage: TEntitySetupStage;
+  const APEnt: PGDBObjEntity): boolean;
 
 var
   // Структура уровня модуля для хранения разобранных операндов команды
   // Module-level structure to store parsed command operands
   gOperandsStruct: TOperandsStruct;
+
+implementation
+
+
 
 {**Процедура добавления переменных к примитиву из структуры операндов
    @param(APEnt - указатель на примитив)

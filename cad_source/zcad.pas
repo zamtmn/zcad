@@ -279,6 +279,7 @@ uses
 
   //Работа с пространствами/зонами
   uzvcommand_spaceadd, //команда addZona для работы с зонами
+  uzCVCommand_SpaceAddPoly,
   uzvcommand_spaceshowhide, //команда показ спрятать
   //****//
 

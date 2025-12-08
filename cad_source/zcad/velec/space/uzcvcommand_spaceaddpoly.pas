@@ -25,8 +25,8 @@ uses
   uzccommandsabstract,
   uzccommandsimpl,
   uzcLog,
-  //это раскомегнтируй
-  //uzvcommand_spaceadd
+  uzvcommand_spaceadd,
+  uzvcommand_spaceutils,
   uzccommand_3dpoly;
 
 implementation
@@ -35,7 +35,7 @@ function _SpaceAddPoly_com_CommandStart(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 begin
   result:=_3DPoly_com_CommandStart(Context,operands);
-  p3dplESP:=nil{AddExtdrToRectangle};//это раскомегнтируй
+  p3dplESP:=@AddExtdrToRectangle;
   if assigned(p3dplESP) then
     p3dplESP(ESSSuppressCommandParams,nil);
 end;
@@ -55,6 +55,13 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsInitializeLMId);
+
+    // Initialize operands structure
+  uzvcommand_spaceadd.gOperandsStruct.listParam := TParamInfoList.Create;  // Создаем экземпляр TVector / Create TVector instance
+  uzvcommand_spaceadd.gOperandsStruct.indexColor := 256;  // ByLayer
+  uzvcommand_spaceadd.gOperandsStruct.namelayer := '';
+
+
   startup;
 
 finalization

@@ -151,7 +151,7 @@ begin
     ESSSetConstructEntity:
       begin
         APEnt^.vp.Color := gOperandsStruct.indexColor;
-        APEnt^.vp.LineWeight := LnWtByLayer;
+        APEnt^.vp.LineWeight := LnWt200;
         result:=False;
 
       end;

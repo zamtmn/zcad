@@ -91,7 +91,7 @@ begin
         drawings.GetCurrentDWG)^.UndoStack.ClearFrom(cc);
 
       if assigned(p3dplESP) then
-        p3dplESP(ESSSetEntity,nil);
+        p3dplESP(ESSSetEntity,p3dpl);
 
       SetObjCreateManipulator(domethod,undomethod);
       with PushMultiObjectCreateCommand(
@@ -124,7 +124,7 @@ begin
       zcSetEntPropFromCurrentDrawingProp(p3dpl);
       p3dpl^.AddVertex(wc);
       if assigned(p3dplESP) then
-        p3dplESP(ESSSetConstructEntity,nil);
+        p3dplESP(ESSSetConstructEntity,p3dpl);
       p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
     end;
   end;
@@ -147,7 +147,7 @@ begin
       vertexeq(wc,p3dpl^.VertexArrayInWCS.getData(0)) then begin
       p3dpl^.Closed:=True;
       if assigned(p3dplESP) then
-        p3dplESP(ESSSetConstructEntity,nil);
+        p3dplESP(ESSSetConstructEntity,p3dpl);
       commandmanager.executecommandend;
     end else begin
       polydata.index:=p3dpl^.VertexArrayInOCS.Count;
@@ -160,7 +160,7 @@ begin
         comit;
       end;
       if assigned(p3dplESP) then
-        p3dplESP(ESSSetConstructEntity,nil);
+        p3dplESP(ESSSetConstructEntity,p3dpl);
       p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
       //p3dpl^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
       Result:=1;

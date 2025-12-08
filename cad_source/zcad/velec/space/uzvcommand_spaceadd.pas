@@ -147,7 +147,14 @@ begin
       end else
         result := False;
     end;
+    
+    ESSSetConstructEntity:
+      begin
+        APEnt^.vp.Color := gOperandsStruct.indexColor;
+        APEnt^.vp.LineWeight := LnWtByLayer;
+        result:=False;
 
+      end;
     ESSCommandEnd: begin
       // Очищаем структуру операндов после завершения команды
       // Clear operands structure after command ends

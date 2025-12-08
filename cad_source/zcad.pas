@@ -284,6 +284,7 @@ uses
 
   //FPSpreadsheet//
   uzvspreadsheet_register,
+  uzvrtrestoretablecmd,
   //****//
 
   uzvcommand_recoverytable, //команда восстановления таблиц с чертежа

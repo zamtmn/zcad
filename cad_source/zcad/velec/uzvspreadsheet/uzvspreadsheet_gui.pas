@@ -89,6 +89,11 @@ type
     FActionList: TActionList;
     FSpreadsheetActions: TSpreadsheetActions;
 
+    // Переменные для отслеживания редактирования ячеек
+    FEditingCell: Boolean;
+    FEditingRow: Cardinal;
+    FEditingCol: Cardinal;
+
     // Процедуры создания компонентов
     procedure CreateActions;
     procedure CreatePanels;
@@ -99,6 +104,9 @@ type
     // Обработчики событий
     procedure OnWorksheetGridSelection(Sender: TObject;
       aCol, aRow: Integer);
+    procedure OnWorksheetGridSelectEditor(Sender: TObject;
+      aCol, aRow: Integer; var Editor: TWinControl);
+    procedure OnWorksheetGridEditingDone(Sender: TObject);
     procedure OnCellContentEditChange(Sender: TObject);
     procedure OnCellContentEditExit(Sender: TObject);
     procedure OnCellContentKeyPress(Sender: TObject; var Key: Char);
@@ -139,6 +147,11 @@ uses
 procedure TuzvSpreadsheetForm.DoCreate;
 begin
   inherited DoCreate;
+
+  // Инициализация переменных отслеживания редактирования
+  FEditingCell := False;
+  FEditingRow := 0;
+  FEditingCol := 0;
 
   // Настройка основных параметров формы
   Caption := 'Электронные таблицы / Spreadsheet';
@@ -332,6 +345,8 @@ begin
   FWorksheetGrid.Options := FWorksheetGrid.Options + [goEditing, goColSizing,
     goRowSizing];
   FWorksheetGrid.OnSelection := @OnWorksheetGridSelection;
+  FWorksheetGrid.OnSelectEditor := @OnWorksheetGridSelectEditor;
+  FWorksheetGrid.OnEditingDone := @OnWorksheetGridEditingDone;
 
   // Создаём пустую книгу при запуске
   FWorkbookSource.CreateNewWorkbook;
@@ -341,6 +356,39 @@ end;
 procedure TuzvSpreadsheetForm.OnWorksheetGridSelection(Sender: TObject;
   aCol, aRow: Integer);
 begin
+  UpdateCellInfo;
+end;
+
+{ Обработчик начала редактирования ячейки в таблице }
+procedure TuzvSpreadsheetForm.OnWorksheetGridSelectEditor(Sender: TObject;
+  aCol, aRow: Integer; var Editor: TWinControl);
+var
+  row, col: Cardinal;
+  cellAddress: String;
+begin
+  // Вычисляем координаты ячейки (без учёта заголовков)
+  row := aRow - FWorksheetGrid.FixedRows;
+  col := aCol - FWorksheetGrid.FixedCols;
+
+  // Сохраняем текущее состояние ячейки перед редактированием
+  cellAddress := GetCellString(row, col);
+  if SpreadsheetUndoManager <> nil then
+  begin
+    SpreadsheetUndoManager.BeginChange(row, col,
+      'Изменение ячейки ' + cellAddress);
+    FEditingCell := True;
+    FEditingRow := row;
+    FEditingCol := col;
+  end;
+end;
+
+{ Обработчик завершения редактирования ячейки в таблице }
+procedure TuzvSpreadsheetForm.OnWorksheetGridEditingDone(Sender: TObject);
+begin
+  // Сбрасываем флаг редактирования
+  FEditingCell := False;
+
+  // Обновляем информацию о ячейке в панели редактирования
   UpdateCellInfo;
 end;
 

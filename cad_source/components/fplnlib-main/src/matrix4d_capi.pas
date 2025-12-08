@@ -1,7 +1,7 @@
 {
 *****************************************************************************
 *                                                                           *
-*  This file is part of the ZCAD                                            *
+*  This file is part of the fpLNLib                                         *
 *                                                                           *
 *  See the file COPYING.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
@@ -11,9 +11,6 @@
 *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
 *                                                                           *
 *****************************************************************************
-}
-{
-@author(Vladimir Bobrov)
 }
 {**
   Модуль Matrix4d_CAPI - операции с матрицами преобразования 4x4.

@@ -9,7 +9,8 @@ interface
 
 uses
   LNEnums_CAPI, LNObject_CAPI, Matrix4d_CAPI, NurbsCurve_CAPI, 
-  NurbsSurface_CAPI, uLNLib, UV_CAPI, XYZ_CAPI, XYZW_CAPI, LazarusPackageIntf;
+  NurbsSurface_CAPI, uLNLib, UV_CAPI, XYZ_CAPI, XYZW_CAPI, gLNLib, 
+  LazarusPackageIntf;
 
 implementation
 

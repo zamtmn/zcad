@@ -11,6 +11,11 @@
         <OtherUnitFiles Value="src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <IncludeAssertionCode Value="True"/>
+        </SyntaxOptions>
+      </Parsing>
     </CompilerOptions>
     <Files>
       <Item>
@@ -48,6 +53,10 @@
       <Item>
         <Filename Value="src\xyzw_capi.pas"/>
         <UnitName Value="XYZW_CAPI"/>
+      </Item>
+      <Item>
+        <Filename Value="src\glnlib.pas"/>
+        <UnitName Value="gLNLib"/>
       </Item>
     </Files>
     <RequiredPkgs>

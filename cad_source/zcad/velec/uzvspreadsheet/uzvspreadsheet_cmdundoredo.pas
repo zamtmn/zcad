@@ -112,6 +112,9 @@ type
     { Очищает все стеки }
     procedure ClearAll;
 
+    { Отменяет последнюю запись в стеке отмены без восстановления состояния }
+    procedure CancelLastUndo;
+
     { Проверяет, есть ли доступные действия для отмены }
     function CanUndo: Boolean;
 
@@ -573,6 +576,16 @@ begin
   FUndoCount := 0;
 
   ClearRedoStack;
+end;
+
+{ Отменяет последнюю запись в стеке отмены без восстановления состояния }
+procedure TSpreadsheetUndoManager.CancelLastUndo;
+begin
+  if FUndoCount > 0 then
+  begin
+    Dec(FUndoCount);
+    SetLength(FUndoStack[FUndoCount].Changes, 0);
+  end;
 end;
 
 { Проверяет возможность отмены }

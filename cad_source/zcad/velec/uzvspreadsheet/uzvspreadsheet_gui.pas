@@ -93,6 +93,7 @@ type
     FEditingCell: Boolean;
     FEditingRow: Cardinal;
     FEditingCol: Cardinal;
+    FOldCellValue: String;  // Содержимое ячейки до начала редактирования
 
     // Процедуры создания компонентов
     procedure CreateActions;
@@ -364,27 +365,69 @@ procedure TuzvSpreadsheetForm.OnWorksheetGridSelectEditor(Sender: TObject;
   aCol, aRow: Integer; var Editor: TWinControl);
 var
   row, col: Cardinal;
+  worksheet: TsWorksheet;
   cellAddress: String;
 begin
   // Вычисляем координаты ячейки (без учёта заголовков)
   row := aRow - FWorksheetGrid.FixedRows;
   col := aCol - FWorksheetGrid.FixedCols;
 
-  // Сохраняем текущее состояние ячейки перед редактированием
-  cellAddress := GetCellString(row, col);
-  if SpreadsheetUndoManager <> nil then
+  // Запоминаем координаты редактируемой ячейки
+  FEditingCell := True;
+  FEditingRow := row;
+  FEditingCol := col;
+
+  // Сохраняем текущее значение ячейки для последующего сравнения
+  FOldCellValue := '';
+  if (FWorkbookSource <> nil) and (FWorkbookSource.Workbook <> nil) then
   begin
-    SpreadsheetUndoManager.BeginChange(row, col,
-      'Изменение ячейки ' + cellAddress);
-    FEditingCell := True;
-    FEditingRow := row;
-    FEditingCol := col;
+    worksheet := FWorkbookSource.Workbook.ActiveWorksheet;
+    if worksheet <> nil then
+    begin
+      if worksheet.FindCell(row, col) <> nil then
+        FOldCellValue := worksheet.ReadAsText(worksheet.FindCell(row, col));
+
+      // Сохраняем текущее состояние ячейки перед редактированием
+      // BeginChange запоминает ТЕКУЩЕЕ (старое) состояние для возможности отмены
+      if SpreadsheetUndoManager <> nil then
+      begin
+        cellAddress := GetCellString(row, col);
+        SpreadsheetUndoManager.BeginChange(row, col,
+          'Изменение ячейки ' + cellAddress);
+      end;
+    end;
   end;
 end;
 
 { Обработчик завершения редактирования ячейки в таблице }
 procedure TuzvSpreadsheetForm.OnWorksheetGridEditingDone(Sender: TObject);
+var
+  worksheet: TsWorksheet;
+  cell: PCell;
+  newCellValue: String;
 begin
+  // Если редактирование завершено, проверяем, изменилось ли содержимое
+  if FEditingCell and (SpreadsheetUndoManager <> nil) then
+  begin
+    if (FWorkbookSource <> nil) and (FWorkbookSource.Workbook <> nil) then
+    begin
+      worksheet := FWorkbookSource.Workbook.ActiveWorksheet;
+      if worksheet <> nil then
+      begin
+        // Получаем новое значение ячейки после редактирования
+        newCellValue := '';
+        cell := worksheet.FindCell(FEditingRow, FEditingCol);
+        if cell <> nil then
+          newCellValue := worksheet.ReadAsText(cell);
+
+        // Если значение НЕ изменилось, отменяем последнюю запись в истории отмены
+        // (она была добавлена в OnWorksheetGridSelectEditor)
+        if newCellValue = FOldCellValue then
+          SpreadsheetUndoManager.CancelLastUndo;
+      end;
+    end;
+  end;
+
   // Сбрасываем флаг редактирования
   FEditingCell := False;
 
@@ -464,6 +507,8 @@ var
   row, col: Cardinal;
   content: String;
   cellAddress: String;
+  cell: PCell;
+  oldContent: String;
 begin
   if (FWorkbookSource = nil) or (FWorkbookSource.Workbook = nil) then
     Exit;
@@ -477,6 +522,16 @@ begin
   col := FWorksheetGrid.Col - FWorksheetGrid.FixedCols;
 
   content := FEditCellContent.Text;
+
+  // Получаем текущее содержимое ячейки для сравнения
+  oldContent := '';
+  cell := worksheet.FindCell(row, col);
+  if cell <> nil then
+    oldContent := worksheet.ReadAsText(cell);
+
+  // Проверяем, действительно ли содержимое изменилось
+  if content = oldContent then
+    Exit; // Нет изменений - ничего не делаем
 
   // Сохраняем текущее состояние ячейки для возможности отмены
   cellAddress := GetCellString(row, col);

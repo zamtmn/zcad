@@ -6,10 +6,10 @@ var
   i:int32;
   lr:PzeLayer;
 begin
-  for i:=0 to zcDwgGetLayersCount-1 do begin
-    lr:=zcDwgGetLayer(i);
+  for i:=0 to zeDwgGetLayersCount-1 do begin
+    lr:=zeDwgGetLayer(i);
     if lr<>nil then
-      zcUIMessageBox(zcLayerName(lr));
+      zcUIMessageBox(zeLayerName(lr));
   end;
 end;
 

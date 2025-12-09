@@ -30,10 +30,18 @@ uses
   uzccommand_3dpoly;
 
 implementation
-
 function _SpaceAddPoly_com_CommandStart(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 begin
+        // Initialize operands structure
+  gOperandsStruct.listParam := TParamInfoList.Create;  // Создаем экземпляр TVector / Create TVector instance
+  gOperandsStruct.indexColor := 256;  // ByLayer
+  gOperandsStruct.namelayer := '';
+
+    // Разбираем операнды и заполняем структуру
+  // Parse operands and fill structure
+  ParseOperandsToStruct(operands, gOperandsStruct);
+
   result:=_3DPoly_com_CommandStart(Context,operands);
   p3dplESP:=@AddExtdrToRectangle;
   if assigned(p3dplESP) then
@@ -43,6 +51,7 @@ end;
 
 procedure startup;
 begin
+
   CreateCommandRTEdObjectPlugin(@_SpaceAddPoly_com_CommandStart,@_3DPoly_com_CommandEnd,
     @_3DPoly_com_CommandEnd,nil,@_3DPoly_com_BeforeClick,@_3DPoly_com_AfterClick,
   nil,nil,'SpaceAddPoly',0,0);
@@ -55,12 +64,6 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsInitializeLMId);
-
-    // Initialize operands structure
-  uzvcommand_spaceadd.gOperandsStruct.listParam := TParamInfoList.Create;  // Создаем экземпляр TVector / Create TVector instance
-  uzvcommand_spaceadd.gOperandsStruct.indexColor := 256;  // ByLayer
-  uzvcommand_spaceadd.gOperandsStruct.namelayer := '';
-
 
   startup;
 

@@ -40,6 +40,8 @@ uses
   varmandef,              // Variable manager definitions / Определения менеджера переменных
   uzestyleslayers,
   uzeconsts,
+  uzeentlwpolyline,
+  uzeentpolyline,
   uzvcommand_spaceutils;  // Space utilities with shared structures / Утилиты для команд пространств
 
 
@@ -47,62 +49,10 @@ function AddExtdrToRectangle(
   const AStage: TEntitySetupStage;
   const APEnt: PGDBObjEntity): boolean;
 
-var
-  // Структура уровня модуля для хранения разобранных операндов команды
-  // Module-level structure to store parsed command operands
-  gOperandsStruct: TOperandsStruct;
+
+
 
 implementation
-
-
-
-{**Процедура добавления переменных к примитиву из структуры операндов
-   @param(APEnt - указатель на примитив)
-   @param(operandsStruct - структура с разобранными операндами)}
-procedure AddVariablesFromStruct(
-  APEnt: PGDBObjEntity;
-  const operandsStruct: TOperandsStruct);
-var
-  VarExt: TVariablesExtender;
-  i: integer;
-  vd: vardesk;
-  paramInfo: TParamInfo;
-begin
-  // Получаем расширение переменных
-  // Get variables extension
-  VarExt := APEnt^.GetExtension<TVariablesExtender>;
-  if VarExt = nil then
-    exit;
-
-  // Добавляем все переменные из структуры
-  // Add all variables from structure
-  if operandsStruct.listParam <> nil then
-  for i := 0 to operandsStruct.listParam.Size - 1 do begin
-    paramInfo := operandsStruct.listParam[i];
-
-    // Проверяем существует ли уже переменная
-    // Check if variable already exists
-    if VarExt.entityunit.FindVariable(paramInfo.varname) = nil then begin
-      // Создаем и добавляем переменную
-      // Create and add the variable
-      VarExt.entityunit.setvardesc(
-        vd,
-        paramInfo.varname,
-        paramInfo.username,
-        paramInfo.typename
-      );
-      VarExt.entityunit.InterfaceVariables.createvariable(vd.Name, vd);
-
-      zcUI.TextMessage(
-        'Добавлена переменная / Variable added: ' +
-        paramInfo.varname +
-        ' (' + paramInfo.username + ') : ' +
-        paramInfo.typename,
-        TMWOHistoryOut
-      );
-    end;
-  end;
-end;
 
 {**Функция добавления расширений к прямоугольнику на разных стадиях настройки
    Использует глобальную структуру gOperandsStruct для получения параметров.
@@ -149,6 +99,10 @@ begin
         // Set entity color from structure
         APEnt^.vp.Color := gOperandsStruct.indexColor;
         APEnt^.vp.LineWeight := LnWtByLayer;
+        if  APEnt^.GetObjType = GDBPolyLineID then
+        PGDBObjPolyline(APEnt).Closed:=True;
+        //if  APEnt^.GetObjType = GDBLWPolyLineID then
+        //PGDBObjLWPolyline(APEnt).Closed:=True;
 
         result := true;
       end else
@@ -159,6 +113,9 @@ begin
       begin
         APEnt^.vp.Color := gOperandsStruct.indexColor;
         APEnt^.vp.LineWeight := LnWt200;
+        if  APEnt^.GetObjType = GDBPolyLineID then
+        PGDBObjPolyline(APEnt).Closed:=True;
+        //APEnt^.Closed:=True;
         result:=False;
 
       end;
@@ -169,6 +126,7 @@ begin
         gOperandsStruct.listParam.Clear;
       gOperandsStruct.indexColor := 256;  // ByLayer
       gOperandsStruct.namelayer := '';
+      //APEnt^.vp.LineWeight := LnWtByLayer;
 
 
       // Выделяем созданную полилинию для последующего редактирования в инспекторе
@@ -192,7 +150,13 @@ function SpaceAdd_com(
 begin
   // Вывод сообщения о запуске команды
   // Output message about command launch
-  zcUI.TextMessage('запущена команда spaceadd', TMWOHistoryOut);
+  zcUI.TextMessage('Запущена команда spaceadd', TMWOHistoryOut);
+
+  // Инициализируем структуру операндов
+  // Initialize operands structure
+  gOperandsStruct.listParam := TParamInfoList.Create;  // Создаем экземпляр TVector / Create TVector instance
+  gOperandsStruct.indexColor := 256;  // ByLayer
+  gOperandsStruct.namelayer := '';
 
   // Разбираем операнды и заполняем структуру
   // Parse operands and fill structure
@@ -211,12 +175,6 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsInitializeLMId);
-
-  // Инициализируем структуру операндов
-  // Initialize operands structure
-  gOperandsStruct.listParam := TParamInfoList.Create;  // Создаем экземпляр TVector / Create TVector instance
-  gOperandsStruct.indexColor := 256;  // ByLayer
-  gOperandsStruct.namelayer := '';
 
   CreateZCADCommand(@SpaceAdd_com,'spaceadd',CADWG,0)^.CEndActionAttr:=[CEGUIRePrepare];
 

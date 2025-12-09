@@ -33,6 +33,10 @@ uses
   uzcinterface,           // Interface utilities / Утилиты интерфейса
   uzcdrawings,            // Drawings manager / Менеджер чертежей
   uzestyleslayers,        // Layer management / Управление слоями
+  uzeentity,
+  varmandef,
+  uzeconsts,
+  uzcEnitiesVariablesExtender,
   uzbtypes;
 
 type
@@ -93,7 +97,68 @@ function GetOrCreateLayer(
   const layerName: string;
   colorIndex: Integer): PGDBLayerProp;
 
+{**Процедура добавления переменных к примитиву из структуры операндов
+   @param(APEnt - указатель на примитив)
+   @param(operandsStruct - структура с разобранными операндами)}
+procedure AddVariablesFromStruct(
+  APEnt: PGDBObjEntity;
+  const operandsStruct: TOperandsStruct);
+
+var
+// Структура уровня модуля для хранения разобранных операндов команды
+// Module-level structure to store parsed command operands
+gOperandsStruct: TOperandsStruct;
+
 implementation
+
+
+{**Процедура добавления переменных к примитиву из структуры операндов
+   @param(APEnt - указатель на примитив)
+   @param(operandsStruct - структура с разобранными операндами)}
+procedure AddVariablesFromStruct(
+  APEnt: PGDBObjEntity;
+  const operandsStruct: TOperandsStruct);
+var
+  VarExt: TVariablesExtender;
+  i: integer;
+  vd: vardesk;
+  paramInfo: TParamInfo;
+begin
+  // Получаем расширение переменных
+  // Get variables extension
+  VarExt := APEnt^.GetExtension<TVariablesExtender>;
+  if VarExt = nil then
+    exit;
+
+  // Добавляем все переменные из структуры
+  // Add all variables from structure
+  if operandsStruct.listParam <> nil then
+  for i := 0 to operandsStruct.listParam.Size - 1 do begin
+    paramInfo := operandsStruct.listParam[i];
+
+    // Проверяем существует ли уже переменная
+    // Check if variable already exists
+    if VarExt.entityunit.FindVariable(paramInfo.varname) = nil then begin
+      // Создаем и добавляем переменную
+      // Create and add the variable
+      VarExt.entityunit.setvardesc(
+        vd,
+        paramInfo.varname,
+        paramInfo.username,
+        paramInfo.typename
+      );
+      VarExt.entityunit.InterfaceVariables.createvariable(vd.Name, vd);
+
+      zcUI.TextMessage(
+        'Добавлена переменная / Variable added: ' +
+        paramInfo.varname +
+        ' (' + paramInfo.username + ') : ' +
+        paramInfo.typename,
+        TMWOHistoryOut
+      );
+    end;
+  end;
+end;
 
 {** Функция удаления внешних кавычек из строки}
 function RemoveQuotes(const s: string): string;
@@ -263,7 +328,7 @@ begin
     Result := drawings.GetCurrentDWG^.LayerTable.addlayer(
       layerName,           // name / имя
       colorIndex,          // color / цвет
-      200,                  // line weight / толщина линии
+      LnWt000,                  // line weight / толщина линии
       True,                // on / включен
       False,               // lock / заблокирован
       True,                // print / печатать

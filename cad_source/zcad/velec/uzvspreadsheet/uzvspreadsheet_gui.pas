@@ -94,6 +94,7 @@ type
     FEditingRow: Cardinal;
     FEditingCol: Cardinal;
     FOldCellValue: String;  // Содержимое ячейки до начала редактирования
+    FUndoSavedForCurrentEdit: Boolean;  // Флаг: undo-запись для текущего редактирования уже создана
 
     // Процедуры создания компонентов
     procedure CreateActions;
@@ -153,6 +154,7 @@ begin
   FEditingCell := False;
   FEditingRow := 0;
   FEditingCol := 0;
+  FUndoSavedForCurrentEdit := False;
 
   // Настройка основных параметров формы
   Caption := 'Электронные таблицы / Spreadsheet';
@@ -377,6 +379,7 @@ begin
   FEditingCell := True;
   FEditingRow := row;
   FEditingCol := col;
+  FUndoSavedForCurrentEdit := False;
 
   // Сохраняем текущее значение ячейки для последующего сравнения
   FOldCellValue := '';
@@ -395,6 +398,7 @@ begin
         cellAddress := GetCellString(row, col);
         SpreadsheetUndoManager.BeginChange(row, col,
           'Изменение ячейки ' + cellAddress);
+        FUndoSavedForCurrentEdit := True;
       end;
     end;
   end;
@@ -429,8 +433,9 @@ begin
     end;
   end;
 
-  // Сбрасываем флаг редактирования
+  // Сбрасываем флаги редактирования
   FEditingCell := False;
+  FUndoSavedForCurrentEdit := False;
 
   // Обновляем информацию о ячейке в панели редактирования
   UpdateCellInfo;
@@ -535,10 +540,22 @@ begin
     Exit; // Нет изменений - ничего не делаем
 
   // Сохраняем текущее состояние ячейки для возможности отмены
+  // Только если ещё не создали undo-запись для этой ячейки
+  // Проверяем, редактируем ли мы ту же ячейку, для которой уже сохранили undo
   cellAddress := GetCellString(row, col);
   if SpreadsheetUndoManager <> nil then
-    SpreadsheetUndoManager.BeginChange(row, col,
-      'Изменение ячейки ' + cellAddress);
+  begin
+    // Если это новая ячейка или ещё не сохраняли undo для текущей ячейки
+    if (not FUndoSavedForCurrentEdit) or
+       (row <> FEditingRow) or (col <> FEditingCol) then
+    begin
+      SpreadsheetUndoManager.BeginChange(row, col,
+        'Изменение ячейки ' + cellAddress);
+      FUndoSavedForCurrentEdit := True;
+      FEditingRow := row;
+      FEditingCol := col;
+    end;
+  end;
 
   // Если начинается с "=" - это формула
   if (Length(content) > 0) and (content[1] = '=') then

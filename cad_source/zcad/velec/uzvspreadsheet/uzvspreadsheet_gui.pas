@@ -183,8 +183,9 @@ end;
 { Создание действий и привязка к кнопкам }
 procedure TuzvSpreadsheetForm.CreateActions;
 begin
-  // Создаём объект действий
-  FSpreadsheetActions := TSpreadsheetActions.Create(FActionList, FWorkbookSource);
+  // Создаём объект действий с передачей ссылки на компонент таблицы
+  FSpreadsheetActions := TSpreadsheetActions.Create(FActionList, FWorkbookSource,
+    FWorksheetGrid);
 
   // Привязываем действия к кнопкам панели инструментов
   FBtnNew.Action := FSpreadsheetActions.ActNewBook;

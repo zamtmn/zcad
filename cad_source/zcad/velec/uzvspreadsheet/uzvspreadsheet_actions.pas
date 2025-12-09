@@ -30,7 +30,8 @@ uses
   SysUtils,
   ActnList,
   fpspreadsheet,
-  fpspreadsheetctrls;
+  fpspreadsheetctrls,
+  fpspreadsheetgrid;
 
 type
   { TSpreadsheetActions }
@@ -39,6 +40,7 @@ type
   private
     FActionList: TActionList;
     FWorkbookSource: TsWorkbookSource;
+    FWorksheetGrid: TsWorksheetGrid;
 
     // Действия
     FActNewBook: TAction;
@@ -65,7 +67,7 @@ type
 
   public
     constructor Create(aActionList: TActionList;
-      aWorkbookSource: TsWorkbookSource);
+      aWorkbookSource: TsWorkbookSource; aWorksheetGrid: TsWorksheetGrid);
     destructor Destroy; override;
 
     { Инициализирует все действия и привязывает обработчики }
@@ -111,11 +113,12 @@ uses
 { TSpreadsheetActions }
 
 constructor TSpreadsheetActions.Create(aActionList: TActionList;
-  aWorkbookSource: TsWorkbookSource);
+  aWorkbookSource: TsWorkbookSource; aWorksheetGrid: TsWorksheetGrid);
 begin
   inherited Create;
   FActionList := aActionList;
   FWorkbookSource := aWorkbookSource;
+  FWorksheetGrid := aWorksheetGrid;
   FAutoCalcEnabled := True;
 
   // Инициализируем менеджер отмены/возврата
@@ -196,12 +199,20 @@ end;
 procedure TSpreadsheetActions.OnActNewBookExecute(Sender: TObject);
 begin
   ExecuteNewBook(FWorkbookSource);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
 end;
 
 { Обработчик действия "Открыть книгу" }
 procedure TSpreadsheetActions.OnActOpenBookExecute(Sender: TObject);
 begin
   ExecuteOpenBook(FWorkbookSource);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
 end;
 
 { Обработчик действия "Сохранить книгу" }
@@ -216,6 +227,10 @@ end;
 procedure TSpreadsheetActions.OnActCalcExecute(Sender: TObject);
 begin
   ExecuteCalcFormulas(FWorkbookSource);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
 end;
 
 { Обработчик действия "Автопересчёт" }
@@ -234,12 +249,20 @@ end;
 procedure TSpreadsheetActions.OnActUndoExecute(Sender: TObject);
 begin
   ExecuteUndo(FWorkbookSource);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
 end;
 
 { Обработчик действия "Вернуть" (Вперёд) }
 procedure TSpreadsheetActions.OnActRedoExecute(Sender: TObject);
 begin
   ExecuteRedo(FWorkbookSource);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
 end;
 
 { Обновление состояния кнопки "Отменить" }

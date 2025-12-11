@@ -30,6 +30,7 @@ uses
   SysUtils,
   ActnList,
   fpspreadsheet,
+  uzcimagesmanager,
   fpspreadsheetctrls,
   fpspreadsheetgrid;
 
@@ -144,6 +145,7 @@ begin
   FActNewBook.ActionList := FActionList;
   FActNewBook.Caption := 'Создать';
   FActNewBook.Hint := 'Создать новую книгу';
+  FActNewBook.ImageIndex := ImagesManager.GetImageIndex('new');
   FActNewBook.OnExecute := @OnActNewBookExecute;
 
   // Действие "Открыть книгу"

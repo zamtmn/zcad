@@ -239,6 +239,7 @@ begin
   FBtnNew.Parent := FToolBar;
   FBtnNew.Hint := 'Создать новую книгу';
   FBtnNew.ShowHint := True;
+  FBtnNew.ShowCaption := False;
   FBtnNew.ImageIndex := ImagesManager.GetImageIndex('new');
 
   // Кнопка "Открыть книгу"
@@ -246,6 +247,7 @@ begin
   FBtnOpen.Parent := FToolBar;
   FBtnOpen.Hint := 'Открыть файл книги';
   FBtnOpen.ShowHint := True;
+  FBtnOpen.ShowCaption := False;
   FBtnOpen.ImageIndex := ImagesManager.GetImageIndex('open');
 
   // Кнопка "Сохранить книгу"
@@ -253,7 +255,8 @@ begin
   FBtnSave.Parent := FToolBar;
   FBtnSave.Hint := 'Сохранить книгу в файл';
   FBtnSave.ShowHint := True;
-  FBtnSave.ImageIndex := ImagesManager.GetImageIndex('save');
+  FBtnSave.ShowCaption := False;
+  FBtnSave.ImageIndex := ImagesManager.GetImageIndex('saveas');
 
   // Разделитель 1
   FBtnSeparator1 := TToolButton.Create(FToolBar);
@@ -266,6 +269,7 @@ begin
   FBtnUndo.Parent := FToolBar;
   FBtnUndo.Hint := 'Назад: Отменить последнее изменение';
   FBtnUndo.ShowHint := True;
+  FBtnUndo.ShowCaption := False;
   FBtnUndo.ImageIndex := ImagesManager.GetImageIndex('undo');
 
   // Кнопка "Вперёд" (Redo)
@@ -273,6 +277,7 @@ begin
   FBtnRedo.Parent := FToolBar;
   FBtnRedo.Hint := 'Вперёд: Вернуть отменённое изменение';
   FBtnRedo.ShowHint := True;
+  FBtnRedo.ShowCaption := False;
   FBtnRedo.ImageIndex := ImagesManager.GetImageIndex('redo');
 
   // Разделитель 2
@@ -286,6 +291,7 @@ begin
   FBtnCalc.Parent := FToolBar;
   FBtnCalc.Hint := 'Расчёт: Пересчитать формулы';
   FBtnCalc.ShowHint := True;
+  FBtnCalc.ShowCaption := False;
   FBtnCalc.ImageIndex := ImagesManager.GetImageIndex('velec/spreadsheet_calc');
 
   // Кнопка "Автопересчёт"
@@ -293,6 +299,7 @@ begin
   FBtnAutoCalc.Parent := FToolBar;
   FBtnAutoCalc.Hint := 'Автопересчёт: Включить/выключить автопересчёт формул';
   FBtnAutoCalc.ShowHint := True;
+  FBtnAutoCalc.ShowCaption := False;
   FBtnAutoCalc.ImageIndex := ImagesManager.GetImageIndex('velec/spreadsheet_autocalc');
   FBtnAutoCalc.Style := tbsCheck;
   FBtnAutoCalc.Down := True;

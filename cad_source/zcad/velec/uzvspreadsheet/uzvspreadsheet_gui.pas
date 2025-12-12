@@ -85,6 +85,13 @@ type
     FBtnSeparator2: TToolButton;
     FBtnCalc: TToolButton;
     FBtnAutoCalc: TToolButton;
+    FBtnSeparator3: TToolButton;
+    FBtnAddRowBelow: TToolButton;
+    FBtnAddRowAbove: TToolButton;
+    FBtnAddColumnRight: TToolButton;
+    FBtnAddColumnLeft: TToolButton;
+    FBtnDeleteRow: TToolButton;
+    FBtnDeleteColumn: TToolButton;
 
     // Действия
     FActionList: TActionList;
@@ -198,6 +205,12 @@ begin
   FBtnRedo.Action := FSpreadsheetActions.ActRedo;
   FBtnCalc.Action := FSpreadsheetActions.ActCalc;
   FBtnAutoCalc.Action := FSpreadsheetActions.ActAutoCalc;
+  FBtnAddRowBelow.Action := FSpreadsheetActions.ActAddRowBelow;
+  FBtnAddRowAbove.Action := FSpreadsheetActions.ActAddRowAbove;
+  FBtnAddColumnRight.Action := FSpreadsheetActions.ActAddColumnRight;
+  FBtnAddColumnLeft.Action := FSpreadsheetActions.ActAddColumnLeft;
+  FBtnDeleteRow.Action := FSpreadsheetActions.ActDeleteRow;
+  FBtnDeleteColumn.Action := FSpreadsheetActions.ActDeleteColumn;
 end;
 
 { Создание основных панелей формы }
@@ -296,6 +309,54 @@ begin
   FBtnAutoCalc.ImageIndex := ImagesManager.GetImageIndex('velec/spreadsheet_autocalc');
   FBtnAutoCalc.Style := tbsCheck;
   FBtnAutoCalc.Down := True;
+
+  // Разделитель 3
+  FBtnSeparator3 := TToolButton.Create(FToolBar);
+  FBtnSeparator3.Parent := FToolBar;
+  FBtnSeparator3.Style := tbsSeparator;
+  FBtnSeparator3.Width := 10;
+
+  // Кнопка "Добавить строку под ячейкой"
+  FBtnAddRowBelow := TToolButton.Create(FToolBar);
+  FBtnAddRowBelow.Parent := FToolBar;
+  FBtnAddRowBelow.Hint := 'Добавить строку под выделенной ячейкой';
+  FBtnAddRowBelow.ShowHint := True;
+  FBtnAddRowBelow.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_row_below');
+
+  // Кнопка "Добавить строку над ячейкой"
+  FBtnAddRowAbove := TToolButton.Create(FToolBar);
+  FBtnAddRowAbove.Parent := FToolBar;
+  FBtnAddRowAbove.Hint := 'Добавить строку над выделенной ячейкой';
+  FBtnAddRowAbove.ShowHint := True;
+  FBtnAddRowAbove.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_row_above');
+
+  // Кнопка "Добавить столбец справа от ячейки"
+  FBtnAddColumnRight := TToolButton.Create(FToolBar);
+  FBtnAddColumnRight.Parent := FToolBar;
+  FBtnAddColumnRight.Hint := 'Добавить столбец справа от выделенной ячейки';
+  FBtnAddColumnRight.ShowHint := True;
+  FBtnAddColumnRight.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_column_right');
+
+  // Кнопка "Добавить столбец слева от ячейки"
+  FBtnAddColumnLeft := TToolButton.Create(FToolBar);
+  FBtnAddColumnLeft.Parent := FToolBar;
+  FBtnAddColumnLeft.Hint := 'Добавить столбец слева от выделенной ячейки';
+  FBtnAddColumnLeft.ShowHint := True;
+  FBtnAddColumnLeft.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_column_left');
+
+  // Кнопка "Удалить строку"
+  FBtnDeleteRow := TToolButton.Create(FToolBar);
+  FBtnDeleteRow.Parent := FToolBar;
+  FBtnDeleteRow.Hint := 'Удалить строку, в которой выделена ячейка';
+  FBtnDeleteRow.ShowHint := True;
+  FBtnDeleteRow.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_delete_row');
+
+  // Кнопка "Удалить столбец"
+  FBtnDeleteColumn := TToolButton.Create(FToolBar);
+  FBtnDeleteColumn.Parent := FToolBar;
+  FBtnDeleteColumn.Hint := 'Удалить столбец, в котором выделена ячейка';
+  FBtnDeleteColumn.ShowHint := True;
+  FBtnDeleteColumn.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_delete_column');
 end;
 
 { Создание панели информации о ячейке }

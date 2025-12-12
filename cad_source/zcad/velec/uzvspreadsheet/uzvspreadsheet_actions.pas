@@ -51,6 +51,12 @@ type
     FActAutoCalc: TAction;
     FActUndo: TAction;
     FActRedo: TAction;
+    FActAddRowBelow: TAction;
+    FActAddRowAbove: TAction;
+    FActAddColumnRight: TAction;
+    FActAddColumnLeft: TAction;
+    FActDeleteRow: TAction;
+    FActDeleteColumn: TAction;
 
     // Флаг автопересчёта
     FAutoCalcEnabled: Boolean;
@@ -65,6 +71,12 @@ type
     procedure OnActRedoExecute(Sender: TObject);
     procedure OnActUndoUpdate(Sender: TObject);
     procedure OnActRedoUpdate(Sender: TObject);
+    procedure OnActAddRowBelowExecute(Sender: TObject);
+    procedure OnActAddRowAboveExecute(Sender: TObject);
+    procedure OnActAddColumnRightExecute(Sender: TObject);
+    procedure OnActAddColumnLeftExecute(Sender: TObject);
+    procedure OnActDeleteRowExecute(Sender: TObject);
+    procedure OnActDeleteColumnExecute(Sender: TObject);
 
   public
     constructor Create(aActionList: TActionList;
@@ -95,6 +107,24 @@ type
     { Возвращает действие "Вернуть" (Redo) }
     property ActRedo: TAction read FActRedo;
 
+    { Возвращает действие "Добавить строку под ячейкой" }
+    property ActAddRowBelow: TAction read FActAddRowBelow;
+
+    { Возвращает действие "Добавить строку над ячейкой" }
+    property ActAddRowAbove: TAction read FActAddRowAbove;
+
+    { Возвращает действие "Добавить столбец справа от ячейки" }
+    property ActAddColumnRight: TAction read FActAddColumnRight;
+
+    { Возвращает действие "Добавить столбец слева от ячейки" }
+    property ActAddColumnLeft: TAction read FActAddColumnLeft;
+
+    { Возвращает действие "Удалить строку" }
+    property ActDeleteRow: TAction read FActDeleteRow;
+
+    { Возвращает действие "Удалить столбец" }
+    property ActDeleteColumn: TAction read FActDeleteColumn;
+
     { Возвращает/устанавливает флаг автопересчёта }
     property AutoCalcEnabled: Boolean read FAutoCalcEnabled
       write FAutoCalcEnabled;
@@ -108,6 +138,7 @@ uses
   uzvspreadsheet_cmdsavebook,
   uzvspreadsheet_cmdcalc,
   uzvspreadsheet_cmdundoredo,
+  uzvspreadsheet_cmdrowcolumns,
   uzclog,
   uzcinterface;
 
@@ -200,6 +231,54 @@ begin
   FActRedo.OnExecute := @OnActRedoExecute;
   FActRedo.OnUpdate := @OnActRedoUpdate;
 
+  // Действие "Добавить строку под ячейкой"
+  FActAddRowBelow := TAction.Create(FActionList);
+  FActAddRowBelow.ActionList := FActionList;
+  FActAddRowBelow.Caption := 'Добавить строку снизу';
+  FActAddRowBelow.Hint := 'Добавить строку под выделенной ячейкой';
+  FActAddRowBelow.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_row_below');
+  FActAddRowBelow.OnExecute := @OnActAddRowBelowExecute;
+
+  // Действие "Добавить строку над ячейкой"
+  FActAddRowAbove := TAction.Create(FActionList);
+  FActAddRowAbove.ActionList := FActionList;
+  FActAddRowAbove.Caption := 'Добавить строку сверху';
+  FActAddRowAbove.Hint := 'Добавить строку над выделенной ячейкой';
+  FActAddRowAbove.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_row_above');
+  FActAddRowAbove.OnExecute := @OnActAddRowAboveExecute;
+
+  // Действие "Добавить столбец справа"
+  FActAddColumnRight := TAction.Create(FActionList);
+  FActAddColumnRight.ActionList := FActionList;
+  FActAddColumnRight.Caption := 'Добавить столбец справа';
+  FActAddColumnRight.Hint := 'Добавить столбец справа от выделенной ячейки';
+  FActAddColumnRight.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_column_right');
+  FActAddColumnRight.OnExecute := @OnActAddColumnRightExecute;
+
+  // Действие "Добавить столбец слева"
+  FActAddColumnLeft := TAction.Create(FActionList);
+  FActAddColumnLeft.ActionList := FActionList;
+  FActAddColumnLeft.Caption := 'Добавить столбец слева';
+  FActAddColumnLeft.Hint := 'Добавить столбец слева от выделенной ячейки';
+  FActAddColumnLeft.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_column_left');
+  FActAddColumnLeft.OnExecute := @OnActAddColumnLeftExecute;
+
+  // Действие "Удалить строку"
+  FActDeleteRow := TAction.Create(FActionList);
+  FActDeleteRow.ActionList := FActionList;
+  FActDeleteRow.Caption := 'Удалить строку';
+  FActDeleteRow.Hint := 'Удалить строку, в которой выделена ячейка';
+  FActDeleteRow.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_delete_row');
+  FActDeleteRow.OnExecute := @OnActDeleteRowExecute;
+
+  // Действие "Удалить столбец"
+  FActDeleteColumn := TAction.Create(FActionList);
+  FActDeleteColumn.ActionList := FActionList;
+  FActDeleteColumn.Caption := 'Удалить столбец';
+  FActDeleteColumn.Hint := 'Удалить столбец, в котором выделена ячейка';
+  FActDeleteColumn.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_delete_column');
+  FActDeleteColumn.OnExecute := @OnActDeleteColumnExecute;
+
   zcUI.TextMessage('Действия электронных таблиц инициализированы', TMWOHistoryOut);
 end;
 
@@ -283,6 +362,66 @@ end;
 procedure TSpreadsheetActions.OnActRedoUpdate(Sender: TObject);
 begin
   FActRedo.Enabled := CanRedo;
+end;
+
+{ Обработчик действия "Добавить строку под ячейкой" }
+procedure TSpreadsheetActions.OnActAddRowBelowExecute(Sender: TObject);
+begin
+  ExecuteAddRowBelow(FWorkbookSource, FWorksheetGrid);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
+end;
+
+{ Обработчик действия "Добавить строку над ячейкой" }
+procedure TSpreadsheetActions.OnActAddRowAboveExecute(Sender: TObject);
+begin
+  ExecuteAddRowAbove(FWorkbookSource, FWorksheetGrid);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
+end;
+
+{ Обработчик действия "Добавить столбец справа" }
+procedure TSpreadsheetActions.OnActAddColumnRightExecute(Sender: TObject);
+begin
+  ExecuteAddColumnRight(FWorkbookSource, FWorksheetGrid);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
+end;
+
+{ Обработчик действия "Добавить столбец слева" }
+procedure TSpreadsheetActions.OnActAddColumnLeftExecute(Sender: TObject);
+begin
+  ExecuteAddColumnLeft(FWorkbookSource, FWorksheetGrid);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
+end;
+
+{ Обработчик действия "Удалить строку" }
+procedure TSpreadsheetActions.OnActDeleteRowExecute(Sender: TObject);
+begin
+  ExecuteDeleteRow(FWorkbookSource, FWorksheetGrid);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
+end;
+
+{ Обработчик действия "Удалить столбец" }
+procedure TSpreadsheetActions.OnActDeleteColumnExecute(Sender: TObject);
+begin
+  ExecuteDeleteColumn(FWorkbookSource, FWorksheetGrid);
+
+  // Принудительное обновление отображения таблицы
+  if FWorksheetGrid <> nil then
+    FWorksheetGrid.Invalidate;
 end;
 
 end.

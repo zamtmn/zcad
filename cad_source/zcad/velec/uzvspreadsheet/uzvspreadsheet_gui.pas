@@ -70,7 +70,7 @@ type
     FEditCellContent: TEdit;
 
     // Компоненты fpspreadsheet
-    FWorkbookSource: TsWorkbookSource;
+
     FWorksheetGrid: TsWorksheetGrid;
     FWorksheetTabControl: TsWorkbookTabControl;
 
@@ -126,6 +126,7 @@ type
     procedure DoDestroy; override;
 
   public
+    FWorkbookSource: TsWorkbookSource;
     { Возвращает источник данных книги }
     property WorkbookSource: TsWorkbookSource read FWorkbookSource;
 

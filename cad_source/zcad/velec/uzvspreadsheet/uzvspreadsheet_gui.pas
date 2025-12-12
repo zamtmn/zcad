@@ -239,21 +239,20 @@ begin
   FBtnNew.Parent := FToolBar;
   FBtnNew.Hint := 'Создать новую книгу';
   FBtnNew.ShowHint := True;
-  FBtnNew.ImageIndex := ImagesManager.GetImageIndex('new');
 
   // Кнопка "Открыть книгу"
   FBtnOpen := TToolButton.Create(FToolBar);
   FBtnOpen.Parent := FToolBar;
   FBtnOpen.Hint := 'Открыть файл книги';
   FBtnOpen.ShowHint := True;
-  FBtnOpen.ImageIndex := ImagesManager.GetImageIndex('open');
+
 
   // Кнопка "Сохранить книгу"
   FBtnSave := TToolButton.Create(FToolBar);
   FBtnSave.Parent := FToolBar;
   FBtnSave.Hint := 'Сохранить книгу в файл';
   FBtnSave.ShowHint := True;
-  FBtnSave.ImageIndex := ImagesManager.GetImageIndex('save');
+
 
   // Разделитель 1
   FBtnSeparator1 := TToolButton.Create(FToolBar);
@@ -266,14 +265,14 @@ begin
   FBtnUndo.Parent := FToolBar;
   FBtnUndo.Hint := 'Назад: Отменить последнее изменение';
   FBtnUndo.ShowHint := True;
-  FBtnUndo.ImageIndex := ImagesManager.GetImageIndex('undo');
+
 
   // Кнопка "Вперёд" (Redo)
   FBtnRedo := TToolButton.Create(FToolBar);
   FBtnRedo.Parent := FToolBar;
   FBtnRedo.Hint := 'Вперёд: Вернуть отменённое изменение';
   FBtnRedo.ShowHint := True;
-  FBtnRedo.ImageIndex := ImagesManager.GetImageIndex('redo');
+
 
   // Разделитель 2
   FBtnSeparator2 := TToolButton.Create(FToolBar);
@@ -286,14 +285,12 @@ begin
   FBtnCalc.Parent := FToolBar;
   FBtnCalc.Hint := 'Расчёт: Пересчитать формулы';
   FBtnCalc.ShowHint := True;
-  FBtnCalc.ImageIndex := ImagesManager.GetImageIndex('velec/spreadsheet_calc');
 
   // Кнопка "Автопересчёт"
   FBtnAutoCalc := TToolButton.Create(FToolBar);
   FBtnAutoCalc.Parent := FToolBar;
   FBtnAutoCalc.Hint := 'Автопересчёт: Включить/выключить автопересчёт формул';
   FBtnAutoCalc.ShowHint := True;
-  FBtnAutoCalc.ImageIndex := ImagesManager.GetImageIndex('velec/spreadsheet_autocalc');
   FBtnAutoCalc.Style := tbsCheck;
   FBtnAutoCalc.Down := True;
 end;

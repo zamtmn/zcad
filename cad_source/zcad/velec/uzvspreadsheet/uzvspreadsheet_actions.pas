@@ -153,6 +153,7 @@ begin
   FActOpenBook.ActionList := FActionList;
   FActOpenBook.Caption := 'Открыть';
   FActOpenBook.Hint := 'Открыть файл книги';
+  FActOpenBook.ImageIndex := ImagesManager.GetImageIndex('open');
   FActOpenBook.OnExecute := @OnActOpenBookExecute;
 
   // Действие "Сохранить книгу"
@@ -160,6 +161,7 @@ begin
   FActSaveBook.ActionList := FActionList;
   FActSaveBook.Caption := 'Сохранить';
   FActSaveBook.Hint := 'Сохранить книгу в файл';
+  FActSaveBook.ImageIndex := ImagesManager.GetImageIndex('saveas');
   FActSaveBook.OnExecute := @OnActSaveBookExecute;
 
   // Действие "Пересчитать формулы"
@@ -167,6 +169,7 @@ begin
   FActCalc.ActionList := FActionList;
   FActCalc.Caption := 'Расчёт';
   FActCalc.Hint := 'Пересчитать все формулы';
+  FActCalc.ImageIndex := ImagesManager.GetImageIndex('spreadsheet_calc');
   FActCalc.OnExecute := @OnActCalcExecute;
 
   // Действие "Автопересчёт"
@@ -174,6 +177,7 @@ begin
   FActAutoCalc.ActionList := FActionList;
   FActAutoCalc.Caption := 'Автопересчёт';
   FActAutoCalc.Hint := 'Включить/выключить автопересчёт формул';
+  FActAutoCalc.ImageIndex := ImagesManager.GetImageIndex('spreadsheet_autocalc');
   FActAutoCalc.OnExecute := @OnActAutoCalcExecute;
 
   // Действие "Отменить" (Назад)
@@ -181,6 +185,7 @@ begin
   FActUndo.ActionList := FActionList;
   FActUndo.Caption := 'Назад';
   FActUndo.Hint := 'Отменить последнее изменение (Ctrl+Z)';
+  FActUndo.ImageIndex := ImagesManager.GetImageIndex('undo');
   FActUndo.ShortCut := 16474; // Ctrl+Z
   FActUndo.OnExecute := @OnActUndoExecute;
   FActUndo.OnUpdate := @OnActUndoUpdate;
@@ -190,6 +195,7 @@ begin
   FActRedo.ActionList := FActionList;
   FActRedo.Caption := 'Вперёд';
   FActRedo.Hint := 'Вернуть отменённое изменение (Ctrl+Y)';
+  FActRedo.ImageIndex := ImagesManager.GetImageIndex('redo');
   FActRedo.ShortCut := 16473; // Ctrl+Y
   FActRedo.OnExecute := @OnActRedoExecute;
   FActRedo.OnUpdate := @OnActRedoUpdate;

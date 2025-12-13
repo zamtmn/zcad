@@ -32,6 +32,8 @@ uses
   fpspreadsheet,
   uzcimagesmanager,
   fpspreadsheetctrls,
+  Dialogs,
+  fpsTypes,
   fpspreadsheetgrid;
 
 type
@@ -145,6 +147,7 @@ uses
   uzvspreadsheet_cmdundoredo,
   uzvspreadsheet_cmdrowcolumns,
   uzvspreadsheet_cmdfillspaceroom,
+  uzvspreadsheet_gui,
   uzclog,
   uzcinterface;
 

@@ -30,10 +30,13 @@ uses
   Classes,
   Generics.Collections,
   uzclog,
+  Dialogs,
   uzcinterface,
   uzcdrawings,
   uzeentity,
   uzeentpolyline,
+  gzctnrVectorTypes,
+  uzeconsts,
   uzcenitiesvariablesextender,
   varmandef;
 
@@ -102,8 +105,16 @@ begin
 
   pvd := VarExt.entityunit.FindVariable(VarName);
   if pvd <> nil then
-    pvd^.data.PTD^.SetValueFromString(Value, pvd^.data.Addr.Instance);
+     pstring(pvd^.data.Addr.Instance)^ := Value;
+    //pvd^.data.PTD^.SetValueFromString(Value, pvd^.data.Addr.Instance);
 end;
+
+//VarDesc := VarExt.entityunit.FindVariable(VarName);
+//if VarDesc <> nil then
+//begin
+//  try
+//    pstring(VarDesc^.data.Addr.Instance)^ := Value;
+
 
 { Основная процедура заполнения пространств из таблицы }
 procedure FillSpacesFromTable(RoomList: TRoomInfoList);

@@ -131,8 +131,8 @@ begin
 
       // Выделяем созданную полилинию для последующего редактирования в инспекторе
       // Select created polyline for subsequent editing in inspector
-      //if APEnt <> nil then
-      //   APEnt^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount, drawings.GetCurrentDWG^.Selector);
+      if APEnt <> nil then
+         APEnt^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount, drawings.GetCurrentDWG^.Selector);
 
       result := False;
     end;

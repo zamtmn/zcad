@@ -77,9 +77,6 @@ procedure uzvrtrestoretable_ShowDialog(aWorkbook: TsWorkbook);
 // Возвращает True при успешном сохранении
 function uzvrtrestoretable_SaveAsXLSX(aWorkbook: TsWorkbook): Boolean;
 
-// Открывает книгу во внутреннем редакторе uzvspreadsheet
-procedure VRestoreTable_OpenInSpreadsheet(aWorkbook: TsWorkbook);
-
 implementation
 
 uses
@@ -182,141 +179,6 @@ begin
   end;
 end;
 
-// Получает или создает экземпляр формы электронных таблиц
-function GetOrCreateSpreadsheetForm(
-  formInfo: PTFormInfoData
-): TuzvSpreadsheetForm;
-begin
-  Result := nil;
-
-  // Проверяем, существует ли уже экземпляр формы
-  if (formInfo^.PInstanceVariable <> nil) and
-     (TuzvSpreadsheetForm(formInfo^.PInstanceVariable^) <> nil) then
-  begin
-    // Используем существующую форму
-    Result := TuzvSpreadsheetForm(formInfo^.PInstanceVariable^);
-    Exit;
-  end;
-
-  // Создаем новый экземпляр формы
-  Result := TuzvSpreadsheetForm(
-    ZCADGUIManager.CreateZCADFormInstance(formInfo^)
-  );
-  Result.Create(nil);
-
-  // Сохраняем ссылку на экземпляр
-  if formInfo^.PInstanceVariable <> nil then
-    TuzvSpreadsheetForm(formInfo^.PInstanceVariable^) := Result;
-
-  // Вызываем процедуру настройки, если она определена
-  if Assigned(formInfo^.SetupProc) then
-    formInfo^.SetupProc(Result);
-end;
-
-// Загружает книгу в WorkbookSource формы
-function LoadWorkbookIntoForm(
-  spreadsheetForm: TuzvSpreadsheetForm;
-  aWorkbook: TsWorkbook
-): Boolean;
-begin
-  Result := False;
-
-  if spreadsheetForm.WorkbookSource = nil then
-  begin
-    zcUI.TextMessage(
-      RSVRestoreDialogError + ' источник данных не инициализирован',
-      TMWOHistoryOut
-    );
-    Exit;
-  end;
-
-  // Освобождаем текущую книгу, если она есть
-  //if spreadsheetForm.WorkbookSource.Workbook <> nil then
-  //begin
-  //  spreadsheetForm.WorkbookSource.Workbook.Free;
-  //  spreadsheetForm.WorkbookSource.Workbook := nil;
-  //end;
-  //
-  //// Устанавливаем новую книгу
-  //spreadsheetForm.WorkbookSource.Workbook := aWorkbook;
-  //
-  // Обновляем отображение
-  spreadsheetForm.UpdateCellInfo;
-
-  zcUI.TextMessage(
-    'Книга открыта в редакторе электронных таблиц',
-    TMWOHistoryOut
-  );
-
-  programlog.LogOutFormatStr(
-    'Книга загружена в редактор uzvspreadsheet',
-    [],
-    LM_Info
-  );
-
-  Result := True;
-end;
-
-// Открывает книгу во внутреннем редакторе uzvspreadsheet
-procedure VRestoreTable_OpenInSpreadsheet(aWorkbook: TsWorkbook);
-var
-  formInfo: PTFormInfoData;
-  spreadsheetForm: TuzvSpreadsheetForm;
-begin
-  if aWorkbook = nil then
-  begin
-    zcUI.TextMessage(
-      RSVRestoreDialogError + ' книга не инициализирована',
-      TMWOHistoryOut
-    );
-    Exit;
-  end;
-
-  try
-    // Получаем информацию о форме из менеджера
-    if not ZCADGUIManager.GetZCADFormInfo('uzvspreadsheet_gui', formInfo) then
-    begin
-      zcUI.TextMessage(
-        RSVRestoreDialogError + ' форма электронных таблиц не зарегистрирована',
-        TMWOHistoryOut
-      );
-      programlog.LogOutFormatStr(
-        'Ошибка: форма uzvspreadsheet_gui не найдена в ZCADGUIManager',
-        [],
-        LM_Error
-      );
-      Exit;
-    end;
-
-    // Получаем или создаем форму
-    spreadsheetForm := GetOrCreateSpreadsheetForm(formInfo);
-    if spreadsheetForm = nil then
-      Exit;
-
-    // Загружаем книгу в форму
-    if not LoadWorkbookIntoForm(spreadsheetForm, aWorkbook) then
-      Exit;
-
-    // Показываем форму
-    spreadsheetForm.Show;
-
-  except
-    on E: Exception do
-    begin
-      zcUI.TextMessage(
-        RSVRestoreDialogError + ' при открытии редактора: ' + E.Message,
-        TMWOHistoryOut
-      );
-
-      programlog.LogOutFormatStr(
-        'Ошибка открытия редактора uzvspreadsheet: %s',
-        [E.Message],
-        LM_Error
-      );
-    end;
-  end;
-end;
-
 // Показывает консольный диалог выбора действия с книгой
 procedure uzvrtrestoretable_ShowDialog(aWorkbook: TsWorkbook);
 type
@@ -371,8 +233,8 @@ begin
               LM_Info
             );
             // Показать инспектор объектов
-            commandmanager.executecommand('Show(uzvspreadsheet_gui)', drawings.GetCurrentDWG, drawings.GetCurrentOGLWParam);
-
+            //commandmanager.executecommand('Show(uzvspreadsheet_gui)', drawings.GetCurrentDWG, drawings.GetCurrentOGLWParam);
+            zcUI.ShowForm('uzvspreadsheet_gui');
             uzvspreadsheet_cmdopenbook.LoadBookFromFileTsWorkbook(aWorkbook);
             Break;
           end;

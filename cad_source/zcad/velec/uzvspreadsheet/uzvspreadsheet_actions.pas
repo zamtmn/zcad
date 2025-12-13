@@ -57,6 +57,7 @@ type
     FActAddColumnLeft: TAction;
     FActDeleteRow: TAction;
     FActDeleteColumn: TAction;
+    FActFillSpaceRoom: TAction;
 
     // Флаг автопересчёта
     FAutoCalcEnabled: Boolean;
@@ -77,6 +78,7 @@ type
     procedure OnActAddColumnLeftExecute(Sender: TObject);
     procedure OnActDeleteRowExecute(Sender: TObject);
     procedure OnActDeleteColumnExecute(Sender: TObject);
+    procedure OnActFillSpaceRoomExecute(Sender: TObject);
 
   public
     constructor Create(aActionList: TActionList;
@@ -125,6 +127,9 @@ type
     { Возвращает действие "Удалить столбец" }
     property ActDeleteColumn: TAction read FActDeleteColumn;
 
+    { Возвращает действие "Заполнить пространства помещений" }
+    property ActFillSpaceRoom: TAction read FActFillSpaceRoom;
+
     { Возвращает/устанавливает флаг автопересчёта }
     property AutoCalcEnabled: Boolean read FAutoCalcEnabled
       write FAutoCalcEnabled;
@@ -139,6 +144,7 @@ uses
   uzvspreadsheet_cmdcalc,
   uzvspreadsheet_cmdundoredo,
   uzvspreadsheet_cmdrowcolumns,
+  uzvspreadsheet_cmdfillspaceroom,
   uzclog,
   uzcinterface;
 
@@ -278,6 +284,14 @@ begin
   FActDeleteColumn.Hint := 'Удалить столбец, в котором выделена ячейка';
   FActDeleteColumn.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_delete_column');
   FActDeleteColumn.OnExecute := @OnActDeleteColumnExecute;
+
+  // Действие "Заполнить пространства помещений"
+  FActFillSpaceRoom := TAction.Create(FActionList);
+  FActFillSpaceRoom.ActionList := FActionList;
+  FActFillSpaceRoom.Caption := 'Заполнить пространства';
+  FActFillSpaceRoom.Hint := 'Заполнить пространства помещений из таблицы';
+  FActFillSpaceRoom.ImageIndex := ImagesManager.GetImageIndex('velec/space_room');
+  FActFillSpaceRoom.OnExecute := @OnActFillSpaceRoomExecute;
 
   zcUI.TextMessage('Действия электронных таблиц инициализированы', TMWOHistoryOut);
 end;
@@ -422,6 +436,101 @@ begin
   // Принудительное обновление отображения таблицы
   if FWorksheetGrid <> nil then
     FWorksheetGrid.Invalidate;
+end;
+
+{ Обработчик действия "Заполнить пространства помещений" }
+procedure TSpreadsheetActions.OnActFillSpaceRoomExecute(Sender: TObject);
+var
+  StartRow, EndRow, StartCol, EndCol: Integer;
+  RoomList: TRoomInfoList;
+  Room: TRoomInfo;
+  worksheet: TsWorksheet;
+  row, col: Integer;
+  ColCount: Integer;
+  cell: PCell;
+begin
+  // Проверка наличия рабочей книги
+  if (FWorkbookSource = nil) or (FWorkbookSource.Workbook = nil) then
+  begin
+    ShowMessage('Нет открытой книги');
+    Exit;
+  end;
+
+  worksheet := FWorkbookSource.Workbook.ActiveWorksheet;
+  if worksheet = nil then
+  begin
+    ShowMessage('Нет активного листа');
+    Exit;
+  end;
+
+  // Получаем выделенный диапазон
+  if not uzvSpreadsheetForm.GetSelectedRange(StartRow, EndRow, StartCol,
+    EndCol) then
+  begin
+    ShowMessage('Не удалось определить выделенный диапазон');
+    Exit;
+  end;
+
+  // Проверка минимального количества колонок
+  ColCount := EndCol - StartCol + 1;
+  if ColCount < 2 then
+  begin
+    ShowMessage('Минимум должно быть выделено 2-е колонки');
+    Exit;
+  end;
+
+  programlog.LogOutFormatStr(
+    'Заполнение пространств: выделено строк %d, колонок %d',
+    [EndRow - StartRow + 1, ColCount], LM_Info);
+
+  // Создаем список помещений
+  RoomList := TRoomInfoList.Create;
+  try
+    // Обрабатываем каждую строку выделенного диапазона
+    for row := StartRow to EndRow do
+    begin
+      Room.RoomPos := '';
+      Room.RoomName := '';
+      Room.RoomArea := '';
+      Room.RoomCategory := '';
+
+      // Читаем данные из колонок согласно таблице из ТЗ
+      for col := StartCol to EndCol do
+      begin
+        cell := worksheet.FindCell(row, col);
+        case col - StartCol of
+          0: if cell <> nil then
+               Room.RoomPos := worksheet.ReadAsText(cell);
+          1: if cell <> nil then
+               Room.RoomName := worksheet.ReadAsText(cell);
+          2: if cell <> nil then
+               Room.RoomArea := worksheet.ReadAsText(cell);
+          3: if cell <> nil then
+               Room.RoomCategory := worksheet.ReadAsText(cell);
+        end;
+      end;
+
+      // Добавляем в список только если RoomPos не пустой
+      if Room.RoomPos <> '' then
+        RoomList.Add(Room);
+    end;
+
+    // Проверка на пустой список
+    if RoomList.Count = 0 then
+    begin
+      ShowMessage('Нет данных для заполнения пространств');
+      Exit;
+    end;
+
+    programlog.LogOutFormatStr('Подготовлено %d записей для обработки',
+      [RoomList.Count], LM_Info);
+
+    // Вызываем процедуру заполнения пространств
+    FillSpacesFromTable(RoomList);
+
+  finally
+    RoomList.Free;
+  end;
 end;
 
 end.

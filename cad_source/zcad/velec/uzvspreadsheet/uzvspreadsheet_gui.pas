@@ -92,6 +92,8 @@ type
     FBtnAddColumnLeft: TToolButton;
     FBtnDeleteRow: TToolButton;
     FBtnDeleteColumn: TToolButton;
+    FBtnSeparator4: TToolButton;
+    FBtnFillSpaceRoom: TToolButton;
 
     // Действия
     FActionList: TActionList;
@@ -141,6 +143,10 @@ type
 
     { Устанавливает содержимое ячейки из поля редактирования }
     procedure ApplyCellContent;
+
+    { Получает диапазон выделенных ячеек в таблице }
+    function GetSelectedRange(out StartRow, EndRow, StartCol,
+      EndCol: Integer): Boolean;
   end;
 
 var
@@ -212,6 +218,7 @@ begin
   FBtnAddColumnLeft.Action := FSpreadsheetActions.ActAddColumnLeft;
   FBtnDeleteRow.Action := FSpreadsheetActions.ActDeleteRow;
   FBtnDeleteColumn.Action := FSpreadsheetActions.ActDeleteColumn;
+  FBtnFillSpaceRoom.Action := FSpreadsheetActions.ActFillSpaceRoom;
 end;
 
 { Создание основных панелей формы }
@@ -355,6 +362,19 @@ begin
   FBtnDeleteColumn.Hint := 'Удалить столбец, в котором выделена ячейка';
   FBtnDeleteColumn.ShowHint := True;
   FBtnDeleteColumn.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_delete_column');
+
+  // Разделитель 4
+  FBtnSeparator4 := TToolButton.Create(FToolBar);
+  FBtnSeparator4.Parent := FToolBar;
+  FBtnSeparator4.Style := tbsSeparator;
+  FBtnSeparator4.Width := 10;
+
+  // Кнопка "Заполнить пространства помещений"
+  FBtnFillSpaceRoom := TToolButton.Create(FToolBar);
+  FBtnFillSpaceRoom.Parent := FToolBar;
+  FBtnFillSpaceRoom.Hint := 'Заполнить пространства помещений из таблицы';
+  FBtnFillSpaceRoom.ShowHint := True;
+  FBtnFillSpaceRoom.ImageIndex := ImagesManager.GetImageIndex('velec/space_room');
 end;
 
 { Создание панели информации о ячейке }
@@ -623,6 +643,36 @@ begin
     worksheet.WriteFormula(row, col, Copy(content, 2, Length(content) - 1))
   else
     worksheet.WriteText(row, col, content);
+end;
+
+{ Получает диапазон выделенных ячеек в таблице }
+function TuzvSpreadsheetForm.GetSelectedRange(out StartRow, EndRow, StartCol,
+  EndCol: Integer): Boolean;
+var
+  Selection: TGridRect;
+begin
+  Result := False;
+  StartRow := 0;
+  EndRow := 0;
+  StartCol := 0;
+  EndCol := 0;
+
+  if FWorksheetGrid = nil then
+    Exit;
+
+  // Получаем выделенный диапазон из компонента таблицы
+  Selection := FWorksheetGrid.Selection;
+
+  // Преобразуем координаты с учётом фиксированных строк и колонок
+  StartRow := Selection.Top - FWorksheetGrid.FixedRows;
+  EndRow := Selection.Bottom - FWorksheetGrid.FixedRows;
+  StartCol := Selection.Left - FWorksheetGrid.FixedCols;
+  EndCol := Selection.Right - FWorksheetGrid.FixedCols;
+
+  // Проверяем валидность диапазона
+  if (StartRow >= 0) and (EndRow >= StartRow) and
+     (StartCol >= 0) and (EndCol >= StartCol) then
+    Result := True;
 end;
 
 end.

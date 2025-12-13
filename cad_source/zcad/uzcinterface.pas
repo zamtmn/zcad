@@ -22,7 +22,9 @@ unit uzcinterface;
 interface
 
 uses
-  Controls,uzcstrconsts,uzedimensionaltypes,gzctnrSTL,zeundostack,varmandef,
+  Controls,
+  AnchorDocking,
+  uzcstrconsts,uzedimensionaltypes,gzctnrSTL,zeundostack,varmandef,
   uzcuilcl2zc,uzcuitypes,Forms,Classes,LCLType,LCLProc,SysUtils,uzbHandles,
   uzbSets;
 
@@ -204,6 +206,8 @@ type
     procedure Do_KeyDown(Sender:TObject;var Key:word;Shift:TShiftState);
     procedure Do_SetNormalFocus;
     function GetPriorityFocus:TWinControl;
+
+    function ShowForm(AFormName:string):boolean;
 
 
     procedure TextMessage(msg:string;opt:TTextMessageWriteOptionsSet);
@@ -706,6 +710,23 @@ function TZCUIManager.GetPriorityFocus:TWinControl;
 begin
   Result:=Do_TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(
     getfocusedcontrol);
+end;
+
+function TZCUIManager.ShowForm(AFormName:string):boolean;
+var
+  ctrl:TControl;
+begin
+  Result:=true;//TODO надо возвращать фактический результат есть форма или нет
+  ctrl:=DockMaster.FindControl(AFormName);
+  if (ctrl<>nil)and(ctrl.IsVisible) then begin
+    DockMaster.ManualFloat(ctrl);
+    DockMaster.GetAnchorSite(ctrl).Close;
+  end else begin
+    if IsValidIdent(AFormName) then
+      DockMaster.ShowControl(AFormName,True)
+    else
+      zcUI.TextMessage('Show: invalid identificator!',TMWOShowError);
+  end;
 end;
 
 procedure TZCUIManager.RegisterGetStateFunc(fnc:TGetStateFunc);

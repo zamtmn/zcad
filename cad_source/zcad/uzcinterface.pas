@@ -725,7 +725,7 @@ begin
     if IsValidIdent(AFormName) then
       DockMaster.ShowControl(AFormName,True)
     else
-      zcUI.TextMessage('Show: invalid identificator!',TMWOShowError);
+      TextMessage('Show: invalid identificator!',TMWOShowError);
   end;
 end;
 

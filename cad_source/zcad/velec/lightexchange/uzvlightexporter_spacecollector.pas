@@ -65,6 +65,7 @@ var
   SpaceRoom, SpaceRoomPos, SpaceRoomName: string;
   SpaceFloor, SpaceBuilding: string;
   FloorHeight: Double;
+  FloorScale: Double;
   BuildingNode: TBuildingNode;
   FloorNode: TFloorNode;
   RoomNode: TRoomNode;
@@ -112,14 +113,16 @@ begin
   else if SpaceFloor <> '' then
   begin
     FloorHeight := GetDoubleVariable(VarExt, VAR_FLOOR_HEIGHT, DEFAULT_FLOOR_HEIGHT);
+    FloorScale := GetDoubleVariable(VarExt, VAR_FLOOR_SCALE, DEFAULT_FLOOR_SCALE);
     FloorNode := TFloorNode.Create(SpaceFloor);
     FloorNode.CeilingHeight := FloorHeight;
+    FloorNode.FloorScale := FloorScale;
     FloorNode.FloorPolyline := PolylinePtr;
     SpacesList.Add(FloorNode);
     Inc(SpaceCount);
     programlog.LogOutFormatStr(
-      'Собран этаж: %s (высота: %.1f м)',
-      [SpaceFloor, FloorHeight],
+      'Собран этаж: %s (высота: %.1f м, масштаб: %.3f)',
+      [SpaceFloor, FloorHeight, FloorScale],
       LM_Info
     );
   end
@@ -280,7 +283,8 @@ begin
   zcUI.TextMessage(
     '  [' + IntToStr(Index) + '] Этаж: ' + FloorNode.Name +
     ' (высота потолка: ' +
-    FormatFloat('0.0', FloorNode.CeilingHeight) + ' м)',
+    FormatFloat('0.0', FloorNode.CeilingHeight) + ' м, масштаб: ' +
+    FormatFloat('0.###', FloorNode.FloorScale) + ')',
     TMWOHistoryOut
   );
 end;

@@ -20,7 +20,7 @@ begin
           NeedStone:=false; 
         end;
         //add line to drawing
-        pe:=zcEntLine(p1,p2);
+        pe:=zeEntLine(p1,p2);
         //continue from last point
         p1:=p2;
       end else

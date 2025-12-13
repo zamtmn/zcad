@@ -1,0 +1,26 @@
+//запускаем скрипт командой:
+//LPCSRun(interactive)
+
+procedure DoSplineTest;
+var
+  pe:PzeEntity;
+  p:TzePoint3d;
+begin
+  {case zcGetEntity('Select entity',pe) of
+    IRCancel:zcUIHistoryOut('IRCancel');
+    IRNormal:zcUIHistoryOut('IRNormal');
+    IRId:zcUIHistoryOut('IRId');
+    IRInput:zcUIHistoryOut('IRInput');
+  end;}
+  case zcGetPointWithLineFromBase('Pick point',zePt3d(0,0,0),p) of
+    IRCancel:zcUIHistoryOut('IRCancel');
+    IRNormal:zcUIHistoryOut('IRNormal');
+    IRId:zcUIHistoryOut('IRId');
+    IRInput:zcUIHistoryOut('IRInput');
+  end;
+
+end;
+
+begin
+  DoSplineTest;
+end.

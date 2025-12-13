@@ -24,7 +24,7 @@ interface
 
 uses
   SysUtils,
-  Controls,AnchorDocking,
+  Controls,
   uzcLog,
   uzcinterface,
   uzcstrconsts,
@@ -37,18 +37,9 @@ function Show_com(const Context:TZCADCommandContext;
 var
   ctrl:TControl;
 begin
-  if Operands<>'' then begin
-    ctrl:=DockMaster.FindControl(Operands);
-    if (ctrl<>nil)and(ctrl.IsVisible) then begin
-      DockMaster.ManualFloat(ctrl);
-      DockMaster.GetAnchorSite(ctrl).Close;
-    end else begin
-      if IsValidIdent(Operands) then
-        DockMaster.ShowControl(Operands,True)
-      else
-        zcUI.TextMessage('Show: invalid identificator!',TMWOShowError);
-    end;
-  end else
+  if Operands<>'' then
+    zcUI.ShowForm(operands)
+  else
     zcUI.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
   Result:=cmd_ok;
 end;

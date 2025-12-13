@@ -22,14 +22,14 @@ begin
   for i:=1 to ALinesCount do begin
     if (i and 1) then
       //вариант1
-      zcEntLine(rndValue(AMax,AOffs),rndValue(AMax,AOffs),0,rndValue(AMax,AOffs),rndValue(AMax,AOffs),0)
+      zeEntLine(rndValue(AMax,AOffs),rndValue(AMax,AOffs),0,rndValue(AMax,AOffs),rndValue(AMax,AOffs),0)
     else begin
       //вариант2
       p1.x:=rndValue(AMax,AOffs);
       p1.y:=rndValue(AMax,AOffs);
       p2.x:=rndValue(AMax,AOffs);
       p2.y:=rndValue(AMax,AOffs);
-      zcEntLine(p1,p2);
+      zeEntLine(p1,p2);
     end;
     ProgressLongProcess(lpsh,i);
   end;

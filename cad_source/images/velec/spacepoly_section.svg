@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Иконка секции здания: первый столбец зеленый, второй столбец красный -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg9"
+   sodipodi:docname="spacepoly_section.svg"
+   inkscape:export-filename="building_section.png"
+   inkscape:export-xdpi="288"
+   inkscape:export-ydpi="288"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     id="namedview9"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="73.8125"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-width="3440"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg9" />
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <rdf:Description>
+        <dc:title>Building Section Icon</dc:title>
+        <dc:description>Иконка секции: первый столбец зеленый, второй столбец красный</dc:description>
+      </rdf:Description>
+    </rdf:RDF>
+  </metadata>
+  <!-- Заливка ячеек с прозрачностью: первый столбец зеленый -->
+  <rect
+     style="fill:#008c00;fill-opacity:0.7;stroke-width:1.2218"
+     x="0.46376848"
+     y="0.46376848"
+     width="7.0812988"
+     height="4.6376801"
+     id="rect1" />
+  <rect
+     style="fill:#008c00;fill-opacity:0.7;stroke-width:1.32747"
+     x="0.46376848"
+     y="5.4344516"
+     width="7.0948467"
+     height="5.4640985"
+     id="rect3" />
+  <rect
+     style="fill:#008c00;fill-opacity:0.7;stroke-width:1.35967"
+     x="0.46376848"
+     y="11.245094"
+     width="7.1083946"
+     height="4.2911301"
+     id="rect5" />
+  <!-- Заливка ячеек с прозрачностью: второй столбец красный -->
+  <rect
+     style="fill:#ff0000;fill-opacity:0.7;stroke-width:1.21829"
+     x="8.4955711"
+     y="0.46376848"
+     width="7.0406551"
+     height="4.6376801"
+     id="rect2" />
+  <rect
+     style="fill:#ff0000;fill-opacity:0.7;stroke-width:1.32619"
+     x="8.4549274"
+     y="5.4344516"
+     width="7.0812988"
+     height="5.4640985"
+     id="rect4" />
+  <rect
+     style="fill:#ff0000;fill-opacity:0.7;stroke-width:1.35531"
+     x="8.4955711"
+     y="11.231546"
+     width="7.0406551"
+     height="4.304678"
+     id="rect6" />
+  <!-- Внешняя рамка -->
+  <rect
+     style="fill:none;stroke:#20a8ff;stroke-width:0.927538;stroke-linecap:round;stroke-linejoin:round"
+     x="0.46376848"
+     y="0.46376848"
+     width="15.072462"
+     height="15.072462"
+     id="rect7" />
+  <!-- Вертикальная линия -->
+  <line
+     style="stroke:#20a8ff;stroke-width:0.977565;stroke-linecap:round"
+     x1="8.010994"
+     y1="0.53738719"
+     x2="8.010994"
+     y2="15.419415"
+     id="line7" />
+  <!-- Горизонтальные линии -->
+  <line
+     style="stroke:#20a8ff;stroke-width:0.983801;stroke-linecap:round"
+     x1="0.46376848"
+     y1="5.1014495"
+     x2="15.536231"
+     y2="5.1014495"
+     id="line8" />
+  <line
+     style="stroke:#20a8ff;stroke-width:0.983801;stroke-linecap:round"
+     x1="0.46376848"
+     y1="10.898546"
+     x2="15.536231"
+     y2="10.898546"
+     id="line9" />
+  <line
+     style="stroke:#000000;stroke-width:1.50033;stroke-linecap:round;stroke-opacity:1"
+     x1="1.4140092"
+     y1="9.0346699"
+     x2="5.3968234"
+     y2="13.557091"
+     id="line9-8" />
+  <line
+     style="stroke:#000000;stroke-width:1.50033;stroke-linecap:round;stroke-opacity:1"
+     x1="5.63164"
+     y1="13.417611"
+     x2="10.162379"
+     y2="9.4442625"
+     id="line9-8-2" />
+  <line
+     style="stroke:#000000;stroke-width:1.50033;stroke-linecap:round;stroke-opacity:1"
+     x1="10.275756"
+     y1="9.4526234"
+     x2="14.342225"
+     y2="13.899972"
+     id="line9-8-2-5" />
+</svg>

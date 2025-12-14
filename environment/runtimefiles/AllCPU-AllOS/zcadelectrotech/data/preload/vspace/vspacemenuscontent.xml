@@ -26,6 +26,8 @@
 		<Action Name="ACN_vspaceRoomonoff"/>		
 		<Separator/>
 		<Action Name="ACN_vtablerecognition"/>
+		<Separator/>
+		<Action Name="ACN_vtableeditor"/>
       </SubMenu>
     </Menu>
   </MenusContent>

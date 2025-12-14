@@ -15,6 +15,7 @@
       <ZAction Name="ACN_vspaceFlooronoff" Command="spaceshowhide('spaceFloor')" Img="space_flooronoff.png" Caption="Вкл/выкл пространство этажа"/>
       <ZAction Name="ACN_vspaceRoomonoff" Command="spaceshowhide('spaceRoom')" Img="space_roomonoff.png" Caption="Вкл/выкл пространство помещения"/>
 	  <ZAction Name="ACN_vtablerecognition" Command="UzvRebuildTable" Img="table_recognition.png" Caption="Восстановить таблицу"/>
+	  <ZAction Name="ACN_vtableeditor" Command="Show(uzvspreadsheet_gui)" Img="#TE" Caption="Редактор таблицы"/>
     </Group>
   </ActionsContent>
 </CONFIG>

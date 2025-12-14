@@ -17,8 +17,16 @@
 }
 {$mode objfpc}{$H+}
 
-{**Модуль чтения примитивов с чертежа для восстановления таблиц}
-unit uzvtable_reader;
+{
+  Модуль: ucvrtreader
+  Назначение: Чтение примитивов с чертежа ZCAD
+  Описание: Модуль отвечает за извлечение выделенных примитивов
+            (линий, полилиний, текстов) с текущего чертежа и
+            преобразование их в структуры данных TRtPrimitiveItem.
+            Не содержит визуальных компонентов.
+  Зависимости: ucvrtdata, uzcdrawings, uzeent*
+}
+unit ucvrtreader;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -35,50 +43,65 @@ uses
   uzegeometrytypes,
   uzeentity,
   gzctnrVectorTypes,
-  uzvtable_data;
+  ucvrtdata;
 
 // Считать все выделенные примитивы с чертежа
-function ReadSelectedPrimitives(out aPrimitives: TUzvPrimitiveList): Boolean;
+// Возвращает True при успешном чтении хотя бы одного примитива
+function ReadSelectedPrimitives(out aPrimitives: TRtPrimitiveList): Boolean;
 
 // Проверить, является ли объект поддерживаемым типом примитива
 function IsSupportedPrimitive(const aEntity: PGDBObjEntity): Boolean;
 
 // Определить тип примитива по объекту
-function GetPrimitiveType(const aEntity: PGDBObjEntity): TPrimitiveType;
+function GetPrimitiveType(const aEntity: PGDBObjEntity): TRtPrimitiveType;
 
-// Извлечь данные из примитива и создать структуру TUzvPrimitiveItem
-function ExtractPrimitiveData(const aEntity: PGDBObjEntity): TUzvPrimitiveItem;
+// Извлечь данные из примитива и создать структуру TRtPrimitiveItem
+function ExtractPrimitiveData(const aEntity: PGDBObjEntity): TRtPrimitiveItem;
+
+// Получить количество выделенных объектов на текущем чертеже
+function GetSelectedObjectsCount: Integer;
 
 implementation
 
 uses
-  uzclog,
   uzcinterface;
 
+// Получить количество выделенных объектов на текущем чертеже
+function GetSelectedObjectsCount: Integer;
+begin
+  Result := drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount;
+end;
+
 // Считать все выделенные примитивы с чертежа
-function ReadSelectedPrimitives(out aPrimitives: TUzvPrimitiveList): Boolean;
+function ReadSelectedPrimitives(out aPrimitives: TRtPrimitiveList): Boolean;
 var
   selectedCount: Integer;
   pobj: PGDBObjEntity;
   ir: itrec;
-  primitiveItem: TUzvPrimitiveItem;
+  primitiveItem: TRtPrimitiveItem;
   supportedCount: Integer;
 begin
   Result := False;
-  aPrimitives:=TUzvPrimitiveList.Create;
+  aPrimitives := TRtPrimitiveList.Create;
   supportedCount := 0;
 
   // Проверяем, есть ли выделенные объекты
-  selectedCount := drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount;
+  selectedCount := GetSelectedObjectsCount;
 
   if selectedCount = 0 then
   begin
-    zcUI.TextMessage('Ошибка: не выбрано ни одного объекта / Error: no objects selected', TMWOHistoryOut);
+    zcUI.TextMessage(
+      'Ошибка: не выбрано ни одного объекта / Error: no objects selected',
+      TMWOHistoryOut
+    );
     Exit;
   end;
 
-  //zcUI.TextMessage('Ошибка: не выбрано ни одного объекта / Error: no objects selected', TMWOHistoryOut);
-  zcUI.TextMessage('Начало чтения выделенных примитивов. Выбрано объектов: ' + IntToStr(selectedCount), TMWOHistoryOut);
+  zcUI.TextMessage(
+    'Начало чтения выделенных примитивов. Выбрано объектов: ' +
+    IntToStr(selectedCount),
+    TMWOHistoryOut
+  );
 
   // Перебираем все объекты на чертеже и проверяем флаг selected
   pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
@@ -104,45 +127,52 @@ begin
     until pobj = nil;
   end;
 
-  zcUI.TextMessage('Чтение завершено. Обработано поддерживаемых примитивов: ' + IntToStr(supportedCount), TMWOHistoryOut);
+  zcUI.TextMessage(
+    'Чтение завершено. Обработано поддерживаемых примитивов: ' +
+    IntToStr(supportedCount),
+    TMWOHistoryOut
+  );
 
   // Успех, если хотя бы один поддерживаемый примитив найден
   Result := supportedCount > 0;
 
   if not Result then
-    zcUI.TextMessage('Предупреждение: среди выделенных объектов нет поддерживаемых типов / Warning: no supported types among selected objects', TMWOHistoryOut);
+    zcUI.TextMessage(
+      'Предупреждение: среди выделенных объектов нет поддерживаемых типов',
+      TMWOHistoryOut
+    );
 end;
 
 // Проверить, является ли объект поддерживаемым типом примитива
 function IsSupportedPrimitive(const aEntity: PGDBObjEntity): Boolean;
 var
-  primType: TPrimitiveType;
+  primType: TRtPrimitiveType;
 begin
   primType := GetPrimitiveType(aEntity);
-  Result := primType <> ptUnknown;
+  Result := primType <> rtptUnknown;
 end;
 
 // Определить тип примитива по объекту
-function GetPrimitiveType(const aEntity: PGDBObjEntity): TPrimitiveType;
+function GetPrimitiveType(const aEntity: PGDBObjEntity): TRtPrimitiveType;
 begin
-  Result := ptUnknown;
+  Result := rtptUnknown;
 
   if aEntity = nil then
     Exit;
 
-  // Проверяем типы примитивов
+  // Проверяем типы примитивов по имени объекта
   if aEntity^.GetObjTypeName = 'GDBObjLine' then
-    Result := ptLine
+    Result := rtptLine
   else if aEntity^.GetObjTypeName = 'GDBObjPolyLine' then
-    Result := ptPolyline
+    Result := rtptPolyline
   else if aEntity^.GetObjTypeName = 'GDBObjText' then
-    Result := ptText
+    Result := rtptText
   else if aEntity^.GetObjTypeName = 'GDBObjMText' then
-    Result := ptMText;
+    Result := rtptMText;
 end;
 
-// Извлечь данные из примитива и создать структуру TUzvPrimitiveItem
-function ExtractPrimitiveData(const aEntity: PGDBObjEntity): TUzvPrimitiveItem;
+// Извлечь данные из примитива и создать структуру TRtPrimitiveItem
+function ExtractPrimitiveData(const aEntity: PGDBObjEntity): TRtPrimitiveItem;
 var
   pLine: PGDBObjLine;
   pPolyline: PGDBObjPolyLine;
@@ -161,27 +191,27 @@ begin
   Result.textContent := '';
   Result.processed := False;
 
-  // Обрабатываем в зависимости от типа
+  // Обрабатываем в зависимости от типа примитива
   case Result.primitiveType of
-    ptLine:
+    rtptLine:
     begin
       pLine := PGDBObjLine(aEntity);
       Result.startPoint := pLine^.CoordInOCS.lBegin;
       Result.endPoint := pLine^.CoordInOCS.lEnd;
     end;
 
-    ptPolyline:
+    rtptPolyline:
     begin
       pPolyline := PGDBObjPolyLine(aEntity);
 
       // Для полилинии берем первую и последнюю точку
       if pPolyline^.VertexArrayInOCS.Count > 0 then
       begin
-        //PzePoint3d(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^
         Result.startPoint := pPolyline^.VertexArrayInOCS.getDataMutable(0)^;
 
         if pPolyline^.VertexArrayInOCS.Count > 1 then
-          Result.endPoint := pPolyline^.VertexArrayInOCS.getDataMutable(pPolyline^.VertexArrayInOCS.Count - 1)^
+          Result.endPoint := pPolyline^.VertexArrayInOCS.getDataMutable(
+            pPolyline^.VertexArrayInOCS.Count - 1)^
         else
           Result.endPoint := Result.startPoint;
       end;
@@ -210,14 +240,14 @@ begin
       end;
     end;
 
-    ptText:
+    rtptText:
     begin
       pText := PGDBObjText(aEntity);
       Result.textContent := pText^.Content;
       Result.startPoint := pText^.Local.P_insert;
     end;
 
-    ptMText:
+    rtptMText:
     begin
       pMText := PGDBObjMText(aEntity);
       Result.textContent := pMText^.Content;

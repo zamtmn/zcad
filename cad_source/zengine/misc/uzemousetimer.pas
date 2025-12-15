@@ -133,7 +133,7 @@ procedure TMouseTimer.Touch(MP:TPoint;AReason:TReasons);
   end;
 
 begin
-  if fd<>0 then begin
+  if (fd<>0)or(@fOnTimerProc<>nil) then begin
     fCurrentPos:=MP;
     case Check of
       T3SCancel:Cancel;

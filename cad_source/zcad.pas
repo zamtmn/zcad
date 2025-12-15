@@ -282,13 +282,11 @@ uses
   uzCVCommand_SpaceAddPoly,
   uzvcommand_spaceshowhide, //команда показ спрятать
   //****//
-
   //FPSpreadsheet//
   uzvspreadsheet_register,
   uzvrtrestoretablecmd,
   //****//
 
-  uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
   uzvlightexporter_commandexport,
   uzvdialuxlumimporter_main,
   uzvconnect_main,

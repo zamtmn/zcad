@@ -4,13 +4,18 @@
     <Group Category="VSPACE">
       <ZAction Name="ACN_vspaceBuild" Command="spaceadd(3,'spaceBuild',space_Building, 'Build', string)" Img="space_building.png" Caption="Создать пространство здания"/>
       <ZAction Name="ACN_vspaceSection" Command="spaceadd(6,'spaceSection',space_Section, 'Section', string)" Img="space_section.png" Caption="Создать пространство блок секции"/>
-      <ZAction Name="ACN_vspaceFloor" Command="spaceadd(4,'spaceFloor',space_Floor, 'FloorNum', integer,space_FloorHeight, 'HeightFloor', Double)" Img="space_floor.png" Caption="Создать пространство этажа"/>
+      <ZAction Name="ACN_vspaceFloor" Command="spaceadd(4,'spaceFloor',space_Floor, 'FloorNum', string,space_FloorHeight, 'HeightFloor', Double, space_FloorScale, 'ScaleFloor', Double)" Img="space_floor.png" Caption="Создать пространство этажа"/>
       <ZAction Name="ACN_vspaceRoom" Command="spaceadd(5,'spaceRoom',Space_RoomPos, 'RoomPos', String, Space_RoomName, 'RoomName', String, Space_RoomArea, 'RoomArea', String, Space_RoomCategory, 'RoomCategory', String, Space_RoomIllumination, 'RoomIllumination Лк', Integer)" Img="space_room.png" Caption="Создать пространство помещения"/>
-	  <ZAction Name="ACN_vspaceBuildonoff" Command="ShowHideSpace(3,'spaceBuildonoff',space_Building)" Img="space_buildingonoff.png" Caption="Вкл/выкл пространство здания"/>
-      <ZAction Name="ACN_vspaceSectiononoff" Command="ShowHideSpace(6,'spaceSectiononoff',space_Section)" Img="space_sectiononoff.png" Caption="Вкл/выкл пространство блок секции"/>
-      <ZAction Name="ACN_vspaceFlooronoff" Command="ShowHideSpace(4,'spaceFlooronoff',space_Floor,space_FloorHeight)" Img="space_flooronoff.png" Caption="Вкл/выкл пространство этажа"/>
-      <ZAction Name="ACN_vspaceRoomonoff" Command="ShowHideSpace(5,'spaceRoomonoff',Space_RoomPos,Space_RoomName,Space_RoomArea,Space_RoomCategory,Space_RoomIllumination)" Img="space_roomonoff.png" Caption="Вкл/выкл пространство помещения"/>
-	  <ZAction Name="ACN_vtablerecognition" Command="recoveryTable" Img="table_recognition.png" Caption="Восстановить таблицу"/>
+	  <ZAction Name="ACN_vspacePolyBuild" Command="spaceaddpoly(3,'spaceBuild',space_Building, 'Build', string)" Img="spacepoly_building.png" Caption="Создать пространство здания"/>
+      <ZAction Name="ACN_vspacePolySection" Command="spaceaddpoly(6,'spaceSection',space_Section, 'Section', string)" Img="spacepoly_section.png" Caption="Создать пространство блок секции"/>
+      <ZAction Name="ACN_vspacePolyFloor" Command="spaceaddpoly(4,'spaceFloor',space_Floor, 'FloorNum', string,space_FloorHeight, 'HeightFloor', Double, space_FloorScale, 'ScaleFloor', Double)" Img="spacepoly_floor.png" Caption="Создать пространство этажа"/>
+      <ZAction Name="ACN_vspacePolyRoom" Command="spaceaddpoly(5,'spaceRoom',Space_RoomPos, 'RoomPos', String, Space_RoomName, 'RoomName', String, Space_RoomArea, 'RoomArea', String, Space_RoomCategory, 'RoomCategory', String, Space_RoomIllumination, 'RoomIllumination Лк', Integer)" Img="spacepoly_room.png" Caption="Создать пространство помещения"/>
+	  <ZAction Name="ACN_vspaceBuildonoff" Command="spaceshowhide('spaceBuild')" Img="space_buildingonoff.png" Caption="Вкл/выкл пространство здания"/>
+      <ZAction Name="ACN_vspaceSectiononoff" Command="spaceshowhide('spaceSection')" Img="space_sectiononoff.png" Caption="Вкл/выкл пространство блок секции"/>
+      <ZAction Name="ACN_vspaceFlooronoff" Command="spaceshowhide('spaceFloor')" Img="space_flooronoff.png" Caption="Вкл/выкл пространство этажа"/>
+      <ZAction Name="ACN_vspaceRoomonoff" Command="spaceshowhide('spaceRoom')" Img="space_roomonoff.png" Caption="Вкл/выкл пространство помещения"/>
+	  <ZAction Name="ACN_vtablerecognition" Command="UzvRebuildTable" Img="table_recognition.png" Caption="Восстановить таблицу"/>
+	  <ZAction Name="ACN_vtableeditor" Command="Show(uzvspreadsheet_gui)" Img="#TE" Caption="Редактор таблицы"/>
     </Group>
   </ActionsContent>
 </CONFIG>

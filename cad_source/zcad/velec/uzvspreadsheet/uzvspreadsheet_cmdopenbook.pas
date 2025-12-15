@@ -30,6 +30,7 @@ uses
   SysUtils,
   fpspreadsheet,
   fpsTypes,
+  uzvspreadsheet_gui,
   fpspreadsheetctrls;
 
 { Выполняет открытие книги из файла через диалог выбора }
@@ -38,6 +39,9 @@ procedure ExecuteOpenBook(aWorkbookSource: TsWorkbookSource);
 { Загружает книгу из указанного файла }
 function LoadBookFromFile(aWorkbookSource: TsWorkbookSource;
   const aFilePath: String): Boolean;
+
+{ Загружает книгу из указанной книги }
+function LoadBookFromFileTsWorkbook(aWorkbook: TsWorkbook): Boolean;
 
 implementation
 
@@ -107,7 +111,45 @@ begin
     end;
   end;
 end;
+{ Загружает книгу из указанной книги }
+function LoadBookFromFileTsWorkbook(aWorkbook: TsWorkbook): Boolean;
+var
+  aWorkbookSource: TsWorkbookSource;
+begin
+  Result := False;
 
+  if aWorkbook = nil then
+  begin
+    zcUI.TextMessage('Ошибка: книга для выгрузки не создана',
+      TMWOHistoryOut);
+    Exit;
+  end;
+
+
+  try
+    aWorkbookSource:=uzvspreadsheet_gui.uzvSpreadsheetForm.FWorkbookSource;
+    // Загружаем книгу из файла
+    // WorkbookSource автоматически определит формат по расширению
+    aWorkbookSource.LoadFromWorkbook(aWorkbook);
+
+    // Включаем чтение формул
+    if aWorkbookSource.Workbook <> nil then
+      aWorkbookSource.Workbook.Options :=
+        aWorkbookSource.Workbook.Options + [boReadFormulas];
+
+    Result := True;
+  except
+    on E: Exception do
+    begin
+      programlog.LogOutFormatStr(
+        'Ошибка загрузки книги из ZCAD',
+        [aWorkbook, E.Message],
+        LM_Info
+      );
+      zcUI.TextMessage('Ошибка загрузки книги: ' + E.Message, TMWOHistoryOut);
+    end;
+  end;
+end;
 { Выполняет открытие книги из файла через диалог выбора }
 procedure ExecuteOpenBook(aWorkbookSource: TsWorkbookSource);
 var

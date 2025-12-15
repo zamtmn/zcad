@@ -48,6 +48,10 @@ const
   VAR_SPACE_FLOOR = 'space_Floor';
   VAR_SPACE_BUILDING = 'space_Building';
   VAR_FLOOR_HEIGHT = 'space_FloorHeight';
+  VAR_FLOOR_SCALE = 'space_FloorScale';
+
+  // Значение масштаба по умолчанию (1.0 означает без масштабирования)
+  DEFAULT_FLOOR_SCALE = 1.0;
 
   // Имена переменных в устройствах
   VAR_LOCATION_FLOORMARK = 'LOCATION_floormark';
@@ -108,6 +112,7 @@ type
     FloorNumber: Integer;
     CeilingHeight: Double;
     Elevation: Double;
+    FloorScale: Double;       // Масштаб координат для выгрузки в STF
     FloorPolyline: PGDBObjPolyLine;
     constructor Create(const AName: string);
   end;
@@ -229,6 +234,7 @@ begin
   FloorNumber := 0;
   CeilingHeight := 0.0;
   Elevation := 0.0;
+  FloorScale := DEFAULT_FLOOR_SCALE;
   FloorPolyline := nil;
 end;
 

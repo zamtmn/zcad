@@ -133,11 +133,16 @@ procedure TMouseTimer.Touch(MP:TPoint;AReason:TReasons);
   end;
 
 begin
-  fCurrentPos:=MP;
-  case Check of
-    T3SCancel:Cancel;
-    T3SDo:ItTime(nil);
-    T3SWait:;
+  if fd<>0 then begin
+    fCurrentPos:=MP;
+    case Check of
+      T3SCancel:Cancel;
+      T3SDo:begin
+        ItTime(nil);
+        Cancel;
+      end;
+      T3SWait:;
+    end;
   end;
 end;
 initialization

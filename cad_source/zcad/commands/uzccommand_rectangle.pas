@@ -149,15 +149,14 @@ begin
       polyObj^.VertexArrayInOCS.PushBackData(vertexObj);
       InteractiveRectangleManipulator(polyObj,pe.p1,False,nil);
       if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,
-          @InteractiveRectangleManipulator,polyObj,ESP)=IRNormal then
-          begin
-          if assigned(ESP) then
+         @InteractiveRectangleManipulator,polyObj,ESP)=IRNormal then begin
+           if assigned(ESP) then
              ESP(ESSSetEntity,polyObj);
-        zcAddEntToCurrentDrawingWithUndo(polyObj);
-        //Добавить объект из конструкторской области в чертеж через ундо//
+           zcAddEntToCurrentDrawingWithUndo(polyObj);
+           //Добавить объект из конструкторской области в чертеж через ундо//
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                   нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
-        //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
+           //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
         zcClearCurrentDrawingConstructRoot;
       end;
     end;

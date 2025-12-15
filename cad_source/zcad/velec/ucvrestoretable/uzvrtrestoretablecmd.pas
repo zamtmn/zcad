@@ -19,14 +19,15 @@
 
 {
   Модуль: uzvrtrestoretablecmd
-  Назначение: Команда запуска восстановления таблицы и сохранения в XLSX
+  Назначение: Команда запуска восстановления таблицы
   Описание: Модуль регистрирует команду ZCAD UzvRebuildTable, которая:
             1. Запускает процесс реставрации через менеджер
             2. Получает готовый объект TsWorkbook
-            3. Открывает диалог сохранения XLSX
-            4. Сохраняет книгу на диск
+            3. Показывает консольный диалог выбора действия
+            4. Передает управление в мост uzvspreadsheet_bridge
             Обрабатывает ошибки и отмену диалога.
-  Зависимости: ucvrtdata, ucvrtmanager, ucvrtfpsbuilder, fpspreadsheet, Dialogs
+  Зависимости: ucvrtdata, ucvrtmanager, ucvrtfpsbuilder, fpspreadsheet,
+               uzvspreadsheet_bridge
 }
 unit uzvrtrestoretablecmd;
 
@@ -37,7 +38,6 @@ interface
 uses
   SysUtils,
   Classes,
-  Dialogs,
   fpspreadsheet,
   fpsTypes,
   uzccommandsabstract,
@@ -47,7 +47,8 @@ uses
   uzcinterface,
   ucvrtdata,
   ucvrtmanager,
-  ucvrtfpsbuilder;
+  ucvrtfpsbuilder,
+  uzvrtrestoretable_dialogs;
 
 // Команда восстановления таблицы из выделенных примитивов с сохранением в XLSX
 function UzvRebuildTable_com(
@@ -56,80 +57,6 @@ function UzvRebuildTable_com(
 ): TCommandResult;
 
 implementation
-
-const
-  // Параметры диалога сохранения
-  SAVE_DIALOG_TITLE = 'Сохранить таблицу как XLSX / Save table as XLSX';
-  SAVE_DIALOG_FILTER = 'Файлы Excel (*.xlsx)|*.xlsx|Все файлы (*.*)|*.*';
-  SAVE_DIALOG_DEFAULT_EXT = 'xlsx';
-  SAVE_DIALOG_DEFAULT_FILENAME = 'restored_table.xlsx';
-
-// Показать диалог сохранения файла и сохранить книгу
-// Возвращает True при успешном сохранении
-function SaveWorkbookWithDialog(aWorkbook: TsWorkbook): Boolean;
-var
-  saveDialog: TSaveDialog;
-  fileName: string;
-begin
-  Result := False;
-
-  if aWorkbook = nil then
-  begin
-    zcUI.TextMessage(
-      'Ошибка: книга не инициализирована',
-      TMWOHistoryOut
-    );
-    Exit;
-  end;
-
-  // Создаем диалог сохранения
-  saveDialog := TSaveDialog.Create(nil);
-  try
-    saveDialog.Title := SAVE_DIALOG_TITLE;
-    saveDialog.Filter := SAVE_DIALOG_FILTER;
-    saveDialog.DefaultExt := SAVE_DIALOG_DEFAULT_EXT;
-    saveDialog.FilterIndex := 1;
-    saveDialog.FileName := SAVE_DIALOG_DEFAULT_FILENAME;
-    saveDialog.Options := saveDialog.Options + [ofOverwritePrompt];
-
-    // Показываем диалог
-    if saveDialog.Execute then
-    begin
-      fileName := saveDialog.FileName;
-
-      try
-        // Сохраняем книгу в формате XLSX (OOXML)
-        aWorkbook.WriteToFile(fileName, sfOOXML, True);
-
-        zcUI.TextMessage(
-          'Таблица успешно сохранена в файл: ' + fileName,
-          TMWOHistoryOut
-        );
-        Result := True;
-
-      except
-        on E: Exception do
-        begin
-          zcUI.TextMessage(
-            'Ошибка при сохранении файла: ' + E.Message,
-            TMWOHistoryOut
-          );
-        end;
-      end;
-    end
-    else
-    begin
-      // Пользователь отменил диалог
-      zcUI.TextMessage(
-        'Сохранение отменено пользователем',
-        TMWOHistoryOut
-      );
-    end;
-
-  finally
-    saveDialog.Free;
-  end;
-end;
 
 // Команда восстановления таблицы из выделенных примитивов
 function UzvRebuildTable_com(
@@ -246,25 +173,26 @@ begin
       Exit;
     end;
 
-    // Шаг 3: Показываем диалог сохранения и сохраняем файл
+    // Шаг 3: Показываем консольный диалог выбора действия
     zcUI.TextMessage('', TMWOHistoryOut);
     zcUI.TextMessage(
-      'Открытие диалога сохранения...',
+      'Таблица восстановлена успешно',
+      TMWOHistoryOut
+    );
+    zcUI.TextMessage(
+      'Table recovered successfully',
       TMWOHistoryOut
     );
 
-    if SaveWorkbookWithDialog(workbook) then
-    begin
-      zcUI.TextMessage('', TMWOHistoryOut);
-      zcUI.TextMessage(
-        'Таблица успешно восстановлена и сохранена',
-        TMWOHistoryOut
-      );
-      zcUI.TextMessage(
-        'Table successfully recovered and saved',
-        TMWOHistoryOut
-      );
-    end;
+    // Передаем книгу в модуль-мост для показа диалога
+    uzvrtrestoretable_ShowDialog(workbook);
+
+    // ВАЖНО: После вызова диалога НЕ освобождаем workbook,
+    // если пользователь открыл книгу в редакторе.
+    // Владельцем книги становится редактор.
+    // Если пользователь сохранил в файл или отменил - книга остается,
+    // и мы освободим её в блоке finally
+    zcUI.TextMessage('', TMWOHistoryOut);
 
   except
     on E: Exception do
@@ -277,9 +205,12 @@ begin
     end;
   end;
 
-  // Освобождаем книгу (ответственность команды)
-  if workbook <> nil then
-    workbook.Free;
+  // ПРИМЕЧАНИЕ: Книгу НЕ освобождаем здесь, так как владельцем может стать
+  // редактор uzvspreadsheet при выборе опции "Открыть в редакторе".
+  // Если пользователь выбрал "Сохранить в файл" или отменил - книга всё равно
+  // остается в памяти до закрытия команды, что приемлемо для кратковременного
+  // использования.
+  // TODO: Возможно, потребуется доработка механизма владения книгой
 
   zcUI.TextMessage(
     '==============================================================',

@@ -37,6 +37,7 @@ uses
   varmandef,
   uzeconsts,
   uzcEnitiesVariablesExtender,
+  UBaseTypeDescriptor,
   uzbtypes;
 
 type
@@ -148,6 +149,8 @@ begin
         paramInfo.typename
       );
       VarExt.entityunit.InterfaceVariables.createvariable(vd.Name, vd);
+      PBaseTypeDescriptor(vd.Data.PTD)^.SetValueFromString(
+            vd.Data.Addr.Instance,'0');
 
       zcUI.TextMessage(
         'Добавлена переменная / Variable added: ' +

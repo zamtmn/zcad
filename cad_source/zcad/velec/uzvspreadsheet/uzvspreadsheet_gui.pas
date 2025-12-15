@@ -70,7 +70,7 @@ type
     FEditCellContent: TEdit;
 
     // Компоненты fpspreadsheet
-    FWorkbookSource: TsWorkbookSource;
+
     FWorksheetGrid: TsWorksheetGrid;
     FWorksheetTabControl: TsWorkbookTabControl;
 
@@ -85,6 +85,15 @@ type
     FBtnSeparator2: TToolButton;
     FBtnCalc: TToolButton;
     FBtnAutoCalc: TToolButton;
+    FBtnSeparator3: TToolButton;
+    FBtnAddRowBelow: TToolButton;
+    FBtnAddRowAbove: TToolButton;
+    FBtnAddColumnRight: TToolButton;
+    FBtnAddColumnLeft: TToolButton;
+    FBtnDeleteRow: TToolButton;
+    FBtnDeleteColumn: TToolButton;
+    FBtnSeparator4: TToolButton;
+    FBtnFillSpaceRoom: TToolButton;
 
     // Действия
     FActionList: TActionList;
@@ -119,6 +128,7 @@ type
     procedure DoDestroy; override;
 
   public
+    FWorkbookSource: TsWorkbookSource;
     { Возвращает источник данных книги }
     property WorkbookSource: TsWorkbookSource read FWorkbookSource;
 
@@ -133,6 +143,10 @@ type
 
     { Устанавливает содержимое ячейки из поля редактирования }
     procedure ApplyCellContent;
+
+    { Получает диапазон выделенных ячеек в таблице }
+    function GetSelectedRange(out StartRow, EndRow, StartCol,
+      EndCol: Integer): Boolean;
   end;
 
 var
@@ -198,6 +212,13 @@ begin
   FBtnRedo.Action := FSpreadsheetActions.ActRedo;
   FBtnCalc.Action := FSpreadsheetActions.ActCalc;
   FBtnAutoCalc.Action := FSpreadsheetActions.ActAutoCalc;
+  FBtnAddRowBelow.Action := FSpreadsheetActions.ActAddRowBelow;
+  FBtnAddRowAbove.Action := FSpreadsheetActions.ActAddRowAbove;
+  FBtnAddColumnRight.Action := FSpreadsheetActions.ActAddColumnRight;
+  FBtnAddColumnLeft.Action := FSpreadsheetActions.ActAddColumnLeft;
+  FBtnDeleteRow.Action := FSpreadsheetActions.ActDeleteRow;
+  FBtnDeleteColumn.Action := FSpreadsheetActions.ActDeleteColumn;
+  FBtnFillSpaceRoom.Action := FSpreadsheetActions.ActFillSpaceRoom;
 end;
 
 { Создание основных панелей формы }
@@ -239,21 +260,20 @@ begin
   FBtnNew.Parent := FToolBar;
   FBtnNew.Hint := 'Создать новую книгу';
   FBtnNew.ShowHint := True;
-  FBtnNew.ImageIndex := ImagesManager.GetImageIndex('new');
 
   // Кнопка "Открыть книгу"
   FBtnOpen := TToolButton.Create(FToolBar);
   FBtnOpen.Parent := FToolBar;
   FBtnOpen.Hint := 'Открыть файл книги';
   FBtnOpen.ShowHint := True;
-  FBtnOpen.ImageIndex := ImagesManager.GetImageIndex('open');
+
 
   // Кнопка "Сохранить книгу"
   FBtnSave := TToolButton.Create(FToolBar);
   FBtnSave.Parent := FToolBar;
   FBtnSave.Hint := 'Сохранить книгу в файл';
   FBtnSave.ShowHint := True;
-  FBtnSave.ImageIndex := ImagesManager.GetImageIndex('save');
+
 
   // Разделитель 1
   FBtnSeparator1 := TToolButton.Create(FToolBar);
@@ -266,14 +286,14 @@ begin
   FBtnUndo.Parent := FToolBar;
   FBtnUndo.Hint := 'Назад: Отменить последнее изменение';
   FBtnUndo.ShowHint := True;
-  FBtnUndo.ImageIndex := ImagesManager.GetImageIndex('undo');
+
 
   // Кнопка "Вперёд" (Redo)
   FBtnRedo := TToolButton.Create(FToolBar);
   FBtnRedo.Parent := FToolBar;
   FBtnRedo.Hint := 'Вперёд: Вернуть отменённое изменение';
   FBtnRedo.ShowHint := True;
-  FBtnRedo.ImageIndex := ImagesManager.GetImageIndex('redo');
+
 
   // Разделитель 2
   FBtnSeparator2 := TToolButton.Create(FToolBar);
@@ -286,16 +306,75 @@ begin
   FBtnCalc.Parent := FToolBar;
   FBtnCalc.Hint := 'Расчёт: Пересчитать формулы';
   FBtnCalc.ShowHint := True;
-  FBtnCalc.ImageIndex := ImagesManager.GetImageIndex('velec/spreadsheet_calc');
 
   // Кнопка "Автопересчёт"
   FBtnAutoCalc := TToolButton.Create(FToolBar);
   FBtnAutoCalc.Parent := FToolBar;
   FBtnAutoCalc.Hint := 'Автопересчёт: Включить/выключить автопересчёт формул';
   FBtnAutoCalc.ShowHint := True;
-  FBtnAutoCalc.ImageIndex := ImagesManager.GetImageIndex('velec/spreadsheet_autocalc');
   FBtnAutoCalc.Style := tbsCheck;
   FBtnAutoCalc.Down := True;
+
+  // Разделитель 3
+  FBtnSeparator3 := TToolButton.Create(FToolBar);
+  FBtnSeparator3.Parent := FToolBar;
+  FBtnSeparator3.Style := tbsSeparator;
+  FBtnSeparator3.Width := 10;
+
+  // Кнопка "Добавить строку под ячейкой"
+  FBtnAddRowBelow := TToolButton.Create(FToolBar);
+  FBtnAddRowBelow.Parent := FToolBar;
+  FBtnAddRowBelow.Hint := 'Добавить строку под выделенной ячейкой';
+  FBtnAddRowBelow.ShowHint := True;
+  FBtnAddRowBelow.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_row_below');
+
+  // Кнопка "Добавить строку над ячейкой"
+  FBtnAddRowAbove := TToolButton.Create(FToolBar);
+  FBtnAddRowAbove.Parent := FToolBar;
+  FBtnAddRowAbove.Hint := 'Добавить строку над выделенной ячейкой';
+  FBtnAddRowAbove.ShowHint := True;
+  FBtnAddRowAbove.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_row_above');
+
+  // Кнопка "Добавить столбец справа от ячейки"
+  FBtnAddColumnRight := TToolButton.Create(FToolBar);
+  FBtnAddColumnRight.Parent := FToolBar;
+  FBtnAddColumnRight.Hint := 'Добавить столбец справа от выделенной ячейки';
+  FBtnAddColumnRight.ShowHint := True;
+  FBtnAddColumnRight.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_column_right');
+
+  // Кнопка "Добавить столбец слева от ячейки"
+  FBtnAddColumnLeft := TToolButton.Create(FToolBar);
+  FBtnAddColumnLeft.Parent := FToolBar;
+  FBtnAddColumnLeft.Hint := 'Добавить столбец слева от выделенной ячейки';
+  FBtnAddColumnLeft.ShowHint := True;
+  FBtnAddColumnLeft.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_add_column_left');
+
+  // Кнопка "Удалить строку"
+  FBtnDeleteRow := TToolButton.Create(FToolBar);
+  FBtnDeleteRow.Parent := FToolBar;
+  FBtnDeleteRow.Hint := 'Удалить строку, в которой выделена ячейка';
+  FBtnDeleteRow.ShowHint := True;
+  FBtnDeleteRow.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_delete_row');
+
+  // Кнопка "Удалить столбец"
+  FBtnDeleteColumn := TToolButton.Create(FToolBar);
+  FBtnDeleteColumn.Parent := FToolBar;
+  FBtnDeleteColumn.Hint := 'Удалить столбец, в котором выделена ячейка';
+  FBtnDeleteColumn.ShowHint := True;
+  FBtnDeleteColumn.ImageIndex := ImagesManager.GetImageIndex('velec/sheet_delete_column');
+
+  // Разделитель 4
+  FBtnSeparator4 := TToolButton.Create(FToolBar);
+  FBtnSeparator4.Parent := FToolBar;
+  FBtnSeparator4.Style := tbsSeparator;
+  FBtnSeparator4.Width := 10;
+
+  // Кнопка "Заполнить пространства помещений"
+  FBtnFillSpaceRoom := TToolButton.Create(FToolBar);
+  FBtnFillSpaceRoom.Parent := FToolBar;
+  FBtnFillSpaceRoom.Hint := 'Заполнить пространства помещений из таблицы';
+  FBtnFillSpaceRoom.ShowHint := True;
+  FBtnFillSpaceRoom.ImageIndex := ImagesManager.GetImageIndex('velec/space_room');
 end;
 
 { Создание панели информации о ячейке }
@@ -564,6 +643,36 @@ begin
     worksheet.WriteFormula(row, col, Copy(content, 2, Length(content) - 1))
   else
     worksheet.WriteText(row, col, content);
+end;
+
+{ Получает диапазон выделенных ячеек в таблице }
+function TuzvSpreadsheetForm.GetSelectedRange(out StartRow, EndRow, StartCol,
+  EndCol: Integer): Boolean;
+var
+  Selection: TGridRect;
+begin
+  Result := False;
+  StartRow := 0;
+  EndRow := 0;
+  StartCol := 0;
+  EndCol := 0;
+
+  if FWorksheetGrid = nil then
+    Exit;
+
+  // Получаем выделенный диапазон из компонента таблицы
+  Selection := FWorksheetGrid.Selection;
+
+  // Преобразуем координаты с учётом фиксированных строк и колонок
+  StartRow := Selection.Top - FWorksheetGrid.FixedRows;
+  EndRow := Selection.Bottom - FWorksheetGrid.FixedRows;
+  StartCol := Selection.Left - FWorksheetGrid.FixedCols;
+  EndCol := Selection.Right - FWorksheetGrid.FixedCols;
+
+  // Проверяем валидность диапазона
+  if (StartRow >= 0) and (EndRow >= StartRow) and
+     (StartCol >= 0) and (EndCol >= StartCol) then
+    Result := True;
 end;
 
 end.

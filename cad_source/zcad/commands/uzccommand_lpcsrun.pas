@@ -53,8 +53,9 @@ initialization
   CommandScriptsManager:=STManager.CreateType('lpcs','Command script',
     TCurrentDrawingContext,LSCMRecreate,
     [TLapeBase.zcBase2cplr,
-     TLapeDwg.ze2cplr,TLapeDwg.zcEnt2cplr,TLapeDwg.zcUndo2cplr,
-     TLapeDwg.zcInteractive2cplr,TLapeDwg.zcStyles2cplr,
+     TLapeDwg.ze2cplr,TLapeDwg.zeGeom2cplr,TLapeDwg.zeStyles2cplr,
+     TLapeDwg.zc2cplr,TLapeDwg.zeEnt2cplr,TLapeDwg.zcUndo2cplr,
+     TLapeDwg.zcInteractive2cplr,
      TLapeDwg.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     CommandScriptsManager.ScanDirs(ExpandPath(sysvar.PATH.Preload_Paths^));

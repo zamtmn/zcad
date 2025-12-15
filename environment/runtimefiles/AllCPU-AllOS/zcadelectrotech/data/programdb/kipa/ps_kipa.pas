@@ -11,7 +11,7 @@ begin
 
      _EQ_kipa_ps_150.initnul;
 
-     _EQ_kipa_ps_150.Group:=pressureswitches;
+     _EQ_kipa_ps_150.Group:=_pressureswitches;
      _EQ_kipa_ps_150.EdIzm:=_sht;
      _EQ_kipa_ps_150.ID:='_EQ_kipa_ps_150';
      _EQ_kipa_ps_150.Standard:='';
@@ -28,7 +28,7 @@ begin
 
      _EQ_kipa_ps_500.initnul;
 
-     _EQ_kipa_ps_500.Group:=pressureswitches;
+     _EQ_kipa_ps_500.Group:=_pressureswitches;
      _EQ_kipa_ps_500.EdIzm:=_sht;
      _EQ_kipa_ps_500.ID:='_EQ_kipa_ps_500';
      _EQ_kipa_ps_500.Standard:='';

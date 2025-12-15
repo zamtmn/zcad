@@ -47,6 +47,12 @@ type
     Y: Double;
   end;
 
+  {**Вспомогательная структура для параметров экспорта помещения}
+  TRoomExportParams = record
+    Origin: TOriginCoordinates;
+    FloorScale: Double;
+  end;
+
 {**Рассчитать начало координат из минимальных значений этажей}
 procedure CalculateOrigin(
   const HierarchyRoot: TLightHierarchyRoot;
@@ -159,7 +165,7 @@ end;
 procedure WriteRoomPolyline(
   var STFFile: TextFile;
   RoomNode: TRoomNode;
-  const Origin: TOriginCoordinates
+  const ExportParams: TRoomExportParams
 );
 var
   i: Integer;
@@ -172,8 +178,11 @@ begin
   for i := 0 to RoomNode.RoomPolyline^.VertexArrayInOCS.Count - 1 do
   begin
     Vertex := RoomNode.RoomPolyline^.VertexArrayInOCS.getData(i);
-    TransX := TransformCoordinate(Vertex.x, Origin.X);
-    TransY := TransformCoordinate(Vertex.y, Origin.Y);
+    // Применяем масштаб этажа к координатам и смещение относительно начала
+    TransX := TransformCoordinate(Vertex.x, ExportParams.Origin.X) *
+      ExportParams.FloorScale;
+    TransY := TransformCoordinate(Vertex.y, ExportParams.Origin.Y) *
+      ExportParams.FloorScale;
 
     WriteLn(STFFile, 'Point' + IntToStr(i + 1) + '=' +
       FormatFloat('0.###', TransX) + ' ' +
@@ -185,7 +194,7 @@ end;
 procedure WriteRoomLuminaires(
   var STFFile: TextFile;
   RoomTreeNode: TSpaceTreeNode;
-  const Origin: TOriginCoordinates
+  const ExportParams: TRoomExportParams
 );
 var
   Child: TSpaceTreeNode;
@@ -205,8 +214,11 @@ begin
       WriteLn(STFFile, 'Lum' + IntToStr(LumIndex) + '=' +
         DeviceNode.DeviceType);
 
-      TransX := TransformCoordinate(DeviceNode.Position.x, Origin.X);
-      TransY := TransformCoordinate(DeviceNode.Position.y, Origin.Y);
+      // Применяем масштаб этажа к координатам светильников
+      TransX := TransformCoordinate(DeviceNode.Position.x, ExportParams.Origin.X) *
+        ExportParams.FloorScale;
+      TransY := TransformCoordinate(DeviceNode.Position.y, ExportParams.Origin.Y) *
+        ExportParams.FloorScale;
 
       WriteLn(STFFile, 'Lum' + IntToStr(LumIndex) + '.Pos=' +
         FormatFloat('0.###', TransX) + ' ' +
@@ -226,7 +238,7 @@ procedure WriteRoom(
   var STFFile: TextFile;
   RoomTreeNode: TSpaceTreeNode;
   RoomIndex: Integer;
-  const Origin: TOriginCoordinates
+  const ExportParams: TRoomExportParams
 );
 var
   RoomNode: TRoomNode;
@@ -247,12 +259,12 @@ begin
   WriteLn(STFFile, 'WorkingPlane=' +
     FormatFloat('0.0', STF_WORKING_PLANE_HEIGHT));
 
-  WriteRoomPolyline(STFFile, RoomNode, Origin);
+  WriteRoomPolyline(STFFile, RoomNode, ExportParams);
 
   WriteLn(STFFile, 'R_Ceiling=' +
     FormatFloat('0.00', STF_CEILING_REFLECTANCE));
 
-  WriteRoomLuminaires(STFFile, RoomTreeNode, Origin);
+  WriteRoomLuminaires(STFFile, RoomTreeNode, ExportParams);
 
   WriteLn(STFFile, 'NrStruct=0');
   WriteLn(STFFile, 'NrFurns=0');
@@ -268,28 +280,50 @@ procedure WriteAllRooms(
 var
   Root: TSpaceTreeNode;
 
-  procedure ProcessNode(Node: TSpaceTreeNode);
+  {**Рекурсивно обработать узлы, сохраняя масштаб текущего этажа}
+  procedure ProcessNode(Node: TSpaceTreeNode; CurrentFloorScale: Double);
   var
     Child: TSpaceTreeNode;
+    ExportParams: TRoomExportParams;
+    NewScale: Double;
+    FloorNode: TFloorNode;
   begin
     if Node = nil then
       Exit;
 
+    NewScale := CurrentFloorScale;
+
+    // Если узел является этажом, обновляем масштаб для вложенных помещений
+    if (Node.Data <> nil) and (Node.Data is TFloorNode) then
+    begin
+      FloorNode := TFloorNode(Node.Data);
+      NewScale := FloorNode.FloorScale;
+      programlog.LogOutFormatStr(
+        'Этаж "%s": применяется масштаб %.3f',
+        [FloorNode.Name, NewScale],
+        LM_Debug
+      );
+    end;
+
+    // Если узел является помещением, экспортируем его с текущим масштабом
     if (Node.Data <> nil) and (Node.Data is TRoomNode) then
     begin
       Inc(RoomIndex);
-      WriteRoom(STFFile, Node, RoomIndex, Origin);
+      ExportParams.Origin := Origin;
+      ExportParams.FloorScale := NewScale;
+      WriteRoom(STFFile, Node, RoomIndex, ExportParams);
     end;
 
+    // Рекурсивно обрабатываем дочерние узлы с актуальным масштабом
     for Child in Node.Children do
-      ProcessNode(Child);
+      ProcessNode(Child, NewScale);
   end;
 
 begin
   RoomIndex := 0;
 
   for Root in HierarchyRoot.Tree.Root.Children do
-    ProcessNode(Root);
+    ProcessNode(Root, DEFAULT_FLOOR_SCALE);
 end;
 
 {**Собрать уникальные типы светильников}

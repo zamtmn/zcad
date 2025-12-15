@@ -634,7 +634,7 @@ begin
          tname:=ti^.Name
      end else begin
        if ATypeName<>ti^.Name then begin
-         AddTypealias(ATypeName,ti^.Name);
+         AddTypealias({ATypeName}tname,ti^.Name);
        end;
        tname:=ATypeName;
      end;

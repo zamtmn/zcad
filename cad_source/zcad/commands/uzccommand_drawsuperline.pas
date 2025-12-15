@@ -42,6 +42,7 @@ uses
   uzccominteractivemanipulators,
   uzegeometrytypes,
   uzcinterface,
+  uzcsysvars,
   uzeentline,             //unit describes line entity
   //модуль описывающий примитив линия
   uzventsuperline,uzcenitiesvariablesextender,UUnitManager,uzbpaths,uzcTranslations,
@@ -113,6 +114,9 @@ function createSuperLine(p1,p2:TzePoint3d;nameSL:string;changeLayer:boolean;
   LayerNamePrefix:string):TCommandResult;
 
 implementation
+
+var
+  SuperlineScriptsManager:TScriptsManager;
 
 
 class procedure TMethod2ltContextSetter.SetCtx(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;
@@ -268,7 +272,7 @@ var
       //заводим в контекст скрипта в переменную Input наше значение
       (method2lt.Ctx as TMethod2ltContext).FInput:=pvd.GetValueAsString;
       //выполняем скрипт
-      CommandScriptsManager.RunScript(context,method2lt);
+      SuperlineScriptsManager.RunScript(context,method2lt);
       //выводим из контекста скрипта выходное значение из переменной Output
       ltname:=(method2lt.Ctx as TMethod2ltContext).FOutput;
       zcUI.TextMessage('ltname:'+ltname,TMWOHistoryOut);
@@ -397,8 +401,15 @@ initialization
     GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'SLSetting3','???');;
   DrawSuperlineParams.SLSettingTypeLine3:=
     GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'SLSettingTypeLine3','-');
+
   CreateZCADCommand(@DrawSuperLine_com,'DrawSuperLine',CADWG,0);
-  method2lt:=CommandScriptsManager.CreateExternalScriptData(
+
+  SuperlineScriptsManager:=STManager.CreateType('sls','Superline script',
+    TMethod2ltContext,LSCMCreateOnce,[]);
+  if sysvar.PATH.Preload_Paths<>nil then
+    SuperlineScriptsManager.ScanDirs(ExpandPath(sysvar.PATH.Preload_Paths^));
+
+  method2lt:=SuperlineScriptsManager.CreateExternalScriptData(
     'method2lt',TMethod2ltContext,[TMethod2ltContextSetter.SetCtx]);
 
 finalization

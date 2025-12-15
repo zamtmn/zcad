@@ -361,5 +361,5 @@ initialization
   LapeLMId:=ProgramLog.RegisterModule('LAPEScripts');
   STManager:=TScriptsTypeManager.Create;
 finalization
-  STManager.Destroy;
+  STManager.Free;
 end.

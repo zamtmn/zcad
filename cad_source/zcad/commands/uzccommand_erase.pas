@@ -27,10 +27,13 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcdrawing,
   zcmultiobjectcreateundocommand,uzcinterface,uzcutils,
-  UGDBSelectedObjArray,gzctnrSTL,uzeentsubordinated;
+  UGDBSelectedObjArray,gzctnrSTL,uzeentsubordinated,uzeentgenericsubentry;
 
 function Erase_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
+
+procedure MySetObjCreateManipulator(Owner:PGDBObjGenericSubEntry;
+  out domethod,undomethod:tmethod);
 
 implementation
 
@@ -88,10 +91,10 @@ begin
   result:=cmd_ok;
 end;*)
 
-procedure MySetObjCreateManipulator(Owner:PGDBObjGenericWithSubordinated;
+procedure MySetObjCreateManipulator(Owner:PGDBObjGenericSubEntry;
   out domethod,undomethod:tmethod);
 begin
-  domethod.Code:=pointer(Owner^.GoodAddObjectToObjArray);
+  domethod.Code:=pointer(PGDBObjGenericSubEntry(Owner)^.GoodAddObjectToObjArray);
   domethod.Data:=Owner;
   undomethod.Code:=pointer(Owner^.GoodRemoveMiFromArray);
   undomethod.Data:=Owner;
@@ -102,23 +105,23 @@ function Erase_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
   pv:pGDBObjEntity;
-  Pair:TMyMapCounter<PGDBObjGenericWithSubordinated>.TDictionaryPair;
+  Pair:TMyMapCounter<PGDBObjGenericSubEntry>.TDictionaryPair;
   ir:itrec;
   Count:integer;
   domethod,undomethod:tmethod;
   psd:PSelectedObjDesc;
-  Counter:TMyMapCounter<PGDBObjGenericWithSubordinated>;
+  Counter:TMyMapCounter<PGDBObjGenericSubEntry>;
 begin
   if (drawings.GetCurrentROOT^.ObjArray.Count=0)or
     (drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount=0) then
     exit;
-  Counter:=TMyMapCounter<PGDBObjGenericWithSubordinated>.Create;
+  Counter:=TMyMapCounter<PGDBObjGenericSubEntry>.Create;
   Count:=0;
   psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
   if psd<>nil then
     repeat
       pv:=psd^.objaddr;
-      Counter.CountKey(pv^.bp.ListPos.Owner);
+      Counter.CountKey(PGDBObjGenericSubEntry(pv^.bp.ListPos.Owner));
       Inc(Count);
       psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
     until psd=nil;
@@ -133,7 +136,7 @@ begin
         if psd<>nil then
           repeat
             pv:=psd^.objaddr;
-            if pv^.bp.ListPos.Owner=Pair.key then begin
+            if PGDBObjGenericSubEntry(pv^.bp.ListPos.Owner)=Pair.key then begin
               AddObject(pv);
               pv^.Selected:=False;
             end;

@@ -596,7 +596,7 @@ begin
   end;
      td:=GetTypeData(ti);
      Getmem(Pointer(etd),sizeof(GDBPointerDescriptor));
-     etd^.init(td.RefType^.Name,ATypeName,@self);
+     etd^.init(td.RefType^.Name,{ATypeName}tname,@self);
      etd^.TypeOf:=RegisterType(td.RefType);
      InterfaceTypes.AddTypeByPP(@etd);
      result:=etd;

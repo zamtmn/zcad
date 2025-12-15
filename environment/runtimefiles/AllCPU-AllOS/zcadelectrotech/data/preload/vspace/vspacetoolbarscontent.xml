@@ -2,10 +2,22 @@
 <CONFIG>
   <ToolBarsContent>
       <VSPACE Type="ToolBar" Caption="Пространства/Зоны">
-		<Action Name="ACN_vspaceBuild"/>				
-		<Action Name="ACN_vspaceSection"/>
-		<Action Name="ACN_vspaceFloor"/>	
-		<Action Name="ACN_vspaceRoom"/>	
+	  	<GroupAction Index="0">
+          <Action Name="ACN_vspaceBuild"/>
+          <Action Name="ACN_vspacePolyBuild"/>
+        </GroupAction>
+	    <GroupAction Index="0">
+          <Action Name="ACN_vspaceSection"/>
+          <Action Name="ACN_vspacePolySection"/>
+        </GroupAction>
+		<GroupAction Index="0">
+          <Action Name="ACN_vspaceFloor"/>
+          <Action Name="ACN_vspacePolyFloor"/>
+        </GroupAction>
+		<GroupAction Index="0">
+          <Action Name="ACN_vspaceRoom"/>
+          <Action Name="ACN_vspacePolyRoom"/>
+        </GroupAction>
 		<Separator/>
 		<Action Name="ACN_vspaceBuildonoff"/>				
 		<Action Name="ACN_vspaceSectiononoff"/>
@@ -13,6 +25,8 @@
 		<Action Name="ACN_vspaceRoomonoff"/>		
 		<Separator/>
 		<Action Name="ACN_vtablerecognition"/>		
+		<Separator/>
+		<Action Name="ACN_vtableeditor"/>
     </VSPACE>
   </ToolBarsContent>
 </CONFIG>

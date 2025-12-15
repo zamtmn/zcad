@@ -22,14 +22,18 @@ interface
 uses
   sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender,
-  uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
-  uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
+  uzeentsubordinated,uzeentgenericsubentry,uzeentity,
+  uzeentdevice,uzeentabstracttext,uzeentwithmatrix,uzeentlwpolyline,
+  uzeentpolyline,uzeentcurve,
+  uzeenttext,uzeentblockinsert,
+  TypeDescriptors,uzctnrVectorBytes,
+  uzbtypes,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
-  UGDBOpenArrayOfPV,uzeentgenericsubentry,uzegeometry,
-  uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes,
-  uzeentwithmatrix,uzeentlwpolyline,uzeenttext;
+  UGDBOpenArrayOfPV,UGDBPoint3DArray,
+  uzegeometry,
+  uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes;
 const
   IncludingVolumeExtenderName='extdrIncludingVolume';
 type
@@ -67,7 +71,7 @@ TIncludingVolumeExtender=class(TBaseEntityExtender)
     procedure PostLoad(var context:TIODXFLoadContext);override;
     procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
     procedure TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
-    procedure ConnectToEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure ConnectToEnt(p:PGDBObjEntity;var VolumeVExtdr,EntityExtender:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure CheckEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
 
     procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
@@ -281,52 +285,86 @@ begin
   until p=nil;
 end;
 procedure TIncludingVolumeExtender.CheckEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
+type
+  TObjectTestType=(OTTNotSupported,OTTByPoint,OTTByPoints);
+
 var
+  ppoint:PzePoint3d;
   testp:TzePoint3d;
   testp2d:TzePoint2d;
-begin
+  pPonts:PGDBPoint3dArray;
+  EntTestType:TObjectTestType;
+  EntVExtdr:TVariablesExtender;
+  i:Integer;
+ begin
+  EntVExtdr:=nil;
+  pPonts:=nil;
   if pThisEntity<>nil then begin
     if p<>pThisEntity then begin
-      case p^.GetObjType of
-        GDBDeviceID:begin
-          testp:=PGDBObjDevice(p)^.P_insert_in_WCS;
-        end;
-        GDBtextID,GDBMTextID:begin
-          testp:=PGDBObjText(p)^.P_insert_in_WCS;
-        end;
-        else begin
-          {TODO: пока работает только с устройствами и текстами, надо расширять на все остальное}
+
+      if IsIt(TypeOf(p^),typeof(GDBObjAbstractText)) then begin
+        testp:=PGDBObjAbstractText(p)^.P_insert_in_WCS;
+        EntTestType:=OTTByPoint;
+      end else if IsIt(TypeOf(p^),typeof(GDBObjBlockInsert)) then begin
+        testp:=PGDBObjDevice(p)^.P_insert_in_WCS;
+        EntTestType:=OTTByPoint;
+      end else if IsIt(TypeOf(p^),typeof(GDBObjCurve)) then begin
+        EntVExtdr:=p^.GetExtension<TVariablesExtender>;
+        if EntVExtdr=nil then
           exit;
-          testp:=NulVertex;
-        end;
+        pPonts:=@PGDBObjCurve(p)^.VertexArrayInWCS;
+        if pPonts=nil then
+          exit;
+        EntTestType:=OTTByPoints;
+      end else begin
+        {TODO: пока работает не с всеми примитивами, надо расширять на все остальное}
+        //EntTestType:=OTTNotSupported;
+        //testp:=NulVertex;
+        exit;
       end;
 
       if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then begin
-        if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then begin
-          testp:=VectorTransform3D(testp,toBoundMatrix);
-          testp2d.x:=testp.x;
-          testp2d.y:=testp.y;
-          if PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
-            ConnectToEnt(p,VolumeVExtdr,drawing,DC);
-        end;
+          case EntTestType of
+            OTTByPoint:begin
+              if not IsPointInBB(testp,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
+                exit;
+              testp:=VectorTransform3D(testp,toBoundMatrix);
+              testp2d.x:=testp.x;
+              testp2d.y:=testp.y;
+              if PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
+                ConnectToEnt(p,VolumeVExtdr,EntVExtdr,drawing,DC);
+            end;
+            OTTByPoints:begin
+              for i:=0 to pPonts^.Count-1 do begin
+                ppoint:=pPonts^.getDataMutable(i);
+                if not IsPointInBB(ppoint^,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
+                  exit;
+                testp:=VectorTransform3D(ppoint^,toBoundMatrix);
+                testp2d.x:=testp.x;
+                testp2d.y:=testp.y;
+                if not PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
+                  exit;
+              end;
+              ConnectToEnt(p,VolumeVExtdr,EntVExtdr,drawing,DC);
+            end;
+          end;
       end else
         if IsPointInBB(testp,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
-          ConnectToEnt(p,VolumeVExtdr,drawing,DC);
+          ConnectToEnt(p,VolumeVExtdr,EntVExtdr,drawing,DC);
 
     end;
   end;
 end;
 
-procedure TIncludingVolumeExtender.ConnectToEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
-var
-  pEntVExtdr:TVariablesExtender;
+procedure TIncludingVolumeExtender.ConnectToEnt(p:PGDBObjEntity;var VolumeVExtdr,EntityExtender:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
-  pEntVExtdr:=p^.GetExtension<TVariablesExtender>;
-  if pEntVExtdr<>nil then begin
+  if EntityExtender=nil then
+    EntityExtender:=p^.GetExtension<TVariablesExtender>;
+  if EntityExtender<>nil then begin
     if VolumeVExtdr=nil then
       VolumeVExtdr:=PGDBObjEntity(pThisEntity)^.GetExtension<TVariablesExtender>;
     if VolumeVExtdr<>nil then begin
-      pEntVExtdr.addConnected(VolumeVExtdr);
+      EntityExtender.addConnected(VolumeVExtdr);
       //pEntVExtdr.EntityUnit.ConnectedUses.PushBackIfNotPresent(@VolumeVExtdr.EntityUnit);
       PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
     end;

@@ -31,7 +31,7 @@ uses
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
-  UGDBOpenArrayOfPV,UGDBPoint3DArray,
+  UGDBOpenArrayOfPV,UGDBPoint3DArray,UGDBPolyLine2DArray,
   uzegeometry,
   uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes;
 const
@@ -70,9 +70,13 @@ TIncludingVolumeExtender=class(TBaseEntityExtender)
     procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
     procedure PostLoad(var context:TIODXFLoadContext);override;
     procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+
+    function CreateCounturArray:PGDBPolyline2DArray;
+    procedure DestroyCounturArray(ACA:PGDBPolyline2DArray);
+
     procedure TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure ConnectToEnt(p:PGDBObjEntity;var VolumeVExtdr,EntityExtender:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
-    procedure CheckEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure CheckEnt(p:PGDBObjEntity;CA:PGDBPolyline2DArray;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
 
     procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
 
@@ -117,10 +121,13 @@ end;
 procedure TVolumesExtender.onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var i:integer;
   VolumeVExtdr:TVariablesExtender;
+  CA:PGDBPolyline2DArray;
 begin
   for i:=0 to Volumes.count-1 do begin
     VolumeVExtdr:=nil;
-    Volumes.getData(i).CheckEnt(pFormattedEntity,VolumeVExtdr,drawing,DC);
+    CA:=Volumes.getData(i).CreateCounturArray;
+    Volumes.getData(i).CheckEnt(pFormattedEntity,CA,VolumeVExtdr,drawing,DC);
+    Volumes.getData(i).DestroyCounturArray(CA);
   end;
 end;
 
@@ -270,21 +277,54 @@ begin
     end;
   end;
 end;
+
+function TIncludingVolumeExtender.CreateCounturArray:PGDBPolyline2DArray;
+var
+  i:integer;
+begin
+  Result:=nil;
+  if pThisEntity<>nil then begin
+    if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then
+      result:=@PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array;
+    if (IsIt(TypeOf(pThisEntity^),typeof(GDBObjCurve)))and(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count>2) then begin
+      Result:=GetMem(SizeOf(GDBpolyline2DArray));
+      Result^.init(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count,false);
+      for i:=0 to PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count-1 do
+        Result^.PushBackData(PzePoint2d(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.getDataMutable(i))^);
+    end;
+  end;
+end;
+
+procedure TIncludingVolumeExtender.DestroyCounturArray(ACA:PGDBPolyline2DArray);
+begin
+  if ACA<>nil then begin
+    if pThisEntity<>nil then begin
+      if not IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then
+        ACA.destroy;
+    end else
+      ACA.destroy;
+  end;
+end;
+
+
 procedure TIncludingVolumeExtender.TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjEntity;
   ir:itrec;
   VolumeVExtdr:TVariablesExtender;
+  CA:PGDBPolyline2DArray;
 begin
   VolumeVExtdr:=nil;
+  CA:=CreateCounturArray;
   p:=Objects.beginiterate(ir);
   if p<>nil then
   repeat
-    CheckEnt(p,VolumeVExtdr,drawing,DC);
+    CheckEnt(p,CA,VolumeVExtdr,drawing,DC);
   p:=Objects.iterate(ir);
   until p=nil;
+  DestroyCounturArray(CA);
 end;
-procedure TIncludingVolumeExtender.CheckEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TIncludingVolumeExtender.CheckEnt(p:PGDBObjEntity;CA:PGDBPolyline2DArray;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
 type
   TObjectTestType=(OTTNotSupported,OTTByPoint,OTTByPoints);
 
@@ -323,7 +363,7 @@ var
         exit;
       end;
 
-      if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then begin
+      if CA<>nil then begin
           case EntTestType of
             OTTByPoint:begin
               if not IsPointInBB(testp,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
@@ -331,7 +371,7 @@ var
               testp:=VectorTransform3D(testp,toBoundMatrix);
               testp2d.x:=testp.x;
               testp2d.y:=testp.y;
-              if PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
+              if ca.ispointinside(testp2d)then
                 ConnectToEnt(p,VolumeVExtdr,EntVExtdr,drawing,DC);
             end;
             OTTByPoints:begin
@@ -342,7 +382,7 @@ var
                 testp:=VectorTransform3D(ppoint^,toBoundMatrix);
                 testp2d.x:=testp.x;
                 testp2d.y:=testp.y;
-                if not PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
+                if not ca.ispointinside(testp2d)then
                   exit;
               end;
               ConnectToEnt(p,VolumeVExtdr,EntVExtdr,drawing,DC);

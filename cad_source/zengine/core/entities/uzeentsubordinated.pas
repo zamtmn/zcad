@@ -55,20 +55,17 @@ type
   PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 
   GDBObjGenericWithSubordinated=object(GDBObjDrawable)
-    procedure GoodAddObjectToObjArray(
-      const obj:PGDBObjSubordinated);virtual;abstract;
-    procedure GoodRemoveMiFromArray(
-      const obj:PGDBObjSubordinated;const drawing:TDrawingDef);virtual;abstract;
+    //procedure GoodAddObjectToObjArray(
+    //  const obj:PGDBObjSubordinated);virtual;abstract;
+    //procedure GoodRemoveMiFromArray(
+    //  const obj:PGDBObjSubordinated;const drawing:TDrawingDef);virtual;abstract;
     procedure ImEdited(pobj:PGDBObjSubordinated;
       pobjinarray:integer;var drawing:TDrawingDef);virtual;
     procedure ImSelected(pobj:PGDBObjSubordinated;
       pobjinarray:integer);virtual;
-    procedure DelSelectedSubitem(
-      var drawing:TDrawingDef);virtual;
-    procedure AddMi(pobj:PGDBObjSubordinated);
-      virtual;abstract;
-    procedure RemoveInArray(pobjinarray:integer);
-      virtual;abstract;
+    procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
+    procedure AddMi(pobj:PGDBObjSubordinated);virtual;abstract;
+    //procedure RemoveInArray(pobjinarray:integer);virtual;abstract;
     procedure createfield;virtual;
     function GetMatrix:PzeTypedMatrix4d;virtual;abstract;
     function GetLayer:PGDBLayerProp;virtual;abstract;

@@ -29,30 +29,21 @@ uses
   zcmultiobjectcreateundocommand,uzcinterface,uzcutils,
   UGDBSelectedObjArray,gzctnrSTL,uzeentsubordinated,uzeconsts,
   uzventsuperline,uzcEnitiesVariablesExtender,uzeentityfactory,
-  UUnitManager,Varman,uzbPaths,uzcTranslations;
+  UUnitManager,Varman,uzbPaths,uzcTranslations,uzeentgenericsubentry,
+  uzccommand_erase;
 
 implementation
-
-procedure MySetObjCreateManipulator(Owner:PGDBObjGenericWithSubordinated;
-  out domethod,undomethod:tmethod);
-begin
-  domethod.Code:=pointer(Owner^.GoodAddObjectToObjArray);
-  domethod.Data:=Owner;
-  undomethod.Code:=pointer(Owner^.GoodRemoveMiFromArray);
-  undomethod.Data:=Owner;
-end;
-
 
 function L2SL_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
   pv:PGDBObjLine;
-  Pair:TMyMapCounter<PGDBObjGenericWithSubordinated>.TDictionaryPair;
+  Pair:TMyMapCounter<PGDBObjGenericSubEntry>.TDictionaryPair;
   ir:itrec;
   Count:integer;
   domethod,undomethod:tmethod;
   psd:PSelectedObjDesc;
-  Counter:TMyMapCounter<PGDBObjGenericWithSubordinated>;
+  Counter:TMyMapCounter<PGDBObjGenericSubEntry>;
   psuperline:PGDBObjSuperLine;
   pvarext:TVariablesExtender;
   psu:ptunit;
@@ -61,7 +52,7 @@ begin
     (drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount=0) then
     exit;
   //счетчик владельцев выделеных примитивов
-  Counter:=TMyMapCounter<PGDBObjGenericWithSubordinated>.Create;
+  Counter:=TMyMapCounter<PGDBObjGenericSubEntry>.Create;
   Count:=0;
   //считаем владельцев выделеных линий
   //считаем выделеные линии
@@ -70,7 +61,7 @@ begin
     repeat
       pv:=pointer(psd^.objaddr);
       if pv^.GetObjType=GDBLineID then begin
-        Counter.CountKey(pv^.bp.ListPos.Owner);
+        Counter.CountKey(PGDBObjGenericSubEntry(pv^.bp.ListPos.Owner));
         Inc(Count);
       end;
       psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
@@ -108,7 +99,7 @@ begin
         if psd<>nil then
           repeat
             pv:=pointer(psd^.objaddr);
-            if (pv^.GetObjType=GDBLineID)and(pv^.bp.ListPos.Owner=Pair.key) then begin
+            if (pv^.GetObjType=GDBLineID)and(PGDBObjGenericSubEntry(pv^.bp.ListPos.Owner)=Pair.key) then begin
               AddObject(pv);
               pv^.Selected:=False;
             end;

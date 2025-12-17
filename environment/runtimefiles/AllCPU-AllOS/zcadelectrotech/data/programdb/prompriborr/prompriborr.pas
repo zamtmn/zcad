@@ -68,7 +68,7 @@ begin
      _EQ_SIGMA03IPKmod1.OKP:='';
      _EQ_SIGMA03IPKmod1.Manufacturer:='ООО "ПРОМПРИБОР-Р" г.Москва';
      _EQ_SIGMA03IPKmod1.Description:='Датчики СИГМА-03.ДЭ предназначены для измерения опасных концентраций';
-     _EQ_SIGMA03IPKmod1.NameShortTemplate:='СИГМА-03ИПК мод.1-%%[Chanels]-%%[Relays]';
+     _EQ_SIGMA03IPKmod1.NameShortTemplate:='СИГМА-03ИПК мод.1 (%%[Chanels]канал., %%[Relays]реле)';
      _EQ_SIGMA03IPKmod1.NameTemplate:='Газоанализатор универсальный (вторичный преобразователь) %%[Chanels] канала(ов), %%[Relays] реле';
 
      _EQ_SIGMA03IPKmod1.NameFullTemplate:='Газоанализатор универсальный (вторичный преобразователь) %%[Chanels] канала(ов), %%[Relays] реле%%[Comment]';

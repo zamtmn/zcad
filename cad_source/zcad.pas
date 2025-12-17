@@ -291,9 +291,10 @@ uses
   uzvdialuxlumimporter_main,
   uzvconnect_main,
   //uzvelectricalexcelcom,
+  uzvaccess_command,
   //**//
   {$ENDIF}
-  contolelschema_main,
+  //contolelschema_main,
   uzcregconnectmanager,
   {$ENDIF}
 

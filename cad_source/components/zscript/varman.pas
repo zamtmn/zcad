@@ -22,7 +22,7 @@ unit Varman;
 
 interface
 uses
-  UEnumDescriptor,uzctnrVectorPointers,uabstractunit,
+  UEnumDescriptor,uzctnrVectorPointers,
   SysUtils,UBaseTypeDescriptor,uzctnrVectorBytes,
   gzctnrVectorTypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
@@ -195,7 +195,7 @@ TunitPart=(TNothing,TInterf,TImpl,TProg);
 PTUnit=^TUnit;
 PTSimpleUnit=^TSimpleUnit;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TSimpleUnit}
-TSimpleUnit=object(TAbstractUnit)
+TSimpleUnit=object
                   Name:TInternalScriptString;
                   InterfaceUses:TZctnrVectorPointer;
                   InterfaceVariables: varmanager;

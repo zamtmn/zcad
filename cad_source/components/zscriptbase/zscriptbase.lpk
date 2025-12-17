@@ -12,7 +12,7 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="5">
+    <Files Count="4">
       <Item1>
         <Filename Value="varmandef.pas"/>
         <UnitName Value="varmandef"/>
@@ -22,17 +22,13 @@
         <UnitName Value="strmy"/>
       </Item2>
       <Item3>
-        <Filename Value="uabstractunit.pas"/>
-        <UnitName Value="uabstractunit"/>
-      </Item3>
-      <Item4>
         <Filename Value="typedescriptors.pas"/>
         <UnitName Value="typedescriptors"/>
-      </Item4>
-      <Item5>
+      </Item3>
+      <Item4>
         <Filename Value="uzctypesdecorations.pas"/>
         <UnitName Value="uzctypesdecorations"/>
-      </Item5>
+      </Item4>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="5">

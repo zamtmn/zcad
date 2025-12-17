@@ -4,11 +4,11 @@
 
 unit zscriptbase;
 
+{$warn 5023 off : no warning about unused units}
 interface
 
 uses
-  varmandef, strmy, uabstractunit, typedescriptors, uzctypesdecorations, 
-  LazarusPackageIntf;
+  varmandef, strmy, typedescriptors, uzctypesdecorations, LazarusPackageIntf;
 
 implementation
 

@@ -10,7 +10,7 @@ begin
 
      _EQ_kipa_30_11.initnul;
 
-     _EQ_kipa_30_11.Group:='Датчикипотока_реле_';
+     _EQ_kipa_30_11.Group:=_flowswitches;
      _EQ_kipa_30_11.EdIzm:=_sht;
      _EQ_kipa_30_11.ID:='_EQ_kipa_30_11';
      _EQ_kipa_30_11.Standard:='ТУ 27.12.24-004-19585569-2019';

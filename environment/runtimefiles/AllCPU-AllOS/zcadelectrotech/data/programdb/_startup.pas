@@ -19,6 +19,9 @@ var
    _pressuresensor:String;
    _levelswitches:String;
    _seismicswitches:String;
+   _gasdetector:String;
+   _gasswitches:String;
+   _flowswitches:String;
 implementation
 begin
      _seismicswitches:='Датчикисейсмо_реле_';
@@ -30,6 +33,9 @@ begin
      _pressureswitches:='Датчикидавления_реледавления_';
      _pressuremanometer:='Датчикидавления_манометры_';
      _pressuresensor:='Датчикидавления_преобразователи_';
+     _gasdetector:='Датчикизагазованности_преобразователи_';
+     _gasswitches:='Датчикизагазованности_реле_';
+     _flowswitches:='Датчикипотока_реле_';
      _cables:='Кабели_';
      _cables_sv:='Кабели_связь';
      _detsmokesl:='Извещатели_пожарные_дымовые_шлейфовые_';

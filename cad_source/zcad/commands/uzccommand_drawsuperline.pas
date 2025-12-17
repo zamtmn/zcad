@@ -66,7 +66,8 @@ uses
   gzctnrVectorTypes,
   uzcstrconsts,       //resouce strings
   uzvcabmountmethod,
-  uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcCommand_LPCSRun,lpcompiler;
+  uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcCommand_LPCSRun,lpcompiler,
+  uzcLog,uzcreglog;
 
 const
   DrawSuperLineSaveCmdParamsPref='cmdParamsDrawSuperLine_';
@@ -108,7 +109,6 @@ type
 
 var
   DrawSuperlineParams:TDrawSuperlineParams;
-  method2lt:TScriptData;
 
 function createSuperLine(p1,p2:TzePoint3d;nameSL:string;changeLayer:boolean;
   LayerNamePrefix:string):TCommandResult;
@@ -252,6 +252,7 @@ var
     ltname:string;
     player:PGDBLayerProp;
     //указатель на слой куда будет помещена супелиния
+    method2lt:TScriptData;
   begin
     psuperline:=AllocEnt(GDBSuperLineID);
     psuperline^.init(nil,nil,0,p1,p2);
@@ -268,25 +269,36 @@ var
 
     pvd:=psu.FindVariable('CABLE_MountingMethod');
     if (DrawSuperlineParams.ProcessTypeLine)and(pvd<>nil) then begin
+      try
+        try
+          method2lt:=SuperlineScriptsManager.CreateExternalScriptData(
+          'method2lt',TMethod2ltContext,[TMethod2ltContextSetter.SetCtx]);
+          //заводим в контекст скрипта в переменную Input наше значение
+          (method2lt.Ctx as TMethod2ltContext).FInput:=pvd.GetValueAsString;
+          //выполняем скрипт
+          SuperlineScriptsManager.RunScript(context,method2lt);
+          //выводим из контекста скрипта выходное значение из переменной Output
+          ltname:=(method2lt.Ctx as TMethod2ltContext).FOutput;
+          zcUI.TextMessage('ltname:'+ltname,TMWOHistoryOut);
+          //копируем при необходимости и возможности тип линий из базы загруженых dxf
+          drawings.AddLTStyleFromDBIfNeed(drawings.GetCurrentDWG,ltname);
 
-      //заводим в контекст скрипта в переменную Input наше значение
-      (method2lt.Ctx as TMethod2ltContext).FInput:=pvd.GetValueAsString;
-      //выполняем скрипт
-      SuperlineScriptsManager.RunScript(context,method2lt);
-      //выводим из контекста скрипта выходное значение из переменной Output
-      ltname:=(method2lt.Ctx as TMethod2ltContext).FOutput;
-      zcUI.TextMessage('ltname:'+ltname,TMWOHistoryOut);
-      //копируем при необходимости и возможности тип линий из базы загруженых dxf
-      drawings.AddLTStyleFromDBIfNeed(drawings.GetCurrentDWG,ltname);
+          psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres(ltname);
+        except
+          on E:Exception do
+            ProgramLog.LogOutFormatStr('DrawSuperLine: problem with method2lt script msg:"%s"',
+              [E.Message],LM_Error,LapeLMId,MO_SH);
+        end;
 
-      psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres(ltname);
-
-      //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inMetalTray' then
-      //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cablotok');
-      //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inСableСhannel' then
-      //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabkorob');
-      //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'Hidden~inPipe' then
-      //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabtruba');
+        //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inMetalTray' then
+        //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cablotok');
+        //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inСableСhannel' then
+        //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabkorob');
+        //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'Hidden~inPipe' then
+        //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabtruba');
+      finally
+        TScriptsmanager.FreeExternalScriptData(method2lt);
+      end;
     end;
 
     //если манипуляции со слоем включены и ранее был найден "юнит" с параметрами
@@ -409,9 +421,6 @@ initialization
   if sysvar.PATH.Preload_Paths<>nil then
     SuperlineScriptsManager.ScanDirs(ExpandPath(sysvar.PATH.Preload_Paths^));
 
-  method2lt:=SuperlineScriptsManager.CreateExternalScriptData(
-    'method2lt',TMethod2ltContext,[TMethod2ltContextSetter.SetCtx]);
-
 finalization
   StoreAnsiStringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
     'LayerNamePrefix',DrawSuperlineParams.LayerNamePrefix);
@@ -431,5 +440,4 @@ finalization
     'SLSetting3',DrawSuperlineParams.SLSetting3);
   StoreAnsistringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
     'SLSettingTypeLine3',DrawSuperlineParams.SLSettingTypeLine3);
-  TScriptsmanager.FreeExternalScriptData(method2lt);
 end.

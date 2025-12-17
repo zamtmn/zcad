@@ -51,6 +51,7 @@ type
     Ctx:TBaseScriptContext;
     FIndividualCDA:TCompilerDefAdders;
     constructor CreateRec(const AFileName:string);
+    procedure MakeEmpty;
   end;
 
   {TExternalScriptData=record
@@ -122,6 +123,9 @@ var
   LapeLMId:TModuleDesk;
 
 implementation
+
+const
+  cScriptStypeSmaskSnofFound='Script "%s" (type "%s", file mask "%s") not found';
 
 constructor TScriptsTypeManager.TScriptTypeDesc.CreateRec(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;ACtxCreateMode:TScriptContextCreateMode;AFCDA:TCompilerDefAdders);
 begin
@@ -206,6 +210,15 @@ begin
   LAPEData.FCompiled:=False;
   Ctx:=nil;
 end;
+procedure TScriptData.MakeEmpty;
+begin
+  FileData.Age:=0;
+  FileData.Name:='';
+  LAPEData.FCompiler:=nil;
+  LAPEData.FCompiled:=false;
+  Ctx:=nil;
+  FIndividualCDA:=[];
+end;
 
 constructor TScriptsManager.Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACtxCreateMode:TScriptContextCreateMode;ACDA:TCompilerDefAdders);
 begin
@@ -278,7 +291,7 @@ begin
   if SN2SD.tryGetMutableValue(scrname,PSD) then
     RunScript(ACommandContext,PSD^)
   else
-    raise Exception.CreateFmt('Script "%s" (type "%s", file mask "%s") not found',[AScriptName,FScriptType,FScriptFileMask]);
+    raise Exception.CreateFmt(cScriptStypeSmaskSnofFound,[AScriptName,FScriptType,FScriptFileMask]);
 end;
 procedure TScriptsManager.RunScript(const ACommandContext:TZCADCommandContext;var SD:TScriptData);
 var
@@ -336,10 +349,12 @@ begin
     else
       result.Ctx:=nil;
   end else begin
-    if AICtxClass<>nil then
+    Result.MakeEmpty;
+    raise Exception.CreateFmt(cScriptStypeSmaskSnofFound,[AScriptName,FScriptType,FScriptFileMask]);
+    {if AICtxClass<>nil then
       result.Ctx:=AICtxClass.Create
     else
-      result.Ctx:=nil;
+      result.Ctx:=nil;}
   end;
 end;
 class procedure TScriptsManager.FreeExternalScriptData(var ESD:TScriptData);

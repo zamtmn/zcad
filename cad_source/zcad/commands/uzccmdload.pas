@@ -36,7 +36,7 @@ uses
   uzcutils,
   SysUtils,
   uzelongprocesssupport,uzccommandsmanager,
-  uzcreglog,uzeLogIntf;
+  uzeLogIntf;
 
 function Load_Merge(const Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
 function Internal_Load_Merge(const s:ansistring;loadproc:TFileLoadProcedure;

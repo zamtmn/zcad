@@ -24,7 +24,7 @@ interface
 uses
   gvector,
   CsvDocument,
-  uzbLog,uzcLog,uzcreglog,
+  uzbLog,uzcLog,
   SysUtils,
   uzbpaths,
   Math,

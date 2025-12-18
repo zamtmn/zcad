@@ -27,7 +27,7 @@ uses
   uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   uzeffdxfsupport,uzcvariablesutils,usimplegenerics,
-  uzeBaseExtender,uzgldrawcontext,fpexprpars,uzcLog,uzcreglog;
+  uzeBaseExtender,uzgldrawcontext,fpexprpars,uzcLog;
 const
   LayerControlExtenderName='extdrLayerControl';
   //добавить это расширение к примитиву можно командой

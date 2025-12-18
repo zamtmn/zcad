@@ -31,7 +31,7 @@ uses
     UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,
     gzctnrVectorTypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
     uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,
-    uzcLog,uzcreglog;
+    uzcLog;
 type
 {EXPORT+}
 PTZCADDrawingsManager=^TZCADDrawingsManager;

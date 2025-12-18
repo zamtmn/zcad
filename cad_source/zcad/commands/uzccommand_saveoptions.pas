@@ -41,7 +41,7 @@ begin
   SysVarUnit^.SavePasToMem(mem);
   mem.SaveToFile(GetWritableFilePath(CFSconfigsDir,CFSsysvarpasFile));
   mem.done;
-  SaveParams(GetWritableFilePath(CFSRtlDir,CFSconfigxmlFile),ZCSysParams.saved);
+  SaveParams(GetWritableFilePath(CFSconfigsDir,CFSconfigxmlFile),ZCSysParams.saved);
   Result:=cmd_ok;
 end;
 

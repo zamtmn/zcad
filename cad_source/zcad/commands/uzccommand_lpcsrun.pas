@@ -23,7 +23,7 @@ interface
 
 uses
   SysUtils,
-  uzcLog,uzcreglog,
+  uzcLog,
   uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager,
   uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcLapeScriptsImplDrawing,
   uzcsysvars;

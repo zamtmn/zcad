@@ -10,7 +10,7 @@ uses
   uzcinterface,uzcgui2linetypes,uzcflinetypesload,uzcsysvars,uzedrawingsimple,
   uzestyleslinetypes,uzcdrawings,uzcimagesmanager,uzbstrproc,usupportgui,uzeutils,
   gzctnrVectorTypes,uzbpaths,uzcstrconsts,UGDBNamedObjectsArray,uzcuitypes,
-  uzcLog,uzcreglog;
+  uzcLog;
 
 type
 

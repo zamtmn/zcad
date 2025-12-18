@@ -136,20 +136,29 @@ var
 begin
   Params:=DefaultSavedParams;
   XMLConfig:=TXMLConfig.Create(nil);
-  XMLConfig.Filename:=xmlfile;
-  XMLConfig.OpenKey('Stage0Params');
-  Params.UniqueInstance:=XMLConfig.GetValue('UniqueInstance',DefaultSavedParams.UniqueInstance);
-  Params.NoSplash:=XMLConfig.GetValue('NoSplash',DefaultSavedParams.NoSplash);
-  Params.NoLoadLayout:=XMLConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
-  Params.UpdatePO:=XMLConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
-  Params.MemProfiling:=XMLConfig.GetValue('MemProfiling',DefaultSavedParams.MemProfiling);
-  Params.LangOverride:=XMLConfig.GetAnsiValue('LangOverride',DefaultSavedParams.LangOverride);
-  Params.DictionariesPath:=XMLConfig.GetAnsiValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
-  Params.LastAutoSaveFile:=XMLConfig.GetAnsiValue('LastAutoSaveFile',DefaultSavedParams.LastAutoSaveFile);
-  Params.PreferredDistribPath:=XMLConfig.GetAnsiValue('PreferredDistribPath',DefaultSavedParams.PreferredDistribPath);
+  try
+    try
+    XMLConfig.Filename:=xmlfile;
+    XMLConfig.OpenKey('Stage0Params');
+    Params.UniqueInstance:=XMLConfig.GetValue('UniqueInstance',DefaultSavedParams.UniqueInstance);
+    Params.NoSplash:=XMLConfig.GetValue('NoSplash',DefaultSavedParams.NoSplash);
+    Params.NoLoadLayout:=XMLConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
+    Params.UpdatePO:=XMLConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
+    Params.MemProfiling:=XMLConfig.GetValue('MemProfiling',DefaultSavedParams.MemProfiling);
+    Params.LangOverride:=XMLConfig.GetAnsiValue('LangOverride',DefaultSavedParams.LangOverride);
+    Params.DictionariesPath:=XMLConfig.GetAnsiValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
+    Params.LastAutoSaveFile:=XMLConfig.GetAnsiValue('LastAutoSaveFile',DefaultSavedParams.LastAutoSaveFile);
+    Params.PreferredDistribPath:=XMLConfig.GetAnsiValue('PreferredDistribPath',DefaultSavedParams.PreferredDistribPath);
+    XMLConfig.CloseKey;
+    except
+      on E:Exception do
+        ProgramLog.LogOutFormatStr('LoadParams: problem with load Stage0Params msg:"%s"',
+          [E.Message],LM_Error,1,MO_SM or MO_SH);
+    end;
+  finally
+  end;
   SetDistribPath(Params.PreferredDistribPath);
-  XMLConfig.CloseKey;
-  FreeAndNil(XMLConfig);
+  XMLConfig.free;
 end;
 
 

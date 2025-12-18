@@ -36,6 +36,8 @@ var
   LM_Necessarily// — Вывод в любом случае
   :TLogLevel;
 
+  MO_SM,MO_SH:TMsgOpt;
+
 
   ProgramLog:TLog;
   UnitsInitializeLMId,UnitsFinalizeLMId:TModuleDesk;
@@ -52,6 +54,11 @@ initialization
   LM_Error:=ProgramLog.RegisterLogLevel('LM_Error','E',LLTError);
   LM_Fatal:=ProgramLog.RegisterLogLevel('LM_Fatal','F',LLTError);
   LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLTNecessarily);
+
+  MO_SM:=MsgOpt.GetEnum;
+  MO_SH:=MsgOpt.GetEnum;
+  ProgramLog.addMsgOptAlias('M',MO_SM);
+  ProgramLog.addMsgOptAlias('H',MO_SH);
 
   ProgramLog.SetDefaultLogLevel(LM_Debug);
   ProgramLog.SetCurrentLogLevel(LM_Info);

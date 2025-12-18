@@ -26,7 +26,7 @@ uses
   lptypes,lpvartypes,lpparser,lpcompiler,{lputils,}lpeval,lpinterpreter,lpmessages,
   gzctnrSTL,
   LazUTF8,
-  uzbLogTypes,uzcLog,uzcreglog,
+  uzbLogTypes,uzcLog,
   uzelongprocesssupport,
   uzcLapeScriptsImplBase,uzccommandsabstract;
 

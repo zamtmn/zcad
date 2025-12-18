@@ -31,8 +31,6 @@ uses
 const
   filelog='zcad.log';
 
-var
-  MO_SM,MO_SH:TMsgOpt;
 implementation
 
 type
@@ -158,10 +156,6 @@ initialization
       end;
 
   InstallLoger(programlog.ZDebugLN,nil,programlog.isTraceEnabled);
-  MO_SM:=MsgOpt.GetEnum;
-  MO_SH:=MsgOpt.GetEnum;
-  ProgramLog.addMsgOptAlias('M',MO_SM);
-  ProgramLog.addMsgOptAlias('H',MO_SH);
   LogerMBoxBackend.init;
   LogerMBoxBackendHandle:=ProgramLog.addBackend(LogerMBoxBackend,'',[]);
 

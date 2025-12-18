@@ -22,7 +22,7 @@ interface
 uses
   SysUtils,uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
   varman,USinonimDescriptor,UBaseTypeDescriptor,uzedimensionaltypes,
-  uzemathutils,uzcLog,uzcreglog,uzegeometrytypes,varmandef;
+  uzemathutils,uzcLog,uzegeometrytypes,varmandef;
 type
   TZeDimLessDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;

@@ -67,7 +67,7 @@ uses
   uzcstrconsts,       //resouce strings
   uzvcabmountmethod,
   uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcCommand_LPCSRun,lpcompiler,
-  uzcLog,uzcreglog;
+  uzcLog;
 
 const
   DrawSuperLineSaveCmdParamsPref='cmdParamsDrawSuperLine_';

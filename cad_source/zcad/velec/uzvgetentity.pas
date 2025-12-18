@@ -15,7 +15,7 @@
 {
 @author(Vladimir Bobrov)
 }
-{$mode delphi}
+{$mode objfpc}{$H+}
 
 unit uzvgetentity;
 
@@ -31,6 +31,7 @@ uses
   uzcdrawings,
   uzeconsts,
   uzeentity,
+  uzbtypes,
   gzctnrVectorTypes,
   uzcenitiesvariablesextender,
   uzcvariablesutils,
@@ -104,7 +105,7 @@ begin
 
   if pvd <> nil then
     // Получаем значение переменной как строку
-    Result := pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance);
+    Result := pvd^.data.PTD^.GetValueAsString(pvd^.data.Addr.Instance);
 end;
 
 {**
@@ -304,14 +305,14 @@ begin
 
   // Выводим количество найденных примитивов
   zcUI.TextMessage(
-    'Найдено объектов: ' + IntToStr(Result.Count),
+    'Найдено объектов: ' + IntToStr(Result.Size),
     TMWOHistoryOut
   );
 
   // Логирование результата
   programlog.LogOutFormatStr(
     'uzvgetentity: result count = %d',
-    [Result.Count],
+    [Result.Size],
     LM_Info
   );
 end;
@@ -361,11 +362,15 @@ begin
   mode := 0;
   param := '';
 
+  //if Trim(operands) = '' then
+  //  exit;
+
   // Если есть первый операнд - это режим
-  if operands.Count > 0 then
-  begin
+  //if operands = '0' then
+  //begin
     try
-      mode := StrToInt(operands[0]);
+      if operands = '1' then
+      mode := 1;
     except
       on E: Exception do
       begin
@@ -375,30 +380,30 @@ begin
         );
         programlog.LogOutFormatStr(
           'uzvgetentity: Invalid mode operand "%s", using mode 0',
-          [operands[0]],
+          [operands],
           LM_Warning
         );
         mode := 0;
       end;
     end;
-  end;
+  //end;
 
-  // Если есть второй операнд - это параметр для режима 2
-  if operands.Count > 1 then
-    param := operands[1];
-
-  // Выводим информацию о параметрах команды
-  zcUI.TextMessage(
-    'Режим работы: ' + IntToStr(mode),
-    TMWOHistoryOut
-  );
-
-  if mode = 2 then
-    zcUI.TextMessage(
-      'Параметр поиска ENTID_Type: "' + param + '"',
-      TMWOHistoryOut
-    );
-
+  //// Если есть второй операнд - это параметр для режима 2
+  //if operands.Count > 1 then
+  //  param := operands[1];
+  //
+  //// Выводим информацию о параметрах команды
+  //zcUI.TextMessage(
+  //  'Режим работы: ' + IntToStr(mode),
+  //  TMWOHistoryOut
+  //);
+  //
+  //if mode = 2 then
+  //  zcUI.TextMessage(
+  //    'Параметр поиска ENTID_Type: "' + param + '"',
+  //    TMWOHistoryOut
+  //  );
+  //
   // Вызываем функцию фильтрации
   entities := uzvGetEntity(mode, param);
 
@@ -413,7 +418,7 @@ begin
       TMWOHistoryOut
     );
 
-    if entities.Count = 0 then
+    if entities.size = 0 then
     begin
       zcUI.TextMessage(
         'Примитивов не найдено',
@@ -423,12 +428,12 @@ begin
     else
     begin
       zcUI.TextMessage(
-        'Найдено примитивов: ' + IntToStr(entities.Count),
+        'Найдено примитивов: ' + IntToStr(entities.size),
         TMWOHistoryOut
       );
 
       // Выводим детали по каждому найденному примитиву
-      for i := 0 to entities.Count - 1 do
+      for i := 0 to entities.size - 1 do
       begin
         pObj := entities[i];
         if pObj <> nil then

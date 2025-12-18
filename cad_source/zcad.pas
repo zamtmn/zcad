@@ -291,6 +291,7 @@ uses
   uzvdialuxlumimporter_main,
   uzvconnect_main,
   //uzvelectricalexcelcom,
+  uzvgetentity,
   //uzvaccess_command,
   //**//
   {$ENDIF}

@@ -199,7 +199,7 @@ var
   i: Integer;
 begin
   // Освобождаем маппинги колонок
-  for i := 0 to FColumnMappings.Count - 1 do
+  for i := 0 to FColumnMappings.size - 1 do
     FColumnMappings[i].Free;
 
   FColumnMappings.Free;

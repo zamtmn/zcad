@@ -26,7 +26,7 @@ interface
 uses
   SysUtils, Classes, Variants,
   uzeentity, varmandef, uzcvariablesutils,
-  uzvgetentity, uzvaccess_types, uzclog;
+  uzvgetentity, uzvaccess_types,uzbtypes, uzclog;
 
 type
   {**
@@ -156,11 +156,11 @@ begin
   end;
 
   // Получаем примитивы через uzvGetEntity
-  FEntityList := uzvGetEntity(FEntityMode, typeStr);
+  FEntityList := uzvGetEntity.uzvGetEntity(FEntityMode, typeStr);
 
   programlog.LogOutFormatStr(
     'uzvaccess: Загружено примитивов: %d',
-    [FEntityList.Count],
+    [FEntityList.Size],
     LM_Info
   );
 end;
@@ -192,7 +192,7 @@ begin
   end;
 
   // Фильтруем примитивы по типу
-  for i := 0 to FEntityList.Count - 1 do
+  for i := 0 to FEntityList.Size - 1 do
   begin
     pEntity := FEntityList[i];
 

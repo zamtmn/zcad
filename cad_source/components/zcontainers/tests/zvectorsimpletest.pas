@@ -58,6 +58,13 @@ begin
   if sum<>NeedSum then
     raise(Exception.CreateFmt('Wrong summ : calc=%d, need=%d',[sum,NeedSum]));
 
+  sum:=0;
+  for i in InegerVector do
+    sum:=sum+i;
+
+  if sum<>NeedSum then
+    raise(Exception.CreateFmt('Wrong summ : calc=%d, need=%d',[sum,NeedSum]));
+
   InegerVector.done;
 end;
 

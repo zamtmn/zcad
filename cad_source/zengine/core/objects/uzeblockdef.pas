@@ -44,7 +44,6 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      function GetMatrix:PzeTypedMatrix4d;virtual;
                      function GetHandle:PtrInt;virtual;
                      function GetMainOwner:PGDBObjSubordinated;virtual;
-                     function GetType:PtrInt;virtual;
                      class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                end;
 {Export-}
@@ -53,10 +52,6 @@ var
 
 implementation
 
-function GDBObjBlockdef.GetType:PtrInt;
-begin
-     result:=1;
-end;
 function GDBObjBlockdef.GetMainOwner:PGDBObjSubordinated;
 begin
      result:=@self;

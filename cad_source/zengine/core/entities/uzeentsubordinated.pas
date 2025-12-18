@@ -70,7 +70,6 @@ type
     function GetMatrix:PzeTypedMatrix4d;virtual;abstract;
     function GetLayer:PGDBLayerProp;virtual;abstract;
     function GetHandle:PtrInt;virtual;
-    function GetType:PtrInt;virtual;
     function IsSelected:boolean;virtual;abstract;
     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;
       var DC:TDrawContext);virtual;
@@ -192,12 +191,6 @@ end;
 function GDBObjSubordinated.IsNeedSeparate:boolean;
 begin
   Result:=False;
-end;
-
-
-function GDBObjGenericWithSubordinated.GetType:PtrInt;
-begin
-  Result:=0;
 end;
 
 function GDBObjGenericWithSubordinated.GetHandle:PtrInt;

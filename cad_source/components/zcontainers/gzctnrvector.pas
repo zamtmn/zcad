@@ -69,6 +69,9 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         {**Конструктор}
         constructor initnul;
 
+        {**Возвращает размер элемента массива}
+        function SizeOfData:TArrayIndex; inline;
+
         {**Удаление всех элементов массива}
         procedure free;virtual;
 
@@ -146,8 +149,6 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         {**Возвращает тип элемента массива}
         function GetSpecializedTypeInfo:PTypeInfo;inline;
 
-        {**Возвращает размер элемента массива}
-        function SizeOfData:TArrayIndex; inline;
         {**Возвращает указатель на массив}
         function GetParray:pointer;virtual;
         {**Возвращает указатель на массив}
@@ -224,6 +225,7 @@ function GZVector<T>.SizeOfData:TArrayIndex;
 begin
   result:=sizeof(T);
 end;
+
 function GZVector<T>.GetSpecializedTypeInfo:PTypeInfo;
 begin
   result:=TypeInfo(T);

@@ -19,7 +19,7 @@
 unit gzctnrVectorClass;
 
 interface
-uses gzctnrVectorTypes,gzctnrVector,gvector;
+uses gzctnrVectorTypes,gzctnrVector;
 type
 {Export+}
   {----REGISTEROBJECTTYPE GZVectorClass}

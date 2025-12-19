@@ -52,7 +52,7 @@ GZVectorc{-}<T>{//}=class(TZAbsVectorClass)//(TZAbsVector)
         Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
      public
         {**Деструктор}
-        destructor Destroy;virtual;
+        destructor Destroy;override;
         {**Конструктор}
         constructor Create(m:TArrayIndex);overload;
         {**Конструктор}
@@ -465,6 +465,7 @@ begin
   if PArray<>nil then
     Freemem(PArray);
   PArray:=nil;
+  inherited;
 end;
 {procedure GZVectorc<T>.free;
 var i:integer;

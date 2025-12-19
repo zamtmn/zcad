@@ -32,7 +32,7 @@ type
 var
   InegerVector:TZInegerVector;
   i:integer;
-  data:Integer;
+  //data:Integer;
   sum:Int64;
 begin
   InegerVector.init(InitVectorLength);

@@ -32,6 +32,7 @@ type
   TZAbsVector=object
     function GetParray:pointer;virtual;abstract;
     function getPData(index:TArrayIndex):Pointer;virtual;abstract;
+    constructor initnul;
   end;
   PZAbsVector=^TZAbsVector;
   {REGISTERRECORDTYPE TInVectorAddr}
@@ -52,6 +53,10 @@ type
         end;
 {Export-}
 implementation
+constructor TZAbsVector.initnul;
+begin
+end;
+
 function TInVectorAddr.GetInstance:Pointer;
 begin
   if DataSegment=nil then

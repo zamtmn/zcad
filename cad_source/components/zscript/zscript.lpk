@@ -59,16 +59,13 @@
       </Item11>
     </Files>
     <CompatibilityMode Value="True"/>
-    <RequiredPkgs Count="3">
+    <RequiredPkgs Count="2">
       <Item1>
-        <PackageName Value="zmath"/>
+        <PackageName Value="zscriptbase"/>
       </Item1>
       <Item2>
-        <PackageName Value="zscriptbase"/>
-      </Item2>
-      <Item3>
         <PackageName Value="FCL"/>
-      </Item3>
+      </Item2>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

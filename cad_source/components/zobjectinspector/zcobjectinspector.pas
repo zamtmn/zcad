@@ -30,8 +30,7 @@ uses
   Types,Graphics,Themes,LCLIntf,LCLType,
   ExtCtrls,Controls,Menus,Forms,
   StdCtrls,ColorBox,
-  uzbtypes,usupportgui,
-  //zeundostack,zebaseundocommands,
+  uzbtypes,
 
   uzedimensionaltypes,uzemathutils,
   varmandef,
@@ -42,6 +41,7 @@ const
   spliterhalfwidth=4;
   subtab=1;
 type
+  TCBReadOnlyMode=(CBReadOnly,CBEditable,CBDoNotTouch);
   PContent=Pointer;
   PContext=Pointer;
   //TIsCurrObjInUndoContext=function({_GDBobj:boolean;}_pcurrobj:pointer):boolean;
@@ -169,8 +169,21 @@ type
   end;
 
 procedure Register;
+procedure SetComboSize(cb:TComboBox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 
 implementation
+procedure SetComboSize(cb:TComboBox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
+begin
+     cb.AutoSize:=false;
+     {$IFDEF LCLWIN32}
+     case ReadOnlyMode of
+       CBReadOnly:cb.Style:=csOwnerDrawFixed;
+       CBEditable:cb.Style:=csOwnerDrawEditableFixed;
+       CBDoNotTouch:;
+     end;
+     cb.ItemHeight:=ItemH;
+     {$ENDIF}
+end;
 constructor TDisplayedData.CreateRec(const APOdj:PContent;const APType:PUserTypeDescriptor;const ACtx:PContext;const AUnitsFormat:TzeUnitsFormat);
 begin
   PObj:=APOdj;

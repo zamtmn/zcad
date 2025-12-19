@@ -174,15 +174,15 @@ procedure SetComboSize(cb:TComboBox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 implementation
 procedure SetComboSize(cb:TComboBox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 begin
-     cb.AutoSize:=false;
-     {$IFDEF LCLWIN32}
+  cb.AutoSize:=False;
+  {$IFDEF LCLWIN32}
      case ReadOnlyMode of
        CBReadOnly:cb.Style:=csOwnerDrawFixed;
        CBEditable:cb.Style:=csOwnerDrawEditableFixed;
        CBDoNotTouch:;
      end;
      cb.ItemHeight:=ItemH;
-     {$ENDIF}
+  {$ENDIF}
 end;
 constructor TDisplayedData.CreateRec(const APOdj:PContent;const APType:PUserTypeDescriptor;const ACtx:PContext;const AUnitsFormat:TzeUnitsFormat);
 begin

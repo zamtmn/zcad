@@ -30,7 +30,6 @@ uses
   Types,Graphics,Themes,LCLIntf,LCLType,
   ExtCtrls,Controls,Menus,Forms,
   StdCtrls,ColorBox,
-  uzbtypes,
 
   uzedimensionaltypes,uzemathutils,
   varmandef,

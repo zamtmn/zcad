@@ -19,9 +19,11 @@ unit typedescriptors;
 
 {$MODE DELPHI}
 interface
-uses uzedimensionaltypes,LCLProc,
-     varmandef,
-     gzctnrVectorTypes,gzctnrVectorP,uzbstrproc,sysutils,uzbLogIntf;
+uses
+  SysUtils,
+  uzedimensionaltypes,
+  varmandef,
+  gzctnrVectorTypes,gzctnrVectorP;
 const
      m_procedure=1;
      m_function=2;
@@ -193,25 +195,23 @@ begin
   result:=result and ((not(fldaTmpHidden in Attr))or(AShowEmptySections));
 end;
 procedure TPropertyDeskriptorArray.cleareraseobj;
-var curr:PPropertyDeskriptor;
-        ir:itrec;
+var
+  curr:PPropertyDeskriptor;
+  ir:itrec;
 begin
   curr:=beginiterate(ir);
   if curr<>nil then
-  repeat
-        if curr^.SubNode<>nil then
-                                      PTPropertyDeskriptorArray(curr^.SubNode)^.cleareraseobj;
-        zTraceLn('{T}[ZSCRIPT]%s=%s',[curr^.Name,curr^.Value]);
-        //programlog.LogOutStr(curr^.Name,0,LM_Trace);
-        //programlog.LogOutStr('='+curr^.Value,0,LM_Trace);
-        curr^.Name:='';
-        curr^.Value:='';
+    repeat
+      if curr^.SubNode<>nil then
+        PTPropertyDeskriptorArray(curr^.SubNode)^.cleareraseobj;
+      curr^.Name:='';
+      curr^.Value:='';
 
-        curr^.done;
-        Freemem(Pointer(curr));
-        curr:=iterate(ir);
-  until curr=nil;
-  count:=0;
+      curr^.done;
+      Freemem(Pointer(curr));
+      curr:=iterate(ir);
+    until curr=nil;
+  Count:=0;
 end;
 function TPropertyDeskriptorArray.GetRealPropertyDeskriptorsCount:integer;
 var curr:PPropertyDeskriptor;

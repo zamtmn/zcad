@@ -44,15 +44,15 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         {-}PTArr=^TArr;{//}                               //**< Тип указатель на массив данных T
         {-}TEqualFunc=function(const a, b: T):Boolean;{//}//**< Тип функция идентичности T
         {-}TProcessProc=procedure(const p: PT);{//}       //**< Тип процедура принимающая указатель на T
-        TEnumerator=object
-        private
-          vector:^GZVector<T>;
-          ir:itrec;
-          function GetCurrent:T;
-        public
-          function MoveNext:boolean;
-          property Current:T Read GetCurrent;
-        end;
+        {-}TEnumerator=object{//}
+        {-}private{//}
+        {-}  vector:^GZVector<T>;{//}
+        {-}  ir:itrec;{//}
+        {-}  function GetCurrent:T;{//}
+        {-}public{//}
+        {-}  function MoveNext:boolean;{//}
+        {-}  property Current:T Read GetCurrent;{//}
+        {-}end;{//}
     {-}var{//}
         PArray:{-}PTArr{/Pointer/};(*hidden_in_objinsp*)   //**< Указатель на массив данных
         Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива

@@ -23,13 +23,13 @@ interface
 uses
   uzeenttext,uzctnrVectorPointers,uzeentblockinsert,uzeconsts,uzcinterface,
   uzbLog,uzcLog,uzcoimultiproperties,uzctranslations,uzepalette,
-  uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
+  uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
   zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,
-  uzCtnrVectorPBaseEntity,uzglviewareageneral,uzglviewareaabstract;
+  uzCtnrVectorPBaseEntity,uzglviewareageneral,uzglviewareaabstract,uzbUnits;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}

@@ -20,10 +20,12 @@ unit UObjectDescriptor;
 
 {$MODE DELPHI}
 interface
-uses LCLProc,gzctnrVectorObjects,URecordDescriptor,uzctnrVectorBytes,sysutils,
-     gzctnrVectorTypes,uzedimensionaltypes,UBaseTypeDescriptor,TypeDescriptors,
-     strmy,uzctnrvectorstrings,objects,gzctnrVector,
-     varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
+uses
+  LCLProc,gzctnrVectorObjects,URecordDescriptor,uzctnrVectorBytes,sysutils,
+  uzbUnits,
+  gzctnrVectorTypes,UBaseTypeDescriptor,TypeDescriptors,
+  strmy,uzctnrvectorstrings,objects,gzctnrVector,
+  varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
 type
 GDBTOperandStoreMode=Byte;
 GDBOperandDesc=record

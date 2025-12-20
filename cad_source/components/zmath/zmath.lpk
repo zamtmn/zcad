@@ -17,31 +17,23 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="6">
+    <Files Count="4">
       <Item1>
         <Filename Value="uzegeometry.pas"/>
         <UnitName Value="uzegeometry"/>
       </Item1>
       <Item2>
-        <Filename Value="uzemathutils.pas"/>
-        <UnitName Value="uzemathutils"/>
-      </Item2>
-      <Item3>
-        <Filename Value="uzedimensionaltypes.pas"/>
-        <UnitName Value="uzedimensionaltypes"/>
-      </Item3>
-      <Item4>
         <Filename Value="uzegeometrytypes.pas"/>
         <UnitName Value="uzegeometrytypes"/>
-      </Item4>
-      <Item5>
+      </Item2>
+      <Item3>
         <Filename Value="gvectorimpl.inc"/>
         <Type Value="Include"/>
-      </Item5>
-      <Item6>
+      </Item3>
+      <Item4>
         <Filename Value="gvectorintf.inc"/>
         <Type Value="Include"/>
-      </Item6>
+      </Item4>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

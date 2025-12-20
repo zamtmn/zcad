@@ -27,7 +27,6 @@ uses
   varmandef,
   uzeconsts,
   uzeentity,
-  uzedimensionaltypes,
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,
@@ -37,7 +36,7 @@ uses
   uzegeometry,uzcoimultiproperties,uzcLog,
   uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector,
   uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable,
-  uzctnrVectorStrings,uzbtypes;
+  uzctnrVectorStrings,uzbtypes,uzbUnits;
 implementation
 var
   ptdTHAlign:PUserTypeDescriptor;

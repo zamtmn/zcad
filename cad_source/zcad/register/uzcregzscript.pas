@@ -21,8 +21,8 @@ unit uzcregzscript;
 interface
 uses
   SysUtils,uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
-  varman,USinonimDescriptor,UBaseTypeDescriptor,uzedimensionaltypes,
-  uzemathutils,uzcLog,uzegeometrytypes,varmandef;
+  varman,USinonimDescriptor,UBaseTypeDescriptor,uzcLog,uzegeometrytypes,
+  varmandef,uzbUnits,uzbUnitsUtils;
 type
   TZeDimLessDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
@@ -152,6 +152,74 @@ begin
   ptsu^.RegisterType(TypeInfo(PTZeDimLess),'PTZeDimLess');
   ptsu^.RegisterType(TypeInfo(PTZeAngleDeg),'PTZeAngleDeg');
   ptsu^.RegisterType(TypeInfo(PTZeAngle),'PTZeAngle');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TDimUnit),'TDimUnit');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DUScientific','DUDecimal','DUEngineering','DUArchitectural','DUFractional','DUSystem'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Scientific','Decimal','Engineering','Architectural','Fractional','System'],[FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TDimDSep),'TDimDSep');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DDSDot','DDSComma','DDSSpace'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Dot','Comma','Space'],[FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TLUnits),'TLUnits');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['LUScientific','LUDecimal','LUEngineering','LUArchitectural','LUFractional'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Scientific','Decimal','Engineering','Architectural','Fractional'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTLUnits),'PTLUnits');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TAUnits),'TAUnits');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['AUDecimalDegrees','AUDegreesMinutesSeconds','AUGradians','AURadians','AUSurveyorsUnits'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Decimal degrees','Degrees minutes seconds','Gradians','Radians','Surveyors units'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTAUnits),'PTAUnits');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TAngDir),'TAngDir');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['ADCounterClockwise','ADClockwise'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Counterclockwise','Clockwise'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTAngDir),'PTAngDir');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TUPrec),'TUPrec');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['UPrec0','UPrec1','UPrec2','UPrec3','UPrec4','UPrec5','UPrec6','UPrec7','UPrec8'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['0','0.0','0.00','0.000','0.0000','0.00000','0.000000','0.0000000','0.00000000'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTUPrec),'PTUPrec');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TUnitMode),'TUnitMode');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['UMWithSpaces','UMWithoutSpaces'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['With spaces','Without spaces'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTUnitMode),'PTUnitMode');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeUnitsFormat),'TzeUnitsFormat');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['abase','adir','aformat','aprec','uformat','uprec','umode','DeciminalSeparator','RemoveTrailingZeros'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TUPrec),'TInsUnits');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['IUUnspecified','IUInches','IUFeet','IUMiles',
+      'IUMillimeters','IUCentimeters','IUMeters','IUKilometers','IUMicroinches',
+      'IUMils','IUYards','IUAngstroms','IUNanometers','IUMicrons',
+      'IUDecimeters','IUDekameters','IUHectometers','IUGigameters',
+      'IUAstronomicalUnits','IULightYears','IUParsecs'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Unspecified','Inches','Feet','Miles',
+      'Millimeters','Centimeters','Meters','Kilometers','Microinches',
+      'Mils','Yards','Angstroms','Nanometers','Microns',
+      'Decimeters','Dekameters','Hectometers','Gigameters',
+      'AstronomicalUnits','LightYears','Parsecs'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTInsUnits),'PTInsUnits');
+
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

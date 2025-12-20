@@ -20,8 +20,10 @@ unit uzcsysvars;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzcsysparams,uzegeometrytypes,uzepalette,
-     uzedimensionaltypes,uzbtypes,uzctnrvectorstrings,
+uses
+  uzbUnits,
+  uzcsysparams,uzegeometrytypes,uzepalette,
+  uzbtypes,uzctnrvectorstrings,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,
 {$ENDIF}

@@ -327,6 +327,9 @@ cad_source/components/callstack_memprofiler/source/callstack_memprofiler.pas:
 	${MAKE} submodulesinitupdate
 cad_source/components/fphunspell/fphunspell.lpk:
 	${MAKE} submodulesinitupdate
+cad_source/components/zunits/zunits.lpk:
+	${MAKE} submodulesinitupdate
+
 
 checksubmodules: cad_source/components/fpdwg/fpdwg.lpk cad_source/other/agraphlaz/lazarus/ag_graph.lpk cad_source/components/metadarkstyle/metadarkstyle.lpk cad_source/components/zmacros/zmacros.lpk cad_source/components/ztoolbars/ztoolbars.lpk cad_source/components/fpspreadsheet/laz_fpspreadsheet.lpk cad_source/components/lape/package/lape.lpk cad_source/components/zreaders/zreaders.lpk cad_source/components/callstack_memprofiler/source/callstack_memprofiler.pas cad_source/components/fphunspell/fphunspell.lpk
 	@echo All submodules found!
@@ -391,6 +394,7 @@ endif
 	${MAKE} checkandcompilepckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lape.lpk
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)zreaders.lpk
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)fphunspell.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zunits$(PATHDELIM)zunits.lpk
 #	$(LAZBUILD) --pcp=$(PCP) --build-ide=""
 
 install: installdata installcfg installbinary

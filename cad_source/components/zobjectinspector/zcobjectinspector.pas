@@ -31,7 +31,7 @@ uses
   ExtCtrls,Controls,Menus,Forms,
   StdCtrls,ColorBox,
 
-  uzedimensionaltypes,uzemathutils,
+  uzbUnits,uzbUnitsUtils,
   varmandef,
   TypeDescriptors,
   gzctnrVectorTypes,uzctnrvectorstrings,

@@ -28,3 +28,6 @@
 [submodule "cad_source/components/fphunspell"]
 	path = cad_source/components/fphunspell
 	url = https://github.com/zamtmn/fphunspell.git
+[submodule "cad_source/components/zunits"]
+	path = cad_source/components/zunits
+	url = https://github.com/zamtmn/zunits.git

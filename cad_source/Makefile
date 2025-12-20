@@ -143,6 +143,7 @@ rmpkgslibs:
 	rm -rf components/lape/package/lib
 	rm -rf components/zreaders/lib
 	rm -rf components/fphunspell/lib
+	rm -rf components/zunits/lib
 	rm -rf simplecad/lib
 #	rm -rf ../lib
 

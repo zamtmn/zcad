@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, ExtCtrls,
   StdCtrls, Buttons, ButtonPanel,
-  uzedimensionaltypes,uzemathutils,uzcuitypes,uzcuidialogs,uzcuilcl2zc;
+  uzcuitypes,uzcuidialogs,uzcuilcl2zc,uzbUnits,uzbUnitsUtils;
 resourcestring
   RSUTScientific='Scientific';
   RSUTDecimal='Decimal';

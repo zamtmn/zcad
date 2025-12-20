@@ -24,7 +24,8 @@ interface
 uses
   Controls,
   AnchorDocking,
-  uzcstrconsts,uzedimensionaltypes,gzctnrSTL,zeundostack,varmandef,
+  uzbUnits,
+  uzcstrconsts,gzctnrSTL,zeundostack,varmandef,
   uzcuilcl2zc,uzcuitypes,Forms,Classes,LCLType,LCLProc,SysUtils,uzbHandles,
   uzbSets;
 

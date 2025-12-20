@@ -20,10 +20,12 @@ unit uzestylesdim;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,
-     uzedimensionaltypes,sysutils,uzbtypes,uzegeometry,
-     gzctnrVectorTypes,uzbstrproc,UGDBNamedObjectsArray,uzeffdxfsupport,
-     {uzeEntityStylesRegister,}uzeNamedObject;
+uses
+  uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,
+  uzbUnits,
+  sysutils,uzbtypes,uzegeometry,
+  gzctnrVectorTypes,uzbstrproc,UGDBNamedObjectsArray,uzeffdxfsupport,
+  uzeNamedObject;
 const
      DIMLWEDefaultValue=LnWtByBlock;
      DIMCLREDefaultValue=ClByBlock;

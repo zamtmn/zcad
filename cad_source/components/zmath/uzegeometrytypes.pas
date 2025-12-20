@@ -116,9 +116,6 @@ type
   PTZeDimLess=^TZeDimLess;
   TZeDimLess=type Double;
 
-  PTZeAngleDeg=^TZeAngleDeg;
-  TZeAngleDeg=type Double;
-
   PTZeAngle=^TZeAngle;
   TZeAngle=type Double;
 

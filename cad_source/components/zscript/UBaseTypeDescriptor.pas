@@ -21,11 +21,12 @@ unit UBaseTypeDescriptor;
 {$MODE DELPHI}{$Codepage UTF8}
 interface
 uses
-      typinfo,LCLProc,Graphics,classes,Themes,
-      gzctnrVectorTypes,uzemathutils,uzegeometry,uzbstrproc,TypeDescriptors,
-      sysutils,uzctnrVectorBytes,
-      USinonimDescriptor,uzedimensionaltypes,varmandef,uzbtypes,
-      base64,uzctnrvectorstrings,math,uzbLogIntf;
+  typinfo,LCLProc,Graphics,classes,Themes,
+  uzbUnits,uzbUnitsUtils,
+  gzctnrVectorTypes,uzegeometry,uzbstrproc,TypeDescriptors,
+  sysutils,uzctnrVectorBytes,
+  USinonimDescriptor,varmandef,uzbtypes,
+  base64,uzctnrvectorstrings,math,uzbLogIntf;
 resourcestring
   rsDifferent='Different';
 type

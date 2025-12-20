@@ -7,8 +7,9 @@ interface
 uses
   SysUtils,
   uzeentity,uzeparser,Masks,
-  uzcoimultiproperties,uzedimensionaltypes,
-  uzbtypes,Varman,varmandef,uzcoimultipropertiesutil,uzcvariablesutils;
+  uzcoimultiproperties,
+  uzbtypes,Varman,varmandef,uzcoimultipropertiesutil,uzcvariablesutils,
+  uzbUnits;
 
 type
   TPropFilterData=record

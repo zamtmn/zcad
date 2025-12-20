@@ -19,15 +19,16 @@
 unit uzcOIRegister;
 {$INCLUDE zengineconfig.inc}
 interface
-uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzcTranslations,Forms,uzcinterface,uzeroot,
-     uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorstrings,varmandef,uzedrawingsimple,
-     uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
-     gzctnrVectorTypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
-     uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,
-     uzmenusmanager,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager,
-     uzedimensionaltypes,uzctreenode,uzcActionsManager,uzObjectInspectorManager,
-     zeundostack,uzcOI,UObjectDescriptor,
-     classes;
+uses
+  Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,
+  uzcutils,uzbpaths,TypeDescriptors,uzcTranslations,Forms,uzcinterface,uzeroot,
+  uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorstrings,varmandef,
+  uzedrawingsimple,uzeentity,uzcenitiesvariablesextender,zcobjectinspector,
+  uzcguimanager,uzcstrconsts,gzctnrVectorTypes,Types,Controls,uzcdrawings,
+  Varman,UUnitManager,uzcsysvars,uzcsysparams,zcobjectinspectorui,
+  uzcoimultiobjects,uzccommandsimpl,uzmenusmanager,uzcLog,menus,ComCtrls,
+  uztoolbarsmanager,uzcimagesmanager,uzctreenode,uzcActionsManager,
+  uzObjectInspectorManager,zeundostack,uzcOI,UObjectDescriptor,classes,uzbUnits;
 const
     PEditorFocusPriority=550;
 type

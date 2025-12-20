@@ -19,8 +19,10 @@
 unit uzedrawingdef;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgldrawcontext,uzestylesdim,uzbtypes,uzestyleslayers,uzestylestexts,
-     uzedimensionaltypes,uzestyleslinetypes,uzestylestables;
+uses
+  uzgldrawcontext,uzestylesdim,uzbtypes,uzestyleslayers,uzestylestexts,
+  uzbUnits,
+  uzestyleslinetypes,uzestylestables;
 type
 {EXPORT+}
 PTDrawingDef=^TDrawingDef;

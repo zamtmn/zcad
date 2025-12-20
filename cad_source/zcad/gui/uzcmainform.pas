@@ -30,12 +30,12 @@ uses
   Menus,Graphics,Themes,
   Types,UniqueInstanceBase,simpleipc,Laz2_XMLCfg,LCLVersion,
   {ZCAD BASE}
-  uzcsysparams,gzctnrVectorTypes,uzemathutils,uzelongprocesssupport,
+  uzcsysparams,gzctnrVectorTypes,uzelongprocesssupport,
   uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
   uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
   uzctnrVectorBytes,uzbtypes,
   uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzcLog,uzbLogTypes,uzbLog,
-  uzedimensionaltypes,varmandef,varman,UUnitManager,uzcsysinfo,strmy,
+  varmandef,varman,UUnitManager,uzcsysinfo,strmy,
   uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,
   {ZCAD ENTITIES}
@@ -58,7 +58,8 @@ uses
   uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
   uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
   uzmacros,uzcviewareacxmenu,uzccommand_quit,uzeMouseTimer,
-  uzccommand_multiselect2objinsp{$IfDef LINUX},BaseUnix{$EndIf};
+  uzccommand_multiselect2objinsp{$IfDef LINUX},BaseUnix{$EndIf},uzbUnits,
+  uzbUnitsUtils;
 
 resourcestring
   rsClosed='Closed';

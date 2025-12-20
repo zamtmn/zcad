@@ -38,9 +38,9 @@ uses
   uzeentity,uzeenttext,
   URecordDescriptor,typedescriptors,Varman,gzctnrVectorTypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
-  uzelongprocesssupport,uzeparser,uzcoimultiproperties,uzedimensionaltypes,
+  uzelongprocesssupport,uzeparser,uzcoimultiproperties,
   uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,
-  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles;
+  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzbUnits;
 
 resourcestring
   RSCLPDataExportWaitFile=

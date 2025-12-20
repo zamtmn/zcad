@@ -22,19 +22,13 @@ unit uzcoimultipropertiesutil;
 
 interface
 uses
-  uzctnrVectorPointers,uzbstrproc,uzctnrvectorstrings,uzepalette,sysutils,uzeentityfactory,
-  uzegeometrytypes,//uzbtypes,
-  varmandef,
-  uzeentity,
-  
-  Varman,UGDBPoint3DArray,
-  uzedimensionaltypes,
-  uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
-  uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,
-  uzegeometry,uzcoimultiproperties,uzcLog,
-  uzcstrconsts,
-  gzctnrSTL,gzctnrVectorTypes,uzeNamedObject,zUndoCmdChgVariable,
-  uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,uzeExtdrAbstractEntityExtender;
+  uzctnrVectorPointers,uzbstrproc,uzctnrvectorstrings,uzepalette,sysutils,
+  uzeentityfactory,uzegeometrytypes,varmandef,uzeentity,Varman,UGDBPoint3DArray,
+  uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,
+  uzeentpolyline,uzcentelleader,uzegeometry,uzcoimultiproperties,uzcLog,
+  uzcstrconsts,gzctnrSTL,gzctnrVectorTypes,uzeNamedObject,zUndoCmdChgVariable,
+  uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,
+  uzeExtdrAbstractEntityExtender,uzbUnits;
 type
   GCacheCalculatedValue<GT,PGT>=record
     PValue:PGT;

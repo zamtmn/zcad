@@ -13,8 +13,9 @@ uses
   Buttons, ExtCtrls, StdCtrls, ComCtrls, LCLIntf, LCLType, Spin,
 
   uzcdrawings,uzbtypes,
-  uzedimensionaltypes,uzestylesdim,
+  uzestylesdim,
   uzclog,uzedrawingsimple,uzcsysvars,
+  uzbUnits,
 
   uzcinterface,uzcstrconsts,uzbstrproc,
   uzepalette,uzcflineweights,uzestyleslinetypes,uzestylestexts,

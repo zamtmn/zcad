@@ -21,17 +21,17 @@ unit uzcdrawings;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    uzglviewareaabstract,uzglviewareageneral,uzcTranslations,uzedimblocksregister,uzeblockdefsfactory,
-    uzemathutils,uzgldrawcontext,uzcdrawing,uzedrawingdef,uzbpaths,uzestylesdim,
-    uzedrawingabstract,uzcdialogsfiles,LResources,uzcsysvars,uzcinterface,
-    uzcstrconsts,uzbstrproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,
-    uzbtypes,varmandef,varman,sysutils,uzegeometry,uzeconsts,
-    uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
-    UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
-    UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,
-    gzctnrVectorTypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
-    uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,
-    uzcLog;
+  uzglviewareaabstract,uzglviewareageneral,uzcTranslations,uzedimblocksregister,
+  uzeblockdefsfactory,uzgldrawcontext,uzcdrawing,uzedrawingdef,uzbpaths,
+  uzestylesdim,uzedrawingabstract,uzcdialogsfiles,LResources,uzcsysvars,
+  uzcinterface,uzcstrconsts,uzbstrproc,uzeblockdef,UGDBObjBlockdefArray,
+  UUnitManager,uzbtypes,varmandef,varman,sysutils,uzegeometry,uzeconsts,
+  uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
+  UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
+  UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,gzctnrVectorTypes,uzetrash,
+  uzctnrVectorBytes,uzglviewareadata,uzeentitiestypefilter,
+  uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,uzcLog,uzbUnits,
+  uzbUnitsUtils;
 type
 {EXPORT+}
 PTZCADDrawingsManager=^TZCADDrawingsManager;

@@ -21,7 +21,8 @@ unit uzeentitiesprop;
 {$INCLUDE zengineconfig.inc}
 interface
 
-uses uzedimensionaltypes,uzepalette,uzestyleslinetypes,uzegeometrytypes,
+uses
+  uzepalette,uzestyleslinetypes,uzegeometrytypes,
   uzbtypes,uzegeometry,SysUtils,
   uzctnrVectorBytes,uzestyleslayers;
 

@@ -21,14 +21,14 @@ unit uzglviewareageneral;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-     gzctnrVectorTypes,uzegeometrytypes,uzemathutils,uzepalette,
-     uzeentsubordinated,uzegeometry,uzbtypes,UGDBSelectedObjArray,
-     uzglviewareadata,uzgldrawcontext,uzeentity,uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,
-     uzeconsts,uzestrconsts,UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,
-     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
-     UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
-     uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrSTL,uzbLogIntf,
-     uzeSnap,uzeMouseTimer;
+  gzctnrVectorTypes,uzegeometrytypes,uzepalette,uzeentsubordinated,uzegeometry,
+  uzbtypes,UGDBSelectedObjArray,uzglviewareadata,uzgldrawcontext,uzeentity,
+  uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,uzeconsts,uzestrconsts,
+  UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,ExtCtrls,Controls,
+  Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
+  UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,
+  uzgldrawerabstract,uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,
+  gzctnrSTL,uzbLogIntf,uzeSnap,uzeMouseTimer;
 const
   ontracdist=10;
   ontracignoredist=25;

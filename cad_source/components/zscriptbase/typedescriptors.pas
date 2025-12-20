@@ -21,8 +21,8 @@ unit typedescriptors;
 interface
 uses
   SysUtils,
-  uzedimensionaltypes,
   varmandef,
+  uzbUnits,
   gzctnrVectorTypes,gzctnrVectorP;
 const
      m_procedure=1;

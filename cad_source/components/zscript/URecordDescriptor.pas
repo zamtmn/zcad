@@ -22,7 +22,8 @@ unit URecordDescriptor;
 interface
 uses
   UPointerDescriptor,uzbstrproc,uzctnrVectorBytes,sysutils,UBaseTypeDescriptor,
-  gzctnrVectorTypes,uzedimensionaltypes,TypeDescriptors,gzctnrVector,
+  uzbUnits,
+  gzctnrVectorTypes,TypeDescriptors,gzctnrVector,
   TypInfo,varmandef,uzbtypes,uzbLogIntf,math;
 type
 TFieldDescriptor=GZVector<FieldDescriptor>;

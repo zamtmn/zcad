@@ -25,7 +25,6 @@ interface
 uses
   SysUtils,
   uzcLog,
-  uzedimensionaltypes,
   uzcfunits,
   uzctreenode,
   uzcsysvars,
@@ -34,7 +33,8 @@ uses
   uzcdrawings,
   Varman,
   uzcuitypes,
-  uzccommandsabstract,uzccommandsimpl;
+  uzccommandsabstract,uzccommandsimpl,
+  uzbUnits;
 
 implementation
 

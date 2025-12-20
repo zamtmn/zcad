@@ -31,22 +31,25 @@
       </Item4>
     </Files>
     <CompatibilityMode Value="True"/>
-    <RequiredPkgs Count="5">
+    <RequiredPkgs Count="6">
       <Item1>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zunits"/>
       </Item1>
       <Item2>
-        <PackageName Value="zbaseutils"/>
+        <PackageName Value="zebase"/>
       </Item2>
       <Item3>
-        <PackageName Value="zmath"/>
+        <PackageName Value="zbaseutils"/>
       </Item3>
       <Item4>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zmath"/>
       </Item4>
       <Item5>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontainers"/>
       </Item5>
+      <Item6>
+        <PackageName Value="FCL"/>
+      </Item6>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

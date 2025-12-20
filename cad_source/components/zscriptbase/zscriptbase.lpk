@@ -31,7 +31,7 @@
       </Item4>
     </Files>
     <CompatibilityMode Value="True"/>
-    <RequiredPkgs Count="6">
+    <RequiredPkgs Count="5">
       <Item1>
         <PackageName Value="zunits"/>
       </Item1>
@@ -42,14 +42,11 @@
         <PackageName Value="zbaseutils"/>
       </Item3>
       <Item4>
-        <PackageName Value="zmath"/>
+        <PackageName Value="zcontainers"/>
       </Item4>
       <Item5>
-        <PackageName Value="zcontainers"/>
-      </Item5>
-      <Item6>
         <PackageName Value="FCL"/>
-      </Item6>
+      </Item5>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

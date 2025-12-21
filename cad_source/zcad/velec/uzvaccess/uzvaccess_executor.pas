@@ -30,6 +30,11 @@ uses
   uzvaccess_source_provider;
 
 type
+  // Тип для хранения массива Variant в TList
+  TVariantArray = array of Variant;
+  PVariantArray = ^TVariantArray;
+
+
   {**
     Класс для выполнения экспорта данных в Access
 
@@ -417,7 +422,8 @@ begin
   // Вставляем записи по одной
   for i := 0 to ABatchData.Count - 1 do
   begin
-    values := TObject(ABatchData[i]) as array of Variant;
+    // Извлекаем указатель на массив значений и разыменовываем его
+    values := PVariantArray(ABatchData[i])^;
 
     try
       PrepareQueryParams(query, AInstructions, values);

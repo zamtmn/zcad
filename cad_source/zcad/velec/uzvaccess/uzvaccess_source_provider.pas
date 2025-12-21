@@ -24,7 +24,7 @@ unit uzvaccess_source_provider;
 interface
 
 uses
-  SysUtils, Classes, Variants,
+  SysUtils, Classes, Variants,gvector,
   uzeentity, varmandef, uzcvariablesutils,
   uzvgetentity, uzvaccess_types,uzbtypes, uzclog;
 
@@ -223,7 +223,11 @@ begin
   pEntity := PGDBObjEntity(AEntity);
 
   // Ищем переменную по имени
-  pvd := pEntity^.specialize GetVariable<string>(APropName);
+  pvd:=FindVariableInEnt(pEntity,APropName);
+  //if pv<>nil then
+  //  tempresult:=pv^.Data.ptd^.GetValueAsString(pv^.Data.Addr.Instance)
+  //
+  //pvd := pEntity^.specialize GetVariable<string>(APropName);
 
   Result := (pvd <> nil);
 end;
@@ -254,7 +258,8 @@ begin
   pEntity := PGDBObjEntity(AEntity);
 
   // Ищем переменную по имени
-  pvd := pEntity^.specialize GetVariable<string>(APropName);
+  pvd:=FindVariableInEnt(pEntity,APropName);
+  //pvd := pEntity^.specialize GetVariable<string>(APropName);
 
   if pvd = nil then
     Exit;
@@ -264,26 +269,26 @@ begin
     'GDBString',
     'GDBAnsiString':
     begin
-      valueStr := pstring(pvd^.data.Instance)^;
+      valueStr := pstring(pvd^.data.Addr.Instance)^;
       Result := valueStr;
     end;
 
     'GDBInteger':
     begin
-      valueInt := PGDBInteger(pvd^.data.Instance)^;
+      valueInt := pInteger(pvd^.data.Addr.Instance)^;
       Result := valueInt;
     end;
 
     'GDBDouble',
     'GDBFloat':
     begin
-      valueFloat := PGDBDouble(pvd^.data.Instance)^;
+      valueFloat := PDouble(pvd^.data.Addr.Instance)^;
       Result := valueFloat;
     end;
 
   else
     // Для остальных типов пытаемся получить строковое представление
-    valueStr := pstring(pvd^.data.Instance)^;
+    valueStr := pvd^.Data.ptd^.GetValueAsString(pvd^.Data.Addr.Instance);
     Result := valueStr;
   end;
 end;

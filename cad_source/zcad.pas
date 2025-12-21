@@ -292,7 +292,7 @@ uses
   uzvconnect_main,
   //uzvelectricalexcelcom,
   uzvgetentity,
-  //uzvaccess_command,
+  uzvaccess_command,
   //**//
   {$ENDIF}
   //contolelschema_main,

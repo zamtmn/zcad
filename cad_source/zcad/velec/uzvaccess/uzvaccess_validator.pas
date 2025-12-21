@@ -313,11 +313,21 @@ begin
 
   if Result then
   begin
-    FLogger.LogDebug(Format(
+    programlog.LogOutFormatStr(
+      Format(
       'Валидация успешна: %s → %s (%s)',
       [VarToStr(AValue), VarToStr(AResult),
        ColumnDataTypeToString(ATargetType)]
-    ));
+    ),
+      [],
+      LM_Info
+    );
+
+    //FLogger.LogDebug(Format(
+    //  'Валидация успешна: %s → %s (%s)',
+    //  [VarToStr(AValue), VarToStr(AResult),
+    //   ColumnDataTypeToString(ATargetType)]
+    //));
   end;
 end;
 

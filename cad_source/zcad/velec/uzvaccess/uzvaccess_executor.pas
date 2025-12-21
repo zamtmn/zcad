@@ -147,7 +147,7 @@ begin
   params := '';
 
   // Формируем список колонок и параметров
-  for i := 0 to AInstructions.ColumnMappings.Count - 1 do
+  for i := 0 to AInstructions.ColumnMappings.Size - 1 do
   begin
     mapping := AInstructions.ColumnMappings[i];
 
@@ -179,7 +179,7 @@ begin
   whereClause := '';
 
   // Формируем SET и WHERE части
-  for i := 0 to AInstructions.ColumnMappings.Count - 1 do
+  for i := 0 to AInstructions.ColumnMappings.Size - 1 do
   begin
     mapping := AInstructions.ColumnMappings[i];
     isKey := AInstructions.KeyColumns.IndexOf(mapping.ColumnName) >= 0;
@@ -250,7 +250,7 @@ begin
   AQuery.Params.Clear;
 
   // Добавляем параметры для каждой колонки
-  for i := 0 to AInstructions.ColumnMappings.Count - 1 do
+  for i := 0 to AInstructions.ColumnMappings.Size - 1 do
   begin
     if i > High(AValues) then
       Break;
@@ -317,7 +317,7 @@ begin
 
       // Находим индекс этой колонки в маппингах
       idx := -1;
-      for idx := 0 to AInstructions.ColumnMappings.Count - 1 do
+      for idx := 0 to AInstructions.ColumnMappings.Size - 1 do
       begin
         if AInstructions.ColumnMappings[idx].ColumnName = keyCol then
           Break;

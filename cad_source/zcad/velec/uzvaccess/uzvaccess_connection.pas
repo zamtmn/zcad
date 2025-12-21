@@ -309,6 +309,22 @@ begin
   end;
 end;
 
+// Функция сравнения для сортировки таблиц EXPORT по номеру
+function CompareExportTableNames(List: TStringList; Index1, Index2: Integer): Integer;
+var
+  num1, num2: Integer;
+  name1, name2: String;
+begin
+  name1 := List[Index1];
+  name2 := List[Index2];
+
+  // Извлекаем номера
+  num1 := StrToIntDef(Copy(name1, 7, Length(name1) - 6), 0);
+  num2 := StrToIntDef(Copy(name2, 7, Length(name2) - 6), 0);
+
+  Result := num1 - num2;
+end;
+
 function TAccessConnection.ListExportTables: TStringList;
 var
   tables: TStringList;
@@ -375,21 +391,6 @@ begin
   end;
 end;
 
-// Функция сравнения для сортировки таблиц EXPORT по номеру
-function CompareExportTableNames(List: TStringList; Index1, Index2: Integer): Integer;
-var
-  num1, num2: Integer;
-  name1, name2: String;
-begin
-  name1 := List[Index1];
-  name2 := List[Index2];
-
-  // Извлекаем номера
-  num1 := StrToIntDef(Copy(name1, 7, Length(name1) - 6), 0);
-  num2 := StrToIntDef(Copy(name2, 7, Length(name2) - 6), 0);
-
-  Result := num1 - num2;
-end;
 
 function TAccessConnection.OpenTable(const ATableName: String): TDataSet;
 var
@@ -406,8 +407,9 @@ begin
     tempQuery.SQL.Text := Format('SELECT * FROM [%s]', [ATableName]);
     tempQuery.Open;
 
-    FLogger.LogDebug(Format('Таблица %s открыта, строк: %d',
-      [ATableName, tempQuery.RecordCount]));
+    programlog.LogOutFormatStr(
+       Format('Таблица %s открыта, строк: %d',[ATableName, tempQuery.RecordCount]), [],
+        LM_Info);
 
     Result := tempQuery;
 
@@ -438,7 +440,10 @@ begin
   except
     on E: Exception do
     begin
-      FLogger.LogError('Ошибка выполнения SQL: ' + E.Message);
+      programlog.LogOutFormatStr(
+       'Ошибка выполнения SQL: ' + E.Message,[],
+        LM_Info
+      );
       raise;
     end;
   end;

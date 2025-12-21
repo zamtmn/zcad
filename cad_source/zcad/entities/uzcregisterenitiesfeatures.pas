@@ -127,6 +127,8 @@ begin
   end;
   if not PGDBObjElLeader(PEnt)^.ShowTable then
       dxfStringout(outStream,1000,'%8=ShowTable|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.ShowTable,true)+'|');
+  if not PGDBObjElLeader(PEnt)^.ShowHeader then
+      dxfStringout(outStream,1000,'%9=ShowHeader|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.ShowHeader,true)+'|');
 end;
 
 procedure EntityIOSave_all(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFSaveContext);

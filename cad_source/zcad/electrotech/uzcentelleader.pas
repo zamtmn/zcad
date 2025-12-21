@@ -36,6 +36,7 @@ GDBObjElLeader= object(GDBObjComplex)
             AutoVAlaign:Boolean;
             VerticalAlign:TVAlign;
             ShowTable:boolean;
+            ShowHeader:boolean;
 
             TextContent:string;
             MaterialContent:string;
@@ -540,7 +541,7 @@ begin
     tbl.tbl.Clear;
     tbl.Build(drawing);
   end;
-  if pdev=nil then
+  if {(pdev=nil)and}(pcable<>nil) then
   begin
   tv:=uzegeometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);
   tv:=uzegeometry.NormalizeVertex(tv);
@@ -600,7 +601,7 @@ begin
   end;
   tbl.FormatEntity(drawing,dc);
   ConstObjArray.free;
-  if pdev<>nil then
+  if (pdev<>nil)and ShowHeader then
   begin
   pentvarext:=self.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then begin
@@ -864,6 +865,7 @@ begin
   tvo^.AutoVAlaign:=AutoVAlaign;
   tvo^.VerticalAlign:=VerticalAlign;
   tvo^.ShowTable:=ShowTable;
+  tvo^.ShowHeader:=ShowHeader;
 
   result := tvo;
 end;
@@ -883,6 +885,7 @@ begin
      AutoVAlaign:=true;
      VerticalAlign:=TVAlign.VATop;
      ShowTable:=true;
+     ShowHeader:=true;
      //vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,uzegeometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
@@ -975,6 +978,10 @@ begin
    pvi:=PTUnit(ptu).FindVariable('ShowTable');
     if pvi<>nil then
       result^.ShowTable:=PBoolean(pvi^.data.Addr.Instance)^;
+
+   pvi:=PTUnit(ptu).FindVariable('ShowHeader');
+    if pvi<>nil then
+      result^.ShowHeader:=PBoolean(pvi^.data.Addr.Instance)^;
    end;
 end;
 initialization

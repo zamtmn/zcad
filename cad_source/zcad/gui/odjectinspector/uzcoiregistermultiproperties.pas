@@ -837,6 +837,7 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('LeaderSize','Size',sysunit^.TypeName2PTD('Integer'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.size),PtrInt(@pelleader^.size),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('Leaderscale','Scale',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.scale),PtrInt(@pelleader^.scale),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('LeaderWidth','Width',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.twidth),PtrInt(@pelleader^.twidth),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('ShowHeader','Show header',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.ShowHeader),PtrInt(@pelleader^.ShowHeader),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('ShowTable','Show table',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.ShowTable),PtrInt(@pelleader^.ShowTable),OneVarDataMIPD,OneVarDataEIPD);
 
     {RotatedDimension misc}

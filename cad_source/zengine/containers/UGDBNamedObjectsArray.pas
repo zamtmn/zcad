@@ -21,7 +21,7 @@ unit UGDBNamedObjectsArray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry,
-     uzeNamedObject,//gzctnrVectorClass,
+     uzeNamedObject,uzeTypes,
      Strings;
 type
 TForCResult=(IsFounded(*'IsFounded'*)=1,

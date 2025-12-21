@@ -24,8 +24,9 @@ interface
 uses
   uzbLogIntf,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
   uzestyleslayers,uzeentsubordinated,UGDBSelectedObjArray,uzeent3d,uzeentity,
-  uzctnrVectorBytes,uzbtypes,uzeconsts,uzegeometrytypes,uzglviewareadata,
-  uzegeometry,uzeffdxfsupport,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
+  uzctnrVectorBytes,uzbtypes,uzeTypes,uzeconsts,uzegeometrytypes,
+  uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeSnap,uzMVReader,
+  uzCtnrVectorpBaseEntity;
 
 type
   PGDBObjLine=^GDBObjLine;

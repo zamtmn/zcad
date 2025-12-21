@@ -8,11 +8,13 @@ unit uzcentcable;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
-     uzcsysvars,uzctnrVectorBytes,uzestyleslayers,UUnitManager,uzeentcurve,uzegeometry,
-     math,gzctnrVector,uzeentity,varmandef,uzbtypes,
-     uzegeometrytypes,uzeconsts,uzeffdxfsupport,sysutils,uzeentsubordinated,uzeentdevice,
-     gzctnrVectorTypes,uzcenitiesvariablesextender,uzeentityfactory,uzcLog;
+uses
+  uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
+  uzcsysvars,uzctnrVectorBytes,uzestyleslayers,UUnitManager,uzeentcurve,
+  uzegeometry,math,gzctnrVector,uzeentity,varmandef,uzbtypes,uzeTypes,
+  uzegeometrytypes,uzeconsts,uzeffdxfsupport,sysutils,uzeentsubordinated,
+  uzeentdevice,gzctnrVectorTypes,uzcenitiesvariablesextender,uzeentityfactory,
+  uzcLog;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;

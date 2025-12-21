@@ -22,7 +22,7 @@ unit uzventsuperline;
 interface
 uses uzeobjectextender,LCLProc,uzeentityfactory,uzedrawingdef,
      uzestyleslayers,uzeentsubordinated,uzcLog,
-     uzeentline,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
+     uzeentline,uzeentity,uzctnrVectorBytes,uzbtypes,uzeTypes,uzeconsts,
      uzegeometrytypes,uzegeometry,uzeffdxfsupport;
 type
 {Export+}

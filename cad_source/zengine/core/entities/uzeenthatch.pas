@@ -25,7 +25,7 @@ uses
   uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,
   gzctnrVectorTypes,uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
   uzegeometrytypes,uzeentity,UGDBPoint3DArray,uzctnrVectorBytes,
-  uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
+  uzbtypes,uzeTypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
   UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,uzeBoundaryPath,
   uzeStylesHatchPatterns,gvector,garrayutils,uzMVReader;
 

@@ -24,9 +24,10 @@ interface
 uses
   uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
   uzecamera,uzeentitiesprop,uzestyleslinetypes,uzegeometrytypes,
-  UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,uzglviewareadata,
-  uzegeometry,uzeffdxfsupport,SysUtils,uzctnrVectorBytes,uzestyleslayers,
-  uzeenrepresentation,uzbLogIntf,uzMVReader,uzCtnrVectorpBaseEntity;
+  UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeTypes,uzeconsts,
+  uzglviewareadata,uzegeometry,uzeffdxfsupport,SysUtils,uzctnrVectorBytes,
+  uzestyleslayers,uzeenrepresentation,uzbLogIntf,uzMVReader,
+  uzCtnrVectorpBaseEntity;
 
 type
   taddotrac=procedure(var posr:os_record;const axis:TzePoint3d) of object;

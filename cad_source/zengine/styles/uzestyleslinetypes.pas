@@ -20,7 +20,7 @@ unit uzeStylesLineTypes;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzbLogIntf,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
+uses uzbLogIntf,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,uzeTypes,
      uzegeometry,uzegeometrytypes,uzestylestexts,gzctnrVectorObjects,
      UGDBNamedObjectsArray,gzctnrVectorTypes,uzbstrproc,uzeNamedObject;
 const

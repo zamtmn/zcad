@@ -25,7 +25,7 @@ uses
   uzeblockdefsfactory,uzgldrawcontext,uzcdrawing,uzedrawingdef,uzbpaths,
   uzestylesdim,uzedrawingabstract,uzcdialogsfiles,LResources,uzcsysvars,
   uzcinterface,uzcstrconsts,uzbstrproc,uzeblockdef,UGDBObjBlockdefArray,
-  UUnitManager,uzbtypes,varmandef,varman,sysutils,uzegeometry,uzeconsts,
+  UUnitManager,uzbtypes,uzeTypes,varmandef,varman,sysutils,uzegeometry,uzeconsts,
   uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
   UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
   UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,gzctnrVectorTypes,uzetrash,

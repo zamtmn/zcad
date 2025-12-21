@@ -25,9 +25,9 @@ uses
   uzglgeometry,uzgldrawcontext,uzeobjectextender,uzetextpreprocessor,
   uzeentityfactory,uzedrawingdef,uzecamera,uzbstrproc,SysUtils,uzefont,
   uzestyleslayers,uzeentabstracttext,uzeentity,uzctnrVectorBytes,uzbtypes,
-  uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
-  uzbLogIntf,uzegeometrytypes,uzestylestexts,uzeSnap,uzMVReader,
-  uzcTextPreprocessorDXFImpl;
+  uzeTypes,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
+  uzeentsubordinated,uzbLogIntf,uzegeometrytypes,uzestylestexts,uzeSnap,
+  uzMVReader,uzcTextPreprocessorDXFImpl;
 
 const
   CLEFNotNeedSaveTemplate=1;

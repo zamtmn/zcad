@@ -20,9 +20,10 @@ unit uzestyleslayers;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses sysutils,uzbtypes,uzegeometry,
-     uzeconsts,UGDBNamedObjectsArray,uzbstrproc,uzeNamedObject,//gzctnrVectorClass,
-     uzeEntityStylesRegister;
+uses
+  sysutils,uzbtypes,uzeTypes,uzegeometry,
+  uzeconsts,UGDBNamedObjectsArray,uzbstrproc,uzeNamedObject,
+  uzeEntityStylesRegister;
 type
 {EXPORT+}
 PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;

@@ -16,36 +16,26 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccommand_merge;
+unit uzeTypes;
 {$INCLUDE zengineconfig.inc}
 
 interface
 
 uses
-  uzcLog,
-  uzbpaths,uzbtypes,uzeTypes,
-  uzeffmanager,
-  uzccommand_DWGNew,
-  uzccmdload,
-  uzccommandsimpl,uzccommandsabstract;
+  uzbtypes;
 
-function Merge_com(const Context:TZCADCommandContext;
-  operands:TCommandOperands):TCommandResult;
+type
+  TLoadOpt=(TLOLoad,TLOMerge);
+  TEntUpgradeInfo=longword;
+  PExtensionData=Pointer;
+
+  GDBStrWithPoint=record
+    str:TDXFEntsInternalStringType;
+    x,y,z,w:double;
+  end;
+  PGDBStrWithPoint=^GDBStrWithPoint;
+
 
 implementation
 
-function Merge_com(const Context:TZCADCommandContext;
-  operands:TCommandOperands):TCommandResult;
-begin
-  Result:=Load_merge(operands,TLOMerge);
-end;
-
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@Merge_com,'Merge',CADWG,0);
-
-finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
 end.

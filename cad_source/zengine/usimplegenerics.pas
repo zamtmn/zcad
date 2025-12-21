@@ -20,7 +20,7 @@ unit usimplegenerics;
 {$Include zengineconfig.inc}
 
 interface
-uses uzbstrproc,uzbtypes,gzctnrSTL,
+uses uzbstrproc,uzbtypes,uzeTypes,gzctnrSTL,
      {$IFNDEF DELPHI}gutil,gmap,gvector,{$ENDIF}
      {$IFDEF DELPHI}generics.collections,{$ENDIF}
      sysutils;

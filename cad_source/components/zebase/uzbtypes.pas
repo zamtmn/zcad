@@ -66,8 +66,7 @@ end;
 (*varcategoryforoi INSERT='Insert'*)
 (*varcategoryforoi NORMAL='Normal'*)
 (*varcategoryforoi SCALE='Scale'*)
-TObjID=Word;
-PGDBaseObject=^GDBaseObject;
+TObjID=word;
 {----REGISTEROBJECTTYPE GDBaseObject----}
 GDBaseObject=object
     function ObjToString(const prefix,sufix:String):String; virtual;
@@ -79,6 +78,8 @@ GDBaseObject=object
     constructor initnul;
     destructor Done;virtual;{ abstract;}
   end;
+PGDBaseObject=^GDBaseObject;
+
 TCameraCounters=record
   totalobj,infrustum:Integer;
   {-}constructor CreateRec(AT,AI:Integer);{//}
@@ -89,7 +90,6 @@ TVisActuality=record
   InfrustumActualy:TActuality;
   {-}constructor CreateRec(AV,AI:TActuality);{//}
 end;
-TEntUpgradeInfo=LongWord;
 
 {REGISTERRECORDTYPE GDBCameraBaseProp}
 GDBCameraBaseProp=record
@@ -124,12 +124,7 @@ GDBBaseCamera=object(GDBaseObject)
           end;
 TDXFEntsInternalStringType=UnicodeString;
 {-}TDXFEntsInternalCharType=UnicodeChar;{//}
-PGDBStrWithPoint=^GDBStrWithPoint;
-{REGISTERRECORDTYPE GDBStrWithPoint}
-GDBStrWithPoint=record
-                      str:TDXFEntsInternalStringType;
-                      x,y,z,w:Double;
-                end;
+
   {REGISTERRECORDTYPE TPolyData}
   TPolyData=record
                   //nearestvertex:integer;
@@ -138,7 +133,6 @@ GDBStrWithPoint=record
                   index:integer;
                   wc:TzePoint3d;
             end;
-  TLoadOpt=(TLOLoad,TLOMerge);
   PTLayerControl=^TLayerControl;
   {REGISTERRECORDTYPE TLayerControl}
   TLayerControl=record
@@ -172,12 +166,6 @@ GDBsymdolinfo=record
     Name:String;
     Number:Integer;
     LatestCreate:Boolean;
-  end;
-PGDBUNISymbolInfo=^GDBUNISymbolInfo;
-{REGISTERRECORDTYPE GDBUNISymbolInfo}
-GDBUNISymbolInfo=record
-    symbol:Integer;
-    symbolinfo:GDBsymdolinfo;
   end;
 PTHAlign=^THAlign;
 THAlign=(HALeft,HAMidle,HARight);
@@ -216,7 +204,6 @@ TImageDegradation=record
                         RD_ID_MaxDegradationFactor:PDouble;(*'Max degradation factor'*)
                         RD_ID_PrefferedRenderTime:PInteger;(*'Prefered rendertime'*)
                     end;
-PExtensionData=Pointer;
 TDCableMountingMethod={-}type {//}string;
 
 

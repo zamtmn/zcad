@@ -38,7 +38,7 @@ uses
   uzeconsts,
   uzcEnitiesVariablesExtender,
   UBaseTypeDescriptor,
-  uzbtypes;
+  uzeTypes,uzbtypes;
 
 type
   {** Структура для хранения одного параметра команды

@@ -22,10 +22,10 @@ unit uzeentdevice;
 interface
 
 uses
-  uzestyleslayers,uzepalette,uzeobjectextender,{uabstractunit,}uzeentityfactory,
+  uzestyleslayers,uzepalette,uzeobjectextender,uzeentityfactory,
   uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,SysUtils,uzctnrVectorBytes,
   uunitmanager,uzegeometry,uzeconsts,uzeentity,uzeentsubordinated,varmandef,
-  uzegeometrytypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,
+  uzegeometrytypes,uzeentblockinsert,uzbtypes,uzeTypes,UGDBVisibleOpenArray,
   UGDBObjBlockdefArray,gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,
   UGDBSelectedObjArray,uzeentitiestree,uzbLogIntf,uzestrconsts,uzglviewareadata,
   uzeSnap,uzCtnrVectorpBaseEntity;

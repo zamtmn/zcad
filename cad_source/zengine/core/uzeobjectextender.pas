@@ -20,8 +20,9 @@ unit uzeobjectextender;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzeExtdrAbstractEntityExtender,uzeentsubordinated,uzedrawingdef,uzbtypes,
-     uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport;
+uses
+  uzeExtdrAbstractEntityExtender,uzeentsubordinated,uzedrawingdef,
+  uzbtypes,uzeTypes,uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport;
 
 type
 TConstructorFeature=procedure(pEntity:Pointer);

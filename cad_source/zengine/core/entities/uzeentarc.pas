@@ -23,9 +23,9 @@ interface
 uses
   uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,
   uzeentwithlocalcs,uzecamera,uzestyleslayers,UGDBSelectedObjArray,uzeentity,
-  UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,uzegeometrytypes,uzeconsts,
-  uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,uzeSnap,Math,
-  uzMVReader,uzCtnrVectorpBaseEntity;
+  UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,uzeTypes,uzegeometrytypes,
+  uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,uzeSnap,
+  Math,uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
 

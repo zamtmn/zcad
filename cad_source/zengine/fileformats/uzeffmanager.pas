@@ -21,8 +21,9 @@ unit uzeffmanager;
 
 interface
 uses
-  uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeentgenericsubentry,
-  uzedrawingsimple,sysutils,gzctnrSTL,uzgldrawcontext,uzbLogIntf,uzeLogIntf;
+  uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeTypes,
+  uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrSTL,uzgldrawcontext,
+  uzbLogIntf,uzeLogIntf;
 
 type
   TExt2LoadProcMap<GFileProcessProc>=class

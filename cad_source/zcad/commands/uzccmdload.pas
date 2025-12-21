@@ -23,7 +23,7 @@ interface
 
 uses
   uzcLog,LCLType,LazUTF8,
-  uzbpaths,uzbtypes,uzcuitypes,
+  uzbpaths,uzbtypes,uzeTypes,uzcuitypes,
   uzeffmanager,uzctranslations,
   uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzcdrawing,

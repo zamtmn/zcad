@@ -25,8 +25,8 @@ uses
   gzctnrVectorTypes,uzeentityfactory,uzeentsubordinated,uzgldrawcontext,
   uzedrawingdef,uzecamera,uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
   uzegeometrytypes,uzeentity,UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,
-  uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-  uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
+  uzeTypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,
+  uzeffdxfsupport,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
   ptcirclertmodify=^tcirclertmodify;

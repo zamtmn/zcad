@@ -24,7 +24,7 @@ interface
 
 uses
   uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrSTL,uzbtypes,
-  uzeentity,uzbLogIntf,SysUtils;
+  uzeTypes,uzeentity,uzbLogIntf,SysUtils;
 type
 TAllocEntFunc=function:Pointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;

@@ -326,7 +326,7 @@ begin
       raise Exception.Create('Не задана целевая таблица');
     end;
 
-    if Result.ColumnMappings.Count = 0 then
+    if Result.ColumnMappings.Size = 0 then
     begin
       programlog.LogOutFormatStr(
       'uzvaccess: Не найдено ни одной инструкции setcolumn',
@@ -337,7 +337,7 @@ begin
 
     programlog.LogOutFormatStr(
       'uzvaccess: Парсинг завершен: %d строк, %d маппингов, %d ключевых колонок',
-      [rowCount, Result.ColumnMappings.Count, Result.KeyColumns.Count],
+      [rowCount, Result.ColumnMappings.Size, Result.KeyColumns.Count],
       LM_Info
     );
 

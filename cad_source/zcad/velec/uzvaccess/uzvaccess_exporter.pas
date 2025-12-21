@@ -281,7 +281,7 @@ begin
           'uzvaccess: Целевая таблица: %s, Тип данных: %s, Маппингов: %d',
           [instructions.TargetTable,
            SourceDataTypeToString(instructions.TypeData),
-           instructions.ColumnMappings.Count],
+           instructions.ColumnMappings.Size],
           LM_Info
         );
 

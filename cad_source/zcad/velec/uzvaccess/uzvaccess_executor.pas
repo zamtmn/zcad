@@ -460,7 +460,7 @@ begin
   Result := True;
 
   // Извлекаем значения для каждой колонки
-  for i := 0 to AInstructions.ColumnMappings.Count - 1 do
+  for i := 0 to AInstructions.ColumnMappings.Size - 1 do
   begin
     mapping := AInstructions.ColumnMappings[i];
 
@@ -552,7 +552,7 @@ begin
       );
 
       // Подготовка массива значений
-      SetLength(values, AInstructions.ColumnMappings.Count);
+      SetLength(values, AInstructions.ColumnMappings.Size);
 
       // Проверяем наличие ключевых колонок
       hasKeys := AInstructions.KeyColumns.Count > 0;

@@ -25,7 +25,8 @@ interface
 
 uses
   SysUtils, Classes, DB,
-  uzvaccess_types, uzclog;
+  uzvaccess_types, uzclog,
+  uzvaccess_parse_setcolumn, uzvaccess_parse_keycolumn, uzvaccess_parse_const;
 
 type
   {**
@@ -39,7 +40,6 @@ type
   **}
   TExportTableParser = class
   private
-
     // Получить значение колонки из датасета
     function GetColumnValue(ADataset: TDataSet; AColumnIndex: Integer): String;
 
@@ -53,24 +53,6 @@ type
     procedure ParseTypeDataInstruction(
       AInstruction: TExportInstructions;
       const ACol2: String
-    );
-
-    // Парсинг инструкции setcolumn
-    procedure ParseSetColumnInstruction(
-      AInstruction: TExportInstructions;
-      const ACol2, ACol3, ACol4: String
-    );
-
-    // Парсинг инструкции keyColumn
-    procedure ParseKeyColumnInstruction(
-      AInstruction: TExportInstructions;
-      ADataset: TDataSet
-    );
-
-    // Парсинг инструкции const
-    procedure ParseConstInstruction(
-      AInstruction: TExportInstructions;
-      const ACol2, ACol3: String
     );
 
   public
@@ -165,82 +147,6 @@ begin
 
 end;
 
-procedure TExportTableParser.ParseSetColumnInstruction(
-  AInstruction: TExportInstructions;
-  const ACol2, ACol3, ACol4: String
-);
-var
-  mapping: TColumnMapping;
-begin
-  // Проверка обязательных параметров
-  if (ACol2 = '') or (ACol3 = '') or (ACol4 = '') then
-  begin
-    programlog.LogOutFormatStr(
-      'uzvaccess: Инструкция setcolumn с неполными параметрами - пропускается',
-      [],
-      LM_Info
-    );
-    Exit;
-  end;
-
-  // Создание маппинга колонки
-  mapping := TColumnMapping.Create;
-  mapping.ColumnName := ACol2;
-  mapping.DataType := StringToColumnDataType(ACol3);
-  mapping.SourceParam := ACol4;
-
-  AInstruction.AddColumnMapping(mapping);
-
-end;
-
-procedure TExportTableParser.ParseKeyColumnInstruction(
-  AInstruction: TExportInstructions;
-  ADataset: TDataSet
-);
-var
-  i: Integer;
-  colValue: String;
-begin
-  // Читаем все колонки начиная с Col3 (т.к. Col1 - ID, Col2 - тип инструкции)
-  for i := 3 to 11 do
-  begin
-    colValue := GetColumnValue(ADataset, i);
-
-    if colValue = '' then
-      Break; // Больше нет ключевых колонок
-
-    AInstruction.AddKeyColumn(colValue);
-  end;
-end;
-
-procedure TExportTableParser.ParseConstInstruction(
-  AInstruction: TExportInstructions;
-  const ACol2, ACol3: String
-);
-var
-  mapping: TColumnMapping;
-begin
-  // Проверка обязательных параметров
-  if (ACol2 = '') or (ACol3 = '') then
-  begin
-    programlog.LogOutFormatStr(
-      'uzvaccess: Инструкция const с неполными параметрами - пропускается',
-      [],
-      LM_Info
-    );
-    Exit;
-  end;
-
-  // Создание константного маппинга
-  mapping := TColumnMapping.Create;
-  mapping.ColumnName := ACol2;
-  mapping.DataType := cdtString; // Константы всегда строки
-  mapping.IsConstant := True;
-  mapping.DefaultValue := ACol3;
-
-  AInstruction.AddColumnMapping(mapping);
-
-end;
 
 function TExportTableParser.Parse(
   const ATableName: String;
@@ -296,13 +202,13 @@ begin
           ParseTypeDataInstruction(Result, col3);
 
         itSetColumn:
-          ParseSetColumnInstruction(Result, col3, col4, col5);
+          uzvaccess_parse_setcolumn.ParseSetColumnInstruction(Result, col3, col4, col5);
 
         itKeyColumn:
-          ParseKeyColumnInstruction(Result, ADataset);
+          uzvaccess_parse_keycolumn.ParseKeyColumnInstruction(Result, ADataset);
 
         itConst:
-          ParseConstInstruction(Result, col3, col4);
+          uzvaccess_parse_const.ParseConstInstruction(Result, col3, col4);
 
         itUnknown:
           programlog.LogOutFormatStr(

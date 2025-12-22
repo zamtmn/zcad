@@ -37,26 +37,6 @@
 
 Финальная цель стандарта — обеспечение единообразия оформления, лёгкости понимания и высокой поддерживаемости кода. Результатом применения данных правил должен стать проект, в котором отсутствуют длинные неструктурированные блоки, все элементы разделены по смыслу, функции компактны и читаемы, а комментарии чётко поясняют назначение логики и намерения программиста.
 
----
-
-Issue to solve: https://github.com/veb86/zcadvelecAI/issues/461
-Your prepared branch: issue-461-16196b29bc7d
-Your prepared working directory: /tmp/gh-issue-solver-1762361786927
-Your forked repository: konard/zcadvelecAI
-Original repository (upstream): veb86/zcadvelecAI
-
-Proceed.
-
-Run timestamp: 2025-11-05T16:56:49.555Z
-
----
-
-Issue to solve: https://github.com/veb86/zcadvelecAI/issues/475
-Your prepared branch: issue-475-a28d88615473
-Your prepared working directory: /tmp/gh-issue-solver-1762423984353
-Your forked repository: konard/zcadvelecAI
-Original repository (upstream): veb86/zcadvelecAI
-
-Proceed.
-
-Run timestamp: 2025-11-06T10:13:26.916Z
+Для логирования использовать: "uses uzclog;". Только тип сообщения: LM_Info
+Пример записи в лог:
+programlog.LogOutFormatStr('uzvgetentity: result count = %d', [Result.Count], LM_Info);

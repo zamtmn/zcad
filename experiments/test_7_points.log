@@ -1,0 +1,42 @@
+================================================================================
+TEST: 7 Fit Points with Standard Global Interpolation
+================================================================================
+
+Fit points:
+  p1 = (0.00, 0.00)
+  p2 = (1.00, 2.00)
+  p3 = (3.00, 1.00)
+  p4 = (2.00, 0.00)
+  p5 = (1.50, -1.00)
+  p6 = (3.50, -0.50)
+  p7 = (4.00, 1.00)
+
+Control points (should be 7 for standard interpolation):
+  Actual count: 7
+  P[0] = (0.000, 0.000)
+  P[1] = (-1.690, 2.965)
+  P[2] = (4.569, 1.615)
+  P[3] = (1.978, 0.278)
+  P[4] = (0.674, -2.320)
+  P[5] = (5.128, 0.089)
+  P[6] = (4.000, 1.000)
+
+Knot vector:
+  [0.         0.         0.         0.         0.39430402 0.54358807
+ 0.68740848 1.         1.         1.         1.        ]
+  Length: 11 (should be 7 + 3 + 1 = 11)
+
+Verification (spline should pass through all fit points):
+  ✓ p1: error = 0.00e+00
+  ✓ p2: error = 2.22e-16
+  ✓ p3: error = 2.22e-16
+  ✓ p4: error = 4.44e-16
+  ✓ p5: error = 0.00e+00
+  ✓ p6: error = 1.11e-16
+  ✓ p7: error = 0.00e+00
+
+Maximum interpolation error: 4.44e-16
+
+✓ Plot saved to: experiments/test_7_points_standard.png
+
+✓ SUCCESS: Spline passes through all fit points!

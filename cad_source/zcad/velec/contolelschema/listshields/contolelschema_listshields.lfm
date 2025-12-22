@@ -1,0 +1,17 @@
+object Frame_listShields: TFrame_listShields
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 320
+  ClientHeight = 240
+  ClientWidth = 320
+  TabOrder = 0
+  object LabelShields: TLabel
+    Left = 10
+    Height = 15
+    Top = 10
+    Width = 61
+    Caption = 'listShields'
+    ParentColor = False
+  end
+end

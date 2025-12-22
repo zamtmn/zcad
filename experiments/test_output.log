@@ -1,0 +1,70 @@
+================================================================================
+Testing NURBS spline interpolation for issue #244
+================================================================================
+
+Fit points (red circles - points spline should pass through):
+  p1: (0.00, 0.00)
+  p2: (2.00, -1.00)
+  p3: (3.50, 1.50)
+  p4: (1.00, 2.00)
+
+Degree: 3
+
+Control points (blue squares - 6 points):
+  P0: (0.000000, 0.000000)
+  P1: (0.666667, -0.333333)
+  P2: (2.370962, -2.148246)
+  P3: (4.548195, 2.378027)
+  P4: (1.833333, 1.833333)
+  P5: (1.000000, 2.000000)
+
+Knot vector (10 knots):
+  [0.         0.         0.         0.         0.33333333 0.66666667
+ 1.         1.         1.         1.        ]
+
+Parameter values for fit points:
+  p1: u = 0.000000
+  p2: u = 0.290359
+  p3: u = 0.668940
+  p4: u = 1.000000
+
+Verification: Does spline pass through fit points?
+================================================================================
+  p1: error = 0.00e+00 ✓ PASS
+       Expected: (0.000000, 0.000000)
+       Got:      (0.000000, 0.000000)
+  p2: error = 0.00e+00 ✓ PASS
+       Expected: (2.000000, -1.000000)
+       Got:      (2.000000, -1.000000)
+  p3: error = 4.97e-16 ✓ PASS
+       Expected: (3.500000, 1.500000)
+       Got:      (3.500000, 1.500000)
+  p4: error = 0.00e+00 ✓ PASS
+       Expected: (1.000000, 2.000000)
+       Got:      (1.000000, 2.000000)
+
+Maximum interpolation error: 4.97e-16
+✓ SUCCESS: Spline passes through all fit points!
+
+Plot saved to: experiments/spline_issue244_test.png
+
+================================================================================
+Basis function matrix (for debugging):
+================================================================================
+Rows = parameter values, Columns = control points
+[[1.00000000e+00 0.00000000e+00 0.00000000e+00 0.00000000e+00
+  0.00000000e+00 0.00000000e+00]
+ [2.14289129e-03 3.55408879e-01 5.32289970e-01 1.10158260e-01
+  0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 1.63279663e-01 5.81570372e-01
+  2.55149647e-01 3.17273010e-07]
+ [0.00000000e+00 0.00000000e+00 0.00000000e+00 0.00000000e+00
+  0.00000000e+00 1.00000000e+00]]
+
+Matrix determinant (for interior unknowns): will compute below...
+
+Linear system matrix A (2 x 2):
+[[0.53228997 0.11015826]
+ [0.16327966 0.58157037]]
+Determinant: 2.915775e-01
+Condition number: 1.663678e+00

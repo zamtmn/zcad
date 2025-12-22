@@ -1,0 +1,77 @@
+================================================================================
+Issue #260: B-spline Conversion Analysis
+================================================================================
+
+Input: 7 points on curve (degree 3)
+Expected output: 9 control points
+Difference: 2 extra control points
+
+================================================================================
+Method 1: Standard Global Interpolation (current implementation)
+================================================================================
+This produces n+1 = m+1 control points for m+1 data points
+Expected: 7 control points
+Result: Does NOT match issue requirements (7 != 9)
+
+================================================================================
+Method 2: scipy.interpolate.splprep with default settings
+================================================================================
+Degree: 3
+Number of control points: 7
+Knot vector length: 11
+Knot vector: [0.         0.         0.         0.         0.24890938 0.45285361
+ 0.58096864 1.         1.         1.         1.        ]
+
+Control points from splprep:
+CP 0: (1583.2137, 417.8366, 0.0000)
+CP 1: (2914.8312, 578.2527, 0.0000)
+CP 2: (1763.0638, 2501.1679, 0.0000)
+CP 3: (-786.7428, 1062.3978, 0.0000)
+CP 4: (273.6623, 4252.1100, 0.0000)
+CP 5: (2793.0754, 2347.2499, 0.0000)
+CP 6: (3449.4735, 2146.5858, 0.0000)
+
+================================================================================
+Method 3: Analyzing expected control points
+================================================================================
+Observation:
+- First control point matches first data point
+- Last control point matches last data point
+- 7 data points + 2 extra = 9 control points
+
+This suggests: Approximation with extra control points for better fit
+Or: Different parameterization/knot vector strategy
+
+================================================================================
+Knot Vector Analysis
+================================================================================
+For 9 control points with degree 3:
+Expected knot vector length: 13
+scipy knot vector length: 11
+
+================================================================================
+Comparison with expected output
+================================================================================
+Number of control points DOES NOT MATCH: 7 vs 9
+
+================================================================================
+Testing different parameterizations
+================================================================================
+
+Testing with periodic=0:
+  Control points: 7
+  Knots: 11
+
+Testing with periodic=1:
+  Control points: 9
+  Knots: 13
+
+================================================================================
+Conclusion
+================================================================================
+The expected output (9 control points) suggests either:
+1. A specific knot vector strategy (clamped with extra knots)
+2. Different algorithm than standard global interpolation
+3. Approximation method with controlled number of control points
+
+Next step: Check if scipy splprep output matches expected values

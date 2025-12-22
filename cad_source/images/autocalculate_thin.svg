@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="256"
+   height="256"
+   viewBox="0 0 256 256"
+   version="1.1">
+  <defs>
+    <style>
+      .equals { fill: none; stroke: #008C00; stroke-width: 6; stroke-linecap: round; }
+      .letter-a { fill: none; stroke: #BE0000; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <!-- Знак равно (в качестве фона) -->
+  <line class="equals" x1="40" y1="108" x2="216" y2="108"/>
+  <line class="equals" x1="40" y1="148" x2="216" y2="148"/>
+
+  <!-- Буква А (перекрывает знак равно) -->
+  <path class="letter-a" d="M 88,180 L 128,76 L 168,180 M 105,140 L 151,140"/>
+</svg>

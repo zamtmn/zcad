@@ -1,0 +1,46 @@
+================================================================================
+Testing NURBS Interpolation for Issue #253
+================================================================================
+
+Input:
+  Number of fit points: 7
+  Degree: 3
+
+Fit points (points where spline should pass through):
+  p1: (0.00, 0.00)
+  p2: (1.00, 1.00)
+  p3: (2.00, 2.50)
+  p4: (2.50, 1.50)
+  p5: (2.00, 0.50)
+  p6: (3.00, 1.00)
+  p7: (4.00, 0.00)
+
+Mathematical calculation:
+  m = 6 (index of last fit point)
+  p = 3 (degree)
+  n = m + p - 1 = 6 + 3 - 1 = 8
+  Expected control points: n + 1 = 9
+
+Converting fit points to control points...
+  Parameters (t_k): [0.         0.17710202 0.40286367 0.54287511 0.68288655 0.82289798
+ 1.        ]
+  Knot vector: [0.         0.         0.         0.         0.37428027 0.54287511
+ 0.68288655 0.         0.         1.         1.         1.
+ 1.        ]
+  Knot vector length: 13 (should be 12 = 12)
+  Basis matrix shape: (7, 9) (should be 7 x 9)
+  Matrix condition number: 9.23e+01
+Traceback (most recent call last):
+  File "/tmp/gh-issue-solver-1760731146942/experiments/test_issue253_nurbs_interpolation.py", line 385, in <module>
+    test_nurbs_interpolation()
+  File "/tmp/gh-issue-solver-1760731146942/experiments/test_issue253_nurbs_interpolation.py", line 272, in test_nurbs_interpolation
+    control_points, knots = convert_fit_points_to_control_points(fit_points, degree)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/gh-issue-solver-1760731146942/experiments/test_issue253_nurbs_interpolation.py", line 215, in convert_fit_points_to_control_points
+    control_points[:, coord] = np.linalg.solve(N, fit_points[:, coord])
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py", line 396, in solve
+    _assert_stacked_square(a)
+  File "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py", line 213, in _assert_stacked_square
+    raise LinAlgError('Last 2 dimensions of the array must be square')
+numpy.linalg.LinAlgError: Last 2 dimensions of the array must be square

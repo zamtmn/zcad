@@ -228,6 +228,7 @@ uses
   uzccommand_VarsLink,
 
   uzccommand_text,
+  uzccommand_textexplode,
   uzccommand_exporttexttocsv,
   uzccommand_dataexport,uzccommand_dataimport,
   uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdrAdd,uzccommand_extdrRemove,
@@ -273,6 +274,7 @@ uses
   uzvmanemcom, //управления и обработка полученой электрической модели
   uzvmanemschemalevelone, //создание одноуровневой схемы
   uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
+  uzvmanagerconnect, // менеджер подключений
   {$IFDEF WINDOWS}//uzvmodeltoxlsx,
   uzvmodeltoxlsxfps, uzvdevtoxlsx, uzvxlsxtocad,uzvelectricalexcelcom,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
 
@@ -290,8 +292,12 @@ uses
   uzvdialuxlumimporter_main,
   uzvconnect_main,
   //uzvelectricalexcelcom,
+  uzvgetentity,
+  uzvaccess_command,
   //**//
   {$ENDIF}
+  //contolelschema_main,
+  uzcregconnectmanager,
   {$ENDIF}
 
   //uzccomexample2,
@@ -417,6 +423,5 @@ begin
   end;
   programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);
 end.
-
 
 

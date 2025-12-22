@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="256"
+   height="256"
+   viewBox="0 0 256 256"
+   version="1.1">
+  <defs>
+    <style>
+      .circle { fill: none; stroke: #20A8FF; stroke-width: 8; }
+      .equals { fill: none; stroke: #008C00; stroke-width: 6; stroke-linecap: round; }
+    </style>
+  </defs>
+
+  <!-- Круг -->
+  <circle class="circle" cx="128" cy="128" r="100"/>
+
+  <!-- Знак равно -->
+  <line class="equals" x1="78" y1="108" x2="178" y2="108"/>
+  <line class="equals" x1="78" y1="148" x2="178" y2="148"/>
+</svg>

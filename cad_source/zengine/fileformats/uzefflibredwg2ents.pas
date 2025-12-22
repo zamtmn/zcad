@@ -43,7 +43,7 @@ var
 begin
   BITCODE_T2Text(PDWGLayer^.name,DWGContext,name);
   zDebugLn(['{WH}Layer: ',name]);
-  if DWGContext.DWGVer>R_2006 then
+  if DWGContext.DWGVer>R_2007 then
     name:=Tria_Utf8ToAnsi(name);
   player:=ZContext.PDrawing^.LayerTable.MergeItem(name,ZContext.LoadMode);
   if player<>nil then begin

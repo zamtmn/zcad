@@ -1,0 +1,18 @@
+================================================================================
+Parameters (chord length):
+================================================================================
+[0.         0.10860267 0.24890938 0.45285361 0.58096864 0.78223565
+ 1.        ]
+
+m (last data point index) = 6
+n (last control point index) = 8
+p (degree) = 3
+Expected knot vector length: n + p + 2 = 13
+Traceback (most recent call last):
+  File "/tmp/gh-issue-solver-1760771923784/experiments/test_knot_averaging.py", line 101, in <module>
+    knot_vector = generate_knot_vector_averaging(m, n, p, params)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/gh-issue-solver-1760771923784/experiments/test_knot_averaging.py", line 74, in generate_knot_vector_averaging
+    sum_val += params[i]
+               ~~~~~~^^^
+IndexError: index 7 is out of bounds for axis 0 with size 7

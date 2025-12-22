@@ -228,6 +228,7 @@ uses
   uzccommand_VarsLink,
 
   uzccommand_text,
+  uzccommand_textexplode,
   uzccommand_exporttexttocsv,
   uzccommand_dataexport,uzccommand_dataimport,
   uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdrAdd,uzccommand_extdrRemove,

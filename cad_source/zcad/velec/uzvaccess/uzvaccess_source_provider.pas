@@ -30,37 +30,12 @@ uses
 
 type
   {**
-    Интерфейс для получения данных из примитивов
-
-    Предоставляет единый интерфейс для доступа к свойствам
-    различных источников данных (примитивы, структуры)
-  **}
-  IDataSourceProvider = interface
-    ['{E5B4D8A0-3F4E-4C2F-8B5D-1A2B3C4D5E6F}']
-
-    // Получить список объектов для экспорта
-    function GetEntities(ATypeData: TSourceDataType): TList;
-
-    // Получить значение свойства объекта по имени
-    function GetPropertyValue(
-      AEntity: Pointer;
-      const APropName: String
-    ): Variant;
-
-    // Проверить наличие свойства у объекта
-    function HasProperty(
-      AEntity: Pointer;
-      const APropName: String
-    ): Boolean;
-  end;
-
-  {**
     Провайдер данных из примитивов ZCAD
 
     Извлекает данные из примитивов (device/superline/cable)
     используя механизм переменных
   **}
-  TEntitySourceProvider = class(TInterfacedObject, IDataSourceProvider)
+  TEntitySourceProvider = class
   private
     FEntityList: TEntityVector;
     FEntityMode: Integer;
@@ -82,12 +57,16 @@ type
     );
     destructor Destroy; override;
 
-    // IDataSourceProvider
+    // Получить список объектов для экспорта
     function GetEntities(ATypeData: TSourceDataType): TList;
+
+    // Получить значение свойства объекта по имени
     function GetPropertyValue(
       AEntity: Pointer;
       const APropName: String
     ): Variant;
+
+    // Проверить наличие свойства у объекта
     function HasProperty(
       AEntity: Pointer;
       const APropName: String

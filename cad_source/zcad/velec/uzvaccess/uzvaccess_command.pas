@@ -17,6 +17,7 @@
 }
 {$mode objfpc}{$H+}
 
+{**Модуль реализации и регистрации команды экспорта в MS Access}
 unit uzvaccess_command;
 
 {$INCLUDE zengineconfig.inc}
@@ -24,152 +25,161 @@ unit uzvaccess_command;
 interface
 
 uses
-  SysUtils, Classes, Dialogs,
-  uzccommandsabstract, uzccommandsimpl, uzcinterface,
-  uzvaccess_types, uzvaccess_config, uzvaccess_exporter;
+  SysUtils,
+  Classes,
+  Dialogs,
+  uzccommandsmanager,
+  uzccommandsabstract,
+  uzccommandsimpl,
+  uzclog,
+  uzcinterface,
+  uzcdrawings,
+  uzbtypes,
+  uzvaccess_types,
+  uzvaccess_config,
+  uzvaccess_exporter;
 
-type
-  {**
-    Команда экспорта данных в MS Access
-
-    Использует гибкую систему управляющих таблиц EXPORT для
-    настройки процесса экспорта без перекомпиляции
-  **}
-  TAccessExportCommand = class(TCommand)
-  public
-    // Выполнить команду
-    function Execute(
-      pCommandParam: Pointer;
-      operationResult: TCommandResult
-    ): TCommandResult; override;
-  end;
-
-// Функция инициализации модуля
-procedure InitializeAccessExportCommand;
+{**Функция команды экспорта данных в MS Access}
+function AccessExport_com(
+  const Context: TZCADCommandContext;
+  operands: TCommandOperands
+): TCommandResult;
 
 implementation
 
-uses
-  uzcLog;
-
+{**Получить путь к файлу базы данных из пользовательского диалога}
+function GetDatabasePath: string;
 var
-  // Глобальный экземпляр команды
-  AccessExportCmd: TAccessExportCommand;
+  openDialog: TOpenDialog;
+begin
+  Result := '';
 
-{ TAccessExportCommand }
+  openDialog := TOpenDialog.Create(nil);
+  try
+    openDialog.Title := 'Выберите файл базы данных MS Access';
+    openDialog.Filter := 'MS Access Database|*.mdb;*.accdb|All Files|*.*';
+    openDialog.Options := [ofFileMustExist, ofEnableSizing];
 
-function TAccessExportCommand.Execute(
-  pCommandParam: Pointer;
-  operationResult: TCommandResult
-): TCommandResult;
+    if openDialog.Execute then
+      Result := openDialog.FileName;
+  finally
+    openDialog.Free;
+  end;
+end;
+
+{**Вывести результаты экспорта в интерфейс}
+procedure DisplayExportResults(const exportResult: TExportResult);
+begin
+  zcUI.TextMessage(
+    StringOfChar('=', 70),
+    TMWOHistoryOut
+  );
+
+  zcUI.TextMessage(
+    'РЕЗУЛЬТАТЫ ЭКСПОРТА:',
+    TMWOHistoryOut
+  );
+
+  zcUI.TextMessage(
+    exportResult.GetSummary,
+    TMWOHistoryOut
+  );
+
+  zcUI.TextMessage(
+    StringOfChar('=', 70),
+    TMWOHistoryOut
+  );
+end;
+
+{**Определить код результата на основе количества ошибок}
+function DetermineCommandResult(totalErrors: Integer): TCommandResult;
+begin
+  if totalErrors > 0 then
+  begin
+    zcUI.TextMessage(
+      'Экспорт завершён с ошибками',
+      TMWOHistoryOut
+    );
+    Result := cmd_OK_WithErrors;
+  end
+  else
+  begin
+    zcUI.TextMessage(
+      'Экспорт успешно завершён',
+      TMWOHistoryOut
+    );
+    Result := cmd_OK;
+  end;
+end;
+
+{**Выполнить процесс экспорта данных}
+function PerformExport(const databasePath: string): TCommandResult;
 var
   config: TExportConfig;
   exporter: TAccessExporter;
   exportResult: TExportResult;
-  accessFile: String;
-  openDialog: TOpenDialog;
 begin
-  Result := operationResult;
+  Result := cmd_Error;
 
-  // Вывод информационного сообщения
+  config := TExportConfig.Create;
+  try
+    config.DatabasePath := databasePath;
+
+    zcUI.TextMessage(
+      'Файл базы данных: ' + databasePath,
+      TMWOHistoryOut
+    );
+
+    exporter := TAccessExporter.Create(config);
+    try
+      exportResult := exporter.Execute;
+      try
+        DisplayExportResults(exportResult);
+        Result := DetermineCommandResult(exportResult.TotalErrors);
+      finally
+        exportResult.Free;
+      end;
+    finally
+      exporter.Free;
+    end;
+  finally
+    config.Free;
+  end;
+end;
+
+{**Функция команды экспорта данных в MS Access}
+function AccessExport_com(
+  const Context: TZCADCommandContext;
+  operands: TCommandOperands
+): TCommandResult;
+var
+  databasePath: string;
+begin
   zcUI.TextMessage(
     'Запуск экспорта данных в MS Access...',
     TMWOHistoryOut
   );
 
+  programlog.LogOutFormatStr(
+    'uzvaccess: Запуск команды экспорта в MS Access',
+    [],
+    LM_Info
+  );
+
   try
-    // Создаём конфигурацию по умолчанию
-    config := TExportConfig.Create;
-    try
-      // Показываем диалог выбора файла Access
-      accessFile := '';
+    databasePath := GetDatabasePath;
 
-      openDialog := TOpenDialog.Create(nil);
-      try
-        openDialog.Title := 'Выберите файл базы данных MS Access';
-        openDialog.Filter := 'MS Access Database|*.mdb;*.accdb|All Files|*.*';
-        openDialog.Options := [ofFileMustExist, ofEnableSizing];
-
-        if openDialog.Execute then
-          accessFile := openDialog.FileName
-        else
-        begin
-          zcUI.TextMessage(
-            'Экспорт отменён: файл не выбран',
-            TMWOHistoryOut
-          );
-          Result := cmd_OK;
-          Exit;
-        end;
-
-      finally
-        openDialog.Free;
-      end;
-
-      // Устанавливаем путь к базе данных
-      config.DatabasePath := accessFile;
-
+    if databasePath = '' then
+    begin
       zcUI.TextMessage(
-        'Файл базы данных: ' + accessFile,
+        'Экспорт отменён: файл не выбран',
         TMWOHistoryOut
       );
-
-      // Создаём экспортер
-      exporter := TAccessExporter.Create(config);
-      try
-        // Выполняем экспорт
-        exportResult := exporter.Execute;
-        try
-          // Выводим результаты
-          zcUI.TextMessage(
-            StringOfChar('=', 70),
-            TMWOHistoryOut
-          );
-
-          zcUI.TextMessage(
-            'РЕЗУЛЬТАТЫ ЭКСПОРТА:',
-            TMWOHistoryOut
-          );
-
-          zcUI.TextMessage(
-            exportResult.GetSummary,
-            TMWOHistoryOut
-          );
-
-          zcUI.TextMessage(
-            StringOfChar('=', 70),
-            TMWOHistoryOut
-          );
-
-          // Определяем статус выполнения
-          if exportResult.TotalErrors > 0 then
-          begin
-            zcUI.TextMessage(
-              'Экспорт завершён с ошибками',
-              TMWOHistoryOut
-            );
-            Result := cmd_OK_WithErrors;
-          end
-          else
-          begin
-            zcUI.TextMessage(
-              'Экспорт успешно завершён',
-              TMWOHistoryOut
-            );
-            Result := cmd_OK;
-          end;
-
-        finally
-          exportResult.Free;
-        end;
-
-      finally
-        exporter.Free;
-      end;
-
-    finally
-      config.Free;
+      Result := cmd_OK;
+      Exit;
     end;
+
+    Result := PerformExport(databasePath);
 
   except
     on E: Exception do
@@ -182,7 +192,7 @@ begin
       programlog.LogOutFormatStr(
         'uzvaccess: Ошибка выполнения команды экспорта: %s',
         [E.Message],
-        LM_Error
+        LM_Info
       );
 
       Result := cmd_Error;
@@ -190,38 +200,12 @@ begin
   end;
 end;
 
-{ Инициализация }
-
-procedure InitializeAccessExportCommand;
-begin
-  // Создаём экземпляр команды
-  AccessExportCmd := TAccessExportCommand.Create(
-    'AccessExport',
-    'Экспорт данных в MS Access'
-  );
-
-  // Регистрируем команду в системе ZCAD
-  // Примечание: конкретный способ регистрации зависит от
-  // архитектуры системы команд ZCAD
-  // Здесь показан общий подход
-
-  programlog.LogOutStr(
-    'uzvaccess: Команда AccessExport зарегистрирована',
-    LM_Info,
-    LM2006_01_Messages
-  );
-end;
-
 initialization
-  // Автоматическая регистрация при загрузке модуля
-  InitializeAccessExportCommand;
-
-finalization
-  // Освобождение ресурсов
-  if AccessExportCmd <> nil then
-  begin
-    AccessExportCmd.Free;
-    AccessExportCmd := nil;
-  end;
+  CreateZCADCommand(
+    @AccessExport_com,
+    'AccessExport',
+    CADWG,
+    0
+  );
 
 end.

@@ -40,15 +40,3 @@
 Для логирования использовать: "uses uzclog;". Только тип сообщения: LM_Info
 Пример записи в лог:
 programlog.LogOutFormatStr('uzvgetentity: result count = %d', [Result.Count], LM_Info);
-
----
-
-Issue to solve: https://github.com/veb86/zcadvelecAI/issues/691
-Your prepared branch: issue-691-b84cea368738
-Your prepared working directory: /tmp/gh-issue-solver-1766392143865
-Your forked repository: konard/veb86-zcadvelecAI
-Original repository (upstream): veb86/zcadvelecAI
-
-Proceed.
-
-Run timestamp: 2025-12-22T08:29:15.492Z

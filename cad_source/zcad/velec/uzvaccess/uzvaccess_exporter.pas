@@ -46,7 +46,7 @@ type
     FParser: TExportTableParser;
     FValidator: TTypeValidator;
     FExecutor: TExportExecutor;
-    FSourceProvider: IDataSourceProvider;
+    FSourceProvider: TEntitySourceProvider;
     FInitialized: Boolean;
 
     // Инициализация всех компонентов
@@ -173,7 +173,11 @@ begin
   );
 
   // Освобождаем в обратном порядке
-  FSourceProvider := nil;
+  if FSourceProvider <> nil then
+  begin
+    FSourceProvider.Free;
+    FSourceProvider := nil;
+  end;
 
   if FExecutor <> nil then
   begin

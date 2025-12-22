@@ -27,7 +27,7 @@ uses
   SysUtils, Classes, Variants, DB, SQLDB,
   uzvaccess_types, uzclog, uzvaccess_config,
   uzvaccess_connection, uzvaccess_validator,
-  uzvaccess_source_provider;
+  uzvaccess_source_provider, uzvaccess_sqlbuilder;
 
 type
   // Тип для хранения массива Variant в TList
@@ -46,25 +46,8 @@ type
     FConnection: TAccessConnection;
     FValidator: TTypeValidator;
     FConfig: TExportConfig;
+    FSqlBuilder: TSqlBuilder;
     FBatchSize: Integer;
-
-    // Построить SQL для вставки
-    function BuildInsertSQL(
-      const ATableName: String;
-      AInstructions: TExportInstructions
-    ): String;
-
-    // Построить SQL для обновления (UPSERT)
-    function BuildUpdateSQL(
-      const ATableName: String;
-      AInstructions: TExportInstructions
-    ): String;
-
-    // Построить SQL для проверки существования записи
-    function BuildExistsSQL(
-      const ATableName: String;
-      AInstructions: TExportInstructions
-    ): String;
 
     // Подготовить параметры запроса
     procedure PrepareQueryParams(
@@ -98,7 +81,7 @@ type
     function ExtractValues(
       AEntity: Pointer;
       AInstructions: TExportInstructions;
-      ASourceProvider: IDataSourceProvider;
+      ASourceProvider: TEntitySourceProvider;
       out AValues: array of Variant
     ): Boolean;
 
@@ -114,7 +97,7 @@ type
     function ExecuteExport(
       const AExportTableName: String;
       AInstructions: TExportInstructions;
-      ASourceProvider: IDataSourceProvider
+      ASourceProvider: TEntitySourceProvider
     ): TExportTableResult;
   end;
 
@@ -131,114 +114,16 @@ begin
   FConnection := AConnection;
   FValidator := AValidator;
   FConfig := AConfig;
+  FSqlBuilder := TSqlBuilder.Create;
   FBatchSize := AConfig.BatchSize;
 end;
 
 destructor TExportExecutor.Destroy;
 begin
+  FSqlBuilder.Free;
   inherited Destroy;
 end;
 
-function TExportExecutor.BuildInsertSQL(
-  const ATableName: String;
-  AInstructions: TExportInstructions
-): String;
-var
-  i: Integer;
-  mapping: TColumnMapping;
-  columns, params: String;
-begin
-  columns := '';
-  params := '';
-
-  // Формируем список колонок и параметров
-  for i := 0 to AInstructions.ColumnMappings.Size - 1 do
-  begin
-    mapping := AInstructions.ColumnMappings[i];
-
-    if i > 0 then
-    begin
-      columns := columns + ', ';
-      params := params + ', ';
-    end;
-
-    columns := columns + '[' + mapping.ColumnName + ']';
-    params := params + ':' + mapping.ColumnName;
-  end;
-
-  Result := Format('INSERT INTO [%s] (%s) VALUES (%s)',
-    [ATableName, columns, params]);
-end;
-
-function TExportExecutor.BuildUpdateSQL(
-  const ATableName: String;
-  AInstructions: TExportInstructions
-): String;
-var
-  i: Integer;
-  mapping: TColumnMapping;
-  setClause, whereClause: String;
-  isKey: Boolean;
-begin
-  setClause := '';
-  whereClause := '';
-
-  // Формируем SET и WHERE части
-  for i := 0 to AInstructions.ColumnMappings.Size - 1 do
-  begin
-    mapping := AInstructions.ColumnMappings[i];
-    isKey := AInstructions.KeyColumns.IndexOf(mapping.ColumnName) >= 0;
-
-    if not isKey then
-    begin
-      // Не ключевые колонки идут в SET
-      if setClause <> '' then
-        setClause := setClause + ', ';
-
-      setClause := setClause + Format('[%s] = :%s',
-        [mapping.ColumnName, mapping.ColumnName]);
-    end
-    else
-    begin
-      // Ключевые колонки идут в WHERE
-      if whereClause <> '' then
-        whereClause := whereClause + ' AND ';
-
-      whereClause := whereClause + Format('[%s] = :%s_key',
-        [mapping.ColumnName, mapping.ColumnName]);
-    end;
-  end;
-
-  Result := Format('UPDATE [%s] SET %s WHERE %s',
-    [ATableName, setClause, whereClause]);
-end;
-
-function TExportExecutor.BuildExistsSQL(
-  const ATableName: String;
-  AInstructions: TExportInstructions
-): String;
-var
-  i: Integer;
-  keyCol: String;
-  whereClause: String;
-begin
-  whereClause := '';
-
-  // Формируем WHERE по ключевым колонкам
-  for i := 0 to AInstructions.KeyColumns.Count - 1 do
-  begin
-    keyCol := AInstructions.KeyColumns[i];
-
-    if i > 0 then
-      whereClause := whereClause + ' AND ';
-
-    whereClause := whereClause + Format('[%s] = :%s',
-      [keyCol, keyCol]);
-  end;
-
-  Result := Format('SELECT COUNT(*) AS RecCount FROM [%s] WHERE %s',
-    [ATableName, whereClause]);
-end;
 
 procedure TExportExecutor.PrepareQueryParams(
   AQuery: TSQLQuery;
@@ -312,7 +197,7 @@ begin
     query.DataBase := FConnection.GetQuery.DataBase;
     query.Transaction := FConnection.GetQuery.Transaction;
 
-    sql := BuildExistsSQL(ATableName, AInstructions);
+    sql := FSqlBuilder.BuildExistsSQL(ATableName, AInstructions);
     query.SQL.Text := sql;
 
     // Устанавливаем параметры только для ключевых колонок
@@ -371,12 +256,12 @@ begin
     if exists then
     begin
       // UPDATE
-      sql := BuildUpdateSQL(ATableName, AInstructions);
+      sql := FSqlBuilder.BuildUpdateSQL(ATableName, AInstructions);
     end
     else
     begin
       // INSERT
-      sql := BuildInsertSQL(ATableName, AInstructions);
+      sql := FSqlBuilder.BuildInsertSQL(ATableName, AInstructions);
     end;
 
     query.SQL.Text := sql;
@@ -415,7 +300,7 @@ begin
     Exit;
 
   query := FConnection.GetQuery;
-  sql := BuildInsertSQL(ATableName, AInstructions);
+  sql := FSqlBuilder.BuildInsertSQL(ATableName, AInstructions);
 
   query.SQL.Text := sql;
 
@@ -449,7 +334,7 @@ end;
 function TExportExecutor.ExtractValues(
   AEntity: Pointer;
   AInstructions: TExportInstructions;
-  ASourceProvider: IDataSourceProvider;
+  ASourceProvider: TEntitySourceProvider;
   out AValues: array of Variant
 ): Boolean;
 var
@@ -504,7 +389,7 @@ end;
 function TExportExecutor.ExecuteExport(
   const AExportTableName: String;
   AInstructions: TExportInstructions;
-  ASourceProvider: IDataSourceProvider
+  ASourceProvider: TEntitySourceProvider
 ): TExportTableResult;
 var
   entities: TList;

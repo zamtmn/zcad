@@ -253,6 +253,7 @@ uses
 
   uzcCommand_PlaceDelegate,
   uzccommand_ReportsUpdate,
+  uzcCommand_TextExplode,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,

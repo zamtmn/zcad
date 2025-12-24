@@ -24,7 +24,7 @@ interface
 uses
   SysUtils,Graphics,LCLType,Themes,Forms,ColorBox,
   zcobjectinspectorui,uzOIDecorations,uzccommandsabstract,uzepalette,
-  zcobjectinspectoreditors,UEnumDescriptor,zcobjectinspector,uzcinfoform,
+  zOIEditors,UEnumDescriptor,zcobjectinspector,uzcinfoform,
   uzestyleslinetypes,uzctreenode,uzcfsnapeditor,
   uzeconsts,UGDBNamedObjectsArray,uzctnrvectorstrings,
   varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzcflineweights,usupportgui,

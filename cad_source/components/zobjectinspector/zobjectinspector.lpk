@@ -19,21 +19,21 @@
         <UnitName Value="zcobjectinspector"/>
       </Item1>
       <Item2>
-        <Filename Value="zcobjectinspectoreditors.pas"/>
-        <UnitName Value="zcobjectinspectoreditors"/>
-      </Item2>
-      <Item3>
         <Filename Value="zcobjectinspectorui.pas"/>
         <UnitName Value="zcobjectinspectorui"/>
-      </Item3>
-      <Item4>
+      </Item2>
+      <Item3>
         <Filename Value="uzobjectinspectormanager.pas"/>
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="uzObjectInspectorManager"/>
-      </Item4>
-      <Item5>
+      </Item3>
+      <Item4>
         <Filename Value="uzoidecorations.pas"/>
         <UnitName Value="uzOIDecorations"/>
+      </Item4>
+      <Item5>
+        <Filename Value="zoieditors.pas"/>
+        <UnitName Value="zoieditors"/>
       </Item5>
     </Files>
     <CompatibilityMode Value="True"/>

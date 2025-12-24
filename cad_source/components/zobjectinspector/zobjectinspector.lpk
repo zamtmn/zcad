@@ -20,7 +20,7 @@
       </Item1>
       <Item2>
         <Filename Value="uzoiui.pas"/>
-        <UnitName Value="uzoiui"/>
+        <UnitName Value="uzOIUI"/>
       </Item2>
       <Item3>
         <Filename Value="uzobjectinspectormanager.pas"/>
@@ -32,8 +32,8 @@
         <UnitName Value="uzOIDecorations"/>
       </Item4>
       <Item5>
-        <Filename Value="zoieditors.pas"/>
-        <UnitName Value="zOIEditors"/>
+        <Filename Value="uzoieditors.pas"/>
+        <UnitName Value="uzoieditors"/>
       </Item5>
     </Files>
     <CompatibilityMode Value="True"/>

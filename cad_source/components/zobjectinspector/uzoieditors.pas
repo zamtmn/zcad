@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit zOIEditors;
+unit uzOIEditors;
 
 {$MODE DELPHI}
 

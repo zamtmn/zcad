@@ -122,6 +122,7 @@ rmpkgslibs:
 	rm -rf components/zreaders/lib/*
 	rm -rf components/fphunspell/lib/*
 	rm -rf simplecad/lib/*
+	rm -rf other/agraphlaz/lazarus/lib/*
 	rm -rf ../lib/*
 	rm -rf components/metadarkstyle/lib
 	rm -rf components/zcontainers/lib
@@ -145,5 +146,6 @@ rmpkgslibs:
 	rm -rf components/fphunspell/lib
 	rm -rf components/zunits/lib
 	rm -rf simplecad/lib
+	rm -rf other/agraphlaz/lazarus/lib
 #	rm -rf ../lib
 

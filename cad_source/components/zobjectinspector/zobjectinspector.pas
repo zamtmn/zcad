@@ -9,7 +9,7 @@ interface
 
 uses
   zcobjectinspector, zcobjectinspectoreditors, zcobjectinspectorui, 
-  LazarusPackageIntf;
+  uzOIDecorations, LazarusPackageIntf;
 
 implementation
 

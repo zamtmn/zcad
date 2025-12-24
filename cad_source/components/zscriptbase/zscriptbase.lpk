@@ -12,7 +12,7 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="4">
+    <Files Count="3">
       <Item1>
         <Filename Value="varmandef.pas"/>
         <UnitName Value="varmandef"/>
@@ -22,13 +22,9 @@
         <UnitName Value="typedescriptors"/>
       </Item2>
       <Item3>
-        <Filename Value="uzctypesdecorations.pas"/>
-        <UnitName Value="uzctypesdecorations"/>
-      </Item3>
-      <Item4>
         <Filename Value="ulexparser.pas"/>
         <UnitName Value="uLexParser"/>
-      </Item4>
+      </Item3>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="5">

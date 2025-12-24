@@ -8,8 +8,7 @@ unit zscriptbase;
 interface
 
 uses
-  varmandef, typedescriptors, uzctypesdecorations, uLexParser, 
-  LazarusPackageIntf;
+  varmandef, typedescriptors, uLexParser, LazarusPackageIntf;
 
 implementation
 

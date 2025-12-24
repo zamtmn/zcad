@@ -12,7 +12,7 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="4">
+    <Files Count="5">
       <Item1>
         <Filename Value="zcobjectinspector.pas"/>
         <HasRegisterProc Value="True"/>
@@ -31,6 +31,10 @@
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="uzObjectInspectorManager"/>
       </Item4>
+      <Item5>
+        <Filename Value="uzoidecorations.pas"/>
+        <UnitName Value="uzOIDecorations"/>
+      </Item5>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

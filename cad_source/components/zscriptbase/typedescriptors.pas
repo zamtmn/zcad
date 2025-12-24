@@ -45,8 +45,6 @@ const
      SM_Default=0;
 
 type
-  tzcpmode=(zcptxt,zcpbin);
-
   PPropertyDeskriptor=^PropertyDeskriptor;
   PropertyDeskriptor=object(BasePropertyDeskriptor)
                            constructor initnul;
@@ -110,9 +108,8 @@ TUserTypeDescriptor=object(UserTypeDescriptor)
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
                           function FindField(const fn:TInternalScriptString):PFieldDescriptor;virtual;
                    end;
-var zcpmode:tzcpmode;
-    //currpd:PPropertyDeskriptor;
-    debugShowHiddenFieldInObjInsp:boolean=false;
+var
+  debugShowHiddenFieldInObjInsp:boolean=false;
 implementation
 
 function TUserTypeDescriptor.GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
@@ -270,5 +267,4 @@ begin
 end;
 
 begin
-     zcpmode:=zcpbin;
 end.

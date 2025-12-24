@@ -19,8 +19,8 @@
         <UnitName Value="zcobjectinspector"/>
       </Item1>
       <Item2>
-        <Filename Value="zcobjectinspectorui.pas"/>
-        <UnitName Value="zcobjectinspectorui"/>
+        <Filename Value="uzoiui.pas"/>
+        <UnitName Value="uzoiui"/>
       </Item2>
       <Item3>
         <Filename Value="uzobjectinspectormanager.pas"/>
@@ -33,7 +33,7 @@
       </Item4>
       <Item5>
         <Filename Value="zoieditors.pas"/>
-        <UnitName Value="zoieditors"/>
+        <UnitName Value="zOIEditors"/>
       </Item5>
     </Files>
     <CompatibilityMode Value="True"/>

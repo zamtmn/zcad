@@ -25,7 +25,7 @@ uses
   uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorstrings,varmandef,
   uzedrawingsimple,uzeentity,uzcenitiesvariablesextender,zcobjectinspector,
   uzcguimanager,uzcstrconsts,gzctnrVectorTypes,Types,Controls,uzcdrawings,
-  Varman,UUnitManager,uzcsysvars,uzcsysparams,zcobjectinspectorui,
+  Varman,UUnitManager,uzcsysvars,uzcsysparams,uzOIUI,
   uzcoimultiobjects,uzccommandsimpl,uzmenusmanager,uzcLog,menus,ComCtrls,
   uztoolbarsmanager,uzcimagesmanager,uzctreenode,uzcActionsManager,
   uzObjectInspectorManager,zeundostack,uzcOI,UObjectDescriptor,classes,uzbUnits;

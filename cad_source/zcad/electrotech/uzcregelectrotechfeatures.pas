@@ -25,7 +25,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,uzctranslations,
      UBaseTypeDescriptor,uzbtypes,uzctnrVectorBytes,varmandef,
      uzcsysparams,TypeDescriptors,URecordDescriptor,
      uzcLog,uzceltechtreeprop,uzcefstringstreeselector,
-     uzccommandsimpl,uzccommandsabstract,uzOIDecorations,zcobjectinspectorui,
+     uzccommandsimpl,uzccommandsabstract,uzOIDecorations,uzOIUI,
      uzcoidecorations,
      Forms,Controls,
      uzcinterface,uzcuitypes;

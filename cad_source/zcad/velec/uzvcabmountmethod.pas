@@ -25,7 +25,7 @@ uses
      uzctranslations,//работа с локализацией
      uzcefstringstreeselector,//окно выбора в дереве
      uzcsysparams,
-     uzOIDecorations,zcobjectinspectorui,//uzcoidecorations,//для "быстрых" редакторов
+     uzOIDecorations,uzOIUI,//uzcoidecorations,//для "быстрых" редакторов
      UUnitManager,
      sysutils,
      Forms,Controls,

@@ -1202,8 +1202,9 @@
         <ResourceBaseClass Value="Form"/>
       </Unit158>
       <Unit159>
-        <Filename Value="components/zobjectinspector/zcobjectinspectorui.pas"/>
+        <Filename Value="components/zobjectinspector/uzoiui.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzOIUI"/>
       </Unit159>
       <Unit160>
         <Filename Value="zcad/gui/forms/uzcfnavigatorentities.pas"/>

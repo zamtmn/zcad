@@ -8,8 +8,7 @@ unit zobjectinspector;
 interface
 
 uses
-  zcobjectinspector, zcobjectinspectorui, uzOIDecorations, zOIEditors, 
-  LazarusPackageIntf;
+  zcobjectinspector, uzOIUI, uzOIDecorations, zOIEditors, LazarusPackageIntf;
 
 implementation
 

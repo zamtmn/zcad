@@ -23,7 +23,7 @@ interface
 
 uses
   SysUtils,Graphics,LCLType,Themes,Forms,ColorBox,
-  zcobjectinspectorui,uzOIDecorations,uzccommandsabstract,uzepalette,
+  uzOIUI,uzOIDecorations,uzccommandsabstract,uzepalette,
   zOIEditors,UEnumDescriptor,zcobjectinspector,uzcinfoform,
   uzestyleslinetypes,uzctreenode,uzcfsnapeditor,
   uzeconsts,UGDBNamedObjectsArray,uzctnrvectorstrings,

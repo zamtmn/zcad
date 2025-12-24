@@ -1,7 +1,7 @@
 unit uzcdevicebaseabstract;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}uzbstrproc,strmy,
+uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}uzbstrproc,//strmy,
      uzbtypes,UUnitManager,varman,sysutils,typedescriptors,uzclog;
 type
 {EXPORT+}

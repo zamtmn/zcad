@@ -17,387 +17,262 @@
 }
 
 unit strmy;
-{$MODE DELPHI}
+{$Mode objfpc}{$H+}
 
 interface
-uses {}sysutils,uzctnrvectorstrings;
+
+uses SysUtils,uzctnrvectorstrings;
+
 type
   TLexema=shortstring;
   PLexema=^TLexema;
-//function pac_lGDBWord_to_String(lw: LongWord): String;
-//function pac_GDBWord_to_String(w: Word): String;
-//function unpac_String_to_GDBWord(s: String): Word;
-//function unpac_String_to_lGDBWord(s: String): LongWord;
-function countchar(const s: String; ch: ansichar): Integer;
-procedure replaceeqlen(var s: String; const substr,newstr: String);
-function replacenull(const s:String): String;
-function strtohex(const s:String): String;
-function parse(const template, str:String; Stringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
-function runparser(const template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
-function IsParsed(const template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
-const maxlexem=16;
+
+function parse(const template,str:string;Stringarray:PTZctnrVectorStrings;
+  mode:boolean;lexema:PLexema;var position:integer):boolean;
+function runparser(const template:string;var str:string;out parsed:boolean)
+                  :PTZctnrVectorStrings;
+function IsParsed(const template:string;var str:string;
+  out strins:PTZctnrVectorStrings):boolean;
 
 const
-      sym_command=['_','?','|','-'];
-      symend=#0;
-      lexemarray:array[0..maxlexem,0..1] of String=(
-                                                    (('identifier'),('_softspace'#0'+I_sym'#0'[{_symordig'#0'}-I')),
-                                                    (('identifiers_cs'),('_softspace'#0'_identifier'#0'[{_softspace'#0'=,_softspace'#0'_identifier'#0'}')),
-                                                    (('sym'),('?_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'#208#209#0)),
-                                                    (('break'),('? '#13#10)),
-                                                    (('softspace'),('[{_break'#0'}')),
-                                                    (('endlexem'),('^ (['#13#10)),
-                                                    (('softend'),('_softspace'#0'=;')),
-                                                    (('hardspace'),('_break'#0'_softspace'#0)),
-                                                    (('symordig'),('?_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'#208#209#0)),
-                                                    (('anysym'),('!@#$%^&*()[];:?_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'#208#209#0)),
-                                                    (('decdig'),('?0123456789'#0)),
-                                                    (('sign'),('?+-'#0)),
-                                                    (('intnumber'),('+I[{_sign'#0'}_decdig'#0'[{_decdig'#0'}-I')),
-                                                    (('realnumber'),('+I[{_sign'#0'}[{_decdig'#0'}@{=._decdig'#0'[{_decdig'#0'}}-I_softspace'#0)),
-                                                    (('intdiapazon'),('_intnumber'#0'_softspace'#0'=.=._softspace'#0'_intnumber'#0)),
-                                                    (('String'),('+S`-S')),
-                                                    (('intdiapazons_cs'),('_intdiapazon'#0'[{_softspace'#0'=,_softspace'#0'_intdiapazon'#0'}'))
-                                                   );
+  sym_command=['_','?','|','-'];
+  symend=#0;
+  maxlexem=16;
+  lexemarray:array[0..maxlexem,0..1] of String=(
+    (('identifier'),('_softspace'#0'+I_sym'#0'[{_symordig'#0'}-I')),
+    (('identifiers_cs'),('_softspace'#0'_identifier'#0'[{_softspace'#0'=,_softspace'#0'_identifier'#0'}')),
+    (('sym'),('?_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'#208#209#0)),
+    (('break'),('? '#13#10)),
+    (('softspace'),('[{_break'#0'}')),
+    (('endlexem'),('^ (['#13#10)),
+    (('softend'),('_softspace'#0'=;')),
+    (('hardspace'),('_break'#0'_softspace'#0)),
+    (('symordig'),('?_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'#208#209#0)),
+    (('anysym'),('!@#$%^&*()[];:?_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'#208#209#0)),
+    (('decdig'),('?0123456789'#0)),
+    (('sign'),('?+-'#0)),
+    (('intnumber'),('+I[{_sign'#0'}_decdig'#0'[{_decdig'#0'}-I')),
+    (('realnumber'),('+I[{_sign'#0'}[{_decdig'#0'}@{=._decdig'#0'[{_decdig'#0'}}-I_softspace'#0)),
+    (('intdiapazon'),('_intnumber'#0'_softspace'#0'=.=._softspace'#0'_intnumber'#0)),
+    (('String'),('+S`-S')),
+    (('intdiapazons_cs'),('_intdiapazon'#0'[{_softspace'#0'=,_softspace'#0'_intdiapazon'#0'}'))
+  );
 
 implementation
-uses varmandef{,log,URecordDescriptor};
-function findlexem(const s:String; start, len: Integer):String; overload;
+
+function findlexem(const s:string;start,len:integer):string;overload;
 var
-   i:Integer;
-   s2:string;
+  i:integer;
+  s2:string;
 begin
-     for i:=0 to maxlexem do
-     begin
-       s2:=lexemarray[i,0];
-       if (Length(s2)=len) and (CompareChar(s2[1], s[start], len)=0) then
-                                begin
-                                     result:=lexemarray[i,1];
-                                     exit;
-                                end;
-     end;
-     result:='';
-end;
-
-function replacenull(const s:String): String;
-var si,ri:Integer;
-    temp:String;
-begin
-     pointer(result):=nil;
-     setlength(result,3*length(s));
-     //result:='234';
-     if s='' then exit;
-     si:=1;
-     ri:=1;
-     while si<=length(s) do
-     begin
-          if Byte(s[si])<32 then
-                                begin
-                                     result[ri]:='#';
-                                     temp:=IntToHex(Byte(s[si]),2);
-                                     inc(ri);
-                                     result[ri]:=temp[1];
-                                     inc(ri);
-                                     result[ri]:=temp[2];
-                                end
-                            else
-                                begin
-                                     result[ri]:=s[si];
-                                end;
-          inc(si);
-          inc(ri);
-     end;
-     setlength(result,ri-1);
-end;
-function strtohex(const s:String): String;
-var si,ri:Integer;
-    temp:String;
-begin
-     pointer(result):=nil;
-     setlength(result,3*length(s));
-     //result:='234';
-     if s='' then exit;
-     si:=1;
-     ri:=1;
-     while si<=length(s) do
-     begin
-          begin
-                                     result[ri]:='#';
-                                     temp:=IntToHex(Byte(s[si]),2);
-                                     inc(ri);
-                                     result[ri]:=temp[1];
-                                     inc(ri);
-                                     result[ri]:=temp[2];
-          end;
-          inc(si);
-          inc(ri);
-     end;
-     //setlength(result,ri-1);
-     //result:='234';
-end;
-
-{function pac_GDBWord_to_String(w: Word): String;
-begin
-  result := chr(lo(w)) + chr(hi(w));
-end;
-
-function pac_lGDBWord_to_String(lw: LongWord): String;
-begin
-  result := chr(lo(lo(lw))) + chr(hi(lo(lw))) + chr(lo(hi(lw))) + chr(hi(hi(lw)));
-end;
-
-function unpac_String_to_GDBWord(s: String): Word;
-begin
-  result := Word(pGDBWord(s)^);
-end;
-
-function unpac_String_to_lGDBWord(s: String): LongWord;
-begin
-  result := LongWord(pGDBLongword(s)^);
-end;}
-
-function countchar(const s: String; ch: ansichar): Integer;
-var i, c: Integer;
-begin
-  c := 0;
-  if length(s) > 0 then
-    for i := 1 to length(s) do if s[i] = ch then inc(c);
-  result := c;
-end;
-procedure replaceeqlen(var s: String; const substr,newstr: String);
-var i, c,a: Integer;
-begin
-  i:=pos(substr,s);
-  c := length(substr);
-  while i>0 do
-  begin
-       for a:=1 to c do
-          s[i+a-1]:=newstr[a];
-          i:=pos(substr,s);
+  for i:=0 to maxlexem do begin
+    s2:=lexemarray[i,0];
+    if (Length(s2)=len) and (CompareChar(s2[1],s[start],len)=0) then begin
+      Result:=lexemarray[i,1];
+      exit;
+    end;
   end;
+  Result:='';
 end;
 
-procedure readsubexpr(r1,r2:ansichar; const expr: String;var substart,subend:Integer);
+procedure readsubexpr(r1,r2:ansichar;const expr:string;var substart,subend:integer);
 var
-  {i, }count: Integer;
-  s,f:Integer;
-  //s: String;
+  Count:integer;
+  s,f:integer;
 begin
-  count := 1;
+  Count:=1;
   s:=substart;
   repeat
-    if expr[subend] = r1 then
-    begin
-      if count=0 then s:=subend;
-      inc(count);
+    if expr[subend]=r1 then begin
+      if Count=0 then
+        s:=subend;
+      Inc(Count);
     end;
-    if expr[subend] = r2 then
-    begin
-      dec(count);
-      if count=0 then f:=subend;
+    if expr[subend]=r2 then begin
+      Dec(Count);
+      if Count=0 then
+        f:=subend;
     end;
-    inc(subend);
-  until (count = 0) or (subend > length(expr));
-  //dec(subend);
+    Inc(subend);
+  until (Count=0) or (subend>length(expr));
   substart:=s;
   subend:=f;
 end;
-procedure foundsym(sym:ansichar; const expr: String;var subend:Integer);
-begin
-  while (expr[subend]<>sym) and (subend < length(expr)) do
-        inc(subend);
-end;
-function IsParsed(const template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
-begin
-     strins:=runparser(template,str,result);
-end;
-function runparser(const template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
-var i:Integer;
-    Stringarray:PTZctnrVectorStrings;
-begin
-     i:=1;
-     Getmem(Pointer(Stringarray),sizeof(TZctnrVectorStrings));
-     Stringarray^.init(20);
-     parsed:=false;
-     if str<>'' then
-     begin
-     parsed:=parse(template,str,Stringarray,false,nil,i);
-     if parsed then
-                   begin
-                        if i>length(str) then {i>=length(str)}
-                                             begin
-                                                  str:='';
-                                             end
-                                         else
-                                             begin
-                                                  str:=copy(str,i,length(str)-i+1);
-                                             end;
-                   end
-               else
-                   begin
-                        {Stringarray^.FreeAndDone;
-                                      Freemem(Pointer(Stringarray));
-                                      Stringarray:=nil;}
 
-                   end;
-     end;
-     if (Stringarray^.Count=0)or(not parsed) then
-                                 begin
-                                      Stringarray^.Done;
-                                      Freemem(Pointer(Stringarray));
-                                      Stringarray:=nil;
-                                 end;
-     result:=Stringarray;
-end;
-function parse(const template, str:String; Stringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
-var i,iend{,subpos},subi:Integer;
-    subexpr:String;
-    {error,}subresult:Boolean;
-    command:ansichar;
-    l:TLexema;
-    strarr:TZctnrVectorStrings;
-    //mode:Boolean;
+procedure foundsym(sym:ansichar;const expr:string;var subend:integer);
 begin
-     result:=false;
-     i:=1;
-     //mode:=false;
-     while i<=length(template) do
-     begin
-          command:=template[i];
-          {if command<>'?' then
-          while (str[position] in syn_breacer) do
-          begin
-               inc(position)
-          end;}
-          inc(i);
-          case command of
-               '_':begin
-                        subi:=i;
-                        foundsym(#0,template,subi);
-                        subexpr:=findlexem(template,i,subi-i);
-                        if subexpr<>'' then
-                        begin
-                             l:='';
-                             strarr.init(20);
-                             if lexema<>nil then result:=parse(subexpr,str,@strarr,mode,lexema,position)
-                                            else result:=parse(subexpr,str,@strarr,mode,@l,position);
-                             if (result)and(strarr.count<>0) then
-                             begin
-                                  strarr.copyto(Stringarray^);
-//                                  l:=l;
-                             end;
-                             strarr.Done;
-                        end;
-                        i:=subi;
-                   end;
-               '?':begin
-                        subi:=i;
-                        foundsym(#0,template,subi);
-                        if IndexByte(template[i], subi-i, Byte(str[position]))>=0 then
-                                                             begin
-                                                                  if (lexema<>nil) and mode then lexema^:=lexema^+str[position];
-                                                                  inc(position);
-                                                                  result:=true
-                                                             end
-                                                         else
-                                                             result:=false;
-                        i:=subi;
-                   end;
-               '`':begin
-                        {subi:=i;
-                        foundsym(#0,template,subi);
-                        subexpr:=copy(template,i,subi-i);}
-                        dec(i);
-                        if str[position]='''' then
-                        begin
-                             inc(position);
-                             while str[position]<>'''' do
-                             begin
-                                  if (lexema<>nil) and mode then lexema^:=lexema^+str[position];
-                                  inc(position);
-                             end;
-                             result:=true;
-                             inc(position);
-                        end else result:=false;
-                   end;
-               '^':begin
-                        subi:=i;
-                        foundsym(#0,template,subi);
-                        if IndexByte(template[i], subi-i, Byte(str[position]))>=0 then
-                                                             begin
-                                                                  result:=true
-                                                             end
-                                                         else
-                                                             result:=false;
-                        i:=subi;
-                   end;
-               '=':begin
-                        if str[position]=template[i] then
-                                                         begin
-                                                              if (lexema<>nil) and mode then lexema^:=lexema^+str[position];
-                                                              inc(position);
-                                                              result:=true
-                                                        end
-                                                     else
-                                                         result:=false;
-                        //inc(i);
-                   end;
-               '|':begin
-                   end;
-               '-':begin
-                        //inc(i);
-                        if lexema<>nil then
-                                           begin
-                                                subexpr:=lexema^;
-                                                Stringarray.PushBackData(subexpr);
-                                                subexpr:='';
-                                                lexema^:='';
-                                           end;
-                        mode:=false;
-                   end;
-               '+':begin
-                        //inc(i);
-                        mode:=true;
-                        result:=true;
-                   end;
-               '[':begin
-                        inc(i);
-                        iend:=i;
-                        readsubexpr('{','}',template,i,iend);
-                        subexpr:=copy(template,i,iend-i);
-                        {subi:=i;
-                        foundsym(#0,template,subi);
-                        subexpr:=copy(template,i,subi-i);}
-                        repeat
-                              subresult:=parse(subexpr,str,Stringarray,mode,lexema,position);
-                        until not subresult;
-                        i:=iend{+1};
-                        result:=true
-                   end;
-               '@':begin
-                        inc(i);
-                        iend:=i;
-                        readsubexpr('{','}',template,i,iend);
-                        subexpr:=copy(template,i,iend-i);
-                              subresult:=parse(subexpr,str,Stringarray,mode,lexema,position);
-                        i:=iend{+1};
-                        result:=true
-                   end;
-               '{':begin
-                        iend:=i;
-                        readsubexpr('{','}',template,i,iend);
-                        subexpr:=findlexem(template,i+1,iend-i-1);
-                        if subexpr<>'' then
-                        begin
-                             {error:=}parse(template,str,Stringarray,mode,nil,position);
-                        end
-                   end;
-          end;
-          if result=false then exit;
-          {else if template[i]<>str[position] then
-                                                 halt(0);}
-          inc(i);
-     end;
+  while (expr[subend]<>sym) and (subend<length(expr)) do
+    Inc(subend);
 end;
+
+function IsParsed(const template:string;
+  var str:string;out strins:PTZctnrVectorStrings):boolean;
+begin
+  strins:=runparser(template,str,Result);
+end;
+
+function runparser(const template:string;var str:string;out parsed:boolean)
+                  :PTZctnrVectorStrings;
+var
+  i:integer;
+  Stringarray:PTZctnrVectorStrings;
+begin
+  i:=1;
+  Getmem(Pointer(Stringarray),sizeof(TZctnrVectorStrings));
+  Stringarray^.init(20);
+  parsed:=False;
+  if str<>'' then begin
+    parsed:=parse(template,str,Stringarray,False,nil,i);
+    if parsed then begin
+      if i>length(str) then begin
+        str:='';
+      end else begin
+        str:=copy(str,i,length(str)-i+1);
+      end;
+    end;
+  end;
+  if (Stringarray^.Count=0)or(not parsed) then begin
+    Stringarray^.Done;
+    Freemem(Pointer(Stringarray));
+    Stringarray:=nil;
+  end;
+  Result:=Stringarray;
+end;
+
+function parse(const template,str:string;
+  Stringarray:PTZctnrVectorStrings;mode:boolean;lexema:PLexema;
+  var position:integer):boolean;
+var
+  i,iend,subi:integer;
+  subexpr:string;
+  subresult:boolean;
+  command:ansichar;
+  l:TLexema;
+  strarr:TZctnrVectorStrings;
+begin
+  Result:=False;
+  i:=1;
+  while i<=length(template) do begin
+    command:=template[i];
+    Inc(i);
+    case command of
+      '_':begin
+        subi:=i;
+        foundsym(#0,template,subi);
+        subexpr:=findlexem(template,i,subi-i);
+        if subexpr<>'' then begin
+          l:='';
+          strarr.init(20);
+          if lexema<>nil then
+            Result:=parse(subexpr,str,@strarr,mode,lexema,position)
+          else
+            Result:=parse(subexpr,str,@strarr,mode,@l,position);
+          if (Result)and(strarr.Count<>0) then begin
+            strarr.copyto(Stringarray^);
+          end;
+          strarr.Done;
+        end;
+        i:=subi;
+      end;
+      '?':begin
+        subi:=i;
+        foundsym(#0,template,subi);
+        if IndexByte(template[i],subi-i,byte(str[position]))>=0 then
+        begin
+          if (lexema<>nil) and
+            mode then
+            lexema^:=lexema^+str[position];
+          Inc(position);
+          Result:=True;
+        end else
+          Result:=False;
+        i:=subi;
+      end;
+      '`':begin
+        Dec(i);
+        if str[position]='''' then begin
+          Inc(position);
+          while str[position]<>'''' do begin
+            if (lexema<>nil) and mode then
+              lexema^:=lexema^+str[position];
+            Inc(position);
+          end;
+          Result:=True;
+          Inc(position);
+        end else
+          Result:=False;
+      end;
+      '^':begin
+        subi:=i;
+        foundsym(#0,template,subi);
+        if IndexByte(template[i],subi-i,byte(str[position]))>=0 then
+        begin
+          Result:=True;
+        end else
+          Result:=False;
+        i:=subi;
+      end;
+      '=':begin
+        if str[position]=template[i] then begin
+          if (lexema<>nil) and
+            mode then
+            lexema^:=lexema^+str[position];
+          Inc(position);
+          Result:=True;
+        end else
+          Result:=False;
+      end;
+      '|':begin
+      end;
+      '-':begin
+        if lexema<>nil then begin
+          subexpr:=lexema^;
+          Stringarray^.PushBackData(subexpr);
+          subexpr:='';
+          lexema^:='';
+        end;
+        mode:=False;
+      end;
+      '+':begin
+        mode:=True;
+        Result:=True;
+      end;
+      '[':begin
+        Inc(i);
+        iend:=i;
+        readsubexpr('{','}',template,i,iend);
+        subexpr:=copy(template,i,iend-i);
+        repeat
+          subresult:=
+            parse(subexpr,str,Stringarray,mode,lexema,position);
+        until not subresult;
+        i:=iend;
+        Result:=True;
+      end;
+      '@':begin
+        Inc(i);
+        iend:=i;
+        readsubexpr('{','}',template,i,iend);
+        subexpr:=copy(template,i,iend-i);
+        subresult:=
+          parse(subexpr,str,Stringarray,mode,lexema,position);
+        i:=iend;
+        Result:=True;
+      end;
+      '{':begin
+        iend:=i;
+        readsubexpr('{','}',template,i,iend);
+        subexpr:=findlexem(template,i+1,iend-i-1);
+        if subexpr<>'' then begin
+          parse(template,str,Stringarray,mode,nil,position);
+        end;
+      end;
+    end;
+    if Result=False then
+      exit;
+    Inc(i);
+  end;
+end;
+
 begin
 end.

@@ -114,7 +114,7 @@ var zcpmode:tzcpmode;
     //currpd:PPropertyDeskriptor;
     debugShowHiddenFieldInObjInsp:boolean=false;
 implementation
-uses strmy;
+
 function TUserTypeDescriptor.GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
 begin
      if bmode=property_build

@@ -1,0 +1,5 @@
+skinparam Legend {
+  BackgroundColor transparent
+  BorderColor transparent
+  FontName "Noto Serif", "DejaVu Serif", serif
+}

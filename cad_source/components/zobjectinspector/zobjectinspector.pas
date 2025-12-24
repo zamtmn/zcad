@@ -8,13 +8,14 @@ unit zobjectinspector;
 interface
 
 uses
-  zcobjectinspector, uzOIUI, uzOIDecorations, uzOIEditors, LazarusPackageIntf;
+  uzObjectInspector, uzObjectInspectorManager, uzOIDecorations, uzOIEditors, 
+  uzOIUI, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
-  RegisterUnit('zcobjectinspector', @zcobjectinspector.Register);
+  RegisterUnit('uzObjectInspector', @uzObjectInspector.Register);
 end;
 
 initialization

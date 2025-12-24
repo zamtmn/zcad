@@ -21,7 +21,7 @@ unit uzcregnavigatorentities;
 interface
 uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      varmandef,
-     uzeentity,zcobjectinspector,uzcguimanager,
+     uzeentity,uzObjectInspector,uzcguimanager,
      Types,Controls,Varman,UUnitManager,uzcsysvars,uzcLog;
 resourcestring
   rsEntities='Entities';

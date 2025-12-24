@@ -23,7 +23,7 @@ uses
   Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,
   uzcutils,uzbpaths,TypeDescriptors,uzcTranslations,Forms,uzcinterface,uzeroot,
   uzbtypes,uzedrawingdef,uzgldrawcontext,uzctnrvectorstrings,varmandef,
-  uzedrawingsimple,uzeentity,uzcenitiesvariablesextender,zcobjectinspector,
+  uzedrawingsimple,uzeentity,uzcenitiesvariablesextender,uzObjectInspector,
   uzcguimanager,uzcstrconsts,gzctnrVectorTypes,Types,Controls,uzcdrawings,
   Varman,UUnitManager,uzcsysvars,uzcsysparams,uzOIUI,
   uzcoimultiobjects,uzccommandsimpl,uzmenusmanager,uzcLog,menus,ComCtrls,

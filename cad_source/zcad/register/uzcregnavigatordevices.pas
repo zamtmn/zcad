@@ -22,7 +22,7 @@ unit uzcregnavigatordevices;
 interface
 uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,
      varmandef,uzeentdevice,uzcnavigatorsnodedesk,
-     uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
+     uzeentity,uzObjectInspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
      Types,Controls,Varman,UUnitManager,uzcsysvars,uzcLog,laz.VirtualTrees,
      uzcfnavigatordevicescxmenu,{uzcmainwindow,}MacroDefIntf,sysutils,uzcActionsManager;
 resourcestring

@@ -20,7 +20,7 @@ unit uzcOI;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  zcobjectinspector;
+  uzObjectInspector;
 var
   GDBobjinsp:TGDBobjinsp;
 implementation

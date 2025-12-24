@@ -8,32 +8,31 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="."/>
+        <OtherUnitFiles Value=".;src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Files Count="5">
       <Item1>
-        <Filename Value="zcobjectinspector.pas"/>
+        <Filename Value="src\uzobjectinspector.pas"/>
         <HasRegisterProc Value="True"/>
-        <UnitName Value="zcobjectinspector"/>
+        <UnitName Value="uzObjectInspector"/>
       </Item1>
       <Item2>
-        <Filename Value="uzoiui.pas"/>
-        <UnitName Value="uzOIUI"/>
+        <Filename Value="src\uzobjectinspectormanager.pas"/>
+        <UnitName Value="uzObjectInspectorManager"/>
       </Item2>
       <Item3>
-        <Filename Value="uzobjectinspectormanager.pas"/>
-        <AddToUsesPkgSection Value="False"/>
-        <UnitName Value="uzObjectInspectorManager"/>
+        <Filename Value="src\uzoidecorations.pas"/>
+        <UnitName Value="uzOIDecorations"/>
       </Item3>
       <Item4>
-        <Filename Value="uzoidecorations.pas"/>
-        <UnitName Value="uzOIDecorations"/>
+        <Filename Value="src\uzoieditors.pas"/>
+        <UnitName Value="uzOIEditors"/>
       </Item4>
       <Item5>
-        <Filename Value="uzoieditors.pas"/>
-        <UnitName Value="uzoieditors"/>
+        <Filename Value="src\uzoiui.pas"/>
+        <UnitName Value="uzOIUI"/>
       </Item5>
     </Files>
     <CompatibilityMode Value="True"/>

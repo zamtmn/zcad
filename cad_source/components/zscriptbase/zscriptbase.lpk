@@ -18,16 +18,16 @@
         <UnitName Value="varmandef"/>
       </Item1>
       <Item2>
-        <Filename Value="strmy.pas"/>
-        <UnitName Value="strmy"/>
-      </Item2>
-      <Item3>
         <Filename Value="typedescriptors.pas"/>
         <UnitName Value="typedescriptors"/>
-      </Item3>
-      <Item4>
+      </Item2>
+      <Item3>
         <Filename Value="uzctypesdecorations.pas"/>
         <UnitName Value="uzctypesdecorations"/>
+      </Item3>
+      <Item4>
+        <Filename Value="ulexparser.pas"/>
+        <UnitName Value="uLexParser"/>
       </Item4>
     </Files>
     <CompatibilityMode Value="True"/>

@@ -24,7 +24,7 @@ uses
   LCLProc,gzctnrVectorObjects,URecordDescriptor,uzctnrVectorBytes,sysutils,
   uzbUnits,
   gzctnrVectorTypes,UBaseTypeDescriptor,TypeDescriptors,
-  strmy,uzctnrvectorstrings,objects,gzctnrVector,
+  uLexParser,uzctnrvectorstrings,objects,gzctnrVector,
   varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
 type
 GDBTOperandStoreMode=Byte;

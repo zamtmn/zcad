@@ -283,7 +283,7 @@ procedure StoreBooleanToSavedUnit(const name,suffix:string;value:Boolean);
 procedure StoreAnsiStringToSavedUnit(const name,suffix:string;const value:string);
 procedure RegisterVarCategory(const CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 implementation
-uses strmy;
+uses uLexParser;
 
 procedure RegisterVarCategory(const CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 begin

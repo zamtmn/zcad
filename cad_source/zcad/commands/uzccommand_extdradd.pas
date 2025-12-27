@@ -25,7 +25,9 @@ interface
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeExtdrAbstractEntityExtender,
+  uzelongprocesssupport,
+  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,
+  uzeExtdrAbstractEntityExtender,
   gzUndoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
   uzcinterface,UGDBSelectedObjArray;
 
@@ -47,9 +49,11 @@ var
   DoMethod,UndoMethod:TMethod;
   ext:TAbstractEntityExtender;
   psd:PSelectedObjDesc;
+  lpsh:TLPSHandle;
 begin
   try
     if EntityExtenders.tryGetValue(uppercase(operands),extdr) then begin
+      lpsh:=LPS.StartLongProcess('Add extenders',nil,0{,LPSOSilent});
       Count:=0;
 
       //обрабатываем последний выбраный примитив
@@ -103,6 +107,7 @@ begin
       zcUI.TextMessage(format(rscmNEntitiesProcessed,[Count]),TMWOHistoryOut);
       if Count>0 then
         PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
+    LPS.EndLongProcess(lpsh);
     end else
       zcUI.TextMessage(format(rscmExtenderNotFound,[operands]),TMWOHistoryOut);
   finally

@@ -15,7 +15,7 @@ uses
   uzcdrawings,uzbtypes,
   uzestylesdim,
   uzclog,uzedrawingsimple,uzcsysvars,
-  uzbUnits,
+  uzbUnits,uzeTypes,
 
   uzcinterface,uzcstrconsts,uzbstrproc,
   uzepalette,uzcflineweights,uzestyleslinetypes,uzestylestexts,

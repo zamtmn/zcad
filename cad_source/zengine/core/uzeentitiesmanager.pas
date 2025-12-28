@@ -21,9 +21,11 @@ unit uzeentitiesmanager;
 
 
 interface
-uses uzbLogIntf,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,
-     uzeutils,uzestyleslayers,sysutils,uzbtypes,UGDBVisibleOpenArray,
-     uzegeometrytypes,uzeentgenericsubentry,uzeentity;
+uses
+  uzbLogIntf,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,uzeutils,
+  uzestyleslayers,sysutils,uzbtypes,uzeTypes,UGDBVisibleOpenArray,
+  uzegeometrytypes,uzeentgenericsubentry,uzeentity;
+
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
                          const AP1,AP2:TzePoint3d): PGDBObjEntity;

@@ -27,7 +27,7 @@ uses
   uzestyleslayers,SysUtils,uzeentity,uzctnrVectorBytes,uzbtypes,uzeTypes,
   uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,Math,uzeentsubordinated,
   gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,
-  uzMVReader,uzcTextPreprocessorDXFImpl;
+  uzMVReader,uzcTextPreprocessorDXFImpl,uzefontbase;
 
 type
   PGDBXYZWStringArray=^XYZWStringArray;

@@ -27,7 +27,7 @@ uses
   uzestyleslayers,uzeentabstracttext,uzeentity,uzctnrVectorBytes,uzbtypes,
   uzeTypes,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
   uzeentsubordinated,uzbLogIntf,uzegeometrytypes,uzestylestexts,uzeSnap,
-  uzMVReader,uzcTextPreprocessorDXFImpl;
+  uzMVReader,uzcTextPreprocessorDXFImpl,uzefontbase;
 
 const
   CLEFNotNeedSaveTemplate=1;

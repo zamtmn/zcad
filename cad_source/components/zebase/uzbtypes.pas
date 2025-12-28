@@ -20,26 +20,64 @@ unit uzbtypes;
 {$ModeSwitch ADVANCEDRECORDS}
 
 interface
+
 uses
-  sysutils,
+  SysUtils,
   uzegeometrytypes,uzbHandles;
 
 const
-     GDBBaseObjectID = 30000;
-     ObjN_NotRecognized='NotRecognized';
-     NotActual = 0;
+  GDBBaseObjectID=30000;
+  ObjN_NotRecognized='NotRecognized';
+  NotActual=0;
+
 type
-TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:Integer);
-TControlPointAttr=(CPA_Strech);
-TControlPointAttrs=set of TControlPointAttr;
-TTimeMeter=record
+  TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:integer);
+  TControlPointAttr=(CPA_Strech);
+  TControlPointAttrs=set of TControlPointAttr;
+  TTimeMeter=record
   private
     fLPTime:TDateTime;
   public
     class function StartMeasure:TTimeMeter;static;
     procedure EndMeasure;
-    function ElapsedMiliSec:Integer;
-end;
+    function ElapsedMiliSec:integer;
+  end;
+  TObjID=word;
+  TActuality=PtrUInt;
+
+  TCameraCounters=record
+    totalobj,infrustum:integer;
+    constructor CreateRec(AT,AI:integer);
+  end;
+
+  TVisActuality=record
+    VisibleActualy:TActuality;
+    InfrustumActualy:TActuality;
+    {-}constructor CreateRec(AV,AI:TActuality);{//}
+  end;
+
+  GDBaseObject=object
+    function ObjToString(const prefix,sufix:string):string;virtual;
+    function GetObjType:TObjID;virtual;
+    //procedure Format;virtual;
+    procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
+    function GetObjTypeName:string;virtual;
+    function GetObjName:string;virtual;
+    constructor initnul;
+    destructor Done;virtual;{ abstract;}
+  end;
+  PGDBaseObject=^GDBaseObject;
+
+  TDXFEntsInternalStringType=unicodestring;
+  {-}TDXFEntsInternalCharType=unicodechar;{//}
+
+  GDBCameraBaseProp=record
+    point:TzePoint3d;
+    look:TzeVector3d;
+    ydir:TzeVector3d;
+    xdir:TzeVector3d;
+    zoom:double;
+  end;
 
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Summary'*)
@@ -66,79 +104,27 @@ end;
 (*varcategoryforoi INSERT='Insert'*)
 (*varcategoryforoi NORMAL='Normal'*)
 (*varcategoryforoi SCALE='Scale'*)
-TObjID=word;
-{----REGISTEROBJECTTYPE GDBaseObject----}
-GDBaseObject=object
-    function ObjToString(const prefix,sufix:String):String; virtual;
-    function GetObjType:TObjID;virtual;
-    //procedure Format;virtual;
-    procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
-    function GetObjTypeName:String;virtual;
-    function GetObjName:String;virtual;
-    constructor initnul;
-    destructor Done;virtual;{ abstract;}
-  end;
-PGDBaseObject=^GDBaseObject;
 
-TCameraCounters=record
-  totalobj,infrustum:Integer;
-  {-}constructor CreateRec(AT,AI:Integer);{//}
-end;
-TActuality=PtrUInt;
-TVisActuality=record
-  VisibleActualy:TActuality;
-  InfrustumActualy:TActuality;
-  {-}constructor CreateRec(AV,AI:TActuality);{//}
-end;
-
-{REGISTERRECORDTYPE GDBCameraBaseProp}
-GDBCameraBaseProp=record
-  point:TzePoint3d;
-  look:TzeVector3d;
-  ydir:TzeVector3d;
-  xdir:TzeVector3d;
-  zoom:double;
-end;
-
-PGDBBaseCamera=^GDBBaseCamera;
-{REGISTEROBJECTTYPE GDBBaseCamera}
 GDBBaseCamera=object(GDBaseObject)
-                modelMatrix:TzeTypedMatrix4d;
-                fovy:Double;
-                Counters:TCameraCounters;
-                //totalobj:Integer;
-                prop:GDBCameraBaseProp;
-                anglx,angly,zmin,zmax:Double;
-                projMatrix:TzeTypedMatrix4d;
-                viewport:TzeVector4i;
-                clip:TzeTypedMatrix4d;
-                frustum:TzeFrustum;
-                //infrustum:Integer;
-                obj_zmax,obj_zmin:Double;
-                DRAWNOTEND:Boolean;
-                DRAWCOUNT:TActuality;
-                POSCOUNT:TActuality;
-                VISCOUNT:TActuality;
-                CamCSOffset:TzePoint3d;
-                procedure NextPosition;virtual; abstract;
-          end;
-TDXFEntsInternalStringType=UnicodeString;
-{-}TDXFEntsInternalCharType=UnicodeChar;{//}
+  modelMatrix:TzeTypedMatrix4d;
+  fovy:double;
+  Counters:TCameraCounters;
+  prop:GDBCameraBaseProp;
+  anglx,angly,zmin,zmax:double;
+  projMatrix:TzeTypedMatrix4d;
+  viewport:TzeVector4i;
+  clip:TzeTypedMatrix4d;
+  frustum:TzeFrustum;
+  obj_zmax,obj_zmin:double;
+  DRAWNOTEND:boolean;
+  DRAWCOUNT:TActuality;
+  POSCOUNT:TActuality;
+  VISCOUNT:TActuality;
+  CamCSOffset:TzePoint3d;
+  procedure NextPosition;virtual;abstract;
+end;
+PGDBBaseCamera=^GDBBaseCamera;
 
-  {REGISTERRECORDTYPE TPolyData}
-  TPolyData=record
-                  //nearestvertex:integer;
-                  //nearestline:integer;
-                  //dir:integer;
-                  index:integer;
-                  wc:TzePoint3d;
-            end;
-  PTLayerControl=^TLayerControl;
-  {REGISTERRECORDTYPE TLayerControl}
-  TLayerControl=record
-                      Enabled:Boolean;(*'Enabled'*)
-                      LayerName:AnsiString;(*'Layer name'*)
-                end;
   TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
   TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);
   TShapeGroup=(SG_El_Sch,SG_Cable_Sch,SG_Plan,SG_Unknown);
@@ -152,51 +138,15 @@ TDXFEntsInternalStringType=UnicodeString;
                    BBorder:TBlockBorder;(*'Border'*)
                    BGroup:TBlockGroup;(*'Block group'*)
              end;
-  PStringTreeType=^TStringTreeType;
-  TStringTreeType=String;
-  TENTID=TStringTreeType;
-  TEentityRepresentation=TStringTreeType;
-  TEentityFunction=TStringTreeType;
-PGDBsymdolinfo=^GDBsymdolinfo;
-{REGISTERRECORDTYPE GDBsymdolinfo}
-GDBsymdolinfo=record
-    LLPrimitiveStartIndex: Integer;
-    LLPrimitiveCount: Integer;
-    NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: Double;
-    Name:String;
-    Number:Integer;
-    LatestCreate:Boolean;
-  end;
-PTHAlign=^THAlign;
-THAlign=(HALeft,HAMidle,HARight);
-PTVAlign=^TVAlign;
-TVAlign=(VATop,VAMidle,VABottom);
-PTAlign=^TAlign;
-TAlign=(TATop,TABottom,TALeft,TARight);
-PTAppMode=^TAppMode;
-TAppMode=(TAMAllowDark,TAMForceDark,TAMForceLight);
-TDWGHandle=QWord;
-PTGDBLineWeight=^TGDBLineWeight;
-TGDBLineWeight=SmallInt;
-PTGDBOSMode=^TGDBOSMode;
-TGDBOSMode=Integer;
-TGDB3StateBool=(T3SB_Fale(*'False'*),T3SB_True(*'True'*),T3SB_Default(*'Default'*));
-PTGDB3StateBool=^TGDB3StateBool;
+
+
 PTFaceTypedData=^TFaceTypedData;
 {REGISTERRECORDTYPE TFaceTypedData}
 TFaceTypedData=record
                  Instance: Pointer;
                  PTD: Pointer;
                 end;
-TLLPrimitiveAttrib=Integer;
-PTLLVertexIndex=^TLLVertexIndex;
-TLLVertexIndex=Integer;
-PTIntegerOverrider=^TIntegerOverrider;
-{REGISTERRECORDTYPE TIntegerOverrider}
-TIntegerOverrider=record
-                      Enable:Boolean;(*'Enable'*)
-                      Value:Integer;(*'New value'*)
-                     end;
+
 {REGISTERRECORDTYPE TImageDegradation}
 TImageDegradation=record
                         RD_ID_Enabled:PBoolean;(*'Enabled'*)
@@ -312,6 +262,7 @@ var
   zeHandles:TZHandleCreator;
 
 function IsIt(PType,PChecedType:Pointer):Boolean;
+function ParentPType(PType:Pointer):Pointer;
 
 {$IFDEF DELPHI}
 function StrToQWord(const sh:string):UInt64;
@@ -406,6 +357,21 @@ begin
   {$endif}
   result:=IsIt({$ifdef VER3_0}CurrParent{$else}CurrParent^{$endif},PChecedType);
 end;
+function ParentPType(PType:Pointer):Pointer;
+type
+  vmtRecPtr=^vmtRec;
+  vmtRecPtrPtr=^vmtRecPtr;
+  vmtRec=packed record
+    size,negSize : sizeint;
+    parent: {$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
+  end;
+begin
+  if vmtRecPtr(PType)^.parent<>nil then
+    result:=vmtRecPtr(PType)^.parent{$ifndef VER3_0}^{$endif}
+  else
+    result:=nil;
+end;
+
 {$IFDEF DELPHI}
 function StrToQWord(const sh:string):UInt64;
 begin

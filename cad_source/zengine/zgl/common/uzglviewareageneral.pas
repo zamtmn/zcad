@@ -28,7 +28,7 @@ uses
   Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
   UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,
   uzgldrawerabstract,uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,
-  gzctnrSTL,uzbLogIntf,uzeSnap,uzeMouseTimer;
+  gzctnrSTL,uzbLogIntf,uzeSnap,uzeMouseTimer,uzeTypes;
 const
   ontracdist=10;
   ontracignoredist=25;

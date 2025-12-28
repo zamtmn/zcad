@@ -33,7 +33,7 @@ uses
   uzcsysparams,gzctnrVectorTypes,uzelongprocesssupport,
   uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
   uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
-  uzctnrVectorBytes,uzbtypes,
+  uzctnrVectorBytes,uzbtypes,uzeTypes,
   uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzcLog,uzbLogTypes,uzbLog,
   varmandef,varman,UUnitManager,uzcsysinfo,
   uzestylestexts,uzestylesdim,

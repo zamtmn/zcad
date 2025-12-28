@@ -20,9 +20,10 @@ unit uzgprimitivescreator;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
-     sysutils,uzbtypes,uzgprimitivessarray,
-     uzegeometry,uzbLogIntf,gzctnrVectorTypes;
+uses
+  uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
+  sysutils,uzbtypes,uzeTypes,uzgprimitivessarray,
+  uzegeometry,uzbLogIntf,gzctnrVectorTypes;
 type
 
 TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)

@@ -36,7 +36,7 @@ uses
   uzegeometry,uzcoimultiproperties,uzcLog,
   uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector,
   uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable,
-  uzctnrVectorStrings,uzbtypes,uzbUnits;
+  uzctnrVectorStrings,uzbtypes,uzeTypes,uzbUnits;
 implementation
 var
   ptdTHAlign:PUserTypeDescriptor;

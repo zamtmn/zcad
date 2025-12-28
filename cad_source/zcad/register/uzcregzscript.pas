@@ -22,8 +22,10 @@ interface
 uses
   SysUtils,uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
   varman,USinonimDescriptor,UBaseTypeDescriptor,uzcLog,uzegeometrytypes,
-  varmandef,uzbUnits,uzbUnitsUtils;
+  varmandef,uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes;
+
 type
+
   TZeDimLessDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
                       end;
@@ -220,6 +222,88 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PTInsUnits),'PTInsUnits');
 
+  utd:=ptsu^.RegisterType(TypeInfo(TVisActuality),'TVisActuality');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['VisibleActualy','InfrustumActualy'],
+      [FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TCameraCounters),'TCameraCounters');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['totalobj','infrustum'],[FNProgram,FNUser]);
+  end;
+
+  ptsu^.RegisterType(TypeInfo(TActuality),'TActuality');
+  ptsu^.RegisterType(TypeInfo(TDXFEntsInternalStringType),
+    'TDXFEntsInternalStringType');
+
+  utd:=ptsu^.RegisterType(TypeInfo(GDBCameraBaseProp),'GDBCameraBaseProp');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['point','look','ydir','xdir','zoom'],
+      [FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TLayerControl),'TLayerControl');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Enabled','LayerName'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Enabled','Layer name'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTLayerControl),'PTLayerControl');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TIntegerOverrider),'TIntegerOverrider');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Enabled','Value'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Enabled','New value'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTIntegerOverrider),'PTIntegerOverrider');
+
+  utd:=ptsu^.RegisterType(TypeInfo(THAlign),'THAlign');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['HALeft','HAMidle','HARight'],[FNProgram,FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTHAlign),'PTHAlign');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TVAlign),'TVAlign');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['VATop','VAMidle','VABottom'],[FNProgram,FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTVAlign),'PTVAlign');
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TAlign),'TAlign');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TATop','TABottom','TALeft','TARight'],[FNProgram,FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTAlign),'PTAlign');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TAppMode),'TAppMode');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TAMAllowDark','TAMForceDark','TAMForceLight'],[FNProgram,FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTAppMode),'PTAppMode');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBLineWeight),'TGDBLineWeight');
+  ptsu^.RegisterType(TypeInfo(PTGDBLineWeight),'PTGDBLineWeight');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBOSMode),'TGDBOSMode');
+  ptsu^.RegisterType(TypeInfo(PTGDBOSMode),'PTGDBOSMode');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDB3StateBool),'TGDB3StateBool');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['T3SB_Fale','T3SB_True','T3SB_Default'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['False','True','Default'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTGDB3StateBool),'PTGDB3StateBool');
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TStringTreeType),'TStringTreeType');
+  ptsu^.RegisterType(TypeInfo(PStringTreeType),'PStringTreeType');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TENTID),'TENTID');
+  utd:=ptsu^.RegisterType(TypeInfo(TEentityRepresentation),'TEentityRepresentation');
+  utd:=ptsu^.RegisterType(TypeInfo(TEentityFunction),'TEentityFunction');
+
+  utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),true,'GDBaseObject');
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

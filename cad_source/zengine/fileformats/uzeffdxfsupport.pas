@@ -24,7 +24,7 @@ unit uzeffdxfsupport;
 interface
 uses
   uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics,
-  uzMVReader,UGDBPoint3DArray;
+  uzMVReader,UGDBPoint3DArray,uzeTypes;
 
 const
   cDXFError_WrogGroupCode='DXF group code "%d" expected but "%d" found';

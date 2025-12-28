@@ -19,7 +19,7 @@
 unit uzgprimitivescreatorabstract;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgprimitivessarray,uzgindexsarray,sysutils,uzbtypes,//
+uses uzgprimitivessarray,uzgindexsarray,sysutils,uzbtypes,uzeTypes,
      gzctnrVectorTypes,uzegeometry;
 type
 TLLPrimitivesCreatorAbstract=class

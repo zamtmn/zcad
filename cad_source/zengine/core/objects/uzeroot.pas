@@ -193,9 +193,14 @@ var
   c:integer;
   bb:TBoundingBox;
   HaveNewBB:boolean;
+  internallpsh:TLPSHandle;
 begin
   c:=ents.count;
   HaveNewBB:=False;
+
+  if lpsh=LPSHEmpty then
+    internallpsh:=lps.StartLongProcess('DoFormat',nil,0,LPSOSilentIfFast);
+
   p:=ents.beginiterate(ir);
   if p<>nil then repeat
     p^.Formatafteredit(drawing,dc,[EFCalcEntityCS]);
@@ -258,6 +263,9 @@ begin
       lps.ProgressLongProcess(lpsh,c+ir.itc);
     p:=ents.iterate(ir);
   until p=nil;
+
+  if lpsh=LPSHEmpty then
+    lps.EndLongProcess(internallpsh);
 
 end;
 

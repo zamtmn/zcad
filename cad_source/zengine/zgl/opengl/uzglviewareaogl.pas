@@ -19,18 +19,19 @@
 unit uzglviewareaogl;
 {$INCLUDE zengineconfig.inc}
 interface
+
 uses
-     {$IFDEF LCLGTK2}
-     gtk2,gdk2,
-     {$ENDIF}
-     (*{$IFDEF LCLQT}
-     qt4,
-     {$ENDIF}*)
-     uzglviewareaabstract,uzgldrawerogl,sysutils,
-     uzgloglstatemanager,uzbtypes,
-     uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
-     ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,
-     uzegeometrytypes,uzbLogIntf,{$IFNDEF DELPHI}OpenGLContext{$ENDIF},GLext;
+  {$IFDEF LCLGTK2}
+  gtk2,gdk2,
+  {$ENDIF}
+  (*{$IFDEF LCLQT}
+  qt4,
+  {$ENDIF}*)
+  uzglviewareaabstract,uzgldrawerogl,SysUtils,
+  uzgloglstatemanager,uzbtypes,uzeTypes,
+  uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
+  ExtCtrls,Classes,Controls,Graphics,uzglviewareageneral,Math,uzglbackendmanager,
+  uzegeometrytypes,uzbLogIntf,{$IFNDEF DELPHI}OpenGLContext{$ENDIF},GLext;
 type
     PTOGLWnd = ^TOGLWnd;
     TOGLWnd = class({TPanel}TOpenGLControl)

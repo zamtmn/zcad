@@ -25,7 +25,8 @@ uses
   UEnumDescriptor,uzctnrVectorPointers,
   SysUtils,UBaseTypeDescriptor,uzctnrVectorBytes,
   gzctnrVectorTypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
-  TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
+  TypeDescriptors,URecordDescriptor,UObjectDescriptor,USinonimDescriptor,
+  uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   gzctnrVectorPData,gzctnrVector,
   uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes,
@@ -145,6 +146,7 @@ TNameToIndex=TMyAnsiStringDictionary<TArrayIndex>;
 TFieldName=(FNUser,FNProgram);
 TFieldNames=set of TFieldName;
 TTypeAliases=TMyMapGen<TInternalScriptString,TInternalScriptString>;
+TVMT2PTD=TMyMapGen<Pointer,PObjectDescriptor>;
 {EXPORT+}
 TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor>{//})
                            end;
@@ -233,10 +235,13 @@ TUnit=object(TSimpleUnit)
             //ImplementationUses:Integer;
             ImplementationTypes:typemanager;
             ImplementationVariables: varmanager;
+            VMT2PTD:TVMT2PTD;
 
             constructor init(const nam:TInternalScriptString);
             function TypeIndex2PTD(ind:Integer):PUserTypeDescriptor;virtual;
             function TypeName2PTD(const n: TInternalScriptString):PUserTypeDescriptor;virtual;
+            procedure AddPODByVmt(const APOD:PObjectDescriptor;const APVMT:Pointer);
+            function GetPODByVmt(const APVMT:Pointer):PObjectDescriptor;
             procedure AddTypealias(const typename,fpcalias: TInternalScriptString);
             function GetTypealias(const fpcalias:TInternalScriptString):TInternalScriptString;
             function ObjectTypeName2PTD(const n: TInternalScriptString):PObjectDescriptor;virtual;
@@ -248,9 +253,12 @@ TUnit=object(TSimpleUnit)
             procedure SetTypeDesk2(putd:PUserTypeDescriptor; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);
             procedure SetTypeDesk(tn:string; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);overload;
             function SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;overload;
-            function RegisterRecordType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
-            function RegisterPointerType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
-            function RegisterEnumType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+
+            function ProcessTypeName(ATypeInfo:PTypeInfo;ATypeName:string):String;
+            function RegisterRecordType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+            function RegisterPointerType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+            function RegisterEnumType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+            function RegisterObjectType(ATypeInfo:PTypeInfo;ATypeOf:Pointer;HasVMT:boolean;ATypeName:string=''):PUserTypeDescriptor;
       end;
 {EXPORT-}
 TOnCreateSystemUnit=procedure (ptsu:PTUnit);
@@ -527,7 +535,22 @@ begin
           pv:=source.InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;
 end;
-function TUnit.RegisterRecordType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+
+function TUnit.ProcessTypeName(ATypeInfo:PTypeInfo;ATypeName:string):String;
+begin
+  if ATypeName='' then begin
+    result:=GetTypealias(ATypeInfo^.Name);
+    if result='' then
+      result:=ATypeInfo^.Name
+  end else begin
+    if ATypeName<>ATypeInfo^.Name then begin
+      AddTypealias(ATypeName,ATypeInfo^.Name);
+    end;
+    result:=ATypeName;
+  end;
+end;
+
+function TUnit.RegisterRecordType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
 var
    td:PTypeData;
    mf: PManagedField;
@@ -536,29 +559,20 @@ var
    fd:FieldDescriptor;
    tname:TInternalScriptString;
 begin
-      if ATypeName='' then begin
-        tname:=GetTypealias(ti^.Name);
-        if tname='' then
-          tname:=ti^.Name
-      end else begin
-        if ATypeName<>ti^.Name then begin
-          AddTypealias(ATypeName,ti^.Name);
-        end;
-        tname:=ATypeName;
-      end;
+     tname:=ProcessTypeName(ATypeInfo,ATypeName);
 
      Getmem(Pointer(etd),sizeof(RecordDescriptor));
      PRecordDescriptor(etd)^.init(tname,@self);
-     td:=GetTypeData(ti);
+     td:=GetTypeData(ATypeInfo);
      mf:=@td.ManagedFldCount;
      inc(pointer(mf),sizeof(td.ManagedFldCount));
      for i:=0 to td.ManagedFldCount-1 do
      begin
-          ti:=mf.TypeRef;
+          ATypeInfo:=mf.TypeRef;
 
 
-          fd.base.ProgramName:=ti.Name;
-          fd.base.PFT:=RegisterType(ti);
+          fd.base.ProgramName:=ATypeInfo.Name;
+          fd.base.PFT:=RegisterType(ATypeInfo);
           fd.base.Attributes:=[];
           fd.base.Saved:=0;
           fd.Collapsed:=true;
@@ -575,7 +589,93 @@ begin
      InterfaceTypes.AddTypeByPP(@etd);
      result:=etd;
 end;
-function TUnit.RegisterPointerType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+procedure TUnit.AddPODByVmt(const APOD:PObjectDescriptor;const APVMT:Pointer);
+begin
+  VMT2PTD.Add(APVMT,APOD);
+end;
+function TUnit.GetPODByVmt(const APVMT:Pointer):PObjectDescriptor;
+begin
+  result:=VMT2PTD.MyGetValue(APVMT);
+end;
+function TUnit.RegisterObjectType(ATypeInfo:PTypeInfo;ATypeOf:Pointer;HasVMT:boolean;ATypeName:string=''):PUserTypeDescriptor;
+var
+  td,tdparetn:PTypeData;
+  ParentTypeOf:Pointer;
+  mf: PManagedField;
+  i:integer;
+  etd:PObjectDescriptor;
+  fd:FieldDescriptor;
+  tname:TInternalScriptString;
+  ftd:PUserTypeDescriptor;
+  parentOTD:PObjectDescriptor;
+  PVMTFieldsIndex:SizeInt;
+begin
+  if ATypeInfo.Kind<>tkObject then
+    raise Exception.CreateFmt('TUnit.RegisterObjectType not object type (alias="%s";name="%s") not alloved',[ATypeName,ATypeInfo.Name]);
+  result:=TypeName2PTD(ATypeName);
+  if result<>nil then
+    exit;
+  ParentTypeOf:=ParentPType(ATypeOf);
+
+  tname:=ProcessTypeName(ATypeInfo,ATypeName);
+
+  Getmem(Pointer(etd),sizeof(ObjectDescriptor));
+  PObjectDescriptor(etd)^.init(tname,@self);
+
+  td:=GetTypeData(ATypeInfo);
+  mf:=@td.ManagedFldCount;
+  inc(pointer(mf),sizeof(td.ManagedFldCount));
+
+  if ParentTypeOf<>nil then begin
+      parentOTD:=GetPODByVmt(ParentTypeOf);
+  end;
+
+
+  if (ParentTypeOf=nil)and(HasVMT) then
+    PVMTFieldsIndex:=td.ManagedFldCount-1
+  else
+    PVMTFieldsIndex:=-1;
+
+  for i:=0 to td.ManagedFldCount-1 do
+  begin
+    ATypeInfo:=mf.TypeRef;
+    ftd:=RegisterType(ATypeInfo);
+       if i=PVMTFieldsIndex then begin
+         fd:=FPVMT;
+         fd.Offset:=mf.FldOffset;
+         fd.Size:=ftd.SizeInBytes;
+         fd.Collapsed:=true;
+         etd^.AddConstField(fd);
+       end else if (i=0)and(ParentTypeOf<>nil)then begin
+
+       end else begin
+         fd.base.create(ftd.TypeName,ftd.TypeName,ftd,[]);
+         fd.Offset:=mf.FldOffset;
+         fd.Size:=ftd.SizeInBytes;
+         fd.Collapsed:=true;
+       end;
+
+
+       {fd.base.ProgramName:=ATypeInfo.Name;
+       fd.base.PFT:=RegisterType(ATypeInfo);
+       fd.base.Attributes:=[];
+       fd.base.Saved:=0;
+       fd.Collapsed:=true;
+       fd.Offset:=mf.FldOffset;
+       if fd.base.PFT<>nil then
+                          fd.Size:=fd.base.PFT^.SizeInBytes
+                      else
+                          system.break;
+       etd^.AddField(fd);}
+
+       inc(mf);
+  end;
+  etd^.SizeInBytes:=td.RecSize;
+  InterfaceTypes.AddTypeByPP(@etd);
+  AddPODByVmt(etd,ATypeOf);
+  result:=etd;
+end;
+function TUnit.RegisterPointerType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
 var
    td:PTypeData;
    //mf: PManagedField;
@@ -584,24 +684,15 @@ var
    //fd:FieldDescriptor;
    tname:TInternalScriptString;
 begin
-  if ATypeName='' then begin
-    tname:=GetTypealias(ti^.Name);
-    if tname='' then
-      tname:=ti^.Name
-  end else begin
-    if ATypeName<>ti^.Name then begin
-      AddTypealias(ATypeName,ti^.Name);
-    end;
-    tname:=ATypeName;
-  end;
-     td:=GetTypeData(ti);
+  tname:=ProcessTypeName(ATypeInfo,ATypeName);
+     td:=GetTypeData(ATypeInfo);
      Getmem(Pointer(etd),sizeof(GDBPointerDescriptor));
      etd^.init(td.RefType^.Name,{ATypeName}tname,@self);
      etd^.TypeOf:=RegisterType(td.RefType);
      InterfaceTypes.AddTypeByPP(@etd);
      result:=etd;
 end;
-function TUnit.RegisterEnumType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+function TUnit.RegisterEnumType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
 var
    td:PTypeData;
    etd:PEnumDescriptor;
@@ -628,17 +719,8 @@ var
   end;
 
 begin
-     if ATypeName='' then begin
-       tname:=GetTypealias(ti^.Name);
-       if tname='' then
-         tname:=ti^.Name
-     end else begin
-       if ATypeName<>ti^.Name then begin
-         AddTypealias({ATypeName}tname,ti^.Name);
-       end;
-       tname:=ATypeName;
-     end;
-     td:=GetTypeData(ti);
+  tname:=ProcessTypeName(ATypeInfo,ATypeName);
+     td:=GetTypeData(ATypeInfo);
      Getmem(Pointer(etd),sizeof(EnumDescriptor));
      case td.OrdType of
         otSByte:bytessize:=1;
@@ -649,13 +731,14 @@ begin
         otULong:bytessize:=4;
      end;
      etd^.init(bytessize,tname,@self);
-     SetEnumData(ti);
+     SetEnumData(ATypeInfo);
      InterfaceTypes.AddTypeByPP(@etd);
      result:=etd;
 end;
 function TUnit.RegisterType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
 var
   tname:string;
+  TempPUTD:PUserTypeDescriptor;
 begin
    if ATypeName='' then begin
      tname:=GetTypealias(ti^.Name);
@@ -663,16 +746,29 @@ begin
        tname:=ti^.Name
    end else begin
      if ATypeName<>ti^.Name then begin
-       AddTypealias(ATypeName,ti^.Name);
+       TempPUTD:=TypeName2PTD(ti^.Name);
+       if TempPUTD<>nil then begin
+         Getmem(result,sizeof(GDBSinonimDescriptor));
+         PGDBSinonimDescriptor(result)^.init(ti^.Name,ATypeName,@self);
+         InterfaceTypes.AddTypeByPP(@result);
+       end else
+         AddTypealias(ATypeName,ti^.Name);
      end;
      tname:=ATypeName;
    end;
    result:=TypeName2PTD(tname);
+   {if result=nil then begin
+     result:=
+   end;}
    if result=nil then
      case ti^.Kind of
        tkRecord:result:=RegisterRecordType(ti,ATypeName);
        tkPointer:result:=RegisterPointerType(ti,ATypeName);
        tkEnumeration:result:=RegisterEnumType(ti,ATypeName);
+       tkObject:begin
+         result:=nil;
+         raise Exception.CreateFmt('Auto registration for objects (alias="%s";name="%s") not alloved',[ATypeName,tname]);
+       end;
      end;
 end;
 procedure TUnit.SetTypeDesk2(putd:PUserTypeDescriptor; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);
@@ -1830,6 +1926,7 @@ begin
   InterfaceTypes.init;
   ImplementationTypes.init;
   ImplementationVariables.init;
+  VMT2PTD:=TVMT2PTD.Create;
   //InterfaceVariables.init;
   if uppercase(name)='SYSTEM' then
   begin
@@ -1922,6 +2019,7 @@ begin
      ImplementationVariables.done;
      InterfaceVariables.done;
      InterfaceUses.done;
+     VMT2PTD.Free;
      if uppercase(name)<>'SYSTEM' then
                                       InterfaceTypes.done
                                   else

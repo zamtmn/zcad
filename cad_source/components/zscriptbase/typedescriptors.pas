@@ -19,123 +19,135 @@ unit typedescriptors;
 
 {$MODE DELPHI}
 interface
+
 uses
   SysUtils,
   varmandef,
   uzbUnits,
   gzctnrVectorTypes,gzctnrVectorP;
+
 const
-     m_procedure=1;
-     m_function=2;
-     m_constructor=4;
-     m_destructor=8;
-     m_virtual=16;
-     field_no_attrib=nil;
+  m_procedure=1;
+  m_function=2;
+  m_constructor=4;
+  m_destructor=8;
+  m_virtual=16;
+  field_no_attrib=nil;
 
-     {fldaHidden=1;
-     fldaReadOnly=2;
-     fldaDifferent=4;
-     fldaApproximately=8;
-     fldaColored1=16;}
-
-     property_correct=1;
-     property_build=0;
-
-     SM_Var=1;
-     SM_Default=0;
+  property_correct=1;
+  property_build=0;
 
 type
   PPropertyDeskriptor=^PropertyDeskriptor;
+
   PropertyDeskriptor=object(BasePropertyDeskriptor)
-                           constructor initnul;
-                           destructor done;virtual;
-                           function IsVisible(AShowEmptySections:Boolean):boolean;
-                     end;
-PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
-TPropertyDeskriptorArray=object(GZVectorP{-}<PPropertyDeskriptor>{//})
-                               procedure cleareraseobj;virtual;
-                               function GetRealPropertyDeskriptorsCount:integer;virtual;
-                               function findcategory(const category:TInternalScriptString):PPropertyDeskriptor;
-                               function findvalkey(valkey:String):integer;
-                         end;
-SimpleProcOfObj=procedure of object;
-SimpleProcOfObjDouble=procedure (arg:Double) of object;
-SimpleFuncOfObjDouble=function:Double  of object;
-PFieldDescriptor=^FieldDescriptor;
-pBaseDescriptor=^BaseDescriptor;
-BaseDescriptor=record
-                      ProgramName:String;
+    constructor initnul;
+    destructor done;virtual;
+    function IsVisible(AShowEmptySections:boolean):boolean;
+  end;
+  PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
 
-                      UserName:String;
+  TPropertyDeskriptorArray=object(GZVectorP{-}<PPropertyDeskriptor>{//})
+    procedure cleareraseobj;virtual;
+    function GetRealPropertyDeskriptorsCount:integer;virtual;
+    function findcategory(
+      const category:TInternalScriptString):PPropertyDeskriptor;
+    function findvalkey(valkey:string):integer;
+  end;
+  SimpleProcOfObj=procedure of object;
+  SimpleProcOfObjDouble=procedure(arg:double) of object;
+  SimpleFuncOfObjDouble=function :double of object;
+  PFieldDescriptor=^FieldDescriptor;
+  pBaseDescriptor=^BaseDescriptor;
 
-                      PFT:PUserTypeDescriptor;
+  BaseDescriptor=record
+    ProgramName:string;
 
-                      {** Сделать строку только для чтения/редактр или скрыть/открыть итд.
-                       Пример:
-                       samplef:=sampleInternalRTTITypeDesk^.FindField('VNum'); находим описание поля VNum
-                       samplef^.base.Attributes:=samplef^.base.Attributes and (not fldaHidden); сбрасываем ему флаг cкрытности
-                       samplef^.base.Attributes:=samplef^.base.Attributes or fldaHidden; устанавливаем ему флаг cкрытности
-                       }
-                      Attributes:TFieldAttrs;
+    UserName:string;
 
-                      Saved:Word;
-               end;
+    PFT:PUserTypeDescriptor;
 
-FieldDescriptor=record
-                      base:BaseDescriptor;
-                      //FieldName:String;
-                      //UserName:String;
-                      //PFT:PUserTypeDescriptor;
-                      Offset,Size:Integer;
-                      //Attributes:Word;
-                      Collapsed:Boolean;
-                end;
-PPropertyDescriptor=^PropertyDescriptor;
-PropertyDescriptor=record
-                      base:BaseDescriptor;
-                      //PropertyName:String;
-                      //UserName:String;
-                      r,w:String;
-                      //PFT:PUserTypeDescriptor;
-                      //Attributes:Word;
-                      Collapsed:Boolean;
-                end;
-PTUserTypeDescriptor=^TUserTypeDescriptor;
-TUserTypeDescriptor=object(UserTypeDescriptor)
-                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;abstract;
-                          //procedure IncAddr(var addr:Pointer);virtual;
-                          function CreatePD:Pointer;
-                          function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
-                          function FindField(const fn:TInternalScriptString):PFieldDescriptor;virtual;
-                   end;
+    {** Сделать строку только для чтения/редактр или скрыть/открыть итд.
+    Пример:
+    samplef:=sampleInternalRTTITypeDesk^.FindField('VNum'); находим описание поля VNum
+    samplef^.base.Attributes:=samplef^.base.Attributes and (not fldaHidden); сбрасываем ему флаг cкрытности
+    samplef^.base.Attributes:=samplef^.base.Attributes or fldaHidden; устанавливаем ему флаг cкрытности
+    }
+    Attributes:TFieldAttrs;
+
+    Saved:word;//todo убрать нахер
+    constructor create(APN,AUN:string;ATD:PUserTypeDescriptor;AAttrs:TFieldAttrs);
+  end;
+
+  FieldDescriptor=record
+    base:BaseDescriptor;
+    Offset,Size:integer;
+    Collapsed:boolean;
+  end;
+  PPropertyDescriptor=^PropertyDescriptor;
+
+  PropertyDescriptor=record
+    base:BaseDescriptor;
+    //PropertyName:String;
+    //UserName:String;
+    r,w:string;
+    //PFT:PUserTypeDescriptor;
+    //Attributes:Word;
+    Collapsed:boolean;
+  end;
+  PTUserTypeDescriptor=^TUserTypeDescriptor;
+
+  TUserTypeDescriptor=object(UserTypeDescriptor)
+    function CreateProperties(
+      const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;
+      const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;
+      var bmode:integer;const addr:Pointer;
+      const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;abstract;
+    //procedure IncAddr(var addr:Pointer);virtual;
+    function CreatePD:Pointer;
+    function GetPPD(PPDA:PTPropertyDeskriptorArray;
+      var bmode:integer):PPropertyDeskriptor;
+    function FindField(
+      const fn:TInternalScriptString):PFieldDescriptor;virtual;
+  end;
+
 var
-  debugShowHiddenFieldInObjInsp:boolean=false;
+  debugShowHiddenFieldInObjInsp:boolean=False;
+
 implementation
 
-function TUserTypeDescriptor.GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
+constructor BaseDescriptor.create(APN,AUN:string;ATD:PUserTypeDescriptor;AAttrs:TFieldAttrs);
 begin
-     if bmode=property_build
-     then
-         begin
-              result:=CreatePD;
-              PPDA^.PushBackData(result);
-         end
-     else
-         begin
-              result:=pointer(ppda^.getDataMutable(abs(bmode)-1));
-              result:=pPointer(result)^;
-              if bmode<0 then
-                             bmode:=property_build;
-         end;
+  ProgramName:=APN;
+  UserName:=AUN;
+  PFT:=ATD;
+  Attributes:=AAttrs;
+  Saved:=0;
 end;
+
+function TUserTypeDescriptor.GetPPD(PPDA:PTPropertyDeskriptorArray;
+  var bmode:integer):PPropertyDeskriptor;
+begin
+  if bmode=property_build then begin
+    Result:=CreatePD;
+    PPDA^.PushBackData(Result);
+  end else begin
+    Result:=pointer(ppda^.getDataMutable(abs(bmode)-1));
+    Result:=pPointer(Result)^;
+    if bmode<0 then
+      bmode:=property_build;
+  end;
+end;
+
 function TUserTypeDescriptor.CreatePD;
 begin
-     Getmem(result,sizeof(PropertyDeskriptor));
-     PPropertyDeskriptor(result)^.initnul;
+  Getmem(Result,sizeof(PropertyDeskriptor));
+  PPropertyDeskriptor(Result)^.initnul;
 end;
+
 function TUserTypeDescriptor.FindField(const fn:TInternalScriptString):PFieldDescriptor;
 begin
-     result:=nil;
+  Result:=nil;
 end;
 
 {procedure TUserTypeDescriptor.IncAddr;
@@ -144,53 +156,54 @@ begin
 end;}
 constructor PropertyDeskriptor.initnul;
 begin
-     inherited;
+  inherited;
 
-    Pointer(Name):=nil;
-    Pointer(Value):=nil;
-    Pointer(ValKey):=nil;
-    Pointer(ValType):=nil;
-    Pointer(category):=nil;
-    Pointer(r):=nil;
-    Pointer(w):=nil;
-    PTypeManager:=nil;
-    Attr:=[];
-    Collapsed:=nil;
-    ValueOffsetInMem:=0;
-    valueAddres:=nil;
-    HelpPointer:=nil;
-    Mode:=PDM_Field;
-    _ppda:=nil;
-    _bmode:=-1000;
+  Pointer(Name):=nil;
+  Pointer(Value):=nil;
+  Pointer(ValKey):=nil;
+  Pointer(ValType):=nil;
+  Pointer(category):=nil;
+  Pointer(r):=nil;
+  Pointer(w):=nil;
+  PTypeManager:=nil;
+  Attr:=[];
+  Collapsed:=nil;
+  ValueOffsetInMem:=0;
+  valueAddres:=nil;
+  HelpPointer:=nil;
+  Mode:=PDM_Field;
+  _ppda:=nil;
+  _bmode:=-1000;
 end;
+
 destructor PropertyDeskriptor.done;
 begin
-    Name:='';
-    Value:='';
-    ValKey:='';
-    ValType:='';
-    category:='';
-    r:='';
-    w:='';
-    if mode=PDM_Property then
-    if valueAddres<>nil then
-                                 begin
-                                      PTypeManager.MagicFreeInstance(valueAddres);
-                                      Freemem(valueAddres);
-                                 end;
-    if SubNode<>nil then
-    begin
-         PTPropertyDeskriptorArray(SubNode)^.Done;
-         Freemem(Pointer(SubNode));
+  Name:='';
+  Value:='';
+  ValKey:='';
+  ValType:='';
+  category:='';
+  r:='';
+  w:='';
+  if mode=PDM_Property then
+    if valueAddres<>nil then begin
+      PTypeManager.MagicFreeInstance(valueAddres);
+      Freemem(valueAddres);
     end;
-    if assigned(FastEditors) then
-                                 freeandnil(FastEditors);
+  if SubNode<>nil then begin
+    PTPropertyDeskriptorArray(SubNode)^.Done;
+    Freemem(Pointer(SubNode));
+  end;
+  if assigned(FastEditors) then
+    FreeAndNil(FastEditors);
 end;
-function PropertyDeskriptor.IsVisible(AShowEmptySections:Boolean):boolean;
+
+function PropertyDeskriptor.IsVisible(AShowEmptySections:boolean):boolean;
 begin
-  result:=(not(fldaHidden in Attr))or(debugShowHiddenFieldInObjInsp);
-  result:=result and ((not(fldaTmpHidden in Attr))or(AShowEmptySections));
+  Result:=(not(fldaHidden in Attr))or(debugShowHiddenFieldInObjInsp);
+  Result:=Result and ((not(fldaTmpHidden in Attr))or(AShowEmptySections));
 end;
+
 procedure TPropertyDeskriptorArray.cleareraseobj;
 var
   curr:PPropertyDeskriptor;
@@ -210,59 +223,63 @@ begin
     until curr=nil;
   Count:=0;
 end;
+
 function TPropertyDeskriptorArray.GetRealPropertyDeskriptorsCount:integer;
-var curr:PPropertyDeskriptor;
-    ir:itrec;
+var
+  curr:PPropertyDeskriptor;
+  ir:itrec;
 begin
-  result:=0;
+  Result:=0;
   curr:=beginiterate(ir);
   if curr<>nil then
-  repeat
-        if curr^.SubNode<>nil then
-           result:=result+PTPropertyDeskriptorArray(curr^.SubNode)^.GetRealPropertyDeskriptorsCount
-        else
-           inc(result);
-        curr:=iterate(ir);
-  until curr=nil;
+    repeat
+      if curr^.SubNode<>nil then
+        Result:=Result+PTPropertyDeskriptorArray(
+          curr^.SubNode)^.GetRealPropertyDeskriptorsCount
+      else
+        Inc(Result);
+      curr:=iterate(ir);
+    until curr=nil;
 end;
-function TPropertyDeskriptorArray.findcategory(const category:TInternalScriptString):PPropertyDeskriptor;
+
+function TPropertyDeskriptorArray.findcategory(
+  const category:TInternalScriptString):PPropertyDeskriptor;
 var
-   ir:itrec;
-   ppd:PPropertyDeskriptor;
+  ir:itrec;
+  ppd:PPropertyDeskriptor;
 begin
-     result:=nil;
-     ppd:=beginiterate(ir);
-     if ppd<>nil then
-     repeat
-           if ppd^.category=category then
-           begin
-                result:=ppd;
-                exit;
-           end;
+  Result:=nil;
+  ppd:=beginiterate(ir);
+  if ppd<>nil then
+    repeat
+      if ppd^.category=category then begin
+        Result:=ppd;
+        exit;
+      end;
 
 
-           ppd:=iterate(ir);
-     until ppd=nil;
+      ppd:=iterate(ir);
+    until ppd=nil;
 
 end;
+
 function TPropertyDeskriptorArray.findvalkey;
 var
-   ir:itrec;
-   ppd:PPropertyDeskriptor;
+  ir:itrec;
+  ppd:PPropertyDeskriptor;
 begin
-     result:=0;
-     ppd:=beginiterate(ir);
-     if ppd<>nil then
-     repeat
-           if ppd^.ValKey=valkey then
-           begin
-                result:=ir.itc+1;
-                exit;
-           end;
+  Result:=0;
+  ppd:=beginiterate(ir);
+  if ppd<>nil then
+    repeat
+      if ppd^.ValKey=valkey then begin
+        Result:=ir.itc+1;
+        exit;
+      end;
 
 
-           ppd:=iterate(ir);
-     until ppd=nil;
+      ppd:=iterate(ir);
+    until ppd=nil;
 
 end;
 

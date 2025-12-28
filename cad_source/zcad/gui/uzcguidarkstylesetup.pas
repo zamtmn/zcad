@@ -21,7 +21,7 @@ unit uzcguiDarkStyleSetup;
 interface
 
 uses
-  uDarkStyleParams,uzcsysvars,uzbtypes;
+  uDarkStyleParams,uzcsysvars,uzeTypes;
 
 implementation
 initialization

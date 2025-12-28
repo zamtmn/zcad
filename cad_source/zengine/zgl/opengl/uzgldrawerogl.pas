@@ -17,17 +17,22 @@
 }
 
 unit uzgldrawerogl;
+
 {$INCLUDE zengineconfig.inc}
+
 interface
+
 uses
-    uzgindexsarray,uzbLogIntf,uzepalette,
-    {$IFDEF LCLGTK2}
+  uzgindexsarray,uzbLogIntf,uzepalette,
+  {$IFDEF LCLGTK2}
     Gtk2Def,
-    {$ENDIF}
-    {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
-    Classes,Controls,
-    uzgvertex3sarray,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,uzgloglstatemanager,Graphics,uzbtypes,
-    uzegeometrytypes,uzecamera;
+  {$ENDIF}
+  {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
+  Classes,Controls,
+  uzgvertex3sarray,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
+  uzgloglstatemanager,Graphics,uzbtypes,uzeTypes,
+  uzegeometrytypes,uzecamera;
+
 const
   texturesize=128;
 type

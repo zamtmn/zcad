@@ -21,7 +21,8 @@ unit uzgldrawcontext;
 interface
 uses
   SysUtils,Nullable,
-  uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytypes;
+  uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytypes,
+  uzeTypes;
 type
 TNulableVetrex=TNullable<TzePoint3d>;
 TDrawHeplGeometry=procedure  of object;

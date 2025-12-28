@@ -47,7 +47,7 @@ uses
      //uzegeometrytypes,
      uzegeometry,
      uzcuitypes,
-     uzbtypes,
+     uzbtypes,uzeTypes,
      typinfo,
      //gzctnrVector,
      //uzvconsts,

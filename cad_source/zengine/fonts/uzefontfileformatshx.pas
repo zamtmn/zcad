@@ -22,7 +22,7 @@ interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
      uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,{$ENDIF}math,sysutils,
      uzegeometrytypes,uzctnrVectorBytes,uzbtypes,uzgprimitives,
-     gzctnrVectorTypes,uzbLogIntf;
+     gzctnrVectorTypes,uzbLogIntf,uzefontbase;
 const
   arccount=16;
   fontdirect:array[0..$F,0..1] of Double=

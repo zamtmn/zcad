@@ -21,14 +21,15 @@ unit uzcutils;
 {$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
-
 interface
-uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
-     uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
-     uzestyleslayers,sysutils,uzbtypes,uzcdrawings,varmandef,
-     uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
-     uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrVectorTypes,uzeentitiesmanager,
-     uzegeometry,zcmultiobjectchangeundocommand,uzeEntBase,UGDBVisibleTreeArray;
+
+uses
+  uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,uzeentityfactory,
+  uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,uzestyleslayers,
+  SysUtils,uzbtypes,uzeTypes,uzcdrawings,varmandef,uzeconsts,
+  UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,uzegeometrytypes,
+  uzeentblockinsert,uzcinterface,gzctnrVectorTypes,uzeentitiesmanager,
+  uzegeometry,zcmultiobjectchangeundocommand,uzeEntBase,UGDBVisibleTreeArray;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)

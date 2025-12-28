@@ -637,6 +637,8 @@ var
   knot:TKnot;
   oldP,P:TzePoint3d;
 begin
+  pThisEntity^.Representation.geometry.lock;
+  try
   result:=true;
   for i:=0 to Connections.Count-1 do begin
     pc:=Connections.getDataMutable(i);
@@ -688,6 +690,9 @@ begin
     if IsDoubleNotEqual(knot.t,1,bigeps) then
       pThisEntity^.Representation.DrawLineWithLT(pThisEntity^,OneMatrix,DC,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity.vp);
     result:=false;
+  end;
+  finally
+    pThisEntity^.Representation.geometry.UnLock;
   end;
 end;
 

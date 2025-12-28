@@ -23,7 +23,7 @@ interface
 uses
   GLext,GL,uzgloglstatemanager,
   uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
-  sysutils,uzbtypes,uzgprimitivessarray,
+  sysutils,uzbtypes,uzeTypes,uzgprimitivessarray,
   uzegeometry,uzbLogIntf,gzctnrVectorTypes,uzgprimitivescreator,
   uzgldrawerabstract,uzgldrawcontext,uzglgeomdata,uzgvertex3sarray,
   uzegeometrytypes;

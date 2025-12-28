@@ -27,6 +27,15 @@ uses
 const
   SymCasheSize=128;
 type
+  GDBsymdolinfo=record
+      LLPrimitiveStartIndex: Integer;
+      LLPrimitiveCount: Integer;
+      NextSymX, SymMaxY,SymMinY, SymMaxX,SymMinX, w, h: Double;
+      Name:String;
+      Number:Integer;
+      LatestCreate:Boolean;
+    end;
+  PGDBsymdolinfo=^GDBsymdolinfo;
   GDBUNISymbolInfo=record
       symbol:Integer;
       symbolinfo:GDBsymdolinfo;

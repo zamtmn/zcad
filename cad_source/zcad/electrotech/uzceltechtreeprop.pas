@@ -6,9 +6,9 @@ interface
 
 uses
   LCLType,ImgList,
-  Classes, SysUtils, ComCtrls, Controls, Graphics, Menus, Forms,ActnList,
+  Classes,SysUtils,ComCtrls,Controls,Graphics,Menus,Forms,ActnList,
   Laz2_XMLCfg,Laz2_DOM,
-  gvector, gtree, uzbtypes;
+  gvector,gtree,uzbtypes,uzeTypes;
 
 type
   TTranslateFunction=function (const Identifier, OriginalValue: String): String;

@@ -21,10 +21,10 @@ unit varmandef;
 
 interface
 uses
-  LCLProc,SysUtils,uzctnrTree,gzctnrSTL,uzctnrvectorstrings,strutils,
+  SysUtils,uzctnrTree,gzctnrSTL,uzctnrvectorstrings,strutils,
   uzbUnits,
   uzctnrVectorBytes,
-  gzctnrVectorTypes,Classes,Controls,StdCtrls,Graphics,types,TypInfo,//gzctnrVector,
+  gzctnrVectorTypes,Classes,Controls,Graphics,StdCtrls,types,TypInfo,//gzctnrVector,
   uzbLogIntf;
 const
   {Ttypenothing=-1;

@@ -23,7 +23,7 @@ interface
 uses
   uzbUnits,
   uzcsysparams,uzegeometrytypes,uzepalette,
-  uzbtypes,uzctnrvectorstrings,
+  uzbtypes,uzeTypes,uzctnrvectorstrings,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,
 {$ENDIF}

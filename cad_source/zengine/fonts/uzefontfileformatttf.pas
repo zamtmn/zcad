@@ -23,8 +23,8 @@ uses
   uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
   uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,
   usimplegenerics,EasyLazFreeType,uzbstrproc,sysutils,
-  uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf,
-  uzeFontFileFormatTTFBackend,
+  uzegeometrytypes,uzbtypes,uzeTypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,
+  uzbLogIntf,uzeFontFileFormatTTFBackend,
   {$IFDEF USELAZFREETYPETTFIMPLEMENTATION}uzeFontFileFormatTTFBackendLFT,{$ENDIF}
   {$IFDEF USEFREETYPETTFIMPLEMENTATION}uzeFontFileFormatTTFBackendFT,{$ENDIF}
   Types;

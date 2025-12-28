@@ -22,7 +22,8 @@ unit uzeStylesLineTypes;
 interface
 uses uzbLogIntf,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,uzeTypes,
      uzegeometry,uzegeometrytypes,uzestylestexts,gzctnrVectorObjects,
-     UGDBNamedObjectsArray,gzctnrVectorTypes,uzbstrproc,uzeNamedObject;
+     UGDBNamedObjectsArray,gzctnrVectorTypes,uzbstrproc,uzeNamedObject,
+     uzefontbase;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;

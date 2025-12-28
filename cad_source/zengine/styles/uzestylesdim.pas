@@ -25,7 +25,7 @@ uses
   uzbUnits,
   sysutils,uzbtypes,uzegeometry,
   gzctnrVectorTypes,uzbstrproc,UGDBNamedObjectsArray,uzeffdxfsupport,
-  uzeNamedObject;
+  uzeNamedObject,uzeTypes;
 const
      DIMLWEDefaultValue=LnWtByBlock;
      DIMCLREDefaultValue=ClByBlock;

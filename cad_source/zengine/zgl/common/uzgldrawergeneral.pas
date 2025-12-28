@@ -20,9 +20,10 @@ unit uzgldrawergeneral;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzegeometrytypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
-     uzgldrawerabstract,uzepalette,types,Classes,Graphics,
-     uzbtypes,uzecamera,uzegeometry,UGDBPoint3DArray,uzbLogIntf;
+uses
+  uzegeometrytypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
+  uzgldrawerabstract,uzepalette,types,Classes,Graphics,
+  uzbtypes,uzeTypes,uzecamera,uzegeometry,UGDBPoint3DArray,uzbLogIntf;
 type
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)

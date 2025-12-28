@@ -26,8 +26,16 @@ uses
   gzctnrVectorTypes,UBaseTypeDescriptor,TypeDescriptors,
   uLexParser,uzctnrvectorstrings,objects,gzctnrVector,
   varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
+const
+  FPVMT:FieldDescriptor=
+    (base:(ProgramName:'#';
+      UserName:'Object';
+      PFT:@FundamentalPointerDescriptorOdj;
+      Attributes:[fldaHidden,fldaReadOnly]);
+    Offset:0;
+    Size:sizeof(Pointer););
 type
-GDBTOperandStoreMode=Byte;
+GDBTOperandStoreMode=(SM_Default,SM_Var);
 GDBOperandDesc=record
                      PTD:PUserTypeDescriptor;
                      StoreMode:GDBTOperandStoreMode;
@@ -105,7 +113,7 @@ end;
 constructor MetodDescriptor.init;
 var
   parseerror:Boolean;
-  parseresult{,subparseresult}:PTZctnrVectorStrings;
+  parseresult:PTZctnrVectorStrings;
   od:GDBOperandDesc;
   i:integer;
 begin

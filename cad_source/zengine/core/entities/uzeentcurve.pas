@@ -22,13 +22,20 @@ unit uzeentcurve;
 interface
 
 uses
+  SysUtils,
   uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrVectorBytes,uzestyleslayers,
   UGDBVectorSnapArray,UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPoint3DArray,
-  uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,SysUtils,
+  uzbtypes,uzeTypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,
   gzctnrVectorTypes,uzegeometrytypes,uzeentsubordinated,uzeSnap,
   uzCtnrVectorpBaseEntity;
 
 type
+
+  TPolyData=record
+    index:integer;
+    wc:TzePoint3d;
+  end;
+
   PGDBObjCurve=^GDBObjCurve;
 
   GDBObjCurve=object(GDBObj3d)

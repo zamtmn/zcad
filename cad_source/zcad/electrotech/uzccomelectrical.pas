@@ -33,7 +33,7 @@ uses
   gzctnrSTL,
   UGDBGraf,
   uzeconsts,
-  uzeentity,uzeentline,
+  uzeentity,uzeentline,uzeentcurve,
   uzcentnet,
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,

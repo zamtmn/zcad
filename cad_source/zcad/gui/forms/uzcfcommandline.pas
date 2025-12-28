@@ -17,16 +17,19 @@
 }
 
 unit uzcfcommandline;
+
 {$INCLUDE zengineconfig.inc}
+
 interface
+
 uses
- uzcguimanager,uzbpaths,Themes,buttons,uzcsysvars,uzcstrconsts,uzbstrproc,
- lclproc,LazUTF8,sysutils, StdCtrls,ExtCtrls,Controls,Classes,
- menus,Forms,fileutil,graphics,uzccommandsmanager,
- varman,varmandef,
- uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,uzclog,
- uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrVectorTypes,
- uzcctrlcommandlineprompt,uzeparsercmdprompt,uzbtypes,uzcFileStructure;
+  Themes,Buttons,lclproc,LazUTF8,SysUtils,StdCtrls,ExtCtrls,Controls,Classes,
+  Menus,Forms,fileutil,Graphics,
+  uzcsysvars,uzcstrconsts,uzbstrproc,uzcguimanager,uzbpaths,uzccommandsmanager,
+  varman,varmandef,uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,
+  uzclog,uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,
+  uzccommandsabstract,gzctnrVectorTypes,uzcctrlcommandlineprompt,
+  uzeparsercmdprompt,uzbtypes,uzeTypes,uzcFileStructure;
 
 const
      cheight=48;

@@ -58,33 +58,6 @@ var
    PVariantsField:PFieldDescriptor;
    PTObj:PPointer;
 implementation
-const
-     {GDBGDBPointerType:gdbtypedesk=
-                                (
-                                 TypeIndex:TGDBPointer;
-                                 sizeinmem:sizeof(Pointer);
-                                );}
-     (*VMTBase:BaseDescriptor=
-                           (
-                           ProgramName:'#';
-                           UserName:'Object';
-                           PFT:@FundamentalPointerDescriptorOdj;
-                           Attributes:{fldaHidden or }fldaReadOnly;
-                           );*)
-     FPVMT:FieldDescriptor=
-                           (
-                            base:(ProgramName:'#';
-                                  UserName:'Object';
-                                  PFT:@FundamentalPointerDescriptorOdj;
-                                  Attributes:[fldaHidden,fldaReadOnly]
-                                  );
-                            //FieldName:'#';
-                            //UserName:'Object';
-                            //PFT:@FundamentalPointerDescriptorOdj;
-                            Offset:0;
-                            Size:sizeof(Pointer);
-                            //Attributes:{fldaHidden or }fldaReadOnly
-                            );
 procedure TUnitManager.CreateExtenalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String;pinstance:Pointer);
 begin
   //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте

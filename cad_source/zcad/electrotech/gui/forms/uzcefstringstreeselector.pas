@@ -5,8 +5,8 @@ unit uzcefstringstreeselector;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, StdCtrls, ButtonPanel, LCLVersion,
-  laz.VirtualTrees, uzceltechtreeprop, uzbtypes, math;
+  Classes,SysUtils,Forms,Controls,Graphics,StdCtrls,ButtonPanel,LCLVersion,
+  laz.VirtualTrees,uzceltechtreeprop,uzbtypes,uzeTypes,Math;
 
 type
 

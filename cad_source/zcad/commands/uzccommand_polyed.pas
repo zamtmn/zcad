@@ -38,7 +38,7 @@ uses
   uzegeometry,
   uzeconsts,
   uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,
-  uzeentpolyline,
+  uzeentpolyline,uzeentcurve,
   Math,
   Varman,
   uzcLog,

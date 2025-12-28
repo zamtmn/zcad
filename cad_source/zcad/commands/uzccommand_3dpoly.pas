@@ -38,7 +38,7 @@ uses
   uzegeometry,
   uzeconsts,
   uzegeometrytypes,
-  uzeentpolyline,
+  uzeentpolyline,uzeentcurve,
   uzcLog;
 
 var

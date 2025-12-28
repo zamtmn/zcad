@@ -19,10 +19,10 @@
 unit uzeTriangulator;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,
-     uzegeometrytypes,uzctnrVectorBytes,
-     sysutils,uzegeometry,uzbLogIntf,gzctnrVectorTypes,uzgloglstatemanager,
-     uzbtypes,uzeenrepresentation;
+uses
+  uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,
+  uzegeometrytypes,uzctnrVectorBytes,sysutils,uzegeometry,uzbLogIntf,
+  gzctnrVectorTypes,uzgloglstatemanager,uzbtypes,uzeTypes,uzeenrepresentation;
 type
   TV4P = array [0..3] of Pointer;
   TArray4F = Array [0..3] of {Float}Double;

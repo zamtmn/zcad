@@ -1462,8 +1462,10 @@ begin
   str(TotalLPTime*10e4:3:2,TimeStr);
   LPName:=lps.getLPName(LPHandle);
 
-  if (not lps.hasOptions(LPHandle,LPSOSilent))and(not CommandManager.isBusy)and
-    ((Options and LPSOSilent)=0) then begin
+  if (not CommandManager.isBusy)and((Options and LPSOSilent)=0) then begin
+    if (Options and LPSOSilentIfFast)<>0 then
+      if TotalLPTime<0.00001 then
+        exit;
     if (LPName='') then
       zcUI.TextMessage(format(rscompiledtimemsg,[TimeStr]),[TMWOToConsole])
     else

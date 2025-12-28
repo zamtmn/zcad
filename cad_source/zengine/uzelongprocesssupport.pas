@@ -99,7 +99,7 @@ type
 
 var
   LPS:TZELongProcessSupport;
-  LPSOSilent,LPSONoProgressBar:TLPOpt;
+  LPSOSilentIfFast,LPSOSilent,LPSONoProgressBar:TLPOpt;
 
 implementation
 
@@ -272,6 +272,7 @@ end;
 initialization
   LPS:=TZELongProcessSupport.Create;
   LPSOSilent:=LPS.CreateOption;
+  LPSOSilentIfFast:=LPS.CreateOption;
   LPSONoProgressBar:=LPS.CreateOption;
 
 finalization

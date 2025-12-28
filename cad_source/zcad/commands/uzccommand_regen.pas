@@ -46,7 +46,7 @@ var
   c:integer;
 begin
   c:=drawings.GetCurrentROOT.ObjArray.Count;
-  lpsh:=lps.StartLongProcess('Regenerate drawing',nil,c*2);
+  lpsh:=lps.StartLongProcess('Regenerate drawing',nil,c*2,LPSOSilentIfFast);
   drawing:=drawings.GetCurrentDwg;
   drawing.wa.CalcOptimalMatrix;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
@@ -54,6 +54,8 @@ begin
   DoFormat(drawings.GetCurrentROOT^,drawings.GetCurrentROOT.ObjArray,
     drawings.GetCurrentROOT.ObjToConnectedArray,drawing^,DC,lpsh,[]);
   drawings.GetCurrentROOT.getoutbound(dc);
+
+  drawings.GetCurrentROOT.ObjCasheArray.Clear;
 
   lps.EndLongProcess(lpsh);
 

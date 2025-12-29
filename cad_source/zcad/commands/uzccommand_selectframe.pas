@@ -29,7 +29,7 @@ uses
   uzcstrconsts,
   uzccommandsabstract,
   uzccommandsimpl,
-  uzbtypes,
+  uzbtypes,uzeTypes,
   uzcdrawings,uzedrawingsimple,
   uzglviewareadata,
   uzcinterface,

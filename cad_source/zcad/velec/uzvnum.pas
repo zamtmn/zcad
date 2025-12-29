@@ -101,7 +101,7 @@ uses
                       //системные переменные
   //uzgldrawcontext,
   uzcinterface,
-  uzbtypes, //base types
+  uzbtypes,uzeTypes, //base types
                       //описания базовых типов
   uzeconsts, //base constants
                       //описания базовых констант

@@ -25,7 +25,7 @@ uses
   SysUtils,
   gzctnrVectorTypes,
   uzgldrawcontext,
-  uzbtypes,
+  uzbtypes,uzeTypes,
   uzcdrawings,
   uzeutils,uzcutils,
   URecordDescriptor,typedescriptors,uzeentityfactory,uzegeometry,Varman,

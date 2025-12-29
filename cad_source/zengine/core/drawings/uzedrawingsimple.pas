@@ -23,7 +23,7 @@ interface
 uses
   uzedrawingdef,uzeblockdefsfactory,uzestylesdim,gzctnrVectorTypes,
   uzedrawingabstract,uzbstrproc,UGDBObjBlockdefArray,uzestylestables,
-  UGDBNumerator,uzbtypes,sysutils,uzegeometry,uzeentgenericsubentry,
+  UGDBNumerator,uzbtypes,uzeTypes,sysutils,uzegeometry,uzeentgenericsubentry,
   uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,
   uzestylestexts,uzbUnits,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,
   uzefont,uzglviewareaabstract,uzgldrawcontext,UGDBControlPointArray,

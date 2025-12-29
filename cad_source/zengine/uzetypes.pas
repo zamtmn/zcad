@@ -82,6 +82,46 @@ type
   TEentityRepresentation=TStringTreeType;
   TEentityFunction=TStringTreeType;
 
+  TOSnapModeControl=(On,Off,AsOwner);
+  TTextJustify=(jstl(*'TopLeft'*),
+                jstc(*'TopCenter'*),
+                jstr(*'TopRight'*),
+                jsml(*'MiddleLeft'*),
+                jsmc(*'MiddleCenter'*), //СерединаЦентр
+                jsmr(*'MiddleRight'*),
+                jsbl(*'BottomLeft'*),
+                jsbc(*'BottomCenter'*),
+                jsbr(*'BottomRight'*),
+                jsbtl(*'Left'*),
+                jsbtc(*'Center'*),
+                jsbtr(*'Right'*));
+
+  TZCCodePage=(ZCCPINVALID,ZCCP874,ZCCP932,ZCCP936,ZCCP949,ZCCP950,
+    ZCCP1250,ZCCP1251,ZCCP1252,ZCCP1253,ZCCP1254,ZCCP1255,ZCCP1256,
+    ZCCP1257,ZCCP1258);
+  PTZCCodePage=^TZCCodePage;
+
+  GDBSnap2D=record
+    Base:TzePoint2d;(*'Base'*)
+    Spacing:TzePoint2d;(*'Spacing'*)
+  end;
+  PGDBSnap2D=^GDBSnap2D;
+
+  GDBPiece=record
+    lbegin:TzePoint3d;
+    dir:TzeVector3d;
+    lend:TzePoint3d;
+  end;
+
+  TImageDegradation=record
+    RD_ID_Enabled:PBoolean;(*'Enabled'*)
+    RD_ID_CurrentDegradationFactor:PDouble;(*'Current degradation factor'*)(*oi_readonly*)
+    RD_ID_MaxDegradationFactor:PDouble;(*'Max degradation factor'*)
+    RD_ID_PrefferedRenderTime:PInteger;(*'Prefered rendertime'*)
+  end;
+
+  TDCableMountingMethod=string;
+
 implementation
 
 end.

@@ -303,6 +303,68 @@ begin
   utd:=ptsu^.RegisterType(TypeInfo(TEentityRepresentation),'TEentityRepresentation');
   utd:=ptsu^.RegisterType(TypeInfo(TEentityFunction),'TEentityFunction');
 
+  utd:=ptsu^.RegisterType(TypeInfo(TOSnapModeControl),'TOSnapModeControl');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['On','Off','AsOwner'],[FNProgram]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TTextJustify),'TTextJustify');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['jstl','jstc','jstr',
+                            'jsml','jsmc','jsmr',
+                            'jsbl','jsbc','jsbr',
+                            'jsbtl','jsbtc','jsbtr'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['TopLeft','TopCenter','TopRight',
+                            'MiddleLeft','MiddleCenter','MiddleRight',
+                            'BottomLeft','BottomCenter','BottomRight',
+                            'Left','Center','Right'],[FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TZCCodePage),'TZCCodePage');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['ZCCPINVALID','ZCCP874','ZCCP932',
+                            'ZCCP936','ZCCP949','ZCCP950',
+                            'ZCCP1250','ZCCP1251','ZCCP1252',
+                            'ZCCP1253','ZCCP1254','ZCCP1255',
+                            'ZCCP1256','ZCCP1257','ZCCP1258'],[FNProgram]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTZCCodePage),'PTZCCodePage');
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(GDBSnap2D),'GDBSnap2D');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Base','Spacing'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Base','Spacing'],[FNUser]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PGDBSnap2D),'PGDBSnap2D');
+
+  utd:=ptsu^.RegisterType(TypeInfo(GDBPiece),'GDBPiece');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['lbegin','dir','lend'],[FNProgram,FNUser]);
+  end;
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TImageDegradation),'TImageDegradation');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['RD_ID_Enabled','RD_ID_CurrentDegradationFactor',
+                            'RD_ID_MaxDegradationFactor',
+                            'RD_ID_PrefferedRenderTime'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Enabled','Current degradation factor',
+                            'Max degradation factor',
+                            'Prefered rendertim'],[FNUser])
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TCalculatedString),'TCalculatedString');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['value','format'],[FNProgram]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PTCalculatedString),'PTCalculatedString');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TDCableMountingMethod),'TDCableMountingMethod');
+
+  ptsu^.RegisterType(TypeInfo(TZColor),'TZColor');
+  ptsu^.RegisterType(TypeInfo(PTZColor),'PTZColor');
+
   utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),true,'GDBaseObject');
 end;
 initialization

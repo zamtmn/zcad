@@ -48,7 +48,7 @@ uses
   uzventsuperline,uzcenitiesvariablesextender,UUnitManager,uzbpaths,uzcTranslations,
   uzeentityfactory,    //unit describing a "factory" to create primitives
   //модуль описывающий "фабрику" для создания примитивов
-  uzbtypes, //base types
+  uzbtypes,uzeTypes, //base types
   //описания базовых типов
   uzeconsts, //base constants
   //описания базовых констант

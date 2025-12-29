@@ -25,7 +25,7 @@ interface
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzestyleslayers,uzbtypes,gzctnrVectorTypes,UGDBSelectedObjArray,
+  uzestyleslayers,uzbtypes,uzeTypes,gzctnrVectorTypes,UGDBSelectedObjArray,
   uzcstrconsts,uzccommandsmanager,uzcdrawings,uzeentity,//uzccominteractivemanipulators,
   uzegeometrytypes,
   uzeentmtext,

@@ -31,10 +31,14 @@ resourcestring
   rsDifferent='Different';
 type
 TBaseTypeManipulator<T>=class
-type
- PT=^T;
- class function Compare(const left,right:T):TCompareResult;
- class procedure Initialize(var Instance:T);
+  type
+    PT=^T;
+  class function Compare(const left,right:T):TCompareResult;
+  class procedure Initialize(var Instance:T);
+end;
+TBaseROTypeManipulator<T>=class(TBaseTypeManipulator<T>)
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 TOrdinalTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
@@ -73,11 +77,13 @@ TTempAnsiStringStoredIn1251TypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 
-TPointerTypeManipulator<T>=class(TBaseTypeManipulator<T>)
+TPointerTypeManipulator<T>=class(TBaseROTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
+end;
+TMethodTypeManipulator<T>=class(TBaseROTypeManipulator<T>)
+  class function GetValueAsString(const data:T):TInternalScriptString;
+  class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 end;
 PBaseTypeDescriptor=^{BaseTypeDescriptor}TUserTypeDescriptor;
 BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
@@ -155,6 +161,10 @@ TempAnsiString1251Descriptor=object(StringGeneralDescriptor<string,TAS1251TM_Str
 TPTM_Pointer=TPointerTypeManipulator<Pointer>;
 PointerDescriptor=object(BaseTypeDescriptor<pointer,{TPointerTypeManipulator<Pointer>}TPTM_Pointer>)
                     end;
+TMTM_TMethod=TMethodTypeManipulator<TMethod>;
+TMethodDescriptor=object(BaseTypeDescriptor<TMethod,TMTM_TMethod>)
+  end;
+
 TOTM_PtrUint=TOrdinalTypeManipulator<PtrUint>;
 TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator<PtrUint>}TOTM_PtrUint>)
                      constructor init;
@@ -240,6 +250,7 @@ FundamentalSingleDescriptorObj:FloatDescriptor;
 FundamentalShortIntDescriptorObj:TFundamentalShortIntDescriptor;
 FundamentalBooleanDescriptorOdj:BooleanDescriptor;
 FundamentalPointerDescriptorOdj:PointerDescriptor;
+FundamentalMethodDescriptorOdj:TMethodDescriptor;
 GDBEnumDataDescriptorObj:TEnumDataDescriptor;
 CalculatedStringDescriptor:TCalculatedStringDescriptor;
 GetterSetterIntegerDescriptor:TGetterSetterIntegerDescriptor;
@@ -270,6 +281,13 @@ end;
 class procedure TBaseTypeManipulator<T>.Initialize(var Instance:T);
 begin
   system.initialize(Instance);
+end;
+
+class procedure TBaseROTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
+begin
+end;
+class procedure TBaseROTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+begin
 end;
 
 function TEnumDataDescriptor.CreateProperties;
@@ -539,22 +557,23 @@ begin
      pointer(s):=nil;
      //KillString(pstring(Pinstance)^);
 end;
-
 class function TPointerTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
-     if data<>nil then
-                      begin
-                           result := '$' + inttohex(int64(data), 8);
-                      end
-                  else result := 'nil';
-end;
-class procedure TPointerTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
-begin
-end;
-class procedure TPointerTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
-begin
+  if data<>nil then begin
+    result:='$'+inttohex(PtrInt(data),8);
+  end else
+    result:='nil';
 end;
 class function TPointerTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+   result:=GetValueAsString(data);
+end;
+class function TMethodTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
+begin
+  result:=format('%s:%s',[TPTM_Pointer.GetValueAsString(tmethod(data).code),
+    TPTM_Pointer.GetValueAsString(tmethod(data).data)]);
+end;
+class function TMethodTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
    result:=GetValueAsString(data);
 end;
@@ -868,6 +887,7 @@ begin
      FundamentalWordDescriptorObj.init('Word',nil);
      FundamentalBooleanDescriptorOdj.init('Boolean',nil);
      FundamentalPointerDescriptorOdj.init('Pointer',nil);
+     FundamentalMethodDescriptorOdj.init('TMethod',nil);
      FundamentalQWordDescriptorObj.init('QWord',nil);
      FundamentalInt64Descriptor.init('Int64',nil);
 

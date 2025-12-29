@@ -559,35 +559,35 @@ var
    fd:FieldDescriptor;
    tname:TInternalScriptString;
 begin
-     tname:=ProcessTypeName(ATypeInfo,ATypeName);
+  tname:=ProcessTypeName(ATypeInfo,ATypeName);
 
-     Getmem(Pointer(etd),sizeof(RecordDescriptor));
-     PRecordDescriptor(etd)^.init(tname,@self);
-     td:=GetTypeData(ATypeInfo);
-     mf:=@td.ManagedFldCount;
-     inc(pointer(mf),sizeof(td.ManagedFldCount));
-     for i:=0 to td.ManagedFldCount-1 do
-     begin
-          ATypeInfo:=mf.TypeRef;
+  Getmem(Pointer(etd),sizeof(RecordDescriptor));
+  PRecordDescriptor(etd)^.init(tname,@self);
+  td:=GetTypeData(ATypeInfo);
+  mf:=@td.ManagedFldCount;
+  inc(pointer(mf),sizeof(td.ManagedFldCount));
+  fd.Offset:=0;
+  for i:=0 to td.ManagedFldCount-1 do begin
+    ATypeInfo:=mf.TypeRef;
+    if mf.FldOffset>=fd.Offset then begin //case части рекорда пропускаем
+      fd.base.ProgramName:=ATypeInfo.Name;
+      fd.base.PFT:=RegisterType(ATypeInfo);
+      fd.base.Attributes:=[];
+      fd.base.Saved:=0;
+      fd.Collapsed:=true;
+      fd.Offset:=mf.FldOffset;
+      if fd.base.PFT<>nil then
+        fd.Size:=fd.base.PFT^.SizeInBytes
+      else
+        system.break;
+      etd^.AddField(fd);
+    end;
 
-
-          fd.base.ProgramName:=ATypeInfo.Name;
-          fd.base.PFT:=RegisterType(ATypeInfo);
-          fd.base.Attributes:=[];
-          fd.base.Saved:=0;
-          fd.Collapsed:=true;
-          fd.Offset:=mf.FldOffset;
-          if fd.base.PFT<>nil then
-                             fd.Size:=fd.base.PFT^.SizeInBytes
-                         else
-                             system.break;
-          etd^.AddField(fd);
-
-          inc(mf);
-     end;
-     etd^.SizeInBytes:=td.RecSize;
-     InterfaceTypes.AddTypeByPP(@etd);
-     result:=etd;
+    inc(mf);
+  end;
+  etd^.SizeInBytes:=td.RecSize;
+  InterfaceTypes.AddTypeByPP(@etd);
+  result:=etd;
 end;
 procedure TUnit.AddPODByVmt(const APOD:PObjectDescriptor;const APVMT:Pointer);
 begin
@@ -769,6 +769,18 @@ begin
          result:=nil;
          raise Exception.CreateFmt('Auto registration for objects (alias="%s";name="%s") not alloved',[ATypeName,tname]);
        end;
+       tkMethod:begin
+         Getmem(result,sizeof(GDBSinonimDescriptor));
+         PGDBSinonimDescriptor(result)^.init('TMethod',ti^.Name,@self);
+         InterfaceTypes.AddTypeByPP(@result);
+       end;
+       tkProcVar:begin
+         Getmem(result,sizeof(GDBSinonimDescriptor));
+         PGDBSinonimDescriptor(result)^.init('Pointer',ti^.Name,@self);
+         InterfaceTypes.AddTypeByPP(@result);
+       end;
+       else
+         raise Exception.CreateFmt('Can''t register typt (alias="%s";name="%s";kind="%s") not alloved',[ATypeName,tname,GetEnumName(TypeInfo(TTypeKind),Integer(ti^.Kind))]);
      end;
 end;
 procedure TUnit.SetTypeDesk2(putd:PUserTypeDescriptor; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);
@@ -1086,6 +1098,7 @@ end;
 procedure typemanager.CreateBaseTypes;
 begin
      AddTypeByRef(FundamentalPointerDescriptorOdj);
+     AddTypeByRef(FundamentalMethodDescriptorOdj);
      AddTypeByRef(FundamentalBooleanDescriptorOdj);
      AddTypeByRef(FundamentalShortIntDescriptorObj);
      AddTypeByRef(FundamentalByteDescriptorObj);

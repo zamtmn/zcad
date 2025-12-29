@@ -88,6 +88,62 @@ type
   TZColor=Longword;
   PTZColor=^TZColor;
 
+  TDummyMethod=record
+    Code:Pointer;
+    Data:Pointer;
+  end;
+
+  TDummyGetterSetter=record
+    Getter:TDummyMethod;
+    Setter:TDummyMethod;
+  end;
+  GGetterSetter<T>=record
+    type
+      TGetter=function:T of object;
+      TSetter=procedure(const AValue:T) of object;
+    var
+      Getter:TGetter;
+      Setter:TSetter;
+    procedure Setup(const AGetter:TGetter;const ASetter:TSetter);
+  end;
+
+  TGetterSetterString=GGetterSetter<string>;
+
+  PTGetterSetterInteger=^TGetterSetterInteger;
+  TGetterSetterInteger=GGetterSetter<integer>;
+
+  PTGetterSetterLongWord=^TGetterSetterLongWord;
+  TGetterSetterLongWord=GGetterSetter<LongWord>;
+
+
+  PTGetterSetterBoolean=^TGetterSetterBoolean;
+  TGetterSetterBoolean=GGetterSetter<boolean>;
+
+  PTGetterSetterTZColor=^TGetterSetterTZColor;
+  TGetterSetterTZColor=GGetterSetter<TZColor>;
+
+
+
+  GUsable<T>=record
+    public type
+      PT=^T;
+      TSelfType=GUsable<T>;
+    private
+      FValue:T;
+      FUsable:Boolean;
+    Public
+      function ValueOrDefault(const ADefaultValue:T):T;
+      Property Value:T  read FValue write FValue;
+      Property Usable:Boolean read FUsable write FUsable;
+  end;
+
+
+  TUsableInteger={-}GUsable<Integer>;{/record Value:integer; Usable:boolean; end;/}
+  PTUsableInteger=^TUsableInteger;
+
+  TGetterSetterTUsableInteger={-}GGetterSetter<TUsableInteger>{/TDummyGetterSetter/};
+  PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
+
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Summary'*)
 (*varcategoryforoi CABLE='Cable params'*)
@@ -149,71 +205,17 @@ PGDBBaseCamera=^GDBBaseCamera;
              end;
 
 
-{REGISTERRECORDTYPE TFaceTypedData}
+{EXPORT-}
+
+PFString=^TFString;
+TFString={-}function:string{/pointer/};
+
 TFaceTypedData=record
                  Instance: Pointer;
                  PTD: Pointer;
                 end;
 PTFaceTypedData=^TFaceTypedData;
 
-
-{REGISTERRECORDTYPE TDummyMethod}
-TDummyMethod=record
-  Code:Pointer;
-  Data:Pointer;
-end;
-{REGISTERRECORDTYPE TDummyGetterSetter}
-TDummyGetterSetter=record
-  Getter:TDummyMethod;
-  Setter:TDummyMethod;
-end;
-{-}GGetterSetter<T>=record{//}
-{-}  type{//}
-{-}    TGetter=function:T of object;{//}
-{-}    TSetter=procedure(const AValue:T) of object;{//}
-{-}  var{//}
-{-}    Getter:TGetter;{//}
-{-}    Setter:TSetter;{//}
-{-}  procedure Setup(const AGetter:TGetter;const ASetter:TSetter);{//}
-{-}end;{//}
-TGetterSetterString={-}GGetterSetter<string>{/TDummyGetterSetter/};
-
-PTGetterSetterInteger=^TGetterSetterInteger;
-TGetterSetterInteger={-}GGetterSetter<integer>{/TDummyGetterSetter/};
-
-PTGetterSetterLongWord=^TGetterSetterLongWord;
-TGetterSetterLongWord={-}GGetterSetter<LongWord>{/TDummyGetterSetter/};
-
-
-PTGetterSetterBoolean=^TGetterSetterBoolean;
-TGetterSetterBoolean={-}GGetterSetter<boolean>{/TDummyGetterSetter/};
-
-PTGetterSetterTZColor=^TGetterSetterTZColor;
-TGetterSetterTZColor={-}GGetterSetter<TZColor>{/TDummyGetterSetter/};
-
-{-}GUsable<T>=record                                      {//}
-{-}  public type                                          {//}
-{-}    PT=^T;                                             {//}
-{-}    TSelfType=GUsable<T>;                              {//}
-{-}  private                                              {//}
-{-}    FValue:T;                                          {//}
-{-}    FUsable:Boolean;                                   {//}
-{-}  Public                                               {//}
-{-}    function ValueOrDefault(const ADefaultValue:T):T;  {//}
-{-}    Property Value:T  read FValue write FValue;        {//}
-{-}    Property Usable:Boolean read FUsable write FUsable;{//}
-{-}end;                                                   {//}
-
-PTUsableInteger=^TUsableInteger;
-TUsableInteger={-}GUsable<Integer>;{/record Value:integer; Usable:boolean; end;/}
-
-PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
-TGetterSetterTUsableInteger={-}GGetterSetter<TUsableInteger>{/TDummyGetterSetter/};
-
-PFString=^TFString;
-TFString={-}function:string{/pointer/};
-
-{EXPORT-}
 TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;
 
 var

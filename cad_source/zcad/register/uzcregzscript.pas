@@ -365,6 +365,37 @@ begin
   ptsu^.RegisterType(TypeInfo(TZColor),'TZColor');
   ptsu^.RegisterType(TypeInfo(PTZColor),'PTZColor');
 
+
+  ptsu^.RegisterType(TypeInfo(TDummyMethod),'TDummyMethod');
+  ptsu^.RegisterType(TypeInfo(TDummyGetterSetter),'TDummyGetterSetter');
+
+
+  ptsu^.RegisterType(TypeInfo(TGetterSetterString),'TGetterSetterString');
+
+  ptsu^.RegisterType(TypeInfo(TGetterSetterInteger),'TGetterSetterInteger');
+  ptsu^.RegisterType(TypeInfo(PTGetterSetterInteger),'PTGetterSetterInteger');
+
+  ptsu^.RegisterType(TypeInfo(TGetterSetterLongWord),'TGetterSetterLongWord');
+  ptsu^.RegisterType(TypeInfo(PTGetterSetterLongWord),'PTGetterSetterLongWord');
+
+  ptsu^.RegisterType(TypeInfo(TGetterSetterBoolean),'TGetterSetterBoolean');
+  ptsu^.RegisterType(TypeInfo(PTGetterSetterBoolean),'PTGetterSetterBoolean');
+
+  ptsu^.RegisterType(TypeInfo(TGetterSetterTZColor),'TGetterSetterTZColor');
+  ptsu^.RegisterType(TypeInfo(PTGetterSetterTZColor),'PTGetterSetterTZColor');
+
+  ptsu^.RegisterType(TypeInfo(TUsableInteger),'TUsableInteger');
+  ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTUsableInteger');
+
+  ptsu^.RegisterType(TypeInfo(TUsableInteger),'TGetterSetterTUsableInteger');
+  ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTGetterSetterTUsableInteger');
+
+  ptsu^.RegisterType(TypeInfo(TFaceTypedData),'TFaceTypedData');
+  ptsu^.RegisterType(TypeInfo(PTFaceTypedData),'PTFaceTypedData');
+
+  ptsu^.RegisterType(TypeInfo(TFString),'TFString');
+  ptsu^.RegisterType(TypeInfo(PFString),'PFString');
+
   utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),true,'GDBaseObject');
 end;
 initialization

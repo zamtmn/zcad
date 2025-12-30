@@ -144,6 +144,27 @@ type
   TGetterSetterTUsableInteger={-}GGetterSetter<TUsableInteger>{/TDummyGetterSetter/};
   PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
 
+
+  GDBBaseCamera=object(GDBaseObject)
+    modelMatrix:TzeTypedMatrix4d;
+    fovy:double;
+    Counters:TCameraCounters;
+    prop:GDBCameraBaseProp;
+    anglx,angly,zmin,zmax:double;
+    projMatrix:TzeTypedMatrix4d;
+    viewport:TzeVector4i;
+    clip:TzeTypedMatrix4d;
+    frustum:TzeFrustum;
+    obj_zmax,obj_zmin:double;
+    DRAWNOTEND:boolean;
+    DRAWCOUNT:TActuality;
+    POSCOUNT:TActuality;
+    VISCOUNT:TActuality;
+    CamCSOffset:TzePoint3d;
+    procedure NextPosition;virtual;abstract;
+  end;
+  PGDBBaseCamera=^GDBBaseCamera;
+
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Summary'*)
 (*varcategoryforoi CABLE='Cable params'*)
@@ -169,26 +190,6 @@ type
 (*varcategoryforoi INSERT='Insert'*)
 (*varcategoryforoi NORMAL='Normal'*)
 (*varcategoryforoi SCALE='Scale'*)
-
-GDBBaseCamera=object(GDBaseObject)
-  modelMatrix:TzeTypedMatrix4d;
-  fovy:double;
-  Counters:TCameraCounters;
-  prop:GDBCameraBaseProp;
-  anglx,angly,zmin,zmax:double;
-  projMatrix:TzeTypedMatrix4d;
-  viewport:TzeVector4i;
-  clip:TzeTypedMatrix4d;
-  frustum:TzeFrustum;
-  obj_zmax,obj_zmin:double;
-  DRAWNOTEND:boolean;
-  DRAWCOUNT:TActuality;
-  POSCOUNT:TActuality;
-  VISCOUNT:TActuality;
-  CamCSOffset:TzePoint3d;
-  procedure NextPosition;virtual;abstract;
-end;
-PGDBBaseCamera=^GDBBaseCamera;
 
   TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
   TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);

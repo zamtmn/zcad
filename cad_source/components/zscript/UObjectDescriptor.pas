@@ -94,6 +94,7 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                        procedure CorrectFieldsOffset(ti: PTypeInfo);
                        procedure CorrectCurrentFieldsOffset(td:PTypeData;var i:integer);
+                       function GetFirstFieldIndex:Integer;virtual;
                  end;
 PTGenericVectorData=^TGenericVectorData;
 TGenericVectorData=GZVector<byte>;
@@ -172,6 +173,13 @@ begin
      if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
      //parseresult:=runparser('_softspace'#0'=(_softspace'#0'_identifier'#0'_softspace'#0'=)',line,parseerror);
 
+end;
+function ObjectDescriptor.GetFirstFieldIndex:Integer;
+begin
+  if Parent<>nil then
+    result:=Parent^.GetLastFieldIndex
+  else
+    result:=0;
 end;
 procedure ObjectDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin

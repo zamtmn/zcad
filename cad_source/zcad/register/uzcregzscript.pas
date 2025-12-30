@@ -20,9 +20,11 @@ unit uzcregzscript;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  SysUtils,uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
-  varman,USinonimDescriptor,UBaseTypeDescriptor,uzcLog,uzegeometrytypes,
-  varmandef,uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes;
+  SysUtils,uzcsysvars,uzbpaths,uzctranslations,
+  varmandef,varman,UUnitManager,TypeDescriptors,UObjectDescriptor,
+  USinonimDescriptor,UBaseTypeDescriptor,
+  uzcLog,uzegeometrytypes,
+  uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes;
 
 type
 
@@ -67,6 +69,7 @@ end;
 procedure _OnCreateSystemUnit(ptsu:PTUnit);
 var
   utd:PUserTypeDescriptor;
+  otd:PObjectDescriptor;
 begin
 
   TZeDimLessDescriptorObj.init('TZeDimLess',nil);
@@ -396,7 +399,19 @@ begin
   ptsu^.RegisterType(TypeInfo(TFString),'TFString');
   ptsu^.RegisterType(TypeInfo(PFString),'PFString');
 
-  utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),true,'GDBaseObject');
+  utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),'GDBaseObject',true);
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBBaseCamera),TypeOf(GDBBaseCamera),'GDBBaseCamera',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['modelMatrix','fovy','Counters','prop','anglx',
+                            'angly','zmin','zmax','projMatrix','viewport',
+                            'clip','frustum','obj_zmax','obj_zmin','DRAWNOTEND',
+                            'DRAWCOUNT','POSCOUNT','VISCOUNT','CamCSOffset'],
+                            [FNProgram,FNUser]);
+    //otd^.RegisterObject(TypeOf(GDBObjCamera),@GDBObjCamera.initnul);
+    //otd^.AddMetod('','initnul','',@GDBObjCamera.initnul,m_constructor);
+  end;
+  ptsu^.RegisterType(TypeInfo(PGDBBaseCamera),'PGDBBaseCamera');
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

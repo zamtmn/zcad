@@ -258,7 +258,7 @@ TUnit=object(TSimpleUnit)
             function RegisterRecordType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
             function RegisterPointerType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
             function RegisterEnumType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
-            function RegisterObjectType(ATypeInfo:PTypeInfo;ATypeOf:Pointer;HasVMT:boolean;ATypeName:string=''):PUserTypeDescriptor;
+            function RegisterObjectType(ATypeInfo:PTypeInfo;ATypeOf:Pointer;ATypeName:string='';HasVMT:boolean=true):PObjectDescriptor;
       end;
 {EXPORT-}
 TOnCreateSystemUnit=procedure (ptsu:PTUnit);
@@ -597,7 +597,7 @@ function TUnit.GetPODByVmt(const APVMT:Pointer):PObjectDescriptor;
 begin
   result:=VMT2PTD.MyGetValue(APVMT);
 end;
-function TUnit.RegisterObjectType(ATypeInfo:PTypeInfo;ATypeOf:Pointer;HasVMT:boolean;ATypeName:string=''):PUserTypeDescriptor;
+function TUnit.RegisterObjectType(ATypeInfo:PTypeInfo;ATypeOf:Pointer;ATypeName:string='';HasVMT:boolean=true):PObjectDescriptor;
 var
   td,tdparetn:PTypeData;
   ParentTypeOf:Pointer;
@@ -612,24 +612,25 @@ var
 begin
   if ATypeInfo.Kind<>tkObject then
     raise Exception.CreateFmt('TUnit.RegisterObjectType not object type (alias="%s";name="%s") not alloved',[ATypeName,ATypeInfo.Name]);
-  result:=TypeName2PTD(ATypeName);
+
+  result:=pointer(TypeName2PTD(ATypeName));
   if result<>nil then
     exit;
+
   ParentTypeOf:=ParentPType(ATypeOf);
+  if ParentTypeOf<>nil then begin
+    parentOTD:=GetPODByVmt(ParentTypeOf);
+  end else
+    parentOTD:=nil;
 
   tname:=ProcessTypeName(ATypeInfo,ATypeName);
 
   Getmem(Pointer(etd),sizeof(ObjectDescriptor));
-  PObjectDescriptor(etd)^.init(tname,@self);
+  etd^.init(tname,@self);
 
   td:=GetTypeData(ATypeInfo);
   mf:=@td.ManagedFldCount;
   inc(pointer(mf),sizeof(td.ManagedFldCount));
-
-  if ParentTypeOf<>nil then begin
-      parentOTD:=GetPODByVmt(ParentTypeOf);
-  end;
-
 
   if (ParentTypeOf=nil)and(HasVMT) then
     PVMTFieldsIndex:=td.ManagedFldCount-1
@@ -647,12 +648,15 @@ begin
          fd.Collapsed:=true;
          etd^.AddConstField(fd);
        end else if (i=0)and(ParentTypeOf<>nil)then begin
-
+         parentOTD^.CopyTo(etd);
+         etd^.Parent:=parentOTD;
+         fd.Offset:=parentOTD^.SizeInBytes;
        end else begin
          fd.base.create(ftd.TypeName,ftd.TypeName,ftd,[]);
          fd.Offset:=mf.FldOffset;
          fd.Size:=ftd.SizeInBytes;
          fd.Collapsed:=true;
+         etd^.AddField(fd);
        end;
 
 
@@ -800,22 +804,25 @@ begin
   end;{case}
 end;
 var
-    i:integer;
+    FldIdx,NameIdx:integer;
+
 begin
   if putd<>nil then begin
     if IsIt(typeof(putd^),typeof(RecordDescriptor)) then begin
-        for i:=0 to PRecordDescriptor(putd)^.Fields.Count-1 do begin
+        NameIdx:=0;
+        for FldIdx:=PRecordDescriptor(putd)^.GetFirstFieldIndex to PRecordDescriptor(putd)^.Fields.Count-1 do begin
           if FNUser in SetNames then
-            PRecordDescriptor(putd)^.Fields.PArray^[i].base.UserName:=GetFieldName(i,PRecordDescriptor(putd)^.Fields.PArray^[i].base.UserName);
+            PRecordDescriptor(putd)^.Fields.PArray^[FldIdx].base.UserName:=GetFieldName(NameIdx,PRecordDescriptor(putd)^.Fields.PArray^[FldIdx].base.UserName);
           if FNProgram in SetNames then
-            PRecordDescriptor(putd)^.Fields.PArray^[i].base.ProgramName:=GetFieldName(i,PRecordDescriptor(putd)^.Fields.PArray^[i].base.UserName);
+            PRecordDescriptor(putd)^.Fields.PArray^[FldIdx].base.ProgramName:=GetFieldName(NameIdx,PRecordDescriptor(putd)^.Fields.PArray^[FldIdx].base.UserName);
+          inc(NameIdx);
         end;
     end else if IsIt(typeof(putd^),typeof(EnumDescriptor)) then begin
-        for i:=0 to PEnumDescriptor(putd)^.UserValue.Count-1 do begin
+        for FldIdx:=0 to PEnumDescriptor(putd)^.UserValue.Count-1 do begin
           if FNUser in SetNames then
-            PEnumDescriptor(putd)^.UserValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(putd)^.UserValue.PArray^[i]);
+            PEnumDescriptor(putd)^.UserValue.PArray^[FldIdx]:=GetFieldName(FldIdx,PEnumDescriptor(putd)^.UserValue.PArray^[FldIdx]);
           if FNProgram in SetNames then
-            PEnumDescriptor(putd)^.SourceValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(putd)^.SourceValue.PArray^[i]);
+            PEnumDescriptor(putd)^.SourceValue.PArray^[FldIdx]:=GetFieldName(FldIdx,PEnumDescriptor(putd)^.SourceValue.PArray^[FldIdx]);
         end;
     end;
   end;

@@ -49,6 +49,8 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                        procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                        procedure CorrectFieldsOffset(ti:PTypeInfo);
+                       function GetFirstFieldIndex:Integer;virtual;
+                       function GetLastFieldIndex:Integer;virtual;
                    end;
 function typeformat(ps:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
 var
@@ -89,6 +91,16 @@ begin
      until i<=0;
      result:=ps;
 end;
+function RecordDescriptor.GetFirstFieldIndex:Integer;
+begin
+  result:=0;
+end;
+function RecordDescriptor.GetLastFieldIndex:Integer;
+begin
+  result:=Fields.Count;
+end;
+
+
 procedure RecordDescriptor.RegisterTypeinfo(ti:PTypeInfo);
 begin
 //  if TypeName='trenderdeb' then begin

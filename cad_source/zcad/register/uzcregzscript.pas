@@ -24,7 +24,7 @@ uses
   varmandef,varman,UUnitManager,TypeDescriptors,UObjectDescriptor,
   USinonimDescriptor,UBaseTypeDescriptor,
   uzcLog,uzegeometrytypes,
-  uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes;
+  uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef;
 
 type
 
@@ -408,10 +408,56 @@ begin
                             'clip','frustum','obj_zmax','obj_zmin','DRAWNOTEND',
                             'DRAWCOUNT','POSCOUNT','VISCOUNT','CamCSOffset'],
                             [FNProgram,FNUser]);
-    //otd^.RegisterObject(TypeOf(GDBObjCamera),@GDBObjCamera.initnul);
-    //otd^.AddMetod('','initnul','',@GDBObjCamera.initnul,m_constructor);
+    otd^.RegisterObject(TypeOf(GDBBaseCamera),@GDBBaseCamera.initnul);
+    otd^.AddMetod('','initnul','',@GDBBaseCamera.initnul,m_constructor);
   end;
   ptsu^.RegisterType(TypeInfo(PGDBBaseCamera),'PGDBBaseCamera');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TBlockType),'TBlockType');
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['BT_Connector','BT_Unknown'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(TBlockBorder),'TBlockBorder');
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['BB_Owner','BB_Self','BB_Empty'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(TBlockGroup),'TBlockGroup');
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['BG_El_Device','BG_Unknown'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TBlockDesc),'TBlockDesc');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['BType','BBorder','BGroup'],[FNProgram,FNUser]);
+  end;
+
+  RegisterVarCategory('SUMMARY','Summary',@InterfaceTranslate);
+
+  RegisterVarCategory('CABLE','Cable params',@InterfaceTranslate);
+  RegisterVarCategory('DEVICE','Device params',@InterfaceTranslate);
+  RegisterVarCategory('OBJFUNC','Function:object',@InterfaceTranslate);
+  RegisterVarCategory('NMO','Name',@InterfaceTranslate);
+
+  RegisterVarCategory('SLCABAGEN1','Подключение №1',@InterfaceTranslate);
+  RegisterVarCategory('deverrors','Ошибки выполнения',@InterfaceTranslate);
+  RegisterVarCategory('DB','Data base',@InterfaceTranslate);
+  RegisterVarCategory('GC','Group connection',@InterfaceTranslate);
+  RegisterVarCategory('LENGTH','Length params',@InterfaceTranslate);
+  RegisterVarCategory('OTHER','Other',@InterfaceTranslate);
+  RegisterVarCategory('BTY','Blockdef params',@InterfaceTranslate);
+  RegisterVarCategory('EL','El(deprecated)',@InterfaceTranslate);
+  RegisterVarCategory('UNITPARAM','Measured parameter',@InterfaceTranslate);
+  RegisterVarCategory('DESC','Description',@InterfaceTranslate);
+
+  RegisterVarCategory('CENTER','Center',@InterfaceTranslate);
+  RegisterVarCategory('START','Start',@InterfaceTranslate);
+  RegisterVarCategory('END','End',@InterfaceTranslate);
+  RegisterVarCategory('DELTA','Delta',@InterfaceTranslate);
+  RegisterVarCategory('INSERT','Insert',@InterfaceTranslate);
+  RegisterVarCategory('NORMAL','Normal',@InterfaceTranslate);
+  RegisterVarCategory('SCALE','Scale',@InterfaceTranslate);
+
+
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

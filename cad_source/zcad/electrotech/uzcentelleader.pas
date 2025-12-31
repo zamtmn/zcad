@@ -16,7 +16,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      gzctnrVectorTypes,uzeentity,varmandef,uzbtypes,uzeTypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated,uzestylestables,uzclog,
      UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor,
-     uzglviewareadata,uzCtnrVectorpBaseEntity,gzctnrSTL;
+     uzglviewareadata,uzCtnrVectorpBaseEntity,gzctnrSTL,uzeblockdef;
 type
 TStringCounter=TMyMapCounter<string>;
 

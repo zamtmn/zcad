@@ -25,6 +25,15 @@ uses
   uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,
   uzbLogIntf,uzMVReader,uzeffdxfsupport;
 type
+TBlockType=(BT_Connector,BT_Unknown);
+TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
+TBlockGroup=(BG_El_Device,BG_Unknown);
+{REGISTERRECORDTYPE TBlockDesc}
+TBlockDesc=record
+                 BType:TBlockType;(*'Block type'*)
+                 BBorder:TBlockBorder;(*'Border'*)
+                 BGroup:TBlockGroup;(*'Block group'*)
+           end;
 {Export+}
 PGDBObjBlockdef=^GDBObjBlockdef;
 {REGISTEROBJECTTYPE GDBObjBlockdef}

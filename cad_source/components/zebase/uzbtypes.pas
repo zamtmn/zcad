@@ -165,46 +165,33 @@ type
   end;
   PGDBBaseCamera=^GDBBaseCamera;
 
+  (*varcategoryforoi SUMMARY='Summary'*)
+  (*varcategoryforoi CABLE='Cable params'*)
+  (*varcategoryforoi DEVICE='Device params'*)
+  (*varcategoryforoi OBJFUNC='Function:object'*)
+  (*varcategoryforoi NMO='Name'*)
+
+  (*varcategoryforoi SLCABAGEN1='Подключение №1'*)
+  (*varcategoryforoi deverrors='Ошибки выполнения'*)
+  (*varcategoryforoi DB='Data base'*)
+  (*varcategoryforoi GC='Group connection'*)
+  (*varcategoryforoi LENGTH='Length params'*)
+  (*varcategoryforoi OTHER='Other'*)
+  (*varcategoryforoi BTY='Blockdef params'*)
+  (*varcategoryforoi EL='El(deprecated)'*)
+  (*varcategoryforoi UNITPARAM='Measured parameter'*)
+  (*varcategoryforoi DESC='Description'*)
+
+  (*varcategoryforoi CENTER='Center'*)
+  (*varcategoryforoi START='Start'*)
+  (*varcategoryforoi END='End'*)
+  (*varcategoryforoi DELTA='Delta'*)
+  (*varcategoryforoi INSERT='Insert'*)
+  (*varcategoryforoi NORMAL='Normal'*)
+  (*varcategoryforoi SCALE='Scale'*)
+
+
 {EXPORT+}
-(*varcategoryforoi SUMMARY='Summary'*)
-(*varcategoryforoi CABLE='Cable params'*)
-(*varcategoryforoi DEVICE='Device params'*)
-(*varcategoryforoi OBJFUNC='Function:object'*)
-(*varcategoryforoi NMO='Name'*)
-
-(*varcategoryforoi SLCABAGEN1='Подключение №1'*)
-(*varcategoryforoi deverrors='Ошибки выполнения'*)
-(*varcategoryforoi DB='Data base'*)
-(*varcategoryforoi GC='Group connection'*)
-(*varcategoryforoi LENGTH='Length params'*)
-(*varcategoryforoi OTHER='Other'*)
-(*varcategoryforoi BTY='Blockdef params'*)
-(*varcategoryforoi EL='El(deprecated)'*)
-(*varcategoryforoi UNITPARAM='Measured parameter'*)
-(*varcategoryforoi DESC='Description'*)
-
-(*varcategoryforoi CENTER='Center'*)
-(*varcategoryforoi START='Start'*)
-(*varcategoryforoi END='End'*)
-(*varcategoryforoi DELTA='Delta'*)
-(*varcategoryforoi INSERT='Insert'*)
-(*varcategoryforoi NORMAL='Normal'*)
-(*varcategoryforoi SCALE='Scale'*)
-
-  TShapeBorder=(SB_Owner,SB_Self,SB_Empty);
-  TShapeClass=(SC_Connector,SC_Terminal,SC_Graphix,SC_Unknown);
-  TShapeGroup=(SG_El_Sch,SG_Cable_Sch,SG_Plan,SG_Unknown);
-
-  TBlockType=(BT_Connector,BT_Unknown);
-  TBlockBorder=(BB_Owner,BB_Self,BB_Empty);
-  TBlockGroup=(BG_El_Device,BG_Unknown);
-  {REGISTERRECORDTYPE TBlockDesc}
-  TBlockDesc=record
-                   BType:TBlockType;(*'Block type'*)
-                   BBorder:TBlockBorder;(*'Border'*)
-                   BGroup:TBlockGroup;(*'Block group'*)
-             end;
-
 
 {EXPORT-}
 

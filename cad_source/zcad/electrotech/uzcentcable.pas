@@ -14,7 +14,7 @@ uses
   uzegeometry,math,gzctnrVector,uzeentity,varmandef,uzbtypes,uzeTypes,
   uzegeometrytypes,uzeconsts,uzeffdxfsupport,sysutils,uzeentsubordinated,
   uzeentdevice,gzctnrVectorTypes,uzcenitiesvariablesextender,uzeentityfactory,
-  uzcLog;
+  uzcLog,uzeblockdef;
 type
 {Повторное описание типа в Cableы}
   PTCableType=^TCableType;

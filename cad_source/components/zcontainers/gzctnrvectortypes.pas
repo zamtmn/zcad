@@ -18,41 +18,43 @@
 unit gzctnrVectorTypes;
 
 interface
-uses sysutils,typinfo;
+
+uses SysUtils,typinfo;
+
 type
   TPtrOffs=record
-             case byte of
-               1:(ptr:Pointer);
-               2:(offs:PtrUInt);
-           end;
-{Export+}
+    case boolean of
+      False:(ptr:Pointer);
+      True:(offs:PtrUInt);
+  end;
   PTArrayIndex=^TArrayIndex;
-  TArrayIndex=Integer;
-  {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TZAbsVector}
+  TArrayIndex=integer;
+
   TZAbsVector=object
     function GetParray:pointer;virtual;abstract;
     function getPData(index:TArrayIndex):Pointer;virtual;abstract;
     constructor initnul;
   end;
   PZAbsVector=^TZAbsVector;
-  {REGISTERRECORDTYPE TInVectorAddr}
+
   TInVectorAddr=record
-                  Instt:{-}TPtrOffs{/Pointer/};
-                  DataSegment:PZAbsVector;
-                  {-}function GetInstance:Pointer;{/ /}
-                  {-}function IsNil:Boolean;{/ /}
-                  {-}property Instance:Pointer read GetInstance;{/ /}
-                  {-}procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;{/ /}
-                  {-}procedure SetInstance(Ptr:Pointer);overload;{/ /}
-                  {-}procedure FreeeInstance;{/ /}
-                end;
-  {REGISTERRECORDTYPE itrec}
+    Instt:TPtrOffs;
+    DataSegment:PZAbsVector;
+    function GetInstance:Pointer;
+    function IsNil:boolean;
+    property Instance:Pointer read GetInstance;
+    procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;
+    procedure SetInstance(Ptr:Pointer);overload;
+    procedure FreeeInstance;
+  end;
+
   itrec=record
-              itp:{-}PPointer{/Pointer/};
-              itc:Integer;
-        end;
-{Export-}
+    itp:PPointer;
+    itc:integer;
+  end;
+
 implementation
+
 constructor TZAbsVector.initnul;
 begin
 end;
@@ -60,14 +62,15 @@ end;
 function TInVectorAddr.GetInstance:Pointer;
 begin
   if DataSegment=nil then
-    result:=Instt.ptr
+    Result:=Instt.ptr
   else
-    result:=DataSegment^.getPData(Instt.offs);
-    //result:=Pointer(PtrUInt(DataSegment^.GetParray)+Instt.offs);
+    Result:=DataSegment^.getPData(Instt.offs);
+  //result:=Pointer(PtrUInt(DataSegment^.GetParray)+Instt.offs);
 end;
-function TInVectorAddr.IsNil:Boolean;
+
+function TInVectorAddr.IsNil:boolean;
 begin
-  result:=(DataSegment=nil)and(Instt.ptr=nil);
+  Result:=(DataSegment=nil)and(Instt.ptr=nil);
 end;
 
 procedure TInVectorAddr.SetInstance(DS:PZAbsVector;Offs:PtrUInt);
@@ -78,8 +81,8 @@ end;
 
 procedure TInVectorAddr.SetInstance(Ptr:Pointer);
 begin
-   DataSegment:=nil;
-   Instt.ptr:=Ptr;
+  DataSegment:=nil;
+  Instt.ptr:=Ptr;
 end;
 
 procedure TInVectorAddr.FreeeInstance;

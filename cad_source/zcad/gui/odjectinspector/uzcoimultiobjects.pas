@@ -33,11 +33,6 @@ uses
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
-  {TMSType=(
-           TMST_All(*'All entities'*),
-           TMST_Devices(*'Devices'*),
-           TMST_Cables(*'Cables'*)
-          );}
   TVariableProcessSelector=(
            VPS_OnlyThisEnts(*'Only this ents'*),
            VPS_OnlyRelatedEnts(*'Only related ents'*),

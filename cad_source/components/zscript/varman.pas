@@ -147,16 +147,15 @@ TFieldName=(FNUser,FNProgram);
 TFieldNames=set of TFieldName;
 TTypeAliases=TMyMapGen<TInternalScriptString,TInternalScriptString>;
 TVMT2PTD=TMyMapGen<Pointer,PObjectDescriptor>;
-{EXPORT+}
+
 TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor>{//})
                            end;
 ptypemanager=^typemanager;
-{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE typemanager}
 typemanager=object(typemanagerdef)
-                  {-}protected{/Pointer;/}
+                  {-}protected{//}
                   n2i:{-}TNameToIndex;{/Pointer;/}
-                  {-}aliases:TTypeAliases;{/Pointer;/}
-                  {-}public{/Pointer;/}
+                  aliases:{-}TTypeAliases;{/Pointer;/}
+                  {-}public{//}
                   exttype:TZctnrVectorPUserTypeDescriptors;
                   constructor init;
                   procedure CreateBaseTypes;virtual;
@@ -174,6 +173,9 @@ typemanager=object(typemanagerdef)
                   procedure AddTypealias(const typename,fpcalias: TInternalScriptString);
                   function GetTypealias(const fpcalias:TInternalScriptString):TInternalScriptString;
             end;
+
+
+{EXPORT+}
 Tvardescarray=GZVector{-}<vardesk>{//};
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
 pvarmanager=^varmanager;
@@ -1533,6 +1535,12 @@ begin
 end;
 
 function varmanager.findfieldcustom;
+type
+  indexdesk=record
+    indexmin, count: Integer;
+  end;
+  arrayindex =packed  array[1..2] of indexdesk;
+  parrayindex = ^arrayindex;
 var
   path,{sp,} {typeString,} sub, {field,} inds: TInternalScriptString;
   oper: ansichar;

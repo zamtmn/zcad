@@ -26,7 +26,8 @@ uses
   uzcLog,uzegeometrytypes,
   uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef,
   uzeentabstracttext,uzecamera,
-  uzccommandsabstract,uzccommandsimpl,uzepalette;
+  uzccommandsabstract,uzccommandsimpl,uzepalette,
+  gzctnrVectorTypes;
 
 type
 
@@ -564,6 +565,12 @@ begin
   utd:=ptsu^.RegisterType(TypeInfo(TGDBPaletteColor),'TGDBPaletteColor');
   utd:=ptsu^.RegisterType(TypeInfo(PTGDBPaletteColor),'PTGDBPaletteColor');
 
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZAbsVector),TypeOf(TZAbsVector),'TZAbsVector',true);
+  ptsu^.RegisterType(TypeInfo(PZAbsVector),'PZAbsVector');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TInVectorAddr),'TInVectorAddr');
+
+  utd:=ptsu^.RegisterType(TypeInfo(itrec),'itrec');
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

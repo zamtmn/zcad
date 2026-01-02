@@ -243,20 +243,13 @@ THardTypedData=record
 PTHardTypedData=^THardTypedData;
 
 {EXPORT+}
-  indexdesk=record
-    indexmin, count: Integer;
-  end;
-  arrayindex =packed  array[1..2] of indexdesk;
-  parrayindex = ^arrayindex;
-  PTTypedData=^TTypedData;
-  pvarmanagerdef=^varmanagerdef;
   {REGISTERRECORDTYPE TTypedData}
   TTypedData=record
-                   PTD:{-}PUserTypeDescriptor{/Pointer/};
-                   Addr:TInVectorAddr;
-                   //{-}constructor Create(PTDesc:PUserTypeDescriptor;DS:pvarmanagerdef;Offset:PtrInt);{/ /}
-                   //{-}property Instance:Pointer read Inst write Inst;{/ /}
-             end;
+    PTD:{-}PUserTypeDescriptor{/Pointer/};
+    Addr:TInVectorAddr;
+  end;
+  PTTypedData=^TTypedData;
+
   TVariableAttributes=Integer;
   {REGISTERRECORDTYPE vardesk}
   vardesk =record
@@ -295,6 +288,7 @@ varmanagerdef=object
                  function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; const nam: String): Boolean;virtual;abstract;
                  //function getDS:Pointer;virtual;abstract;
            end;
+pvarmanagerdef=^varmanagerdef;
 {EXPORT-}
 procedure convertToRunTime(dt:TFastEditorsVector;var rt:TFastEditorsRunTimeVector);
 procedure clearRTd(rtv:TFastEditorsRunTimeVector);

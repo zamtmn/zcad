@@ -1,6 +1,6 @@
 #коментарий
 ;коментарий
-components/zcontainers/gzctnrvectortypes.pas
+;components/zcontainers/gzctnrvectortypes.pas
 components/zcontainers/gzctnrvector.pas
 components/zcontainers/gzctnrvectorsimple.pas
 components/zcontainers/gzctnrvectorstr.pas

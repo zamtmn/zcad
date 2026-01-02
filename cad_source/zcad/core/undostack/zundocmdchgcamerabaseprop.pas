@@ -20,7 +20,7 @@ unit zUndoCmdChgCameraBaseProp;
 {$INCLUDE zengineconfig.inc}
 interface
 uses zeundostack,zebaseundocommands,
-     uzbtypes,uzeentity,gzUndoCmdChgData;
+     uzecamera,uzeentity,gzUndoCmdChgData;
 type
   TGDBCameraBasePropChangeCommand=specialize GUCmdChgData<GDBCameraBaseProp,PGDBObjEntity>;
 implementation

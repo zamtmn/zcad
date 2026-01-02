@@ -105,7 +105,7 @@ begin
   result:=false;
   if (currobjgdbtype<>nil)and(pcurrobj<>nil) then
     if IsIt(typeof(currobjgdbtype^),typeof(ObjectDescriptor)) then
-      if IsIt(typeof(PGDBaseObject(pcurrobj)^),typeof(GDBaseObject)) then
+      if IsIt(PObjectDescriptor(currobjgdbtype)^.PVMT,typeof(GDBaseObject)) then
         result:=True;
 end;
 procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const f:TzeUnitsFormat);

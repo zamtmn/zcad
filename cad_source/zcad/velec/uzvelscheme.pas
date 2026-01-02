@@ -124,7 +124,8 @@ uses
    //uzccombase,
    uzeExtdrAbstractEntityExtender,
    uzeblockdef,
-   uzctranslations;//,
+   uzctranslations,
+   uzeentabstracttext;//,
    //generics.Collections;
 
 type

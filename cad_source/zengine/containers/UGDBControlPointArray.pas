@@ -21,7 +21,7 @@ unit UGDBControlPointArray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzepalette,uzgldrawcontext,gzctnrVector,sysutils,uzbtypes,uzegeometry,
-     uzegeometrytypes,uzglviewareadata;
+     uzegeometrytypes,uzglviewareadata,uzeTypes;
 type
 {Export+}
 PGDBControlPointArray=^GDBControlPointArray;

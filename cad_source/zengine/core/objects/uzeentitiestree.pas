@@ -23,7 +23,7 @@ interface
 uses
     gzctnrVectorTypes,graphics,gzctnrVectorSimple,gzctnrVectorPObjects,
     uzegeometrytypes,gzctnrBinarySeparatedTree,uzgldrawcontext,uzegeometry,
-    UGDBVisibleOpenArray,uzeentity,uzbtypes,gzctnrVectorP;
+    UGDBVisibleOpenArray,uzeentity,uzbtypes,gzctnrVectorP,uzeTypes;
 type
 TZEntsManipulator=class;
 TFirstStageData=record

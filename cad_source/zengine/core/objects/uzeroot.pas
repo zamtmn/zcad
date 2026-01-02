@@ -25,7 +25,7 @@ Uses
   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypes,
   uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,UGDBOpenArrayOfPV,
-  uzelongprocesssupport;
+  uzelongprocesssupport,uzeTypes;
 
 type
 

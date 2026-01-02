@@ -25,7 +25,7 @@ uses
   uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
   UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzeentwithmatrix,uzeentsubordinated,
   uzbtypes,uzegeometry,uzeentity,gzctnrVectorTypes,uzegeometrytypes,uzeconsts,
-  uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity;
+  uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity,uzeTypes;
 
 type
   PTDrawingPreCalcData=^TDrawingPreCalcData;

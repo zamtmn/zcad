@@ -121,7 +121,8 @@ uses
    uzbstrproc,
    //uzccombase,
 
-   uzctranslations;//,
+   uzctranslations,
+   uzeentabstracttext;//,
    //generics.Collections;
 
 type

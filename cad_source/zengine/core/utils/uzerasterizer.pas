@@ -26,7 +26,7 @@ uses
   uzegeometry,uzeconsts,
   uzeiopalette,uzepalette,uzcutils,
   uzbLogIntf,Graphics,Classes,
-  uzgldrawercanvas,uzbtypes;
+  uzgldrawercanvas,uzbtypes,uzeTypes;
 type
   TRasterizeColor=(PC_Color,PC_Grayscale,PC_Monochrome);
   PTRasterizeParams=^TRasterizeParams;

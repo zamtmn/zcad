@@ -26,7 +26,7 @@ uses
   uzegeometrytypes,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
   UGDBControlPointArray,uzegeometry,uzeentline,uzeentcomplex,SysUtils,
   UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
-  uzeentsubordinated,uzglviewareadata,uzeSnap;
+  uzeentsubordinated,uzglviewareadata,uzeSnap,uzeTypes;
 (*
 
 Diametric dimension structure in DXF

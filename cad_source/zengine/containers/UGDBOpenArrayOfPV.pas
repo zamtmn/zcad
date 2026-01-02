@@ -23,7 +23,7 @@ interface
 uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,
      gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,
      uzeentsubordinated,uzeentityfactory,//uzctnrvectorpgdbaseobjects,
-     uzctnrvectorpbaseentity,uzeEntBase;
+     uzctnrvectorpbaseentity,uzeEntBase,uzeTypes;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
 objvizarray = array[0..0] of PGDBObjEntity;

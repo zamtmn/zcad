@@ -24,7 +24,9 @@ uses
   varmandef,varman,UUnitManager,TypeDescriptors,UObjectDescriptor,
   USinonimDescriptor,UBaseTypeDescriptor,
   uzcLog,uzegeometrytypes,
-  uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef;
+  uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef,
+  uzeentabstracttext,uzecamera,
+  uzccommandsabstract,uzccommandsimpl;
 
 type
 
@@ -369,10 +371,6 @@ begin
   ptsu^.RegisterType(TypeInfo(PTZColor),'PTZColor');
 
 
-  ptsu^.RegisterType(TypeInfo(TDummyMethod),'TDummyMethod');
-  ptsu^.RegisterType(TypeInfo(TDummyGetterSetter),'TDummyGetterSetter');
-
-
   ptsu^.RegisterType(TypeInfo(TGetterSetterString),'TGetterSetterString');
 
   ptsu^.RegisterType(TypeInfo(TGetterSetterInteger),'TGetterSetterInteger');
@@ -457,6 +455,92 @@ begin
   RegisterVarCategory('NORMAL','Normal',@InterfaceTranslate);
   RegisterVarCategory('SCALE','Scale',@InterfaceTranslate);
 
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandObjectDef),TypeOf(CommandObjectDef),'CommandObjectDef',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['CommandName','CommandString','savemousemode',
+                            'mouseclic','dyn','overlay','CStartAttrEnableAttr',
+                            'CStartAttrDisableAttr','CEndActionAttr','pdwg',
+                            'pcontext','NotUseCommandLine','IData'],
+                            [FNProgram,FNUser]);
+    ptsu^.SetAttrs(otd,[[fldaHidden],[fldaHidden],[fldaHidden],[fldaHidden],
+                        [fldaHidden],[fldaHidden],[fldaHidden],[fldaHidden],
+                        [fldaHidden],[fldaHidden],[fldaHidden],[fldaHidden],
+                        [fldaHidden]]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PCommandObjectDef),'PCommandObjectDef');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandFastObjectDef),TypeOf(CommandFastObjectDef),'CommandFastObjectDef',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['UndoTop'],
+                           [FNProgram,FNUser]);
+    ptsu^.SetAttrs(otd,[[fldaHidden]]);
+  end;
+  //ptsu^.RegisterType(TypeInfo(PCommandFastObjectDef),'PCommandFastObjectDef');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObjectDef),TypeOf(CommandRTEdObjectDef),'CommandRTEdObjectDef',true);
+  if otd<>nil then begin
+  end;
+  ptsu^.RegisterType(TypeInfo(PCommandRTEdObjectDef),'PCommandRTEdObjectDef');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandFastObjectPlugin),TypeOf(CommandFastObjectPlugin),'CommandFastObjectPlugin',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['onCommandStart'],
+                           [FNProgram,FNUser]);
+    ptsu^.SetAttrs(otd,[[fldaHidden]]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PCommandFastObjectPlugin),'PCommandFastObjectPlugin');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObject),TypeOf(CommandRTEdObject),'CommandRTEdObject',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['saveosmode','commanddata','ShowParams'],
+                           [FNProgram,FNUser]);
+    ptsu^.SetAttrs(otd,[[fldaHidden],[],[fldaHidden]]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PCommandRTEdObject),'PCommandRTEdObject');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObjectPlugin),TypeOf(CommandRTEdObjectPlugin),'CommandRTEdObjectPlugin',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['onCommandStart','onCommandEnd','onCommandCancel',
+                            'onFormat','onBeforeClick','onAfterClick',
+                            'onHelpGeometryDraw','onCommandContinue'],
+                           [FNProgram,FNUser]);
+    ptsu^.SetAttrs(otd,[[fldaHidden],[fldaHidden],[fldaHidden],[fldaHidden],
+                        [fldaHidden],[fldaHidden],[fldaHidden],[fldaHidden]]);
+  end;
+  ptsu^.RegisterType(TypeInfo(PCommandRTEdObjectPlugin),'PCommandRTEdObjectPlugin');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TOSMode),'TOSMode');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['kosm_inspoint','kosm_endpoint','kosm_midpoint',
+                            'kosm_3','kosm_4','kosm_center','kosm_quadrant',
+                            'kosm_point','kosm_intersection',
+                            'kosm_perpendicular','kosm_tangent','kosm_nearest',
+                            'kosm_apparentintersection','kosm_parallel'],
+                           [FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Insertion','Endpoint','Midpoint',
+                            '1/3','1/4','Center','Quadrant',
+                            'Point','Intersection',
+                            'Perpendicular','Tangent','Nearest',
+                            'Apparent intersection','Parallel'],[FNUser])
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TTraceAngle),'TTraceAngle');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TTA90','TTA45','TTA30'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['90 deg','45 deg','30 deg'],[FNUser])
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TTraceMode),'TTraceMode');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Angle','ZAxis'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Angle','Z Axis'],[FNUser])
+  end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TOSModeEditor),TypeOf(TOSModeEditor),'TOSModeEditor',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['Snap','Trace'],[FNProgram,FNUser]);
+  end;
 
 end;
 initialization

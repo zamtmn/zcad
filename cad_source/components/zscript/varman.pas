@@ -250,6 +250,7 @@ TUnit=object(TSimpleUnit)
             destructor done;virtual;
             procedure free;virtual;
             function RegisterType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+            procedure SetAttrs(putd:PUserTypeDescriptor; const Attrs:array of TFieldAttrs);
             procedure SetTypeDesk2(putd:PUserTypeDescriptor; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);
             procedure SetTypeDesk(tn:string; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);overload;
             function SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;overload;
@@ -581,6 +582,7 @@ begin
       else
         system.break;
       etd^.AddField(fd);
+      fd.Offset:=fd.Offset+fd.Size;
     end;
 
     inc(mf);
@@ -627,6 +629,7 @@ begin
 
   Getmem(Pointer(etd),sizeof(ObjectDescriptor));
   etd^.init(tname,@self);
+  etd.PVMT:=ATypeOf;
 
   td:=GetTypeData(ATypeInfo);
   mf:=@td.ManagedFldCount;
@@ -783,6 +786,11 @@ begin
          PGDBSinonimDescriptor(result)^.init('Pointer',ti^.Name,@self);
          InterfaceTypes.AddTypeByPP(@result);
        end;
+       tkSet:begin
+         Getmem(result,sizeof(GDBSinonimDescriptor));
+         PGDBSinonimDescriptor(result)^.init('Byte',ti^.Name,@self);
+         InterfaceTypes.AddTypeByPP(@result);
+       end;
        else
          raise Exception.CreateFmt('Can''t register typt (alias="%s";name="%s";kind="%s") not alloved',[ATypeName,tname,GetEnumName(TypeInfo(TTypeKind),Integer(ti^.Kind))]);
      end;
@@ -824,6 +832,22 @@ begin
           if FNProgram in SetNames then
             PEnumDescriptor(putd)^.SourceValue.PArray^[FldIdx]:=GetFieldName(FldIdx,PEnumDescriptor(putd)^.SourceValue.PArray^[FldIdx]);
         end;
+    end;
+  end;
+end;
+procedure TUnit.SetAttrs(putd:PUserTypeDescriptor; const Attrs:array of TFieldAttrs);
+var
+  FldIdx,AttrIdx:integer;
+begin
+  if putd<>nil then begin
+    if IsIt(typeof(putd^),typeof(RecordDescriptor)) then begin
+      AttrIdx:=0;
+      for FldIdx:=PRecordDescriptor(putd)^.GetFirstFieldIndex to PRecordDescriptor(putd)^.Fields.Count-1 do begin
+        PRecordDescriptor(putd)^.Fields.PArray^[FldIdx].base.Attributes:=Attrs[AttrIdx];
+        inc(AttrIdx);
+        if AttrIdx=Length(Attrs)then
+          exit;
+      end;
     end;
   end;
 end;

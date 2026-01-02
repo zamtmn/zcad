@@ -233,34 +233,16 @@ TPropEditor=class(TComponent)
   //pbooleab=^Boolean;
  {TODO:огнегне}
 TTranslateFunction=function (const Identifier, OriginalValue: String): String;
+
+THardTypedData=record
+                 Instance: Pointer;
+                 case boolean of
+                 false:(P:Pointer);
+                 true:(PTD:PUserTypeDescriptor);
+               end;
+PTHardTypedData=^THardTypedData;
+
 {EXPORT+}
-TTraceAngle=(
-              TTA90(*'90 deg'*),
-              TTA45(*'45 deg'*),
-              TTA30(*'30 deg'*)
-             );
-{REGISTERRECORDTYPE TTraceMode}
-TTraceMode=record
-                 Angle:TTraceAngle;(*'Angle'*)
-                 ZAxis:Boolean;(*'Z Axis'*)
-           end;
-{REGISTERRECORDTYPE TOSMode}
-TOSMode=record
-              kosm_inspoint:Boolean;(*'Insertion'*)
-              kosm_endpoint:Boolean;(*'Endpoint'*)
-              kosm_midpoint:Boolean;(*'Midpoint'*)
-              kosm_3:Boolean;(*'1/3'*)
-              kosm_4:Boolean;(*'1/4'*)
-              kosm_center:Boolean;(*'Center'*)
-              kosm_quadrant:Boolean;(*'Quadrant'*)
-              kosm_point:Boolean;(*'Point'*)
-              kosm_intersection:Boolean;(*'Intersection'*)
-              kosm_perpendicular:Boolean;(*'Perpendicular'*)
-              kosm_tangent:Boolean;(*'Tangent'*)
-              kosm_nearest:Boolean;(*'Nearest'*)
-              kosm_apparentintersection:Boolean;(*'Apparent intersection'*)
-              kosm_parallel:Boolean;(*'Parallel'*)
-        end;
   indexdesk=record
     indexmin, count: Integer;
   end;
@@ -268,12 +250,6 @@ TOSMode=record
   parrayindex = ^arrayindex;
   PTTypedData=^TTypedData;
   pvarmanagerdef=^varmanagerdef;
-  PTHardTypedData=^THardTypedData;
-  {REGISTERRECORDTYPE THardTypedData}
-  THardTypedData=record
-                   Instance: Pointer;
-                   PTD:{-}PUserTypeDescriptor{/Pointer/};
-             end;
   {REGISTERRECORDTYPE TTypedData}
   TTypedData=record
                    PTD:{-}PUserTypeDescriptor{/Pointer/};

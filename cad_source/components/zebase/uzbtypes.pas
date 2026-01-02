@@ -23,7 +23,7 @@ interface
 
 uses
   SysUtils,
-  uzegeometrytypes,uzbHandles;
+  uzegeometrytypes,uzbHandles,System.diagnostics;
 
 const
   GDBBaseObjectID=30000;
@@ -31,35 +31,12 @@ const
   NotActual=0;
 
 type
-  TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:integer);
-  TControlPointAttr=(CPA_Strech);
-  TControlPointAttrs=set of TControlPointAttr;
-  TTimeMeter=record
-  private
-    fLPTime:TDateTime;
-  public
-    class function StartMeasure:TTimeMeter;static;
-    procedure EndMeasure;
-    function ElapsedMiliSec:integer;
-  end;
+
   TObjID=word;
-  TActuality=PtrUInt;
-
-  TCameraCounters=record
-    totalobj,infrustum:integer;
-    constructor CreateRec(AT,AI:integer);
-  end;
-
-  TVisActuality=record
-    VisibleActualy:TActuality;
-    InfrustumActualy:TActuality;
-    {-}constructor CreateRec(AV,AI:TActuality);{//}
-  end;
 
   GDBaseObject=object
     function ObjToString(const prefix,sufix:string):string;virtual;
     function GetObjType:TObjID;virtual;
-    //procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
     function GetObjTypeName:string;virtual;
     function GetObjName:string;virtual;
@@ -71,14 +48,6 @@ type
   TDXFEntsInternalStringType=unicodestring;
   {-}TDXFEntsInternalCharType=unicodechar;{//}
 
-  GDBCameraBaseProp=record
-    point:TzePoint3d;
-    look:TzeVector3d;
-    ydir:TzeVector3d;
-    xdir:TzeVector3d;
-    zoom:double;
-  end;
-
   TCalculatedString=record
     value:string;
     format:string;
@@ -88,15 +57,6 @@ type
   TZColor=Longword;
   PTZColor=^TZColor;
 
-  TDummyMethod=record
-    Code:Pointer;
-    Data:Pointer;
-  end;
-
-  TDummyGetterSetter=record
-    Getter:TDummyMethod;
-    Setter:TDummyMethod;
-  end;
   GGetterSetter<T>=record
     type
       TGetter=function:T of object;
@@ -138,76 +98,21 @@ type
   end;
 
 
-  TUsableInteger={-}GUsable<Integer>;{/record Value:integer; Usable:boolean; end;/}
+  TUsableInteger=GUsable<Integer>;
   PTUsableInteger=^TUsableInteger;
 
-  TGetterSetterTUsableInteger={-}GGetterSetter<TUsableInteger>{/TDummyGetterSetter/};
+  TGetterSetterTUsableInteger=GGetterSetter<TUsableInteger>;
   PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
-
-
-  GDBBaseCamera=object(GDBaseObject)
-    modelMatrix:TzeTypedMatrix4d;
-    fovy:double;
-    Counters:TCameraCounters;
-    prop:GDBCameraBaseProp;
-    anglx,angly,zmin,zmax:double;
-    projMatrix:TzeTypedMatrix4d;
-    viewport:TzeVector4i;
-    clip:TzeTypedMatrix4d;
-    frustum:TzeFrustum;
-    obj_zmax,obj_zmin:double;
-    DRAWNOTEND:boolean;
-    DRAWCOUNT:TActuality;
-    POSCOUNT:TActuality;
-    VISCOUNT:TActuality;
-    CamCSOffset:TzePoint3d;
-    procedure NextPosition;virtual;abstract;
-  end;
-  PGDBBaseCamera=^GDBBaseCamera;
-
-  (*varcategoryforoi SUMMARY='Summary'*)
-  (*varcategoryforoi CABLE='Cable params'*)
-  (*varcategoryforoi DEVICE='Device params'*)
-  (*varcategoryforoi OBJFUNC='Function:object'*)
-  (*varcategoryforoi NMO='Name'*)
-
-  (*varcategoryforoi SLCABAGEN1='Подключение №1'*)
-  (*varcategoryforoi deverrors='Ошибки выполнения'*)
-  (*varcategoryforoi DB='Data base'*)
-  (*varcategoryforoi GC='Group connection'*)
-  (*varcategoryforoi LENGTH='Length params'*)
-  (*varcategoryforoi OTHER='Other'*)
-  (*varcategoryforoi BTY='Blockdef params'*)
-  (*varcategoryforoi EL='El(deprecated)'*)
-  (*varcategoryforoi UNITPARAM='Measured parameter'*)
-  (*varcategoryforoi DESC='Description'*)
-
-  (*varcategoryforoi CENTER='Center'*)
-  (*varcategoryforoi START='Start'*)
-  (*varcategoryforoi END='End'*)
-  (*varcategoryforoi DELTA='Delta'*)
-  (*varcategoryforoi INSERT='Insert'*)
-  (*varcategoryforoi NORMAL='Normal'*)
-  (*varcategoryforoi SCALE='Scale'*)
-
 
 {EXPORT+}
 
 {EXPORT-}
-
-PFString=^TFString;
-TFString={-}function:string{/pointer/};
 
 TFaceTypedData=record
                  Instance: Pointer;
                  PTD: Pointer;
                 end;
 PTFaceTypedData=^TFaceTypedData;
-
-TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;
-
-var
-  zeHandles:TZHandleCreator;
 
 function IsIt(PType,PChecedType:Pointer):Boolean;
 function ParentPType(PType:Pointer):Pointer;
@@ -221,30 +126,6 @@ procedure GGetterSetter<T>.Setup(const AGetter:TGetter;const ASetter:TSetter);
 begin
   Getter:=AGetter;
   Setter:=ASetter;
-end;
-
-class function TTimeMeter.StartMeasure:TTimeMeter;static;
-begin
-  result.fLPTime:=now();
-end;
-procedure TTimeMeter.EndMeasure;
-begin
-  fLPTime:=now()-fLPTime;
-end;
-function TTimeMeter.ElapsedMiliSec:Integer;
-begin
-  result:=round(fLPTime*10e7);
-end;
-
-constructor TCameraCounters.CreateRec(AT,AI:Integer);
-begin
-  totalobj:=AT;
-  infrustum:=AI;
-end;
-constructor TVisActuality.CreateRec(AV,AI:TActuality);
-begin
-  VisibleActualy:=AV;
-  InfrustumActualy:=AI;
 end;
 
 function GDBaseObject.GetObjType:Word;
@@ -296,6 +177,8 @@ begin
 
   if PType=PChecedType then
     exit(true);
+  if PType=nil then
+    exit(false);
   CurrParent:=vmtRecPtr(PType)^.parent;
   if CurrParent=nil then
     exit(false);
@@ -333,9 +216,6 @@ begin
   else
     result:=ADefaultValue
 end;
-initialization
-  zeHandles.init;
-finalization
-  zeHandles.done;
+
 end.
 

@@ -22,9 +22,12 @@ unit uzeTypes;
 interface
 
 uses
-  uzbtypes,uzegeometrytypes;
+  SysUtils,
+  uzbtypes,uzbHandles,uzegeometrytypes;
 
 type
+  TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:integer);
+
   TLoadOpt=(TLOLoad,TLOMerge);
   TEntUpgradeInfo=longword;
   PExtensionData=Pointer;
@@ -83,18 +86,6 @@ type
   TEentityFunction=TStringTreeType;
 
   TOSnapModeControl=(On,Off,AsOwner);
-  TTextJustify=(jstl(*'TopLeft'*),
-                jstc(*'TopCenter'*),
-                jstr(*'TopRight'*),
-                jsml(*'MiddleLeft'*),
-                jsmc(*'MiddleCenter'*), //СерединаЦентр
-                jsmr(*'MiddleRight'*),
-                jsbl(*'BottomLeft'*),
-                jsbc(*'BottomCenter'*),
-                jsbr(*'BottomRight'*),
-                jsbtl(*'Left'*),
-                jsbtc(*'Center'*),
-                jsbtr(*'Right'*));
 
   TZCCodePage=(ZCCPINVALID,ZCCP874,ZCCP932,ZCCP936,ZCCP949,ZCCP950,
     ZCCP1250,ZCCP1251,ZCCP1252,ZCCP1253,ZCCP1254,ZCCP1255,ZCCP1256,
@@ -122,6 +113,95 @@ type
 
   TDCableMountingMethod=string;
 
+  PFString=^TFString;
+  TFString=function:string;
+
+  TCameraCounters=record
+    totalobj,infrustum:integer;
+    constructor CreateRec(AT,AI:integer);
+  end;
+
+  TActuality=PtrUInt;
+
+  TVisActuality=record
+    VisibleActualy:TActuality;
+    InfrustumActualy:TActuality;
+    constructor CreateRec(AV,AI:TActuality);
+  end;
+
+  TControlPointAttr=(CPA_Strech);
+  TControlPointAttrs=set of TControlPointAttr;
+
+  TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;
+
+  TTimeMeter=record
+  private
+    fLPTime:TDateTime;
+  public
+    class function StartMeasure:TTimeMeter;static;
+    procedure EndMeasure;
+    function ElapsedMiliSec:integer;
+  end;
+
+  TTraceAngle=(
+                TTA90(*'90 deg'*),
+                TTA45(*'45 deg'*),
+                TTA30(*'30 deg'*)
+               );
+  TTraceMode=record
+                   Angle:TTraceAngle;(*'Angle'*)
+                   ZAxis:Boolean;(*'Z Axis'*)
+             end;
+  TOSMode=record
+                kosm_inspoint:Boolean;(*'Insertion'*)
+                kosm_endpoint:Boolean;(*'Endpoint'*)
+                kosm_midpoint:Boolean;(*'Midpoint'*)
+                kosm_3:Boolean;(*'1/3'*)
+                kosm_4:Boolean;(*'1/4'*)
+                kosm_center:Boolean;(*'Center'*)
+                kosm_quadrant:Boolean;(*'Quadrant'*)
+                kosm_point:Boolean;(*'Point'*)
+                kosm_intersection:Boolean;(*'Intersection'*)
+                kosm_perpendicular:Boolean;(*'Perpendicular'*)
+                kosm_tangent:Boolean;(*'Tangent'*)
+                kosm_nearest:Boolean;(*'Nearest'*)
+                kosm_apparentintersection:Boolean;(*'Apparent intersection'*)
+                kosm_parallel:Boolean;(*'Parallel'*)
+          end;
+
+var
+  zeHandles:TZHandleCreator;
+
 implementation
 
+constructor TCameraCounters.CreateRec(AT,AI:Integer);
+begin
+  totalobj:=AT;
+  infrustum:=AI;
+end;
+
+constructor TVisActuality.CreateRec(AV,AI:TActuality);
+begin
+  VisibleActualy:=AV;
+  InfrustumActualy:=AI;
+end;
+
+class function TTimeMeter.StartMeasure:TTimeMeter;static;
+begin
+  result.fLPTime:=now();
+end;
+procedure TTimeMeter.EndMeasure;
+begin
+  fLPTime:=now()-fLPTime;
+end;
+function TTimeMeter.ElapsedMiliSec:Integer;
+begin
+  result:=round(fLPTime*10e7);
+end;
+
+
+initialization
+  zeHandles.init;
+finalization
+  zeHandles.done;
 end.

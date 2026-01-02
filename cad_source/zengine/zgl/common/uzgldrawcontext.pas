@@ -22,7 +22,7 @@ interface
 uses
   SysUtils,Nullable,
   uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytypes,
-  uzeTypes;
+  uzeTypes,uzecamera;
 type
 TNulableVetrex=TNullable<TzePoint3d>;
 TDrawHeplGeometry=procedure  of object;

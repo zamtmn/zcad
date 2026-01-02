@@ -73,10 +73,11 @@ type
     PCurrentDWG:PTZCADDrawing;
     constructor CreateRec(ACDWG:PTZCADDrawing);
   end;
-  {Export+}
   TCommandEndAction=(CEGUIRePrepare,CEGUIReturnToDefaultObject,
     CEDeSelect,CEDWGNChanged);
   TCommandEndActions={-}set of TCommandEndAction{/Byte/};
+  TCStartAttr=integer;
+  {REGISTERRECORDTYPE TInteractiveData}
   TGetPointMode=(
     TGPMWait{point},//ожидание указания точки
     TGPMPoint,      //точка указана
@@ -88,7 +89,6 @@ type
     TGPMCloseDWG,
     TGPMCloseApp
     );
-  {REGISTERRECORDTYPE TInteractiveData}
   TInteractiveData=record
     GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
     BasePoint,currentPointValue,GetPointValue:TzePoint3d;
@@ -103,12 +103,8 @@ type
     {-}InputMode:TGetInputMode;{//}
   end;
   TCommandOperands={-}string{/Pointer/};
-  TCommandResult=integer;
-  TCStartAttr=integer;
-  {атрибут разрешения\запрещения запуска команды}
-  PCommandObjectDef=^CommandObjectDef;
-  {REGISTEROBJECTTYPE CommandObjectDef}
-  CommandObjectDef=object(GDBaseObject)
+
+  CommandObjectDef=object
     CommandName:string;(*hidden_in_objinsp*)
     CommandString:string;(*hidden_in_objinsp*)
     savemousemode:byte;(*hidden_in_objinsp*)
@@ -134,14 +130,15 @@ type
     function IsRTECommand:boolean;virtual;
     procedure CommandContinue(const Context:TZCADCommandContext);virtual;
   end;
-  {REGISTEROBJECTTYPE CommandFastObjectDef}
+  PCommandObjectDef=^CommandObjectDef;
+  TCommandResult=integer;
+
   CommandFastObjectDef=object(CommandObjectDef)
     UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     procedure CommandInit;virtual;abstract;
     procedure CommandEnd(const Context:TZCADCommandContext);virtual;abstract;
   end;
-  PCommandRTEdObjectDef=^CommandRTEdObjectDef;
-  {REGISTEROBJECTTYPE CommandRTEdObjectDef}
+
   CommandRTEdObjectDef=object(CommandFastObjectDef)
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
       virtual;abstract;
@@ -157,7 +154,8 @@ type
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     function IsRTECommand:boolean;virtual;
   end;
-  {Export-}
+  PCommandRTEdObjectDef=^CommandRTEdObjectDef;
+
 const
   SomethingWait=[TGPMWait,TGPMWaitEnt,TGPMWaitInput];
 

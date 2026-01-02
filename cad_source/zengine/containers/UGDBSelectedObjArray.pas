@@ -20,8 +20,10 @@ unit UGDBSelectedObjArray;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzegeometrytypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,uzeentity,
-     UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry,uzglviewareadata;
+uses
+  uzegeometrytypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,
+  uzeentity,UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry,
+  uzglviewareadata,uzeTypes;
 type
 {Export+}
 PSelectedObjDesc=^SelectedObjDesc;

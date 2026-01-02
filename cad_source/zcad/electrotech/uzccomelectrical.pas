@@ -43,7 +43,7 @@ uses
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
   uzeparsercmdprompt,uzeSnap,uzCtnrVectorpBaseEntity,
-  uzeEntBase;
+  uzeEntBase,uzeentabstracttext;
 type
   TELCableComParam=record
     Traces:TEnumData;(*'Trace'*)

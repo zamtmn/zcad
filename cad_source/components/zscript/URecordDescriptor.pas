@@ -544,7 +544,7 @@ begin
                                                                                                                                        begin
                                                                                                                                        zTraceLn('{T}[ZSCRIPT]%p',[pobj]);
                                                                                                                                        //programlog.LogOutFormatStr('%p',[pobj],lp_OldPos,LM_Trace);
-                                                                                                                                       ppd^.value:=pobj^.GetObjTypeName;
+                                                                                                                                       //ppd^.value:=pobj^.GetObjTypeName;
                                                                                                                                        //pobj^.whoisit;
                                                                                                                                        //pobj^.GetObjTypeName;
                                                                                                                                        end;

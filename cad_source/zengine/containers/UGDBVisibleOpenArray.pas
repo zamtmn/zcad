@@ -20,7 +20,9 @@ unit UGDBVisibleOpenArray;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzecamera,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry;
+uses
+  gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzecamera,UGDBOpenArrayOfPV,
+  sysutils,uzbtypes,uzeTypes,uzegeometry;
 type
 {Export+}
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;

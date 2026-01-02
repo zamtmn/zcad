@@ -21,7 +21,7 @@ uses
   gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,uzcLog,
   uzcstrconsts,uzccmdfloatinsert,//uzctnrvectorpgdbaseobjects,
   zUndoCmdChgTypes,zUndoCmdChgVariable,
-  uzcdrawing,uzCtnrVectorpBaseEntity,UGDBVisibleTreeArray;
+  uzcdrawing,uzCtnrVectorpBaseEntity,UGDBVisibleTreeArray,uzeentabstracttext;
 
 type
   TPlaceParam=record

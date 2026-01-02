@@ -26,6 +26,35 @@ uses
 
 type
   GDBProjectProc=procedure (objcoord:TzePoint3d; out wincoord:TzePoint3d) of object;
+
+  GDBCameraBaseProp=record
+    point:TzePoint3d;
+    look:TzeVector3d;
+    ydir:TzeVector3d;
+    xdir:TzeVector3d;
+    zoom:double;
+  end;
+
+  GDBBaseCamera=object(GDBaseObject)
+    modelMatrix:TzeTypedMatrix4d;
+    fovy:double;
+    Counters:TCameraCounters;
+    prop:GDBCameraBaseProp;
+    anglx,angly,zmin,zmax:double;
+    projMatrix:TzeTypedMatrix4d;
+    viewport:TzeVector4i;
+    clip:TzeTypedMatrix4d;
+    frustum:TzeFrustum;
+    obj_zmax,obj_zmin:double;
+    DRAWNOTEND:boolean;
+    DRAWCOUNT:TActuality;
+    POSCOUNT:TActuality;
+    VISCOUNT:TActuality;
+    CamCSOffset:TzePoint3d;
+    procedure NextPosition;virtual;abstract;
+  end;
+  PGDBBaseCamera=^GDBBaseCamera;
+
 {EXPORT+}
   PGDBObjCamera=^GDBObjCamera;
 {REGISTEROBJECTTYPE GDBObjCamera}

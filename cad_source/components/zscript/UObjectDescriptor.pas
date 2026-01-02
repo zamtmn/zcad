@@ -77,7 +77,7 @@ ObjectDescriptor=object(RecordDescriptor)
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        procedure RegisterVMT(pv:Pointer);
                        procedure RegisterDefaultConstructor(pv:Pointer);
-                       procedure RegisterObject(pv,pc:Pointer);
+                       procedure RegisterObject(pv,pc:Pointer);overload;
                        procedure AddMetod(const objname,mn,dt:TInternalScriptString;ma:Pointer;attr:GDBMetodModifier);
                        procedure AddProperty(var pd:PropertyDescriptor);
                        function FindMetod(const mn:TInternalScriptString;obj:Pointer):PMetodDescriptor;virtual;

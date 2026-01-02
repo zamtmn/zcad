@@ -24,7 +24,7 @@ interface
 
 uses
   uzcutils,uzgldrawcontext,uzglviewareageneral,uzglviewareaabstract,uzcsysvars,
-  uzegeometry,varmandef,uzbtypes,uzccommandsabstract,uzccommandsmanager,
+  uzegeometry,varmandef,uzbtypes,uzeTypes,uzccommandsabstract,uzccommandsmanager,
   uzegeometrytypes,uzglviewareadata,uzcdrawings,
   uzcinterface,varman,uzclog,uzeSnap,Math;
 
@@ -38,9 +38,7 @@ type
 
   TZCADBaseCommand=function(const Context:TZCADCommandContext;
     Operands:TCommandOperands):TCommandResult;
-  {Export+}
-  PCommandFastObjectPlugin=^CommandFastObjectPlugin;
-  {REGISTEROBJECTTYPE CommandFastObjectPlugin}
+
   CommandFastObjectPlugin=object(CommandFastObjectDef)
     onCommandStart:TZCADBaseCommand;
     constructor Init(Name:pansichar;func:TZCADBaseCommand);
@@ -49,8 +47,8 @@ type
     procedure CommandCancel(const Context:TZCADCommandContext);virtual;
     procedure CommandEnd(const Context:TZCADCommandContext);virtual;
   end;
-  pCommandRTEdObject=^CommandRTEdObject;
-  {REGISTEROBJECTTYPE CommandRTEdObject}
+  PCommandFastObjectPlugin=^CommandFastObjectPlugin;
+
   CommandRTEdObject=object(CommandRTEdObjectDef)
     saveosmode:integer;(*hidden_in_objinsp*)
     commanddata:THardTypedData;(*'Command options'*)
@@ -69,8 +67,8 @@ type
     //function BeforeClick(wc: TzePoint3d; mc: TzePoint2i; button: Byte;osp:pos_record): Integer; virtual; abstract;
     //function AfterClick(wc: TzePoint3d; mc: TzePoint2i; button: Byte;osp:pos_record): Integer; virtual; abstract;
   end;
-  pCommandRTEdObjectPlugin=^CommandRTEdObjectPlugin;
-  {REGISTEROBJECTTYPE CommandRTEdObjectPlugin}
+  pCommandRTEdObject=^CommandRTEdObject;
+
   CommandRTEdObjectPlugin=object(CommandRTEdObject)
     onCommandStart:comfuncwithoper;
     onCommandEnd,onCommandCancel,onFormat:comproc;(*hidden_in_objinsp*)
@@ -92,13 +90,16 @@ type
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     procedure DrawHeplGeometry;virtual;
   end;
-  {REGISTEROBJECTTYPE TOSModeEditor}
+  pCommandRTEdObjectPlugin=^CommandRTEdObjectPlugin;
+
   TOSModeEditor=object(GDBaseObject)
     osm:TOSMode;(*'Snap'*)
     trace:TTraceMode;(*'Trace'*)
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
     procedure GetState;
   end;
+
+  {Export+}
   {Export-}
 var
   OSModeEditor:TOSModeEditor;

@@ -26,7 +26,7 @@ uses
   uzcLog,uzegeometrytypes,
   uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef,
   uzeentabstracttext,uzecamera,
-  uzccommandsabstract,uzccommandsimpl;
+  uzccommandsabstract,uzccommandsimpl,uzepalette;
 
 type
 
@@ -371,31 +371,36 @@ begin
   ptsu^.RegisterType(TypeInfo(PTZColor),'PTZColor');
 
 
-  ptsu^.RegisterType(TypeInfo(TGetterSetterString),'TGetterSetterString');
+  //ptsu^.RegisterType(TypeInfo(TGetterSetterString),'TGetterSetterString');
 
   ptsu^.RegisterType(TypeInfo(TGetterSetterInteger),'TGetterSetterInteger');
-  ptsu^.RegisterType(TypeInfo(PTGetterSetterInteger),'PTGetterSetterInteger');
+  //ptsu^.RegisterType(TypeInfo(PTGetterSetterInteger),'PTGetterSetterInteger');
 
   ptsu^.RegisterType(TypeInfo(TGetterSetterLongWord),'TGetterSetterLongWord');
-  ptsu^.RegisterType(TypeInfo(PTGetterSetterLongWord),'PTGetterSetterLongWord');
+  //ptsu^.RegisterType(TypeInfo(PTGetterSetterLongWord),'PTGetterSetterLongWord');
 
-  ptsu^.RegisterType(TypeInfo(TGetterSetterBoolean),'TGetterSetterBoolean');
-  ptsu^.RegisterType(TypeInfo(PTGetterSetterBoolean),'PTGetterSetterBoolean');
+  utd:=ptsu^.RegisterType(TypeInfo(TGetterSetterBoolean),'TGetterSetterBoolean');
+  {if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Getter','Setter'],
+                           [FNProgram,FNUser]);
+    ptsu^.SetAttrs(utd,[[fldaHidden],[fldaHidden]]);
+  end;}
+  //ptsu^.RegisterType(TypeInfo(PTGetterSetterBoolean),'PTGetterSetterBoolean');
 
   ptsu^.RegisterType(TypeInfo(TGetterSetterTZColor),'TGetterSetterTZColor');
-  ptsu^.RegisterType(TypeInfo(PTGetterSetterTZColor),'PTGetterSetterTZColor');
+  //ptsu^.RegisterType(TypeInfo(PTGetterSetterTZColor),'PTGetterSetterTZColor');
 
-  ptsu^.RegisterType(TypeInfo(TUsableInteger),'TUsableInteger');
-  ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTUsableInteger');
+  //ptsu^.RegisterType(TypeInfo(TUsableInteger),'TUsableInteger');
+  //ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTUsableInteger');
 
   ptsu^.RegisterType(TypeInfo(TUsableInteger),'TGetterSetterTUsableInteger');
-  ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTGetterSetterTUsableInteger');
+  //ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTGetterSetterTUsableInteger');
 
   ptsu^.RegisterType(TypeInfo(TFaceTypedData),'TFaceTypedData');
-  ptsu^.RegisterType(TypeInfo(PTFaceTypedData),'PTFaceTypedData');
+  //ptsu^.RegisterType(TypeInfo(PTFaceTypedData),'PTFaceTypedData');
 
   ptsu^.RegisterType(TypeInfo(TFString),'TFString');
-  ptsu^.RegisterType(TypeInfo(PFString),'PFString');
+  //ptsu^.RegisterType(TypeInfo(PFString),'PFString');
 
   utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),'GDBaseObject',true);
 
@@ -541,6 +546,23 @@ begin
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['Snap','Trace'],[FNProgram,FNUser]);
   end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TRGB),'TRGB');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['r','g','b','a'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Red','Green','Blue','Alpha'],[FNUser])
+  end;
+  ptsu^.RegisterType(TypeInfo(PTRGB),'PTRGB');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TDXFCOLOR),'TDXFCOLOR');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['RGB','name'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Color','Name'],[FNUser])
+  end;
+  ptsu^.RegisterType(TypeInfo(PTDXFCOLOR),'PTDXFCOLOR');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBPaletteColor),'TGDBPaletteColor');
+  utd:=ptsu^.RegisterType(TypeInfo(PTGDBPaletteColor),'PTGDBPaletteColor');
 
 end;
 initialization

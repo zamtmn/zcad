@@ -323,7 +323,8 @@ begin
   if pvd=nil then
   pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
      if pvd<>nil then begin
-       if pvd^.data.PTD.getfacttypedef=@FundamentalBooleanDescriptorOdj then begin
+       if(pvd^.data.PTD.getfacttypedef=@FundamentalBooleanDescriptorOdj)
+       or(pvd^.data.PTD.GetDescribedTypedef=@FundamentalBooleanDescriptorOdj)then begin
          pvd^.data.PTD.GetSuperOrSelfTypedef.CopyInstanceToValue(pvd^.data.Addr.Instance,@tempboolean);
          tempboolean:=not tempboolean;
          pvd^.data.PTD.GetSuperOrSelfTypedef.CopyValueToInstance(@tempboolean,pvd^.data.Addr.Instance);
@@ -393,7 +394,8 @@ begin
   pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
   if pvd<>nil then begin
     enabled:=true;
-    if pvd^.data.PTD.GetFactTypedef=@FundamentalBooleanDescriptorOdj then begin
+    if (pvd^.data.PTD.GetFactTypedef=@FundamentalBooleanDescriptorOdj)
+     or(pvd^.data.PTD.GetDescribedTypedef=@FundamentalBooleanDescriptorOdj)then begin
       pvd^.data.PTD.GetSuperOrSelfTypedef.CopyInstanceToValue(pvd^.data.Addr.Instance,@tempboolean);
       Checked:=tempboolean;
     end else if fmask<>0 then

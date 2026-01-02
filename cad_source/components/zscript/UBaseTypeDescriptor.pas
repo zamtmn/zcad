@@ -695,7 +695,7 @@ end;*)
 
 constructor TGetterSetterIntegerDescriptor.init;
 begin
-  inherited init('TGetterSetterIntegerDescriptor',nil);
+  inherited init('TGetterSetterInteger',nil);
 end;
 function TGetterSetterIntegerDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 begin
@@ -735,7 +735,7 @@ end;
 
 constructor TGetterSetterBooleanDescriptor.init;
 begin
-  inherited init('TGetterSetterBooleanDescriptor',nil);
+  inherited init('TGetterSetterBoolean',nil);
 end;
 function TGetterSetterBooleanDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 begin
@@ -784,7 +784,7 @@ end;
 
 constructor TGetterSetterTUsableIntegerDescriptor.init;
 begin
-  inherited init('TGetterSetterTUsableIntegerDescriptor',nil);
+  inherited init('TGetterSetterTUsableInteger',nil);
 end;
 function TGetterSetterTUsableIntegerDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 var
@@ -833,7 +833,7 @@ end;
 
 constructor TGetterSetterTZColorDescriptor.init;
 begin
-  inherited init('TGetterSetterTZColorDescriptor',nil);
+  inherited init('TGetterSetterTZColor',nil);
 end;
 function TGetterSetterTZColorDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 begin

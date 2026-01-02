@@ -54,7 +54,7 @@ type
   end;
   PTCalculatedString=^TCalculatedString;
 
-  TZColor=Longword;
+  TZColor=type Longword;
   PTZColor=^TZColor;
 
   GGetterSetter<T>=record
@@ -67,21 +67,21 @@ type
     procedure Setup(const AGetter:TGetter;const ASetter:TSetter);
   end;
 
-  TGetterSetterString=GGetterSetter<string>;
+  //TGetterSetterString=GGetterSetter<string>;
 
-  PTGetterSetterInteger=^TGetterSetterInteger;
+
   TGetterSetterInteger=GGetterSetter<integer>;
+  PTGetterSetterInteger=^TGetterSetterInteger;
 
-  PTGetterSetterLongWord=^TGetterSetterLongWord;
   TGetterSetterLongWord=GGetterSetter<LongWord>;
+  PTGetterSetterLongWord=^TGetterSetterLongWord;
 
 
-  PTGetterSetterBoolean=^TGetterSetterBoolean;
   TGetterSetterBoolean=GGetterSetter<boolean>;
+  PTGetterSetterBoolean=^TGetterSetterBoolean;
 
-  PTGetterSetterTZColor=^TGetterSetterTZColor;
   TGetterSetterTZColor=GGetterSetter<TZColor>;
-
+  PTGetterSetterTZColor=^TGetterSetterTZColor;
 
 
   GUsable<T>=record

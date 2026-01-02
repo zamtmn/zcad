@@ -760,6 +760,16 @@ begin
          InterfaceTypes.AddTypeByPP(@result);
        end else
          AddTypealias(ATypeName,ti^.Name);
+
+       TempPUTD:=TypeName2PTD(ATypeName);
+       if TempPUTD<>nil then begin
+         result:=TempPUTD;
+         {Getmem(result,sizeof(GDBSinonimDescriptor));
+         PGDBSinonimDescriptor(result)^.init(ATypeName,ATypeName,@self);
+         InterfaceTypes.AddTypeByPP(@result);}
+         //AddTypealias(ti^.Name,ATypeName);
+       end {else
+         AddTypealias(ATypeName,ti^.Name);}
      end;
      tname:=ATypeName;
    end;
@@ -789,6 +799,11 @@ begin
        tkSet:begin
          Getmem(result,sizeof(GDBSinonimDescriptor));
          PGDBSinonimDescriptor(result)^.init('Byte',ti^.Name,@self);
+         InterfaceTypes.AddTypeByPP(@result);
+       end;
+       tkInteger:begin
+         Getmem(result,sizeof(GDBSinonimDescriptor));
+         PGDBSinonimDescriptor(result)^.init('Integer',ti^.Name,@self);
          InterfaceTypes.AddTypeByPP(@result);
        end;
        else
@@ -2113,12 +2128,18 @@ begin
 
 end;
 function tunit.TypeName2PTD;
-//var p:ptunit;
+var
+  alias:TInternalScriptString;
 begin
      result:=inherited TypeName2PTD(n);
      if result<>nil then
                         exit;
      result:=InterfaceTypes._TypeName2PTD(n);
+     if result=nil then begin
+       alias:=GetTypealias(n);
+       if alias<>''then
+         result:=InterfaceTypes._TypeName2PTD(alias);
+     end;
      if result=nil then
        zTraceLn('{W}In unit "%s" not found type "%s"',[name,n]);
 

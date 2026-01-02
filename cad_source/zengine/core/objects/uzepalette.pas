@@ -24,9 +24,7 @@ uses
   uzbtypes,uzeconsts;
 
 type
-{EXPORT+}
-  PTRGB=^TRGB;
-  {REGISTERRECORDTYPE TRGB}
+
   TRGB=record
             r:Byte;(*'Red'*)
             g:Byte;(*'Green'*)
@@ -34,16 +32,22 @@ type
             a:Byte;(*'Alpha'*)
             {-}constructor create(AR,AG,AB,AA:Byte);{//}
       end;
-  PTDXFCOLOR=^TDXFCOLOR;
-  {REGISTERRECORDTYPE TDXFCOLOR}
+  PTRGB=^TRGB;
+
   TDXFCOLOR=record
             RGB:TRGB;(*'Color'*)
             name:String;(*'Name'*)
       end;
+  PTDXFCOLOR=^TDXFCOLOR;
+
+  TGDBPaletteColor=type Integer;
   PTGDBPaletteColor=^TGDBPaletteColor;
-  TGDBPaletteColor=Integer;
-  TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
+
+{EXPORT+}
+
 {EXPORT-}
+
+  TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
 const
   NotTransparent=0;
   acadpalette:TGDBPalette=(

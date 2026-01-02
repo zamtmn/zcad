@@ -586,9 +586,9 @@ begin
     AddEditorToType(SysUnit.TypeName2PTD('TEnumDataDescriptor'),TBaseTypesEditors.TEnumDataCreateEditor);
     EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;
     AddEditorToType(SysUnit.TypeName2PTD('TCalculatedStringDescriptor'),TBaseTypesEditors.BaseCreateEditor);
-    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterIntegerDescriptor'),TBaseTypesEditors.BaseCreateEditor);
-    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterBooleanDescriptor'),TBaseTypesEditors.BooleanCreateEditor);
-    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableIntegerDescriptor'),TBaseTypesEditors.BaseCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterInteger'),TBaseTypesEditors.BaseCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterBoolean'),TBaseTypesEditors.BooleanCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableInteger'),TBaseTypesEditors.BaseCreateEditor);
 
 
     DecorateType(SysUnit.TypeName2PTD('TGDBLineWeight'),LWDecorator,LineWeightDecoratorCreateEditor,drawLWProp);

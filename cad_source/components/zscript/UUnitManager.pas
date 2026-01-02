@@ -272,7 +272,7 @@ begin
   if gstn<>'' then begin
     gsft:=currentunit.TypeName2PTD(gstn);
     if gsft<>nil then begin
-      gstd:=currentunit.TypeName2PTD(format('TGetterSetter%sDescriptor',[gsft^.TypeName]));
+      gstd:=currentunit.TypeName2PTD(format('TGetterSetter%s',[gsft^.TypeName]));
       if gstd<>nil then
         etd.pSuperTypeDeskriptor:=gstd;
     end;

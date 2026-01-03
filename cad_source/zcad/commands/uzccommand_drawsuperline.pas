@@ -87,7 +87,7 @@ type
   PTDrawSuperlineParams=^TDrawSuperlineParams;
 
   TDrawSuperlineParams=record
-    pu:PTUnit;
+    pu:PTSimpleUnit;
     //рантайм юнит с параметрами суперлинии
     LayerNamePrefix:string;//префикс
     ProcessLayer:boolean;  //выключатель слоя

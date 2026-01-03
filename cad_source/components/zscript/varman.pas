@@ -178,7 +178,6 @@ typemanager=object(typemanagerdef)
 {EXPORT+}
 Tvardescarray=GZVector{-}<vardesk>{//};
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
-pvarmanager=^varmanager;
 varmanager=object(varmanagerdef)
             vardescarray:Tvardescarray;
             vararray:TZctnrAlignedVectorBytes;
@@ -195,8 +194,8 @@ varmanager=object(varmanagerdef)
                  destructor done;virtual;
                  procedure free;virtual;
            end;
-TunitPart=(TNothing,TInterf,TImpl,TProg);
-PTUnit=^TUnit;
+pvarmanager=^varmanager;
+
 PTSimpleUnit=^TSimpleUnit;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TSimpleUnit}
 TSimpleUnit=object
@@ -216,22 +215,26 @@ TSimpleUnit=object
                   function SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorPointer=nil):PUserTypeDescriptor;virtual;
                   function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;abstract;
                   procedure setvardesc(out vd: vardesk; const varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
-                  procedure free;virtual;abstract;
+                  procedure free;virtual;
                   procedure CopyTo(source:PTSimpleUnit);virtual;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
             end;
+{EXPORT-}
+
 PTEntityUnit=^TEntityUnit;
-{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TEntityUnit}
 TEntityUnit=object(TSimpleUnit)
                   ConnectedUses:TZctnrVectorPointer;
-                  procedure free;virtual;
+                  //procedure free;virtual;
                   constructor init(const nam:TInternalScriptString);
                   destructor done;virtual;
 
                   function FindVariable(const varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
                   function FindVarDesc(const varname:TInternalScriptString):TInVectorAddr;virtual;
             end;
-{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TUnit}
+
+TunitPart=(TNothing,TInterf,TImpl,TProg);
+PTUnit=^TUnit;
+
 TUnit=object(TSimpleUnit)
             InterfaceTypes:typemanager;
             //ImplementationUses:Integer;
@@ -263,7 +266,8 @@ TUnit=object(TSimpleUnit)
             function RegisterEnumType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
             function RegisterObjectType(ATypeInfo:PTypeInfo;ATypeOf:Pointer;ATypeName:string='';HasVMT:boolean=true):PObjectDescriptor;
       end;
-{EXPORT-}
+
+
 TOnCreateSystemUnit=procedure (ptsu:PTUnit);
 procedure vardeskclear(const p:pvardesk);
 var
@@ -885,7 +889,7 @@ begin
   SetTypeDesk2(putd,fieldnames,SetNames);
 end;
 
-procedure TEntityUnit.free;
+procedure TSimpleUnit.free;
 begin
      self.InterfaceUses.clear;
      self.InterfaceVariables.vardescarray.Freewithproc(vardeskclear);

@@ -325,7 +325,7 @@ begin
   end;
   result:=ppda;
 
-  if (self.TypeName='TEntityUnit')or(self.TypeName='TUnit') then begin
+  if (self.TypeName='TEntityUnit')or(self.TypeName='TUnit')or(self.TypeName='TSimpleUnit') then begin
     if (bmode=property_correct)then begin
       if PTPropertyDeskriptorArray(ppd^.SubNode)^.GetRealPropertyDeskriptorsCount<>PTEntityUnit(addr)^.InterfaceVariables.vardescarray.Count then begin
         PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;

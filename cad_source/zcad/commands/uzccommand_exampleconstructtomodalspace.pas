@@ -45,7 +45,7 @@ implementation
 
 type
   TCmdProp=record
-    props:TEntityUnit;
+    props:TSimpleUnit;
   end;
 
 var

@@ -568,9 +568,12 @@ begin
   otd:=ptsu^.RegisterObjectType(TypeInfo(TZAbsVector),TypeOf(TZAbsVector),'TZAbsVector',true);
   ptsu^.RegisterType(TypeInfo(PZAbsVector),'PZAbsVector');
 
-  utd:=ptsu^.RegisterType(TypeInfo(TInVectorAddr),'TInVectorAddr');
+  //utd:=ptsu^.RegisterType(TypeInfo(TInVectorAddr),'TInVectorAddr');
 
-  utd:=ptsu^.RegisterType(TypeInfo(itrec),'itrec');
+  //utd:=ptsu^.RegisterType(TypeInfo(itrec),'itrec');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(varmanagerdef),TypeOf(varmanagerdef),'varmanagerdef',true);
+
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

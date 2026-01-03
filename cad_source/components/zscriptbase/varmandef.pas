@@ -226,32 +226,45 @@ TPropEditor=class(TComponent)
                  function geteditor:TWinControl;
                  procedure SetEditorBounds(pd:PBasePropertyDeskriptor;OnlyHotFasteditors:boolean);
             end;
-  //pd=^Double;
-  {-}{/PInteger=^Integer;/}
-  //pstr=^TInternalScriptString;
-  {-}{/PPointer=^Pointer;/}
-  //pbooleab=^Boolean;
- {TODO:огнегне}
+
 TTranslateFunction=function (const Identifier, OriginalValue: String): String;
 
-THardTypedData=record
-                 Instance: Pointer;
-                 case boolean of
-                 false:(P:Pointer);
-                 true:(PTD:PUserTypeDescriptor);
-               end;
-PTHardTypedData=^THardTypedData;
+  THardTypedData=record
+    Instance:Pointer;
+    case boolean of
+      False:(P:Pointer);
+      True:(PTD:PUserTypeDescriptor);
+  end;
+  PTHardTypedData=^THardTypedData;
 
-{EXPORT+}
-  {REGISTERRECORDTYPE TTypedData}
   TTypedData=record
-    PTD:{-}PUserTypeDescriptor{/Pointer/};
     Addr:TInVectorAddr;
+    case boolean of
+      False:(P:Pointer);
+      True:(PTD:PUserTypeDescriptor);
   end;
   PTTypedData=^TTypedData;
 
+  typemanagerdef=object
+    procedure readbasetypes;virtual;abstract;
+    procedure readexttypes(const fn:TInternalScriptString);
+      virtual;abstract;
+    function _TypeName2Index(const Name:TInternalScriptString):integer;
+      virtual;abstract;
+    function _TypeName2PTD(
+      const Name:TInternalScriptString):PUserTypeDescriptor;virtual;abstract;
+    function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;
+      virtual;abstract;
+
+    function getDataMutable(index:TArrayIndex):Pointer;virtual;abstract;
+    function getcount:TArrayIndex;virtual;abstract;
+    function AddTypeByPP(p:Pointer):TArrayIndex;virtual;abstract;
+    function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;
+      virtual;abstract;
+  end;
+  ptypemanagerdef=^typemanagerdef;
+
   TVariableAttributes=Integer;
-  {REGISTERRECORDTYPE vardesk}
   vardesk =record
     name: TInternalScriptString;
     username: TInternalScriptString;
@@ -262,34 +275,24 @@ PTHardTypedData=^THardTypedData;
     {-}procedure SetInstance(Ptr:Pointer);overload;{/ /}
     {-}procedure FreeeInstance;{/ /}
   end;
-ptypemanagerdef=^typemanagerdef;
-{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE typemanagerdef}
-typemanagerdef=object
-                  procedure readbasetypes;virtual;abstract;
-                  procedure readexttypes(const fn: TInternalScriptString);virtual;abstract;
-                  function _TypeName2Index(const name: TInternalScriptString): Integer;virtual;abstract;
-                  function _TypeName2PTD(const name: TInternalScriptString):PUserTypeDescriptor;virtual;abstract;
-                  function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;abstract;
 
-                  function getDataMutable(index:TArrayIndex):Pointer;virtual;abstract;
-                  function getcount:TArrayIndex;virtual;abstract;
-                  function AddTypeByPP(p:Pointer):TArrayIndex;virtual;abstract;
-                  function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;abstract;
-            end;
-{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanagerdef}
-varmanagerdef=object
-                 {vardescarray:GDBOpenArrayOfData;
-                 vararray:TZctnrVectorBytes;}
-                 function findvardesc(const varname:TInternalScriptString): pvardesk;virtual;abstract;
-                 function createvariable(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0): pvardesk;virtual;abstract;
-                 function createvariable2(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;abstract;
-                 procedure createvariablebytype(const varname,vartype:TInternalScriptString);virtual;abstract;
-                 procedure createbasevaluefromString(const varname: TInternalScriptString; const varvalue: TInternalScriptString; var vd: vardesk);virtual;abstract;
-                 function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; const nam: String): Boolean;virtual;abstract;
-                 //function getDS:Pointer;virtual;abstract;
-           end;
-pvarmanagerdef=^varmanagerdef;
-{EXPORT-}
+  varmanagerdef=object
+    function findvardesc(const varname:TInternalScriptString):pvardesk;
+      virtual;abstract;
+    function createvariable(const varname:TInternalScriptString;
+      var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;abstract;
+    function createvariable2(const varname:TInternalScriptString;
+      var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;abstract;
+    procedure createvariablebytype(
+      const varname,vartype:TInternalScriptString);virtual;abstract;
+    procedure createbasevaluefromString(
+      const varname:TInternalScriptString;const varvalue:TInternalScriptString;
+      var vd:vardesk);virtual;abstract;
+    function findfieldcustom(var pdesc:pbyte;var offset:integer;
+      var tc:PUserTypeDescriptor;const nam:string):boolean;virtual;abstract;
+  end;
+  pvarmanagerdef=^varmanagerdef;
+
 procedure convertToRunTime(dt:TFastEditorsVector;var rt:TFastEditorsRunTimeVector);
 procedure clearRTd(rtv:TFastEditorsRunTimeVector);
 procedure clearRTstate(rtv:TFastEditorsRunTimeVector);
@@ -297,8 +300,7 @@ var
   date:TDateTime;
 procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattrib,resetattrib:TVariableAttributes);
 implementation
-//uses log;
-{for hide exttype}
+
 function vardesk.GetValueAsString:TInternalScriptString;
 begin
   result:=data.PTD^.GetValueAsString(data.Addr.Instance);

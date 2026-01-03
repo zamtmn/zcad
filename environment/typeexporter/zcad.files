@@ -26,7 +26,7 @@ zengine/styles/uzestylesdim.pas
 zengine/styles/uzestylestables.pas
 zcad/uzcsysvars.pas
 ;components/zscriptbase/uabstractunit.pas
-components/zscriptbase/varmandef.pas
+;components/zscriptbase/varmandef.pas
 components/zscript/varman.pas
 zcad/devicebase/uzcdevicebaseabstract.pas
 zcad/devicebase/uzcdevicebase.pas

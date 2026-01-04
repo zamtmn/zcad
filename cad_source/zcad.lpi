@@ -1343,13 +1343,16 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="2">
+    <Exceptions Count="3">
       <Item1>
         <Name Value="ECodetoolError"/>
       </Item1>
       <Item2>
         <Name Value="EFOpenError"/>
       </Item2>
+      <Item3>
+        <Name Value="InlineTypeRegistrationException"/>
+      </Item3>
     </Exceptions>
   </Debugging>
 </CONFIG>

@@ -418,6 +418,17 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PGDBBaseCamera),'PGDBBaseCamera');
 
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBObjCamera),TypeOf(GDBObjCamera),'GDBObjCamera',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['modelMatrixLCS','zminLCS','zmaxLCS','frustumLCS',
+                            'clipLCS','projMatrixLCS','notuseLCS'],
+                            [FNProgram,FNUser]);
+    otd^.RegisterObject(TypeOf(GDBObjCamera),@GDBObjCamera.initnul);
+    otd^.AddMetod('','initnul','',@GDBBaseCamera.initnul,m_constructor);
+  end;
+  ptsu^.RegisterType(TypeInfo(PGDBObjCamera),'PGDBObjCamera');
+
+
   utd:=ptsu^.RegisterType(TypeInfo(TBlockType),'TBlockType');
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['BT_Connector','BT_Unknown'],[FNProgram,FNUser]);

@@ -55,9 +55,6 @@ type
   end;
   PGDBBaseCamera=^GDBBaseCamera;
 
-{EXPORT+}
-  PGDBObjCamera=^GDBObjCamera;
-{REGISTEROBJECTTYPE GDBObjCamera}
   GDBObjCamera= object(GDBBaseCamera)
     modelMatrixLCS:TzeTypedMatrix4d;
     zminLCS,zmaxLCS:Double;
@@ -73,7 +70,7 @@ type
 
     procedure NextPosition;virtual;
   end;
-{EXPORT-}
+  PGDBObjCamera=^GDBObjCamera;
 
 implementation
 

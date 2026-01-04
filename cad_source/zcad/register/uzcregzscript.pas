@@ -28,7 +28,7 @@ uses
   uzeentabstracttext,uzecamera,
   uzccommandsabstract,uzccommandsimpl,uzepalette,
   gzctnrVectorTypes,gzctnrVector,uzctnrVectorBytes,uzctnrAlignedVectorBytes,
-  uzctnrVectorPointers;
+  uzctnrVectorPointers,uzcoimultiobjects,uzctnrVectorStrings;
 
 type
 
@@ -585,6 +585,54 @@ begin
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TSimpleUnit),TypeOf(TSimpleUnit));
 
+
+  utd:=ptsu^.RegisterType(TypeInfo(TVariableProcessSelector),'TVariableProcessSelector');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['VPS_OnlyThisEnts','VPS_OnlyRelatedEnts',
+                            'VPS_AllEnts','VPS_AllEntsSeparated'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Only this ents','Only related ents','All ents',
+                            'All ents separated'],[FNUser])
+  end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorStrings),TypeOf(TZctnrVectorStrings));
+  utd:=ptsu^.RegisterType(TypeInfo(TEnumData),'TEnumData');
+  utd:=ptsu^.RegisterType(TypeInfo(PTEnumData),'PTEnumData');
+  utd:=ptsu^.RegisterType(TypeInfo(TEnumDataWithOtherStrings),'TEnumDataWithOtherStrings');
+  utd:=ptsu^.RegisterType(TypeInfo(PTEnumDataWithOtherStrings),'PTEnumDataWithOtherStrings');
+  utd:=ptsu^.RegisterType(TypeInfo(TEnumDataWithOtherPointers),'TEnumDataWithOtherPointers');
+  utd:=ptsu^.RegisterType(TypeInfo(PTEnumDataWithOtherPointers),'PTEnumDataWithOtherPointers');
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TMSPrimitiveDetector),'TMSPrimitiveDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSBlockNamesDetector),'TMSBlockNamesDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSTextsStylesDetector),'TMSTextsStylesDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsLayersDetector),'TMSEntsLayersDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsLinetypesDetector),'TMSEntsLinetypesDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsExtendersDetector),'TMSEntsExtendersDetector');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TMSEditor),TypeOf(TMSEditor),'TMSEditor',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['TxtEntType','VariableProcessSelector',
+                            'RelatedVariablesUnit','VariablesUnit',
+                            'ExtendersUnit','GeneralUnit','GeometryUnit',
+                            'MiscUnit','SummaryUnit','ObjIDVector',
+                            'ObjID2Counter','ObjIDWithExtenderCounter',
+                            'SavezeUnitsFormat'],
+                           [FNProgram]);
+    ptsu^.SetTypeDesk2(otd,['Process primitives','Process variables',
+                            'Related variables','Variables',
+                            'Extenders','General','Geometry',
+                            'Misc','Summary','ObjIDVector',
+                            'ObjID2Counter','ObjIDWithExtenderCounter',
+                            'SavezeUnitsFormat'],
+                           [FNUser]);
+    ptsu^.SetAttrs(otd,[[],[],
+                        [],[],
+                        [],[],[],
+                        [],[],[fldaHidden],
+                        [fldaHidden],[fldaHidden],
+                        [fldaHidden]]);
+  end;
 
 end;
 initialization

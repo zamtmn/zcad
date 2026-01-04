@@ -807,7 +807,7 @@ begin
          PGDBSinonimDescriptor(result)^.init('TMethod',ti^.Name,@self);
          InterfaceTypes.AddTypeByPP(@result);
        end;
-       tkProcVar:begin
+       tkProcVar,tkClass:begin
          Getmem(result,sizeof(GDBSinonimDescriptor));
          PGDBSinonimDescriptor(result)^.init('Pointer',ti^.Name,@self);
          InterfaceTypes.AddTypeByPP(@result);

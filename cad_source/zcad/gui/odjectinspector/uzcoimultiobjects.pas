@@ -20,39 +20,41 @@ unit uzcoimultiobjects;
 {$modeswitch TypeHelpers}{$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzeenttext,uzctnrVectorPointers,uzeentblockinsert,uzeconsts,uzcinterface,
   uzbLog,uzcLog,uzcoimultiproperties,uzctranslations,uzepalette,
-  uzcstrconsts,sysutils,uzeentityfactory,
+  uzcstrconsts,SysUtils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
   zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,
   uzCtnrVectorPBaseEntity,uzglviewareageneral,uzglviewareaabstract,uzbUnits;
+
 type
+
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
-{Export+}
+
   TVariableProcessSelector=(
-           VPS_OnlyThisEnts(*'Only this ents'*),
-           VPS_OnlyRelatedEnts(*'Only related ents'*),
-           VPS_AllEnts(*'All ents'*),
-           VPS_AllEntsSeparated(*'All ents separated'*)
-          );
-  {REGISTERRECORDTYPE TMSPrimitiveDetector}
+    VPS_OnlyThisEnts(*'Only this ents'*),
+    VPS_OnlyRelatedEnts(*'Only related ents'*),
+    VPS_AllEnts(*'All ents'*),
+    VPS_AllEntsSeparated(*'All ents separated'*)
+    );
+
   TMSPrimitiveDetector=TEnumData;
-  {REGISTERRECORDTYPE TMSBlockNamesDetector}
   TMSBlockNamesDetector=TEnumDataWithOtherStrings;
-  {REGISTERRECORDTYPE TMSTextsStylesDetector}
   TMSTextsStylesDetector=TEnumDataWithOtherPointers;
-  {REGISTERRECORDTYPE TMSEntsLayersDetector}
   TMSEntsLayersDetector=TEnumDataWithOtherPointers;
-  {REGISTERRECORDTYPE TMSEntsLinetypesDetector}
   TMSEntsLinetypesDetector=TEnumDataWithOtherPointers;
-  {REGISTERRECORDTYPE TMSEntsExtendersDetector}
   TMSEntsExtendersDetector=TEnumDataWithOtherPointers;
+
+
+{Export+}
+
   {REGISTEROBJECTTYPE TMSEditor}
-  TMSEditor= object(GDBaseObject)
+  TMSEditor=object(GDBaseObject)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariableProcessSelector:TVariableProcessSelector;(*'Process variables'*)
                 RelatedVariablesUnit:TSimpleUnit;(*'Related variables'*)

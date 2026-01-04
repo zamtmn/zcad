@@ -197,6 +197,8 @@ type
     parent: {$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
   end;
 begin
+  if PType=nil then
+    exit(nil);
   if vmtRecPtr(PType)^.parent<>nil then
     result:=vmtRecPtr(PType)^.parent{$ifndef VER3_0}^{$endif}
   else

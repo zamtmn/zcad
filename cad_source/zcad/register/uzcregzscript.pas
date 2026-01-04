@@ -27,7 +27,8 @@ uses
   uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef,
   uzeentabstracttext,uzecamera,
   uzccommandsabstract,uzccommandsimpl,uzepalette,
-  gzctnrVectorTypes,gzctnrVector,uzctnrVectorBytes,uzctnrAlignedVectorBytes;
+  gzctnrVectorTypes,gzctnrVector,uzctnrVectorBytes,uzctnrAlignedVectorBytes,
+  uzctnrVectorPointers;
 
 type
 
@@ -576,6 +577,14 @@ begin
   //utd:=ptsu^.RegisterType(TypeInfo(itrec),'itrec');
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(varmanagerdef),TypeOf(varmanagerdef),'varmanagerdef',true);
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TvarDescArray),TypeOf(TvarDescArray));
+  otd:=ptsu^.RegisterObjectType(TypeInfo(varmanager),TypeOf(varmanager));
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorPointer),TypeOf(TZctnrVectorPointer));
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TSimpleUnit),TypeOf(TSimpleUnit));
+
 
 end;
 initialization

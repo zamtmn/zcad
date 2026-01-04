@@ -175,52 +175,48 @@ typemanager=object(typemanagerdef)
                   function GetTypealias(const fpcalias:TInternalScriptString):TInternalScriptString;
             end;
 
+  TvarDescArray=GZVector<vardesk>;
+  {GISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
+  varmanager=object(varmanagerdef)
+              vardescarray:TvarDescArray;
+              vararray:TZctnrAlignedVectorBytes;
+                   constructor init;
+                   function findvardesc(const varname:TInternalScriptString):pvardesk;virtual;
+                   function findvardescbyinst(varinst:Pointer):pvardesk;virtual;
+                   function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
+                   function CreateVariable(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
+                   function CreateVariable2(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
+                   procedure RemoveVariable(pvd:pvardesk);virtual;
+                   function findvardesc2(const varname:TInternalScriptString):TInVectorAddr;virtual;
+                   function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; const nam: String): Boolean;virtual;
+                   function getDS:Pointer;virtual;
+                   destructor done;virtual;
+                   procedure free;virtual;
+             end;
+  pvarmanager=^varmanager;
 
-{EXPORT+}
-Tvardescarray=GZVector{-}<vardesk>{//};
-{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
-varmanager=object(varmanagerdef)
-            vardescarray:Tvardescarray;
-            vararray:TZctnrAlignedVectorBytes;
-                 constructor init;
-                 function findvardesc(const varname:TInternalScriptString):pvardesk;virtual;
-                 function findvardescbyinst(varinst:Pointer):pvardesk;virtual;
-                 function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
-                 function CreateVariable(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
-                 function CreateVariable2(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
-                 procedure RemoveVariable(pvd:pvardesk);virtual;
-                 function findvardesc2(const varname:TInternalScriptString):TInVectorAddr;virtual;
-                 function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; const nam: String): Boolean;virtual;
-                 function getDS:Pointer;virtual;
-                 destructor done;virtual;
-                 procedure free;virtual;
-           end;
-pvarmanager=^varmanager;
-
-PTSimpleUnit=^TSimpleUnit;
-{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TSimpleUnit}
-TSimpleUnit=object
-                  Name:TInternalScriptString;
-                  InterfaceUses:TZctnrVectorPointer;
-                  InterfaceVariables: varmanager;
-                  constructor init(const nam:TInternalScriptString);
-                  destructor done;virtual;
-                  function CreateFixedVariable(const varname,vartype:TInternalScriptString;_pinstance:pointer):Pointer;virtual;
-                  function CreateVariable(const varname,vartype:TInternalScriptString):vardesk;virtual;
-                  function FindVariable(const varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
-                  function FindVarDesc(const varname:TInternalScriptString):TInVectorAddr;virtual;
-                  function FindVariableByInstance(_Instance:Pointer):pvardesk;virtual;
-                  function FindValue(const varname:TInternalScriptString):pvardesk;virtual;
-                  function FindOrCreateValue(const varname,vartype:TInternalScriptString):vardesk;virtual;
-                  function TypeName2PTD(const n: TInternalScriptString):PUserTypeDescriptor;virtual;
-                  function SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorPointer=nil):PUserTypeDescriptor;virtual;
-                  function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;abstract;
-                  procedure setvardesc(out vd: vardesk; const varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
-                  procedure free;virtual;
-                  procedure CopyTo(source:PTSimpleUnit);virtual;
-                  procedure CopyFrom(source:PTSimpleUnit);virtual;
-            end;
-{EXPORT-}
+  PTSimpleUnit=^TSimpleUnit;
+  TSimpleUnit=object
+                    Name:TInternalScriptString;
+                    InterfaceUses:TZctnrVectorPointer;
+                    InterfaceVariables: varmanager;
+                    constructor init(const nam:TInternalScriptString);
+                    destructor done;virtual;
+                    function CreateFixedVariable(const varname,vartype:TInternalScriptString;_pinstance:pointer):Pointer;virtual;
+                    function CreateVariable(const varname,vartype:TInternalScriptString):vardesk;virtual;
+                    function FindVariable(const varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
+                    function FindVarDesc(const varname:TInternalScriptString):TInVectorAddr;virtual;
+                    function FindVariableByInstance(_Instance:Pointer):pvardesk;virtual;
+                    function FindValue(const varname:TInternalScriptString):pvardesk;virtual;
+                    function FindOrCreateValue(const varname,vartype:TInternalScriptString):vardesk;virtual;
+                    function TypeName2PTD(const n: TInternalScriptString):PUserTypeDescriptor;virtual;
+                    function SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorPointer=nil):PUserTypeDescriptor;virtual;
+                    function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;abstract;
+                    procedure setvardesc(out vd: vardesk; const varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
+                    procedure free;virtual;
+                    procedure CopyTo(source:PTSimpleUnit);virtual;
+                    procedure CopyFrom(source:PTSimpleUnit);virtual;
+              end;
 
 PTEntityUnit=^TEntityUnit;
 TEntityUnit=object(TSimpleUnit)
@@ -650,18 +646,21 @@ begin
   for i:=0 to td.ManagedFldCount-1 do
   begin
     ATypeInfo:=mf.TypeRef;
-    ftd:=RegisterType(ATypeInfo);
        if i=PVMTFieldsIndex then begin
+         ftd:=RegisterType(ATypeInfo);
          fd:=FPVMT;
          fd.Offset:=mf.FldOffset;
          fd.Size:=ftd.SizeInBytes;
          fd.Collapsed:=true;
          etd^.AddConstField(fd);
        end else if (i=0)and(ParentTypeOf<>nil)then begin
+         if parentOTD=nil then
+           parentOTD:=RegisterObjectType(mf.TypeRef,ParentTypeOf,'',HasVMT);
          parentOTD^.CopyTo(etd);
          etd^.Parent:=parentOTD;
          fd.Offset:=parentOTD^.SizeInBytes;
        end else begin
+         ftd:=RegisterType(ATypeInfo);
          fd.base.create(ftd.TypeName,ftd.TypeName,ftd,[]);
          fd.Offset:=mf.FldOffset;
          fd.Size:=ftd.SizeInBytes;
@@ -800,8 +799,8 @@ begin
        tkPointer:result:=RegisterPointerType(ti,ATypeName);
        tkEnumeration:result:=RegisterEnumType(ti,ATypeName);
        tkObject:begin
-         result:=nil;
-         raise Exception.CreateFmt('Auto registration for objects (alias="%s";name="%s") not alloved',[ATypeName,tname]);
+         result:=RegisterObjectType(ti,nil,tname,true);
+         //raise Exception.CreateFmt('Auto registration for objects (alias="%s";name="%s") not alloved',[ATypeName,tname]);
        end;
        tkMethod:begin
          Getmem(result,sizeof(GDBSinonimDescriptor));

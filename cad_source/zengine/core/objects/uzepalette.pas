@@ -43,10 +43,6 @@ type
   TGDBPaletteColor=type Integer;
   PTGDBPaletteColor=^TGDBPaletteColor;
 
-{EXPORT+}
-
-{EXPORT-}
-
   TGDBPalette={$IFNDEF DELPHI}packed {$ENDIF}array[0..255] of TDXFCOLOR;
 const
   NotTransparent=0;

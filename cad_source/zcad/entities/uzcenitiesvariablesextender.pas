@@ -23,7 +23,7 @@ interface
 uses
   sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender,
-  uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
+  uzeentdevice,TypeDescriptors,uzctnrVectorBytesStream,
   uzbtypes,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,

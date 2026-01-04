@@ -21,7 +21,7 @@ unit UPointerDescriptor;
 {$MODE DELPHI}
 interface
 uses
-  types,TypeDescriptors,uzctnrVectorBytes,
+  types,TypeDescriptors,uzctnrVectorBytesStream,
   uzbUnits,
   varmandef,uzctnrvectorstrings,
   UBaseTypeDescriptor;

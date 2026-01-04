@@ -23,7 +23,7 @@ unit uzeffdxfsupport;
 
 interface
 uses
-  uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics,
+  uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytesStream,usimplegenerics,
   uzMVReader,UGDBPoint3DArray,uzeTypes;
 
 const

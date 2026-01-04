@@ -28,7 +28,7 @@ uses
   sysutils,
   varmandef,
   varman,
-  uzctnrVectorBytes,
+  uzctnrVectorBytesStream,
   uzeentity,
   uzcdevicebaseabstract,UUnitManager,strutils,forms,Controls,uzcinterface,uzedrawingdef,uzctnrvectorstrings,uLexParser,
   uzcenitiesvariablesextender,uzcfsinglelinetexteditor,UObjectDescriptor,uzcfprojecttree,uzccommandsmanager,uzclog,uzeentsubordinated,

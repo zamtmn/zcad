@@ -21,7 +21,7 @@ unit uzeExtdrAbstractDrawingExtender;
 
 interface
 uses
-  usimplegenerics,uzctnrVectorBytes,gzctnrSTL,uzeBaseExtender,uzedrawingabstract;
+  usimplegenerics,uzctnrVectorBytesStream,gzctnrSTL,uzeBaseExtender,uzedrawingabstract;
 
 type
   TAbstractDrawingExtender=class(TExtender<TAbstractDrawing>)

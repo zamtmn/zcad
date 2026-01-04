@@ -11,16 +11,10 @@ uses
   gzctnrVector, gzctnrVectorSimple, gzctnrVectorObjects, gzctnrVectorP, 
   gzctnrVectorPData, gzctnrVectorPObjects, gzctnrBinarySeparatedTree, 
   gzctnrSTL, uzctnrAlignedVectorBytes, gzctnrVectorStr, uzctnrTree, 
-  uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytes, 
+  uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytesStream, 
   gzctnrAlignedVectorObjects, gzctnrVectorc, gzctnrVectorClass, 
-  gzctnrBufferAllocator, LazarusPackageIntf;
+  gzctnrBufferAllocator, uzctnrVectorBytes;
 
 implementation
 
-procedure Register;
-begin
-end;
-
-initialization
-  RegisterPackage('zcontainers', @Register);
 end.

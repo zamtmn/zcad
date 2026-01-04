@@ -21,7 +21,7 @@ unit uzefontbase;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytes,gzctnrVectorTypes,
+  uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytesStream,gzctnrVectorTypes,
   gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
 
 const

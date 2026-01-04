@@ -24,7 +24,7 @@ interface
 uses
   sysutils,
   math,uzegeometry,
-  uzctnrVectorBytes,
+  uzctnrVectorBytesStream,
   uzedrawingdef,uzgldrawcontext,
   uzeffdxfsupport,
   uzeentdevice,uzeentsubordinated,uzeentity,uzeentabstracttext,uzeenttext,

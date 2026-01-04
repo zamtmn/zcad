@@ -25,7 +25,7 @@ uses
   uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,
   UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
   uzestyleslayers,uzeentsubordinated,uzeentcurve,
-  uzeentity,uzctnrVectorBytes,uzbtypes,uzeTypes,uzeconsts,uzglviewareadata,
+  uzeentity,uzctnrVectorBytesStream,uzbtypes,uzeTypes,uzeconsts,uzglviewareadata,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,SysUtils,
   uzMVReader,uzCtnrVectorpBaseEntity,uzeNURBSTypes,uzbLogIntf,Math,
   uzeNURBSUtils;

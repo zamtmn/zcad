@@ -20,7 +20,7 @@ unit uzebeziersolver;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,gvector,
-     uzegeometrytypes,uzctnrVectorBytes,
+     uzegeometrytypes,uzctnrVectorBytesStream,
      sysutils,uzegeometry,gzctnrSTL,uzbLogIntf,gzctnrVectorTypes;
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);

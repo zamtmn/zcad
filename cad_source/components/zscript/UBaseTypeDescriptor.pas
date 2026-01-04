@@ -24,7 +24,7 @@ uses
   typinfo,LCLProc,Graphics,classes,Themes,
   uzbUnits,uzbUnitsUtils,
   gzctnrVectorTypes,uzegeometry,uzbstrproc,TypeDescriptors,
-  sysutils,uzctnrVectorBytes,
+  sysutils,uzctnrVectorBytesStream,
   USinonimDescriptor,varmandef,uzbtypes,
   base64,uzctnrvectorstrings,math,uzbLogIntf;
 resourcestring

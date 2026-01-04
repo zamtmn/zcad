@@ -30,7 +30,7 @@ uses
   Varman,
   uzccmdinfoform,
   uzccommandsabstract,uzccommandsimpl,
-  uzctnrVectorBytes,
+  uzctnrVectorBytesStream,
   uzcinterface,
   uzcstrconsts,
   UUnitManager,

@@ -23,7 +23,7 @@ interface
 
 uses
   uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzegeometrytypes,
-  UGDBOutbound2DIArray,uzctnrVectorBytes,uzeentwithmatrix,uzbtypes,uzeTypes,
+  UGDBOutbound2DIArray,uzctnrVectorBytesStream,uzeentwithmatrix,uzbtypes,uzeTypes,
   uzegeometry,uzeffdxfsupport,SysUtils,uzeentsubordinated,uzestyleslayers,
   uzMVReader,uzbLogIntf,uzestrconsts;
 

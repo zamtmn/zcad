@@ -25,7 +25,7 @@ interface
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzctnrVectorBytes,
+  uzctnrVectorBytesStream,
   uzbpaths,
   Varman,
   uzcsysparams,uzcFileStructure;

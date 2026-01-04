@@ -21,7 +21,7 @@ unit UObjectDescriptor;
 {$MODE DELPHI}
 interface
 uses
-  LCLProc,gzctnrVectorObjects,URecordDescriptor,uzctnrVectorBytes,sysutils,
+  LCLProc,gzctnrVectorObjects,URecordDescriptor,uzctnrVectorBytesStream,sysutils,
   uzbUnits,
   gzctnrVectorTypes,UBaseTypeDescriptor,TypeDescriptors,
   uLexParser,uzctnrvectorstrings,objects,gzctnrVector,

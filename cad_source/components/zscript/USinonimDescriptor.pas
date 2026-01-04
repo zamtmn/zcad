@@ -20,7 +20,7 @@ unit USinonimDescriptor;
 
 {$MODE DELPHI}
 interface
-uses TypeDescriptors,uzctnrVectorBytes,
+uses TypeDescriptors,uzctnrVectorBytesStream,
      uzbUnits,
      varmandef,TypInfo;
 type

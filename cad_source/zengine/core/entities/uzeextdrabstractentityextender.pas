@@ -22,7 +22,7 @@ unit uzeExtdrAbstractEntityExtender;
 interface
 
 uses
-  uzedrawingdef,usimplegenerics,uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport,
+  uzedrawingdef,usimplegenerics,uzctnrVectorBytesStream,gzctnrSTL,uzeffdxfsupport,
   uzeBaseExtender,uzgldrawcontext;
 
 type

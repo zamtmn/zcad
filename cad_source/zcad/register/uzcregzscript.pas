@@ -27,7 +27,7 @@ uses
   uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef,
   uzeentabstracttext,uzecamera,
   uzccommandsabstract,uzccommandsimpl,uzepalette,
-  gzctnrVectorTypes;
+  gzctnrVectorTypes,gzctnrVector,uzctnrVectorBytes,uzctnrAlignedVectorBytes;
 
 type
 
@@ -567,6 +567,9 @@ begin
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TZAbsVector),TypeOf(TZAbsVector),'TZAbsVector',true);
   ptsu^.RegisterType(TypeInfo(PZAbsVector),'PZAbsVector');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorBytes),TypeOf(TZctnrVectorBytes));
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrAlignedVectorBytes),TypeOf(TZctnrAlignedVectorBytes),'TZctnrAlignedVectorBytes',true);
 
   //utd:=ptsu^.RegisterType(TypeInfo(TInVectorAddr),'TInVectorAddr');
 

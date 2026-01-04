@@ -24,7 +24,7 @@ interface
 uses
   uzgldrawcontext,uzeentabstracttext,uzestylestexts,uzestylesdim,
   uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,uzbstrproc,
-  uzctnrVectorBytes,uzeenttext,uzegeometry,uzeentline,uzeentcomplex,
+  uzctnrVectorBytesStream,uzeenttext,uzegeometry,uzeentline,uzeentcomplex,
   uzegeometrytypes,SysUtils,uzeentity,uzbtypes,uzeTypes,uzeconsts,
   uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert,uzglviewareadata,
   uzeSnap,Math,uzbUnits,uzbUnitsUtils;

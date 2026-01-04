@@ -22,7 +22,7 @@ unit uzeBoundaryPath;
 interface
 
 uses
-  Math,uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,uzctnrVectorBytes,
+  Math,uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,uzctnrVectorBytesStream,
   gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader,uzeNURBSTypes,
   uzegluinterface,uzbLogIntf;
 

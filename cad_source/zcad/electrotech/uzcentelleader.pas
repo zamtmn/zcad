@@ -10,7 +10,7 @@ unit uzcentelleader;
 interface
 uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzeentabstracttext,uzeentgenericsubentry,uzetrash,uzedrawingdef,uzecamera,
-     uzcsysvars,uzbstrproc,uzctnrVectorBytes,math,
+     uzcsysvars,uzbstrproc,uzctnrVectorBytesStream,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,uzegeometry,
      uzeentline,uzeentcomplex,sysutils,uzctnrvectorstrings,
      gzctnrVectorTypes,uzeentity,varmandef,uzbtypes,uzeTypes,uzeconsts,uzeffdxfsupport,

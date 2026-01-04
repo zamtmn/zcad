@@ -10,7 +10,7 @@ unit uzcentcable;
 interface
 uses
   uzeobjectextender,varman,uzgldrawcontext,uzeentgenericsubentry,uzedrawingdef,
-  uzcsysvars,uzctnrVectorBytes,uzestyleslayers,UUnitManager,uzeentcurve,
+  uzcsysvars,uzctnrVectorBytesStream,uzestyleslayers,UUnitManager,uzeentcurve,
   uzegeometry,math,gzctnrVector,uzeentity,varmandef,uzbtypes,uzeTypes,
   uzegeometrytypes,uzeconsts,uzeffdxfsupport,sysutils,uzeentsubordinated,
   uzeentdevice,gzctnrVectorTypes,uzcenitiesvariablesextender,uzeentityfactory,

@@ -21,7 +21,7 @@ unit uzeblockdef;
 interface
 uses
   gzctnrVectorTypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,
-  uzedrawingdef,uzeentsubordinated,uzctnrVectorBytes,sysutils,uzbtypes,uzeTypes,
+  uzedrawingdef,uzeentsubordinated,uzctnrVectorBytesStream,sysutils,uzbtypes,uzeTypes,
   uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,
   uzbLogIntf,uzMVReader,uzeffdxfsupport;
 type

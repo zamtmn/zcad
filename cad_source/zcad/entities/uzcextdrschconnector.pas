@@ -23,7 +23,7 @@ uses
   sysutils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender,
   uzeentgenericsubentry,uzeentline,uzegeometry,
-  uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
+  uzeentdevice,TypeDescriptors,uzctnrVectorBytesStream,
   uzbtypes,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
   usimplegenerics,uzeffdxfsupport,
   gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,

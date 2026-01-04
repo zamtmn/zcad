@@ -21,7 +21,7 @@ unit uzeiopalette;
 interface
 uses uzbpaths,uzepalette,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,{$IFNDEF DELPHI}FileUtil,uzbLogIntf,{$ENDIF}{log,}sysutils,
-     uzctnrVectorBytes,gstack;
+     uzctnrVectorBytesStream,gstack;
 type
   TPaletteStack=TStack<TGDBPalette>;
 var

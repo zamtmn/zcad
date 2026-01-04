@@ -29,7 +29,7 @@ uses
   uzedrawingsimple,uzeentgenericsubentry,uzestyleslayers,uzeentity,
   UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
   UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,gzctnrVectorTypes,uzetrash,
-  uzctnrVectorBytes,uzglviewareadata,uzeentitiestypefilter,
+  uzctnrVectorBytesStream,uzglviewareadata,uzeentitiestypefilter,
   uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,uzcLog,uzbUnits,
   uzbUnitsUtils;
 type

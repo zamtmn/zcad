@@ -3,7 +3,7 @@
   <Package Version="5">
     <PathDelim Value="\"/>
     <Name Value="zcontainers"/>
-    <Type Value="RunAndDesignTime"/>
+    <Type Value="RunTimeOnly"/>
     <CompilerOptions>
       <Version Value="11"/>
       <PathDelim Value="\"/>
@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="18">
+    <Files Count="19">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrVector"/>
@@ -72,8 +72,8 @@
         <UnitName Value="uzctnrVectorPointers"/>
       </Item13>
       <Item14>
-        <Filename Value="uzctnrvectorbytes.pas"/>
-        <UnitName Value="uzctnrVectorBytes"/>
+        <Filename Value="uzctnrvectorbytesstream.pas"/>
+        <UnitName Value="uzctnrVectorBytesStream"/>
       </Item14>
       <Item15>
         <Filename Value="gzctnralignedvectorobjects.pas"/>
@@ -91,6 +91,10 @@
         <Filename Value="gzctnrbufferallocator.pas"/>
         <UnitName Value="gzctnrBufferAllocator"/>
       </Item18>
+      <Item19>
+        <Filename Value="uzctnrvectorbytes.pas"/>
+        <UnitName Value="uzctnrVectorBytes"/>
+      </Item19>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

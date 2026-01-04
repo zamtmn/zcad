@@ -21,7 +21,7 @@ unit URecordDescriptor;
 {$MODE DELPHI}
 interface
 uses
-  UPointerDescriptor,uzbstrproc,uzctnrVectorBytes,sysutils,UBaseTypeDescriptor,
+  UPointerDescriptor,uzbstrproc,uzctnrVectorBytesStream,sysutils,UBaseTypeDescriptor,
   uzbUnits,
   gzctnrVectorTypes,TypeDescriptors,gzctnrVector,
   TypInfo,varmandef,uzbtypes,uzbLogIntf,math;

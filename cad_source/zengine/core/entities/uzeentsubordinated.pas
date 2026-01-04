@@ -23,7 +23,7 @@ interface
 
 uses
   strutils,uzgldrawcontext,uzeExtdrAbstractEntityExtender,uzedrawingdef,
-  uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,
+  uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytesStream,
   uzegeometrytypes,uzbtypes,uzeTypes,
   SysUtils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera,uzeentbase;
 

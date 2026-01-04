@@ -21,7 +21,7 @@ unit uzcExtdrSCHConnection;
 interface
 uses sysutils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
-     uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
+     uzeentdevice,TypeDescriptors,uzctnrVectorBytesStream,
      uzbtypes,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
      usimplegenerics,uzeffdxfsupport,
      gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,

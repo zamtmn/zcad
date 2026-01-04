@@ -22,7 +22,7 @@ unit uzefontmanager;
 {$ModeSwitch advancedrecords}
 interface
 uses
-  uzctnrVectorBytes,{$IFNDEF DELPHI}LResources,{$ENDIF}uzbLogIntf,uzbpaths,
+  uzctnrVectorBytesStream,{$IFNDEF DELPHI}LResources,{$ENDIF}uzbLogIntf,uzbpaths,
   uzelclintfex,uzestrconsts,uzbstrproc,uzefont,
   sysutils,uzbtypes,uzegeometry,gzctnrSTL,
   UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;

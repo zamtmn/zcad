@@ -22,7 +22,7 @@ interface
 uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
      uzegeometry,gzctnrVectorObjects,
      gzctnrVectorTypes,uzbstrproc,uzeStylesLineTypes,uzegeometrytypes,
-     uzctnrVectorBytes,
+     uzctnrVectorBytesStream,
      uzeffdxfsupport,uzMVReader,
      Math;
 type

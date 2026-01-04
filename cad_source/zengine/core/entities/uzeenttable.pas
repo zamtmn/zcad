@@ -22,7 +22,7 @@ interface
 
 uses
   uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,
-  uzctnrVectorBytes,uzestylestables,uzeentline,uzeentcomplex,SysUtils,
+  uzctnrVectorBytesStream,uzestylestables,uzeentline,uzeentcomplex,SysUtils,
   gzctnrVectorPObjects,uzctnrvectorstrings,uzeentmtext,uzeentity,uzbtypes,
   uzeTypes,uzeconsts,uzegeometry,gzctnrVectorTypes,uzegeometrytypes,
   uzeentblockinsert,uzeffdxfsupport;

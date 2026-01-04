@@ -28,7 +28,7 @@ uses
   uzbpaths,
   Varman,
   UUnitManager,
-  uzctnrVectorBytes,uzctnrVectorPointers,gzctnrVectorTypes,
+  uzctnrVectorBytesStream,uzctnrVectorPointers,gzctnrVectorTypes,
   uzcinterface,
   uzctranslations,
   Controls,

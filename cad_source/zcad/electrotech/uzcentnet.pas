@@ -9,7 +9,7 @@ unit uzcentnet;
 
 interface
 uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,
-     uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,uzctnrVectorBytes,
+     uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,uzctnrVectorBytesStream,
      uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
      varmandef,uzegeometry,uzbtypes,uzeTypes,UGDBGraf,uzeentsubordinated,uunitmanager,
      gzctnrVectorTypes,uzegeometrytypes,sysutils,

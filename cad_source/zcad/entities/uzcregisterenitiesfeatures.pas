@@ -21,7 +21,7 @@ unit uzcregisterenitiesfeatures;
 interface
 uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzcTranslations,sysutils,
      uzcenitiesvariablesextender,uzcstrconsts,uzeconsts,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,uzeffdxfsupport,
-     uzetextpreprocessor,uzctnrVectorBytes,uzbtypes,uzeTypes,uzeobjectextender,
+     uzetextpreprocessor,uzctnrVectorBytesStream,uzbtypes,uzeTypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,
      uzbstrproc,uzeentitiesprop,uzcentelleader,math,gzctnrVectorTypes,uzccommandsmanager;

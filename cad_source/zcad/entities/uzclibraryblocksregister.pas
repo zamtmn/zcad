@@ -21,7 +21,7 @@ unit uzclibraryblocksregister;
 
 
 interface
-uses uzccommandsimpl,uzbstrproc,uzctnrVectorBytes,uzccommandsabstract,uzbpaths,
+uses uzccommandsimpl,uzbstrproc,uzctnrVectorBytesStream,uzccommandsabstract,uzbpaths,
      uzccommand_mergeblocks,
      uzestyleslayers,UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
      uzcsysvars,uzeentity,uzcdrawings,uzcLog;

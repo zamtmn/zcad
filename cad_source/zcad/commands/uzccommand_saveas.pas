@@ -36,7 +36,7 @@ uses
   uzcinterface,
   uzcFileStructure,
   uzeffdxf,uzeffdxfsupport,
-  uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
+  uzedrawingsimple,Varman,uzctnrVectorBytesStream,uzcdrawing,uzcTranslations,uzeconsts;
 
 function SaveAs_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;

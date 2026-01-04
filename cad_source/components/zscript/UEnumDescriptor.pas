@@ -21,7 +21,7 @@ unit UEnumDescriptor;
 {$MODE DELPHI}
 interface
 uses
-  types,sysutils,uzctnrVectorBytes,TypeDescriptors,
+  types,sysutils,uzctnrVectorBytesStream,TypeDescriptors,
   uzbUnits,
   gzctnrVectorTypes,varmandef,gzctnrVector,uzctnrvectorstrings;
 resourcestring

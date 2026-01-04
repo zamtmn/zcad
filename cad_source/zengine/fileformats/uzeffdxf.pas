@@ -26,7 +26,7 @@ uses
   gzctnrVectorTypes,uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
   uzegeometry,uzeentsubordinated,uzeentgenericsubentry,uzbtypes,uzeTypes,
   uzegeometrytypes,sysutils,uzeconsts,UGDBObjBlockdefArray,
-  uzctnrVectorBytes,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
+  uzctnrVectorBytesStream,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
   uzeffmanager,uzbLogIntf,uzeLogIntf,
   uzMVSMemoryMappedFile,uzMVReader;
 resourcestring

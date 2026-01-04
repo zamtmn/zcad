@@ -24,7 +24,7 @@ interface
 uses
   Classes,SysUtils,
   LResources,LazUTF8,Controls,Graphics,
-  gzctnrSTL,uzctnrVectorBytes,
+  gzctnrSTL,uzctnrVectorBytesStream,
   uzbpaths,uzbstrproc,uzcLog;
 type
   TImageData=record

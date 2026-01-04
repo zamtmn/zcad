@@ -23,7 +23,7 @@ interface
 
 uses
   SysUtils,
-  uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrVectorBytes,uzestyleslayers,
+  uzgldrawcontext,uzedrawingdef,uzecamera,uzctnrVectorBytesStream,uzestyleslayers,
   UGDBVectorSnapArray,UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPoint3DArray,
   uzbtypes,uzeTypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,
   gzctnrVectorTypes,uzegeometrytypes,uzeentsubordinated,uzeSnap,

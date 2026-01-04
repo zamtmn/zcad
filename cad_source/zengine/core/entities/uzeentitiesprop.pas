@@ -24,7 +24,7 @@ interface
 uses
   uzepalette,uzestyleslinetypes,uzegeometrytypes,
   uzbtypes,uzeTypes,uzegeometry,SysUtils,
-  uzctnrVectorBytes,uzestyleslayers;
+ uzctnrVectorBytesStream,uzestyleslayers;
 
 type
   PGDBObjVisualProp=^GDBObjVisualProp;

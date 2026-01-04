@@ -21,7 +21,7 @@ unit uzeFFTTF;
 interface
 uses
   uzefontmanager,uzeFontFileFormatTTF,uzegeometry,uzefont,uzbstrproc,
-  {$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,uzctnrVectorBytes,
+  {$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,uzctnrVectorBytesStream,
   uzefontttfpreloader,uzeFontFileFormatTTFBackend;
 type
   ptsyminfo=^tsyminfo;

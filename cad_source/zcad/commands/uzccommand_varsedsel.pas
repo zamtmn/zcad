@@ -29,7 +29,7 @@ uses
   uzbpaths,
   uzccmdinfoform,
   uzccommandsabstract,uzccommandsimpl,
-  uzctnrVectorBytes,
+  uzctnrVectorBytesStream,
   uzeentity,
   gzctnrVectorTypes,
   uzcenitiesvariablesextender,

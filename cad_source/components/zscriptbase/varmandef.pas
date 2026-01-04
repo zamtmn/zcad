@@ -23,7 +23,7 @@ interface
 uses
   SysUtils,uzctnrTree,gzctnrSTL,uzctnrvectorstrings,strutils,
   uzbUnits,
-  uzctnrVectorBytes,
+  uzctnrVectorBytesStream,
   gzctnrVectorTypes,Classes,Controls,Graphics,StdCtrls,types,TypInfo,//gzctnrVector,
   uzbLogIntf;
 const

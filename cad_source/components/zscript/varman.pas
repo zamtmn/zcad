@@ -23,7 +23,7 @@ unit Varman;
 interface
 uses
   UEnumDescriptor,uzctnrVectorPointers,
-  SysUtils,UBaseTypeDescriptor,uzctnrVectorBytes,
+  SysUtils,UBaseTypeDescriptor,uzctnrVectorBytesStream,
   gzctnrVectorTypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,USinonimDescriptor,
   uzbstrproc,classes,typinfo,
@@ -32,6 +32,7 @@ uses
   uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes,
   StrUtils;
 type
+  InlineTypeRegistrationException=class (exception);
     td=record
              template:String;
              id:Integer;
@@ -696,14 +697,24 @@ var
    etd:PGDBPointerDescriptor;
    //fd:FieldDescriptor;
    tname:TInternalScriptString;
+   reftype:PUserTypeDescriptor;
 begin
   tname:=ProcessTypeName(ATypeInfo,ATypeName);
-     td:=GetTypeData(ATypeInfo);
-     Getmem(Pointer(etd),sizeof(GDBPointerDescriptor));
-     etd^.init(td.RefType^.Name,{ATypeName}tname,@self);
-     etd^.TypeOf:=RegisterType(td.RefType);
-     InterfaceTypes.AddTypeByPP(@etd);
-     result:=etd;
+  td:=GetTypeData(ATypeInfo);
+  try
+    reftype:=RegisterType(td.RefType);
+  except;
+    reftype:=nil;
+  end;
+  if reftype=nil then begin
+    Result:=@FundamentalPointerDescriptorOdj;
+  end else begin
+    Getmem(Pointer(etd),sizeof(GDBPointerDescriptor));
+    etd^.init(td.RefType^.Name,{ATypeName}tname,@self);
+    etd^.TypeOf:=RegisterType(td.RefType);
+    InterfaceTypes.AddTypeByPP(@etd);
+    result:=etd;
+  end;
 end;
 function TUnit.RegisterEnumType(ATypeInfo:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
 var
@@ -813,7 +824,9 @@ begin
          InterfaceTypes.AddTypeByPP(@result);
        end;
        else
-         raise Exception.CreateFmt('Can''t register typt (alias="%s";name="%s";kind="%s") not alloved',[ATypeName,tname,GetEnumName(TypeInfo(TTypeKind),Integer(ti^.Kind))]);
+         raise InlineTypeRegistrationException.CreateFmt(
+           'Can''t register type (alias="%s";name="%s";kind="%s") not alloved',
+           [ATypeName,tname,GetEnumName(TypeInfo(TTypeKind),Integer(ti^.Kind))]);
      end;
 end;
 procedure TUnit.SetTypeDesk2(putd:PUserTypeDescriptor; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);

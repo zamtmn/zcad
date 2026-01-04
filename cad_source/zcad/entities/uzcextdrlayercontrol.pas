@@ -23,7 +23,7 @@ interface
 uses
   SysUtils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender,
-  uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytes,
+  uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytesStream,
   uzbtypes,uzeTypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   uzeffdxfsupport,uzcvariablesutils,usimplegenerics,

@@ -24,7 +24,7 @@ interface
 uses
   Classes,SysUtils,ActnList,
   //LResources,LazUTF8,Controls,Graphics,
-  //gzctnrSTL,uzctnrVectorBytes,
+  //gzctnrSTL,uzctnrVectorBytesStream,
   {uzbpaths,uzbstrproc,}uzcLog;
 var
   Actions:TActionList;

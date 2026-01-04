@@ -21,7 +21,7 @@ unit uzeTriangulator;
 interface
 uses
   uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,
-  uzegeometrytypes,uzctnrVectorBytes,sysutils,uzegeometry,uzbLogIntf,
+  uzegeometrytypes,uzctnrVectorBytesStream,sysutils,uzegeometry,uzbLogIntf,
   gzctnrVectorTypes,uzgloglstatemanager,uzbtypes,uzeTypes,uzeenrepresentation;
 type
   TV4P = array [0..3] of Pointer;

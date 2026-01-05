@@ -831,19 +831,20 @@ end;
 procedure TUnit.SetTypeDesk2(putd:PUserTypeDescriptor; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);
 function GetFieldName(index:integer;const oldname:string):string;
 begin
-  if index>high(fieldnames) then
-                            begin
-                              result:=oldname;
-                              exit;
-                            end;
+  if index>high(fieldnames) then begin
+    Result:=oldname;
+    exit;
+  end;
   case fieldnames[index].VType of
-                    vtString:result:=fieldnames[index].VString^;
-                    vtChar:result:=fieldnames[index].VChar;
-                vtAnsiString:result:=ansistring(fieldnames[index].VAnsiString);
-                else
-                  result:=oldname;
+    vtString:Result:=fieldnames[index].VString^;
+    vtChar:Result:=fieldnames[index].VChar;
+    vtAnsiString:Result:=string(fieldnames[index].VAnsiString);
+    vtUnicodeString:Result:=string(fieldnames[index].VUnicodeString);
+    else
+      Result:=oldname;
   end;{case}
 end;
+
 var
     FldIdx,NameIdx:integer;
 

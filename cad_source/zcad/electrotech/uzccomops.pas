@@ -31,7 +31,6 @@ type
                     PlaceLastOffset:double;
                     OtherStep:double;
   end;
-{Export+}
   TInsertType=(
                TIT_Block(*'Block'*),
                TIT_Device(*'Device'*)
@@ -61,8 +60,7 @@ type
                            TARDM_LongAxis(*'Long axis'*),
                            TARDM_ShortAxis(*'Short axis'*),
                            TARDM_AllAxis(*'All axis'*));
-  PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
-  {REGISTERRECORDTYPE TOPSPlaceSmokeDetectorOrtoParam}
+
   TOPSPlaceSmokeDetectorOrtoParam=record
                                         InsertType:TInsertType;(*'Insert'*)
                                         Scale:Double;(*'Plan scale'*)
@@ -85,8 +83,8 @@ type
                                         oldsh:Integer;(*hidden_in_objinsp*)
                                         olddt:TOPSDatType;(*hidden_in_objinsp*)
                                   end;
-  PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
-  {REGISTERRECORDTYPE TOrtoDevPlaceParam}
+  PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
+
   TOrtoDevPlaceParam=record
                                         Name:String;(*'Block'*)(*oi_readonly*)
                                         ScaleBlock:Double;(*'Blocks scale'*)
@@ -99,6 +97,9 @@ type
                                         NormalizePoint:Boolean;(*'Normalize to grid (if enabled)'*)
 
                      end;
+  PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
+
+{Export+}
 {Export-}
 OPS_SPBuild= object(FloatInsert_com)
  procedure Command(Operands:TCommandOperands); virtual;
@@ -1415,7 +1416,92 @@ begin
 //  end;
 end;
 procedure startup;
+var
+  utd:PUserTypeDescriptor;
 begin
+
+  if SysUnit<>nil then begin
+    utd:=SysUnit^.RegisterType(TypeInfo(TInsertType),'TInsertType');
+    if utd<>nil then begin
+      SysUnit^.SetTypeDesk2(utd,['TIT_Block','TIT_Device'],[FNProgram]);
+      SysUnit^.SetTypeDesk2(utd,['Block','Device'],[FNUser]);
+    end;
+
+    utd:=SysUnit^.RegisterType(TypeInfo(TOPSDatType),'TOPSDatType');
+    if utd<>nil then begin
+      SysUnit^.SetTypeDesk2(utd,['TOPSDT_Termo','TOPSDT_Smoke'],[FNProgram]);
+      SysUnit^.SetTypeDesk2(utd,['Termo','Smoke'],[FNUser]);
+    end;
+
+    utd:=SysUnit^.RegisterType(TypeInfo(TOPSMinDatCount),'TOPSMinDatCount');
+    if utd<>nil then begin
+      SysUnit^.SetTypeDesk2(utd,['TOPSMDC_1_4','TOPSMDC_1_2','TOPSMDC_2',
+                                 'TOPSMDC_3','TOPSMDC_4'],[FNProgram]);
+      SysUnit^.SetTypeDesk2(utd,['1 in the quarter','1 in the middle','2','3','4'],
+                                [FNUser]);
+    end;
+
+    utd:=SysUnit^.RegisterType(TypeInfo(TODPCountType),'TODPCountType');
+    if utd<>nil then begin
+      SysUnit^.SetTypeDesk2(utd,['TODPCT_by_Count','TODPCT_by_XY'],[FNProgram]);
+      SysUnit^.SetTypeDesk2(utd,['by number','by width/height'],[FNUser]);
+    end;
+
+    utd:=SysUnit^.RegisterType(TypeInfo(TPlaceSensorsStrategy),'TPlaceSensorsStrategy');
+    if utd<>nil then begin
+      SysUnit^.SetTypeDesk2(utd,['TPSS_Proportional','TPSS_FixDD','TPSS_FixDW',
+                                 'TPSS_ByNum'],[FNProgram]);
+      SysUnit^.SetTypeDesk2(utd,['Proportional','Sensor-Sensor distance fix',
+                                 'Sensor-Wall distance fix','By number'],
+                                [FNUser]);
+    end;
+
+    utd:=SysUnit^.RegisterType(TypeInfo(TAxisReduceDistanceMode),'TAxisReduceDistanceMode');
+    if utd<>nil then begin
+      SysUnit^.SetTypeDesk2(utd,['TARDM_Nothing','TARDM_LongAxis','TARDM_ShortAxis',
+                                 'TARDM_AllAxis'],[FNProgram]);
+      SysUnit^.SetTypeDesk2(utd,['Nothing','Long axis','Short axis','All axis'],
+                                [FNUser]);
+    end;
+
+    utd:=SysUnit^.RegisterType(TypeInfo(TOPSPlaceSmokeDetectorOrtoParam),'TOPSPlaceSmokeDetectorOrtoParam');
+    if utd<>nil then begin
+      SysUnit^.SetTypeDesk2(utd,['InsertType','Scale','ScaleBlock',
+                                 'StartAuto','SensorSensorDistance','SensorWallDistance',
+                                 'DatType','DMC','Height',
+                                 'ReductionFactor','NDD','NDW',
+                                 'PlaceStrategy','FDD','FDW',
+                                 'NormalizePoint','oldth','oldsh',
+                                 'olddt'],[FNProgram]);
+      SysUnit^.SetTypeDesk2(utd,['Insert','Plan scale','Blocks scale',
+                                 '"Start" signal','Sensor-sensor distance reduction','Sensor-wall distance reduction',
+                                 'Sensor type','Min. number of sensors','Height of installation',
+                                 'Reduction factor','Sensor-Sensor(standard)','Sensor-Wall(standard)',
+                                 'Place strategy','Sensor-Sensor(fact)','Sensor-Wall(fact)',
+                                 'Normalize to grid (if enabled)','','',
+                                 ''],
+                                [FNUser]);
+      SysUnit^.SetAttrs(utd,[[],[],[],[],[],[],[],[],[],[],[],[],[],
+                             [fldaReadOnly],[fldaReadOnly],[],[fldaHidden],
+                             [fldaHidden],[fldaHidden]]);
+    end;
+    SysUnit^.RegisterType(TypeInfo(PTOPSPlaceSmokeDetectorOrtoParam),'PTOPSPlaceSmokeDetectorOrtoParam');
+
+    utd:=SysUnit^.RegisterType(TypeInfo(TOrtoDevPlaceParam),'TOrtoDevPlaceParam');
+    if utd<>nil then begin
+      SysUnit^.SetTypeDesk2(utd,['Name','ScaleBlock','CountType','Count','NX',
+                                 'NY','Angle','AutoAngle','NormalizePoint'],
+                                [FNProgram]);
+      SysUnit^.SetTypeDesk2(utd,['Block','Blocks scale','Type of placement',
+                                 'Total number','Number of length',
+                                 'Number of width','Rotation','Auto rotation',
+                                 'Normalize to grid (if enabled)'],[FNUser]);
+      SysUnit^.SetAttrs(utd,[[fldaReadOnly],[],[],[],[],
+                             [],[],[],[]]);
+    end;
+    SysUnit^.RegisterType(TypeInfo(PTOrtoDevPlaceParam),'PTOrtoDevPlaceParam');
+  end;
+
   OPS_SPBuild_com.init('OPS_SPBuild',0,0);
   //CreateCommandFastObjectPlugin(@OPS_SPBuild_com,'OPS_SPBuild',CADWG,0);
 
@@ -1451,7 +1537,6 @@ begin
   OrtoDevPlaceParam.AutoAngle:=false;
   OrtoDevPlaceParam.NormalizePoint:=true;
   commformat2;
-  //format;
 end;
 procedure finalize;
 begin

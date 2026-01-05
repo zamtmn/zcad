@@ -208,7 +208,7 @@ writestring(allgeneratedfiles,filename+',');
 end;
 
 
-procedure processfileabstract(name:string;handle:cardinal);
+procedure processfileabstract(name:string;handle:cardinal;var typewrited:boolean);
 var f:filestream;
     line,uline,lineend,fn:string;
     expblock:integer;
@@ -286,6 +286,10 @@ begin
                             inc(expblock);
                             line:=copy(line,find,length(line)-find+1);
                             uline:=uppercase(line);
+                            if not typewrited then begin
+                              typewrited:=true;
+                              writestring(outhandle,'type');
+                            end;
                        end;
          find:=pos(endtoken,uline);
          if find>0 then
@@ -396,6 +400,8 @@ begin
                        end;
      result:=part;
 end;
+var
+  typewrited:boolean;
 begin
      writeln('ZCAD data types export utility');
      writeln;
@@ -425,7 +431,8 @@ begin
      writestring(outhandle,'unit System;');
      writestring(outhandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
      writestring(outhandle,'interface');
-     writestring(outhandle,'type');
+     typewrited:=false;
+     //writestring(outhandle,'type');
 
      FileNames:=TStringList.create;
      while GetPartOfPath(CurrentFile,ProcessFiles,'+')<>'' do
@@ -437,7 +444,7 @@ begin
          CurrentFile:=FileNames.ValueFromIndex[i];
          if Length(CurrentFile)>0 then
            if (CurrentFile[1]<>'#')and(CurrentFile[1]<>';') then
-             processfileabstract(PathPrefix+CurrentFile,outhandle);
+             processfileabstract(PathPrefix+CurrentFile,outhandle,typewrited);
        end;
        FileNames.Clear;
      end;

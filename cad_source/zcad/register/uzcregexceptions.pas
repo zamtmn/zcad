@@ -140,13 +140,13 @@ begin
     WriteLn(f,sysvar.SYS.SYS_Version^)
   else
     WriteLn(f,'unknown version');
-  Write(f,  '  Build with ');Write(f,sysvar.SYS.SSY_CompileInfo.SYS_Compiler);Write(f,' v');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerVer);
-  Write(f,  '  Target CPU: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU);
-  Write(f,  '  Target OS: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS);
-  Write(f,  '  Compile date: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileDate);
-  Write(f,  '  Compile time: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileTime);
-  Write(f,  '  LCL version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_LCLVersion);
-  Write(f,  '  Environment version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion);
+  Write(f,  '  Build with ');Write(f,sysvar.SYS.SYS_CompileInfo.SYS_Compiler);Write(f,' v');WriteLn(f,sysvar.SYS.SYS_CompileInfo.SYS_CompilerVer);
+  Write(f,  '  Target CPU: ');WriteLn(f,sysvar.SYS.SYS_CompileInfo.SYS_CompilerTargetCPU);
+  Write(f,  '  Target OS: ');WriteLn(f,sysvar.SYS.SYS_CompileInfo.SYS_CompilerTargetOS);
+  Write(f,  '  Compile date: ');WriteLn(f,sysvar.SYS.SYS_CompileInfo.SYS_CompileDate);
+  Write(f,  '  Compile time: ');WriteLn(f,sysvar.SYS.SYS_CompileInfo.SYS_CompileTime);
+  Write(f,  '  LCL version: ');WriteLn(f,sysvar.SYS.SYS_CompileInfo.SYS_LCLVersion);
+  Write(f,  '  Environment version: ');WriteLn(f,sysvar.SYS.SYS_CompileInfo.SYS_EnvironmentVersion);
   Write(f,  '  Read only cfg path: ');WriteLn(f,GetRoCfgsPath);
   Write(f,  '  Temporary  path: ');WriteLn(f,GetTempPath);
   WriteLn(f,'end.');

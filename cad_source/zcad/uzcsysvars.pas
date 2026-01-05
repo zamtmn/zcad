@@ -103,7 +103,7 @@ type
 
   tsys=record
     SYS_Version:PString;(*'Program version'*)(*oi_readonly*)
-    SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
+    SYS_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
     SYS_RunTime:PInteger;(*'Uptime'*)(*oi_readonly*)
     SYS_UniqueInstance:PBoolean;(*'Unique instance'*)
     SYS_NoSplash:PBoolean;(*'No splash screen'*)
@@ -255,20 +255,20 @@ implementation
 begin
   {$IFNDEF DELPHI}
 
-    SysVar.SYS.SSY_CompileInfo.SYS_Compiler:='Free Pascal Compiler (FPC)';
-    SysVar.SYS.SSY_CompileInfo.SYS_CompilerVer:={$I %FPCVERSION%};
-    SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetCPU:={$I %FPCTARGETCPU%};
-    SysVar.SYS.SSY_CompileInfo.SYS_CompilerTargetOS:={$I %FPCTARGETOS%};
-    SysVar.SYS.SSY_CompileInfo.SYS_CompileDate:={$I %DATE%};
-    SysVar.SYS.SSY_CompileInfo.SYS_CompileTime:={$I %TIME%};
-    SysVar.SYS.SSY_CompileInfo.SYS_LCLVersion:=lcl_version;
-    SysVar.SYS.SSY_CompileInfo.SYS_LCLFullVersion:=inttostr(lcl_fullversion);
+    SysVar.SYS.SYS_CompileInfo.SYS_Compiler:='Free Pascal Compiler (FPC)';
+    SysVar.SYS.SYS_CompileInfo.SYS_CompilerVer:={$I %FPCVERSION%};
+    SysVar.SYS.SYS_CompileInfo.SYS_CompilerTargetCPU:={$I %FPCTARGETCPU%};
+    SysVar.SYS.SYS_CompileInfo.SYS_CompilerTargetOS:={$I %FPCTARGETOS%};
+    SysVar.SYS.SYS_CompileInfo.SYS_CompileDate:={$I %DATE%};
+    SysVar.SYS.SYS_CompileInfo.SYS_CompileTime:={$I %TIME%};
+    SysVar.SYS.SYS_CompileInfo.SYS_LCLVersion:=lcl_version;
+    SysVar.SYS.SYS_CompileInfo.SYS_LCLFullVersion:=inttostr(lcl_fullversion);
     {$IFDEF LCLWIN32}
-       SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='Windows ';
+       SysVar.SYS.SYS_CompileInfo.SYS_EnvironmentVersion:='Windows ';
        if Win32CSDVersion<>'' then
-                                  SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber)+' '+Win32CSDVersion
+                                  SysVar.SYS.SYS_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SYS_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber)+' '+Win32CSDVersion
                               else
-                                  SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
+                                  SysVar.SYS.SYS_CompileInfo.SYS_EnvironmentVersion:=SysVar.SYS.SYS_CompileInfo.SYS_EnvironmentVersion+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+' build '+inttostr(Win32BuildNumber);
     {$ENDIF}
     {$IFDEF LCLQt}
        SysVar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion:='Qt'+inttostr(QtVersionMajor)+'.'+inttostr(QtVersionMinor)+'.'+inttostr(QtVersionMicro);

@@ -31,7 +31,6 @@ type
       property Name:String read fName write fName;
   end;
 {EXPORT+}
-  PGDBNamedObject=^GDBNamedObject;
   {REGISTEROBJECTTYPE GDBNamedObject}
   GDBNamedObject=object(GDBaseObject)
                        Name:AnsiString;(*'Name'*)
@@ -44,6 +43,7 @@ type
                        procedure SetDefaultValues;virtual;
                        procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                  end;
+  PGDBNamedObject=^GDBNamedObject;
 {EXPORT-}
 implementation
 constructor TNamedObject.Create(const n:String);

@@ -30,85 +30,87 @@ const
      DefaultSHXX=0;
      DefaultSHXY=0;
 type
+  TLTMode=(TLTContinous,TLTByLayer,TLTByBlock,TLTLineType);
+  PTDashInfo=^TDashInfo;
+  TDashInfo=(TDIDash,TDIText,TDIShape);
+  TOuterDashInfo=(TODIUnknown,TODIShape,TODIPoint,TODILine,TODIBlank);
+  TAngleDir=(TACAbs,TACRel,TACUpRight);
+
+  shxprop=record
+                  Height,Angle,X,Y:Double;
+                  AD:TAngleDir;
+                  PStyle:PGDBTextStyle;
+                  PstyleIsHandle:Boolean;
+          end;
+
+  BasicSHXDashProp= object(GDBaseObject)
+                  param:shxprop;
+                  constructor initnul;
+            end;
+
+  TextProp= object(BasicSHXDashProp)
+                  Text,Style:String;
+                  txtL,txtH:Double;
+                  //PFont:PGDBfont;
+                  constructor initnul;
+                  destructor done;virtual;
+            end;
+  PTextProp=^TextProp;
+
+  ShapeProp= object(BasicSHXDashProp)
+                  SymbolName,FontName:String;
+                  ShapeNum:Integer;
+                  Psymbol:PGDBsymdolinfo;
+                  constructor initnul;
+                  destructor done;virtual;
+            end;
+  PShapeProp=^ShapeProp;
+
+  GDBDashInfoArray=GZVector<TDashInfo>;
+
+  TStrokesArray= object(GZVector{-}<Double>{//})
+                  LengthFact:Double;(*'Length'*)
+                  constructor init(m:Integer);
+                  function CopyTo(var dest:GZVector{-}<Double>{//}):Integer;virtual;
+                  procedure Clear;virtual;
+                  procedure format;
+                 end;
+  PTStrokesArray=^TStrokesArray;
+
+  GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})
+                  constructor init(m:Integer);
+                 end;
+
+  GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})
+                  constructor init(m:Integer);
+                 end;
+
+  PGDBLtypePropObjInsp=Pointer;
+  PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
+
+  GDBLtypeProp= object(GDBNamedObject)
+                 LengthDXF{,LengthFact}:Double;(*'Length'*)
+                 h:Double;(*'Height'*)
+                 Mode:TLTMode;
+                 FirstStroke,LastStroke:TOuterDashInfo;
+                 WithoutLines:Boolean;
+                 dasharray:GDBDashInfoArray;(*'DashInfo array'*)
+                 strokesarray:TStrokesArray;(*'Strokes array'*)
+                 shapearray:GDBShapePropArray;(*'Shape array'*)
+                 Textarray:GDBTextPropArray;(*'Text array'*)
+                 desk:AnsiString;(*'Description'*)
+                 constructor init(const n:String);
+                 destructor done;virtual;
+                 procedure Format;virtual;
+                 function GetAsText:String;
+                 function GetLTString:String;
+                 procedure CreateLineTypeFrom(var LT:String);
+               end;
+  PGDBLtypeProp=^GDBLtypeProp;
+
 {EXPORT+}
-TLTMode=(TLTContinous,TLTByLayer,TLTByBlock,TLTLineType);
-PTDashInfo=^TDashInfo;
-TDashInfo=(TDIDash,TDIText,TDIShape);
-TOuterDashInfo=(TODIUnknown,TODIShape,TODIPoint,TODILine,TODIBlank);
-TAngleDir=(TACAbs,TACRel,TACUpRight);
-{REGISTERRECORDTYPE shxprop}
-shxprop=record
-                Height,Angle,X,Y:Double;
-                AD:TAngleDir;
-                PStyle:PGDBTextStyle;
-                PstyleIsHandle:Boolean;
-        end;
-{REGISTEROBJECTTYPE BasicSHXDashProp}
-BasicSHXDashProp= object(GDBaseObject)
-                param:shxprop;
-                constructor initnul;
-          end;
-PTextProp=^TextProp;
-{REGISTEROBJECTTYPE TextProp}
-TextProp= object(BasicSHXDashProp)
-                Text,Style:String;
-                txtL,txtH:Double;
-                //PFont:PGDBfont;
-                constructor initnul;
-                destructor done;virtual;
-          end;
-PShapeProp=^ShapeProp;
-{REGISTEROBJECTTYPE ShapeProp}
-ShapeProp= object(BasicSHXDashProp)
-                SymbolName,FontName:String;
-                ShapeNum:Integer;
-                Psymbol:PGDBsymdolinfo;
-                constructor initnul;
-                destructor done;virtual;
-          end;
-{REGISTEROBJECTTYPE GDBDashInfoArray}
-GDBDashInfoArray= object(GZVector{-}<TDashInfo>{//})
-               end;
-PTStrokesArray=^TStrokesArray;
-{REGISTEROBJECTTYPE TStrokesArray}
-TStrokesArray= object(GZVector{-}<Double>{//})
-                LengthFact:Double;(*'Length'*)
-                constructor init(m:Integer);
-                function CopyTo(var dest:GZVector{-}<Double>{//}):Integer;virtual;
-                procedure Clear;virtual;
-                procedure format;
-               end;
-{REGISTEROBJECTTYPE GDBShapePropArray}
-GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})
-                constructor init(m:Integer);
-               end;
-{REGISTEROBJECTTYPE GDBTextPropArray}
-GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})
-                constructor init(m:Integer);
-               end;
-PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
-PGDBLtypePropObjInsp=Pointer;
-PGDBLtypeProp=^GDBLtypeProp;
-{REGISTEROBJECTTYPE GDBLtypeProp}
-GDBLtypeProp= object(GDBNamedObject)
-               LengthDXF{,LengthFact}:Double;(*'Length'*)
-               h:Double;(*'Height'*)
-               Mode:TLTMode;
-               FirstStroke,LastStroke:TOuterDashInfo;
-               WithoutLines:Boolean;
-               dasharray:GDBDashInfoArray;(*'DashInfo array'*)
-               strokesarray:TStrokesArray;(*'Strokes array'*)
-               shapearray:GDBShapePropArray;(*'Shape array'*)
-               Textarray:GDBTextPropArray;(*'Text array'*)
-               desk:AnsiString;(*'Description'*)
-               constructor init(const n:String);
-               destructor done;virtual;
-               procedure Format;virtual;
-               function GetAsText:String;
-               function GetLTString:String;
-               procedure CreateLineTypeFrom(var LT:String);
-             end;
 {EXPORT-}
+
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
 PGDBLtypeArray=^GDBLtypeArray;

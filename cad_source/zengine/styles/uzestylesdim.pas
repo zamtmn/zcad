@@ -41,18 +41,18 @@ TDimArrowBlockParam=record
                      name:String;
                      width:Double;
                end;
-{EXPORT+}
+
 TDimTextVertPosition=(DTVPCenters,DTVPAbove,DTVPOutside,DTVPJIS,DTVPBellov);
 TArrowStyle=(TSClosedFilled,TSClosedBlank,TSClosed,TSDot,TSArchitecturalTick,TSOblique,TSOpen,TSOriginIndicator,TSOriginIndicator2,
             TSRightAngle,TSOpen30,TSDotSmall,TSDotBlank,TSDotSmallBlank,TSBox,TSBoxFilled,TSDatumTriangle,TSDatumtTriangleFilled,TSIntegral,TSUserDef);
 TDimTextMove=(DTMMoveDimLine,DTMCreateLeader,DTMnothung);
-PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
-{REGISTERRECORDTYPE TDimStyleDXFLoadingData}
+
 TDimStyleDXFLoadingData=record
                               TextStyleName:string;
                               DIMBLK1handle,DIMBLK2handle,DIMLDRBLKhandle:TDWGHandle;
                         end;
-{REGISTERRECORDTYPE TGDBDimLinesProp}
+PTDimStyleDXFLoadingData=^TDimStyleDXFLoadingData;
+
 TGDBDimLinesProp=record
                        //выносные линии
                        DIMEXE:Double;//Extension line extension//group44
@@ -68,14 +68,14 @@ TGDBDimLinesProp=record
                        DIMCLRD:TGDBPaletteColor;//DIMCLRD//group176
                        DIMLTYPE:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};
                  end;
-{REGISTERRECORDTYPE TGDBDimArrowsProp}
+
 TGDBDimArrowsProp=record
                        DIMASZ:Double; //Dimensioning arrow size//group41
                        DIMBLK1:TArrowStyle;//First arrow block name//group343
                        DIMBLK2:TArrowStyle;//First arrow block name//group344
                        DIMLDRBLK:TArrowStyle;//Arrow block name for leaders//group341
                   end;
-{REGISTERRECORDTYPE TGDBDimTextProp}
+
 TGDBDimTextProp=record
                        DIMTXT:Double; //Text size//group140
                        DIMTIH:Boolean;//Text inside horizontal if nonzero//group73
@@ -85,11 +85,11 @@ TGDBDimTextProp=record
                        DIMTXSTY:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};//340 DIMTXSTY (handle of referenced STYLE)
                        DIMCLRT:TGDBPaletteColor;//DIMCLRT//group176
                  end;
-{REGISTERRECORDTYPE TGDBDimPlacingProp}
+
 TGDBDimPlacingProp=record
                        DIMTMOVE:TDimTextMove;
                  end;
-{REGISTERRECORDTYPE TGDBDimUnitsProp}
+
 TGDBDimUnitsProp=record
                        DIMLFAC:Double;//Linear measurements scale factor//group144
                        DIMLUNIT:TDimUnit;//Sets units for all dimension types except Angular://group277
@@ -100,10 +100,10 @@ TGDBDimUnitsProp=record
                        DIMSCALE:Double;//DIMSCALE//group40
                        DIMZIN:Integer;//Controls the suppression of zeros in the primary unit values//group78
                  end;
-PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
+
 PGDBDimStyleObjInsp=Pointer;
-PGDBDimStyle=^GDBDimStyle;
-{REGISTEROBJECTTYPE GDBDimStyle}
+PPGDBDimStyleObjInsp=^PGDBDimStyleObjInsp;
+
 GDBDimStyle = object(GDBNamedObject)
                       Lines:TGDBDimLinesProp;
                       Arrows:TGDBDimArrowsProp;
@@ -121,6 +121,9 @@ GDBDimStyle = object(GDBNamedObject)
                       procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
                       destructor Done;virtual;
              end;
+PGDBDimStyle=^GDBDimStyle;
+
+{EXPORT+}
 {EXPORT-}
 PGDBDimStyleArray=^GDBDimStyleArray;
 GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})

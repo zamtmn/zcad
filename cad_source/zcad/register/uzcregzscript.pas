@@ -28,7 +28,8 @@ uses
   uzeentabstracttext,uzecamera,
   uzccommandsabstract,uzccommandsimpl,uzepalette,
   gzctnrVectorTypes,gzctnrVector,uzctnrVectorBytes,uzctnrAlignedVectorBytes,
-  uzctnrVectorPointers,uzcoimultiobjects,uzctnrVectorStrings;
+  uzctnrVectorPointers,uzcoimultiobjects,uzctnrVectorStrings,uzestylestables,
+  uzeNamedObject,uzestylesdim,uzeStylesLineTypes,uzestylestexts,uzestyleslayers;
 
 type
 
@@ -644,6 +645,214 @@ begin
                         [fldaHidden],[fldaHidden],
                         [fldaHidden]]);
   end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBNamedObject),TypeOf(GDBNamedObject),'GDBNamedObject',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['Name'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TTableCellJustify),'TTableCellJustify');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['jcl','jcc','jcr'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['TopLeft','TopCenter','TopRight'],[FNUser])
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PTGDBTableCellStyle),'PTGDBTableCellStyle');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBTableCellStyle),'TGDBTableCellStyle');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Width','TextWidth','CF'],[FNProgram,FNUser]);
+  end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBCellFormatArray),TypeOf(GDBCellFormatArray),'GDBCellFormatArray',true);
+
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TGDBTableStyle),TypeOf(TGDBTableStyle),'TGDBTableStyle',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['rowheight','textheight',
+                            'tblformat','HeadBlockName'],
+                           [FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PTGDBTableStyle),'PTGDBTableStyle');
+
+  utd:=ptsu^.RegisterType(TypeInfo(GDBTextStyleProp),'GDBTextStyleProp');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['size','oblique','wfactor'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBTextStyleProp),'PGDBTextStyleProp');
+
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBTextStyleObjInsp),'PGDBTextStyleObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PPGDBTextStyleObjInsp),'PPGDBTextStyleObjInsp');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBTextStyle),TypeOf(GDBTextStyle),'GDBTextStyle',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['FontFile','FontFamily','pfont','prop','UsedInLTYPE'],
+                           [FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBTextStyle),'PGDBTextStyle');
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TLTMode),'TLTMode');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TLTContinous','TLTByLayer','TLTByBlock',
+                            'TLTLineType'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TDashInfo),'TDashInfo');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TDIDash','TDIText','TDIShape'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PTDashInfo),'PTDashInfo');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TOuterDashInfo),'TOuterDashInfo');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TODIUnknown','TODIShape','TODIPoint',
+                            'TODILine','TODIBlank'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TAngleDir),'TAngleDir');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TACAbs','TACRel','TACUpRight'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(shxprop),'shxprop');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Height','Angle','X','Y','AD','PStyle',
+                            'PstyleIsHandle'],[FNProgram,FNUser]);
+  end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(BasicSHXDashProp),TypeOf(BasicSHXDashProp),'BasicSHXDashProp',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['param'],[FNProgram,FNUser]);
+  end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TextProp),TypeOf(TextProp),'TextProp',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['Text','Style','txtL','txtH'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PTextProp),'PTextProp');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(ShapeProp),TypeOf(ShapeProp),'ShapeProp',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['SymbolName','FontName','Psymbol'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PShapeProp),'PShapeProp');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBDashInfoArray),TypeOf(GDBDashInfoArray),'GDBDashInfoArray',true);
+  if otd<>nil then begin
+  end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TStrokesArray),TypeOf(TStrokesArray),'TStrokesArray',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['LengthFact'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PTStrokesArray),'PTStrokesArray');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBShapePropArray),TypeOf(GDBShapePropArray),'GDBShapePropArray',true);
+  if otd<>nil then begin
+  end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBTextPropArray),TypeOf(GDBTextPropArray),'GDBTextPropArray',true);
+  if otd<>nil then begin
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBLtypePropObjInsp),'PGDBLtypePropObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PPGDBLtypePropObjInsp),'PPGDBLtypePropObjInsp');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBLtypeProp),TypeOf(GDBLtypeProp),'GDBLtypeProp',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['LengthDXF','h','Mode','FirstStroke','LastStroke',
+                            'WithoutLines','dasharray','strokesarray',
+                            'shapearray','Textarray','desk'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBLtypeProp),'PGDBLtypeProp');
+
+
+
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TDimTextVertPosition),'TDimTextVertPosition');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DTVPCenters','DTVPAbove','DTVPOutside',
+                            'DTVPJIS','DTVPBellov'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(TArrowStyle),'TArrowStyle');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TSClosedFilled','TSClosedBlank','TSClosed',
+                            'TSDot','TSArchitecturalTick','TSOblique',
+                            'TSOpen','TSOriginIndicator','TSOriginIndicator2',
+                            'TSRightAngle','TSOpen30','TSDotSmall','TSDotBlank',
+                            'TSDotSmallBlank','TSBox','TSBoxFilled',
+                            'TSDatumTriangle','TSDatumtTriangleFilled',
+                            'TSIntegral','TSUserDef'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(TDimTextVertPosition),'TDimTextVertPosition');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DTMMoveDimLine','DTMCreateLeader','DTMnothung'],
+                       [FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TDimStyleDXFLoadingData),'TDimStyleDXFLoadingData');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TextStyleName','DIMBLK1handle','DIMBLK2handle',
+                            'DIMLDRBLKhandle'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PTDimStyleDXFLoadingData),'PTDimStyleDXFLoadingData');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBDimLinesProp),'TGDBDimLinesProp');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DIMEXE','DIMEXO','DIMLWE',
+                            'DIMCLRE','DIMLTEX1','DIMLTEX2',
+                            'DIMDLE','DIMCEN','DIMLWD',
+                            'DIMCLRD','DIMLTYPE'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBDimArrowsProp),'TGDBDimArrowsProp');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DIMASZ','DIMBLK1','DIMBLK2',
+                            'DIMLDRBLK'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBDimTextProp),'TGDBDimTextProp');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DIMTXT','DIMTIH','DIMTOH',
+                            'DIMTAD','DIMGAP','DIMTXSTY',
+                            'DIMCLRT'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBDimPlacingProp),'TGDBDimPlacingProp');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DIMTMOVE'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDBDimUnitsProp),'TGDBDimUnitsProp');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['DIMLFAC','DIMLUNIT','DIMDEC',
+                            'DIMDSEP','DIMRND','DIMPOST',
+                            'DIMSCALE','DIMSCALE'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBDimStyleObjInsp),'PGDBDimStyleObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PPGDBDimStyleObjInsp),'PPGDBDimStyleObjInsp');
+
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBDimStyle),TypeOf(GDBDimStyle),'GDBDimStyle',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['Lines','Arrows','Text','Placing','Units',
+                            'PDXFLoadingData'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBDimStyle),'PGDBDimStyle');
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBLayerPropObjInsp),'PGDBLayerPropObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PPGDBLayerPropObjInsp),'PPGDBLayerPropObjInsp');
+
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBLayerProp),TypeOf(GDBLayerProp),'GDBLayerProp',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['color','lineweight','LT','_on','_lock','_print',
+                            'desk'],[FNProgram,FNUser]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBLayerProp),'PGDBLayerProp');
 
 end;
 initialization

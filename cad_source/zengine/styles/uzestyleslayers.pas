@@ -25,26 +25,30 @@ uses
   uzeconsts,UGDBNamedObjectsArray,uzbstrproc,uzeNamedObject,
   uzeEntityStylesRegister;
 type
+
+  PGDBLayerPropObjInsp=Pointer;
+  PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
+
+  GDBLayerProp=object(GDBNamedObject)
+    color:byte;(*'Color'*)
+    lineweight:smallint;(*'Line weight'*)
+    LT:Pointer;(*'Line type'*)
+    _on:boolean;(*'On'*)
+    _lock:boolean;(*'Lock'*)
+    _print:boolean;(*'Print'*)
+    desk:ansistring;(*'Description'*)
+    constructor InitWithParam(const N:string;C:integer;
+      LW:integer;oo,ll,pp:boolean;const d:string);
+    function GetFullName:string;virtual;
+    procedure SetValueFromDxf(group:integer;const Value:string);virtual;
+    procedure SetDefaultValues;virtual;
+    destructor done;virtual;
+  end;
+  PGDBLayerProp=^GDBLayerProp;
+
 {EXPORT+}
-PPGDBLayerPropObjInsp=^PGDBLayerPropObjInsp;
-PGDBLayerPropObjInsp={GDBPtrUInt}Pointer;
-PGDBLayerProp=^GDBLayerProp;
-{REGISTEROBJECTTYPE GDBLayerProp}
-GDBLayerProp= object(GDBNamedObject)
-               color:Byte;(*'Color'*)
-               lineweight:SmallInt;(*'Line weight'*)
-               LT:Pointer;(*'Line type'*)
-               _on:Boolean;(*'On'*)
-               _lock:Boolean;(*'Lock'*)
-               _print:Boolean;(*'Print'*)
-               desk:AnsiString;(*'Description'*)
-               constructor InitWithParam(const N:String; C: Integer; LW: Integer;oo,ll,pp:Boolean;const d:String);
-               function GetFullName:String;virtual;
-               procedure SetValueFromDxf(group:Integer;const value:String);virtual;
-               procedure SetDefaultValues;virtual;
-               destructor done;virtual;
-         end;
 {EXPORT-}
+
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
   PGDBLayerArray=^GDBLayerArray;

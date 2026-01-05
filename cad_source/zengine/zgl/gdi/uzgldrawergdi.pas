@@ -42,8 +42,7 @@ uses
 const
   NeedScreenInvalidrect=true;
 type
-{EXPORT+}
-{REGISTERRECORDTYPE TGDIPrimitivesCounter}
+
 TGDIPrimitivesCounter=record
           Lines:Integer;
           Triangles:Integer;
@@ -53,8 +52,6 @@ TGDIPrimitivesCounter=record
           SystemSymbols:Integer;
     end;
 TTextRenderingType=(TRT_System,TRT_ZGL,TRT_Both);
-PTGDIData=^TGDIData;
-{REGISTERRECORDTYPE TGDIData}
 TGDIData=record
           RD_TextRendering:TTextRenderingType;
           RD_DrawDebugGeometry:Boolean;
@@ -62,6 +59,9 @@ TGDIData=record
           RD_Renderer:String;(*'Device'*)(*oi_readonly*)
           RD_Version:String;(*'Version'*)(*oi_readonly*)
     end;
+PTGDIData=^TGDIData;
+
+{EXPORT+}
 {EXPORT-}
 TGDIFontCacheKey=record
                        RealSizeInPixels:Integer;

@@ -13,9 +13,7 @@ uses
 
   uzbpaths,uzbtypes;
 type
-{EXPORT+}
-PDeviceDbBaseObject=^DeviceDbBaseObject;
-{REGISTEROBJECTTYPE DeviceDbBaseObject}
+
 DeviceDbBaseObject= object(DbBaseObject)
                        UID:String;(*'**Уникальный идентификатор'*)
 
@@ -29,15 +27,15 @@ DeviceDbBaseObject= object(DbBaseObject)
                        procedure Format;virtual;
                        procedure SetOtherFields(PField,PTypeDescriptor:Pointer);virtual;
                  end;
-PElDeviceBaseObject=^ElDeviceBaseObject;
-{REGISTEROBJECTTYPE ElDeviceBaseObject}
+PDeviceDbBaseObject=^DeviceDbBaseObject;
+
 ElDeviceBaseObject= object(DeviceDbBaseObject)
                                    Pins:String;(*'**Клеммы'*)
                                    constructor initnul;
                                    procedure Format;virtual;
                              end;
-PCableDeviceBaseObject=^CableDeviceBaseObject;
-{REGISTEROBJECTTYPE CableDeviceBaseObject}
+PElDeviceBaseObject=^ElDeviceBaseObject;
+
 CableDeviceBaseObject= object(DeviceDbBaseObject)
                                    CoreCrossSection:Double;(*'**Сечение жилы'*)
                                    NumberOfCores:Double;(*'**Количество жил'*)
@@ -45,6 +43,9 @@ CableDeviceBaseObject= object(DeviceDbBaseObject)
                                    DDT:Double;(*'**ДТТ'*)
                                    constructor initnul;
                              end;
+PCableDeviceBaseObject=^CableDeviceBaseObject;
+
+{EXPORT+}
 {EXPORT-}
 DeviceManager=object(GDBaseObject)
                     constructor init;
@@ -56,8 +57,7 @@ thead=record
             cheked:boolean;
       end;
 theadarray=TVector<thead>;
-{procedure startup;
-procedure finalize;}
+
 const
      firstfilename='_startup.pas';
 var devman:DeviceManager;

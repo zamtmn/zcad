@@ -17,6 +17,7 @@
 }
 
 unit uzcregzscript;
+{$Codepage UTF8}
 {$INCLUDE zengineconfig.inc}
 interface
 uses
@@ -29,7 +30,10 @@ uses
   uzccommandsabstract,uzccommandsimpl,uzepalette,
   gzctnrVectorTypes,gzctnrVector,uzctnrVectorBytes,uzctnrAlignedVectorBytes,
   uzctnrVectorPointers,uzcoimultiobjects,uzctnrVectorStrings,uzestylestables,
-  uzeNamedObject,uzestylesdim,uzeStylesLineTypes,uzestylestexts,uzestyleslayers;
+  uzeNamedObject,uzestylesdim,uzeStylesLineTypes,uzestylestexts,uzestyleslayers,
+  uzgldrawerogl,uzgldrawergdi,
+  uzcSysParams,
+  uzcdevicebaseabstract,uzcdevicebase;
 
 type
 
@@ -853,6 +857,168 @@ begin
                             'desk'],[FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(PGDBLayerProp),'PGDBLayerProp');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGLVersion),'TGLVersion');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['GLV_1_0','GLV_1_2','GLV_1_3','GLV_1_5','GLV_2_0',
+                            'GLV_2_1','GLV_3_0','GLV_3_1','GLV_3_2','GLV_3_3',
+                            'GLV_4_0','GLV_4_3'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TOpenglData),'TOpenglData');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['RD_DraverVersion','RD_Renderer','RD_DriverVersion',
+                            'RD_Extensions','RD_Vendor','RD_UseStencil',
+                            'RD_Light','RD_LineSmooth','RD_VSync','RD_MaxWidth',
+                            'RD_MaxLineWidth','RD_MaxPointSize'],
+                           [FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Draver version','Device','Driver version',
+                            'Extensions','Vendor','Use STENCIL buffer',
+                            'Light','Line smoothing','VSync','Max width',
+                            'Max line width','Max point size'],
+                           [FNUser]);
+    ptsu^.SetAttrs(utd,[[fldaReadOnly],[fldaReadOnly],[fldaReadOnly],
+                        [fldaReadOnly],[fldaReadOnly],[],
+                        [],[],[],[fldaReadOnly],
+                        [fldaReadOnly],[fldaReadOnly]]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(PTOpenglData),'PTOpenglData');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDIPrimitivesCounter),'TGDIPrimitivesCounter');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Lines','Triangles','Quads''Points','ZGLSymbols',
+                            'SystemSymbols'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TTextRenderingType),'TTextRenderingType');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['TRT_System','TRT_ZGL','TRT_Both'],[FNProgram,FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TGDIData),'TGDIData');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['RD_TextRendering','RD_DrawDebugGeometry',
+                            'DebugCounter','RD_Renderer','RD_Version'],
+                           [FNProgram,FNUser]);
+    ptsu^.SetAttrs(utd,[[],[],[],[fldaReadOnly],[fldaReadOnly]]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PTGDIData),'PTGDIData');
+
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TmyFileVersionInfo),'TmyFileVersionInfo');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['Major','Minor','Micro','Release','CommitsAfter',
+                            'AbbreviatedName','VersionString',
+                            'ShortVersionString'],
+                           [FNProgram,FNUser]);
+    ptsu^.SetAttrs(utd,[[fldaReadOnly],[fldaReadOnly],[fldaReadOnly],
+                        [fldaReadOnly],[fldaReadOnly],[fldaReadOnly],
+                        [fldaReadOnly],[fldaReadOnly]]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TZCSavedParams),'TZCSavedParams');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['UniqueInstance','NoSplash','NoLoadLayout',
+                            'UpdatePO','MemProfiling','LangOverride',
+                            'DictionariesPath','LastAutoSaveFile',
+                            'PreferredDistribPath'],
+                           [FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Unique instance','No splash screen','No load layout',
+                            'Update PO file','Internal memory profiler','Language override',
+                            'Dictionaries path','Last autosave file',
+                            'Path to distributive'],
+                           [FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TZCNotSavedParams),'TZCNotSavedParams');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['ScreenX','ScreenY','OtherInstanceRun',
+                            'PreloadedFile','Ver','DefaultHeight'],
+                           [FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Screen X','Screen Y','Other instance run',
+                            'Preloaded file','Version','Default controls height'],
+                           [FNUser]);
+    ptsu^.SetAttrs(utd,[[fldaReadOnly],[fldaReadOnly],[fldaReadOnly],
+                        [fldaReadOnly],[fldaReadOnly],[fldaReadOnly]]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TZCSysParams),'TZCSysParams');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['saved','notsaved'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Saved params','Not saved params'],[FNUser]);
+    ptsu^.SetAttrs(utd,[[],[fldaReadOnly]]);
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(PZCSysParams),'PZCSysParams');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TOborudCategory),'TOborudCategory');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['_misc','_elapp','_ppkop','_detsmokesl','_kables'],
+                       [FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['**Разное','**Электроаппараты',
+                            '**Приборы приемноконтрольные ОПС',
+                            '**Извещатель дымовой шлейфовый',
+                            '**Кабельная продукция'],[FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TEdIzm),'TEdIzm');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['_sht','_m'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['**шт.','**м'],[FNUser]);
+  end;
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(DbBaseObject),TypeOf(DbBaseObject),'DbBaseObject',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['Category','Group','Position','NameShort','Name',
+                            'NameFull','Description','ID','Standard','OKP',
+                            'EdIzm','Manufacturer','TreeCoord','PartNumber'],
+                            [FNProgram]);
+    ptsu^.SetTypeDesk2(otd,['**Категория','**Группа','**Позиция','**Короткое название','**Название',
+                            '**Полное название','**Описание','**Идентификатор','**Технический документ','**Код ОКП',
+                            '**Ед. изм.','**Производитель','**Позиция в дереве БД','**Каталожный номер'],
+                            [FNUser]);
+    otd^.RegisterObject(TypeOf(DbBaseObject),@DbBaseObject.initnul);
+    otd^.AddMetod('','initnul','',@DbBaseObject.initnul,m_constructor);
+  end;
+  ptsu^.RegisterType(TypeInfo(PDbBaseObject),'PDbBaseObject');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(DeviceDbBaseObject),TypeOf(DeviceDbBaseObject),'DeviceDbBaseObject',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['UID','NameShortTemplate','NameTemplate',
+                            'NameFullTemplate','UIDTemplate','Variants'],
+                            [FNProgram]);
+    ptsu^.SetTypeDesk2(otd,['**Уникальный идентификатор',
+                            '**Формат короткого названия',
+                            '**Формат названия',
+                            '**Формат полного названия',
+                            '**Формат уникального идентификатора',
+                            '**Варианты'],
+                            [FNUser]);
+    otd^.RegisterObject(TypeOf(DeviceDbBaseObject),@DeviceDbBaseObject.initnul);
+    otd^.AddMetod('','initnul','',@DeviceDbBaseObject.initnul,m_constructor);
+  end;
+  ptsu^.RegisterType(TypeInfo(PDeviceDbBaseObject),'PDeviceDbBaseObject');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(ElDeviceBaseObject),TypeOf(ElDeviceBaseObject),'ElDeviceBaseObject',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['Pins'],[FNProgram]);
+    ptsu^.SetTypeDesk2(otd,['**Клеммы'],[FNUser]);
+    otd^.RegisterObject(TypeOf(ElDeviceBaseObject),@ElDeviceBaseObject.initnul);
+    otd^.AddMetod('','initnul','',@ElDeviceBaseObject.initnul,m_constructor);
+  end;
+  ptsu^.RegisterType(TypeInfo(PElDeviceBaseObject),'PElDeviceBaseObject');
+
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CableDeviceBaseObject),TypeOf(CableDeviceBaseObject),'CableDeviceBaseObject',true);
+  if otd<>nil then begin
+    ptsu^.SetTypeDesk2(otd,['CoreCrossSection','NumberOfCores','OuterDiameter',
+                            'DDT'],[FNProgram]);
+    ptsu^.SetTypeDesk2(otd,['**Сечение жилы','**Количество жил','**Наружный диаметр',
+                            '**ДТТ'],[FNUser]);
+    otd^.RegisterObject(TypeOf(CableDeviceBaseObject),@CableDeviceBaseObject.initnul);
+    otd^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,m_constructor);
+  end;
+  ptsu^.RegisterType(TypeInfo(PCableDeviceBaseObject),'PCableDeviceBaseObject');
 
 end;
 initialization

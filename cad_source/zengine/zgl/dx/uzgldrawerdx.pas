@@ -31,13 +31,6 @@ uses
 const
   texturesize=128;
 type
-{EXPORT+}
-PTDXData=^TDXData;
-{//REGISTERRECORDTYPE TDXData}
-TDXData=record
-          RD_Renderer:String;(*'Device'*)(*oi_readonly*)
-    end;
-{EXPORT-}
 TZGLDXDrawer=class(TZGLGeneralDrawer)
                         //myscrbuf:tmyscrbuf;
                         public

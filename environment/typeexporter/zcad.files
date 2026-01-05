@@ -18,7 +18,7 @@
 ;components/zebase/uzbtypes.pas
 ;zengine/core/objects/uzepalette.pas
 ;zengine/core/objects/uzecamera.pas
-zcad/uzcsysparams.pas
+;zcad/uzcsysparams.pas
 ;zengine/styles/uzenamedobject.pas
 ;zengine/styles/uzestylestexts.pas
 ;zengine/styles/uzestyleslayers.pas
@@ -29,8 +29,8 @@ zcad/uzcsysvars.pas
 ;components/zscriptbase/uabstractunit.pas
 ;components/zscriptbase/varmandef.pas
 ;components/zscript/varman.pas
-zcad/devicebase/uzcdevicebaseabstract.pas
-zcad/devicebase/uzcdevicebase.pas
+;zcad/devicebase/uzcdevicebaseabstract.pas
+;zcad/devicebase/uzcdevicebase.pas
 ;zcad/commands/uzccommandsabstract.pas
 ;zcad/commands/uzccommandsimpl.pas
 ;zcad/commands/uzccmdfloatinsert.pas
@@ -38,8 +38,8 @@ zcad/devicebase/uzcdevicebase.pas
 ;zcad/commands/uzccommand_move.pas
 ;zcad/commands/uzccommand_copy.pas
 ;zcad/commands/uzccomdraw.pas
-zengine/zgl/common/uzglviewareadata.pas
-zengine/zgl/opengl/uzgldrawerogl.pas
-zengine/zgl/gdi/uzgldrawergdi.pas
-zengine/zgl/dx/uzgldrawerdx.pas
+;;;;;;;;;;;;zengine/zgl/common/uzglviewareadata.pas
+;zengine/zgl/opengl/uzgldrawerogl.pas
+;zengine/zgl/gdi/uzgldrawergdi.pas
+;zengine/zgl/dx/uzgldrawerdx.pas
 ;zcad/gui/odjectinspector/uzcoimultiobjects.pas

@@ -26,15 +26,14 @@ uses
   LCLProc,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},
   uzcLog,uzbPaths;
 type
-{EXPORT+}
-  {REGISTERRECORDTYPE TmyFileVersionInfo}
+
   TmyFileVersionInfo=record
     Major,Minor,Micro,Release,CommitsAfter:Integer;
     AbbreviatedName:AnsiString;
     VersionString:AnsiString;
     ShortVersionString:AnsiString;
   end;
-  {REGISTERRECORDTYPE TZCSavedParams}
+
   TZCSavedParams=record
     UniqueInstance:Boolean;(*'Unique instance'*)
     NoSplash:Boolean;(*'No splash screen'*)
@@ -46,21 +45,23 @@ type
     LastAutoSaveFile:string;(*'Last autosave file'*)
     PreferredDistribPath:String;(*'Path to distributive'*)
   end;
-  {REGISTERRECORDTYPE TZCNotSavedParams}
+
   TZCNotSavedParams=record
     ScreenX:Integer;(*'Screen X'*)(*oi_readonly*)
     ScreenY:Integer;(*'Screen Y'*)(*oi_readonly*)
-    otherinstancerun:Boolean;(*'Other instance run'*)(*oi_readonly*)
+    OtherInstanceRun:Boolean;(*'Other instance run'*)(*oi_readonly*)
     PreloadedFile:String;(*'Preloaded file'*)(*oi_readonly*)
     Ver:TmyFileVersionInfo;(*'Version'*)(*oi_readonly*)
     DefaultHeight:Integer;(*'Default controls height'*)(*oi_readonly*)
   end;
-  PZCSysParams=^TZCSysParams;
-  {REGISTERRECORDTYPE TZCSysParams}
+
   TZCSysParams=record
     saved:TZCSavedParams;(*'Saved params'*)
     notsaved:TZCNotSavedParams;(*'Not saved params'*)(*oi_readonly*)
   end;
+  PZCSysParams=^TZCSysParams;
+
+{EXPORT+}
 {EXPORT-}
 const
   DefaultSavedParams:TZCSavedParams=(UniqueInstance:true;

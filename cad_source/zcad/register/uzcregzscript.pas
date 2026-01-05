@@ -21,7 +21,7 @@ unit uzcregzscript;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  SysUtils,uzcsysvars,uzbpaths,uzctranslations,
+  SysUtils,uzbpaths,uzctranslations,
   varmandef,varman,UUnitManager,TypeDescriptors,UObjectDescriptor,
   USinonimDescriptor,UBaseTypeDescriptor,
   uzcLog,uzegeometrytypes,
@@ -33,7 +33,7 @@ uses
   uzeNamedObject,uzestylesdim,uzeStylesLineTypes,uzestylestexts,uzestyleslayers,
   uzgldrawerogl,uzgldrawergdi,
   uzcSysParams,
-  uzcdevicebaseabstract,uzcdevicebase;
+  uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars;
 
 type
 
@@ -887,7 +887,7 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TGDIPrimitivesCounter),'TGDIPrimitivesCounter');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['Lines','Triangles','Quads''Points','ZGLSymbols',
+    ptsu^.SetTypeDesk2(utd,['Lines','Triangles','Quads','Points','ZGLSymbols',
                             'SystemSymbols'],[FNProgram,FNUser]);
   end;
 
@@ -1019,6 +1019,8 @@ begin
     otd^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,m_constructor);
   end;
   ptsu^.RegisterType(TypeInfo(PCableDeviceBaseObject),'PCableDeviceBaseObject');
+
+  RegSysVars(ptsu);
 
 end;
 initialization

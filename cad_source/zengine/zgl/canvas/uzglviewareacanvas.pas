@@ -29,6 +29,11 @@ uses
      ExtCtrls,classes,Controls,Graphics,uzglbackendmanager,
      uzglviewareacanvasgeneral;
 type
+    PTCanvasData=^TCanvasData;
+    {REGISTERRECORDTYPE TCanvasData}
+    TCanvasData=record
+              RD_Renderer:String;(*'Device'*)(*oi_readonly*)
+        end;
     TCanvasViewArea=class(TGeneralCanvasViewArea)
                       public
                       CanvasData:TCanvasData;

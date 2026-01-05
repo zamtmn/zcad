@@ -33,33 +33,19 @@ qtwidgets,qt4,qtint,
 {$IFDEF LCLQT5}
 qtwidgets,qt5,qtint,
 {$ENDIF}
-{$IFNDEF DELPHI}LCLVersion{$ENDIF},sysutils;
+{$IFNDEF DELPHI}LCLVersion{$ENDIF},sysutils,
+  uzestyleslayers,uzeStylesLineTypes,uzestylesdim,uzestylestexts;
 type
-{EXPORT+}
-  {REGISTERRECORDTYPE tmemdeb}
-  tmemdeb=record
-                test:integer;
-                GetMemCount,FreeMemCount:PInteger;
-                TotalAllocMb,CurrentAllocMB:PInteger;
-          end;
-  {REGISTERRECORDTYPE trenderdeb}
-  trenderdeb=record
-                   primcount,pointcount,bathcount:Integer;
-                   middlepoint:TzePoint3d;
-             end;
-  {REGISTERRECORDTYPE tlanguadedeb}
+
   tlanguadedeb=record
-                   UpdatePO,NotEnlishWord,DebugWord:Integer;
-             end;
-  {REGISTERRECORDTYPE tdebug}
+    UpdatePO,NotEnlishWord,DebugWord:integer;
+  end;
+
   tdebug=record
-               memdeb:tmemdeb;
-               renderdeb:trenderdeb;
-               languadedeb:tlanguadedeb;
-               ShowHiddenFieldInObjInsp:PBoolean;(*'Show hidden fields'*)
-               TestUnicodeString:UnicodeString;
-        end;
-  {REGISTERRECORDTYPE tpath}
+    languadedeb:tlanguadedeb;
+    ShowHiddenFieldInObjInsp:PBoolean;(*'Show hidden fields'*)
+  end;
+
   tpath=record
     Distrib_Path:TFString;(*'Path to program distributive'*)(*oi_readonly*)
     PreferedDistrib_Path:PString;(*'Prefered path to distributive'*)
@@ -77,182 +63,176 @@ type
     Dictionaries:PString;(*'Dictionaries'*)
     Device_Library:PString;(*'Device base'*)
   end;
-  PTCanvasData=^TCanvasData;
-  {REGISTERRECORDTYPE TCanvasData}
-  TCanvasData=record
-            RD_Renderer:String;(*'Device'*)(*oi_readonly*)
-      end;
-  {REGISTERRECORDTYPE trd}
+
   trd=record
-            RD_RendererBackEnd:PTEnumData;(*'Graphic device'*)
-            RD_CurrentWAParam:TFaceTypedData;(*'Current graphic device params'*)
-            RD_GLUVersion:PString;(*'GLU Version'*)(*oi_readonly*)
-            RD_GLUExtensions:PString;(*'GLU Extensions'*)(*oi_readonly*)
-            RD_LastRenderTime:PInteger;(*'Last render time'*)(*oi_readonly*)
-            RD_LastUpdateTime:PInteger;(*'Last update time'*)(*oi_readonly*)
-            RD_LastCalcVisible:PInteger;(*'Last visible calculation time'*)(*oi_readonly*)
-            RD_MaxRenderTime:PInteger;(*'Maximum single pass time'*)
-            RD_DrawInsidePaintMessage:PTGDB3StateBool;(*'Draw inside paint message'*)
-            RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
-            RD_PanObjectDegradation:PBoolean;(*'Degradation while pan'*)
-            RD_SpatialNodesDepth:PInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
-            RD_SpatialNodeCount:PInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
-            RD_MaxLTPatternsInEntity:PInteger;(*'Max LT patterns in entity'*)
-            RD_UseLazFreeTypeImplementation:PBoolean;(*'Use LazFreeType engine instead FreeType'*)
-      end;
-  {REGISTERRECORDTYPE tsave}
+    RD_RendererBackEnd:PTEnumData;(*'Graphic device'*)
+    RD_CurrentWAParam:TFaceTypedData;(*'Current graphic device params'*)
+    RD_GLUVersion:PString;(*'GLU Version'*)(*oi_readonly*)
+    RD_GLUExtensions:PString;(*'GLU Extensions'*)(*oi_readonly*)
+    RD_LastRenderTime:PInteger;(*'Last render time'*)(*oi_readonly*)
+    RD_LastUpdateTime:PInteger;(*'Last update time'*)(*oi_readonly*)
+    RD_LastCalcVisible:PInteger;(*'Last visible calculation time'*)(*oi_readonly*)
+    RD_MaxRenderTime:PInteger;(*'Maximum single pass time'*)
+    RD_DrawInsidePaintMessage:PTGDB3StateBool;(*'Draw inside paint message'*)
+    RD_ImageDegradation:TImageDegradation;(*'Image degradation'*)
+    RD_PanObjectDegradation:PBoolean;(*'Degradation while pan'*)
+    RD_SpatialNodesDepth:PInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
+    RD_SpatialNodeCount:PInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
+    RD_MaxLTPatternsInEntity:PInteger;(*'Max LT patterns in entity'*)
+    RD_UseLazFreeTypeImplementation:PBoolean;(*'Use LazFreeType engine instead FreeType'*)
+  end;
+
   tsave=record
-              SAVE_Auto_On:PBoolean;(*'Autosave'*)
-              SAVE_Auto_Current_Interval:PInteger;(*'Time to autosave'*)(*oi_readonly*)
-              SAVE_Auto_Interval:PInteger;(*'Time between autosaves'*)
-              SAVE_Auto_FileName:PString;(*'Autosave file name'*)
-        end;
-  {REGISTERRECORDTYPE tcompileinfo}
+    SAVE_Auto_On:PBoolean;(*'Autosave'*)
+    SAVE_Auto_Current_Interval:PInteger;(*'Time to autosave'*)(*oi_readonly*)
+    SAVE_Auto_Interval:PInteger;(*'Time between autosaves'*)
+    SAVE_Auto_FileName:PString;(*'Autosave file name'*)
+  end;
+
   tcompileinfo=record
-                     SYS_Compiler:String;(*'Compiler'*)(*oi_readonly*)
-                     SYS_CompilerVer:String;(*'Compiler version'*)(*oi_readonly*)
-                     SYS_CompilerTargetCPU:String;(*'Target CPU'*)(*oi_readonly*)
-                     SYS_CompilerTargetOS:String;(*'Target OS'*)(*oi_readonly*)
-                     SYS_CompileDate:String;(*'Compile date'*)(*oi_readonly*)
-                     SYS_CompileTime:String;(*'Compile time'*)(*oi_readonly*)
-                     SYS_LCLVersion:String;(*'LCL version'*)(*oi_readonly*)
-                     SYS_LCLFullVersion:String;(*'LCL full version'*)(*oi_readonly*)
-                     SYS_EnvironmentVersion:String;(*'Environment version'*)(*oi_readonly*)
-               end;
-  {REGISTERRECORDTYPE tsys}
+    SYS_Compiler:string;(*'Compiler'*)(*oi_readonly*)
+    SYS_CompilerVer:string;(*'Compiler version'*)(*oi_readonly*)
+    SYS_CompilerTargetCPU:string;(*'Target CPU'*)(*oi_readonly*)
+    SYS_CompilerTargetOS:string;(*'Target OS'*)(*oi_readonly*)
+    SYS_CompileDate:string;(*'Compile date'*)(*oi_readonly*)
+    SYS_CompileTime:string;(*'Compile time'*)(*oi_readonly*)
+    SYS_LCLVersion:string;(*'LCL version'*)(*oi_readonly*)
+    SYS_LCLFullVersion:string;(*'LCL full version'*)(*oi_readonly*)
+    SYS_EnvironmentVersion:string;(*'Environment version'*)(*oi_readonly*)
+  end;
+
   tsys=record
-             SYS_Version:PString;(*'Program version'*)(*oi_readonly*)
-             SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
-             SYS_RunTime:PInteger;(*'Uptime'*)(*oi_readonly*)
-             SYS_UniqueInstance:PBoolean;(*'Unique instance'*)
-             SYS_NoSplash:PBoolean;(*'No splash screen'*)
-             SYS_NoLoadLayout:PBoolean;(*'No load layout'*)(*oi_readonly*)
-             SYS_UpdatePO:PBoolean;(*'Update PO file'*)(*oi_readonly*)
-             SYS_MemProfiling:PBoolean;(*'Memory profiling'*)(*oi_readonly*)
-             SYS_UseExperimentalFeatures:PBoolean;(*'Use experimental features'*)(*oi_readonly*)
-       end;
-  {REGISTERRECORDTYPE TSystemDWG}
+    SYS_Version:PString;(*'Program version'*)(*oi_readonly*)
+    SSY_CompileInfo:tcompileinfo;(*'Build info'*)(*oi_readonly*)
+    SYS_RunTime:PInteger;(*'Uptime'*)(*oi_readonly*)
+    SYS_UniqueInstance:PBoolean;(*'Unique instance'*)
+    SYS_NoSplash:PBoolean;(*'No splash screen'*)
+    SYS_NoLoadLayout:PBoolean;(*'No load layout'*)(*oi_readonly*)
+    SYS_UpdatePO:PBoolean;(*'Update PO file'*)(*oi_readonly*)
+    SYS_MemProfiling:PBoolean;(*'Memory profiling'*)(*oi_readonly*)
+    SYS_UseExperimentalFeatures:PBoolean;
+    (*'Use experimental features'*)(*oi_readonly*)
+  end;
+
   TSystemDWG=record
     SysDWG_CodePage:PTZCCodePage;(*'DWGCODEPAGE for new drawings'*)
   end;
-  {REGISTERRECORDTYPE tdwg}
+
   tdwg=record
     System:TSystemDWG;(*'System drawing settings'*)
     DWG_DXFCodePage:PTZCCodePage;(*'DWGCODEPAGE for saving'*)
-             DWG_DrawMode:PBoolean;(*'Display line weights'*)
-             DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
-             DWG_PolarMode:PBoolean;(*'Polar tracking mode'*)
-             DWG_CLayer:{-}PPointer{/PPGDBLayerPropObjInsp/};(*'Current layer'*)
-             DWG_CLinew:PTGDBLineWeight;(*'Current line weight'*)
-             DWG_CColor:PTGDBPaletteColor;(*'Current color'*)
-             DWG_LTScale:PDouble;(*'Global line type scale'*)
-             DWG_CLTScale:PDouble;(*'Current line type scale'*)
-             DWG_CLType:{-}PPointer{/PPGDBLtypePropObjInsp/};(*'Drawing line type'*)
-             DWG_CDimStyle:{-}PPointer{/PPGDBDimStyleObjInsp/};(*'Dim style'*)
-             DWG_RotateTextInLT:PBoolean;(*'Rotate text in line type'*)
-             DWG_CTStyle:{-}PPointer{/PPGDBTextStyleObjInsp/};(*'Text style'*)
+    DWG_DrawMode:PBoolean;(*'Display line weights'*)
+    DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
+    DWG_PolarMode:PBoolean;(*'Polar tracking mode'*)
+    DWG_CLayer:PPGDBLayerPropObjInsp;(*'Current layer'*)
+    DWG_CLinew:PTGDBLineWeight;(*'Current line weight'*)
+    DWG_CColor:PTGDBPaletteColor;(*'Current color'*)
+    DWG_LTScale:PDouble;(*'Global line type scale'*)
+    DWG_CLTScale:PDouble;(*'Current line type scale'*)
+    DWG_CLType:PPGDBLtypePropObjInsp;(*'Drawing line type'*)
+    DWG_CDimStyle:PPGDBDimStyleObjInsp;(*'Dim style'*)
+    DWG_RotateTextInLT:PBoolean;(*'Rotate text in line type'*)
+    DWG_CTStyle:PPGDBTextStyleObjInsp;(*'Text style'*)
 
-             DWG_LUnits:PTLUnits;(*'LUnits (linear units format)'*)
-             DWG_LUPrec:PTUPrec;(*'LUPrec (linear units precision)'*)
-             DWG_AUnits:PTAUnits;(*'AUnits (angular units format)'*)
-             DWG_AUPrec:PTUPrec;(*'AUPrec (angular units precision)'*)
-             DWG_AngDir:PTAngDir;(*'AngDir (direction of positive angles)'*)
-             DWG_AngBase:PTZeAngleDeg;(*'AngBase (zero base angle)'*)
-             DWG_UnitMode:PTUnitMode;(*'UnitMode (display format for units)'*)
-             DWG_InsUnits:PTInsUnits;(*'InsUnits (value for automatic scaling of blocks)'*)
-             DWG_TextSize:PDouble;(*'TextSize (size of new crreated text ents)'*)
-             DWG_Snap:PGDBSnap2D;(*'Snap settings'*)
-             DWG_GridSpacing:PzePoint2d;(*'Grid spacing'*)
-             DWG_DrawGrid:PBoolean;(*'Display grid'*)
-             DWG_SnapGrid:PBoolean;(*'Snap'*)
+    DWG_LUnits:PTLUnits;(*'LUnits (linear units format)'*)
+    DWG_LUPrec:PTUPrec;(*'LUPrec (linear units precision)'*)
+    DWG_AUnits:PTAUnits;(*'AUnits (angular units format)'*)
+    DWG_AUPrec:PTUPrec;(*'AUPrec (angular units precision)'*)
+    DWG_AngDir:PTAngDir;(*'AngDir (direction of positive angles)'*)
+    DWG_AngBase:PTZeAngleDeg;(*'AngBase (zero base angle)'*)
+    DWG_UnitMode:PTUnitMode;(*'UnitMode (display format for units)'*)
+    DWG_InsUnits:PTInsUnits;(*'InsUnits (value for automatic scaling of blocks)'*)
+    DWG_TextSize:PDouble;(*'TextSize (size of new crreated text ents)'*)
+    DWG_Snap:PGDBSnap2D;(*'Snap settings'*)
+    DWG_GridSpacing:PzePoint2d;(*'Grid spacing'*)
+    DWG_DrawGrid:PBoolean;(*'Display grid'*)
+    DWG_SnapGrid:PBoolean;(*'Snap'*)
 
-             DWG_EditInSubEntry:PBoolean;(*'SubEntities edit'*)
-             DWG_AdditionalGrips:PBoolean;(*'Additional grips'*)
-             DWG_HelpGeometryDraw:PBoolean;(*'Help geometry'*)
-             DWG_SelectedObjToInsp:PBoolean;(*'Selected object to inspector'*)
-             DWG_AlwaysUseMultiSelectWrapper:PBoolean;(*'Always use multiselect wrapper'*)
-       end;
-  {REGISTERRECORDTYPE TLayerControls}
+    DWG_EditInSubEntry:PBoolean;(*'SubEntities edit'*)
+    DWG_AdditionalGrips:PBoolean;(*'Additional grips'*)
+    DWG_HelpGeometryDraw:PBoolean;(*'Help geometry'*)
+    DWG_SelectedObjToInsp:PBoolean;(*'Selected object to inspector'*)
+    DWG_AlwaysUseMultiSelectWrapper:PBoolean;(*'Always use multiselect wrapper'*)
+  end;
+
   TLayerControls=record
-                       DSGN_LC_Net:PTLayerControl;(*'Nets'*)
-                       DSGN_LC_Cable:PTLayerControl;(*'Cables'*)
-                       DSGN_LC_Leader:PTLayerControl;(*'Leaders'*)
-                 end;
-  {REGISTERRECORDTYPE tdesigning}
-  tdesigning=record
-             DSGN_LayerControls:TLayerControls;(*'Control layers'*)
-             DSGN_TraceAutoInc:PBoolean;(*'Increment trace names'*)
-             DSGN_LeaderDefaultWidth:PDouble;(*'Default leader width'*)
-             DSGN_HelpScale:PDouble;(*'Scale of auxiliary elements'*)
-             DSGN_SelNew:PBoolean;(*'New selection set'*)
-             DSGN_SelSameName:PBoolean;(*'Auto select devices with same name'*)
-             DSGN_MaxSelectEntsCountWithObjInsp:PInteger;(*'Maximum selected entities to object inspector'*)
-             DSGN_MaxSelectEntsCountWithGrips:PInteger;(*'Maximum selected entities with grips'*)
-             DSGN_OTrackTimerInterval:PInteger;(*'Object track timer interval'*)
-             DSGN_EntityMoveStartTimerInterval:PInteger;
-             DSGN_EntityMoveStartOffset:PInteger;
-             DSGN_EntityMoveByMouseUp:PBoolean;
+    DSGN_LC_Net:PTLayerControl;(*'Nets'*)
+    DSGN_LC_Cable:PTLayerControl;(*'Cables'*)
+    DSGN_LC_Leader:PTLayerControl;(*'Leaders'*)
+  end;
 
-       end;
-  {REGISTERRECORDTYPE tobjinspinterface}
+  tdesigning=record
+    DSGN_LayerControls:TLayerControls;(*'Control layers'*)
+    DSGN_TraceAutoInc:PBoolean;(*'Increment trace names'*)
+    DSGN_LeaderDefaultWidth:PDouble;(*'Default leader width'*)
+    DSGN_HelpScale:PDouble;(*'Scale of auxiliary elements'*)
+    DSGN_SelNew:PBoolean;(*'New selection set'*)
+    DSGN_SelSameName:PBoolean;(*'Auto select devices with same name'*)
+    DSGN_MaxSelectEntsCountWithObjInsp:PInteger;(*'Maximum selected entities to object inspector'*)
+    DSGN_MaxSelectEntsCountWithGrips:PInteger;(*'Maximum selected entities with grips'*)
+    DSGN_OTrackTimerInterval:PInteger;(*'Object track timer interval'*)
+    DSGN_EntityMoveStartTimerInterval:PInteger;
+    DSGN_EntityMoveStartOffset:PInteger;
+    DSGN_EntityMoveByMouseUp:PBoolean;
+  end;
+
   tobjinspinterface=record
-                INTF_ObjInsp_ShowHeaders:TGetterSetterBoolean;(*'Show headers'*)
-                INTF_ObjInsp_OldStyleDraw:TGetterSetterBoolean;(*'Old style'*)
-                INTF_ObjInsp_Level0HeaderColor:TGetterSetterTZColor;(*'Level0 header color'*)
-                INTF_ObjInsp_BorderColor:TGetterSetterTZColor;(*'Border color'*)
-                INTF_ObjInsp_WhiteBackground:TGetterSetterBoolean;(*'White background'*)
-                INTF_ObjInsp_ShowSeparator:TGetterSetterBoolean;(*'Show separator'*)
-                INTF_ObjInsp_ShowFastEditors:TGetterSetterBoolean;(*'Show fast editors'*)
-                INTF_ObjInsp_ShowOnlyHotFastEditors:TGetterSetterBoolean;(*'Show only hot fast editors'*)
-                INTF_ObjInsp_RowHeight:TGetterSetterTUsableInteger;(*'Row height override'*)
-                INTF_ObjInsp_SpaceHeight:TGetterSetterInteger;(*'Space height'*)
-                INTF_ObjInsp_ShowEmptySections:TGetterSetterBoolean;(*'Show empty sections'*)
-                INTF_ObjInsp_ButtonSizeReducing:TGetterSetterInteger;(*'Button size reducing'*)
-               end;
-  {REGISTERRECORDTYPE tmessagesinterface}
+    INTF_ObjInsp_ShowHeaders:TGetterSetterBoolean;(*'Show headers'*)
+    INTF_ObjInsp_OldStyleDraw:TGetterSetterBoolean;(*'Old style'*)
+    INTF_ObjInsp_Level0HeaderColor:TGetterSetterTZColor;(*'Level0 header color'*)
+    INTF_ObjInsp_BorderColor:TGetterSetterTZColor;(*'Border color'*)
+    INTF_ObjInsp_WhiteBackground:TGetterSetterBoolean;(*'White background'*)
+    INTF_ObjInsp_ShowSeparator:TGetterSetterBoolean;(*'Show separator'*)
+    INTF_ObjInsp_ShowFastEditors:TGetterSetterBoolean;(*'Show fast editors'*)
+    INTF_ObjInsp_ShowOnlyHotFastEditors:TGetterSetterBoolean;(*'Show only hot fast editors'*)
+    INTF_ObjInsp_RowHeight:TGetterSetterTUsableInteger;(*'Row height override'*)
+    INTF_ObjInsp_SpaceHeight:TGetterSetterInteger;(*'Space height'*)
+    INTF_ObjInsp_ShowEmptySections:TGetterSetterBoolean;(*'Show empty sections'*)
+    INTF_ObjInsp_ButtonSizeReducing:TGetterSetterInteger;(*'Button size reducing'*)
+  end;
+
   tmessagesinterface=record
-                INTF_Messages_SuppressDoubles:PTGDB3StateBool;(*'Suppress doubles'*)
-               end;
-  {REGISTERRECORDTYPE tinterface}
+    INTF_Messages_SuppressDoubles:PTGDB3StateBool;(*'Suppress doubles'*)
+  end;
+
   tinterface=record
-              INTF_LanguageOverride:PString;(*'Language override'*)
-              INTF_CommandLineEnabled:PBoolean;(*'Command line enabled'*)
-              INTF_ShowScrollBars:PBoolean;(*'Show scroll bars'*)
-              INTF_ShowDwgTabs:PBoolean;(*'Show drawing tabs'*)
-              INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
-              INTF_ShowDwgTabCloseBurron:PBoolean;(*'Show drawing tab close button'*)
-              INTF_ThemedUpToolbars:PBoolean;(*'Themed up toolbars'*)
-              INTF_ThemedRightToolbars:PBoolean;(*'Themed right toolbars'*)
-              INTF_ThemedDownToolbars:PBoolean;(*'Themed down toolbars'*)
-              INTF_ThemedLeftToolbars:PBoolean;(*'Themed left toolbars'*)
-              INTF_DefaultControlHeight:PInteger;(*'Default control height'*)(*oi_readonly*)
-              INTF_DefaultEditorFontHeight:PInteger;(*'Default editor font height'*)
-              INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
-              INTF_MESSAGES_Properties:tmessagesinterface;(*'Messages properties'*)
-              INTF_AppMode:PTAppMode;(*'Application mode'*)
-              INTF_ColorScheme:PString;(*'Application color scheme'*)
-             end;
-  {REGISTERRECORDTYPE tdisp}
+    INTF_LanguageOverride:PString;(*'Language override'*)
+    INTF_CommandLineEnabled:PBoolean;(*'Command line enabled'*)
+    INTF_ShowScrollBars:PBoolean;(*'Show scroll bars'*)
+    INTF_ShowDwgTabs:PBoolean;(*'Show drawing tabs'*)
+    INTF_DwgTabsPosition:PTAlign;(*'Drawing tabs position'*)
+    INTF_ShowDwgTabCloseBurron:PBoolean;(*'Show drawing tab close button'*)
+    INTF_ThemedUpToolbars:PBoolean;(*'Themed up toolbars'*)
+    INTF_ThemedRightToolbars:PBoolean;(*'Themed right toolbars'*)
+    INTF_ThemedDownToolbars:PBoolean;(*'Themed down toolbars'*)
+    INTF_ThemedLeftToolbars:PBoolean;(*'Themed left toolbars'*)
+    INTF_DefaultControlHeight:PInteger;(*'Default control height'*)(*oi_readonly*)
+    INTF_DefaultEditorFontHeight:PInteger;(*'Default editor font height'*)
+    INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
+    INTF_MESSAGES_Properties:tmessagesinterface;(*'Messages properties'*)
+    INTF_AppMode:PTAppMode;(*'Application mode'*)
+    INTF_ColorScheme:PString;(*'Application color scheme'*)
+  end;
+
   tdisp=record
-             DISP_SystmGeometryDraw:PBoolean;(*'System geometry'*)
-             DISP_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
-             DISP_ZoomFactor:PDouble;(*'Mouse wheel scale factor'*)
-             DISP_OSSize:PDouble;(*'Snap aperture size'*)
-             DISP_CursorSize:PInteger;(*'Cursor size'*)
-             DISP_CrosshairSize:PDouble;(*'Crosshair size'*)
-             DISP_RemoveSystemCursorFromWorkArea:PBoolean;(*'Remove system cursor from work area'*)
-             DISP_DrawZAxis:PBoolean;(*'Show Z axis'*)
-             DISP_ColorAxis:PBoolean;(*'Colored cursor'*)
-             DISP_GripSize:PInteger;(*'Grip size'*)
-             DISP_BackGroundColor:PTRGB;(*'Background color'*)
-             DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)
-             DISP_SelectedGripColor:PTGDBPaletteColor;(*'Selected grip color'*)
-             DISP_HotGripColor:PTGDBPaletteColor;(*'Hot grip color'*)
-             DISP_LWDisplayScale:PInteger;(*'Display line weight scale'*)
-             DISP_DefaultLW:PTGDBLineWeight;(*'Default line weight'*)
-        end;
-  pgdbsysvariable=^gdbsysvariable;
-  {REGISTERRECORDTYPE gdbsysvariable}
+    DISP_SystmGeometryDraw:PBoolean;(*'System geometry'*)
+    DISP_SystmGeometryColor:PTGDBPaletteColor;(*'Help color'*)
+    DISP_ZoomFactor:PDouble;(*'Mouse wheel scale factor'*)
+    DISP_OSSize:PDouble;(*'Snap aperture size'*)
+    DISP_CursorSize:PInteger;(*'Cursor size'*)
+    DISP_CrosshairSize:PDouble;(*'Crosshair size'*)
+    DISP_RemoveSystemCursorFromWorkArea:PBoolean;(*'Remove system cursor from work area'*)
+    DISP_DrawZAxis:PBoolean;(*'Show Z axis'*)
+    DISP_ColorAxis:PBoolean;(*'Colored cursor'*)
+    DISP_GripSize:PInteger;(*'Grip size'*)
+    DISP_BackGroundColor:PTRGB;(*'Background color'*)
+    DISP_UnSelectedGripColor:PTGDBPaletteColor;(*'Unselected grip color'*)
+    DISP_SelectedGripColor:PTGDBPaletteColor;(*'Selected grip color'*)
+    DISP_HotGripColor:PTGDBPaletteColor;(*'Hot grip color'*)
+    DISP_LWDisplayScale:PInteger;(*'Display line weight scale'*)
+    DISP_DefaultLW:PTGDBLineWeight;(*'Default line weight'*)
+  end;
+
   gdbsysvariable=record
     PATH:tpath;(*'Paths'*)
     RD:trd;(*'Graphics'*)
@@ -264,6 +244,9 @@ type
     debug:tdebug;(*'Debug'*)(*hidden_in_objinsp*)
     INTF:tinterface;(*'Interface'*)
   end;
+  pgdbsysvariable=^gdbsysvariable;
+
+{EXPORT+}
 {EXPORT-}
 var
   sysvar: gdbsysvariable;
@@ -300,10 +283,6 @@ begin
   {$ENDIF}
     SysVar.debug.languadedeb.NotEnlishWord:=0;
     SysVar.debug.languadedeb.UpdatePO:=0;
-    //SysVar.debug.TestUnicodeString:=UTF8ToString('test ゔ&#12436');
-    SysVar.debug.TestUnicodeString:=UTF8ToString('你好来自俄罗斯');
     sysvar.RD.RD_RendererBackEnd:=nil;
-    sysvar.debug.memdeb.test:=3;
-
 end.
 

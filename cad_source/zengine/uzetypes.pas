@@ -18,6 +18,7 @@
 
 unit uzeTypes;
 {$INCLUDE zengineconfig.inc}
+{$Mode delphi}
 
 interface
 

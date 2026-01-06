@@ -3,7 +3,6 @@
   <Package Version="5">
     <PathDelim Value="\"/>
     <Name Value="zcontainers"/>
-    <Type Value="RunTimeOnly"/>
     <CompilerOptions>
       <Version Value="11"/>
       <PathDelim Value="\"/>

@@ -23,7 +23,7 @@ interface
 uses
   uzbUnits,
   uzcsysparams,uzegeometrytypes,uzepalette,
-  uzbtypes,uzeTypes,uzctnrvectorstrings,
+  uzbtypes,uzeTypes,uzctnrvectorstrings,varmandef,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,
 {$ENDIF}
@@ -66,7 +66,7 @@ type
 
   trd=record
     RD_RendererBackEnd:PTEnumData;(*'Graphic device'*)
-    RD_CurrentWAParam:TFaceTypedData;(*'Current graphic device params'*)
+    RD_CurrentWAParam:THardTypedData;(*'Current graphic device params'*)
     RD_GLUVersion:PString;(*'GLU Version'*)(*oi_readonly*)
     RD_GLUExtensions:PString;(*'GLU Extensions'*)(*oi_readonly*)
     RD_LastRenderTime:PInteger;(*'Last render time'*)(*oi_readonly*)

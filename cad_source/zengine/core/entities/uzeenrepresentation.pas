@@ -23,7 +23,7 @@ interface
 uses
   uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,SysUtils,uzegeometrytypes,
   uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
-  uzeentsubordinated,uzegeomentitiestree,uzbtypes,gzctnrVectorTypes,
+  uzeentsubordinated,uzegeomentitiestree,uzbtypes,uzeTypes,gzctnrVectorTypes,
   uzgeomline3d,uzgeomproxy;
 
 type

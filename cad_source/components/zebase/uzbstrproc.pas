@@ -39,8 +39,6 @@ function ach2uch(ach:byte):word;
 function CompareNUMSTR(str1,str2:String):Boolean;
 function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
 
-function ConvertFromDxfString(const str:TDXFEntsInternalStringType):String;
-function ConvertToDxfString(const str:String):TDXFEntsInternalStringType;
 function MakeHash(const s: String):SizeUInt;//TODO в gzctnrSTL есть копия этой процедуры. надо убирать
 
 procedure KillString(var str:String);inline;
@@ -120,16 +118,6 @@ begin
     Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
 end;
 
-function ConvertFromDxfString(const str:TDXFEntsInternalStringType):String;
-begin
-     //result:=Tria_AnsiToUtf8(str);
-     {$IFNDEF DELPHI}result:=UTF8Encode(StringsReplace(str, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]));{$ENDIF}
-end;
-
-function ConvertToDxfString(const str:String):TDXFEntsInternalStringType;
-begin
-  result:=UTF8ToString(StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]));
-end;
 function uch2ach(uch:word):byte;
 var s:String;
 begin
@@ -151,7 +139,7 @@ begin
 end;
 function ach2uch(ach:byte):word;
 var s:String;
-    {$IFNDEF DELPHI}tstr:{UTF16String}TDXFEntsInternalStringType;{$ENDIF}
+    {$IFNDEF DELPHI}tstr:UnicodeString;{$ENDIF}
     CharLen: integer;
 begin
     {$IFNDEF DELPHI}

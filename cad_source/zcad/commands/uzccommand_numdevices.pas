@@ -69,7 +69,7 @@ type
   PTNumberingParams=^TNumberingParams;
   TNumberingParams=record
                      AlgoType:TAlgoType;
-                     AlgoParams:TFaceTypedData;
+                     AlgoParams:THardTypedData;
                      OnlyDevices:Boolean;
                      StartNumber:Integer;//Start
                      Increment:Integer;//Increment

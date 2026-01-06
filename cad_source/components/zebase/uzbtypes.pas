@@ -46,9 +46,6 @@ type
   end;
   PGDBaseObject=^GDBaseObject;
 
-  TDXFEntsInternalStringType=unicodestring;
-  {-}TDXFEntsInternalCharType=unicodechar;{//}
-
   TCalculatedString=record
     value:string;
     format:string;
@@ -108,12 +105,6 @@ type
 {EXPORT+}
 
 {EXPORT-}
-
-TFaceTypedData=record
-                 Instance: Pointer;
-                 PTD: Pointer;
-                end;
-PTFaceTypedData=^TFaceTypedData;
 
 function IsIt(PType,PChecedType:Pointer):Boolean;
 function ParentPType(PType:Pointer):Pointer;

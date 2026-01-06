@@ -403,7 +403,7 @@ begin
   ptsu^.RegisterType(TypeInfo(TUsableInteger),'TGetterSetterTUsableInteger');
   //ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTGetterSetterTUsableInteger');
 
-  ptsu^.RegisterType(TypeInfo(TFaceTypedData),'TFaceTypedData');
+  //ptsu^.RegisterType(TypeInfo(TFaceTypedData),'TFaceTypedData');
   //ptsu^.RegisterType(TypeInfo(PTFaceTypedData),'PTFaceTypedData');
 
   ptsu^.RegisterType(TypeInfo(TFString),'TFString');

@@ -33,7 +33,7 @@ uses
   uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,
   uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
   uzccommand_layer,uzcuitypes,uzeNamedObject,uzccommandsimpl,
-  uzcOI,uzcdrawing,uzbUnits;
+  uzcOI,uzcdrawing,uzbUnits,uzeBaseUtils;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);
@@ -417,7 +417,7 @@ begin
      modalresult:=zcUI.DOShowModal(InfoForm);
      if modalresult=ZCMrOk then
                          begin
-                              pString(PInstance)^:=String(ConvertToDxfString(InfoForm.memo.text));
+                              PAnsiString(PInstance)^:=ConvertToDxfString(InfoForm.memo.text);
                               StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
                          end;
 end;

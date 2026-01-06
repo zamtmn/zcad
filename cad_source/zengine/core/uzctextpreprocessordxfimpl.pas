@@ -23,7 +23,7 @@ interface
 uses
   sysutils,
   uzetextpreprocessor,uzbstrproc,
-  uzbtypes,
+  uzeTypes,
   LazUTF8;
 function SPFSdxf:TSPFSourceEnum;
 implementation

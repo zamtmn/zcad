@@ -33,6 +33,9 @@ type
   TEntUpgradeInfo=longword;
   PExtensionData=Pointer;
 
+  TDXFEntsInternalStringType=unicodestring;
+  TDXFEntsInternalCharType=unicodechar;
+
   GDBStrWithPoint=record
     str:TDXFEntsInternalStringType;
     x,y,z,w:double;

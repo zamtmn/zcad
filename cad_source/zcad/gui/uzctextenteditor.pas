@@ -23,11 +23,10 @@ unit uzctextenteditor;
 interface
 
 uses
-  uzcsysparams,uzcutils,uzcsysvars,
-  uzcinfoform,Varman,uzcinterface,
-  uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
-  Controls,Classes,Forms,uzccommandsmanager,uzcuitypes,
-  zUndoCmdChgTypes,zUndoCmdChgVariable,uzcdrawing,uzcdrawings,uzbtypes;
+  uzcsysparams,uzcutils,uzcsysvars,uzcinfoform,Varman,uzcinterface,uzedrawingdef,
+  uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
+  Controls,Classes,Forms,uzccommandsmanager,uzcuitypes,zUndoCmdChgTypes,
+  zUndoCmdChgVariable,uzcdrawing,uzcdrawings,uzeTypes,uzeBaseUtils;
 
 const
   MTextWndSaveParamName='MTEdWND';

@@ -18,12 +18,13 @@
 unit uzbtypes;
 {$Mode delphi}
 {$ModeSwitch ADVANCEDRECORDS}
+{$ModeSwitch typehelpers}
 
 interface
 
 uses
   SysUtils,
-  uzegeometrytypes,uzbHandles,System.diagnostics;
+  uzegeometrytypes,uzbHandles;
 
 const
   GDBBaseObjectID=30000;

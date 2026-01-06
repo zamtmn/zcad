@@ -30,13 +30,17 @@ uses
 resourcestring
   rsDifferent='Different';
 type
-TBaseTypeManipulator<T>=class
-  type
-    PT=^T;
+  TManipulator<T>=class
+    {TODO это появилось потому что fpc 3.2.4 не умеет сравнивать TMethod}
+    {убрать после выхода 4.0}
+    type
+      PT=^T;
+    class procedure Initialize(var Instance:T);
+  end;
+TBaseTypeManipulator<T>=class(TManipulator<T>)
   class function Compare(const left,right:T):TCompareResult;
-  class procedure Initialize(var Instance:T);
 end;
-TBaseROTypeManipulator<T>=class(TBaseTypeManipulator<T>)
+TBaseROTypeManipulator<T>=class(TManipulator<T>)
   class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
   class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
@@ -278,7 +282,7 @@ begin
      else
          result:=CREqual;
 end;
-class procedure TBaseTypeManipulator<T>.Initialize(var Instance:T);
+class procedure TManipulator<T>.Initialize(var Instance:T);
 begin
   system.initialize(Instance);
 end;

@@ -13,8 +13,14 @@ uses
   gzctnrSTL, uzctnrAlignedVectorBytes, gzctnrVectorStr, uzctnrTree, 
   uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytesStream, 
   gzctnrAlignedVectorObjects, gzctnrVectorc, gzctnrVectorClass, 
-  gzctnrBufferAllocator, uzctnrVectorBytes;
+  gzctnrBufferAllocator, uzctnrVectorBytes, LazarusPackageIntf;
 
 implementation
 
+procedure Register;
+begin
+end;
+
+initialization
+  RegisterPackage('zcontainers', @Register);
 end.

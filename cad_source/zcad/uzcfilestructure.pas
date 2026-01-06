@@ -40,6 +40,7 @@ const
   CFSdictionariesDir='dictionaries';
 
   CFSlanguagesDir='languages';
+  CFSzcadpoFile='zcad.po';
 
   CFShelpDir='help';
   CFSuserguide_shtmlFile='userguide.%s.html';

@@ -63,7 +63,10 @@ begin
   //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
   if SysUnit=nil then
     begin
-      units.loadunit(ppaths,TranslateFunc,sysunitname,nil);
+      if FileExists(sysunitname)then
+        units.loadunit(ppaths,TranslateFunc,sysunitname,nil)
+      else
+        units.CreateUnit(ppaths,TranslateFunc,'System');
       SysUnit:=units.findunit(PPaths,TranslateFunc,'System');
     end;
   if VarUnit=nil then
@@ -78,7 +81,10 @@ begin
   //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
   if SysUnit=nil then
     begin
-      units.loadunit(ppaths,TranslateFunc,sysunitname,nil);
+      if FileExists(sysunitname)then
+        units.loadunit(ppaths,TranslateFunc,sysunitname,nil)
+      else
+        units.CreateUnit(ppaths,TranslateFunc,'System');
       SysUnit:=units.findunit(PPaths,TranslateFunc,'System');
     end;
   if VarUnit=nil then
@@ -240,14 +246,17 @@ begin
         else
         begin
           result:=pointer(CreateObject);
+          currentunit:=pointer(result);
           result.init(UName);
-          pfu:=findunit(PPaths,TranslateFunc,'SYSTEM');
-          if (pfu=nil)then
-          begin
-               pfu:=pointer(CreateObject);
-               PTUnit(pfu)^.init('system');
+          if UpperCase(UName)<>'SYSTEM' then begin
+            pfu:=findunit(PPaths,TranslateFunc,'SYSTEM');
+            if (pfu=nil)then
+            begin
+                 pfu:=pointer(CreateObject);
+                 PTUnit(pfu)^.init('system');
+            end;
+            result.InterfaceUses.PushBackIfNotPresent(pfu);
           end;
-          result.InterfaceUses.PushBackIfNotPresent(pfu);
         end;
 end;
 

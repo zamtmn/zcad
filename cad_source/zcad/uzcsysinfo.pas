@@ -158,7 +158,9 @@ end;
 function DistribFilesExistChec(const ACheckedPath:string):boolean;
 begin
   result:=DirectoryExists(ConcatPaths([ACheckedPath,CFSrtlDir]))
-      and FileExists(ConcatPaths([ACheckedPath,CFSrtlDir,CFSsystempasFile]));
+      and DirectoryExists(ConcatPaths([ACheckedPath,CFSdictionariesDir]))
+      and DirectoryExists(ConcatPaths([ACheckedPath,CFSlanguagesDir]))
+      and FileExists(ConcatPaths([ACheckedPath,CFSlanguagesDir,CFSzcadpoFile]));
 end;
 
 Procedure GetSysInfo;

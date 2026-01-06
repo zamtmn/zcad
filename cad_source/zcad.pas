@@ -252,12 +252,13 @@ uses
   uzcCommand_Duplicate,
 
   uzcCommand_PlaceDelegate,
-  uzccommand_ReportsUpdate,
+  {$IFDEF ELECTROTECH}
+  uzcExtdrReport,uzccommand_ReportsUpdate,
+  {$ENDIF}
   uzcCommand_TextExplode,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,
-  uzcExtdrReport,
   uzcfhistorywindow,
 
   {$IFNDEF DARWIN}

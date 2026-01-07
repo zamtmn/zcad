@@ -26,6 +26,9 @@ uses
   SysUtils,
   uzbtypes,uzbHandles,uzegeometrytypes;
 
+const
+  NotActual=0;
+
 type
   TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:integer);
 

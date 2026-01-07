@@ -56,6 +56,14 @@
         <Filename Value="uzbcommandlineparser.pas"/>
         <UnitName Value="uzbCommandLineParser"/>
       </Item>
+      <Item>
+        <Filename Value="uzbgettersetter.pas"/>
+        <UnitName Value="uzbGetterSetter"/>
+      </Item>
+      <Item>
+        <Filename Value="uzbusable.pas"/>
+        <UnitName Value="uzbUsable"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

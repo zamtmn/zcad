@@ -24,12 +24,11 @@ interface
 
 uses
   SysUtils,
-  uzegeometrytypes,uzbHandles;
+  uzbGetterSetter,uzbUsable;
 
 const
   GDBBaseObjectID=30000;
   ObjN_NotRecognized='NotRecognized';
-  NotActual=0;
 
 type
 
@@ -55,16 +54,6 @@ type
   TZColor=type Longword;
   PTZColor=^TZColor;
 
-  GGetterSetter<T>=record
-    type
-      TGetter=function:T of object;
-      TSetter=procedure(const AValue:T) of object;
-    var
-      Getter:TGetter;
-      Setter:TSetter;
-    procedure Setup(const AGetter:TGetter;const ASetter:TSetter);
-  end;
-
   //TGetterSetterString=GGetterSetter<string>;
 
 
@@ -80,21 +69,6 @@ type
 
   TGetterSetterTZColor=GGetterSetter<TZColor>;
   PTGetterSetterTZColor=^TGetterSetterTZColor;
-
-
-  GUsable<T>=record
-    public type
-      PT=^T;
-      TSelfType=GUsable<T>;
-    private
-      FValue:T;
-      FUsable:Boolean;
-    Public
-      function ValueOrDefault(const ADefaultValue:T):T;
-      Property Value:T  read FValue write FValue;
-      Property Usable:Boolean read FUsable write FUsable;
-  end;
-
 
   TUsableInteger=GUsable<Integer>;
   PTUsableInteger=^TUsableInteger;
@@ -113,12 +87,6 @@ function ParentPType(PType:Pointer):Pointer;
 function StrToQWord(const sh:string):UInt64;
 {$ENDIF}
 implementation
-
-procedure GGetterSetter<T>.Setup(const AGetter:TGetter;const ASetter:TSetter);
-begin
-  Getter:=AGetter;
-  Setter:=ASetter;
-end;
 
 function GDBaseObject.GetObjType:Word;
 begin
@@ -203,13 +171,6 @@ begin
       result:=strtoint(sh);
 end;
 {$ENDIF}
-function GUsable<T>.ValueOrDefault(const ADefaultValue:T):T;
-begin
-  if FUsable then
-    result:=FValue
-  else
-    result:=ADefaultValue
-end;
 
 end.
 

@@ -28,7 +28,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,uzctranslations,
      uzccommandsimpl,uzccommandsabstract,uzOIDecorations,uzOIUI,
      uzcoidecorations,
      Forms,Controls,
-     uzcinterface,uzcuitypes,uzcregzscript;
+     uzcinterface,uzcuitypes,uzcTypeDescriprors;
 var
   StringsTreeSelector:TStringsTreeSelector=nil;
 implementation

@@ -19,7 +19,9 @@
 unit uzcregzscript;
 {$Codepage UTF8}
 {$INCLUDE zengineconfig.inc}
+
 interface
+
 uses
   SysUtils,uzbpaths,uzctranslations,
   varmandef,varman,UUnitManager,TypeDescriptors,UObjectDescriptor,
@@ -34,104 +36,10 @@ uses
   uzgldrawerogl,uzgldrawergdi,
   uzcSysParams,
   uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics,
-  URecordDescriptor;
+  URecordDescriptor,uzcTypeDescriprors;
 
-type
-
-  TZeDimLessDescriptor=object(DoubleDescriptor)
-                            function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
-                      end;
-  TZeAngleDegDescriptor=object(DoubleDescriptor)
-                                         function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
-                                   end;
-  TZeAngleDescriptor=object(DoubleDescriptor)
-                                 function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
-                                 procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;const Value:String);virtual;
-                           end;
-  TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_String>)
-    constructor init;
-    function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
-    function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
-    procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
-    procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
-    //function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-  end;
-
-var
-  CalculatedStringDescriptor:TCalculatedStringDescriptor;
-  TZeDimLessDescriptorObj:TZeDimLessDescriptor;
-  TZeAngleDegDescriptorObj:TZeAngleDegDescriptor;
-  TZeAngleDescriptorObj:TZeAngleDescriptor;
-  AliasTzeXUnitsDescriptorOdj:GDBSinonimDescriptor;
-  AliasTzeYUnitsDescriptorOdj:GDBSinonimDescriptor;
-  AliasTzeZUnitsDescriptorOdj:GDBSinonimDescriptor;
 implementation
-constructor TCalculatedStringDescriptor.init;
-begin
-  inherited init('TCalculatedStringDescriptor',nil);
-end;
-function TCalculatedStringDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
-begin
-  result:=PTCalculatedString(pinstance)^.value;
-end;
-function TCalculatedStringDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
-begin
-  result:=PTCalculatedString(pinstance)^.format;
-end;
-procedure TCalculatedStringDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
-begin
-  PTCalculatedString(pinstance)^.format:=Value;
-end;
-procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
-begin
-  PTCalculatedString(pinstance)^.format:=_Value;
-end;
-(*function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
-var ppd:PPropertyDeskriptor;
-begin
-  zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
-  ppd:=GetPPD(ppda,bmode);
-  if ppd^._bmode=property_build then
-    ppd^._bmode:=bmode;
-  if bmode=property_build then begin
-    ppd^._ppda:=ppda;
-    ppd^._bmode:=bmode;
-  end;
-  ppd^.Name:=name;
-  ppd^.ValType:=valtype;
-  ppd^.ValKey:=valkey;
-  ppd^.PTypeManager:=@self;
-  ppd^.Decorators:=Decorators;
-  convertToRunTime(FastEditors,ppd^.FastEditors);
-  ppd^.Attr:=ownerattrib;
-  ppd^.Collapsed:=PCollapsed;
-  ppd^.valueAddres:=addr;
-  if fldaDifferent in ppd^.Attr then
-    ppd^.value:=rsDifferent
-  else
-    ppd^.value:=GetDecoratedValueAsString(addr,f);
-end;*)
 
-function TZeDimLessDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
-begin
-    result:=zeNonDimensionToString(PTZeDimLess(PInstance)^,f);
-end;
-function TZeAngleDegDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
-begin
-    result:=zeAngleDegToString(PTZeDimLess(PInstance)^,f);
-end;
-function TZeAngleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
-begin
-    result:=zeAngleToString(PTZeDimLess(PInstance)^,f);
-end;
-procedure TZeAngleDescriptor.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:String);
-begin
-  try
-    PTZeDimLess(PInstance)^:=zeStringToAngle(Value,f);
-  except
-    ProgramLog.LogOutFormatStr('Input with error "%s"',[Value],LM_Error,0,MO_SM);
-  end;
-end;
 procedure _OnCreateSystemUnit(ptsu:PTUnit);
 var
   utd:PUserTypeDescriptor;
@@ -154,8 +62,7 @@ begin
   ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeZUnitsDescriptorOdj);
 
   CalculatedStringDescriptor.init;
-
-  ptsu^.InterfaceTypes.AddTypeByRef(CalculatedStringDescriptor);
+  //ptsu^.InterfaceTypes.AddTypeByRef(CalculatedStringDescriptor);
 
   BaseTypesEndIndex:=ptsu^.InterfaceTypes.exttype.Count;
 
@@ -197,7 +104,8 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TzeFrustum),'TzeFrustum');
   if utd<>nil then
-    ptsu^.SetTypeDesk2(utd,['Right','Left','Down','Up','Near','Far'],[FNProgram,FNUser]);
+    ptsu^.SetTypeDesk2(utd,['Right','Left','Down','Up','Near','Far'],
+                           [FNProgram,FNUser]);
 
   utd:=ptsu^.RegisterType(TypeInfo(TzeMatrix4s),'TzeMatrix4s');
   if utd<>nil then
@@ -230,8 +138,11 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TDimUnit),'TDimUnit');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['DUScientific','DUDecimal','DUEngineering','DUArchitectural','DUFractional','DUSystem'],[FNProgram]);
-    ptsu^.SetTypeDesk2(utd,['Scientific','Decimal','Engineering','Architectural','Fractional','System'],[FNUser]);
+    ptsu^.SetTypeDesk2(utd,['DUScientific','DUDecimal','DUEngineering',
+                            'DUArchitectural','DUFractional','DUSystem'],
+                           [FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Scientific','Decimal','Engineering',
+                            'Architectural','Fractional','System'],[FNUser]);
   end;
 
   utd:=ptsu^.RegisterType(TypeInfo(TDimDSep),'TDimDSep');
@@ -242,15 +153,21 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TLUnits),'TLUnits');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['LUScientific','LUDecimal','LUEngineering','LUArchitectural','LUFractional'],[FNProgram]);
-    ptsu^.SetTypeDesk2(utd,['Scientific','Decimal','Engineering','Architectural','Fractional'],[FNUser]);
+    ptsu^.SetTypeDesk2(utd,['LUScientific','LUDecimal','LUEngineering',
+                            'LUArchitectural','LUFractional'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Scientific','Decimal','Engineering',
+                            'Architectural','Fractional'],[FNUser]);
   end;
   ptsu^.RegisterType(TypeInfo(PTLUnits),'PTLUnits');
 
   utd:=ptsu^.RegisterType(TypeInfo(TAUnits),'TAUnits');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['AUDecimalDegrees','AUDegreesMinutesSeconds','AUGradians','AURadians','AUSurveyorsUnits'],[FNProgram]);
-    ptsu^.SetTypeDesk2(utd,['Decimal degrees','Degrees minutes seconds','Gradians','Radians','Surveyors units'],[FNUser]);
+    ptsu^.SetTypeDesk2(utd,['AUDecimalDegrees','AUDegreesMinutesSeconds',
+                            'AUGradians','AURadians','AUSurveyorsUnits'],
+                           [FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Decimal degrees','Degrees minutes seconds',
+                            'Gradians','Radians','Surveyors units'],
+                           [FNUser]);
   end;
   ptsu^.RegisterType(TypeInfo(PTAUnits),'PTAUnits');
 
@@ -263,8 +180,10 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TUPrec),'TUPrec');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['UPrec0','UPrec1','UPrec2','UPrec3','UPrec4','UPrec5','UPrec6','UPrec7','UPrec8'],[FNProgram]);
-    ptsu^.SetTypeDesk2(utd,['0','0.0','0.00','0.000','0.0000','0.00000','0.000000','0.0000000','0.00000000'],[FNUser]);
+    ptsu^.SetTypeDesk2(utd,['UPrec0','UPrec1','UPrec2','UPrec3','UPrec4',
+                            'UPrec5','UPrec6','UPrec7','UPrec8'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['0','0.0','0.00','0.000','0.0000','0.00000',
+                            '0.000000','0.0000000','0.00000000'],[FNUser]);
   end;
   ptsu^.RegisterType(TypeInfo(PTUPrec),'PTUPrec');
 
@@ -277,7 +196,9 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TzeUnitsFormat),'TzeUnitsFormat');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['abase','adir','aformat','aprec','uformat','uprec','umode','DeciminalSeparator','RemoveTrailingZeros'],[FNProgram,FNUser]);
+    ptsu^.SetTypeDesk2(utd,['abase','adir','aformat','aprec','uformat','uprec',
+                            'umode','DeciminalSeparator','RemoveTrailingZeros'],
+                           [FNProgram,FNUser]);
   end;
 
   utd:=ptsu^.RegisterType(TypeInfo(TUPrec),'TInsUnits');
@@ -345,13 +266,15 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TAlign),'TAlign');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['TATop','TABottom','TALeft','TARight'],[FNProgram,FNUser]);
+    ptsu^.SetTypeDesk2(utd,['TATop','TABottom','TALeft','TARight'],
+                           [FNProgram,FNUser]);
   end;
   ptsu^.RegisterType(TypeInfo(PTAlign),'PTAlign');
 
   utd:=ptsu^.RegisterType(TypeInfo(TAppMode),'TAppMode');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['TAMAllowDark','TAMForceDark','TAMForceLight'],[FNProgram,FNUser]);
+    ptsu^.SetTypeDesk2(utd,['TAMAllowDark','TAMForceDark','TAMForceLight'],
+                           [FNProgram,FNUser]);
   end;
   ptsu^.RegisterType(TypeInfo(PTAppMode),'PTAppMode');
 
@@ -363,7 +286,8 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TGDB3StateBool),'TGDB3StateBool');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['T3SB_Fale','T3SB_True','T3SB_Default'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['T3SB_Fale','T3SB_True','T3SB_Default'],
+                           [FNProgram]);
     ptsu^.SetTypeDesk2(utd,['False','True','Default'],[FNUser]);
   end;
   ptsu^.RegisterType(TypeInfo(PTGDB3StateBool),'PTGDB3StateBool');
@@ -373,7 +297,8 @@ begin
   ptsu^.RegisterType(TypeInfo(PStringTreeType),'PStringTreeType');
 
   utd:=ptsu^.RegisterType(TypeInfo(TENTID),'TENTID');
-  utd:=ptsu^.RegisterType(TypeInfo(TEentityRepresentation),'TEentityRepresentation');
+  utd:=ptsu^.RegisterType(TypeInfo(TEentityRepresentation),
+                          'TEentityRepresentation');
   utd:=ptsu^.RegisterType(TypeInfo(TEentityFunction),'TEentityFunction');
 
   utd:=ptsu^.RegisterType(TypeInfo(TOSnapModeControl),'TOSnapModeControl');
@@ -434,7 +359,8 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PTCalculatedString),'PTCalculatedString');
 
-  utd:=ptsu^.RegisterType(TypeInfo(TDCableMountingMethod),'TDCableMountingMethod');
+  utd:=ptsu^.RegisterType(TypeInfo(TDCableMountingMethod),
+                                  'TDCableMountingMethod');
 
   ptsu^.RegisterType(TypeInfo(TColor),'TColor');
   ptsu^.RegisterType(TypeInfo(TColor),'PColor');
@@ -469,9 +395,11 @@ begin
   ptsu^.RegisterType(TypeInfo(TFString),'TFString');
   //ptsu^.RegisterType(TypeInfo(PFString),'PFString');
 
-  utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),'GDBaseObject',true);
+  utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),
+                                        'GDBaseObject',true);
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBBaseCamera),TypeOf(GDBBaseCamera),'GDBBaseCamera',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBBaseCamera),TypeOf(GDBBaseCamera),
+                                        'GDBBaseCamera',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['modelMatrix','fovy','Counters','prop','anglx',
                             'angly','zmin','zmax','projMatrix','viewport',
@@ -483,7 +411,8 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PGDBBaseCamera),'PGDBBaseCamera');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBObjCamera),TypeOf(GDBObjCamera),'GDBObjCamera',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBObjCamera),TypeOf(GDBObjCamera),
+                                        'GDBObjCamera',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['modelMatrixLCS','zminLCS','zmaxLCS','frustumLCS',
                             'clipLCS','projMatrixLCS','notuseLCS'],
@@ -539,7 +468,9 @@ begin
   RegisterVarCategory('SCALE','Scale',@InterfaceTranslate);
 
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandObjectDef),TypeOf(CommandObjectDef),'CommandObjectDef',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandObjectDef),
+                                  TypeOf(CommandObjectDef),
+                                        'CommandObjectDef',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['CommandName','CommandString','savemousemode',
                             'mouseclic','dyn','overlay','CStartAttrEnableAttr',
@@ -553,7 +484,9 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PCommandObjectDef),'PCommandObjectDef');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandFastObjectDef),TypeOf(CommandFastObjectDef),'CommandFastObjectDef',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandFastObjectDef),
+                                  TypeOf(CommandFastObjectDef),
+                                        'CommandFastObjectDef',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['UndoTop'],
                            [FNProgram,FNUser]);
@@ -561,20 +494,27 @@ begin
   end;
   //ptsu^.RegisterType(TypeInfo(PCommandFastObjectDef),'PCommandFastObjectDef');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObjectDef),TypeOf(CommandRTEdObjectDef),'CommandRTEdObjectDef',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObjectDef),
+                                  TypeOf(CommandRTEdObjectDef),
+                                        'CommandRTEdObjectDef',true);
   if otd<>nil then begin
   end;
   ptsu^.RegisterType(TypeInfo(PCommandRTEdObjectDef),'PCommandRTEdObjectDef');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandFastObjectPlugin),TypeOf(CommandFastObjectPlugin),'CommandFastObjectPlugin',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandFastObjectPlugin),
+                                  TypeOf(CommandFastObjectPlugin),
+                                        'CommandFastObjectPlugin',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['onCommandStart'],
                            [FNProgram,FNUser]);
     ptsu^.SetAttrs(otd,[[fldaHidden]]);
   end;
-  ptsu^.RegisterType(TypeInfo(PCommandFastObjectPlugin),'PCommandFastObjectPlugin');
+  ptsu^.RegisterType(TypeInfo(PCommandFastObjectPlugin),
+                     'PCommandFastObjectPlugin');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObject),TypeOf(CommandRTEdObject),'CommandRTEdObject',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObject),
+                                  TypeOf(CommandRTEdObject),
+                                        'CommandRTEdObject',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['saveosmode','commanddata','ShowParams'],
                            [FNProgram,FNUser]);
@@ -582,7 +522,9 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PCommandRTEdObject),'PCommandRTEdObject');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObjectPlugin),TypeOf(CommandRTEdObjectPlugin),'CommandRTEdObjectPlugin',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObjectPlugin),
+                                  TypeOf(CommandRTEdObjectPlugin),
+                                        'CommandRTEdObjectPlugin',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['onCommandStart','onCommandEnd','onCommandCancel',
                             'onFormat','onBeforeClick','onAfterClick',
@@ -591,7 +533,8 @@ begin
     ptsu^.SetAttrs(otd,[[fldaHidden],[fldaHidden],[fldaHidden],[fldaHidden],
                         [fldaHidden],[fldaHidden],[fldaHidden],[fldaHidden]]);
   end;
-  ptsu^.RegisterType(TypeInfo(PCommandRTEdObjectPlugin),'PCommandRTEdObjectPlugin');
+  ptsu^.RegisterType(TypeInfo(PCommandRTEdObjectPlugin),
+                             'PCommandRTEdObjectPlugin');
 
   utd:=ptsu^.RegisterType(TypeInfo(TOSMode),'TOSMode');
   if utd<>nil then begin
@@ -620,7 +563,8 @@ begin
     ptsu^.SetTypeDesk2(utd,['Angle','Z Axis'],[FNUser])
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TOSModeEditor),TypeOf(TOSModeEditor),'TOSModeEditor',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TOSModeEditor),TypeOf(TOSModeEditor),
+                                        'TOSModeEditor',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['Snap','Trace'],[FNProgram,FNUser]);
   end;
@@ -642,27 +586,34 @@ begin
   utd:=ptsu^.RegisterType(TypeInfo(TGDBPaletteColor),'TGDBPaletteColor');
   utd:=ptsu^.RegisterType(TypeInfo(PTGDBPaletteColor),'PTGDBPaletteColor');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TZAbsVector),TypeOf(TZAbsVector),'TZAbsVector',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZAbsVector),TypeOf(TZAbsVector),
+                                        'TZAbsVector',true);
   ptsu^.RegisterType(TypeInfo(PZAbsVector),'PZAbsVector');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorBytes),TypeOf(TZctnrVectorBytes));
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrAlignedVectorBytes),TypeOf(TZctnrAlignedVectorBytes),'TZctnrAlignedVectorBytes',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorBytes),
+                                  TypeOf(TZctnrVectorBytes));
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrAlignedVectorBytes),
+                                  TypeOf(TZctnrAlignedVectorBytes),
+                                        'TZctnrAlignedVectorBytes',true);
 
   //utd:=ptsu^.RegisterType(TypeInfo(TInVectorAddr),'TInVectorAddr');
 
   //utd:=ptsu^.RegisterType(TypeInfo(itrec),'itrec');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(varmanagerdef),TypeOf(varmanagerdef),'varmanagerdef',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(varmanagerdef),TypeOf(varmanagerdef),
+                                        'varmanagerdef',true);
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TvarDescArray),TypeOf(TvarDescArray));
   otd:=ptsu^.RegisterObjectType(TypeInfo(varmanager),TypeOf(varmanager));
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorPointer),TypeOf(TZctnrVectorPointer));
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorPointer),
+                                  TypeOf(TZctnrVectorPointer));
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TSimpleUnit),TypeOf(TSimpleUnit));
 
 
-  utd:=ptsu^.RegisterType(TypeInfo(TVariableProcessSelector),'TVariableProcessSelector');
+  utd:=ptsu^.RegisterType(TypeInfo(TVariableProcessSelector),
+                                  'TVariableProcessSelector');
   if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['VPS_OnlyThisEnts','VPS_OnlyRelatedEnts',
                             'VPS_AllEnts','VPS_AllEntsSeparated'],[FNProgram]);
@@ -670,23 +621,35 @@ begin
                             'All ents separated'],[FNUser])
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorStrings),TypeOf(TZctnrVectorStrings));
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorStrings),
+                                  TypeOf(TZctnrVectorStrings));
   utd:=ptsu^.RegisterType(TypeInfo(TEnumData),'TEnumData');
   utd:=ptsu^.RegisterType(TypeInfo(PTEnumData),'PTEnumData');
-  utd:=ptsu^.RegisterType(TypeInfo(TEnumDataWithOtherStrings),'TEnumDataWithOtherStrings');
-  utd:=ptsu^.RegisterType(TypeInfo(PTEnumDataWithOtherStrings),'PTEnumDataWithOtherStrings');
-  utd:=ptsu^.RegisterType(TypeInfo(TEnumDataWithOtherPointers),'TEnumDataWithOtherPointers');
-  utd:=ptsu^.RegisterType(TypeInfo(PTEnumDataWithOtherPointers),'PTEnumDataWithOtherPointers');
+  utd:=ptsu^.RegisterType(TypeInfo(TEnumDataWithOtherStrings),
+                                  'TEnumDataWithOtherStrings');
+  utd:=ptsu^.RegisterType(TypeInfo(PTEnumDataWithOtherStrings),
+                                  'PTEnumDataWithOtherStrings');
+  utd:=ptsu^.RegisterType(TypeInfo(TEnumDataWithOtherPointers),
+                                  'TEnumDataWithOtherPointers');
+  utd:=ptsu^.RegisterType(TypeInfo(PTEnumDataWithOtherPointers),
+                                  'PTEnumDataWithOtherPointers');
 
 
-  utd:=ptsu^.RegisterType(TypeInfo(TMSPrimitiveDetector),'TMSPrimitiveDetector');
-  utd:=ptsu^.RegisterType(TypeInfo(TMSBlockNamesDetector),'TMSBlockNamesDetector');
-  utd:=ptsu^.RegisterType(TypeInfo(TMSTextsStylesDetector),'TMSTextsStylesDetector');
-  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsLayersDetector),'TMSEntsLayersDetector');
-  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsLinetypesDetector),'TMSEntsLinetypesDetector');
-  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsExtendersDetector),'TMSEntsExtendersDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSPrimitiveDetector),
+                                  'TMSPrimitiveDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSBlockNamesDetector),
+                                  'TMSBlockNamesDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSTextsStylesDetector),
+                                  'TMSTextsStylesDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsLayersDetector),
+                                  'TMSEntsLayersDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsLinetypesDetector),
+                                  'TMSEntsLinetypesDetector');
+  utd:=ptsu^.RegisterType(TypeInfo(TMSEntsExtendersDetector),
+                                  'TMSEntsExtendersDetector');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TMSEditor),TypeOf(TMSEditor),'TMSEditor',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TMSEditor),TypeOf(TMSEditor),
+                                        'TMSEditor',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['TxtEntType','VariableProcessSelector',
                             'RelatedVariablesUnit','VariablesUnit',
@@ -710,7 +673,8 @@ begin
                         [fldaHidden]]);
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBNamedObject),TypeOf(GDBNamedObject),'GDBNamedObject',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBNamedObject),TypeOf(GDBNamedObject),
+                                        'GDBNamedObject',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['Name'],[FNProgram,FNUser]);
   end;
@@ -727,10 +691,14 @@ begin
     ptsu^.SetTypeDesk2(utd,['Width','TextWidth','CF'],[FNProgram,FNUser]);
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBCellFormatArray),TypeOf(GDBCellFormatArray),'GDBCellFormatArray',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBCellFormatArray),
+                                  TypeOf(GDBCellFormatArray),
+                                        'GDBCellFormatArray',true);
 
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TGDBTableStyle),TypeOf(TGDBTableStyle),'TGDBTableStyle',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TGDBTableStyle),
+                                  TypeOf(TGDBTableStyle),
+                                        'TGDBTableStyle',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['rowheight','textheight',
                             'tblformat','HeadBlockName'],
@@ -744,12 +712,16 @@ begin
   end;
   utd:=ptsu^.RegisterType(TypeInfo(PGDBTextStyleProp),'PGDBTextStyleProp');
 
-  utd:=ptsu^.RegisterType(TypeInfo(PGDBTextStyleObjInsp),'PGDBTextStyleObjInsp');
-  utd:=ptsu^.RegisterType(TypeInfo(PPGDBTextStyleObjInsp),'PPGDBTextStyleObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBTextStyleObjInsp),
+                                  'PGDBTextStyleObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PPGDBTextStyleObjInsp),
+                                  'PPGDBTextStyleObjInsp');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBTextStyle),TypeOf(GDBTextStyle),'GDBTextStyle',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBTextStyle),TypeOf(GDBTextStyle),
+                                        'GDBTextStyle',true);
   if otd<>nil then begin
-    ptsu^.SetTypeDesk2(otd,['FontFile','FontFamily','pfont','prop','UsedInLTYPE'],
+    ptsu^.SetTypeDesk2(otd,['FontFile','FontFamily',
+                            'pfont','prop','UsedInLTYPE'],
                            [FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(PGDBTextStyle),'PGDBTextStyle');
@@ -784,55 +756,66 @@ begin
                             'PstyleIsHandle'],[FNProgram,FNUser]);
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(BasicSHXDashProp),TypeOf(BasicSHXDashProp),'BasicSHXDashProp',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(BasicSHXDashProp),
+                                  TypeOf(BasicSHXDashProp),
+                                        'BasicSHXDashProp',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['param'],[FNProgram,FNUser]);
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TextProp),TypeOf(TextProp),'TextProp',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TextProp),TypeOf(TextProp),
+                                        'TextProp',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['Text','Style','txtL','txtH'],[FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(PTextProp),'PTextProp');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(ShapeProp),TypeOf(ShapeProp),'ShapeProp',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(ShapeProp),TypeOf(ShapeProp),
+                                        'ShapeProp',true);
   if otd<>nil then begin
-    ptsu^.SetTypeDesk2(otd,['SymbolName','FontName','Psymbol'],[FNProgram,FNUser]);
+    ptsu^.SetTypeDesk2(otd,['SymbolName','FontName','Psymbol'],
+                           [FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(PShapeProp),'PShapeProp');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBDashInfoArray),TypeOf(GDBDashInfoArray),'GDBDashInfoArray',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBDashInfoArray),
+                                  TypeOf(GDBDashInfoArray),
+                                        'GDBDashInfoArray',true);
   if otd<>nil then begin
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(TStrokesArray),TypeOf(TStrokesArray),'TStrokesArray',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(TStrokesArray),
+                                  TypeOf(TStrokesArray),'TStrokesArray',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['LengthFact'],[FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(PTStrokesArray),'PTStrokesArray');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBShapePropArray),TypeOf(GDBShapePropArray),'GDBShapePropArray',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBShapePropArray),
+                                  TypeOf(GDBShapePropArray),
+                                        'GDBShapePropArray',true);
   if otd<>nil then begin
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBTextPropArray),TypeOf(GDBTextPropArray),'GDBTextPropArray',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBTextPropArray),
+                                  TypeOf(GDBTextPropArray),
+                                        'GDBTextPropArray',true);
   if otd<>nil then begin
   end;
 
-  utd:=ptsu^.RegisterType(TypeInfo(PGDBLtypePropObjInsp),'PGDBLtypePropObjInsp');
-  utd:=ptsu^.RegisterType(TypeInfo(PPGDBLtypePropObjInsp),'PPGDBLtypePropObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBLtypePropObjInsp),
+                                  'PGDBLtypePropObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PPGDBLtypePropObjInsp),
+                                  'PPGDBLtypePropObjInsp');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBLtypeProp),TypeOf(GDBLtypeProp),'GDBLtypeProp',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBLtypeProp),TypeOf(GDBLtypeProp),
+                                        'GDBLtypeProp',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['LengthDXF','h','Mode','FirstStroke','LastStroke',
                             'WithoutLines','dasharray','strokesarray',
                             'shapearray','Textarray','desk'],[FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(PGDBLtypeProp),'PGDBLtypeProp');
-
-
-
-
 
   utd:=ptsu^.RegisterType(TypeInfo(TDimTextVertPosition),'TDimTextVertPosition');
   if utd<>nil then begin
@@ -855,12 +838,14 @@ begin
                        [FNProgram,FNUser]);
   end;
 
-  utd:=ptsu^.RegisterType(TypeInfo(TDimStyleDXFLoadingData),'TDimStyleDXFLoadingData');
+  utd:=ptsu^.RegisterType(TypeInfo(TDimStyleDXFLoadingData),
+                                  'TDimStyleDXFLoadingData');
   if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['TextStyleName','DIMBLK1handle','DIMBLK2handle',
                             'DIMLDRBLKhandle'],[FNProgram,FNUser]);
   end;
-  utd:=ptsu^.RegisterType(TypeInfo(PTDimStyleDXFLoadingData),'PTDimStyleDXFLoadingData');
+  utd:=ptsu^.RegisterType(TypeInfo(PTDimStyleDXFLoadingData),
+                                  'PTDimStyleDXFLoadingData');
 
   utd:=ptsu^.RegisterType(TypeInfo(TGDBDimLinesProp),'TGDBDimLinesProp');
   if utd<>nil then begin
@@ -895,11 +880,14 @@ begin
                             'DIMSCALE','DIMSCALE'],[FNProgram,FNUser]);
   end;
 
-  utd:=ptsu^.RegisterType(TypeInfo(PGDBDimStyleObjInsp),'PGDBDimStyleObjInsp');
-  utd:=ptsu^.RegisterType(TypeInfo(PPGDBDimStyleObjInsp),'PPGDBDimStyleObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBDimStyleObjInsp),
+                                  'PGDBDimStyleObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PPGDBDimStyleObjInsp),
+                                  'PPGDBDimStyleObjInsp');
 
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBDimStyle),TypeOf(GDBDimStyle),'GDBDimStyle',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBDimStyle),TypeOf(GDBDimStyle),
+                                        'GDBDimStyle',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['Lines','Arrows','Text','Placing','Units',
                             'PDXFLoadingData'],[FNProgram,FNUser]);
@@ -907,11 +895,14 @@ begin
   utd:=ptsu^.RegisterType(TypeInfo(PGDBDimStyle),'PGDBDimStyle');
 
 
-  utd:=ptsu^.RegisterType(TypeInfo(PGDBLayerPropObjInsp),'PGDBLayerPropObjInsp');
-  utd:=ptsu^.RegisterType(TypeInfo(PPGDBLayerPropObjInsp),'PPGDBLayerPropObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PGDBLayerPropObjInsp),
+                                  'PGDBLayerPropObjInsp');
+  utd:=ptsu^.RegisterType(TypeInfo(PPGDBLayerPropObjInsp),
+                                  'PPGDBLayerPropObjInsp');
 
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBLayerProp),TypeOf(GDBLayerProp),'GDBLayerProp',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBLayerProp),TypeOf(GDBLayerProp),
+                                        'GDBLayerProp',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['color','lineweight','LT','_on','_lock','_print',
                             'desk'],[FNProgram,FNUser]);
@@ -945,7 +936,8 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(PTOpenglData),'PTOpenglData');
 
-  utd:=ptsu^.RegisterType(TypeInfo(TGDIPrimitivesCounter),'TGDIPrimitivesCounter');
+  utd:=ptsu^.RegisterType(TypeInfo(TGDIPrimitivesCounter),
+                                  'TGDIPrimitivesCounter');
   if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['Lines','Triangles','Quads','Points','ZGLSymbols',
                             'SystemSymbols'],[FNProgram,FNUser]);
@@ -953,7 +945,8 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TTextRenderingType),'TTextRenderingType');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['TRT_System','TRT_ZGL','TRT_Both'],[FNProgram,FNUser]);
+    ptsu^.SetTypeDesk2(utd,['TRT_System','TRT_ZGL','TRT_Both'],
+                           [FNProgram,FNUser]);
   end;
 
   utd:=ptsu^.RegisterType(TypeInfo(TGDIData),'TGDIData');
@@ -1043,7 +1036,9 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PDbBaseObject),'PDbBaseObject');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(DeviceDbBaseObject),TypeOf(DeviceDbBaseObject),'DeviceDbBaseObject',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(DeviceDbBaseObject),
+                                  TypeOf(DeviceDbBaseObject),
+                                        'DeviceDbBaseObject',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['UID','NameShortTemplate','NameTemplate',
                             'NameFullTemplate','UIDTemplate','Variants'],
@@ -1060,33 +1055,42 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PDeviceDbBaseObject),'PDeviceDbBaseObject');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(ElDeviceBaseObject),TypeOf(ElDeviceBaseObject),'ElDeviceBaseObject',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(ElDeviceBaseObject),
+                                  TypeOf(ElDeviceBaseObject),
+                                        'ElDeviceBaseObject',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['Pins'],[FNProgram]);
     ptsu^.SetTypeDesk2(otd,['**Клеммы'],[FNUser]);
     otd^.RegisterObject(TypeOf(ElDeviceBaseObject),@ElDeviceBaseObject.initnul);
     otd^.AddMetod('','initnul','',@ElDeviceBaseObject.initnul,m_constructor);
   end;
-  ptsu^.RegisterType(TypeInfo(PElDeviceBaseObject),'PElDeviceBaseObject');
+  ptsu^.RegisterType(TypeInfo(PElDeviceBaseObject),
+                             'PElDeviceBaseObject');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CableDeviceBaseObject),TypeOf(CableDeviceBaseObject),'CableDeviceBaseObject',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CableDeviceBaseObject),
+                                  TypeOf(CableDeviceBaseObject),
+                                        'CableDeviceBaseObject',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['CoreCrossSection','NumberOfCores','OuterDiameter',
                             'DDT'],[FNProgram]);
     ptsu^.SetTypeDesk2(otd,['**Сечение жилы','**Количество жил','**Наружный диаметр',
                             '**ДТТ'],[FNUser]);
-    otd^.RegisterObject(TypeOf(CableDeviceBaseObject),@CableDeviceBaseObject.initnul);
+    otd^.RegisterObject(TypeOf(CableDeviceBaseObject),
+                        @CableDeviceBaseObject.initnul);
     otd^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,m_constructor);
   end;
   ptsu^.RegisterType(TypeInfo(PCableDeviceBaseObject),'PCableDeviceBaseObject');
 
   RegSysVars(ptsu);
-
 end;
+
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),InterfaceTranslate,'ShowHiddenFieldInObjInsp','Boolean',@debugShowHiddenFieldInObjInsp);
-finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-end.
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,
+    expandpath('$(DistribPath)/rtl/system.pas'),InterfaceTranslate,
+    'ShowHiddenFieldInObjInsp','Boolean',@debugShowHiddenFieldInObjInsp);
 
+finalization
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
+end.

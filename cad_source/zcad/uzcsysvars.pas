@@ -23,7 +23,7 @@ interface
 uses
   uzbUnits,
   uzcsysparams,uzegeometrytypes,uzepalette,
-  uzbtypes,uzeTypes,uzctnrvectorstrings,varmandef,
+  uzbtypes,uzeTypes,uzcTypes,uzctnrvectorstrings,varmandef,
 {$IFDEF LCLGTK2}
 gtk2,gdk2,
 {$ENDIF}
@@ -34,7 +34,7 @@ qtwidgets,qt4,qtint,
 qtwidgets,qt5,qtint,
 {$ENDIF}
 {$IFNDEF DELPHI}LCLVersion{$ENDIF},sysutils,
-  uzestyleslayers,uzeStylesLineTypes,uzestylesdim,uzestylestexts;
+  uzestyleslayers,uzeStylesLineTypes,uzestylesdim,uzestylestexts,uzbUsable;
 type
 
   tlanguadedeb=record

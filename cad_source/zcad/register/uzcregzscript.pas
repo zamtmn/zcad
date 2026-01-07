@@ -30,13 +30,13 @@ uses
   uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef,
   uzeentabstracttext,uzecamera,
   uzccommandsabstract,uzccommandsimpl,uzepalette,
-  gzctnrVectorTypes,gzctnrVector,uzctnrVectorBytes,uzctnrAlignedVectorBytes,
+  gzctnrVectorTypes,uzctnrVectorBytes,uzctnrAlignedVectorBytes,
   uzctnrVectorPointers,uzcoimultiobjects,uzctnrVectorStrings,uzestylestables,
   uzeNamedObject,uzestylesdim,uzeStylesLineTypes,uzestylestexts,uzestyleslayers,
   uzgldrawerogl,uzgldrawergdi,
   uzcSysParams,
   uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics,
-  URecordDescriptor,uzcTypeDescriprors;
+  URecordDescriptor,uzcTypeDescriprors,uzcTypes;
 
 implementation
 

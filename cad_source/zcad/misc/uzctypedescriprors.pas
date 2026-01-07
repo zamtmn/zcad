@@ -33,10 +33,9 @@ uses
   uzgldrawergdi,
   uzcSysParams,
   Graphics,
-  URecordDescriptor,uzbtypes;
+  URecordDescriptor,uzbtypes,uzcTypes,uzObjectInspectorManager;
 
 type
-
   TZeDimLessDescriptor=object(DoubleDescriptor)
     function GetFormattedValueAsString(PInstance:Pointer;const f:TzeUnitsFormat):string;virtual;
   end;

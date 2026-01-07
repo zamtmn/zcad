@@ -44,9 +44,6 @@ type
   end;
   PGDBaseObject=^GDBaseObject;
 
-  TUsableInteger=GUsable<integer>;
-  PTUsableInteger=^TUsableInteger;
-
 implementation
 
 function GDBaseObject.GetObjType:word;

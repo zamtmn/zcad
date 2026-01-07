@@ -25,8 +25,11 @@ interface
 uses
   SysUtils,
   Graphics,
-  uzbtypes;
+  uzbtypes,uzbUsable;
 type
+  TUsableInteger=GUsable<integer>;
+  PTUsableInteger=^TUsableInteger;
+
   TObjInspsManager=object
     private
       fPropertyRowName:string;

@@ -32,7 +32,8 @@ uses
   uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,
   uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,uzcutils,
   zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry,
-  URecordDescriptor,typedescriptors,varmandef,uzccommand_Insert,uzbtypes,
+  URecordDescriptor,typedescriptors,varmandef,uzccommand_Insert,
+  uzbtypes,uzbBaseUtils,
   uzeentdevice,UUnitManager,uzbPaths,uzcTranslations,uzcEnitiesVariablesExtender;
 
 implementation
@@ -49,7 +50,7 @@ var
 begin
   if (drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount<>1)  or
     (drawings.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject=nil)  or
-    not (IsIt(typeof(PGDBObjEntity(
+    not (IsObjectIt(typeof(PGDBObjEntity(
     drawings.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject)^),typeof(GDBObjDevice))) then
   begin
     zcUI.TextMessage('PlaceDelegate:'+SysUtils.format(rscmSelDevBeforeComm,[]),

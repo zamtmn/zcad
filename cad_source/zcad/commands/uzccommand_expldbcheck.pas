@@ -35,7 +35,7 @@ uses
   URecordDescriptor,typedescriptors,Varman,varmandef,UUnitManager,
   uzcdevicebase,uzcdevicebaseabstract,
   uzcinterface,
-  uzbtypes,
+  uzbtypes,uzbBaseUtils,
   uzcenitiesvariablesextender;
 
 implementation
@@ -74,7 +74,7 @@ begin
               zcUI.TextMessage(
                 format('DbBaseObject.Name=%s',[PDeviceDbBaseObject(PBaseObject)^.Name]),TMWOHistoryOut);
               //проверяем явлляется ли то что нашли наследником от DeviceDbBaseObject, если является, получаем доступ как к кабелю
-              if IsIt(TypeOf(PBaseObject^),typeof(DeviceDbBaseObject)) then begin
+              if IsObjectIt(TypeOf(PBaseObject^),typeof(DeviceDbBaseObject)) then begin
                 zcUI.TextMessage(format('DeviceDbBaseObject.UID=%s',
                   [PDeviceDbBaseObject(PBaseObject)^.UID]),TMWOHistoryOut);
                 zcUI.TextMessage(
@@ -82,7 +82,7 @@ begin
                   [PDeviceDbBaseObject(PBaseObject)^.NameShortTemplate]),TMWOHistoryOut);
               end;
               //проверяем явлляется ли то что нашли наследником от кабеля, если является, получаем доступ как к кабелю
-              if IsIt(TypeOf(PBaseObject^),typeof(CableDeviceBaseObject)) then begin
+              if IsObjectIt(TypeOf(PBaseObject^),typeof(CableDeviceBaseObject)) then begin
                 zcUI.TextMessage(
                   format('CableDeviceBaseObject.CoreCrossSection=%g',
                   [PCableDeviceBaseObject(PBaseObject)^.CoreCrossSection]),TMWOHistoryOut);

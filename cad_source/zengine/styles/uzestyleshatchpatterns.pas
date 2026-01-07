@@ -19,12 +19,14 @@
 unit uzeStylesHatchPatterns;
 {$INCLUDE zengineconfig.inc}
 interface
-uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
-     uzegeometry,gzctnrVectorObjects,
-     gzctnrVectorTypes,uzbstrproc,uzeStylesLineTypes,uzegeometrytypes,
-     uzctnrVectorBytesStream,
-     uzeffdxfsupport,uzMVReader,
-     Math;
+uses
+  LCLProc,LazUTF8,Classes,gzctnrVector,SysUtils,
+  uzbtypes,uzbBaseUtils,
+  uzegeometry,gzctnrVectorObjects,
+  gzctnrVectorTypes,uzbstrproc,uzeStylesLineTypes,uzegeometrytypes,
+  uzctnrVectorBytesStream,
+  uzeffdxfsupport,uzMVReader,
+  Math;
 type
   PTPatStrokesArray=^TPatStrokesArray;
   TPatStrokesArray=object(TStrokesArray)
@@ -69,7 +71,7 @@ end;
 function TPatStrokesArray.CopyTo(var dest:GZVector<Double>):Integer;
 begin
   result:=inherited;
-  if IsIt(TypeOf(dest),TypeOf(TPatStrokesArray)) then begin
+  if IsObjectIt(TypeOf(dest),TypeOf(TPatStrokesArray)) then begin
     PTPatStrokesArray(@dest)^.fAngle:=fAngle;
     PTPatStrokesArray(@dest)^.Base:=Base;
     PTPatStrokesArray(@dest)^.Offset:=Offset;

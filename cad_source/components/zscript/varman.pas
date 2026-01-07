@@ -29,7 +29,7 @@ uses
   uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   gzctnrVectorPData,gzctnrVector,
-  uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes,
+  uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes,uzbBaseUtils,
   StrUtils;
 type
   InlineTypeRegistrationException=class (exception);
@@ -622,7 +622,7 @@ begin
   if result<>nil then
     exit;
 
-  ParentTypeOf:=ParentPType(ATypeOf);
+  ParentTypeOf:=ParentObjectPType(ATypeOf);
   if ParentTypeOf<>nil then begin
     parentOTD:=GetPODByVmt(ParentTypeOf);
   end else
@@ -850,7 +850,7 @@ var
 
 begin
   if putd<>nil then begin
-    if IsIt(typeof(putd^),typeof(RecordDescriptor)) then begin
+    if IsObjectIt(typeof(putd^),typeof(RecordDescriptor)) then begin
         NameIdx:=0;
         for FldIdx:=PRecordDescriptor(putd)^.GetFirstFieldIndex to PRecordDescriptor(putd)^.Fields.Count-1 do begin
           if FNUser in SetNames then
@@ -859,7 +859,7 @@ begin
             PRecordDescriptor(putd)^.Fields.PArray^[FldIdx].base.ProgramName:=GetFieldName(NameIdx,PRecordDescriptor(putd)^.Fields.PArray^[FldIdx].base.UserName);
           inc(NameIdx);
         end;
-    end else if IsIt(typeof(putd^),typeof(EnumDescriptor)) then begin
+    end else if IsObjectIt(typeof(putd^),typeof(EnumDescriptor)) then begin
         for FldIdx:=0 to PEnumDescriptor(putd)^.UserValue.Count-1 do begin
           if FNUser in SetNames then
             PEnumDescriptor(putd)^.UserValue.PArray^[FldIdx]:=GetFieldName(FldIdx,PEnumDescriptor(putd)^.UserValue.PArray^[FldIdx]);
@@ -874,7 +874,7 @@ var
   FldIdx,AttrIdx:integer;
 begin
   if putd<>nil then begin
-    if IsIt(typeof(putd^),typeof(RecordDescriptor)) then begin
+    if IsObjectIt(typeof(putd^),typeof(RecordDescriptor)) then begin
       AttrIdx:=0;
       for FldIdx:=PRecordDescriptor(putd)^.GetFirstFieldIndex to PRecordDescriptor(putd)^.Fields.Count-1 do begin
         PRecordDescriptor(putd)^.Fields.PArray^[FldIdx].base.Attributes:=Attrs[AttrIdx];
@@ -974,7 +974,7 @@ begin
        pu:=InterfaceUses.beginiterate(ir);
        if pu<>nil then
          repeat
-           if not IsIt(typeof(pu^),typeof(TEntityUnit)) then begin
+           if not IsObjectIt(typeof(pu^),typeof(TEntityUnit)) then begin
              if realUsesCount=0 then
                membuf.TXTAddString('uses '+pu^.Name)
              else

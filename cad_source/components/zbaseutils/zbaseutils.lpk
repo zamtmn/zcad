@@ -64,6 +64,10 @@
         <Filename Value="uzbusable.pas"/>
         <UnitName Value="uzbUsable"/>
       </Item>
+      <Item>
+        <Filename Value="uzbbaseutils.pas"/>
+        <UnitName Value="uzbBaseUtils"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

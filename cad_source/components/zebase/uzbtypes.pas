@@ -80,9 +80,6 @@ type
 
 {EXPORT-}
 
-function IsIt(PType,PChecedType:Pointer):Boolean;
-function ParentPType(PType:Pointer):Pointer;
-
 {$IFDEF DELPHI}
 function StrToQWord(const sh:string):UInt64;
 {$ENDIF}
@@ -122,47 +119,6 @@ begin
      //pointer(result):=typeof(testobj);
      result:=GetObjTypeName;
 
-end;
-function IsIt(PType,PChecedType:Pointer):Boolean;
-type
-  vmtRecPtr=^vmtRec;
-  vmtRecPtrPtr=^vmtRecPtr;
-  vmtRec=packed record
-    size,negSize : sizeint;
-    parent: {$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
-  end;
-var
-  CurrParent:{$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
-begin
-
-  if PType=PChecedType then
-    exit(true);
-  if PType=nil then
-    exit(false);
-  CurrParent:=vmtRecPtr(PType)^.parent;
-  if CurrParent=nil then
-    exit(false);
-  {$ifndef VER3_0}
-  if CurrParent^=nil then
-    exit(false);
-  {$endif}
-  result:=IsIt({$ifdef VER3_0}CurrParent{$else}CurrParent^{$endif},PChecedType);
-end;
-function ParentPType(PType:Pointer):Pointer;
-type
-  vmtRecPtr=^vmtRec;
-  vmtRecPtrPtr=^vmtRecPtr;
-  vmtRec=packed record
-    size,negSize : sizeint;
-    parent: {$ifdef VER3_0}vmtRecPtr{$else}vmtRecPtrPtr{$endif};
-  end;
-begin
-  if PType=nil then
-    exit(nil);
-  if vmtRecPtr(PType)^.parent<>nil then
-    result:=vmtRecPtr(PType)^.parent{$ifndef VER3_0}^{$endif}
-  else
-    result:=nil;
 end;
 
 {$IFDEF DELPHI}

@@ -23,7 +23,7 @@ interface
 uses uzbLogIntf,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,uzeTypes,
      uzegeometry,uzegeometrytypes,uzestylestexts,gzctnrVectorObjects,
      UGDBNamedObjectsArray,gzctnrVectorTypes,uzbstrproc,uzeNamedObject,
-     uzefontbase;
+     uzefontbase,uzbBaseUtils;
 const
      DefaultSHXHeight=1;
      DefaultSHXAngle=0;
@@ -727,7 +727,7 @@ end;
 function TStrokesArray.CopyTo(var dest:GZVector{-}<Double>{//}):Integer;
 begin
  result:=inherited;
- if IsIt(TypeOf(dest),TypeOf(TStrokesArray)) then
+ if IsObjectIt(TypeOf(dest),TypeOf(TStrokesArray)) then
    PTStrokesArray(@dest)^.LengthFact:=LengthFact;
 end;
 procedure TStrokesArray.Clear;

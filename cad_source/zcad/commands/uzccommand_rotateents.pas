@@ -30,7 +30,7 @@ uses
   uzccommandsabstract,
   uzegeometry,zcmultiobjectchangeundocommand,
   uzegeometrytypes,uzeentity,uzcLog,
-  uzbtypes,
+  uzbtypes,uzbBaseUtils,
   uzccommandsimpl;
 
 implementation
@@ -69,7 +69,7 @@ begin
     if pv<>nil then
       repeat
         if pv^.Selected then begin
-          if IsIt(typeof(pv^),typeof(GDBObjWithLocalCS)) then
+          if IsObjectIt(typeof(pv^),typeof(GDBObjWithLocalCS)) then
             pc:=PGDBObjWithLocalCS(pv)^.P_insert_in_WCS
           else
             pc:=Vertexmorph(pv^.vp.BoundingBox.LBN,pv^.vp.BoundingBox.RTF,0.5);

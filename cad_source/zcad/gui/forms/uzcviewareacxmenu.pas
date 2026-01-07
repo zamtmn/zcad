@@ -8,7 +8,8 @@ uses
   sysutils,
   uzglviewareaabstract,uzmenusmanager,uzmacros,TransferMacros,MacroDefIntf,Forms,
   ActnList,uzccommandsmanager,uzedrawingsimple,
-  uzbtypes,gzctnrVectorTypes,uzeentity,uzeentdevice,UGDBSelectedObjArray;
+  uzbtypes,uzbBaseUtils,gzctnrVectorTypes,uzeentity,uzeentdevice,
+  UGDBSelectedObjArray;
 
 type
   PTViewAreaContext=^TViewAreaContext;
@@ -68,13 +69,13 @@ begin
   //todo: сделать по нормальному
   result:=(vac.VA.param.SelDesc.Selectedobjcount=1)and(vac.VA.PDWG<>nil);
   if result then begin
-    if IsIt(typeof(vac.VA.PDWG^),typeof(TSimpleDrawing)) then begin
+    if IsObjectIt(typeof(vac.VA.PDWG^),typeof(TSimpleDrawing)) then begin
       psd:=pointer(vac.VA.PDWG);
       count:=0;
       PSelDesk:=psd^.SelObjArray.beginiterate(ir);
       if PSelDesk<>nil then
       repeat
-        if IsIt(typeof(PSelDesk^.objaddr^),typeof(GDBObjDevice))then
+        if IsObjectIt(typeof(PSelDesk^.objaddr^),typeof(GDBObjDevice))then
           Inc(count);
         if count>1 then
           exit(false);

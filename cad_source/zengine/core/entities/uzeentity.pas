@@ -27,7 +27,7 @@ uses
   UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeTypes,uzeconsts,
   uzglviewareadata,uzegeometry,uzeffdxfsupport,SysUtils,uzctnrVectorBytesStream,
   uzestyleslayers,uzeenrepresentation,uzbLogIntf,uzMVReader,
-  uzCtnrVectorpBaseEntity;
+  uzCtnrVectorpBaseEntity,uzbBaseUtils;
 
 type
   taddotrac=procedure(var posr:os_record;const axis:TzePoint3d) of object;
@@ -258,7 +258,7 @@ begin
   Result:=(AStates*State)<>[];
   if not Result then
     if bp.ListPos.Owner<>nil then
-      if IsIt(typeof(bp.ListPos.Owner^),typeof(GDBObjEntity)) then
+      if IsObjectIt(typeof(bp.ListPos.Owner^),typeof(GDBObjEntity)) then
         Result:=PGDBObjEntity(bp.ListPos.Owner)^.CheckState(AStates);
 end;
 

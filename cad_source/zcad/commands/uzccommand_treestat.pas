@@ -26,7 +26,7 @@ interface
 uses
   uzcLog,
   SysUtils,
-  uzbtypes,uzeTypes,
+  uzbtypes,uzbBaseUtils,uzeTypes,
   uzeentitiestree,
   uzeentity,
   uzgldrawcontext,
@@ -163,12 +163,12 @@ begin
   if drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject=nil then
     rootnode:=@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree
   else begin
-    if IsIt(typeof(PGDBObjEntity(
+    if IsObjectIt(typeof(PGDBObjEntity(
       drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^),typeof(
       GDBObjGenericSubEntry)) then
       rootnode:=@PGDBObjGenericSubEntry(
         drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^.ObjArray.ObjTree
-    else if IsIt(typeof(PGDBObjEntity(
+    else if IsObjectIt(typeof(PGDBObjEntity(
       drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^),typeof(GDBObjComplex)) then
       rootnode:=@PGDBObjComplex(
         drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^.ConstObjArray.ObjTree

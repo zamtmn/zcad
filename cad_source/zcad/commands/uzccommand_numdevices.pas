@@ -28,7 +28,7 @@ uses
   
   uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,
+  uzbtypes,uzbBaseUtils,
   uzcdrawings,
   sysutils,
   uzcinterface,
@@ -158,7 +158,7 @@ end;
 
 function IsHavePoint(pent:PGDBObjEntity;out pt:TzePoint3d):boolean;
 begin
-  if IsIt(TypeOf(pent^),typeof(GDBObjWithLocalCS)) then
+  if IsObjectIt(TypeOf(pent^),typeof(GDBObjWithLocalCS)) then
     pt:=PGDBObjWithLocalCS(pent)^.P_insert_in_WCS
   else
     pt:=(pent^.vp.BoundingBox.LBN+pent^.vp.BoundingBox.RTF)/2;

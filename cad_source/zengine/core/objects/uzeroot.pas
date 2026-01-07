@@ -25,7 +25,7 @@ Uses
   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypes,
   uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,UGDBOpenArrayOfPV,
-  uzelongprocesssupport,uzeTypes;
+  uzelongprocesssupport,uzeTypes,uzbBaseUtils;
 
 type
 
@@ -231,7 +231,7 @@ begin
 
   p:=ents2Connected.beginiterate(ir);
   if p<>nil then repeat
-      if IsIt(TypeOf(p^),typeof(GDBObjConnected)) then
+      if IsObjectIt(TypeOf(p^),typeof(GDBObjConnected)) then
         PGDBObjConnected(p)^.connectedtogdb(@ConnectedArea,drawing);
       if assigned(p^.EntExtensions)then
         p^.EntExtensions.RunOnConnect(p,drawing,DC);

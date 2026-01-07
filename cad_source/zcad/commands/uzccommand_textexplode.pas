@@ -38,7 +38,7 @@ uses
   uzcinterface,
   zUndoCmdSaveEntityState,
   uzeentity,
-  uzbtypes;
+  uzbtypes,uzbBaseUtils;
 
 implementation
 
@@ -66,7 +66,7 @@ begin
     repeat
       {Обработка только выбранных текстовых примитивов}
       if pEntity^.Selected then begin
-        if IsIt(typeof(pEntity^),typeof(GDBObjText))then begin
+        if IsObjectIt(typeof(pEntity^),typeof(GDBObjText))then begin
           if needUndoCommand then begin
             needUndoCommand:=false;
             {Начало группировки операций для undo}

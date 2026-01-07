@@ -27,7 +27,7 @@ uses
   uzeentpolyline,uzeentcurve,
   uzeenttext,uzeentblockinsert,
   TypeDescriptors,uzctnrVectorBytesStream,
-  uzbtypes,uzeTypes,uzeblockdef,
+  uzbtypes,uzbBaseUtils,uzeTypes,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
@@ -252,7 +252,7 @@ end;
 procedure TIncludingVolumeExtender.onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   if pThisEntity<>nil then begin
-    if IsIt(TypeOf(pThisEntity^),typeof(GDBObjWithMatrix)) then begin
+    if IsObjectIt(TypeOf(pThisEntity^),typeof(GDBObjWithMatrix)) then begin
       toBoundMatrix:=PGDBObjWithMatrix(pThisEntity)^.GetMatrix^;
       MatrixInvert(toBoundMatrix);
     end else
@@ -284,9 +284,9 @@ var
 begin
   Result:=nil;
   if pThisEntity<>nil then begin
-    if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then
+    if IsObjectIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then
       result:=@PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array;
-    if (IsIt(TypeOf(pThisEntity^),typeof(GDBObjCurve)))and(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count>2) then begin
+    if (IsObjectIt(TypeOf(pThisEntity^),typeof(GDBObjCurve)))and(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count>2) then begin
       Result:=GetMem(SizeOf(GDBpolyline2DArray));
       Result^.init(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count,false);
       for i:=0 to PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count-1 do
@@ -299,7 +299,7 @@ procedure TIncludingVolumeExtender.DestroyCounturArray(ACA:PGDBPolyline2DArray);
 begin
   if ACA<>nil then begin
     if pThisEntity<>nil then begin
-      if not IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then
+      if not IsObjectIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then
         ACA.destroy;
     end else
       ACA.destroy;
@@ -342,13 +342,13 @@ var
   if pThisEntity<>nil then begin
     if p<>pThisEntity then begin
 
-      if IsIt(TypeOf(p^),typeof(GDBObjAbstractText)) then begin
+      if IsObjectIt(TypeOf(p^),typeof(GDBObjAbstractText)) then begin
         testp:=PGDBObjAbstractText(p)^.P_insert_in_WCS;
         EntTestType:=OTTByPoint;
-      end else if IsIt(TypeOf(p^),typeof(GDBObjBlockInsert)) then begin
+      end else if IsObjectIt(TypeOf(p^),typeof(GDBObjBlockInsert)) then begin
         testp:=PGDBObjDevice(p)^.P_insert_in_WCS;
         EntTestType:=OTTByPoint;
-      end else if IsIt(TypeOf(p^),typeof(GDBObjCurve)) then begin
+      end else if IsObjectIt(TypeOf(p^),typeof(GDBObjCurve)) then begin
         EntVExtdr:=p^.GetExtension<TVariablesExtender>;
         if EntVExtdr=nil then
           exit;

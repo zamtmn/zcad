@@ -28,7 +28,8 @@ uses
   Varman,UUnitManager,uzcsysvars,uzcsysparams,uzOIUI,
   uzcoimultiobjects,uzccommandsimpl,uzmenusmanager,uzcLog,menus,ComCtrls,
   uztoolbarsmanager,uzcimagesmanager,uzctreenode,uzcActionsManager,
-  uzObjectInspectorManager,zeundostack,uzcOI,UObjectDescriptor,classes,uzbUnits;
+  uzObjectInspectorManager,zeundostack,uzcOI,UObjectDescriptor,classes,uzbUnits,
+  uzbBaseUtils;
 const
     PEditorFocusPriority=550;
 type
@@ -104,8 +105,8 @@ function isGDBObjInstance(const currobjgdbtype:PUserTypeDescriptor;const pcurcon
 begin
   result:=false;
   if (currobjgdbtype<>nil)and(pcurrobj<>nil) then
-    if IsIt(typeof(currobjgdbtype^),typeof(ObjectDescriptor)) then
-      if IsIt(PObjectDescriptor(currobjgdbtype)^.PVMT,typeof(GDBaseObject)) then
+    if IsObjectIt(typeof(currobjgdbtype^),typeof(ObjectDescriptor)) then
+      if IsObjectIt(PObjectDescriptor(currobjgdbtype)^.PVMT,typeof(GDBaseObject)) then
         result:=True;
 end;
 procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const f:TzeUnitsFormat);

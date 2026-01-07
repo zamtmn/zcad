@@ -22,7 +22,7 @@ interface
 uses sysutils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
      uzeentdevice,TypeDescriptors,uzctnrVectorBytesStream,
-     uzbtypes,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
+     uzbtypes,uzbBaseUtils,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
      usimplegenerics,uzeffdxfsupport,
      gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
      uzegeometrytypes,uzcsysvars,
@@ -207,7 +207,7 @@ begin
   if pThisEntity<>nil then begin
     if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy,ESTemp]) then
    // if not (ESConstructProxy in pThisEntity^.State) then
-      if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
+      if IsObjectIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         if Assigned(Net) then begin
           CNet:=Net;
           Net.RemoveConnection(Self);
@@ -263,7 +263,7 @@ begin
   if pThisEntity<>nil then begin
     if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy,ESTemp]) then
     //if not (ESConstructProxy in pThisEntity^.State) then
-      if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
+      if IsObjectIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         objects.init(10);
         if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInVolume(PGDBObjLine(pThisEntity)^.vp.BoundingBox,Objects)then
           TryConnectToEnts(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,Objects,drawing,dc);
@@ -503,7 +503,7 @@ begin
   repeat
     if pointer(p)<>pThisEntity then begin
       PTI:=TypeOf(p^);
-      if IsIt(PTI,typeof(GDBObjLine)) then begin
+      if IsObjectIt(PTI,typeof(GDBObjLine)) then begin
         NetExtender:=p^.GetExtension<TSCHConnectionExtender>;
         if NetExtender<>nil then begin
           ip:=uzegeometry.intercept3d(p1,p2,p^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd);
@@ -538,7 +538,7 @@ begin
             end;
           end;
         end;
-      end else if IsIt(PTI,typeof(GDBObjDevice)) then begin
+      end else if IsObjectIt(PTI,typeof(GDBObjDevice)) then begin
         ConnectorExtender:=p^.GetExtension<TSCHConnectorExtender>;
         if ConnectorExtender=nil then
           TryConnectToDeviceConnectors(p1,p2,PGDBObjDevice(p)^,drawing,DC)
@@ -587,7 +587,7 @@ begin
   if p<>nil then
   repeat
 
-    if IsIt(TypeOf(p^),typeof(GDBObjDevice)) then begin
+    if IsObjectIt(TypeOf(p^),typeof(GDBObjDevice)) then begin
       ConnectorExtender:=p^.GetExtension<TSCHConnectorExtender>;
       if ConnectorExtender=nil then
         TryConnectToDeviceConnectors(p1,p2,PGDBObjDevice(p)^,drawing,DC)

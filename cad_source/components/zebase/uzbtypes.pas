@@ -28,7 +28,6 @@ uses
 
 const
   GDBBaseObjectID=30000;
-  ObjN_NotRecognized='NotRecognized';
 
 type
 
@@ -41,21 +40,14 @@ type
     function GetObjTypeName:string;virtual;
     function GetObjName:string;virtual;
     constructor initnul;
-    destructor Done;virtual;{ abstract;}
+    destructor Done;virtual;
   end;
   PGDBaseObject=^GDBaseObject;
-
-  TCalculatedString=record
-    value:string;
-    format:string;
-  end;
-  PTCalculatedString=^TCalculatedString;
-
 
   TGetterSetterInteger=GGetterSetter<integer>;
   PTGetterSetterInteger=^TGetterSetterInteger;
 
-  TGetterSetterLongWord=GGetterSetter<LongWord>;
+  TGetterSetterLongWord=GGetterSetter<longword>;
   PTGetterSetterLongWord=^TGetterSetterLongWord;
 
 
@@ -65,63 +57,49 @@ type
   TGetterSetterTColor=GGetterSetter<TColor>;
   PTGetterSetterTColor=^TGetterSetterTColor;
 
-  TUsableInteger=GUsable<Integer>;
+  TUsableInteger=GUsable<integer>;
   PTUsableInteger=^TUsableInteger;
 
   TGetterSetterTUsableInteger=GGetterSetter<TUsableInteger>;
   PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
 
-{EXPORT+}
-
-{EXPORT-}
-
-{$IFDEF DELPHI}
-function StrToQWord(const sh:string):UInt64;
-{$ENDIF}
 implementation
 
-function GDBaseObject.GetObjType:Word;
+function GDBaseObject.GetObjType:word;
 begin
-     result:=GDBBaseObjectID;
+  Result:=GDBBaseObjectID;
 end;
-function GDBaseObject.ObjToString(const prefix,sufix:String):String;
+
+function GDBaseObject.ObjToString(const prefix,sufix:string):string;
 begin
-     result:=prefix+GetObjTypeName+sufix;
+  Result:=prefix+GetObjTypeName+sufix;
 end;
+
 constructor GDBaseObject.initnul;
 begin
 end;
+
 destructor GDBaseObject.Done;
 begin
 
 end;
 
-{procedure GDBaseObject.format;
-begin
-end;}
 procedure GDBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 begin
-     //format;
-end;
-function GDBaseObject.GetObjTypeName:String;
-begin
-     //pointer(result):=typeof(testobj);
-     result:='GDBaseObject';
-
-end;
-function GDBaseObject.GetObjName:String;
-begin
-     //pointer(result):=typeof(testobj);
-     result:=GetObjTypeName;
-
+  //format;
 end;
 
-{$IFDEF DELPHI}
-function StrToQWord(const sh:string):UInt64;
+function GDBaseObject.GetObjTypeName:string;
 begin
-      result:=strtoint(sh);
+  //pointer(result):=typeof(testobj);
+  Result:='GDBaseObject';
 end;
-{$ENDIF}
+
+function GDBaseObject.GetObjName:string;
+begin
+  //pointer(result):=typeof(testobj);
+  Result:=GetObjTypeName;
+
+end;
 
 end.
-

@@ -176,6 +176,12 @@ type
                 kosm_parallel:Boolean;(*'Parallel'*)
           end;
 
+  TCalculatedString=record
+    value:string;
+    format:string;
+  end;
+  PTCalculatedString=^TCalculatedString;
+
 var
   zeHandles:TZHandleCreator;
 

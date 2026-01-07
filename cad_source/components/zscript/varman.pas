@@ -1179,7 +1179,6 @@ begin
      AddTypeByRef(FundamentalTempAnsiString1251DescriptorObj);
      AddTypeByRef(FundamentalSingleDescriptorObj);
      AddTypeByRef(GDBEnumDataDescriptorObj);
-     AddTypeByRef(CalculatedStringDescriptor);
      AddTypeByRef(GetterSetterIntegerDescriptor);
      AddTypeByRef(GetterSetterBooleanDescriptor);
      AddTypeByRef(GetterSetterTUsableIntegerDescriptor);

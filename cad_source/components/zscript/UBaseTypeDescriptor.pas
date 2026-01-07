@@ -178,15 +178,6 @@ TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
-TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_String>)
-  constructor init;
-  function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
-  function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
-  procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
-  procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
-  //function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-end;
-
 TGetterSetterIntegerDescriptor=object(BaseTypeDescriptor<TGetterSetterInteger,TOTM_Integer>)
   constructor init;
   function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
@@ -256,7 +247,6 @@ FundamentalBooleanDescriptorOdj:BooleanDescriptor;
 FundamentalPointerDescriptorOdj:PointerDescriptor;
 FundamentalMethodDescriptorOdj:TMethodDescriptor;
 GDBEnumDataDescriptorObj:TEnumDataDescriptor;
-CalculatedStringDescriptor:TCalculatedStringDescriptor;
 GetterSetterIntegerDescriptor:TGetterSetterIntegerDescriptor;
 GetterSetterBooleanDescriptor:TGetterSetterBooleanDescriptor;
 GetterSetterTUsableIntegerDescriptor:TGetterSetterTUsableIntegerDescriptor;
@@ -651,52 +641,6 @@ function TEnumDataDescriptor.GetDecoratedValueAsString(pinstance:Pointer; const 
 begin
   result:=GetValueAsString(pinstance);
 end;
-constructor TCalculatedStringDescriptor.init;
-begin
-  inherited init('TCalculatedStringDescriptor',nil);
-end;
-function TCalculatedStringDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
-begin
-  result:=PTCalculatedString(pinstance)^.value;
-end;
-function TCalculatedStringDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
-begin
-  result:=PTCalculatedString(pinstance)^.format;
-end;
-procedure TCalculatedStringDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
-begin
-  PTCalculatedString(pinstance)^.format:=Value;
-end;
-procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
-begin
-  PTCalculatedString(pinstance)^.format:=_Value;
-end;
-(*function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
-var ppd:PPropertyDeskriptor;
-begin
-  zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
-  ppd:=GetPPD(ppda,bmode);
-  if ppd^._bmode=property_build then
-    ppd^._bmode:=bmode;
-  if bmode=property_build then begin
-    ppd^._ppda:=ppda;
-    ppd^._bmode:=bmode;
-  end;
-  ppd^.Name:=name;
-  ppd^.ValType:=valtype;
-  ppd^.ValKey:=valkey;
-  ppd^.PTypeManager:=@self;
-  ppd^.Decorators:=Decorators;
-  convertToRunTime(FastEditors,ppd^.FastEditors);
-  ppd^.Attr:=ownerattrib;
-  ppd^.Collapsed:=PCollapsed;
-  ppd^.valueAddres:=addr;
-  if fldaDifferent in ppd^.Attr then
-    ppd^.value:=rsDifferent
-  else
-    ppd^.value:=GetDecoratedValueAsString(addr,f);
-end;*)
-
 constructor TGetterSetterIntegerDescriptor.init;
 begin
   inherited init('TGetterSetterInteger',nil);
@@ -920,7 +864,6 @@ begin
 
 
      GDBEnumDataDescriptorObj.init;
-     CalculatedStringDescriptor.init;
      GetterSetterIntegerDescriptor.init;
      GetterSetterBooleanDescriptor.init;
      GetterSetterTUsableIntegerDescriptor.init;

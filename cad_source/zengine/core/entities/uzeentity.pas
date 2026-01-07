@@ -516,7 +516,7 @@ end;
 
 function GDBObjEntity.GetObjTypeName;
 begin
-  Result:=ObjN_NotRecognized;
+  Result:='';
 end;
 
 function GDBObjEntity.GetObjType;

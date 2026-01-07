@@ -33,7 +33,8 @@ uses
   uzeNamedObject,uzestylesdim,uzeStylesLineTypes,uzestylestexts,uzestyleslayers,
   uzgldrawerogl,uzgldrawergdi,
   uzcSysParams,
-  uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics;
+  uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics,
+  URecordDescriptor;
 
 type
 
@@ -47,7 +48,17 @@ type
                                  function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
                                  procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;const Value:String);virtual;
                            end;
+  TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_String>)
+    constructor init;
+    function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+    function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+    procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
+    procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
+    //function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+  end;
+
 var
+  CalculatedStringDescriptor:TCalculatedStringDescriptor;
   TZeDimLessDescriptorObj:TZeDimLessDescriptor;
   TZeAngleDegDescriptorObj:TZeAngleDegDescriptor;
   TZeAngleDescriptorObj:TZeAngleDescriptor;
@@ -55,6 +66,52 @@ var
   AliasTzeYUnitsDescriptorOdj:GDBSinonimDescriptor;
   AliasTzeZUnitsDescriptorOdj:GDBSinonimDescriptor;
 implementation
+constructor TCalculatedStringDescriptor.init;
+begin
+  inherited init('TCalculatedStringDescriptor',nil);
+end;
+function TCalculatedStringDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
+begin
+  result:=PTCalculatedString(pinstance)^.value;
+end;
+function TCalculatedStringDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  result:=PTCalculatedString(pinstance)^.format;
+end;
+procedure TCalculatedStringDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
+begin
+  PTCalculatedString(pinstance)^.format:=Value;
+end;
+procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
+begin
+  PTCalculatedString(pinstance)^.format:=_Value;
+end;
+(*function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
+var ppd:PPropertyDeskriptor;
+begin
+  zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
+  ppd:=GetPPD(ppda,bmode);
+  if ppd^._bmode=property_build then
+    ppd^._bmode:=bmode;
+  if bmode=property_build then begin
+    ppd^._ppda:=ppda;
+    ppd^._bmode:=bmode;
+  end;
+  ppd^.Name:=name;
+  ppd^.ValType:=valtype;
+  ppd^.ValKey:=valkey;
+  ppd^.PTypeManager:=@self;
+  ppd^.Decorators:=Decorators;
+  convertToRunTime(FastEditors,ppd^.FastEditors);
+  ppd^.Attr:=ownerattrib;
+  ppd^.Collapsed:=PCollapsed;
+  ppd^.valueAddres:=addr;
+  if fldaDifferent in ppd^.Attr then
+    ppd^.value:=rsDifferent
+  else
+    ppd^.value:=GetDecoratedValueAsString(addr,f);
+end;*)
+
 function TZeDimLessDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
     result:=zeNonDimensionToString(PTZeDimLess(PInstance)^,f);
@@ -95,6 +152,10 @@ begin
   ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeXUnitsDescriptorOdj);
   ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeYUnitsDescriptorOdj);
   ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeZUnitsDescriptorOdj);
+
+  CalculatedStringDescriptor.init;
+
+  ptsu^.InterfaceTypes.AddTypeByRef(CalculatedStringDescriptor);
 
   BaseTypesEndIndex:=ptsu^.InterfaceTypes.exttype.Count;
 
@@ -369,6 +430,7 @@ begin
   utd:=ptsu^.RegisterType(TypeInfo(TCalculatedString),'TCalculatedString');
   if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['value','format'],[FNProgram]);
+    registerRecTypeDescriptorOverrider(utd,@CalculatedStringDescriptor);
   end;
   ptsu^.RegisterType(TypeInfo(PTCalculatedString),'PTCalculatedString');
 

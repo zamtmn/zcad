@@ -23,7 +23,7 @@ interface
 uses
   UPointerDescriptor,uzbstrproc,uzctnrVectorBytesStream,sysutils,UBaseTypeDescriptor,
   uzbUnits,
-  gzctnrVectorTypes,TypeDescriptors,gzctnrVector,
+  gzctnrVectorTypes,TypeDescriptors,gzctnrVector,gzctnrSTL,
   TypInfo,varmandef,uzbtypes,uzbLogIntf,math;
 type
 TFieldDescriptor=GZVector<FieldDescriptor>;
@@ -53,10 +53,36 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        function GetLastFieldIndex:Integer;virtual;
                    end;
 function typeformat(ps:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
-var
-    EmptyTypedData:TInternalScriptString;
+
+procedure registerRecTypeDescriptorOverrider(ASourceTD,ANewTD:PUserTypeDescriptor);
+function getRecTypeDescriptorOverrider(ASourceTD:PUserTypeDescriptor):PUserTypeDescriptor;
+
 implementation
 uses varman;
+
+type
+  TTypeDescriptorOverrider=GKey2DataMap<PUserTypeDescriptor,PUserTypeDescriptor>;
+
+var
+  TypeDescriptorOverrider:TTypeDescriptorOverrider;
+
+procedure registerRecTypeDescriptorOverrider(ASourceTD,ANewTD:PUserTypeDescriptor);
+begin
+  if TypeDescriptorOverrider=nil then
+    TypeDescriptorOverrider:=TTypeDescriptorOverrider.create;
+  TypeDescriptorOverrider.Add(ASourceTD,ANewTD);
+end;
+
+function getRecTypeDescriptorOverrider(ASourceTD:PUserTypeDescriptor):PUserTypeDescriptor;
+begin
+  if TypeDescriptorOverrider=nil then
+    result:=nil
+  else begin
+    if not TypeDescriptorOverrider.TryGetValue(ASourceTD,Result)then
+      result:=nil;
+  end;
+ end;
+
 function typeformat(ps:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
 var i,i2:Integer;
     {ps,}fieldname:TInternalScriptString;
@@ -299,6 +325,7 @@ var
   SaveDecorators:TDecoratedProcs;
   SaveFastEditors:TFastEditorsVector;
   startaddr:pointer;
+  PUTDOverrider:PTUserTypeDescriptor;
 begin
   zTraceLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
   pobj:=addr;
@@ -377,6 +404,7 @@ begin
         ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
       end;
       bmodesave2:=ppda^.findvalkey(pvd^.name);
+      PUTDOverrider:=PTUserTypeDescriptor(getRecTypeDescriptorOverrider(PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef));
       if bmodesave2<>0 then begin
         if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')or
            (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherStrings')or
@@ -389,14 +417,15 @@ begin
           GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
           GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
 
-        end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TCalculatedString')then begin
-          SaveDecorators:=CalculatedStringDescriptor.Decorators;
-          SaveFastEditors:=CalculatedStringDescriptor.FastEditors;
-          CalculatedStringDescriptor.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
-          CalculatedStringDescriptor.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
-          CalculatedStringDescriptor.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
-          CalculatedStringDescriptor.Decorators:=SaveDecorators;
-          CalculatedStringDescriptor.FastEditors:=SaveFastEditors;
+        end else if PUTDOverrider<>nil then begin {end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TCalculatedString')then begin}
+          SaveDecorators:=PUTDOverrider.Decorators;
+          SaveFastEditors:=PUTDOverrider.FastEditors;
+          PUTDOverrider.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+          PUTDOverrider.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+          PUTDOverrider.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
+          PUTDOverrider.Decorators:=SaveDecorators;
+          PUTDOverrider.FastEditors:=SaveFastEditors;
+
         end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor<>nil)then begin
           SaveDecorators:=GetterSetterIntegerDescriptor.Decorators;
           SaveFastEditors:=GetterSetterIntegerDescriptor.FastEditors;
@@ -419,14 +448,14 @@ begin
           GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
           GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
           GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
-        end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TCalculatedString')then begin
-          SaveDecorators:=CalculatedStringDescriptor.Decorators;
-          SaveFastEditors:=CalculatedStringDescriptor.FastEditors;
-          CalculatedStringDescriptor.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
-          CalculatedStringDescriptor.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
-          CalculatedStringDescriptor.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
-          CalculatedStringDescriptor.Decorators:=SaveDecorators;
-          CalculatedStringDescriptor.FastEditors:=SaveFastEditors;
+        end else if PUTDOverrider<>nil then begin {end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TCalculatedString')then begin}
+             SaveDecorators:=PUTDOverrider.Decorators;
+             SaveFastEditors:=PUTDOverrider.FastEditors;
+             PUTDOverrider.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+             PUTDOverrider.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+             PUTDOverrider.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+             PUTDOverrider.Decorators:=SaveDecorators;
+             PUTDOverrider.FastEditors:=SaveFastEditors;
         end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor<>nil)then begin
           SaveDecorators:=GetterSetterIntegerDescriptor.Decorators;
           SaveFastEditors:=GetterSetterIntegerDescriptor.FastEditors;
@@ -622,6 +651,9 @@ begin
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
-begin
-  EmptyTypedData:='Empty';
+
+initialization
+  TypeDescriptorOverrider:=nil;
+finalization
+  TypeDescriptorOverrider.free;
 end.

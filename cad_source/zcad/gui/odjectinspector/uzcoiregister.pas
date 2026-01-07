@@ -29,7 +29,7 @@ uses
   uzcoimultiobjects,uzccommandsimpl,uzmenusmanager,uzcLog,menus,ComCtrls,
   uztoolbarsmanager,uzcimagesmanager,uzctreenode,uzcActionsManager,
   uzObjectInspectorManager,zeundostack,uzcOI,UObjectDescriptor,classes,uzbUnits,
-  uzbBaseUtils;
+  uzbBaseUtils,uzeTypes;
 const
     PEditorFocusPriority=550;
 type

@@ -44,24 +44,8 @@ type
   end;
   PGDBaseObject=^GDBaseObject;
 
-  TGetterSetterInteger=GGetterSetter<integer>;
-  PTGetterSetterInteger=^TGetterSetterInteger;
-
-  TGetterSetterLongWord=GGetterSetter<longword>;
-  PTGetterSetterLongWord=^TGetterSetterLongWord;
-
-
-  TGetterSetterBoolean=GGetterSetter<boolean>;
-  PTGetterSetterBoolean=^TGetterSetterBoolean;
-
-  TGetterSetterTColor=GGetterSetter<TColor>;
-  PTGetterSetterTColor=^TGetterSetterTColor;
-
   TUsableInteger=GUsable<integer>;
   PTUsableInteger=^TUsableInteger;
-
-  TGetterSetterTUsableInteger=GGetterSetter<TUsableInteger>;
-  PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
 
 implementation
 

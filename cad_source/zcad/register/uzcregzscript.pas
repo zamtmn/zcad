@@ -46,22 +46,33 @@ var
   otd:PObjectDescriptor;
 begin
 
-  TZeDimLessDescriptorObj.init('TZeDimLess',nil);
-  TZeAngleDegDescriptorObj.init('TZeAngleDeg',nil);
-  TZeAngleDescriptorObj.init('TZeAngle',nil);
+  CreateAdditionalTypes;
+
+  //TZeDimLessDescriptorObj.init('TZeDimLess',nil);
+  //TZeAngleDegDescriptorObj.init('TZeAngleDeg',nil);
+  //TZeAngleDescriptorObj.init('TZeAngle',nil);
 
   ptsu^.InterfaceTypes.AddTypeByRef(TZeDimLessDescriptorObj);
   ptsu^.InterfaceTypes.AddTypeByRef(TZeAngleDegDescriptorObj);
   ptsu^.InterfaceTypes.AddTypeByRef(TZeAngleDescriptorObj);
 
-  AliasTzeXUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeXUnits',nil);
-  AliasTzeYUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeYUnits',nil);
-  AliasTzeZUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeZUnits',nil);
+  //AliasTzeXUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeXUnits',nil);
+  //AliasTzeYUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeYUnits',nil);
+  //AliasTzeZUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeZUnits',nil);
   ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeXUnitsDescriptorOdj);
   ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeYUnitsDescriptorOdj);
   ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeZUnitsDescriptorOdj);
 
-  CalculatedStringDescriptor.init;
+  //GetterSetterIntegerDescriptor.init;
+  //GetterSetterBooleanDescriptor.init;
+  //GetterSetterTUsableIntegerDescriptor.init;
+  //GetterSetterTColorDescriptor.init;
+  ptsu^.InterfaceTypes.AddTypeByRef(GetterSetterIntegerDescriptor);
+  ptsu^.InterfaceTypes.AddTypeByRef(GetterSetterBooleanDescriptor);
+  ptsu^.InterfaceTypes.AddTypeByRef(GetterSetterTUsableIntegerDescriptor);
+  ptsu^.InterfaceTypes.AddTypeByRef(GetterSetterTColorDescriptor);
+
+  //CalculatedStringDescriptor.init;
   //ptsu^.InterfaceTypes.AddTypeByRef(CalculatedStringDescriptor);
 
   BaseTypesEndIndex:=ptsu^.InterfaceTypes.exttype.Count;
@@ -365,29 +376,11 @@ begin
   ptsu^.RegisterType(TypeInfo(TColor),'TColor');
   ptsu^.RegisterType(TypeInfo(TColor),'PColor');
 
-  //ptsu^.RegisterType(TypeInfo(TGetterSetterString),'TGetterSetterString');
 
   ptsu^.RegisterType(TypeInfo(TGetterSetterInteger),'TGetterSetterInteger');
-  //ptsu^.RegisterType(TypeInfo(PTGetterSetterInteger),'PTGetterSetterInteger');
-
-  ptsu^.RegisterType(TypeInfo(TGetterSetterLongWord),'TGetterSetterLongWord');
-  //ptsu^.RegisterType(TypeInfo(PTGetterSetterLongWord),'PTGetterSetterLongWord');
-
-  utd:=ptsu^.RegisterType(TypeInfo(TGetterSetterBoolean),'TGetterSetterBoolean');
-  {if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['Getter','Setter'],
-                           [FNProgram,FNUser]);
-    ptsu^.SetAttrs(utd,[[fldaHidden],[fldaHidden]]);
-  end;}
-  //ptsu^.RegisterType(TypeInfo(PTGetterSetterBoolean),'PTGetterSetterBoolean');
-
+  ptsu^.RegisterType(TypeInfo(TGetterSetterBoolean),'TGetterSetterBoolean');
   ptsu^.RegisterType(TypeInfo(TGetterSetterTColor),'TGetterSetterTColor');
-
-  //ptsu^.RegisterType(TypeInfo(TUsableInteger),'TUsableInteger');
-  //ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTUsableInteger');
-
-  ptsu^.RegisterType(TypeInfo(TUsableInteger),'TGetterSetterTUsableInteger');
-  //ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTGetterSetterTUsableInteger');
+  ptsu^.RegisterType(TypeInfo(TGetterSetterTUsableInteger),'TGetterSetterTUsableInteger');
 
   //ptsu^.RegisterType(TypeInfo(TFaceTypedData),'TFaceTypedData');
   //ptsu^.RegisterType(TypeInfo(PTFaceTypedData),'PTFaceTypedData');

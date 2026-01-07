@@ -24,7 +24,7 @@ interface
 
 uses
   SysUtils,
-  uzbtypes,uzbHandles,uzegeometrytypes;
+  uzbtypes,uzbHandles,uzegeometrytypes,uzbGetterSetter,Graphics;
 
 const
   NotActual=0;
@@ -181,6 +181,23 @@ type
     format:string;
   end;
   PTCalculatedString=^TCalculatedString;
+
+  TGetterSetterInteger=GGetterSetter<integer>;
+  PTGetterSetterInteger=^TGetterSetterInteger;
+
+  {TGetterSetterLongWord=GGetterSetter<longword>;
+  PTGetterSetterLongWord=^TGetterSetterLongWord;}
+
+
+  TGetterSetterBoolean=GGetterSetter<boolean>;
+  PTGetterSetterBoolean=^TGetterSetterBoolean;
+
+  TGetterSetterTColor=GGetterSetter<TColor>;
+  PTGetterSetterTColor=^TGetterSetterTColor;
+
+  TGetterSetterTUsableInteger=GGetterSetter<TUsableInteger>;
+  PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
+
 
 var
   zeHandles:TZHandleCreator;

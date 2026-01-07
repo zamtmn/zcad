@@ -28,8 +28,6 @@ function OIUI_FE_BooleanGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 
 procedure OIUI_ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string;boundr:trect);
 procedure OIUI_FE_BooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
-procedure OIUI_FE_GetterSetterBooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
-procedure OIUI_FE_GetterSetterUsableIntegerUsableDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonCrossDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonMultiplyDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
@@ -40,15 +38,7 @@ procedure OIUI_FE_ButtonLessThatDraw(canvas:TCanvas;r:trect;PInstance:Pointer;st
 procedure OIUI_FE_BooleanInverse(PInstance:Pointer);
 procedure OIUI_FE_IntegerInc(PInstance:Pointer);
 procedure OIUI_FE_IntegerDec(PInstance:Pointer);
-
-procedure OIUI_FE_GetterSetterIntegerInc(PInstance:Pointer);
-procedure OIUI_FE_GetterSetterIntegerDec(PInstance:Pointer);
-procedure OIUI_FE_GetterSetterBooleanInverse(PInstance:Pointer);
-
-procedure OIUI_FE_GetterSetterUsableIntegerInc(PInstance:Pointer);
-procedure OIUI_FE_GetterSetterUsableIntegerDec(PInstance:Pointer);
-procedure OIUI_FE_GetterSetterUsableIntegerUsableInverse(PInstance:Pointer);
-
+procedure BooleanDraw(AValue:boolean;canvas:TCanvas;r:trect;state:TFastEditorState;boundr:trect);
 
 implementation
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
@@ -131,14 +121,6 @@ procedure OIUI_FE_BooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFa
 begin
   BooleanDraw(pboolean(PInstance)^,canvas,r,state,boundr);
 end;
-procedure OIUI_FE_GetterSetterBooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
-begin
-  BooleanDraw(PTGetterSetterBoolean(PInstance)^.Getter,canvas,r,state,boundr);
-end;
-procedure OIUI_FE_GetterSetterUsableIntegerUsableDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
-begin
-  BooleanDraw(PTGetterSetterTUsableInteger(PInstance)^.Getter.Usable,canvas,r,state,boundr);
-end;
 
 procedure OIUI_ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string;boundr:trect);
 var
@@ -196,71 +178,7 @@ begin
      dec(pinteger(PInstance)^);
 end;
 
-procedure OIUI_FE_GetterSetterIntegerInc(PInstance:Pointer);
-var
-  d:Integer;
-begin
-  if (@PTGetterSetterInteger(PInstance).Getter<>nil)
-  and(@PTGetterSetterInteger(PInstance).Setter<>nil)then begin
-    d:=PTGetterSetterInteger(PInstance).Getter;
-    Inc(d);
-    PTGetterSetterInteger(PInstance).Setter(d);
-  end;
-end;
-procedure OIUI_FE_GetterSetterIntegerDec(PInstance:Pointer);
-var
-  d:Integer;
-begin
-  if (@PTGetterSetterInteger(PInstance).Getter<>nil)
-  and(@PTGetterSetterInteger(PInstance).Setter<>nil)then begin
-    d:=PTGetterSetterInteger(PInstance).Getter;
-    Dec(d);
-    PTGetterSetterInteger(PInstance).Setter(d);
-  end;
-end;
 
-procedure OIUI_FE_GetterSetterBooleanInverse(PInstance:Pointer);
-begin
-  if (@PTGetterSetterBoolean(PInstance).Getter<>nil)
-    and(@PTGetterSetterBoolean(PInstance).Setter<>nil)then begin
-      PTGetterSetterBoolean(PInstance).Setter(not PTGetterSetterBoolean(PInstance).Getter);
-  end;
-end;
-
-procedure OIUI_FE_GetterSetterUsableIntegerInc(PInstance:Pointer);
-var
-  d:TUsableInteger;
-begin
-  if (@PTGetterSetterTUsableInteger(PInstance).Getter<>nil)
-  and(@PTGetterSetterTUsableInteger(PInstance).Setter<>nil)then begin
-    d:=PTGetterSetterTUsableInteger(PInstance).Getter;
-    d.Value:=d.Value+1;
-    PTGetterSetterTUsableInteger(PInstance).Setter(d);
-  end;
-end;
-procedure OIUI_FE_GetterSetterUsableIntegerDec(PInstance:Pointer);
-var
-  d:TUsableInteger;
-begin
-  if (@PTGetterSetterTUsableInteger(PInstance).Getter<>nil)
-  and(@PTGetterSetterTUsableInteger(PInstance).Setter<>nil)then begin
-    d:=PTGetterSetterTUsableInteger(PInstance).Getter;
-    d.Value:=d.Value-1;
-    PTGetterSetterTUsableInteger(PInstance).Setter(d);
-  end;
-end;
-
-procedure OIUI_FE_GetterSetterUsableIntegerUsableInverse(PInstance:Pointer);
-var
-  d:TUsableInteger;
-begin
-  if (@PTGetterSetterTUsableInteger(PInstance).Getter<>nil)
-    and(@PTGetterSetterTUsableInteger(PInstance).Setter<>nil)then begin
-      d:=PTGetterSetterTUsableInteger(PInstance).Getter;
-      d.Usable:=not d.Usable;
-      PTGetterSetterTUsableInteger(PInstance).Setter(d);
-  end;
-end;
 
 
 

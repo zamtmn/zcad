@@ -427,8 +427,8 @@ begin
           PUTDOverrider.FastEditors:=SaveFastEditors;
 
         end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor<>nil)then begin
-          SaveDecorators:=GetterSetterIntegerDescriptor.Decorators;
-          SaveFastEditors:=GetterSetterIntegerDescriptor.FastEditors;
+          SaveDecorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.Decorators;
+          SaveFastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.FastEditors;
           PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
           PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
           PTUserTypeDescriptor(pvd^.data.PTD^.GetFactTypedef^.pSuperTypeDeskriptor).CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
@@ -457,8 +457,8 @@ begin
              PUTDOverrider.Decorators:=SaveDecorators;
              PUTDOverrider.FastEditors:=SaveFastEditors;
         end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor<>nil)then begin
-          SaveDecorators:=GetterSetterIntegerDescriptor.Decorators;
-          SaveFastEditors:=GetterSetterIntegerDescriptor.FastEditors;
+          SaveDecorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.Decorators;
+          SaveFastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.FastEditors;
           PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
           PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
           PTUserTypeDescriptor(pvd^.data.PTD^.GetFactTypedef^.pSuperTypeDeskriptor).CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);

@@ -179,8 +179,8 @@ type
   tobjinspinterface=record
     INTF_ObjInsp_ShowHeaders:TGetterSetterBoolean;(*'Show headers'*)
     INTF_ObjInsp_OldStyleDraw:TGetterSetterBoolean;(*'Old style'*)
-    INTF_ObjInsp_Level0HeaderColor:TGetterSetterTZColor;(*'Level0 header color'*)
-    INTF_ObjInsp_BorderColor:TGetterSetterTZColor;(*'Border color'*)
+    INTF_ObjInsp_Level0HeaderColor:TGetterSetterTColor;(*'Level0 header color'*)
+    INTF_ObjInsp_BorderColor:TGetterSetterTColor;(*'Border color'*)
     INTF_ObjInsp_WhiteBackground:TGetterSetterBoolean;(*'White background'*)
     INTF_ObjInsp_ShowSeparator:TGetterSetterBoolean;(*'Show separator'*)
     INTF_ObjInsp_ShowFastEditors:TGetterSetterBoolean;(*'Show fast editors'*)

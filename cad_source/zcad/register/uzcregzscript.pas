@@ -33,7 +33,7 @@ uses
   uzeNamedObject,uzestylesdim,uzeStylesLineTypes,uzestylestexts,uzestyleslayers,
   uzgldrawerogl,uzgldrawergdi,
   uzcSysParams,
-  uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars;
+  uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics;
 
 type
 
@@ -374,9 +374,8 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TDCableMountingMethod),'TDCableMountingMethod');
 
-  ptsu^.RegisterType(TypeInfo(TZColor),'TZColor');
-  ptsu^.RegisterType(TypeInfo(PTZColor),'PTZColor');
-
+  ptsu^.RegisterType(TypeInfo(TColor),'TColor');
+  ptsu^.RegisterType(TypeInfo(TColor),'PColor');
 
   //ptsu^.RegisterType(TypeInfo(TGetterSetterString),'TGetterSetterString');
 
@@ -394,8 +393,7 @@ begin
   end;}
   //ptsu^.RegisterType(TypeInfo(PTGetterSetterBoolean),'PTGetterSetterBoolean');
 
-  ptsu^.RegisterType(TypeInfo(TGetterSetterTZColor),'TGetterSetterTZColor');
-  //ptsu^.RegisterType(TypeInfo(PTGetterSetterTZColor),'PTGetterSetterTZColor');
+  ptsu^.RegisterType(TypeInfo(TGetterSetterTColor),'TGetterSetterTColor');
 
   //ptsu^.RegisterType(TypeInfo(TUsableInteger),'TUsableInteger');
   //ptsu^.RegisterType(TypeInfo(PTUsableInteger),'PTUsableInteger');

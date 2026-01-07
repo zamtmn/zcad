@@ -24,7 +24,7 @@ interface
 
 uses
   SysUtils,
-  uzbGetterSetter,uzbUsable;
+  uzbGetterSetter,uzbUsable,Graphics;
 
 const
   GDBBaseObjectID=30000;
@@ -51,11 +51,6 @@ type
   end;
   PTCalculatedString=^TCalculatedString;
 
-  TZColor=type Longword;
-  PTZColor=^TZColor;
-
-  //TGetterSetterString=GGetterSetter<string>;
-
 
   TGetterSetterInteger=GGetterSetter<integer>;
   PTGetterSetterInteger=^TGetterSetterInteger;
@@ -67,8 +62,8 @@ type
   TGetterSetterBoolean=GGetterSetter<boolean>;
   PTGetterSetterBoolean=^TGetterSetterBoolean;
 
-  TGetterSetterTZColor=GGetterSetter<TZColor>;
-  PTGetterSetterTZColor=^TGetterSetterTZColor;
+  TGetterSetterTColor=GGetterSetter<TColor>;
+  PTGetterSetterTColor=^TGetterSetterTColor;
 
   TUsableInteger=GUsable<Integer>;
   PTUsableInteger=^TUsableInteger;

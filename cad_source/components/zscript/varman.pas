@@ -1183,7 +1183,7 @@ begin
      AddTypeByRef(GetterSetterIntegerDescriptor);
      AddTypeByRef(GetterSetterBooleanDescriptor);
      AddTypeByRef(GetterSetterTUsableIntegerDescriptor);
-     AddTypeByRef(GetterSetterTZColorDescriptor);
+     AddTypeByRef(GetterSetterTColorDescriptor);
      AddTypeByRef(AliasIntegerDescriptorOdj);
      AddTypeByRef(AliasCardinalDescriptorOdj);
      AddTypeByRef(AliasDWordDescriptorOdj);

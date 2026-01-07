@@ -65,7 +65,7 @@ function PaletteColorDecorator(PInstance:Pointer):String;
 begin
      result:=ColorIndex2Name(PTGDBPaletteColor(PInstance)^);
 end;
-function ZColorDecorator(PInstance:Pointer):String;
+function TColorDecorator(PInstance:Pointer):String;
 begin
      result:=ColorToString(PColor(PInstance)^);
 end;
@@ -331,7 +331,7 @@ begin
      result.mode:=TEM_Integrate;
 end;
 
-function ZColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
+function TColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
 var
   cbedit:TColorBox;
 begin
@@ -342,19 +342,19 @@ begin
   result.mode:=TEM_Integrate;
 end;
 
-function TGetterSetterTZColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
+function TGetterSetterTColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
 var
   cbedit:TColorBox;
 begin
   CreateTColorPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit,f);
   SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
   cbedit.Style:=cbedit.Style+[cbStandardColors,cbExtendedColors,cbSystemColors,cbIncludeDefault];
-  cbedit.Selected:=PTGetterSetterTZColor(pinstance)^.Getter{PColor(pinstance)^};
+  cbedit.Selected:=PTGetterSetterTColor(pinstance)^.Getter{PColor(pinstance)^};
   result.mode:=TEM_Integrate;
 end;
-function TGetterSetterTZColorDecorator(PInstance:Pointer):String;
+function TGetterSetterTColorDecorator(PInstance:Pointer):String;
 begin
-     result:=ColorToString(PTGetterSetterTZColor(pinstance)^.Getter);
+     result:=ColorToString(PTGetterSetterTColor(pinstance)^.Getter);
 end;
 
 procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
@@ -598,8 +598,8 @@ begin
     DecorateType(SysUnit.TypeName2PTD('PGDBDimStyleObjInsp'),NamedObjectsDecorator,DimStyleDecoratorCreateEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('TGDBPaletteColor'),PaletteColorDecorator,ColorDecoratorCreateEditor,drawIndexColorProp);
     DecorateType(SysUnit.TypeName2PTD('TGDBOSMode'),nil,CreateEmptyEditor,nil);
-    DecorateType(SysUnit.TypeName2PTD('TZColor'),ZColorDecorator,ZColorDecoratorCreateEditor,nil);
-    DecorateType(SysUnit.TypeName2PTD('TFString'),TFStringDecorator,ZColorDecoratorCreateEditor,nil);
+    DecorateType(SysUnit.TypeName2PTD('TColor'),TColorDecorator,TColorDecoratorCreateEditor,nil);
+    DecorateType(SysUnit.TypeName2PTD('TFString'),TFStringDecorator,nil,nil);
 
     AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_GetterSetterIntegerInc);
     AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_GetterSetterIntegerDec);
@@ -608,7 +608,7 @@ begin
     AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_GetterSetterUsableIntegerInc);
     AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_GetterSetterUsableIntegerDec);
     AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableInteger'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_GetterSetterUsableIntegerUsableDraw,@OIUI_FE_GetterSetterUsableIntegerUsableInverse);
-    DecorateType(SysUnit.TypeName2PTD('TGetterSetterTZColor'),TGetterSetterTZColorDecorator,TGetterSetterTZColorDecoratorCreateEditor,nil);
+    DecorateType(SysUnit.TypeName2PTD('TGetterSetterTColor'),TGetterSetterTColorDecorator,TGetterSetterTColorDecoratorCreateEditor,nil);
 
 
 

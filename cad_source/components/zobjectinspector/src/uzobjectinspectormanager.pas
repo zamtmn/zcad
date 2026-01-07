@@ -80,13 +80,9 @@ type
 
       function getLevel0HeaderColor:TColor;
       procedure setLevel0HeaderColor(const AValue:TColor);
-      function getLevel0HeaderZColor:TZColor;
-      procedure setLevel0HeaderZColor(const AValue:TZColor);
 
       function getBorderColor:TColor;
       procedure setBorderColor(const AValue:TColor);
-      function getBorderZColor:TZColor;
-      procedure setBorderZColor(const AValue:TZColor);
 
       function getButtonSizeReducing:integer;
       procedure setButtonSizeReducing(const AValue:integer);
@@ -236,29 +232,12 @@ procedure TObjInspsManager.setLevel0HeaderColor(const AValue:TColor);
 begin
   fLevel0HeaderColor:=AValue;
 end;
-function TObjInspsManager.getLevel0HeaderZColor:TZColor;
-begin
-  result:=fLevel0HeaderColor;
-end;
-procedure TObjInspsManager.setLevel0HeaderZColor(const AValue:TZColor);
-begin
-  fLevel0HeaderColor:=AValue;
-end;
-
 
 function TObjInspsManager.getBorderColor:TColor;
 begin
   result:=fBorderColor;
 end;
 procedure TObjInspsManager.setBorderColor(const AValue:TColor);
-begin
-  fBorderColor:=AValue;
-end;
-function TObjInspsManager.getBorderZColor:TZColor;
-begin
-  result:=fBorderColor;
-end;
-procedure TObjInspsManager.setBorderZColor(const AValue:TZColor);
 begin
   fBorderColor:=AValue;
 end;

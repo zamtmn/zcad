@@ -423,13 +423,13 @@ initialization
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors.Setup(OIManager.getShowOnlyHotFastEditors,OIManager.setShowOnlyHotFastEditors);
 
 
-  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','TGetterSetterTZColor');
-  PTGetterSetterTZColor(vd.data.Addr.GetInstance)^.Setup(OIManager.getLevel0HeaderZColor,OIManager.setLevel0HeaderZColor);
-  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor.Setup(OIManager.getLevel0HeaderZColor,OIManager.setLevel0HeaderZColor);
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','TGetterSetterTColor');
+  PTGetterSetterTColor(vd.data.Addr.GetInstance)^.Setup(OIManager.getLevel0HeaderColor,OIManager.setLevel0HeaderColor);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor.Setup(OIManager.getLevel0HeaderColor,OIManager.setLevel0HeaderColor);
 
-  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','TGetterSetterTZColor');
-  PTGetterSetterTZColor(vd.data.Addr.GetInstance)^.Setup(OIManager.getBorderZColor,OIManager.setBorderZColor);
-  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor.Setup(OIManager.getBorderZColor,OIManager.setBorderZColor);
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','TGetterSetterTColor');
+  PTGetterSetterTColor(vd.data.Addr.GetInstance)^.Setup(OIManager.getBorderColor,OIManager.setBorderColor);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor.Setup(OIManager.getBorderColor,OIManager.setBorderColor);
 
   vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','TGetterSetterBoolean');
   PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getRowHeightOverrideUsable,OIManager.setRowHeightOverrideUsable);

@@ -31,3 +31,6 @@
 [submodule "cad_source/components/zunits"]
 	path = cad_source/components/zunits
 	url = https://github.com/zamtmn/zunits.git
+[submodule "cad_source/components/zmath"]
+	path = cad_source/components/zmath
+	url = https://github.com/zamtmn/zmath.git

@@ -22,10 +22,10 @@ interface
 uses
   uzbtypes,uzeTypes,gzctnrVectorSimple;
 type
-{Export+}
+
 PTZctnrVectorGDBLineWeight=^TZctnrVectorGDBLineWeight;
-TZctnrVectorGDBLineWeight=GZVectorSimple{-}<TGDBLineWeight>{//};
-{Export-}
+TZctnrVectorGDBLineWeight=GZVectorSimple<TGDBLineWeight>;
+
 implementation
 begin
 end.

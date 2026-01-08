@@ -45,11 +45,11 @@ type
   end;
   PGDBTextStyle=^GDBTextStyle;
 
-{EXPORT+}
 
-{EXPORT-}
+
+
 PGDBTextStyleArray=^GDBTextStyleArray;
-GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})
+GDBTextStyleArray= object(GDBNamedObjectsArray<PGDBTextStyle,GDBTextStyle>)
                     constructor init(m:Integer);
                     constructor initnul;
 

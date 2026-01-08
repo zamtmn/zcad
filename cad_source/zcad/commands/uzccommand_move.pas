@@ -36,23 +36,21 @@ uses
   uzclog;
 
 type
-  {EXPORT+}
+
   PTCopyObjectDesc=^TCopyObjectDesc;
-  {REGISTERRECORDTYPE TCopyObjectDesc}
   TCopyObjectDesc=record
     sourceEnt,tmpProxy,copyEnt:PGDBObjEntity;
   end;
   ptpcoavector=^tpcoavector;
-  tpcoavector={-}specialize{//}
-    GZVector{-}<TCopyObjectDesc>{//};
-  {REGISTEROBJECTTYPE move_com}
+  tpcoavector=specialize
+    GZVector<TCopyObjectDesc>;
   move_com=object(CommandRTEdObject)
     t3dp:TzePoint3d;
     pcoa:ptpcoavector;
-    {-}protected{//}
+    protected
     function InternalCommandStart(const Context:TZCADCommandContext;
       Operands:TCommandOperands):boolean;virtual;
-    {-}public{//}
+    public
     procedure CommandStart(const Context:TZCADCommandContext;
       Operands:TCommandOperands);virtual;
     procedure CommandCancel(const Context:TZCADCommandContext);virtual;
@@ -64,7 +62,7 @@ type
     function Move(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;
     procedure showprompt(mklick:integer);virtual;
   end;
-  {EXPORT-}
+
 var
   move:move_com;
 

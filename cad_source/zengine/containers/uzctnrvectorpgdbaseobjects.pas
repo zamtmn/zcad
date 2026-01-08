@@ -22,11 +22,11 @@ unit uzctnrvectorpgdbaseobjects;
 interface
 uses uzbtypes,gzctnrVectorPData;
 type
-{Export+}
-TZctnrVectorPGDBaseObjects=object(GZVectorPData{-}<PGDBaseObject>{//})
+
+TZctnrVectorPGDBaseObjects=object(GZVectorPData<PGDBaseObject>)
                               end;
 PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
-{Export-}
+
 implementation
 begin
 end.

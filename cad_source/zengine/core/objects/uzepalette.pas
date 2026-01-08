@@ -30,7 +30,7 @@ type
             g:Byte;(*'Green'*)
             b:Byte;(*'Blue'*)
             a:Byte;(*'Alpha'*)
-            {-}constructor create(AR,AG,AB,AA:Byte);{//}
+            constructor create(AR,AG,AB,AA:Byte);
       end;
   PTRGB=^TRGB;
 

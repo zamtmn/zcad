@@ -46,11 +46,11 @@ type
   end;
   PTGDBTableStyle=^TGDBTableStyle;
 
-{EXPORT+}
 
-{EXPORT-}
+
+
 PGDBTableStyleArray=^GDBTableStyleArray;
-GDBTableStyleArray= object(GDBNamedObjectsArray{-}<PTGDBTableStyle,TGDBTableStyle>{//})
+GDBTableStyleArray= object(GDBNamedObjectsArray<PTGDBTableStyle,TGDBTableStyle>)
                     constructor init(m:Integer);
                     constructor initnul;
                     function AddStyle(const name:String):PTGDBTableStyle;

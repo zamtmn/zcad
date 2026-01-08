@@ -33,9 +33,8 @@ uses
   uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,uzcLog,uzbUnits,
   uzbUnitsUtils;
 type
-{EXPORT+}
+
 PTZCADDrawingsManager=^TZCADDrawingsManager;
-{REGISTEROBJECTTYPE TZCADDrawingsManager}
 TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     CurrentDWG:{PTZCADDrawing}PTSimpleDrawing;
                     ProjectUnits:TUnitManager;
@@ -83,7 +82,7 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     procedure AfterNotAutoProcessGDB(const AUndoMethod:TMethod);
                     procedure AfterEnt(const pent:PGDBObjEntity);
               end;
-{EXPORT-}
+
 var drawings: TZCADDrawingsManager;
     BlockBaseDWG:{PTZCADDrawing}PTSimpleDrawing=nil;
     ClipboardDWG:{PTZCADDrawing}PTSimpleDrawing=nil;

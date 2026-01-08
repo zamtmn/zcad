@@ -56,18 +56,18 @@ type
   end;
 
   GDBObjEntity=object(GDBObjSubordinated)
-    {-}protected{//}
+    protected
     //fInfrustum:TActuality;
-    {-}public{//}
+    public
     vp:GDBObjVisualProp;
     Selected:boolean;
     Visible:TActuality;
     PExtAttrib:PTExtAttrib;
     Representation:TZEntityRepresentation;
     State:TEntityStates;
-    {-}protected{//}
+    protected
     function GetInfrustumFromTree:TActuality;virtual;
-    {-}public{//}
+    public
     destructor done;virtual;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -225,8 +225,8 @@ type
       var ConnectedArray:TZctnrVectorPGDBaseEntity);
     function CheckState(AStates:TEntityStates):boolean;
     function GetObjName:string;virtual;
-    {-} property infrustum:TActuality
-      read GetInfrustumFromTree{ write fInfrustum};{//}
+     property infrustum:TActuality
+      read GetInfrustumFromTree{ write fInfrustum};
   end;
 
 var

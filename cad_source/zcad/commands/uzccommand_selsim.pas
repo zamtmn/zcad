@@ -76,7 +76,6 @@ type
     Blocks:TSelBlockParams;(*'Blocks'*)
     Texts:TSelTextParams;(*'Texts'*)
   end;
-  {REGISTEROBJECTTYPE SelSim_com}
   SelSim_com=object(CommandRTEdObject)
     created:boolean;
     bnames:TZctnrVectorStrings;

@@ -22,22 +22,20 @@ interface
 uses
      sysutils,uzbtypes,uzegeometry,uzgeomentity3d,uzegeometrytypes;
 type
-{Export+}
-  {REGISTEROBJECTTYPE TGeomLine3D}
+
   TGeomLine3D=object(TGeomEntity3D)
     LineData:GDBLineProp;
     StartParam:Double;
     constructor init(const p1,p2:TzePoint3d;const sp:Double);
     function GetBB:TBoundingBox;virtual;
   end;
-  {REGISTEROBJECTTYPE TGeomPLine3D}
   TGeomPLine3D=object(TGeomEntity3D)
     PLineData:PGDBLineProp;
     StartParam:Double;
     constructor init(constref LD:GDBLineProp;const sp:Double);
     function GetBB:TBoundingBox;virtual;
   end;
-{Export-}
+
 implementation
 constructor TGeomLine3D.init(const p1,p2:TzePoint3d;const sp:Double);
 begin

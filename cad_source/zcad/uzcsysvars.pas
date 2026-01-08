@@ -246,8 +246,8 @@ type
   end;
   pgdbsysvariable=^gdbsysvariable;
 
-{EXPORT+}
-{EXPORT-}
+
+
 var
   sysvar: gdbsysvariable;
   testvar: tlanguadedeb;

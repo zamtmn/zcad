@@ -29,7 +29,7 @@ const
   CircleLODCount=100;
 type
   PGDBPolyPoint2DArray=^GDBPolyPoint2DArray;
-  GDBPolyPoint2DArray=object(GZVector{-}<GDBPolyVertex2D>{//})
+  GDBPolyPoint2DArray=object(GZVector<GDBPolyVertex2D>)
   end;
 var
    circlepointoflod:array[0..CircleLODCount] of GDBpolyPoint2DArray;

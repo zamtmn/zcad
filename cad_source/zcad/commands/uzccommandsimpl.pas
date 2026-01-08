@@ -99,8 +99,8 @@ type
     procedure GetState;
   end;
 
-  {Export+}
-  {Export-}
+
+
 var
   OSModeEditor:TOSModeEditor;
 

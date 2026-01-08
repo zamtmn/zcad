@@ -24,16 +24,14 @@ uses
   uzctnrAlignedVectorBytes,gzctnrVectorTypes;
 
 type
-{Export+}
-{----REGISTEROBJECTTYPE GZAlignedVectorObjects}
-//<PObj> тут используется только для определения размера объекта
-  GZAlignedVectorObjects{-}<PObj>{//}=
-  object(TZctnrAlignedVectorBytes)
+
+  //<PObj> тут используется только для определения размера объекта
+  GZAlignedVectorObjects<PObj>=object(TZctnrAlignedVectorBytes)
     function iterate(var ir:itrec):Pointer;virtual;
     procedure Clear;virtual;
     procedure free;virtual;
   end;
-{Export-}
+
 implementation
 procedure GZAlignedVectorObjects<PObj>.free;
 begin

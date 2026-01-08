@@ -47,7 +47,7 @@ type
   end;
   PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
 
-  TPropertyDeskriptorArray=object(GZVectorP{-}<PPropertyDeskriptor>{//})
+  TPropertyDeskriptorArray=object(GZVectorP<PPropertyDeskriptor>)
     procedure cleareraseobj;virtual;
     function GetRealPropertyDeskriptorsCount:integer;virtual;
     function findcategory(

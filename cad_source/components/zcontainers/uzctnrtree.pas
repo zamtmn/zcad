@@ -24,7 +24,7 @@ type
 PGDBBaseNode=^GDBBaseNode;
 PIterateCmpareFunc=function(pnode:PGDBBaseNode;PExpr:Pointer):Boolean;
 IterateProc=procedure(pnode:PGDBBaseNode;PProcData:Pointer);
-{EXPORT+}
+
 PTGDBTree=^TGDBTree;
 GDBBaseNode=object
                   SubNode:PTGDBTree;
@@ -33,13 +33,12 @@ GDBBaseNode=object
                   procedure free;virtual;
                   destructor done;virtual;
             end;
-{REGISTEROBJECTTYPE TGDBTree}
-TGDBTree=object(GZVectorPData{-}<PGDBBaseNode>{//})
+TGDBTree=object(GZVectorPData<PGDBBaseNode>)
                procedure AddNode(pnode:PGDBBaseNode);
                function IterateFind(CompareFunc:PIterateCmpareFunc;PExpr:Pointer;SubFind:Boolean):PGDBBaseNode;
                procedure IterateProc(Proc:IterateProc;SubProc:Boolean;PProcData:Pointer);
          end;
-{EXPORT-}
+
 implementation
 procedure GDBBaseNode.free;
 begin

@@ -26,10 +26,9 @@ uses uzbpaths,uzbstrproc,Varman,languade,gzctnrVectorObjects,SysUtils,
      TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor,uzbLogIntf;
 type
-{EXPORT+}
+
     PTUnitManager=^TUnitManager;
-    {REGISTEROBJECTTYPE TUnitManager}
-    TUnitManager=object(GZVectorObjects{-}<TUnit>{//})
+    TUnitManager=object(GZVectorObjects<TUnit>)
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
@@ -43,14 +42,12 @@ type
                        function internalfindunit(const uname:String):ptunit;virtual;
                        procedure SetNextManager(PNM:PTUnitManager);
                        procedure LoadFolder(const PPaths:String;TranslateFunc:TTranslateFunction;const path: String);
-
-                       //procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
 
                        procedure CreateExtenalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String;pinstance:Pointer);
                        function CreateInternalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String):vardesk;
                  end;
-{EXPORT-}
+
 var
    units:TUnitManager;
    IrInDBUnit:itrec;
@@ -107,14 +104,6 @@ begin
        //AfterObjectDone(punit);
        dec(PtrUInt(punit),SizeOfData);
   end;
-
-  {p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-        pgdbaseobject(p).done;
-        AfterObjectDone(p);
-        p:=iterate(ir);
-  until p=nil;}
   clear;
 end;
 
@@ -529,17 +518,6 @@ begin
                                                   parseresult:=runparser('_softspace'#0'=(_softspace'#0'_identifier'#0'_softspace'#0'=)',line,parseerror);
                                               if parseerror then
                                                   begin
-                                                       (*if uppercase(parseresult^.getData(0)) = 'GDBASEOBJECT'
-                                                       then
-                                                           begin
-                                                                PObjectDescriptor(etd)^.Parent:=nil;
-                                                                PObjectDescriptor(etd)^.AddConstField(FPVMT);
-
-                                                                fieldgdbtype := Types.TypeName2TypeDesc('Pointer');
-                                                                //Stringtypearray := Stringtypearray + 'PVMT'+ #0+ 'C' + pac_GDBWord_to_String(fieldgdbtype.gdbtypecustom) + pac_lGDBWord_to_String(fieldgdbtype.sizeinmem);
-                                                                fieldoffset := {fieldoffset + }fieldgdbtype.sizeinmem
-                                                           end
-                                                      else*)
                                                           begin
                                                                fieldgdbtype := currentunit.TypeName2PTD(parseresult^.getData(0));
                                                                if fieldgdbtype=nil then

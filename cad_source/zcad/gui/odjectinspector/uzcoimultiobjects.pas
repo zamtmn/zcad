@@ -51,9 +51,7 @@ type
   TMSEntsExtendersDetector=TEnumDataWithOtherPointers;
 
 
-{Export+}
 
-  {REGISTEROBJECTTYPE TMSEditor}
   TMSEditor=object(GDBaseObject)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariableProcessSelector:TVariableProcessSelector;(*'Process variables'*)
@@ -64,9 +62,9 @@ type
                 GeometryUnit:TSimpleUnit;(*'Geometry'*)
                 MiscUnit:TSimpleUnit;(*'Misc'*)
                 SummaryUnit:TSimpleUnit;(*'Summary'*)
-                ObjIDVector:{-}TObjIDVector{/Pointer/};(*hidden_in_objinsp*)
-                ObjID2Counter:{-}TObjID2Counter{/Pointer/};(*hidden_in_objinsp*)
-                ObjIDWithExtenderCounter:{-}TObjIDWithExtender2Counter{/Pointer/};(*hidden_in_objinsp*)
+                ObjIDVector:TObjIDVector;(*hidden_in_objinsp*)
+                ObjID2Counter:TObjID2Counter;(*hidden_in_objinsp*)
+                ObjIDWithExtenderCounter:TObjIDWithExtender2Counter;(*hidden_in_objinsp*)
                 SavezeUnitsFormat:TzeUnitsFormat;(*hidden_in_objinsp*)
                 procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                 procedure CreateUnit(const f:TzeUnitsFormat;_GetEntsTypes:boolean=true);virtual;
@@ -86,7 +84,7 @@ type
                 procedure ClearErrorRange;
             end;
   PMSEditor=^TMSEditor;
-{Export-}
+
 procedure DeselectEnts(PInstance:Pointer);
 procedure SelectOnlyThisEnts(PInstance:Pointer);
 procedure DeselectBlocsByName(PInstance:Pointer);

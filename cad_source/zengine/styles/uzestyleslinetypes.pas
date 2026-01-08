@@ -68,20 +68,20 @@ type
 
   GDBDashInfoArray=GZVector<TDashInfo>;
 
-  TStrokesArray= object(GZVector{-}<Double>{//})
+  TStrokesArray= object(GZVector<Double>)
                   LengthFact:Double;(*'Length'*)
                   constructor init(m:Integer);
-                  function CopyTo(var dest:GZVector{-}<Double>{//}):Integer;virtual;
+                  function CopyTo(var dest:GZVector<Double>):Integer;virtual;
                   procedure Clear;virtual;
                   procedure format;
                  end;
   PTStrokesArray=^TStrokesArray;
 
-  GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})
+  GDBShapePropArray= object(GZVectorObjects<ShapeProp>)
                   constructor init(m:Integer);
                  end;
 
-  GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})
+  GDBTextPropArray= object(GZVectorObjects<TextProp>)
                   constructor init(m:Integer);
                  end;
 
@@ -108,13 +108,13 @@ type
                end;
   PGDBLtypeProp=^GDBLtypeProp;
 
-{EXPORT+}
-{EXPORT-}
+
+
 
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
 PGDBLtypeArray=^GDBLtypeArray;
-GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})
+GDBLtypeArray= object(GDBNamedObjectsArray<PGDBLtypeProp,GDBLtypeProp>)
                     constructor init(m:Integer);
                     constructor initnul;
                     procedure LoadFromFile(const fname:String;lm:TLoadOpt);
@@ -724,7 +724,7 @@ begin
      strings.Destroy;
 end;
 
-function TStrokesArray.CopyTo(var dest:GZVector{-}<Double>{//}):Integer;
+function TStrokesArray.CopyTo(var dest:GZVector<Double>):Integer;
 begin
  result:=inherited;
  if IsObjectIt(TypeOf(dest),TypeOf(TStrokesArray)) then

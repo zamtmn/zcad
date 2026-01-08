@@ -46,13 +46,13 @@ type
   end;
   PGDBLayerProp=^GDBLayerProp;
 
-{EXPORT+}
-{EXPORT-}
+
+
 
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
   PGDBLayerArray=^GDBLayerArray;
-  GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})
+  GDBLayerArray= object(GDBNamedObjectsArray<PGDBLayerProp,GDBLayerProp>)
     private
       fActlState:TActuality;
     public
@@ -64,9 +64,9 @@ GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
       function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
       function createlayerifneedbyname(const lname:String;_source:PGDBLayerProp):PGDBLayerProp;
       procedure NewState;
-      {-}property ActlState:TActuality read fActlState;{//}
+      property ActlState:TActuality read fActlState;
   end;
-{EXPORT-}
+
 
 TLayerProp=class(TNamedObject)
 end;

@@ -30,7 +30,6 @@ uses
      uzglviewareacanvasgeneral;
 type
     PTCanvasData=^TCanvasData;
-    {REGISTERRECORDTYPE TCanvasData}
     TCanvasData=record
               RD_Renderer:String;(*'Device'*)(*oi_readonly*)
         end;

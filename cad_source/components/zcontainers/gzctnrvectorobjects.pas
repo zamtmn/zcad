@@ -21,14 +21,13 @@ unit gzctnrVectorObjects;
 interface
 uses gzctnrVector;
 type
-{Export+}
-{-----------REGISTEROBJECTTYPE GZVectorObjects}
-GZVectorObjects{-}<TData>{//}=object
-                                (GZVector{-}<TData>{//})
+
+GZVectorObjects<TData>=object
+                                (GZVector<TData>)
                              function CreateObject:PT;
                              procedure free;virtual;
                        end;
-{Export-}
+
 implementation
 function GZVectorObjects<TData>.CreateObject;
 {var addr: PtrInt;}

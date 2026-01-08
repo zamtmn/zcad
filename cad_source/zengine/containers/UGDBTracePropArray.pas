@@ -21,10 +21,9 @@ unit UGDBTracePropArray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,gzctnrVector,sysutils;
-{Export+}
+
 type
   ptraceprop=^traceprop;
-  {REGISTERRECORDTYPE traceprop}
   traceprop=record
     trace:Boolean;
     tmouse: Double;
@@ -33,10 +32,9 @@ type
     dispraycoord: TzePoint3d;
     worldraycoord: TzePoint3d;
   end;
-  {REGISTEROBJECTTYPE GDBtracepropArray}
-GDBtracepropArray= object(GZVector{-}<traceprop>{//})
+GDBtracepropArray= object(GZVector<traceprop>)
              end;
-{Export-}
+
 implementation
 begin
 end.

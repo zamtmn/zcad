@@ -32,9 +32,9 @@ type
   PGDBObjLine=^GDBObjLine;
 
   GDBObjLine=object(GDBObj3d)
-    {-}private{//}
+    private
     fCoordInWCS:GDBLineProp;
-    {-}public{//}
+    public
     CoordInOCS:GDBLineProp;
 
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
@@ -95,8 +95,8 @@ type
 
     function getCoordInWCS:GDBLineProp;
 
-    {-} property CoordInWCS:GDBLineProp
-      read fCoordInWCS write fCoordInWCS;{//}
+     property CoordInWCS:GDBLineProp
+      read fCoordInWCS write fCoordInWCS;
   end;
   ptlinertmodify=^tlinertmodify;
 

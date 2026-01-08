@@ -56,8 +56,8 @@ TOpenglData=record
           RD_MaxPointSize:Double;(*'Max point size'*)(*oi_readonly*)
     end;
 PTOpenglData=^TOpenglData;
-{EXPORT+}
-{EXPORT-}
+
+
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
                         mm:TzeTypedMatrix4d;

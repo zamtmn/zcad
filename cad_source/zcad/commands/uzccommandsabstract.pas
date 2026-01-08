@@ -75,9 +75,8 @@ type
   end;
   TCommandEndAction=(CEGUIRePrepare,CEGUIReturnToDefaultObject,
     CEDeSelect,CEDWGNChanged);
-  TCommandEndActions={-}set of TCommandEndAction{/Byte/};
+  TCommandEndActions=set of TCommandEndAction;
   TCStartAttr=integer;
-  {REGISTERRECORDTYPE TInteractiveData}
   TGetPointMode=(
     TGPMWait{point},//ожидание указания точки
     TGPMPoint,      //точка указана
@@ -95,14 +94,14 @@ type
     (*hidden_in_objinsp*)
     DrawFromBasePoint:boolean;(*hidden_in_objinsp*)
     PInteractiveData:Pointer;
-    PInteractiveProc:{-}TInteractiveProcObjBuild{/Pointer/};
-    PInteractiveESP:{-}TEntitySetupProc{/Pointer/};
+    PInteractiveProc:TInteractiveProcObjBuild;
+    PInteractiveESP:TEntitySetupProc;
     Input:ansistring;
     Id:integer;
-    {-}PossibleResult:TGetPossibleResult;{//}
-    {-}InputMode:TGetInputMode;{//}
+    PossibleResult:TGetPossibleResult;
+    InputMode:TGetInputMode;
   end;
-  TCommandOperands={-}string{/Pointer/};
+  TCommandOperands=string;
 
   CommandObjectDef=object
     CommandName:string;(*hidden_in_objinsp*)

@@ -30,10 +30,10 @@ type
   PTZEntityRepresentation=^TZEntityRepresentation;
 
   TZEntityRepresentation=object(GDBaseObject)
-    {-}//private{//}
+    //private
     Graphix:ZGLGraphix;
     Geometry:TGeomEntTreeNode;
-    {-}public{//}
+    public
     constructor init();
     destructor done;virtual;
 

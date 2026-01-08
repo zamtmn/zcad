@@ -29,9 +29,8 @@ type
 objvizarray = array[0..0] of PGDBObjEntity;
 pobjvizarray = ^objvizarray;
 GDBObjEntityArray=array [0..0] of PGDBObjEntity;}
-{Export+}
+
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
-{REGISTEROBJECTTYPE GDBObjOpenArrayOfPV}
 GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntity)
                       procedure DrawWithattrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                       procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
@@ -53,7 +52,7 @@ GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntit
                       function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:TzePoint3d):Boolean;virtual;
                       //function FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjSubordinated;virtual;
                 end;
-{Export-}
+
 function EqualFuncPGDBaseEntity(const a, b: PGDBObjBaseEntity):Boolean;
 implementation
 function EqualFuncPGDBaseEntity(const a, b: PGDBObjBaseEntity):Boolean;

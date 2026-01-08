@@ -22,15 +22,14 @@ unit UGDBOutbound2DIArray;
 interface
 uses uzegeometrytypes,uzgldrawcontext,gzctnrVector,sysutils,uzegeometry;
 type
-{Export+}
+
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
-{REGISTEROBJECTTYPE GDBOOutbound2DIArray}
-GDBOOutbound2DIArray= object(GZVector{-}<TzePoint2i>{//})
+GDBOOutbound2DIArray= object(GZVector<TzePoint2i>)
                       procedure DrawGeometry(var DC:TDrawContext);virtual;
                       function InRect(Frame1, Frame2: TzePoint2i):TInBoundingVolume;virtual;
                       function perimetr:Double;virtual;
                 end;
-{Export-}
+
 function EqualVertex2DI(const a, b: TzePoint2i):Boolean;
 implementation
 function EqualVertex2DI(const a, b: TzePoint2i):Boolean;

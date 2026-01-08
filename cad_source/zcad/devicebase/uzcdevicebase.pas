@@ -21,7 +21,7 @@ DeviceDbBaseObject= object(DbBaseObject)
                        NameTemplate:String;(*'**Формат названия'*)
                        NameFullTemplate:String;(*'**Формат полного названия'*)
                        UIDTemplate:String;(*'**Формат уникального идентификатора'*)
-                       Variants:{-}TCSVDocument{/Pointer/};(*'Варианты'*)
+                       Variants:TCSVDocument;(*'Варианты'*)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                        procedure Format;virtual;
@@ -45,8 +45,8 @@ CableDeviceBaseObject= object(DeviceDbBaseObject)
                              end;
 PCableDeviceBaseObject=^CableDeviceBaseObject;
 
-{EXPORT+}
-{EXPORT-}
+
+
 DeviceManager=object(GDBaseObject)
                     constructor init;
                     procedure loadfromdir(path: String);

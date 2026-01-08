@@ -21,14 +21,12 @@ unit gzctnrVectorClass;
 interface
 uses gzctnrVectorTypes,gzctnrVector;
 type
-{Export+}
-  {----REGISTEROBJECTTYPE GZVectorClass}
-  GZVectorClass{-}<T:class>{//}=object
-                                      (GZVector{-}<T>{//})
+
+  GZVectorClass<T:class>=object(GZVector<T>)
     procedure cleareraseobjfrom2(n:Integer);
     destructor destroy;virtual;
   end;
-{Export-}
+
 implementation
 procedure GZVectorClass<T>.cleareraseobjfrom2(n:Integer);
 var

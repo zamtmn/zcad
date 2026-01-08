@@ -270,10 +270,10 @@ TTranslateFunction=function (const Identifier, OriginalValue: String): String;
     username: TInternalScriptString;
     data: TTypedData;
     attrib:TVariableAttributes;
-    {-}function GetValueAsString:TInternalScriptString;overload;{/ /}
-    {-}procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;{/ /}
-    {-}procedure SetInstance(Ptr:Pointer);overload;{/ /}
-    {-}procedure FreeeInstance;{/ /}
+    function GetValueAsString:TInternalScriptString;overload;
+    procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;
+    procedure SetInstance(Ptr:Pointer);overload;
+    procedure FreeeInstance;
   end;
 
   varmanagerdef=object

@@ -25,12 +25,11 @@ uses
   uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef, gzctnrVectorObjects,
   gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf,Strings,uzeTypes;
 type
-{Export+}
-{REGISTEROBJECTTYPE GDBObjBlockdefArray}
+
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
-GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})
+GDBObjBlockdefArray= object(GZVectorObjects<GDBObjBlockdef>)
                       constructor init(m:Integer);
                       constructor initnul;
 
@@ -43,7 +42,7 @@ GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})
                       procedure Grow(newmax:Integer=0);virtual;
                       procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                     end;
-{Export-}
+
 implementation
 //uses log;
 procedure GDBObjBlockdefArray.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);

@@ -26,8 +26,7 @@ const
   cAlignmentBit=cAlignment{*2};
 
 type
-{Export+}
-{----REGISTEROBJECTTYPE TZctnrAlignedVectorBytes}
+
 TZctnrAlignedVectorBytes=
   object(TZctnrVectorBytes)
                 function beginiterate(out ir:itrec):Pointer;virtual;
@@ -38,7 +37,7 @@ TZctnrAlignedVectorBytes=
 
                 function AllocData(SData:Word):Integer;virtual;
              end;
-{Export-}
+
 implementation
 class function TZctnrAlignedVectorBytes.Align(SData:Integer):Integer;
 //var

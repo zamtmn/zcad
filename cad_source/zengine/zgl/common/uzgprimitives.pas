@@ -49,26 +49,22 @@ type
   PTIndexs=^TIndexs;
   TIndexs=GZVector<TGAndPIndexs>;
 
-{Export+}
-{REGISTERRECORDTYPE ZGLOptimizerData}
+
 ZGLOptimizerData=record
                                                      ignoretriangles:boolean;
                                                      ignorelines:boolean;
                                                      symplify:boolean;
                                                      ignoreTo,ignoreFrom,nextprimitive:TArrayIndex;
                                                end;
-{REGISTERRECORDTYPE TEntIndexesData}
 TEntIndexesData=record
                                                     GeomIndexMin,GeomIndexMax:Integer;
                                                     IndexsIndexMin,IndexsIndexMax:Integer;
                                               end;
-{REGISTERRECORDTYPE TEntIndexesOffsetData}
 TEntIndexesOffsetData=record
                                                     GeomIndexOffset:Integer;
                                                     IndexsIndexOffset:Integer;
                                               end;
 PTLLPrimitive=^TLLPrimitive;
-{---REGISTEROBJECTTYPE TLLPrimitive}
 TLLPrimitive= object(GDBaseObject)
                        function getPrimitiveSize:Integer;virtual;
                        procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
@@ -79,7 +75,6 @@ TLLPrimitive= object(GDBaseObject)
                        function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
                    end;
 PTLLLine=^TLLLine;
-{---REGISTEROBJECTTYPE TLLLine}
 TLLLine= object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
@@ -88,7 +83,6 @@ TLLLine= object(TLLPrimitive)
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
 PTLLTriangle=^TLLTriangle;
-{---REGISTEROBJECTTYPE TLLTriangle}
 TLLTriangle= object(TLLPrimitive)
               P1Index:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
@@ -96,7 +90,6 @@ TLLTriangle= object(TLLPrimitive)
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
 PTLLFreeTriangle=^TLLFreeTriangle;
-{---REGISTEROBJECTTYPE TLLFreeTriangle}
 TLLFreeTriangle= object(TLLPrimitive)
               P1IndexInIndexesArray:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
@@ -104,7 +97,6 @@ TLLFreeTriangle= object(TLLPrimitive)
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
 PTLLTriangleStrip=^TLLTriangleStrip;
-{---REGISTEROBJECTTYPE TLLTriangleStrip}
 TLLTriangleStrip= object(TLLPrimitive)
               P1IndexInIndexesArray:TLLVertexIndex;
               IndexInIndexesArraySize:TLLVertexIndex;
@@ -115,12 +107,10 @@ TLLTriangleStrip= object(TLLPrimitive)
               constructor init;
         end;
 PTLLTriangleFan=^TLLTriangleFan;
-{---REGISTEROBJECTTYPE TLLTriangleFan}
 TLLTriangleFan= object(TLLTriangleStrip)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
         end;
 PTLLPoint=^TLLPoint;
-{---REGISTEROBJECTTYPE TLLPoint}
 TLLPoint= object(TLLPrimitive)
               PIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
@@ -129,7 +119,6 @@ TLLPoint= object(TLLPrimitive)
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
 PTSymbolSParam=^TSymbolSParam;
-{REGISTERRECORDTYPE TSymbolSParam}
 TSymbolSParam=record
                    FirstSymMatr:TzeTypedMatrix4d;
                    sx,Rotate,Oblique,NeededFontHeight{,offsety}:Single;
@@ -137,7 +126,6 @@ TSymbolSParam=record
                    IsCanSystemDraw:Boolean;
              end;
 PTLLSymbol=^TLLSymbol;
-{---REGISTEROBJECTTYPE TLLSymbol}
 TLLSymbol= object(TLLPrimitive)
               SymSize:Integer;
               LineIndex:TArrayIndex;
@@ -154,7 +142,6 @@ TLLSymbol= object(TLLPrimitive)
               function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
         end;
 PTLLSymbolLine=^TLLSymbolLine;
-{---REGISTEROBJECTTYPE TLLSymbolLine}
 TLLSymbolLine= object(TLLPrimitive)
               SimplyDrawed:Boolean;
               MaxSqrSymH:Single;
@@ -181,13 +168,11 @@ TLLProxyLine= object(TLLPrimitive)
               procedure Process(var GeomData:ZGLGeomData;const ACurrentPoint:TzePoint3d;ACPrimitiveIndex:TArrayIndex;At:Double);
         end;
 PTLLSymbolEnd=^TLLSymbolEnd;
-{---REGISTEROBJECTTYPE TLLSymbolEnd}
 TLLSymbolEnd= object(TLLPrimitive)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
               function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
                    end;
 PTLLPolyLine=^TLLPolyLine;
-{---REGISTEROBJECTTYPE TLLPolyLine}
 TLLPolyLine= object(TLLPrimitive)
               P1Index,Count,SimplifiedContourIndex,SimplifiedContourSize:TLLVertexIndex;
               Closed:Boolean;
@@ -198,7 +183,7 @@ TLLPolyLine= object(TLLPrimitive)
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
               constructor init;
         end;
-{Export-}
+
 implementation
 uses uzglvectorobject{,uzcdrawings,uzecamera};
 constructor TGAndPIndexs.CreateRec(AGI,API:TArrayIndex;At:Double);

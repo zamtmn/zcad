@@ -22,13 +22,12 @@ interface
 uses gzctnrVectorPData,gzctnrVector,
      typinfo;
 type
-{Export+}
-{------------REGISTEROBJECTTYPE GZVectorPObects}
-GZVectorPObects{-}<PTObj,TObj>{//}
-                             =object(GZVectorPData{-}<PTObj>{//})
+
+GZVectorPObects<PTObj,TObj>
+                             =object(GZVectorPData<PTObj>)
                              function CreateObject:PTObj;
                 end;
-{Export-}
+
 implementation
 function GZVectorPObects<PTObj,TObj>.CreateObject;
 begin

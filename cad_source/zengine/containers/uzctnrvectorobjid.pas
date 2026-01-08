@@ -21,10 +21,10 @@ unit uzctnrvectorobjid;
 interface
 uses uzbtypes,gzctnrVectorSimple;
 type
-{Export+}
+
 PTZctnrVectorObjID=^TZctnrVectorObjID;
-TZctnrVectorObjID=GZVectorSimple{-}<TObjID>{//};
-{Export-}
+TZctnrVectorObjID=GZVectorSimple<TObjID>;
+
 implementation
 begin
 end.

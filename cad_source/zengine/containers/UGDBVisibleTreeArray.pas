@@ -23,9 +23,8 @@ interface
 uses uzeentitiestree,UGDBVisibleOpenArray,sysutils,uzegeometry,
      uzeentity,gzctnrVectorTypes;
 type
-{Export+}
+
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;
-{REGISTEROBJECTTYPE GDBObjEntityTreeArray}
 GDBObjEntityTreeArray= object(GDBObjEntityOpenArray)
                             ObjTree:TEntTreeNode;
                             constructor init(m:Integer);
@@ -36,7 +35,7 @@ GDBObjEntityTreeArray= object(GDBObjEntityOpenArray)
                             procedure RemoveFromTree(p:PGDBObjEntity);
 
                       end;
-{Export-}
+
 implementation
 procedure GDBObjEntityTreeArray.free;
 begin

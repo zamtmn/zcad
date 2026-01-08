@@ -25,16 +25,14 @@ uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
      gzctnrVectorTypes,uzestyleslinetypes,sysutils,uzbtypes,uzeTypes,
      uzbstrproc,uzefont,uzglvectorobject,uzgprimitivessarray,uzgprimitives;
 type
-{Export+}
+
   PZGLGraphix=^ZGLGraphix;
   PZPolySegmentData=^ZPolySegmentData;
-  {REGISTERRECORDTYPE ZPolySegmentData}
   ZPolySegmentData= record
     startpoint,endpoint,dir:TzePoint3d;
     length,nlength,naccumlength,accumlength:Double;
   end;
-  {REGISTEROBJECTTYPE ZSegmentator}
-  ZSegmentator=object(GZVector{-}<ZPolySegmentData>{//})
+  ZSegmentator=object(GZVector<ZPolySegmentData>)
     dir,cp:TzePoint3d;
     cdp,angle:Double;
     pcurrsegment:PZPolySegmentData;
@@ -47,7 +45,6 @@ type
     procedure normalize(l:Double);
     procedure draw(var rc:TDrawContext;length:Double;paint:boolean;var dr:TLLDrawResult);
   end;
-  {REGISTEROBJECTTYPE ZGLGraphix}
   ZGLGraphix= object(ZGLVectorObject)
     procedure DrawGeometry(var DC:TDrawContext;const inFrustumState:TInBoundingVolume;simplydraw:boolean);virtual;
     constructor init();
@@ -72,7 +69,7 @@ type
     procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:TzeTypedMatrix4d;const textprop_size:Double;var Outbound:OutBound4V);
     //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:Double):Boolean;
   end;
-{Export-}
+
 var
   sysvarDWGRotateTextInLT:boolean=true;
   SysVarRDMaxLTPatternsInEntity:integer=1000;

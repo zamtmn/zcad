@@ -25,7 +25,7 @@ const
     lineend:string=#13#10;
 type
 PTZctnrVectorBytes=^TZctnrVectorBytes;
-TZctnrVectorBytes=object(GZVector{-}<byte>{//})
+TZctnrVectorBytes=object(GZVector<byte>)
                       ReadPos:Integer;
                       name:AnsiString;
                       constructor init(m:Integer);

@@ -149,14 +149,14 @@ TFieldNames=set of TFieldName;
 TTypeAliases=TMyMapGen<TInternalScriptString,TInternalScriptString>;
 TVMT2PTD=TMyMapGen<Pointer,PObjectDescriptor>;
 
-TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor>{//})
+TZctnrVectorPUserTypeDescriptors=object(GZVectorPData<PUserTypeDescriptor>)
                            end;
 ptypemanager=^typemanager;
 typemanager=object(typemanagerdef)
-                  {-}protected{//}
-                  n2i:{-}TNameToIndex;{/Pointer;/}
-                  aliases:{-}TTypeAliases;{/Pointer;/}
-                  {-}public{//}
+                  protected
+                  n2i:TNameToIndex;
+                  aliases:TTypeAliases;
+                  public
                   exttype:TZctnrVectorPUserTypeDescriptors;
                   constructor init;
                   procedure CreateBaseTypes;virtual;

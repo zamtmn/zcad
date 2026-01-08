@@ -314,7 +314,6 @@ var
   bmodesave,bmodesave2,bmodetemp:Integer;
   tname:TInternalScriptString;
   ta,tb,taa:Pointer;
-  //pobj:PGDBaseObject;
   ir,ir2:itrec;
   pvd:pvardesk;
   tw:TFieldAttrs;
@@ -328,7 +327,6 @@ var
   PUTDOverrider:PTUserTypeDescriptor;
 begin
   zTraceLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
-  //pobj:=addr;
   startaddr:=addr;
   bmodesave:=property_build;
   if PCollapsed<>field_no_attrib then begin

@@ -47,8 +47,7 @@ type
     TO_MText,
     TO_NotDefined
     );
-  {EXPORT+}
-  {REGISTEROBJECTTYPE TextInsert_com}
+
   TextInsert_com=object(FloatInsert_com)
     pt:PGDBObjText;
     TOverrider:TTOMode;
@@ -69,7 +68,7 @@ type
     function getNeedEntityType:TIMode;
     function getNeedText:TDXFEntsInternalStringType;
   end;
-  {EXPORT-}
+
   PTTextInsertParams=^TTextInsertParams;
 
   TTextInsertParams=record

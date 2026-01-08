@@ -61,8 +61,8 @@ TGDIData=record
     end;
 PTGDIData=^TGDIData;
 
-{EXPORT+}
-{EXPORT-}
+
+
 TGDIFontCacheKey=record
                        RealSizeInPixels:Integer;
                        PFontRecord:PGDBFontRecord;
@@ -71,7 +71,6 @@ TGDIFontCacheKey=record
                        Handle:HFONT;
                   end;}
 PTLLGDISymbol=^TLLGDISymbol;
-{---REGISTEROBJECTTYPE TLLGDISymbol}
 TLLGDISymbol= object(TLLSymbol)
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);virtual;
         end;

@@ -21,10 +21,10 @@ unit uzctnrvectorgdbpalettecolor;
 interface
 uses uzepalette,gzctnrVectorSimple;
 type
-{Export+}
+
 PTZctnrVectorTGDBPaletteColor=^TZctnrVectorTGDBPaletteColor;
-TZctnrVectorTGDBPaletteColor=GZVectorSimple{-}<TGDBPaletteColor>{//};
-{Export-}
+TZctnrVectorTGDBPaletteColor=GZVectorSimple<TGDBPaletteColor>;
+
 implementation
 begin
 end.

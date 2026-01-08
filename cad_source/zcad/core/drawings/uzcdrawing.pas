@@ -28,9 +28,8 @@ uses
   uzeconsts,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,uzbUnits,
   uzegeometrytypes,uzctnrVectorBytesStream,gzctnrVectorTypes,uzglviewareadata;
 type
-{EXPORT+}
+
 PTZCADDrawing=^TZCADDrawing;
-{REGISTEROBJECTTYPE TZCADDrawing}
 TZCADDrawing= object(TSimpleDrawing)
 
            FileName:String;
@@ -65,7 +64,7 @@ TZCADDrawing= object(TSimpleDrawing)
            procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;
            procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
      end;
-{EXPORT-}
+
 //procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
 implementation
  uses uzcdrawings,uzccommandsmanager;

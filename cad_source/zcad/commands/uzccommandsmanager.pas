@@ -53,7 +53,7 @@ type
   TOnCommandRun=procedure(command:string) of object;
   TButtonMethod2=procedure(const Data:TZCADCommandContext) of object;
 
-  TZctnrPCommandObjectDef=object(GZVectorP{-}<PCommandObjectDef>{//})
+  TZctnrPCommandObjectDef=object(GZVectorP<PCommandObjectDef>)
     //TODO:почемуто не работают синонимы с объектами, приходится наследовать
     //TODO:надо тут поменять GZVectorP на GZVectorSimple
   end;
@@ -63,7 +63,7 @@ type
     Context:TZCADCommandContext;
   end;
 
-  GDBcommandmanager=object(GZVectorPObects{-}<PCommandObjectDef,CommandObjectDef>{//})
+  GDBcommandmanager=object(GZVectorPObects<PCommandObjectDef,CommandObjectDef>)
     lastcommand:string;
 
     CurrCmd:TCmdWithContext;

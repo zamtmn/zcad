@@ -116,7 +116,7 @@ type
     function IsShortcut(var Message: TLMKey): boolean; override;
     function ShowModal: Integer; override;
     procedure IncreaseChangeStamp;
-    {-}property ChangeStamp:Boolean read fChangeStamp;{//}
+    property ChangeStamp:Boolean read fChangeStamp;
   end;
 
 var

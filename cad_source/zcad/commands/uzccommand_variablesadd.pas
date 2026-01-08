@@ -70,7 +70,6 @@ type
   TVarTextSelectParams=record
     TemplateToFind:ansistring;
   end;
-  {REGISTEROBJECTTYPE SelSim_com}
   VariablesAdd_com=object(CommandRTEdObject)
     procedure CommandStart(
       const Context:TZCADCommandContext;Operands:TCommandOperands);virtual;

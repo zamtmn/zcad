@@ -30,13 +30,12 @@ uses
   uzglviewareadata,uzeExtdrAbstractDrawingExtender,uzCtnrVectorPBaseEntity;
 type
   TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
-{EXPORT+}
+
   TDrawingActualy=record
     EntityLayers:TActuality;
-    {-}procedure CreateDef;{//}
+    procedure CreateDef;
   end;
   PTSimpleDrawing=^TSimpleDrawing;
-{REGISTEROBJECTTYPE TSimpleDrawing}
   TSimpleDrawing= object(TAbstractDrawing)
       type
         TSelector=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;
@@ -120,7 +119,7 @@ type
                        procedure UpdateActuality;
                        procedure LostActuality;
   end;
-{EXPORT-}
+
 function CreateSimpleDWG:PTSimpleDrawing;
 var
   MainBlockCreateProc:TMainBlockCreateProc=nil;

@@ -31,8 +31,8 @@ DbBaseObject= object(GDBaseObject)
                  end;
 PDbBaseObject=^DbBaseObject;
 
-{EXPORT+}
-{EXPORT-}
+
+
 implementation
 constructor DbBaseObject.initnul;
 begin

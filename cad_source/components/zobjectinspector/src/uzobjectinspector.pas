@@ -1691,7 +1691,7 @@ begin
                                                                                             pp.FastEditorState:=TFES_Pressed;
                                                                                             {pp.FastEditor.OnRunFastEditor(pp.valueAddres);
                                                                                             if GDBobj then
-                                                                                            if PGDBaseObject(CurrPObj)^.IsEntity then
+                                                                                            if PGD--BaseObject(CurrPObj)^.IsEntity then
                                                                                                                                 PGDBObjEntity(CurrPObj)^.FormatEntity(PTDrawingDef(CurrContext)^);
                                                                                             if assigned(resetoglwndproc) then resetoglwndproc;
                                                                                             if assigned(redrawoglwndproc) then redrawoglwndproc;

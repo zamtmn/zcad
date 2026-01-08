@@ -25,17 +25,15 @@ uses
   uzeentity,UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry,
   uzglviewareadata,uzeTypes;
 type
-{Export+}
+
 PSelectedObjDesc=^SelectedObjDesc;
-{REGISTERRECORDTYPE SelectedObjDesc}
 SelectedObjDesc=record
                       objaddr:PGDBObjEntity;
                       pcontrolpoint:PGDBControlPointArray;
                       ptempobj:PGDBObjEntity;
                 end;
 PGDBSelectedObjArray=^GDBSelectedObjArray;
-{REGISTEROBJECTTYPE GDBSelectedObjArray}
-GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
+GDBSelectedObjArray= object(GZVector<selectedobjdesc>)
                           SelectedCount:Integer;
 
                           function addobject(PEntity:PGDBObjEntity):pselectedobjdesc;virtual;
@@ -60,7 +58,7 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           procedure calcvisible(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                           //procedure resprojparam(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
-{EXPORT-}
+
 implementation
 //uses uzedrawingabstract,uzeentgenericsubentry;
 {procedure GDBSelectedObjArray.resprojparam;

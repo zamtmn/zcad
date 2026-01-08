@@ -23,10 +23,9 @@ interface
 uses uzegeometrytypes,gzctnrVector,sysutils,math,
      gzctnrVectorTypes,{uzgloglstatemanager,}uzegeometry;
 type
-{Export+}
-{REGISTEROBJECTTYPE GDBPoint3dArray}
+
 PGDBPoint3dArray=^GDBPoint3dArray;
-GDBPoint3dArray= object(GZVector{-}<TzePoint3d>{//})
+GDBPoint3dArray= object(GZVector<TzePoint3d>)
                 function onpoint(const p:TzePoint3d;closed:Boolean):Boolean;
                 function onmouse(const mf:TzeFrustum;const closed:Boolean):Boolean;virtual;
                 function CalcTrueInFrustum(const frustum:TzeFrustum; const closed:boolean):TInBoundingVolume;virtual;
@@ -35,7 +34,7 @@ GDBPoint3dArray= object(GZVector{-}<TzePoint3d>{//})
                 procedure DrawGeometryWClosed(closed:Boolean);virtual;}
                 function getoutbound:TBoundingBox;virtual;
              end;
-{Export-}
+
 implementation
 function GDBPoint3DArray.getoutbound;
 var

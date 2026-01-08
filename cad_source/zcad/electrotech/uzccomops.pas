@@ -99,8 +99,8 @@ type
                      end;
   PTOrtoDevPlaceParam=^TOrtoDevPlaceParam;
 
-{Export+}
-{Export-}
+
+
 OPS_SPBuild= object(FloatInsert_com)
  procedure Command(Operands:TCommandOperands); virtual;
 end;

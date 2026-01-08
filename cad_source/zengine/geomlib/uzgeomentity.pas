@@ -22,13 +22,12 @@ interface
 uses
   sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
 type
-{Export+}
+
 PTGeomEntity=^TGeomEntity;
-{REGISTEROBJECTTYPE TGeomEntity}
 TGeomEntity= object(GDBaseObject)
                                              function GetBB:TBoundingBox;virtual;abstract;
                                            end;
-{Export-}
+
 implementation
 begin
 end.

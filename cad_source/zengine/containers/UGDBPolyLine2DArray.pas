@@ -23,10 +23,9 @@ interface
 uses uzegeometrytypes,gzctnrVector,sysutils,uzegeometry,
      gzctnrVectorTypes,math;
 type
-{Export+}
-{REGISTEROBJECTTYPE GDBPolyline2DArray}
+
 PGDBPolyline2DArray=^GDBPolyline2DArray;
-GDBPolyline2DArray= object(GZVector{-}<TzePoint2d>{//})
+GDBPolyline2DArray= object(GZVector<TzePoint2d>)
                       closed:Boolean;
                       constructor init(m:Integer;c:Boolean);
 
@@ -39,7 +38,7 @@ GDBPolyline2DArray= object(GZVector{-}<TzePoint2d>{//})
                       procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
                       function getoutbound:TBoundingBox;virtual;
                 end;
-{Export-}
+
 function _intercept2d(const p1,p2,p:TzePoint2d;const dirx, diry: Double): Boolean;
 implementation
 function GDBPolyline2DArray.getoutbound;

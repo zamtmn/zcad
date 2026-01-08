@@ -22,11 +22,10 @@ interface
 uses
      sysutils,uzgeomentity,uzegeometry;
 type
-{Export+}
-{REGISTEROBJECTTYPE TGeomEntity3D}
+
 TGeomEntity3D= object(TGeomEntity)
                                              end;
-{Export-}
+
 implementation
 begin
 end.

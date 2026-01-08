@@ -21,17 +21,16 @@ unit gzctnrVectorSimple;
 interface
 uses gzctnrVector,gzctnrVectorTypes;
 type
-{Export+}
-{----REGISTEROBJECTTYPE GZVectorSimple}
-GZVectorSimple{-}<T>{//}=object
-                               (GZVector{-}<T>{//})
+
+GZVectorSimple<T>=object
+                               (GZVector<T>)
                                    function PushBackIfNotPresent(data:T):Integer;
                                    function IsDataExist(pobj:T):Integer;
                                    {**Удалить элемент по содержимому, с уменьшениием размера массива}
                                    procedure EraseData(data:T);
                                    procedure RemoveDataFromArray(const data:T);virtual;
                                  end;
-{Export-}
+
 implementation
 
 procedure GZVectorSimple<T>.RemoveDataFromArray(const data:T);

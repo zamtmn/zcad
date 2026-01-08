@@ -43,7 +43,7 @@ GDBOperandDesc=record
 GDBMetodModifier=Word;
 TOperandsVector=GZVector<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
-MetodDescriptor=object//(GDBaseObject)
+MetodDescriptor=object
                       objname:String;
                       MetodName:String;
                       OperandsName:String;
@@ -250,132 +250,12 @@ begin
 end;
 
 procedure ObjectDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);
-//var pd:PFieldDescriptor;
-//    d:FieldDescriptor;
-//    ir:itrec;
 begin
         membuf.TXTAddStringEOL(prefix+'.initnul;');
         inherited;
          membuf.TXTAddStringEOL('');
 end;
-(*function ObjectDescriptor.Serialize;
-var
-   pld:PRecordDescriptor;
-   p:pointer;
-   objtypename:string;
-       ir:itrec;
-begin
-     inherited serialize(PInstance,SaveFlag,membuf,linkbuf,sub);
-     PGDBaseObject(PInstance)^.AfterSerialize(SaveFlag,pointer(membuf));
-        if LincedData<>''then
-        begin
-             if LincedData='TObjLinkRecord' then
-                                    LincedData:=LincedData;
-             pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(LincedData))^));
-             p:=PGDBOpenArrayOfData(PInstance)^.beginiterate(ir);
-             if p<>nil then
-             repeat
-                   pld^.Serialize(p,saveflag,membuf,linkbuf,sub);
-                   p:=PGDBOpenArrayOfData(PInstance)^.iterate(ir);
-             until p=nil;
-        end;
-        if LincedObjects then
-        begin
-             p:=PGDBOpenArrayOfGDBPointer(PInstance)^.beginiterate(ir);
-             if p<>nil then
-             repeat
-                   objtypename:=PGDBaseObject(P)^.GetObjTypeName;
-                   if objtypename<>ObjN_NotRecognized then
-                   begin
-                        //if objtypename<>ObjN_GDBObjLine then
-                        //                                    objtypename:=objtypename;
-                        FundamentalStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf,sub);
-                        pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
-                        pld^.Serialize(p,saveflag,membuf,linkbuf,sub);
-                   end;
-                   p:=PGDBOpenArrayOfGDBPointer(PInstance)^.iterate(ir);
-             until p=nil;
-             objtypename:=ObjN_ArrayEnd;
-             FundamentalStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf,sub);
-        end;
-end;
-function ObjectDescriptor.DeSerialize;
-var //pd:PFieldDescriptor;
-//     d:FieldDescriptor;
-     p:ppointer;
-//     fo:integer;
-     pld:PRecordDescriptor;
-     objtypename:string;
-     i:integer;
-begin
-     if self.TypeName='GDBObjRoot' then
-                                    LincedData:=LincedData;
-     RunDefaultConstructor(Pinstance);
-     inherited DeSerialize(PInstance,SaveFlag,membuf,linkbuf);
-     PGDBaseObject(PInstance)^.AfterDeSerialize(SaveFlag,pointer(@membuf));
-     if LincedData<>''then
-        begin
-             if LincedData='GDBTextStyle' then
-                                    LincedData:=LincedData;
-             pld:=pointer(SysUnit.TypeName2PTD(LincedData));
-             for i := 0 to PGDBOpenArrayOfData(PInstance)^.Count-1 do
-             begin
-             p:=PGDBOpenArrayOfData(PInstance)^.getDataMutable(i);
-             pld^.DeSerialize(p,saveflag,membuf,linkbuf);
-             end;
-        end;
-        if LincedObjects then
-        begin
-             i:=0;
-             objtypename:='';
-             FundamentalStringDescriptorObj.DeSerialize(@objtypename,saveflag,membuf,linkbuf);
-             while objtypename<>ObjN_ArrayEnd do
-             begin
-                  p:=PGDBOpenArrayOfData(PInstance)^.getDataMutable(i);
-                  pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.{exttype.}getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
-                  Getmem(pointer(p^),pld^.SizeInBytes);
-                  pld^.deSerialize(p^,saveflag,membuf,linkbuf);
 
-                  objtypename:='';
-                  FundamentalStringDescriptorObj.DeSerialize(@objtypename,saveflag,membuf,linkbuf);
-                  inc(i);
-             end;
-
-             (*for i := 0 to PGDBOpenArrayOfGDBPointer(PInstance)^.Count-1 do
-             begin
-                   p:=PGDBOpenArrayOfData(PInstance)^.getDataMutable(i);
-                   FundamentalStringDescriptorObj^.DeSerialize(@objtypename,saveflag,membuf);
-                   if objtypename<>ObjN_NotRecognized then
-                   begin
-                        if objtypename=ObjN_ArrayEnd then system.Break;
-                        pld:=pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(Types.TypeName2Index(objtypename))^));
-                        Getmem(pointer(p^),pld^.SizeInBytes);
-                        pld^.deSerialize(p^,saveflag,membuf);
-                   end;
-                   objtypename:='';
-             end;
-             objtypename:='';*)
-//        end;
-        {if LincedObjects then
-        begin
-             p:=PGDBOpenArrayOfGDBPointer(PInstance)^.beginiterate;
-             if p<>nil then
-             repeat
-                   objtypename:=PGDBaseObject(P)^.GetObjTypeName;
-                   if objtypename<>ObjN_NotRecognized then
-                   begin
-                        if objtypename<>ObjN_GDBObjLine then
-                                                            objtypename:=objtypename;
-                        FundamentalStringDescriptorObj^.Serialize(@objtypename,saveflag,membuf,linkbuf);
-                        pld:=pointer(PUserTypeDescriptor(Types.exttype.getDataMutable(Types.TypeName2Index(objtypename))^));
-                        pld^.Serialize(p,saveflag,membuf,linkbuf);
-                   end;
-                   p:=PGDBOpenArrayOfGDBPointer(PInstance)^.iterate;
-             until p=nil;
-             objtypename:=ObjN_ArrayEnd;
-             FundamentalStringDescriptorObj^.Serialize(@objtypename,saveflag,membuf,linkbuf);
-        end;}
-//end;*)
 procedure freemetods(p:Pointer);
 begin
      PMetodDescriptor(p)^.MetodName:='';
@@ -594,7 +474,6 @@ begin
                        //         PtrInt(pmd^.MetodAddr)+12)^;
                        {$endif WIN64}
                   SimpleProcOfObj(tm);
-                       //pgdbaseobject(obj)^.Format;
                   (*asm
                                                                 {$ifdef WINDOWS}
                                                                 mov rax,[obj]//win64

@@ -29,10 +29,10 @@ type
   PGDBObjWithMatrix=^GDBObjWithMatrix;
 
   GDBObjWithMatrix=object(GDBObjEntity)
-    {-}protected{//}
+    protected
     fObjMatrix:TzeTypedMatrix4d;
     procedure SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);virtual;
-    {-}public{//}
+    public
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     function GetMatrix:PzeTypedMatrix4d;virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
@@ -50,7 +50,7 @@ type
       var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
 
-    {-} property ObjMatrix:TzeTypedMatrix4d read fObjMatrix write SetObjMatrix;{//}
+     property ObjMatrix:TzeTypedMatrix4d read fObjMatrix write SetObjMatrix;
   end;
 
 implementation

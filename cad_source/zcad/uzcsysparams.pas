@@ -61,8 +61,8 @@ type
   end;
   PZCSysParams=^TZCSysParams;
 
-{EXPORT+}
-{EXPORT-}
+
+
 const
   DefaultSavedParams:TZCSavedParams=(UniqueInstance:true;
                                    NoSplash:false;

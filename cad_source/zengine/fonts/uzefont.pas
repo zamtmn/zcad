@@ -25,9 +25,8 @@ uses math,uzgldrawerabstract,uzgprimitivescreator,uzgprimitives,
      uzefontbase,uzegeometrytypes,uzegeometry,uzglvectorobject,
      gzctnrVectorTypes,uzeNamedObject;
 type
-{EXPORT+}
+
 PGDBfont=^GDBfont;
-{REGISTEROBJECTTYPE GDBfont}
 GDBfont= object(GDBNamedObject)
     fontfile:String;
     Internalname:String; // Международное полное имя с описанием авора
@@ -42,7 +41,7 @@ GDBfont= object(GDBNamedObject)
     function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
     procedure CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:TzeTypedMatrix4d;matr:TzeTypedMatrix4d;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
   end;
-{EXPORT-}
+
 var
    pbasefont: PGDBfont;
 procedure initfont(var pf:pgdbfont;name:String);

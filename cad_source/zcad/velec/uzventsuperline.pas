@@ -25,8 +25,7 @@ uses uzeobjectextender,LCLProc,uzeentityfactory,uzedrawingdef,
      uzeentline,uzeentity,uzctnrVectorBytesStream,uzbtypes,uzeTypes,uzeconsts,
      uzegeometrytypes,uzegeometry,uzeffdxfsupport;
 type
-{Export+}
-{REGISTEROBJECTTYPE GDBObjSuperLine}
+
 PGDBObjSuperLine=^GDBObjSuperLine;
 GDBObjSuperLine= object(GDBObjLine)
                   constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:TzePoint3d);
@@ -38,7 +37,7 @@ GDBObjSuperLine= object(GDBObjLine)
                   procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
                   class function GetDXFIOFeatures:TDXFEntIODataManager;static;
            end;
-{Export-}
+
 function AllocAndInitSuperLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 var
     GDBObjSuperLineDXFFeatures:TDXFEntIODataManager;

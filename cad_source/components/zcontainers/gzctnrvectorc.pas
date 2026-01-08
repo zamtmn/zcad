@@ -35,19 +35,18 @@ const
 type
 TZAbsVectorClass=class
 end;
-{Export+}
+
 {**Генерик объекта-массива}
-{----REGISTEROBJECTTYPE GZVector}
-GZVectorc{-}<T>{//}=class(TZAbsVectorClass)//(TZAbsVector)
-    {-}type{//}
-        {-}TDataType=T;{//}                               //**< Тип данных T
-        {-}PT=^T;{//}                                     //**< Тип указатель на тип данных T
-        {-}TArr=array[0..0] of T;{//}                     //**< Тип массив данных T
-        {-}PTArr=^TArr;{//}                               //**< Тип указатель на массив данных T
-        {-}TEqualFunc=function(const a, b: T):Boolean;{//}//**< Тип функция идентичности T
-        {-}TProcessProc=procedure(const p: PT);{//}       //**< Тип процедура принимающая указатель на T
-    {-}var{//}
-        PArray:{-}PTArr{/Pointer/};(*hidden_in_objinsp*)   //**< Указатель на массив данных
+GZVectorc<T>=class(TZAbsVectorClass)//(TZAbsVector)
+    type
+        TDataType=T;                               //**< Тип данных T
+        PT=^T;                                     //**< Тип указатель на тип данных T
+        TArr=array[0..0] of T;                     //**< Тип массив данных T
+        PTArr=^TArr;                               //**< Тип указатель на массив данных T
+        TEqualFunc=function(const a, b: T):Boolean;//**< Тип функция идентичности T
+        TProcessProc=procedure(const p: PT);       //**< Тип процедура принимающая указатель на T
+    var
+        PArray:PTArr;(*hidden_in_objinsp*)   //**< Указатель на массив данных
         Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
         Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
      public
@@ -147,7 +146,7 @@ GZVectorc{-}<T>{//}=class(TZAbsVectorClass)//(TZAbsVector)
 
         procedure freewithproc(freeproc:TProcessProc);virtual;
   end;
-{Export-}
+
 function remapmememblock(pblock:Pointer;sizeblock:Integer):Pointer;
 function enlargememblock(pblock:Pointer;oldsize,nevsize:Integer):Pointer;
 

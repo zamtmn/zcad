@@ -23,11 +23,10 @@ uses varman,uzedrawingdef,varmandef,UGDBPoint3DArray,gzctnrVector,
      uzegeometrytypes,sysutils,uzbtypes,uzegeometry,uzeentity,UGDBOpenArrayOfPV,
      gzctnrVectorTypes,uzcenitiesvariablesextender,uzeentline,math;
 type
-{EXPORT+}
+
 PTLinkType=^TLinkType;
 TLinkType=(LT_Normal,LT_OnlyLink);
 pgrafelement=^grafelement;
-{REGISTEROBJECTTYPE grafelement}
 grafelement= object(GDBaseObject)
                   linkcount:Integer;
                   point:TzePoint3d;
@@ -42,8 +41,7 @@ grafelement= object(GDBaseObject)
                   procedure addline(pv:pgdbobjEntity);
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
-{REGISTEROBJECTTYPE GDBGraf}
-GDBGraf= object(GZVector{-}<grafelement>{//})
+GDBGraf= object(GZVector<grafelement>)
                 constructor init(m:Integer);
                 function addge(const v:TzePoint3d):pgrafelement;
                 procedure clear;virtual;
@@ -55,7 +53,7 @@ GDBGraf= object(GZVector{-}<grafelement>{//})
                 procedure BeginFindPath;
                 procedure FindPath(point1,point2:TzePoint3d;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
              end;
-{EXPORT-}
+
 function getlinktype(pv:PGDBObjEntity):TLinktype;
 implementation
 procedure GDBGraf.BeginFindPath;

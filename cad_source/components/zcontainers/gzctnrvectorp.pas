@@ -21,10 +21,9 @@ unit gzctnrVectorP;
 interface
 uses gzctnrVectorTypes,sysutils,gzctnrVector,gzctnrVectorSimple;
 type
-{Export+}
-{---------REGISTEROBJECTTYPE GZVectorP}
-GZVectorP{-}<T>{//}=object
-                          (GZVectorSimple{-}<T>{//})
+
+GZVectorP<T>=object
+                          (GZVectorSimple<T>)
                                        Deleted:TArrayIndex;(*hidden_in_objinsp*)
                                        function iterate (var ir:itrec):Pointer;virtual;
                                        function beginiterate(out ir:itrec):Pointer;virtual;
@@ -38,7 +37,7 @@ GZVectorP{-}<T>{//}=object
                                        procedure Clear;virtual;
                                        //function GetCount:Integer;
                                  end;
-{Export-}
+
 function EqualFuncPointer(const a, b: pointer):Boolean;
 implementation
 function EqualFuncPointer(const a, b: pointer):Boolean;

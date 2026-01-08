@@ -24,9 +24,8 @@ uses
   uzbUnits,
   uzestyleslinetypes,uzestylestables;
 type
-{EXPORT+}
+
 PTDrawingDef=^TDrawingDef;
-{REGISTEROBJECTTYPE TDrawingDef}
 TDrawingDef= object(GDBaseobject)
                        procedure CreateBlockDef(name:String);virtual;abstract;
                        function GetLayerTable:PGDBLayerArray;virtual;abstract;
@@ -47,6 +46,6 @@ TDrawingDef= object(GDBaseobject)
                        function CreateDrawingRC(_maxdetail:Boolean=false;ExcludeOpts:TDContextOptions=[]):TDrawContext;virtual;abstract;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
                  end;
-{EXPORT-}
+
 implementation
 end.

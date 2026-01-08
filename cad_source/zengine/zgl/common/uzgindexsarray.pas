@@ -23,14 +23,13 @@ interface
 uses gzctnrVector,sysutils,
      gzctnrVectorTypes,uzegeometry;
 type
-{Export+}
+
 PZGLIndexsArray=^ZGLIndexsArray;
-{REGISTEROBJECTTYPE ZGLIndexsArray}
-ZGLIndexsArray= object(GZVector{-}<TArrayIndex>{//})
+ZGLIndexsArray= object(GZVector<TArrayIndex>)
                 constructor init(m:Integer);
                 constructor initnul;
              end;
-{Export-}
+
 implementation
 //uses {glstatemanager,}log;
 constructor ZGLIndexsArray.init;

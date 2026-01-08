@@ -21,9 +21,8 @@ unit uzcbillofmaterial;
 interface
 uses gzctnrVectorTypes,gzctnrVector,sysutils;
 type
-{EXPORT+}
+
 PGDBBOMItem=^GDBBOMItem;
-{REGISTERRECORDTYPE GDBBOMItem}
 GDBBOMItem=record
                  Material:String;
                  Amount:Double;
@@ -31,15 +30,14 @@ GDBBOMItem=record
                  processed:Boolean;
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
-{REGISTEROBJECTTYPE GDBBbillOfMaterial}
-GDBBbillOfMaterial= object(GZVector{-}<GDBBOMItem>{//})
+GDBBbillOfMaterial= object(GZVector<GDBBOMItem>)
                        constructor init(m:Integer);
                        procedure freeelement(PItem:PT);virtual;
                        //function getnamenumber(_Name:String):String;
                        //function AddByPointer(p:Pointer):TArrayIndex;virtual;
                        function findorcreate(_Name:String):PGDBBOMItem;virtual;
                        end;
-{EXPORT-}
+
 implementation
 //uses
 //    log;

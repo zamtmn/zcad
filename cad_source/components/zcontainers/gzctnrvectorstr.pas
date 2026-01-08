@@ -23,10 +23,9 @@ uses
   SysUtils,StrUtils,
   uzctnrVectorBytesStream,gzctnrVectorSimple,gzctnrVectorTypes;
 type
-{Export+}
-{----REGISTEROBJECTTYPE GZVectorSimple}
-GZVectorStr{-}<T>{//}=object
-                            (GZVectorSimple{-}<T>{//})
+
+GZVectorStr<T>=object
+                            (GZVectorSimple<T>)
                         procedure loadfromfile(const fname:RawByteString);
                         function findstring(s:T;ucase:Boolean):integer;
                         procedure sort;virtual;
@@ -35,7 +34,7 @@ GZVectorStr{-}<T>{//}=object
                         function GetLengthWithEOL:Integer;
                         function GetTextWithEOL:T;
                       end;
-{Export-}
+
 implementation
 procedure GZVectorStr<T>.loadfromfile(const fname:RawByteString);
 var f:TZctnrVectorBytes;

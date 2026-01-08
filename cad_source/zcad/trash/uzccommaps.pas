@@ -41,7 +41,6 @@ type
   LessDouble=TLess<double>;
   TIntersections=GKey2DataMapOld<double,TIntersectedCom,LessDouble>;
   TPointMap=GKey2DataMap<AnsiString,TMAPPoint{,LessAnsiString}>;
-  {REGISTEROBJECTTYPE TProfileBuildCom}
   TProfileBuildCom= object(FloatInsert_com)
     PointMap:TPointMap;
     PlanScale,VertScale,HorScale:double;

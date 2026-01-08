@@ -24,15 +24,14 @@ uses
   gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzecamera,UGDBOpenArrayOfPV,
   sysutils,uzbtypes,uzeTypes,uzegeometry;
 type
-{Export+}
+
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
-{REGISTEROBJECTTYPE GDBObjEntityOpenArray}
 GDBObjEntityOpenArray= object(GDBObjOpenArrayOfPV)
                       function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
                       procedure CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:Pointer);virtual;
                       procedure SetInFrustumFromTree(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                 end;
-{Export-}
+
 implementation
 procedure GDBObjEntityOpenArray.SetInFrustumFromTree;
 var pobj:PGDBObjEntity;

@@ -21,10 +21,10 @@ unit uzctnrVectorDouble;
 interface
 uses sysutils,gzctnrVectorSimple;
 type
-{Export+}
+
 PTZctnrVectorDouble=^TZctnrVectorDouble;
-TZctnrVectorDouble=GZVectorSimple{-}<Double>{//};
-{Export-}
+TZctnrVectorDouble=GZVectorSimple<Double>;
+
 implementation
 begin
 end.

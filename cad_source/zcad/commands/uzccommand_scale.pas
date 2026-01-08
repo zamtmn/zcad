@@ -34,7 +34,6 @@ uses
   uzegeometrytypes,uzeentity,uzcLog;
 
 type
-  {REGISTEROBJECTTYPE scale_com}
   scale_com=object(move_com)
     function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;

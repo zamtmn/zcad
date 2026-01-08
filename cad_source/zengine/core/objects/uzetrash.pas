@@ -23,15 +23,14 @@ interface
 uses
     uzegeometrytypes,uzeentity,uzeconsts,uzegeometry;
 type
-{EXPORT+}
-{REGISTEROBJECTTYPE GDBObjTrash}
+
 GDBObjTrash= object(GDBObjEntity)
                  function GetHandle:PtrInt;virtual;
                  function GetMatrix:PzeTypedMatrix4d;virtual;
                  constructor initnul;
                  destructor done;virtual;
             end;
-{EXPORT-}
+
 var
     GDBTrash:GDBObjTrash;
 implementation

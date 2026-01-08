@@ -23,16 +23,14 @@ interface
 uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,
      uzegeometrytypes,uzegeometry,sysutils,uzbtypes,uzbstrproc,gzctnrVectorTypes,uzgvertex3sarray;
 type
-{Export+}
+
 TAppearance=(TAMatching,TANeedProxy);
-{REGISTERRECORDTYPE TLLDrawResult}
 TLLDrawResult=record
                        LLPStart,LLPEndi:TArrayIndex;
                        LLPCount:TArrayIndex;
                        Appearance:TAppearance;
                        BB:TBoundingBox;
               end;
-{REGISTERRECORDTYPE TZGLVectorDataCopyParam}
 TZGLVectorDataCopyParam=record
                              LLPrimitivesStartIndex:TArrayIndex;
                              LLPrimitivesDataSize:Integer;
@@ -43,7 +41,6 @@ TZGLVectorDataCopyParam=record
                        end;
 
 PZGLVectorObject=^ZGLVectorObject;
-{REGISTEROBJECTTYPE ZGLVectorObject}
 ZGLVectorObject= object(GDBaseObject)
                                  LLprimitives:TLLPrimitivesArray;
                                  GeomData:ZGLGeomData;
@@ -62,7 +59,7 @@ ZGLVectorObject= object(GDBaseObject)
                                  procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume;simplydraw:boolean);virtual;
                                  procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer;const inFrustumState:TInBoundingVolume);virtual;
                                end;
-{Export-}
+
 implementation
 procedure ZGLVectorObject.DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume;simplydraw:boolean);
 var

@@ -59,14 +59,14 @@ TGDBDimLinesProp=record
                        DIMEXO:Double;//Extension line offset//group42
                        DIMLWE:TGDBLineWeight;//DIMLWD (lineweight enum value)//group372
                        DIMCLRE:TGDBPaletteColor;//DIMCLRE//group177
-                       DIMLTEX1,DIMLTEX2:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};
+                       DIMLTEX1,DIMLTEX2:PGDBLtypeProp;
                        //размерные линии
                        DIMDLE:Double;//Dimension line extension//group46
                        DIMCEN:Double;//Size of center mark/lines//group141
                        //DIMLTYPE:PGDBLtypeProp;//Size of center mark/lines//group141
                        DIMLWD:TGDBLineWeight;//DIMLWD (lineweight enum value)//group371
                        DIMCLRD:TGDBPaletteColor;//DIMCLRD//group176
-                       DIMLTYPE:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};
+                       DIMLTYPE:PGDBLtypeProp;
                  end;
 
 TGDBDimArrowsProp=record
@@ -82,7 +82,7 @@ TGDBDimTextProp=record
                        DIMTOH:Boolean;//Text outside horizontal if nonzero//group74
                        DIMTAD:TDimTextVertPosition;//Text above dimension line if nonzero//group77
                        DIMGAP:Double; //Dimension line gap //Смещение текста//group147
-                       DIMTXSTY:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};//340 DIMTXSTY (handle of referenced STYLE)
+                       DIMTXSTY:PGDBTextStyle;//340 DIMTXSTY (handle of referenced STYLE)
                        DIMCLRT:TGDBPaletteColor;//DIMCLRT//group176
                  end;
 
@@ -123,10 +123,10 @@ GDBDimStyle = object(GDBNamedObject)
              end;
 PGDBDimStyle=^GDBDimStyle;
 
-{EXPORT+}
-{EXPORT-}
+
+
 PGDBDimStyleArray=^GDBDimStyleArray;
-GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})
+GDBDimStyleArray= object(GDBNamedObjectsArray<PGDBDimStyle,GDBDimStyle>)
                     constructor init(m:Integer);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);

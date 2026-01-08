@@ -34,14 +34,13 @@ uses
   uzegeometrytypes,uzeentity,uzcLog;
 
 type
-  {EXPORT+}
-  {REGISTEROBJECTTYPE copy_com}
+
   copy_com=object(move_com)
     function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     function Copy(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;
   end;
-  {EXPORT-}
+
 var
   Copy:copy_com;
 

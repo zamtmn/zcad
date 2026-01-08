@@ -35,9 +35,8 @@ MZW_SHIFT=128;
 type
   TBUTTONSTATE=(BSUP,BSDOWN);
   TShowCursorHandler=procedure (var DC:TDrawContext) of object;
-{Export+}
+
 pcontrolpointdesc=^controlpointdesc;
-{REGISTERRECORDTYPE controlpointdesc}
 controlpointdesc=record
                    pt:TSnapType;
                    vn:Integer;
@@ -48,24 +47,21 @@ controlpointdesc=record
                        dcoord:TzePoint3d;
                        dispcoord:TzePoint2i;
                        selected:Boolean;
-                   {-}function gvnum:Integer;{//}
-                   {-}procedure svnum(AVertexNum:Integer);{//}
-                   {-}property pointtype:TSnapType read pt write pt;{//}
-                   {-}property vertexnum:Integer read gvnum write svnum;{//}
+                   function gvnum:Integer;
+                   procedure svnum(AVertexNum:Integer);
+                   property pointtype:TSnapType read pt write pt;
+                   property vertexnum:Integer read gvnum write svnum;
                  end;
-{REGISTERRECORDTYPE TRTModifyData}
 TRTModifyData=record
                    point:controlpointdesc;
                    dist,wc:TzePoint3d;
              end;
-{REGISTERRECORDTYPE tcontrolpointdist}
 tcontrolpointdist=record
   pcontrolpoint:pcontrolpointdesc;
   disttomouse:Integer;
 end;
 
   pmousedesc = ^mousedesc;
-  {REGISTERRECORDTYPE mousedesc}
   mousedesc = record
     mode: Byte;
     mouse, mouseglue: TzePoint2i;
@@ -81,7 +77,6 @@ end;
   end;
 
   PSelectiondesc = ^Selectiondesc;
-  {REGISTERRECORDTYPE Selectiondesc}
   Selectiondesc = record
     OnMouseObject,LastSelectedObject:Pointer;
     Selectedobjcount:Integer;
@@ -91,12 +86,10 @@ end;
     Frame13d, Frame23d: TzePoint3d;
     BigMouseFrustum:TzeFrustum;
   end;
-  {REGISTERRECORDTYPE tcpdist}
   tcpdist = record
     cpnum: Integer;
     cpdist: Integer;
   end;
-  {REGISTERRECORDTYPE objcontrolpoint}
   objcontrolpoint = record
     objnum: Integer;
     newobjnum: Integer;
@@ -106,7 +99,6 @@ end;
     selected: Boolean;
   end;
   pos_record=^os_record;
-  {REGISTERRECORDTYPE os_record}
   os_record = record
     worldcoord: TzePoint3d;
     dispcoord: TzePoint3d;
@@ -118,12 +110,10 @@ end;
     radius: Single;
     PGDBObject:Pointer;
   end;
-  {REGISTERRECORDTYPE totrackarray}
   totrackarray = record
     otrackarray: packed array[0..3] of os_record;
     total, current: Integer;
   end;
-  {REGISTERRECORDTYPE TCSIcon}
   TCSIcon=record
                CSIconCoord: TzePoint3d;
                CSIconX,CSIconY,CSIconZ: TzePoint3d;
@@ -168,7 +158,7 @@ end;
     constructor init;
     destructor done;virtual;
   end;
-{Export-}
+
 //ppolaraxis: PGDBOpenArrayVertex_GDBWord;
 
 

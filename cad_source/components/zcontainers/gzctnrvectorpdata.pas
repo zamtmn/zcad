@@ -21,10 +21,9 @@ unit gzctnrVectorPData;
 interface
 uses gzctnrVectorP,gzctnrVectorTypes;
 type
-{Export+}
-{--------REGISTEROBJECTTYPE GZVectorPData}
-GZVectorPData{-}<PTData>{//}=object
-                                         (GZVectorP{-}<PTData>{//})
+
+GZVectorPData<PTData>=object
+                                         (GZVectorP<PTData>)
                                        procedure cleareraseobjfrom(n:Integer);virtual;
                                        procedure cleareraseobjfrom2(n:Integer);virtual;
                                        function getDataMutable(index:Integer):PTData;
@@ -33,7 +32,7 @@ GZVectorPData{-}<PTData>{//}=object
                                        procedure free;virtual;
                                        procedure done;virtual;
                                  end;
-{Export-}
+
 implementation
 procedure GZVectorPData<PTData>.done;
 var

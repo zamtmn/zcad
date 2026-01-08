@@ -40,7 +40,7 @@ GDBNamedObjectsArray<PTObj,TObj>
                     procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
               end;
 PTGenericNamedObjectsArray=^TGenericNamedObjectsArray;
-TGenericNamedObjectsArray=GDBNamedObjectsArray{-}<PGDBNamedObject,GDBNamedObject>{//};
+TGenericNamedObjectsArray=GDBNamedObjectsArray<PGDBNamedObject,GDBNamedObject>;
 implementation
 procedure GDBNamedObjectsArray<PTObj,TObj>.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);
 var p:PGDBNamedObject;

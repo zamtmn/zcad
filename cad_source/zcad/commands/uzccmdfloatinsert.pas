@@ -29,8 +29,7 @@ uses
   zcmultiobjectcreateundocommand,uzccommandsmanager;
 
 type
-  {EXPORT+}
-  {REGISTEROBJECTTYPE FloatInsert_com}
+
   FloatInsert_com=object(CommandRTEdObject)
   protected
     FSelectInsertedEnts:boolean;
@@ -45,7 +44,7 @@ type
     function BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
   end;
-  {EXPORT-}
+
 
 implementation
 

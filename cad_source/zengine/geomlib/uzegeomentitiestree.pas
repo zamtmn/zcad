@@ -40,7 +40,7 @@ type
     procedure AfterSeparateNode(var nul:TEntityArray);
   end;
   PTEntTreeNode=^TGeomEntTreeNode;
-  TGeomEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,TzeVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
+  TGeomEntTreeNode=object(GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>)
   end;
 
   TZEntsManipulator=class
@@ -158,7 +158,7 @@ case axis of
                                           );
 end;
 end;
-class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,TzeVector4d,TgeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer);
+class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TgeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer);
 begin
   {Entity.bp.TreePos.Owner:=@Node;
   Entity.bp.TreePos.SelfIndex:=index;}

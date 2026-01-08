@@ -23,10 +23,9 @@ interface
 uses uzepalette,uzgldrawcontext,gzctnrVector,sysutils,uzbtypes,uzegeometry,
      uzegeometrytypes,uzglviewareadata,uzeTypes;
 type
-{Export+}
+
 PGDBControlPointArray=^GDBControlPointArray;
-{REGISTEROBJECTTYPE GDBControlPointArray}
-GDBControlPointArray= object(GZVector{-}<controlpointdesc>{//})
+GDBControlPointArray= object(GZVector<controlpointdesc>)
                            SelectedCount:Integer;
 
                            procedure done;virtual;
@@ -35,7 +34,7 @@ GDBControlPointArray= object(GZVector{-}<controlpointdesc>{//})
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
                            procedure selectcurrentcontrolpoint(key:Byte;mx,my,h:integer);virtual;
                      end;
-{Export-}
+
 implementation
 procedure GDBControlPointArray.done;
 begin

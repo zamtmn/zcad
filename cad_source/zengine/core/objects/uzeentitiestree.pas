@@ -31,7 +31,7 @@ TFirstStageData=record
                   d:double;
                   counter:integer;
                 end;
-{EXPORT+}
+
   TDrawType=(TDTFulDraw,TDTSimpleDraw);
   TEntityArray=GZVectorPObects<PGDBObjEntity,GDBObjEntity>;
   TEntTreeNodeData=record
@@ -49,15 +49,14 @@ TFirstStageData=record
     procedure AfterSeparateNode(var nul:TEntityArray);
   end;
          PTEntTreeNode=^TEntTreeNode;
-         {---REGISTEROBJECTTYPE TEntTreeNode}
-         TEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
+         TEntTreeNode=object(GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>)
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);
                             procedure DrawWithAttribExternalArray(var DC:TDrawContext;LODDeep:integer=0);
                             procedure DeleteFromSeparated(var Entity:GDBObjEntity);
                       end;
-{EXPORT-}
+
 TZEntsManipulator=class
                    class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
                    class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
@@ -275,7 +274,7 @@ case NodeNum of
                                           );
 end;
 end;
-class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
+class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
 begin
   Entity.bp.TreePos.Owner:=@Node;
   Entity.bp.TreePos.SelfIndexInNode:=index;

@@ -8,6 +8,7 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
+        <OtherUnitFiles Value="src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
@@ -16,83 +17,87 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="19">
+    <Files Count="20">
       <Item1>
-        <Filename Value="gzctnrvector.pas"/>
-        <UnitName Value="gzctnrVector"/>
+        <Filename Value="src\gzctnralignedvectorobjects.pas"/>
+        <UnitName Value="gzctnrAlignedVectorObjects"/>
       </Item1>
       <Item2>
-        <Filename Value="gzctnrvectorsimple.pas"/>
-        <UnitName Value="gzctnrVectorSimple"/>
+        <Filename Value="src\gzctnrbinaryseparatedtree.pas"/>
+        <UnitName Value="gzctnrBinarySeparatedTree"/>
       </Item2>
       <Item3>
-        <Filename Value="gzctnrvectorobjects.pas"/>
-        <UnitName Value="gzctnrVectorObjects"/>
+        <Filename Value="src\gzctnrbufferallocator.pas"/>
+        <UnitName Value="gzctnrBufferAllocator"/>
       </Item3>
       <Item4>
-        <Filename Value="gzctnrvectorp.pas"/>
-        <UnitName Value="gzctnrVectorP"/>
+        <Filename Value="src\gzctnrstl.pas"/>
+        <UnitName Value="gzctnrSTL"/>
       </Item4>
       <Item5>
-        <Filename Value="gzctnrvectorpdata.pas"/>
-        <UnitName Value="gzctnrVectorPData"/>
+        <Filename Value="src\gzctnrvector.pas"/>
+        <UnitName Value="gzctnrVector"/>
       </Item5>
       <Item6>
-        <Filename Value="gzctnrvectorpobjects.pas"/>
-        <UnitName Value="gzctnrVectorPObjects"/>
+        <Filename Value="src\gzctnrvectorc.pas"/>
+        <UnitName Value="gzctnrVectorc"/>
       </Item6>
       <Item7>
-        <Filename Value="gzctnrbinaryseparatedtree.pas"/>
-        <UnitName Value="gzctnrBinarySeparatedTree"/>
+        <Filename Value="src\gzctnrvectorclass.pas"/>
+        <UnitName Value="gzctnrVectorClass"/>
       </Item7>
       <Item8>
-        <Filename Value="gzctnrstl.pas"/>
-        <UnitName Value="gzctnrSTL"/>
+        <Filename Value="src\gzctnrvectorobjects.pas"/>
+        <UnitName Value="gzctnrVectorObjects"/>
       </Item8>
       <Item9>
-        <Filename Value="uzctnralignedvectorbytes.pas"/>
-        <UnitName Value="uzctnrAlignedVectorBytes"/>
+        <Filename Value="src\gzctnrvectorp.pas"/>
+        <UnitName Value="gzctnrVectorP"/>
       </Item9>
       <Item10>
-        <Filename Value="gzctnrvectorstr.pas"/>
-        <UnitName Value="gzctnrVectorStr"/>
+        <Filename Value="src\gzctnrvectorpdata.pas"/>
+        <UnitName Value="gzctnrVectorPData"/>
       </Item10>
       <Item11>
-        <Filename Value="uzctnrtree.pas"/>
-        <UnitName Value="uzctnrTree"/>
+        <Filename Value="src\gzctnrvectorpobjects.pas"/>
+        <UnitName Value="gzctnrVectorPObjects"/>
       </Item11>
       <Item12>
-        <Filename Value="uzctnrvectorstrings.pas"/>
-        <UnitName Value="uzctnrVectorStrings"/>
+        <Filename Value="src\gzctnrvectorsimple.pas"/>
+        <UnitName Value="gzctnrVectorSimple"/>
       </Item12>
       <Item13>
-        <Filename Value="uzctnrvectorpointers.pas"/>
-        <UnitName Value="uzctnrVectorPointers"/>
+        <Filename Value="src\gzctnrvectorstr.pas"/>
+        <UnitName Value="gzctnrVectorStr"/>
       </Item13>
       <Item14>
-        <Filename Value="uzctnrvectorbytesstream.pas"/>
-        <UnitName Value="uzctnrVectorBytesStream"/>
+        <Filename Value="src\gzctnrvectortypes.pas"/>
+        <UnitName Value="gzctnrVectorTypes"/>
       </Item14>
       <Item15>
-        <Filename Value="gzctnralignedvectorobjects.pas"/>
-        <UnitName Value="gzctnrAlignedVectorObjects"/>
+        <Filename Value="src\uzctnralignedvectorbytes.pas"/>
+        <UnitName Value="uzctnrAlignedVectorBytes"/>
       </Item15>
       <Item16>
-        <Filename Value="gzctnrvectorc.pas"/>
-        <UnitName Value="gzctnrVectorc"/>
+        <Filename Value="src\uzctnrtree.pas"/>
+        <UnitName Value="uzctnrTree"/>
       </Item16>
       <Item17>
-        <Filename Value="gzctnrvectorclass.pas"/>
-        <UnitName Value="gzctnrVectorClass"/>
+        <Filename Value="src\uzctnrvectorbytes.pas"/>
+        <UnitName Value="uzctnrVectorBytes"/>
       </Item17>
       <Item18>
-        <Filename Value="gzctnrbufferallocator.pas"/>
-        <UnitName Value="gzctnrBufferAllocator"/>
+        <Filename Value="src\uzctnrvectorbytesstream.pas"/>
+        <UnitName Value="uzctnrVectorBytesStream"/>
       </Item18>
       <Item19>
-        <Filename Value="uzctnrvectorbytes.pas"/>
-        <UnitName Value="uzctnrVectorBytes"/>
+        <Filename Value="src\uzctnrvectorpointers.pas"/>
+        <UnitName Value="uzctnrVectorPointers"/>
       </Item19>
+      <Item20>
+        <Filename Value="src\uzctnrvectorstrings.pas"/>
+        <UnitName Value="uzctnrVectorStrings"/>
+      </Item20>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

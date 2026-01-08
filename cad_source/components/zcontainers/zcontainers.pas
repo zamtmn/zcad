@@ -8,12 +8,13 @@ unit zcontainers;
 interface
 
 uses
-  gzctnrVector, gzctnrVectorSimple, gzctnrVectorObjects, gzctnrVectorP, 
-  gzctnrVectorPData, gzctnrVectorPObjects, gzctnrBinarySeparatedTree, 
-  gzctnrSTL, uzctnrAlignedVectorBytes, gzctnrVectorStr, uzctnrTree, 
-  uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytesStream, 
-  gzctnrAlignedVectorObjects, gzctnrVectorc, gzctnrVectorClass, 
-  gzctnrBufferAllocator, uzctnrVectorBytes, LazarusPackageIntf;
+  gzctnrAlignedVectorObjects, gzctnrBinarySeparatedTree, 
+  gzctnrBufferAllocator, gzctnrSTL, gzctnrVector, gzctnrVectorc, 
+  gzctnrVectorClass, gzctnrVectorObjects, gzctnrVectorP, gzctnrVectorPData, 
+  gzctnrVectorPObjects, gzctnrVectorSimple, gzctnrVectorStr, 
+  gzctnrVectorTypes, uzctnrAlignedVectorBytes, uzctnrTree, uzctnrVectorBytes, 
+  uzctnrVectorBytesStream, uzctnrVectorPointers, uzctnrVectorStrings, 
+  LazarusPackageIntf;
 
 implementation
 

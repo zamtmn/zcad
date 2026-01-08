@@ -20,7 +20,7 @@ unit uzedrawingdef;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzgldrawcontext,uzestylesdim,uzbtypes,uzestyleslayers,uzestylestexts,
+  uzgldrawcontext,uzestylesdim,uzeTypes,uzestyleslayers,uzestylestexts,
   uzbUnits,
   uzestyleslinetypes,uzestylestables;
 type

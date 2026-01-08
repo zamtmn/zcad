@@ -19,7 +19,9 @@
 unit uzcregenginefeatures;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzeutils,uzeentity,uzedrawingsimple,uzbtypes,uzeconsts,uzeenttext,uzeentdimension,uzcLog;
+uses
+  uzeutils,uzeentity,uzedrawingsimple,uzeTypes,uzeconsts,uzeenttext,
+  uzeentdimension,uzcLog;
 implementation
 procedure zeSetTextStylePropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
 var

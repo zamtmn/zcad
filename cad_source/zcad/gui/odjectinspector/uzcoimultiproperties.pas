@@ -22,7 +22,7 @@ unit uzcoimultiproperties;
 
 interface
 uses
-  uzcuidialogs,uzctranslations,uzbtypes,uzclog,usimplegenerics,
+  uzcuidialogs,uzctranslations,uzeTypes,uzclog,usimplegenerics,
   varmandef,Varman,garrayutils,gzctnrSTL,uzbUnits,
   contnrs,uzeBaseExtender,Rtti;
 type

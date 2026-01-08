@@ -32,7 +32,7 @@ uses
   uzccommandsabstract,
   uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,
+  uzeTypes,
   uzcdrawings,
   uzcutils,
   SysUtils,

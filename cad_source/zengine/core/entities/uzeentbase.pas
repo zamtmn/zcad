@@ -23,7 +23,7 @@ unit uzeEntBase;
 interface
 
 uses
-  uzbtypes,
+  uzeTypes,
   SysUtils;
 
 type

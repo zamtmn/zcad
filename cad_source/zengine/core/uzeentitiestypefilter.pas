@@ -27,7 +27,7 @@ uses
   SysUtils,LCLProc,Masks,
   uzeentityfactory,uzeentity,
   uzeBaseExtender,uzeExtdrAbstractEntityExtender,
-  uzbtypes,usimplegenerics;
+  uzeTypes,usimplegenerics;
 
 const
   CachedValuesCount=2;

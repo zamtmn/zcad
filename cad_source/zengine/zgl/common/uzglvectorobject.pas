@@ -21,7 +21,7 @@ unit uzglvectorobject;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgldrawerabstract,uzgldrawcontext,uzgprimitives,uzglgeomdata,uzgprimitivessarray,
-     uzegeometrytypes,uzegeometry,sysutils,uzbtypes,uzbstrproc,gzctnrVectorTypes,uzgvertex3sarray;
+     uzegeometrytypes,uzegeometry,sysutils,uzeTypes,uzbstrproc,gzctnrVectorTypes,uzgvertex3sarray;
 type
 
 TAppearance=(TAMatching,TANeedProxy);

@@ -20,7 +20,7 @@ unit uzgprimitivessarray;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses gzctnrAlignedVectorObjects,uzbtypes;
+uses gzctnrAlignedVectorObjects,uzeTypes;
 type
 
   PTLLPrimitivesArray=^TLLPrimitivesArray;

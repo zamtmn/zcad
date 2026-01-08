@@ -11,7 +11,7 @@ uses
   varmandef,Varman,URecordDescriptor,UObjectDescriptor,typedescriptors,UUnitManager,
   uzcdevicebaseabstract,
 
-  uzbpaths,uzbtypes;
+  uzbpaths,uzeTypes;
 type
 
 DeviceDbBaseObject= object(DbBaseObject)

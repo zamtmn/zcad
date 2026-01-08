@@ -27,7 +27,7 @@ type
 PTLinkType=^TLinkType;
 TLinkType=(LT_Normal,LT_OnlyLink);
 pgrafelement=^grafelement;
-grafelement= object(GDBaseObject)
+grafelement= object
                   linkcount:Integer;
                   point:TzePoint3d;
                   link:GDBObjOpenArrayOfPV;

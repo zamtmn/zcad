@@ -31,7 +31,7 @@ uses
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcdrawings,
   uzcutils,
-  uzbtypes,
+  uzeTypes,
   uzegeometry,
   uzeentity,uzeenttext,
   URecordDescriptor,typedescriptors,Varman,gzctnrVectorTypes,

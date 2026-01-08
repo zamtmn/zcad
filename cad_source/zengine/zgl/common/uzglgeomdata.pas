@@ -20,7 +20,7 @@ unit uzglgeomdata;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypes,
+uses uzgindexsarray,uzgvertex3sarray,sysutils,uzeTypes,
      uzegeometrytypes,uzegeometry,gzctnrVectorTypes;
 type
 

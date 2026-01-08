@@ -26,7 +26,7 @@ uses
   uzbLog,uzcLog,uzcoimultiproperties,uzctranslations,uzepalette,
   uzcstrconsts,SysUtils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
-  gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
+  gzctnrVectorTypes,uzeTypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
   zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,

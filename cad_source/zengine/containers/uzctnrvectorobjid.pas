@@ -19,7 +19,7 @@
 unit uzctnrvectorobjid;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzbtypes,gzctnrVectorSimple;
+uses uzeTypes,gzctnrVectorSimple;
 type
 
 PTZctnrVectorObjID=^TZctnrVectorObjID;

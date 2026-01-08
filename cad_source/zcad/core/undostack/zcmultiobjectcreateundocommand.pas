@@ -19,7 +19,7 @@
 unit zcmultiobjectcreateundocommand;
 {$INCLUDE zengineconfig.inc}
 interface
-uses UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzbtypes,
+uses UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzeTypes,
      gzctnrVectorTypes,uzeentity,uzcdrawings,uzedrawingdef,uzeEntBase;
 
 type

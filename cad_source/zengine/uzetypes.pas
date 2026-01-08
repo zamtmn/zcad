@@ -191,10 +191,30 @@ type
   TGetterSetterTColor=GGetterSetter<TColor>;
   PTGetterSetterTColor=^TGetterSetterTColor;
 
+  GDBaseObject=object
+    procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
+    constructor initnul;
+    destructor Done;virtual;
+  end;
+  PGDBaseObject=^GDBaseObject;
+
 var
   zeHandles:TZHandleCreator;
 
 implementation
+
+constructor GDBaseObject.initnul;
+begin
+end;
+
+destructor GDBaseObject.Done;
+begin
+end;
+
+procedure GDBaseObject.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
+begin
+end;
+
 
 constructor TCameraCounters.CreateRec(AT,AI:Integer);
 begin

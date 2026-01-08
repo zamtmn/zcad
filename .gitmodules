@@ -49,3 +49,9 @@
 [submodule "cad_source/components/zscriptbase"]
 	path = cad_source/components/zscriptbase
 	url = https://github.com/zamtmn/zscriptbase.git
+[submodule "cad_source/components/zobjectinspector"]
+	path = cad_source/components/zobjectinspector
+	url = https://github.com/zamtmn/zobjectinspector.git
+[submodule "cad_source/components/zundostack"]
+	path = cad_source/components/zundostack
+	url = https://github.com/zamtmn/zundostack.git

@@ -91,7 +91,6 @@ var
   res,operands,sss:TDXFEntsInternalStringType;
   pair:Prefix2ProcessFunc.TDictionaryPair;
   startsearhpos:integer;
-  TCP:TCodePage;
   firstloop:boolean;
   sb:TUnicodeStringBuilder;
   SPA:TStrProcessAttributes;
@@ -141,15 +140,12 @@ begin
                 EndBracketPos:=ContinuePos;
               SPFSources.Include(ASourcesCounter,pair.Value.Source);
               ContinuePos:=EndBracketPos;
-              TCP:=CodePage;
-              CodePage:=CP_utf8;
               SPA:=[];
               res:=UTF8Decode(pair.value.func(sss,operands,ContinuePos,SPA,pobj));
               if SPARecursive in spa then begin
                 res:=TxtFormatAndCountSrcs(res,EnabledSources,RecursiveSourcesCounter,pobj);
                 ASourcesCounter:=RecursiveSourcesCounter or ASourcesCounter;
               end;
-              CodePage:=TCP;
               sbAppend(res);
               startsearhpos:=ContinuePos;
               inc(counter);

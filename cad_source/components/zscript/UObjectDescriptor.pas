@@ -43,11 +43,11 @@ GDBOperandDesc=record
 GDBMetodModifier=Word;
 TOperandsVector=GZVector<GDBOperandDesc>;
 PMetodDescriptor=^MetodDescriptor;
-MetodDescriptor=object(GDBaseObject)
+MetodDescriptor=object//(GDBaseObject)
                       objname:String;
                       MetodName:String;
                       OperandsName:String;
-                      Operands:{GDBOpenArrayOfdata}TOperandsVector; {DATA}
+                      Operands:TOperandsVector;
                       ResultPTD:PUserTypeDescriptor;
                       MetodAddr:Pointer;
                       Attributes:GDBMetodModifier;
@@ -687,15 +687,15 @@ begin
      if pmd<>nil then
      repeat
            pointer(pcmd):=PObjectDescriptor(rd)^.SimpleMenods.createobject;
-           pcmd^.initnul;
-           pcmd.MetodName:=pmd^.MetodName;
+           pcmd^.init(pmd^.objname,pmd^.MetodName,pmd^.OperandsName,pmd^.MetodAddr,pmd^.Attributes,nil);
+           {pcmd.MetodName:=pmd^.MetodName;
            pcmd.objname:=pmd^.objname;
            pcmd.NameHash:=pmd^.NameHash;
            pcmd.OperandsName:=pmd^.OperandsName;
            pcmd.ResultPTD:=pmd^.ResultPTD;
            pcmd.MetodAddr:=pmd^.MetodAddr;
            pcmd.Attributes:=pmd^.Attributes;
-           pcmd.Operands.init(10);
+           pcmd.Operands.init(10);}
            //PObjectDescriptor(rd)^.SimpleMenods.AddByPointer(@pcmd);
            //pointer(pcmd.MetodName):=nil;
            //pointer(pcmd.OperandsName):=nil;

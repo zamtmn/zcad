@@ -314,7 +314,7 @@ var
   bmodesave,bmodesave2,bmodetemp:Integer;
   tname:TInternalScriptString;
   ta,tb,taa:Pointer;
-  pobj:PGDBaseObject;
+  //pobj:PGDBaseObject;
   ir,ir2:itrec;
   pvd:pvardesk;
   tw:TFieldAttrs;
@@ -328,7 +328,7 @@ var
   PUTDOverrider:PTUserTypeDescriptor;
 begin
   zTraceLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
-  pobj:=addr;
+  //pobj:=addr;
   startaddr:=addr;
   bmodesave:=property_build;
   if PCollapsed<>field_no_attrib then begin
@@ -568,15 +568,15 @@ begin
                                                                                 ppd^.Collapsed:=PCollapsed;
                                                                                 ppd^.valueAddres:=startaddr;
                                                                                 ppd^.value:='Not initialized';
-                                                                                if assigned(pobj) then
-                                                                                                      if assigned(ppointer(pobj)^) then
-                                                                                                                                       begin
-                                                                                                                                       zTraceLn('{T}[ZSCRIPT]%p',[pobj]);
+                                                                                //if assigned(pobj) then
+                                                                                                      //if assigned(ppointer(pobj)^) then
+                                                                                                                                       //begin
+                                                                                                                                       //zTraceLn('{T}[ZSCRIPT]%p',[pobj]);
                                                                                                                                        //programlog.LogOutFormatStr('%p',[pobj],lp_OldPos,LM_Trace);
                                                                                                                                        //ppd^.value:=pobj^.GetObjTypeName;
                                                                                                                                        //pobj^.whoisit;
                                                                                                                                        //pobj^.GetObjTypeName;
-                                                                                                                                       end;
+                                                                                                                                       //end;
                                                                                 //Inc(PtrInt(startaddr),sizeof(Pointer));
                                            end
                    else

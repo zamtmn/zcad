@@ -328,7 +328,7 @@ var
   ptn:PTNodeProp;
   ptext:PGDBObjText;
   width,sl,l:Integer;
-  TCP:TCodePage;
+  //TCP:TCodePage;
   textyoffset:double;
 
   Objects:GDBObjOpenArrayOfPV;
@@ -338,8 +338,8 @@ begin
   if assigned(EntExtensions)then
   EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
-  TCP:=CodePage;
-  CodePage:=CP_utf8;
+  //TCP:=CodePage;
+  //CodePage:=CP_utf8;
   pdev:=nil;
   sta.init(10);
   stcnt:=TStringCounter.Create(10);
@@ -680,8 +680,6 @@ begin
 
   end;
   inherited;
-
-  CodePage:=TCP;
   objects.Clear;
   objects.Done;
   buildgeometry(drawing);

@@ -8,8 +8,6 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <IncludeFiles Value="$PkgDir(zebase);fpcmod\inc"/>
-        <OtherUnitFiles Value=".;fpcmod"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>

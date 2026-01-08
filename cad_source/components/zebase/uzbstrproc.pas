@@ -19,19 +19,15 @@
 unit uzbstrproc;
 
 interface
-uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypes,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
+uses
+  sysutils,strutils,LazUTF8,lazutf16;
+
 function GetPredStr(var s: String; const substr: String): String;overload;
 function GetPredStr(var s: String; const substrs: array of const; var nearestsubstr:string): String;overload;
 function readspace(const expr: String): String;
 
-//function sys2interf(s:String):String;
 function Tria_Utf8ToAnsi(const s:string):string;
 function Tria_AnsiToUtf8(const s:string):string;
-
-function Ansi2CP(const astr:AnsiString):String;
-function Uni2CP(const astr:AnsiString):String;
-function CP2Ansi(const astr:AnsiString):String;
-function CP2Uni(const astr:AnsiString):String;
 
 function uch2ach(uch:word):byte;
 function ach2uch(ach:byte):word;
@@ -46,40 +42,8 @@ procedure KillString(var str:String);inline;
 Function PosWithBracket(c,OpenBracket,CloseBracket:AnsiChar;Const s:AnsiString;StartPos,InitCounterValue:SizeInt):SizeInt;
 function isNotUtf8(const s:RawByteString):boolean;
 
-type
-  TCodePage=(CP_utf8,CP_win);
-
-const
-    syn_breacer=[#13,#10,' '];
-    lineend:string=#13#10;
-var
-  CodePage:TCodePage;
 implementation
-//uses
-//    log;
-(*Function PosWithBracket(c : AnsiChar; Const s : {RawByteString}String) : SizeInt;
-var
-  i: SizeInt;
-  pc : PAnsiChar;
-  bracketcounter:SizeInt;
-begin
-  bracketcounter:=0;
-  pc:=@s[1];
-  for i:=1 to length(s) do
-   begin
-     if pc^='(' then
-                   inc(bracketcounter)
-else if pc^=')' then
-                   dec(bracketcounter)
-else if bracketcounter=0 then
-     if pc^=c then
-      begin
-        exit(i);
-      end;
-     inc(pc);
-   end;
-  exit(0)
-end;*)
+
 Function PosWithBracket(c,OpenBracket,CloseBracket:AnsiChar;Const s:AnsiString;StartPos,InitCounterValue:SizeInt):SizeInt;
 var
   i: SizeInt;
@@ -105,10 +69,12 @@ begin
   end;
   result:=0;
 end;
+
 procedure KillString(var str:String);inline;
 begin
      Pointer(str):=nil;
 end;
+
 function MakeHash(const s: String):SizeUInt;
 var
   I: Integer;
@@ -119,48 +85,23 @@ begin
 end;
 
 function uch2ach(uch:word):byte;
-var s:String;
+var
+  s:String;
 begin
-     {$IFNDEF DELPHI}
-//     if uch=$412 then
-//                     uch:=uch;
-//     if uch=44064 then
-//                     uch:=uch;
-     s:=UnicodeToUtf8(uch);
-     s:=Tria_Utf8ToAnsi(s);
-     //if length(s)=1 then
-                        result:=ord(s[1]);
-     //               else
-     //                   result:=0;
-     //WideCharToMultiByte(CP_ACP,0,@uch, 1, @result, 1, nil, nil);
-//     if result=194 then
-//                     uch:=uch;
-     {$ENDIF}
+  s:=UnicodeToUtf8(uch);
+  s:=Tria_Utf8ToAnsi(s);
+    result:=ord(s[1]);
 end;
-function ach2uch(ach:byte):word;
-var s:String;
-    {$IFNDEF DELPHI}tstr:UnicodeString;{$ENDIF}
-    CharLen: integer;
-begin
-    {$IFNDEF DELPHI}
-     {if ach<127 then
-                    begin
-                    result:=ach;
-                    exit;
-                    end;}
-     //s:=char(ach);
-     s:=Tria_AnsiToUtf8(char(ach));
-     tstr:=UTF8ToUTF16(s);
-     result:=UTF16CharacterToUnicode(@tstr[1],CharLen);
 
-     //if length(s)=1 then
-     //                   result:=ord(s[1]);
-     //               else
-     //                   result:=0;
-     //WideCharToMultiByte(CP_ACP,0,@uch, 1, @result, 1, nil, nil);
-     //if result=194 then
-     //                uch:=uch;
-     {$ENDIF}
+function ach2uch(ach:byte):word;
+var
+  s:String;
+  tstr:UnicodeString;
+  CharLen: integer;
+begin
+  s:=Tria_AnsiToUtf8(char(ach));
+  tstr:=UTF8ToUTF16(s);
+  result:=UTF16CharacterToUnicode(@tstr[1],CharLen);
 end;
 function GetDigitCount(const str1:String):Integer;
 begin
@@ -450,38 +391,6 @@ begin
                   s:='';
              end;
   //end;
-end;
-
-function Ansi2CP(const astr:AnsiString):String;
-begin
-     case CodePage of
-                     CP_utf8:result:=
-                                     Tria_AnsiToUtf8(astr);
-                     CP_win:result:=astr;
-     end;
-end;
-function Uni2CP(const astr:AnsiString):String;
-begin
-     case CodePage of
-                     CP_utf8:result:=astr;
-                     CP_win:result:=Tria_Utf8ToAnsi(astr);
-     end;
-end;
-function CP2Ansi(const astr:AnsiString):String;
-begin
-case CodePage of
-                CP_utf8:result:=
-                                Tria_Utf8ToAnsi(astr);
-                CP_win:result:=astr;
-end;
-end;
-
-function CP2Uni(const astr:AnsiString):String;
-begin
-case CodePage of
-                CP_utf8:result:=astr;
-                CP_win:result:=Tria_AnsiToUtf8(astr);
-end;
 end;
 
 function Tria_Utf8ToAnsi(const s:string):string;
@@ -797,11 +706,5 @@ begin
   result:=false;
 end;
 
-(*function sys2interf(s:String):String;
 begin
-     result:=s//{systoutf8}{WinToK8R}Tria_AnsiToUtf8(s);
-end;*)
-
-begin
-CodePage:=CP_utf8;
 end.

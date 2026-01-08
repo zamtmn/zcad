@@ -137,8 +137,6 @@ end;
 
 procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;
   var DC:TDrawContext;Stage:TEFStages=EFAllStages);
-var
-  TCP:TCodePage;
 begin
   if EFCalcEntityCS in stage then begin
     calcobjmatrix;//расширениям нужны матрицы в OnBeforeEntityFormat
@@ -147,12 +145,9 @@ begin
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
-    TCP:=CodePage;
-    CodePage:=CP_win;
     if template='' then
       template:=content;
     content:=textformat(template,SPFSources.GetFull,@self);
-    CodePage:=TCP;
     if (content='')and(template='') then
       content:=str_empty;
     lod:=0;

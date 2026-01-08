@@ -199,24 +199,8 @@ begin
     desk:=d;
 end;
 function GDBLayerProp.GetFullName;
-{const
-     ls=24;}
-//var ss:String;
 begin
-     result:=ansi2cp(getname);
-     {  if _on then
-                       ss:='[O'
-                   else
-                       ss:='[–';
-       if _lock then
-                       ss:=ss+'L'
-                   else
-                       ss:=ss+'–';
-       if _print then
-                       ss:=ss+'P] '
-                   else
-                       ss:=ss+'–] '; }
-       result:={ss+}result;
+  result:=getname;
 end;
 function GDBLayerArray.GetSystemLayer;
 begin

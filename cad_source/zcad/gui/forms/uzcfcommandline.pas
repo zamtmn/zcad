@@ -25,8 +25,8 @@ interface
 uses
   Themes,Buttons,lclproc,LazUTF8,SysUtils,StdCtrls,ExtCtrls,Controls,Classes,
   Menus,Forms,fileutil,Graphics,
-  uzcsysvars,uzcstrconsts,uzbstrproc,uzcguimanager,uzbpaths,uzccommandsmanager,
-  varman,uzsbVarmanDef,uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,
+  uzcsysvars,uzcstrconsts,uzcguimanager,uzbpaths,uzccommandsmanager,
+  varman,uzsbVarmanDef,uzctnrvectorstrings,uzcinterface,uzctreenode,
   uzclog,uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,
   uzccommandsabstract,gzctnrVectorTypes,uzcctrlcommandlineprompt,
   uzeparsercmdprompt,uzeTypes,uzcFileStructure;

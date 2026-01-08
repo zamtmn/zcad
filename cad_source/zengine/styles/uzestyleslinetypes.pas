@@ -21,7 +21,7 @@ unit uzeStylesLineTypes;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzbLogIntf,LazUTF8,Classes,gzctnrVector,sysutils,uzeTypes,
-     uzegeometry,uzegeometrytypes,uzestylestexts,gzctnrVectorObjects,
+     uzegeometrytypes,uzestylestexts,gzctnrVectorObjects,
      UGDBNamedObjectsArray,gzctnrVectorTypes,uzbstrproc,uzeNamedObject,
      uzefontbase,uzbBaseUtils;
 const

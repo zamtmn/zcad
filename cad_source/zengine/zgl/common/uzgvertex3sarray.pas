@@ -21,7 +21,7 @@ unit uzgvertex3sarray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVector,sysutils,
-     gzctnrVectorTypes,uzegeometrytypes,uzegeometry;
+     gzctnrVectorTypes,uzegeometrytypes;
 type
 
 TStoredType=Double;

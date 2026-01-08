@@ -20,7 +20,7 @@ unit uzeFFTTF;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzefontmanager,uzeFontFileFormatTTF,uzegeometry,uzefont,uzbstrproc,
+  uzefontmanager,uzeFontFileFormatTTF,uzefont,
   {$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,uzctnrVectorBytesStream,
   uzefontttfpreloader,uzeFontFileFormatTTFBackend;
 type

@@ -23,7 +23,7 @@ uses
   LCLProc,LazUTF8,Classes,gzctnrVector,SysUtils,
   uzbBaseUtils,
   uzegeometry,gzctnrVectorObjects,
-  gzctnrVectorTypes,uzbstrproc,uzeStylesLineTypes,uzegeometrytypes,
+  gzctnrVectorTypes,uzeStylesLineTypes,uzegeometrytypes,
   uzctnrVectorBytesStream,
   uzeffdxfsupport,uzMVReader,
   Math;

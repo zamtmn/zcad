@@ -25,7 +25,6 @@ unit uzvdialuxlumimporter_recognizer;
 interface
 uses
   SysUtils,
-  Math,
   uzeentity,
   uzeenttext,
   uzeentmtext,

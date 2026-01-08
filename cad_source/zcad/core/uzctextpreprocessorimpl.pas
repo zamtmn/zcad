@@ -20,7 +20,7 @@ unit uzctextpreprocessorimpl;
 {$mode objfpc}{$H+}
 
 interface
-uses uzeentity,uzcvariablesutils,uzetextpreprocessor,uzbstrproc,sysutils,
+uses uzeentity,uzcvariablesutils,uzetextpreprocessor,sysutils,
      uzsbVarmanDef,uzeTypes,uzcenitiesvariablesextender,languade,
      uzcpropertiesutils,uzeparser,LazUTF8,uzcTextPreprocessorDXFImpl;
 type

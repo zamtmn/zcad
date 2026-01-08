@@ -48,7 +48,7 @@ uses
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,
   math,uzeenttable,uzctnrvectorstrings,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,
-  uzsbTypeDescriptors,UGDBVisibleTreeArray,uzelongprocesssupport,
+  UGDBVisibleTreeArray,uzelongprocesssupport,
   uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
   uzccommand_rebuildtree, uzeffmanager,
   masks;

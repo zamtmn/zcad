@@ -26,11 +26,11 @@ uses
   uzeentdevice,uzeentabstracttext,uzeentwithmatrix,uzeentlwpolyline,
   uzeentpolyline,uzeentcurve,
   uzeenttext,uzeentblockinsert,
-  uzsbTypeDescriptors,uzctnrVectorBytesStream,
+  uzctnrVectorBytesStream,
   uzbBaseUtils,uzeTypes,uzeblockdef,
   uzsbVarmanDef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-  gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
+  gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
   UGDBOpenArrayOfPV,UGDBPoint3DArray,UGDBPolyLine2DArray,
   uzegeometry,
   uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes;

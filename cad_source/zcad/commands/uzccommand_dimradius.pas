@@ -28,7 +28,7 @@ uses
   uzeconsts,uzcstrconsts,
   uzegeometrytypes,
   uzccommandsmanager,
-  uzeentcircle,uzeentarc,uzeentityfactory,uzegeometry,
+  uzeentcircle,uzeentarc,uzeentityfactory,
   uzcutils,uzeentdimradial,uzgldrawcontext,uzcdrawings,uzcinterface,
   uzccominteractivemanipulators,uzcsysvars,uzccommand_dimlinear;
 

@@ -21,9 +21,9 @@ unit uzcregelectrotechfeatures;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,uzctranslations,
-     uzbstrproc,Varman,SysUtils,
+     Varman,SysUtils,
      UBaseTypeDescriptor,uzeTypes,uzctnrVectorBytesStream,uzsbVarmanDef,
-     uzcsysparams,uzsbTypeDescriptors,URecordDescriptor,
+     uzcsysparams,URecordDescriptor,
      uzcLog,uzceltechtreeprop,uzcefstringstreeselector,
      uzccommandsimpl,uzccommandsabstract,uzOIDecorations,uzOIUI,
      uzcoidecorations,

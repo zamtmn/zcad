@@ -35,7 +35,6 @@ uses
   uzeentity,
   uzclog,
   uzegeometrytypes,
-  uzegeometry,
   uzccommand_selectframe,uzccommand_ondrawinged,
   UGDBSelectedObjArray,
   UGDBControlPointArray;

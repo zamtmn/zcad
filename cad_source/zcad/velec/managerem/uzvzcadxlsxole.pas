@@ -36,8 +36,7 @@ uses
   //gzctnrVectorTypes,
   uzcinterface,
   //fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch, fpsAllFormats,
-  comobj, variants, LConvEncoding, strutils,
-  uzbstrproc;
+  comobj, variants, LConvEncoding, strutils;
 
   //uzvsettingform,
   //LCLIntf, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,

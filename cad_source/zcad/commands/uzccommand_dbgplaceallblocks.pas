@@ -25,7 +25,6 @@ uses
   gzctnrVectorTypes,
   uzcdrawings,
   uzccommandsabstract,uzccommandsimpl,
-  uzegeometry,
   uzccommandsmanager,
   uzegeometrytypes,uzeentity,uzcLog,
   uzeconsts,

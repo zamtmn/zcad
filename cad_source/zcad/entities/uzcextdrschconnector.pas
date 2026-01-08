@@ -22,8 +22,8 @@ interface
 uses
   sysutils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender,
-  uzeentgenericsubentry,uzeentline,uzegeometry,
-  uzeentdevice,uzsbTypeDescriptors,uzctnrVectorBytesStream,
+  uzeentgenericsubentry,uzeentline,
+  uzeentdevice,uzctnrVectorBytesStream,
   uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
   usimplegenerics,uzeffdxfsupport,
   gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,

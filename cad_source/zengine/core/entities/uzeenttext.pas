@@ -23,7 +23,7 @@ interface
 
 uses
   uzglgeometry,uzgldrawcontext,uzeobjectextender,uzetextpreprocessor,
-  uzeentityfactory,uzedrawingdef,uzecamera,uzbstrproc,SysUtils,uzefont,
+  uzeentityfactory,uzedrawingdef,uzecamera,SysUtils,uzefont,
   uzestyleslayers,uzeentabstracttext,uzeentity,uzctnrVectorBytesStream,
   uzeTypes,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
   uzeentsubordinated,uzbLogIntf,uzegeometrytypes,uzestylestexts,uzeSnap,

@@ -21,7 +21,7 @@ unit uzvagraphsdev;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzbpaths,uzbstrproc,LazUTF8,gettext,translations,
+uses uzbpaths,LazUTF8,gettext,translations,
      fileutil,LResources,sysutils,{uzbLogTypes,}uzcLog,uzbLog,forms,
      Classes, typinfo,uzcsysparams{,uzcLog},Graphs,uzeentdevice,uzegeometrytypes,uzegeometry,uzeentity,uzeconsts,uzcinterface,uzeentpolyline,gzctnrVectorTypes,gvector,
      uzcenitiesvariablesextender,uzsbVarmanDef;

@@ -38,7 +38,7 @@ uses
     примитивов и действий с ними }
 
   SysUtils,Math,
-  URecordDescriptor,uzsbTypeDescriptors,
+  URecordDescriptor,
   uzccommandsabstract,
   Forms,
   uzeutils,

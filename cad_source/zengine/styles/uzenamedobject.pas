@@ -19,7 +19,8 @@
 unit uzeNamedObject;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzepalette,sysutils,uzeTypes,uzegeometry,uzbstrproc;
+uses
+  sysutils,uzeTypes;
 type
   TNamedObject=class
     private

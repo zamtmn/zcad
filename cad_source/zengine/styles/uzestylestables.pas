@@ -20,8 +20,8 @@ unit uzestylestables;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses sysutils,uzegeometry,
-     UGDBNamedObjectsArray,gzctnrVector,uzeNamedObject;
+uses
+  sysutils,UGDBNamedObjectsArray,gzctnrVector,uzeNamedObject;
 type
 
   TTableCellJustify=(jcl(*'TopLeft'*),

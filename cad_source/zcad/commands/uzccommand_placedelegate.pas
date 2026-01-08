@@ -26,13 +26,13 @@ uses
   SysUtils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzbstrproc,
-  uzeblockdef,uzcdrawing,uzcdrawings,uzcinterface,
-  uzctnrVectorStrings,uzegeometrytypes,
-  uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,
-  uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,uzcutils,
-  zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry,
-  URecordDescriptor,uzsbTypeDescriptors,uzsbVarmanDef,uzccommand_Insert,
+
+  uzeblockdef,uzcdrawings,uzcinterface,
+  uzegeometrytypes,
+  uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzglviewareadata,
+  uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,
+  uzeentityfactory,
+  URecordDescriptor,uzsbVarmanDef,uzccommand_Insert,
   uzbBaseUtils,
   uzeentdevice,UUnitManager,uzbPaths,uzcTranslations,uzcEnitiesVariablesExtender;
 

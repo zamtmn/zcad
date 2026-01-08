@@ -48,7 +48,6 @@ uses
   uzeentpolyline,
   uzvzcadxlsxfps,  //работа с xlsx
   //uzvzcadxlsxfps,  //работа с xlsx
-  uzbstrproc,
   StrUtils,
   uzcsysvars,
   Classes,

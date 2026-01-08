@@ -34,7 +34,7 @@ uses
   uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
   uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
   uzctnrVectorBytesStream,uzeTypes,
-  uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzcLog,uzbLogTypes,uzbLog,
+  uzcsysvars,uzcstrconsts,uzcLog,uzbLogTypes,uzbLog,
   uzsbVarmanDef,varman,UUnitManager,uzcsysinfo,
   uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,

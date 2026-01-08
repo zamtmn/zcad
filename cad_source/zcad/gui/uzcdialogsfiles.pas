@@ -20,7 +20,7 @@ unit uzcdialogsfiles;
 {$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
-uses sysutils,uzbstrproc,
+uses sysutils,
      {$IFNDEF DELPHI}LResources,{$ENDIF}Dialogs{$IFNDEF DELPHI},FileUtil{$ENDIF},
      uzeffmanager;
 resourcestring

@@ -21,7 +21,7 @@ unit uzgindexsarray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVector,sysutils,
-     gzctnrVectorTypes,uzegeometry;
+     gzctnrVectorTypes;
 type
 
 PZGLIndexsArray=^ZGLIndexsArray;

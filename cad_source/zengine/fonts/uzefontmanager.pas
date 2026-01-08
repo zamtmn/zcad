@@ -23,8 +23,8 @@ unit uzefontmanager;
 interface
 uses
   uzctnrVectorBytesStream,{$IFNDEF DELPHI}LResources,{$ENDIF}uzbLogIntf,uzbpaths,
-  uzelclintfex,uzestrconsts,uzbstrproc,uzefont,
-  sysutils,uzegeometry,gzctnrSTL,
+  uzelclintfex,uzestrconsts,uzefont,
+  sysutils,gzctnrSTL,
   UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
 type
   TGeneralFontParam=record

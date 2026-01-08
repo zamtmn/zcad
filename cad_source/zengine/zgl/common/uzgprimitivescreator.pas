@@ -23,7 +23,7 @@ interface
 uses
   uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
   sysutils,uzeTypes,uzgprimitivessarray,
-  uzegeometry,uzbLogIntf,gzctnrVectorTypes;
+  uzbLogIntf,gzctnrVectorTypes;
 type
 
 TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)

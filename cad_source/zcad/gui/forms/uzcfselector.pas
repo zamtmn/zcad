@@ -3,7 +3,7 @@ unit uzcfselector;
 interface
 
 uses
-  uzbstrproc,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   ButtonPanel, types, lclintf,lcltype, ComCtrls, uzcuilcl2zc;
 
 type

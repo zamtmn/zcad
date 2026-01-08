@@ -19,7 +19,7 @@
 unit uzcregnavigatorentities;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,uzsbTypeDescriptors,uzctranslations,Forms,
+uses uzcfnavigatorentities,uzcfcommandline,uzbpaths,uzctranslations,Forms,
      uzsbVarmanDef,
      uzeentity,uzObjectInspector,uzcguimanager,
      Types,Controls,Varman,UUnitManager,uzcsysvars,uzcLog;

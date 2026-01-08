@@ -38,7 +38,7 @@ uses
 
   sysutils, math,
 
-  uzegeometrytypes,URecordDescriptor,uzsbTypeDescriptors,
+  uzegeometrytypes,URecordDescriptor,
 
   Forms, //gzctnrVectorTypes,
   //uzcfblockinsert,  //старое временно

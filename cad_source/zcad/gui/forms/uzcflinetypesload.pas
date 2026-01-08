@@ -3,7 +3,7 @@ unit uzcflinetypesload;
 interface
 
 uses
-  uzbstrproc,uzcdrawings,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
+  uzcdrawings,Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   ButtonPanel, lclintf,lcltype, EditBtn, ComCtrls,uzedrawingsimple, uzcuilcl2zc;
 
 type

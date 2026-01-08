@@ -29,8 +29,8 @@ uses
   uzeconsts,UGDBNamedObjectsArray,uzctnrvectorstrings,
   uzsbVarmanDef,Varman,uzcfcolors,uzestyleslayers,uzeTypes,uzcflineweights,
   usupportgui,uzccommandsmanager,
-  StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,
-  uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,
+  StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzcsysvars,
+  uzcsysparams,gzctnrVectorTypes,uzcinterface,uzcoimultiobjects,
   uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
   uzccommand_layer,uzcuitypes,uzeNamedObject,uzccommandsimpl,
   uzcOI,uzcdrawing,uzbUnits,uzeBaseUtils,uzcTypes,uzObjectInspectorManager;

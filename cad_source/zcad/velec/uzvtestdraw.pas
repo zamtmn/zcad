@@ -24,7 +24,7 @@ interface
 uses
    sysutils, //math,
 
-  URecordDescriptor,uzsbTypeDescriptors,
+  URecordDescriptor,
 
   Forms, //uzcfblockinsert,
   //uzcfarrayinsert,
@@ -62,7 +62,6 @@ uses
   uzeentdevice,
   //UGDBOpenArrayOfPV,
 
-  uzegeometry,
   //uzeentitiesmanager,
 
   //uzcmessagedialogs,

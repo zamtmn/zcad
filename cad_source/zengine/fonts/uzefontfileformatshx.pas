@@ -20,7 +20,7 @@ unit uzeFontFileFormatSHX;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
-     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,{$ENDIF}math,sysutils,
+     uzefont,FileUtil,math,sysutils,
      uzegeometrytypes,uzctnrVectorBytesStream,uzgprimitives,
      gzctnrVectorTypes,uzbLogIntf,uzefontbase;
 const

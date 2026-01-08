@@ -21,7 +21,7 @@ unit uzefont;
 {$INCLUDE zengineconfig.inc}
 interface
 uses math,uzgldrawerabstract,uzgprimitivescreator,uzgprimitives,
-     uzbstrproc,uzctnrVectorBytesStream,sysutils,
+     uzctnrVectorBytesStream,sysutils,
      uzefontbase,uzegeometrytypes,uzegeometry,uzglvectorobject,
      gzctnrVectorTypes,uzeNamedObject;
 type

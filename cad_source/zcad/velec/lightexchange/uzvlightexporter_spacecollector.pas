@@ -26,12 +26,10 @@ interface
 uses
   SysUtils,
   Classes,
-  gtree,
   uzcdrawings,
   uzeentity,
   uzeentpolyline,
   uzeentdevice,
-  uzegeometrytypes,
   uzcenitiesvariablesextender,
   uzsbVarmanDef,
   uzeconsts,

@@ -23,7 +23,7 @@ interface
 
 uses
   uzepalette,uzestyleslinetypes,uzegeometrytypes,
-  uzeTypes,uzegeometry,SysUtils,
+  uzeTypes,SysUtils,
  uzctnrVectorBytesStream,uzestyleslayers;
 
 type

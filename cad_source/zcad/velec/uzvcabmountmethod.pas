@@ -45,7 +45,6 @@ uses
      uzcinterface,
      //uzctnrvectorString,
      //uzegeometrytypes,
-     uzegeometry,
      uzcuitypes,
      uzeTypes,
      typinfo,

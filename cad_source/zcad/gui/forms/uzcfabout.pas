@@ -21,7 +21,7 @@ unit uzcfabout;
 interface
 uses
  uzcsysparams,uzcstrconsts,gettext,uzctranslations,
- uzbstrproc,uzctreenode,FileUtil,Forms, stdctrls, Controls,
+ uzctreenode,FileUtil,Forms, stdctrls, Controls,
  sysutils,
  uzeentityfactory,uzclog,uzccommandsmanager;
 type

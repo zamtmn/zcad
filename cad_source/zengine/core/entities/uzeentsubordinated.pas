@@ -25,7 +25,7 @@ uses
   strutils,uzgldrawcontext,uzeExtdrAbstractEntityExtender,uzedrawingdef,
   uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytesStream,
   uzegeometrytypes,uzeTypes,
-  SysUtils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera,uzeentbase;
+  SysUtils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzeentbase;
 
 type
 

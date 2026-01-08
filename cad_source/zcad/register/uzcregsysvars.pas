@@ -23,9 +23,9 @@ interface
 uses
   SysUtils,uzcsysvars,
   uzsbVarmanDef,
-  varman,
+  varman;
   //UUnitManager,
-  uzsbTypeDescriptors;
+  //uzsbTypeDescriptors;
   //UObjectDescriptor,
   //USinonimDescriptor,UBaseTypeDescriptor;
 procedure RegSysVars(ptsu:PTUnit);

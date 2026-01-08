@@ -20,9 +20,9 @@ unit UGDBNamedObjectsArray;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzegeometry,
-     uzeNamedObject,uzeTypes,
-     Strings;
+uses
+  gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzeNamedObject,uzeTypes,
+  Strings;
 type
 TForCResult=(IsFounded(*'IsFounded'*)=1,
              IsCreated(*'IsCreated'*)=2,

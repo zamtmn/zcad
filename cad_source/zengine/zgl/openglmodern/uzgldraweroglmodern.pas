@@ -21,7 +21,7 @@ unit uzgldraweroglmodern;
 interface
 uses
   uzgldrawerogl,uzgldrawergeneral,uzgprimitivescreatorabstract,uzgprimitivescreator,
-  uzgprimitivescreatoroglmodern,gl,GLext,
+  uzgprimitivescreatoroglmodern,gl,
   uzecamera,
   gzctnrBufferAllocator;
 type

@@ -19,14 +19,17 @@
 unit uzgeomentity3d;
 {$INCLUDE zengineconfig.inc}
 interface
+
 uses
-     sysutils,uzgeomentity,uzegeometry;
+  SysUtils,
+  uzgeomentity;
+
 type
 
-TGeomEntity3D= object(TGeomEntity)
-                                             end;
+  TGeomEntity3D=object(TGeomEntity)
+  end;
 
 implementation
+
 begin
 end.
-

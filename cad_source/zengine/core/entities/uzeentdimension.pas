@@ -23,7 +23,7 @@ interface
 
 uses
   uzgldrawcontext,uzeentabstracttext,uzestylestexts,uzestylesdim,
-  uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,uzbstrproc,
+  uzeentmtext,uzestyleslayers,uzedrawingdef,uzecamera,
   uzctnrVectorBytesStream,uzeenttext,uzegeometry,uzeentline,uzeentcomplex,
   uzegeometrytypes,SysUtils,uzeentity,uzeTypes,uzeconsts,
   uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert,uzglviewareadata,

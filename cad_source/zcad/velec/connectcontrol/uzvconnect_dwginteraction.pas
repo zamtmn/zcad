@@ -30,7 +30,6 @@ uses
   uzcdrawings,
   uzcvariablesutils,
   uzsbVarmanDef,
-  uzeentsubordinated,
   gzctnrVectorTypes,
   uzeconsts,
   UGDBSelectedObjArray,

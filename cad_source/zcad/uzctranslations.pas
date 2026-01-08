@@ -21,7 +21,7 @@ unit uzcTranslations;
 
 interface
 uses
-  uzbpaths,uzbstrproc,uzbLogTypes,uzcLog,uzbLog,
+  uzbpaths,uzbLogTypes,uzcLog,uzbLog,
   uzcsysparams,uzcFileStructure,
   uSpeller,uzcSpeller,
   LazUTF8,gettext,translations,

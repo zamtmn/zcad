@@ -35,7 +35,7 @@ uses
   uzeenthatch,
   uzegeometry,uzcoimultiproperties,uzcLog,
   uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector,
-  uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable,
+  uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable,
   uzctnrVectorStrings,uzeTypes,uzbUnits;
 implementation
 var

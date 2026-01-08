@@ -31,10 +31,10 @@ uses
   uzctnrVectorStrings,
   uzccomdraw,uzcstrconsts,uzccommandsmanager,uzsbVarmanDef,Varman,uzeconsts,
   uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,
-  uzeentityfactory,uzegeometry,
+  uzeentityfactory,
   UGDBVisibleTreeArray,UGDBSelectedObjArray,uzcenitiesvariablesextender,
   uzeentdevice,UBaseTypeDescriptor,uzccommand_regen,URecordDescriptor,
-  uzsbTypeDescriptors,uzeentgenericsubentry;
+  uzeentgenericsubentry;
 
 type
 

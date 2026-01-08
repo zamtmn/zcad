@@ -11,11 +11,11 @@ interface
 uses
 
   uzctranslations,uzeentitiesmanager,uzeentity,uzglviewareaabstract,uzgldrawcontext,
-  {uzeentabstracttext,}uzeenttext,uzctnrvectorstrings,uzeentityfactory,uzcsysvars,uzbstrproc,
+  uzeenttext,uzctnrvectorstrings,uzeentityfactory,uzcsysvars,
   uzcinterface,uzccommandsmanager,
   uzccommandsabstract,uzccommandsimpl,uzeTypes,uzcdrawings,uzeutils,
   uzcutils,sysutils,uzsbVarmanDef,uzctnrVectorBytesStream,uzegeometry,uzeconsts,
-  uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzeentblockinsert,
+  uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,
   uzegeometrytypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
   gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,uzsbTypeDescriptors,uzcLog,

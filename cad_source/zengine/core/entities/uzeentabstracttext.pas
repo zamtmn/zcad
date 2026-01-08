@@ -22,7 +22,7 @@ unit uzeentabstracttext;
 interface
 
 uses
-  SysUtils,UGDBSelectedObjArray,uzgldrawcontext,uzeentity,uzecamera,uzbstrproc,
+  SysUtils,UGDBSelectedObjArray,uzgldrawcontext,uzeentity,uzecamera,
   uzeentplainwithox,uzegeometrytypes,uzeTypes,uzegeometry,Math,
   uzglviewareadata,uzeSnap,uzedrawingdef,uzCtnrVectorpBaseEntity;
 

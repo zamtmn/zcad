@@ -22,7 +22,7 @@ unit uzcTextPreprocessorDXFImpl;
 interface
 uses
   sysutils,
-  uzetextpreprocessor,uzbstrproc,
+  uzetextpreprocessor,
   uzeTypes,
   LazUTF8;
 function SPFSdxf:TSPFSourceEnum;

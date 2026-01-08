@@ -21,7 +21,7 @@ unit uzglgeomdata;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgindexsarray,uzgvertex3sarray,sysutils,uzeTypes,
-     uzegeometrytypes,uzegeometry,gzctnrVectorTypes;
+     uzegeometrytypes,gzctnrVectorTypes;
 type
 
 ZGLGeomData=object(GDBaseObject)

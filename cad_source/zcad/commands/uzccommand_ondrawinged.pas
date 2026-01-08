@@ -28,7 +28,7 @@ uses
   uzedrawingabstract,uzedrawingdef,
   uzgldrawcontext,
   UGDBSelectedObjArray,
-  uzeentwithlocalcs,uzeentity,uzeentgenericsubentry,
+  uzeentwithlocalcs,uzeentity,
   
   uzcdrawings,
   uzglviewareadata,

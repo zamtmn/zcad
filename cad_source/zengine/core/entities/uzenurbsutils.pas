@@ -24,8 +24,7 @@ interface
 
 uses
   SysUtils,
-  uzegeometrytypes,uzegeometry,
-  gzctnrVector,
+  uzegeometrytypes,
   uzeNURBSTypes;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;

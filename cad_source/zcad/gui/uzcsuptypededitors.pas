@@ -23,7 +23,7 @@ interface
 
 uses
   zeundostack,zebaseundocommands,usupportgui,Varman,UBaseTypeDescriptor,
-  uzsbVarmanDef,StdCtrls,sysutils,Forms,Controls,Classes,uzbstrproc,uzcsysvars,
+  uzsbVarmanDef,StdCtrls,sysutils,Forms,Controls,Classes,uzcsysvars,
   uzccommandsmanager,uzcinterface,uzbUnits;
 
 type

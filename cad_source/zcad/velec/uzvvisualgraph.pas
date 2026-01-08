@@ -26,7 +26,7 @@ uses
 
    sysutils, //math,
 
-  URecordDescriptor,uzsbTypeDescriptors,
+  URecordDescriptor,
 
   Forms, //uzcfblockinsert,
    //uzcfarrayinsert,

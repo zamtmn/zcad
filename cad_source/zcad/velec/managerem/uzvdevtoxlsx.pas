@@ -44,10 +44,8 @@ uses
   uzcenitiesvariablesextender,
   uzcentcable,
   //uzvmanemshieldsgroupparams,
-  uzegeometry,
   uzeentpolyline,
   uzvzcadxlsxole,  //работа с xlsx
-  uzbstrproc,
   StrUtils,
   uzcsysvars,
   Classes,

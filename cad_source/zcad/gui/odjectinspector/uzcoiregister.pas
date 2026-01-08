@@ -21,11 +21,11 @@ unit uzcOIRegister;
 interface
 uses
   Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,
-  uzcutils,uzbpaths,uzsbTypeDescriptors,uzcTranslations,Forms,uzcinterface,uzeroot,
+  uzcutils,uzbpaths,uzcTranslations,Forms,uzcinterface,uzeroot,
   uzedrawingdef,uzgldrawcontext,uzctnrvectorstrings,uzsbVarmanDef,
   uzedrawingsimple,uzeentity,uzcenitiesvariablesextender,uzObjectInspector,
-  uzcguimanager,uzcstrconsts,gzctnrVectorTypes,Types,Controls,uzcdrawings,
-  Varman,UUnitManager,uzcsysvars,uzcsysparams,uzOIUI,
+  uzcguimanager,uzcstrconsts,gzctnrVectorTypes,Controls,uzcdrawings,
+  Varman,UUnitManager,uzcsysvars,uzcsysparams,
   uzcoimultiobjects,uzccommandsimpl,uzmenusmanager,uzcLog,menus,ComCtrls,
   uztoolbarsmanager,uzcimagesmanager,uzctreenode,uzcActionsManager,
   uzObjectInspectorManager,zeundostack,uzcOI,UObjectDescriptor,classes,uzbUnits,

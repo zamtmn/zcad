@@ -20,7 +20,7 @@ unit uzefontshx;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzefontbase,uzctnrVectorBytesStream,sysutils,uzegeometry;
+  uzefontbase,uzctnrVectorBytesStream,sysutils;
 type
   TZESHXFontImpl= class(TZEBaseFontImpl)
     h,u:Byte;

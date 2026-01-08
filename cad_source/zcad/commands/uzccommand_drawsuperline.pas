@@ -62,7 +62,7 @@ uses
   //разные функции упрощающие создание примитивов, пока их там очень мало
   uzestyleslayers,
   uzsbVarmanDef,
-  Varman,UBaseTypeDescriptor,uzbstrproc,
+  Varman,UBaseTypeDescriptor,
   gzctnrVectorTypes,
   uzcstrconsts,       //resouce strings
   uzvcabmountmethod,

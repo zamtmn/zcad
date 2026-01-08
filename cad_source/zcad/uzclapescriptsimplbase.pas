@@ -27,9 +27,7 @@ uses
   LazUTF8,
   uzcLog,
   uzeentity,uzeExtdrAbstractEntityExtender,
-  uzedrawingsimple,uzcdrawings,
-  uzeentline,uzeentityfactory,uzeconsts,uzcutils,
-  uzegeometry,uzegeometrytypes,
+  uzeentline,uzeentityfactory,
   uzelongprocesssupport,uzccommandsabstract;
 
 type

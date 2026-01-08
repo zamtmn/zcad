@@ -23,7 +23,7 @@ interface
 
 uses
   uzgldrawcontext,uzeentityfactory,uzeentdimension,uzestylesdim,uzestyleslayers,
-  uzegeometrytypes,uzedrawingdef,uzbstrproc,uzctnrVectorBytesStream,
+  uzegeometrytypes,uzedrawingdef,uzctnrVectorBytesStream,
   UGDBControlPointArray,uzegeometry,uzeentline,uzeentcomplex,SysUtils,
   UGDBSelectedObjArray,uzeentity,uzeconsts,uzeffdxfsupport,
   uzeentsubordinated,uzglviewareadata,uzeSnap,uzeTypes;

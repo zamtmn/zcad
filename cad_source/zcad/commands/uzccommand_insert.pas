@@ -26,7 +26,6 @@ uses
   SysUtils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzbstrproc,
   uzeblockdef,uzcdrawing,uzcdrawings,uzcinterface,
   uzctnrVectorStrings,uzegeometrytypes,
   uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,

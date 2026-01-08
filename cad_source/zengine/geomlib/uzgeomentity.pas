@@ -20,7 +20,7 @@ unit uzgeomentity;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  sysutils,uzeTypes,uzegeometrytypes,uzegeometry;
+  sysutils,uzeTypes,uzegeometrytypes;
 type
 
 PTGeomEntity=^TGeomEntity;

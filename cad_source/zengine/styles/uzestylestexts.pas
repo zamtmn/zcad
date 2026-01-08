@@ -20,8 +20,8 @@ unit uzestylestexts;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses LCLProc,uzbpaths,uzefontmanager,sysutils,uzegeometry,
-     uzbstrproc,uzefont,uzestrconsts,UGDBNamedObjectsArray,uzeNamedObject,
+uses LCLProc,uzbpaths,uzefontmanager,sysutils,
+     uzefont,uzestrconsts,UGDBNamedObjectsArray,uzeNamedObject,
      uzeLogIntf;
 type
 

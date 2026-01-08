@@ -8,10 +8,10 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ActnList, laz.VirtualTrees, gzctnrSTL,
-  uzegeometry, uzccommandsmanager,
+  uzccommandsmanager,
   uzcinterface, uzeentity, uzcimagesmanager,
   uzcenitiesvariablesextender,uzcExtdrSCHConnection,
-  uzsbVarmanDef, uzbstrproc,uzctreenode,
+  uzsbVarmanDef, uzctreenode,
   Varman, uzcoimultiproperties,LCLType,LCLVersion;
 
 type

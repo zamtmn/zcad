@@ -23,7 +23,7 @@ interface
 uses
   uzcTranslations,uzcinterface,uzgldrawcontext,zeundostack,gzUndoCmdChgData,
   gzUndoCmdChgMethod,zUndoCmdChgCameraBaseProp,zebaseundocommands,uzbpaths,
-  uzestylesdim,uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,
+  uzestylesdim,uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,
   uzeblockdef,UUnitManager,uzsbVarmanDef,varman,sysutils,uzegeometry,
   uzeconsts,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,uzbUnits,
   uzegeometrytypes,uzctnrVectorBytesStream,gzctnrVectorTypes,uzglviewareadata;

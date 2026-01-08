@@ -8,22 +8,22 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="."/>
+        <OtherUnitFiles Value=".;src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Files Count="3">
       <Item1>
-        <Filename Value="varmandef.pas"/>
-        <UnitName Value="varmandef"/>
+        <Filename Value="src\uzsbvarmandef.pas"/>
+        <UnitName Value="uzsbvarmandef"/>
       </Item1>
       <Item2>
-        <Filename Value="typedescriptors.pas"/>
-        <UnitName Value="typedescriptors"/>
+        <Filename Value="src\uzsbtypedescriptors.pas"/>
+        <UnitName Value="uzsbTypeDescriptors"/>
       </Item2>
       <Item3>
-        <Filename Value="ulexparser.pas"/>
-        <UnitName Value="uLexParser"/>
+        <Filename Value="src\uzsblexparser.pas"/>
+        <UnitName Value="uzsbLexParser"/>
       </Item3>
     </Files>
     <CompatibilityMode Value="True"/>

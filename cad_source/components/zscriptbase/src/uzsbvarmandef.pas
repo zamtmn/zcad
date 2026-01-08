@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit varmandef;
+unit uzsbVarmanDef;
 {$MODESWITCH ADVANCEDRECORDS}
 
 interface

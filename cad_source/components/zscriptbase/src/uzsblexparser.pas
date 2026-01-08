@@ -1,8 +1,6 @@
 {
 *****************************************************************************
 *                                                                           *
-*  This file is part of the ZCAD                                            *
-*                                                                           *
 *  See the file COPYING.txt, included in this distribution,                 *
 *  for details about the copyright.                                         *
 *                                                                           *
@@ -16,7 +14,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uLexParser;
+unit uzsbLexParser;
 {$Mode objfpc}{$H+}
 
 interface

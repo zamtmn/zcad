@@ -15,14 +15,14 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit typedescriptors;
+unit uzsbTypeDescriptors;
 
 {$MODE DELPHI}
 interface
 
 uses
   SysUtils,
-  varmandef,
+  uzsbVarmanDef,
   uzbUnits,
   gzctnrVectorTypes,gzctnrVectorP;
 

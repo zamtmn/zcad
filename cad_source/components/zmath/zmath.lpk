@@ -8,7 +8,8 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="."/>
+        <IncludeFiles Value="src"/>
+        <OtherUnitFiles Value=".;src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
@@ -19,20 +20,20 @@
     </CompilerOptions>
     <Files Count="4">
       <Item1>
-        <Filename Value="uzegeometry.pas"/>
-        <UnitName Value="uzegeometry"/>
+        <Filename Value="src\gvectorimpl.inc"/>
+        <Type Value="Include"/>
       </Item1>
       <Item2>
-        <Filename Value="uzegeometrytypes.pas"/>
-        <UnitName Value="uzegeometrytypes"/>
+        <Filename Value="src\gvectorintf.inc"/>
+        <Type Value="Include"/>
       </Item2>
       <Item3>
-        <Filename Value="gvectorimpl.inc"/>
-        <Type Value="Include"/>
+        <Filename Value="src\uzegeometry.pas"/>
+        <UnitName Value="uzegeometry"/>
       </Item3>
       <Item4>
-        <Filename Value="gvectorintf.inc"/>
-        <Type Value="Include"/>
+        <Filename Value="src\uzegeometrytypes.pas"/>
+        <UnitName Value="uzegeometrytypes"/>
       </Item4>
     </Files>
     <CompatibilityMode Value="True"/>

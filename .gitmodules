@@ -43,3 +43,9 @@
 [submodule "cad_source/components/zcontainers"]
 	path = cad_source/components/zcontainers
 	url = https://github.com/zamtmn/zcontainers.git
+[submodule "cad_source/components/zscript"]
+	path = cad_source/components/zscript
+	url = https://github.com/zamtmn/zscript.git
+[submodule "cad_source/components/zscriptbase"]
+	path = cad_source/components/zscriptbase
+	url = https://github.com/zamtmn/zscriptbase.git

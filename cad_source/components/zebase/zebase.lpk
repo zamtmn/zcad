@@ -23,14 +23,6 @@
         <Filename Value="uzbtypes.pas"/>
         <UnitName Value="uzbtypes"/>
       </Item>
-      <Item>
-        <Filename Value="uzbstrproc.pas"/>
-        <UnitName Value="uzbstrproc"/>
-      </Item>
-      <Item>
-        <Filename Value="uzbpaths.pas"/>
-        <UnitName Value="uzbpaths"/>
-      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

@@ -380,7 +380,8 @@ begin
   ptsu^.RegisterType(TypeInfo(TGetterSetterInteger),'TGetterSetterInteger');
   ptsu^.RegisterType(TypeInfo(TGetterSetterBoolean),'TGetterSetterBoolean');
   ptsu^.RegisterType(TypeInfo(TGetterSetterTColor),'TGetterSetterTColor');
-  ptsu^.RegisterType(TypeInfo(TGetterSetterTUsableInteger),'TGetterSetterTUsableInteger');
+  ptsu^.RegisterType(TypeInfo(TGetterSetterTUsableInteger),
+                             'TGetterSetterTUsableInteger');
 
   //ptsu^.RegisterType(TypeInfo(TFaceTypedData),'TFaceTypedData');
   //ptsu^.RegisterType(TypeInfo(PTFaceTypedData),'PTFaceTypedData');
@@ -422,7 +423,8 @@ begin
   end;
   utd:=ptsu^.RegisterType(TypeInfo(TBlockBorder),'TBlockBorder');
   if otd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['BB_Owner','BB_Self','BB_Empty'],[FNProgram,FNUser]);
+    ptsu^.SetTypeDesk2(utd,['BB_Owner','BB_Self','BB_Empty'],
+                           [FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(TBlockGroup),'TBlockGroup');
   if otd<>nil then begin
@@ -806,11 +808,13 @@ begin
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['LengthDXF','h','Mode','FirstStroke','LastStroke',
                             'WithoutLines','dasharray','strokesarray',
-                            'shapearray','Textarray','desk'],[FNProgram,FNUser]);
+                            'shapearray','Textarray','desk'],
+                           [FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(PGDBLtypeProp),'PGDBLtypeProp');
 
-  utd:=ptsu^.RegisterType(TypeInfo(TDimTextVertPosition),'TDimTextVertPosition');
+  utd:=ptsu^.RegisterType(TypeInfo(TDimTextVertPosition),
+                                  'TDimTextVertPosition');
   if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['DTVPCenters','DTVPAbove','DTVPOutside',
                             'DTVPJIS','DTVPBellov'],[FNProgram,FNUser]);
@@ -825,7 +829,8 @@ begin
                             'TSDatumTriangle','TSDatumtTriangleFilled',
                             'TSIntegral','TSUserDef'],[FNProgram,FNUser]);
   end;
-  utd:=ptsu^.RegisterType(TypeInfo(TDimTextVertPosition),'TDimTextVertPosition');
+  utd:=ptsu^.RegisterType(TypeInfo(TDimTextVertPosition),
+                                  'TDimTextVertPosition');
   if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['DTMMoveDimLine','DTMCreateLeader','DTMnothung'],
                        [FNProgram,FNUser]);
@@ -1014,7 +1019,8 @@ begin
     ptsu^.SetTypeDesk2(utd,['**шт.','**м'],[FNUser]);
   end;
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(DbBaseObject),TypeOf(DbBaseObject),'DbBaseObject',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(DbBaseObject),TypeOf(DbBaseObject),
+                                        'DbBaseObject',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['Category','Group','Position','NameShort','Name',
                             'NameFull','Description','ID','Standard','OKP',

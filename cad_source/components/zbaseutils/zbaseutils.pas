@@ -11,7 +11,7 @@ uses
   uzbLog, uzbNamedHandles, uzbNamedHandlesWithData, uzbHandles, uzbSets, 
   uzbexceptionscl, uzbexceptionsparams, uzbLogIntf, uzbLogDecorators, 
   uzbLogFileBackend, uzbCommandLineParser, uzbGetterSetter, uzbUsable, 
-  uzbBaseUtils, LazarusPackageIntf;
+  uzbBaseUtils, uzbstrproc, uzbPaths, LazarusPackageIntf;
 
 implementation
 

@@ -8,7 +8,7 @@ uses
   sysutils,
   uzglviewareaabstract,uzmenusmanager,uzmacros,TransferMacros,MacroDefIntf,Forms,
   ActnList,uzccommandsmanager,uzedrawingsimple,
-  uzbtypes,uzbBaseUtils,gzctnrVectorTypes,uzeentity,uzeentdevice,
+  uzbBaseUtils,gzctnrVectorTypes,uzeentity,uzeentdevice,
   UGDBSelectedObjArray;
 
 type

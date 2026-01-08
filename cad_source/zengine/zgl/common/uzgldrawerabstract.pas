@@ -23,7 +23,7 @@ uses
   uzgindexsarray,uzgvertex3sarray,UGDBPoint3DArray,{$IFDEF DELPHI}types,{$ENDIF}
   uzgprimitivescreatorabstract,uzepalette,
   Classes,Graphics,
-  uzbtypes,uzeTypes,uzecamera,uzegeometrytypes,uzegeometry;
+  uzeTypes,uzecamera,uzegeometrytypes,uzegeometry;
 type
 TRenderMode=(TRM_ModelSpace,TRM_DisplaySpace,TRM_WindowSpace);
 TZGLPenStyle=(TPS_Solid,TPS_Dot,TPS_Dash,TPS_Selected);

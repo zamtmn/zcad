@@ -23,7 +23,7 @@ interface
 uses
   zeundostack,zebaseundocommands,uzeentity,varmandef,
   uzcEnitiesVariablesExtender,gzUndoCmdChgData2,uzedrawingdef,
-  uzestyleslayers,uzbtypes,uzbBaseUtils,uzeExtdrAbstractEntityExtender,
+  uzestyleslayers,uzbBaseUtils,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender;
 
 type

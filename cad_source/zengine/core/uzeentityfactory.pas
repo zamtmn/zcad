@@ -23,7 +23,7 @@ unit uzeentityfactory;
 interface
 
 uses
-  uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrSTL,uzbtypes,
+  uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrSTL,
   uzeTypes,uzeentity,uzbLogIntf,SysUtils;
 type
 TAllocEntFunc=function:Pointer;

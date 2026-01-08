@@ -22,7 +22,7 @@ unit uzecamera;
 
 interface
 uses
-  uzbLogIntf,uzegeometrytypes,uzbtypes,uzeTypes,uzegeometry;
+  uzbLogIntf,uzegeometrytypes,uzeTypes,uzegeometry;
 
 type
   GDBProjectProc=procedure (objcoord:TzePoint3d; out wincoord:TzePoint3d) of object;

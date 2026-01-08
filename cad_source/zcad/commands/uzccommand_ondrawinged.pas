@@ -29,7 +29,7 @@ uses
   uzgldrawcontext,
   UGDBSelectedObjArray,
   uzeentwithlocalcs,uzeentity,uzeentgenericsubentry,
-  uzbtypes,
+  
   uzcdrawings,
   uzglviewareadata,
   uzegeometrytypes,uzegeometry,

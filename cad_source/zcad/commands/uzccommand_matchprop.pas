@@ -31,7 +31,7 @@ uses
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcdrawings,
   uzcutils,
-  uzbtypes,uzeTypes,
+  uzeTypes,
   uzegeometry,
   uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,
   //gzUndoCmdChgData,zUndoCmdChgBaseTypes,

@@ -24,7 +24,7 @@ interface
 uses
   uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
   UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzeentwithmatrix,uzeentsubordinated,
-  uzbtypes,uzegeometry,uzeentity,gzctnrVectorTypes,uzegeometrytypes,uzeconsts,
+  uzegeometry,uzeentity,gzctnrVectorTypes,uzegeometrytypes,uzeconsts,
   uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity,uzeTypes;
 
 type

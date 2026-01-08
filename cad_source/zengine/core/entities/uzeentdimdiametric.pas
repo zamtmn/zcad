@@ -25,7 +25,7 @@ uses
   uzgldrawcontext,uzeentityfactory,uzeentdimension,uzestylesdim,uzestyleslayers,
   uzegeometrytypes,uzedrawingdef,uzbstrproc,uzctnrVectorBytesStream,
   UGDBControlPointArray,uzegeometry,uzeentline,uzeentcomplex,SysUtils,
-  UGDBSelectedObjArray,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
+  UGDBSelectedObjArray,uzeentity,uzeconsts,uzeffdxfsupport,
   uzeentsubordinated,uzglviewareadata,uzeSnap,uzeTypes;
 (*
 

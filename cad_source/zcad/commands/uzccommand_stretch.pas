@@ -27,7 +27,7 @@ uses
   uzccommandsmanager,
   uzccommandsabstract,
   uzccommandsimpl,
-  uzbtypes,
+  
   uzcdrawings,
   uzglviewareadata,
   uzcinterface,

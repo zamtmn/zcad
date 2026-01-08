@@ -28,7 +28,7 @@ uses
   
   uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,uzbBaseUtils,
+  uzbBaseUtils,
   uzcdrawings,
   sysutils,
   uzcinterface,

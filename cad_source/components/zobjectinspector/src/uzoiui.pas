@@ -21,7 +21,7 @@ unit uzOIUI;
 {$MODE DELPHI}
 interface
 uses Classes,Types,Themes,Graphics,LCLIntf,LCLType,Forms,
-     varmandef,uzbtypes,uzObjectInspectorManager;
+     varmandef,uzObjectInspectorManager;
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 function OIUI_FE_HalfButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 function OIUI_FE_BooleanGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;

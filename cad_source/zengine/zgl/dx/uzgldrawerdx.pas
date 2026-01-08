@@ -26,7 +26,7 @@ uses
     {$ENDIF}
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
-    uzgvertex3sarray,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,{uzgloglstatemanager,}Graphics,uzbtypes,
+    uzgvertex3sarray,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,{uzgloglstatemanager,}Graphics,
     uzegeometrytypes,uzecamera;
 const
   texturesize=128;

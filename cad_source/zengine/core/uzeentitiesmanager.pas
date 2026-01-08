@@ -23,7 +23,7 @@ unit uzeentitiesmanager;
 interface
 uses
   uzbLogIntf,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,uzeutils,
-  uzestyleslayers,sysutils,uzbtypes,uzeTypes,UGDBVisibleOpenArray,
+  uzestyleslayers,sysutils,uzeTypes,UGDBVisibleOpenArray,
   uzegeometrytypes,uzeentgenericsubentry,uzeentity;
 
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;

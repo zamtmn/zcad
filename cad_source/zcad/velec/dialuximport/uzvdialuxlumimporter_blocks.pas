@@ -27,7 +27,7 @@ uses
   SysUtils,
   Classes,
   uzcdrawings,
-  uzbtypes,
+  
   uzclog,
   uzeblockdef,
   gzctnrVectorTypes,

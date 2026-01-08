@@ -21,7 +21,7 @@ unit uzeffmanager;
 
 interface
 uses
-  uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeTypes,
+  uzbnamedhandles,uzbnamedhandleswithdata,uzeTypes,
   uzeentgenericsubentry,uzedrawingsimple,sysutils,gzctnrSTL,uzgldrawcontext,
   uzbLogIntf,uzeLogIntf;
 

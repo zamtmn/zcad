@@ -27,22 +27,19 @@
       </Item3>
     </Files>
     <CompatibilityMode Value="True"/>
-    <RequiredPkgs Count="5">
+    <RequiredPkgs Count="4">
       <Item1>
         <PackageName Value="zunits"/>
       </Item1>
       <Item2>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zbaseutils"/>
       </Item2>
       <Item3>
-        <PackageName Value="zbaseutils"/>
+        <PackageName Value="zcontainers"/>
       </Item3>
       <Item4>
-        <PackageName Value="zcontainers"/>
-      </Item4>
-      <Item5>
         <PackageName Value="FCL"/>
-      </Item5>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

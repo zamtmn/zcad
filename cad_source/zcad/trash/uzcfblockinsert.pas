@@ -10,7 +10,6 @@ uses
 
   UGDBObjBlockdefArray, //описание таблицы блоков
   uzeblockdef,          //описания блоков
-  uzbtypes,          //базовые типы
   uzegeometrytypes,          //базовые типы
   uzbstrproc,               //билеберда для работы со стрингами
   gzctnrVectorTypes

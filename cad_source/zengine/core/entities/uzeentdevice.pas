@@ -25,7 +25,7 @@ uses
   uzestyleslayers,uzepalette,uzeobjectextender,uzeentityfactory,
   uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,SysUtils,uzctnrVectorBytesStream,
   uunitmanager,uzegeometry,uzeconsts,uzeentity,uzeentsubordinated,varmandef,
-  uzegeometrytypes,uzeentblockinsert,uzbtypes,uzeTypes,UGDBVisibleOpenArray,
+  uzegeometrytypes,uzeentblockinsert,uzeTypes,UGDBVisibleOpenArray,
   UGDBObjBlockdefArray,gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,
   UGDBSelectedObjArray,uzeentitiestree,uzbLogIntf,uzestrconsts,uzglviewareadata,
   uzeSnap,uzCtnrVectorpBaseEntity;

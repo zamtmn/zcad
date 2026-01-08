@@ -23,7 +23,7 @@ interface
 uses
   uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,
   uzbUnits,
-  sysutils,uzbtypes,uzegeometry,
+  sysutils,uzegeometry,
   gzctnrVectorTypes,uzbstrproc,UGDBNamedObjectsArray,uzeffdxfsupport,
   uzeNamedObject,uzeTypes;
 const

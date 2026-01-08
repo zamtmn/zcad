@@ -24,7 +24,7 @@ interface
 uses
   uzctnrVectorBytesStream,{$IFNDEF DELPHI}LResources,{$ENDIF}uzbLogIntf,uzbpaths,
   uzelclintfex,uzestrconsts,uzbstrproc,uzefont,
-  sysutils,uzbtypes,uzegeometry,gzctnrSTL,
+  sysutils,uzegeometry,gzctnrSTL,
   UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
 type
   TGeneralFontParam=record

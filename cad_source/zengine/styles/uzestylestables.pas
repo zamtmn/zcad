@@ -20,7 +20,7 @@ unit uzestylestables;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses sysutils,uzbtypes,uzegeometry,
+uses sysutils,uzegeometry,
      UGDBNamedObjectsArray,gzctnrVector,uzeNamedObject;
 type
 

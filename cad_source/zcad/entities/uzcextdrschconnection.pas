@@ -22,7 +22,7 @@ interface
 uses sysutils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
      uzeentdevice,TypeDescriptors,uzctnrVectorBytesStream,
-     uzbtypes,uzbBaseUtils,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
+     uzbBaseUtils,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
      usimplegenerics,uzeffdxfsupport,
      gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
      uzegeometrytypes,uzcsysvars,

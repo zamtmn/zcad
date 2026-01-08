@@ -20,7 +20,7 @@ unit uzctnrvectorgdblineweight;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzbtypes,uzeTypes,gzctnrVectorSimple;
+  uzeTypes,gzctnrVectorSimple;
 type
 
 PTZctnrVectorGDBLineWeight=^TZctnrVectorGDBLineWeight;

@@ -24,7 +24,7 @@ interface
 
 uses
   SysUtils,
-  uzbtypes,uzbHandles,uzegeometrytypes,uzbGetterSetter,Graphics;
+  uzbHandles,uzegeometrytypes,uzbGetterSetter,Graphics;
 
 const
   NotActual=0;

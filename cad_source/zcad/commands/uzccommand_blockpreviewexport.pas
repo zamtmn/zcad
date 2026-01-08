@@ -30,7 +30,7 @@ uses
   uzcsysvars,
   uzccommandsabstract,
   uzccommandsimpl,
-  uzbtypes,
+  
   uzeutils,uzcutils,
   uzcinterface,
   uzegeometrytypes,uzegeometry,

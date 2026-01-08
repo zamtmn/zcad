@@ -22,7 +22,7 @@ unit uzefontbase;
 interface
 uses
   uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytesStream,gzctnrVectorTypes,
-  gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
+  gzctnrVector,sysutils,uzegeometrytypes,uzegeometry;
 
 const
   SymCasheSize=128;

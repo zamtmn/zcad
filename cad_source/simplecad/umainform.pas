@@ -11,7 +11,7 @@ uses
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
                                                                          //zcad memorymanager
-  uzbtypes, uzegeometrytypes,                                              //zcad basetypes
+   uzegeometrytypes,                                              //zcad basetypes
   uzegeometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeFontFileFormatSHX,                                                        //fonts manager and SHX fileformat support
   uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support

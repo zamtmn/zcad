@@ -30,7 +30,7 @@ uses
   uzccommandsabstract,
   uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,
+  
   uzcdrawings,
   uzcutils,
   uzglviewareadata,

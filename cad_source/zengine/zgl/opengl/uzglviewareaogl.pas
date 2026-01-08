@@ -27,8 +27,8 @@ uses
   (*{$IFDEF LCLQT}
   qt4,
   {$ENDIF}*)
-  uzglviewareaabstract,uzgldrawerogl,SysUtils,
-  uzgloglstatemanager,uzbtypes,uzeTypes,
+  uzglviewareaabstract,uzgldrawerogl,SysUtils,uzeTypes,
+  uzgloglstatemanager,
   uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
   ExtCtrls,Classes,Controls,Graphics,uzglviewareageneral,Math,uzglbackendmanager,
   uzegeometrytypes,uzbLogIntf,{$IFNDEF DELPHI}OpenGLContext{$ENDIF},GLext;

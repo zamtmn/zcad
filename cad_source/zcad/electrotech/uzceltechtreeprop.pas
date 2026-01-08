@@ -8,7 +8,7 @@ uses
   LCLType,ImgList,
   Classes,SysUtils,ComCtrls,Controls,Graphics,Menus,Forms,ActnList,
   Laz2_XMLCfg,Laz2_DOM,
-  gvector,gtree,uzbtypes,uzeTypes;
+  gvector,gtree,uzeTypes;
 
 type
   TTranslateFunction=function (const Identifier, OriginalValue: String): String;

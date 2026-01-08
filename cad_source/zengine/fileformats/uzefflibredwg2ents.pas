@@ -25,7 +25,7 @@ uses
   uzbLogIntf,
   SysUtils,
   dwg,dwgproc,
-  uzeentgenericsubentry,{uzbtypes,}uzedrawingsimple,
+  uzeentgenericsubentry,uzedrawingsimple,
   uzbstrproc,
   uzestyleslayers,
   uzeentline,uzeentity,//uzgldrawcontext,

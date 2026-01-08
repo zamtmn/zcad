@@ -22,7 +22,7 @@ unit UGDBSelectedObjArray;
 interface
 uses
   uzegeometrytypes,uzepalette,uzgldrawcontext,uzecamera,uzeentwithmatrix,
-  uzeentity,UGDBControlPointArray,gzctnrVector,sysutils,uzbtypes,uzegeometry,
+  uzeentity,UGDBControlPointArray,gzctnrVector,sysutils,uzegeometry,
   uzglviewareadata,uzeTypes;
 type
 

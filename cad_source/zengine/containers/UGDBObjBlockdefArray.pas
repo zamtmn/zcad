@@ -23,7 +23,7 @@ unit UGDBObjBlockdefArray;
 interface
 uses
   uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef, gzctnrVectorObjects,
-  gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf,Strings,uzeTypes;
+  gzctnrVectorTypes,sysutils,uzegeometry,uzbLogIntf,Strings,uzeTypes;
 type
 
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;

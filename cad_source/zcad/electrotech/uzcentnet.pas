@@ -11,7 +11,7 @@ interface
 uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzestyleslayers,
      uzeentgenericsubentry,uzedrawingdef,uzeentitiesprop,uzcsysvars,uzctnrVectorBytesStream,
      uzeentity,UGDBOpenArrayOfPV,uzeentconnected,uzeconsts,
-     varmandef,uzegeometry,uzbtypes,uzeTypes,UGDBGraf,uzeentsubordinated,uunitmanager,
+     varmandef,uzegeometry,uzeTypes,UGDBGraf,uzeentsubordinated,uunitmanager,
      gzctnrVectorTypes,uzegeometrytypes,sysutils,
      uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,
      uzCtnrVectorpBaseEntity;

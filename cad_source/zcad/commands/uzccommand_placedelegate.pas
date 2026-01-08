@@ -33,7 +33,7 @@ uses
   uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,uzcutils,
   zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry,
   URecordDescriptor,typedescriptors,varmandef,uzccommand_Insert,
-  uzbtypes,uzbBaseUtils,
+  uzbBaseUtils,
   uzeentdevice,UUnitManager,uzbPaths,uzcTranslations,uzcEnitiesVariablesExtender;
 
 implementation

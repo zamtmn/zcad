@@ -20,7 +20,7 @@ unit uzcprinterspecfunc;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzegeometrytypes,uzepalette,uzbtypes,LCLType,Printers,
+uses uzegeometrytypes,uzepalette,LCLType,Printers,
      gl,glu,uzgloglstatemanager,
      {$IFDEF SLINUX}glx,{$ENDIF}
      sysutils,varmandef,Graphics,uzcdrawings,uzegeometry;

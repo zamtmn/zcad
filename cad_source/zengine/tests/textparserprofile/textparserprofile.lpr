@@ -2,9 +2,7 @@ program textparserprofile;
 {$Codepage UTF8}
 {$Mode delphi}
 uses
-  SysUtils,StrUtils,Math,
-  uzbtypes,
-  uzetextpreprocessor,uzctextpreprocessordxfimpl,
+  SysUtils,StrUtils,Math,uzetextpreprocessor,uzctextpreprocessordxfimpl,
   velecparser;
 
 type

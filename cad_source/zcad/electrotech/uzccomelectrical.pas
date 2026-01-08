@@ -22,7 +22,7 @@ uses
   uzccommandsmanager,uzccomdraw,uzcentelleader,
   uzccommandsabstract,
   uzccommandsimpl,
-  uzegeometrytypes,uzbtypes,uzeTypes,
+  uzegeometrytypes,uzeTypes,
   uzcutils,
   SysUtils,
   LazUTF8,

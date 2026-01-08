@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   Buttons,
 
-  uzbUnits,uzbUnitsUtils,uzObjectInspector,UUnitManager,uzbtypes,varmandef,
+  uzbUnits,uzbUnitsUtils,uzObjectInspector,UUnitManager,varmandef,
   Varman,uzOIEditors,UEnumDescriptor;
 
 type

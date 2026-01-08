@@ -27,7 +27,7 @@ uses
   varmandef,varman,UUnitManager,TypeDescriptors,UObjectDescriptor,
   USinonimDescriptor,UBaseTypeDescriptor,
   uzcLog,uzegeometrytypes,
-  uzbUnits,uzbUnitsUtils,uzbtypes,uzeTypes,uzeblockdef,
+  uzbUnits,uzbUnitsUtils,uzeTypes,uzeblockdef,
   uzeentabstracttext,uzecamera,
   uzccommandsabstract,uzccommandsimpl,uzepalette,
   gzctnrVectorTypes,uzctnrVectorBytes,uzctnrAlignedVectorBytes,

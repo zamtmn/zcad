@@ -22,7 +22,7 @@ unit uzgprimitivescreator;
 interface
 uses
   uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
-  sysutils,uzbtypes,uzeTypes,uzgprimitivessarray,
+  sysutils,uzeTypes,uzgprimitivessarray,
   uzegeometry,uzbLogIntf,gzctnrVectorTypes;
 type
 

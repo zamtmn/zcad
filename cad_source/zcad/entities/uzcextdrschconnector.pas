@@ -24,7 +24,7 @@ uses
   uzeExtdrBaseEntityExtender,
   uzeentgenericsubentry,uzeentline,uzegeometry,
   uzeentdevice,TypeDescriptors,uzctnrVectorBytesStream,
-  uzbtypes,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
+  uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
   usimplegenerics,uzeffdxfsupport,
   gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
   uzcsysvars,gzctnrVectorSimple,gzctnrVectorP,UGDBOpenArrayOfPV,

@@ -27,7 +27,7 @@ uses
   uzcLog,
   gzctnrVectorTypes,
   uzccommandsabstract,uzccommandsimpl,
-  uzestyleslayers,//uzbtypes,
+  uzestyleslayers,//
   {uzcstrconsts,}uzccommandsmanager,uzcdrawings,uzeentity,
   //uzccominteractivemanipulators,
   uzgldrawcontext,

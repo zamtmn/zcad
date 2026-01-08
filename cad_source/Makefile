@@ -42,8 +42,6 @@ rmsrcbackups:
 	rm -rf components/zbaseutilsgui/backup
 	rm -rf components/zbaseutilsgui/examples/simpleapp/backup/*
 	rm -rf components/zbaseutilsgui/examples/simpleapp/backup
-	rm -rf components/zebase/backup/*
-	rm -rf components/zebase/backup
 	rm -rf components/zcontrols/backup/*
 	rm -rf components/zcontrols/backup
 	rm -rf components/zmacros/src/backup/*
@@ -105,7 +103,6 @@ rmpkgslibs:
 	rm -rf components/zcontainers/lib/*
 	rm -rf components/zbaseutils/lib/*
 	rm -rf components/zbaseutilsgui/lib/*
-	rm -rf components/zebase/lib/*
 	rm -rf components/zcontrols/lib/*
 	rm -rf components/zmacros/lib/*
 	rm -rf components/zmath/lib/*
@@ -128,7 +125,6 @@ rmpkgslibs:
 	rm -rf components/zcontainers/lib
 	rm -rf components/zbaseutils/lib
 	rm -rf components/zbaseutilsgui/lib
-	rm -rf components/zebase/lib
 	rm -rf components/zcontrols/lib
 	rm -rf components/zmacros/lib
 	rm -rf components/zmath/lib

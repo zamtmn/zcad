@@ -27,7 +27,7 @@ uses
   uzeentpolyline,uzeentcurve,
   uzeenttext,uzeentblockinsert,
   TypeDescriptors,uzctnrVectorBytesStream,
-  uzbtypes,uzbBaseUtils,uzeTypes,uzeblockdef,
+  uzbBaseUtils,uzeTypes,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,

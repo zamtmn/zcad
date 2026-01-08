@@ -29,7 +29,7 @@ uses
   uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   gzctnrVectorPData,gzctnrVector,
-  uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes,uzbBaseUtils,
+  uzbLogIntf,uzctnrAlignedVectorBytes,uzbBaseUtils,
   StrUtils;
 type
   InlineTypeRegistrationException=class (exception);

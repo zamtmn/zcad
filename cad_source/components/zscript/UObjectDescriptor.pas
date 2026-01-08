@@ -25,7 +25,7 @@ uses
   uzbUnits,
   gzctnrVectorTypes,UBaseTypeDescriptor,TypeDescriptors,
   uLexParser,uzctnrvectorstrings,objects,gzctnrVector,
-  varmandef,uzbtypes,uzbstrproc,TypInfo,uzbLogIntf;
+  varmandef,uzbstrproc,TypInfo,uzbLogIntf;
 const
   FPVMT:FieldDescriptor=
     (base:(ProgramName:'#';

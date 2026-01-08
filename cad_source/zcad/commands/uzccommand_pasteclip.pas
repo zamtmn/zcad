@@ -37,7 +37,7 @@ uses
   uzeffmanager,
   LazUTF8,
   SysUtils,
-  uzbtypes,uzeTypes,
+  uzeTypes,
   uzeffdxf
   //,uzcutils
   ;

@@ -25,7 +25,7 @@ uses
   LazUTF8,uzcLog,
   uzcdialogsfiles,
   SysUtils,
-  uzbtypes,uzeTypes,uzbpaths,
+  uzeTypes,uzbpaths,
   uzeffmanager,
   uzccommand_DWGNew,
   uzccommandsimpl,uzccommandsabstract,

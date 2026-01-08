@@ -30,7 +30,7 @@ uses
   uzccommandsabstract,
   uzegeometry,zcmultiobjectchangeundocommand,
   uzegeometrytypes,uzeentity,uzcLog,
-  uzbtypes,uzbBaseUtils,
+  uzbBaseUtils,
   uzccommandsimpl;
 
 implementation

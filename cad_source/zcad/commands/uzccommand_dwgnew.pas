@@ -24,7 +24,7 @@ interface
 uses
   ComCtrls,Controls,LazUTF8,uzcLog,AnchorDocking,
   SysUtils,
-  uzbtypes,uzeTypes,uzbpaths,
+  uzeTypes,uzbpaths,
   uzglbackendmanager,uzglviewareaabstract,
   uzccmdload,
   uzccommandsimpl,uzccommandsabstract,

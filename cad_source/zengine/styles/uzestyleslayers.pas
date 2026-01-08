@@ -21,8 +21,8 @@ unit uzestyleslayers;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  sysutils,uzbtypes,uzeTypes,uzegeometry,
-  uzeconsts,UGDBNamedObjectsArray,uzbstrproc,uzeNamedObject,
+  sysutils,uzeTypes,
+  uzeconsts,UGDBNamedObjectsArray,uzeNamedObject,
   uzeEntityStylesRegister;
 type
 

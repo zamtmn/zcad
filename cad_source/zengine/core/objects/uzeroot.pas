@@ -22,7 +22,7 @@ unit uzeroot;
 
 interface
 Uses
-  uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypes,
+  uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,
   uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,UGDBOpenArrayOfPV,
   uzelongprocesssupport,uzeTypes,uzbBaseUtils;

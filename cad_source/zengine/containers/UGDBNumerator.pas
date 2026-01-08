@@ -20,7 +20,7 @@ unit UGDBNumerator;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzbtypes,gzctnrVectorTypes,sysutils,UGDBNamedObjectsArray,uzeNamedObject;
+uses gzctnrVectorTypes,sysutils,UGDBNamedObjectsArray,uzeNamedObject;
 type
 
 PGDBNumItem=^GDBNumItem;

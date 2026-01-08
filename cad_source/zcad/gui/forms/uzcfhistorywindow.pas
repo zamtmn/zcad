@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  uzcinterface, uzccommandsabstract, uzbtypes, uzccommandsimpl;
+  uzcinterface, uzccommandsabstract,  uzccommandsimpl;
 
 type
 

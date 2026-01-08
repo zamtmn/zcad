@@ -22,7 +22,7 @@ interface
 
 uses
   SysUtils,
-  uzbtypes,uzeTypes,uzeffdxfsupport,uzeffmanager,uzeLogIntf,
+  uzeTypes,uzeffdxfsupport,uzeffmanager,uzeLogIntf,
   uzeffdxf,
   uzeffLibreDWG,uzeffLibreDWG2Ents;
 implementation

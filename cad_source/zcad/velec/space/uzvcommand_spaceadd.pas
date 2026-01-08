@@ -36,7 +36,7 @@ uses
   uzcExtdrIncludingVolume,
   uzccommand_rectangle,
   uzcinterface,           // Interface utilities / Утилиты интерфейса
-  uzbtypes,
+  
   varmandef,              // Variable manager definitions / Определения менеджера переменных
   uzestyleslayers,
   uzeconsts,

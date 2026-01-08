@@ -23,7 +23,7 @@ uses
   uzegeometrytypes,varmandef,uzctnrvectorstrings,uzccommandsmanager,
   gzctnrVectorTypes,SysUtils,uzbstrproc,uzcdrawings,uzegeometry,Math,
   UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
-  uLexParser,LCLProc,uzccommandsabstract,LazUtilities,uzbtypes,uzeTypes;
+  uLexParser,LCLProc,uzccommandsabstract,LazUtilities,uzeTypes;
 const
      commandsuffix='>';
      commandprefix=' ';

@@ -24,7 +24,7 @@ interface
 
 uses
   SysUtils,StrUtils,
-  uzbtypes,uzbHandles,uzegeometrytypes,uzeTypes;
+  uzbHandles,uzegeometrytypes,uzeTypes;
 
 function ConvertFromDxfString(const str:TDXFEntsInternalStringType):String;
 function ConvertToDxfString(const str:String):TDXFEntsInternalStringType;

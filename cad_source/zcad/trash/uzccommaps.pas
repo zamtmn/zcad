@@ -13,7 +13,7 @@ uses
   uzctranslations,uzeentity,uzglviewareaabstract,uzgldrawcontext,
   uzeenttext,uzeentityfactory,uzcsysvars,uzbstrproc,
   uzcinterface,uzccommandsmanager,uzclog,
-  uzccommandsabstract,uzccommandsimpl,uzbtypes,uzcdrawings,uzeutils,uzcutils,sysutils,
+  uzccommandsabstract,uzccommandsimpl,uzcdrawings,uzeutils,uzcutils,sysutils,
   varmandef,uzctnrVectorBytesStream,uzegeometry,uzeconsts,
   uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,
   uzegeometrytypes,varman,uzeentdevice,uzeentmtext,math,

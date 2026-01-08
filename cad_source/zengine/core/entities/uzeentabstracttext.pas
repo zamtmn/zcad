@@ -23,7 +23,7 @@ interface
 
 uses
   SysUtils,UGDBSelectedObjArray,uzgldrawcontext,uzeentity,uzecamera,uzbstrproc,
-  uzeentplainwithox,uzegeometrytypes,uzbtypes,uzeTypes,uzegeometry,Math,
+  uzeentplainwithox,uzegeometrytypes,uzeTypes,uzegeometry,Math,
   uzglviewareadata,uzeSnap,uzedrawingdef,uzCtnrVectorpBaseEntity;
 
 type

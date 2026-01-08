@@ -24,7 +24,7 @@ interface
 uses
   uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
   uzecamera,uzeentitiesprop,uzestyleslinetypes,uzegeometrytypes,
-  UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeTypes,uzeconsts,
+  UGDBControlPointArray,uzeentsubordinated,uzeTypes,uzeconsts,
   uzglviewareadata,uzegeometry,uzeffdxfsupport,SysUtils,uzctnrVectorBytesStream,
   uzestyleslayers,uzeenrepresentation,uzbLogIntf,uzMVReader,
   uzCtnrVectorpBaseEntity,uzbBaseUtils;

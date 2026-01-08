@@ -20,7 +20,7 @@ unit UGDBNamedObjectsArray;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry,
+uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzegeometry,
      uzeNamedObject,uzeTypes,
      Strings;
 type

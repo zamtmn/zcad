@@ -23,7 +23,7 @@ interface
 uses
   SysUtils,
   uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,
-  uzgldrawerabstract,uzbtypes,uzeTypes,gzctnrVectorTypes,gzctnrVector,
+  uzgldrawerabstract,uzeTypes,gzctnrVectorTypes,gzctnrVector,
   uzegeometrytypes,uzegeometry,Generics.Collections,Generics.Defaults;
 const
 

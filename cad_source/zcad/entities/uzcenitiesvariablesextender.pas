@@ -24,7 +24,7 @@ uses
   sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender,
   uzeentdevice,TypeDescriptors,uzctnrVectorBytesStream,
-  uzbtypes,uzbBaseUtils,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
+  uzbBaseUtils,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,

@@ -20,7 +20,7 @@ unit uzgeomline3d;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-     sysutils,uzbtypes,uzegeometry,uzgeomentity3d,uzegeometrytypes;
+     sysutils,uzegeometry,uzgeomentity3d,uzegeometrytypes;
 type
 
   TGeomLine3D=object(TGeomEntity3D)

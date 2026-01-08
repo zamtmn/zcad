@@ -22,7 +22,7 @@ interface
 uses
   uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,
   uzegeometrytypes,uzctnrVectorBytesStream,sysutils,uzegeometry,uzbLogIntf,
-  gzctnrVectorTypes,uzgloglstatemanager,uzbtypes,uzeTypes,uzeenrepresentation;
+  gzctnrVectorTypes,uzgloglstatemanager,uzeTypes,uzeenrepresentation;
 type
   TV4P = array [0..3] of Pointer;
   TArray4F = Array [0..3] of {Float}Double;

@@ -24,7 +24,7 @@ uses
   UPointerDescriptor,uzbstrproc,uzctnrVectorBytesStream,sysutils,UBaseTypeDescriptor,
   uzbUnits,
   gzctnrVectorTypes,TypeDescriptors,gzctnrVector,gzctnrSTL,
-  TypInfo,varmandef,uzbtypes,uzbLogIntf,math;
+  TypInfo,varmandef,uzbLogIntf,math;
 type
 TFieldDescriptor=GZVector<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;

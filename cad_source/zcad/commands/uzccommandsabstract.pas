@@ -22,7 +22,7 @@ unit uzccommandsabstract;
 interface
 
 uses
-  uzegeometrytypes,uzbtypes,uzglviewareadata,uzclog,gzctnrVectorTypes,
+  uzegeometrytypes,uzglviewareadata,uzclog,gzctnrVectorTypes,
   uzcdrawing,uzeentity,
   SysUtils;
 

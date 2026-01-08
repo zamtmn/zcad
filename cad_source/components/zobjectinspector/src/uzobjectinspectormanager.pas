@@ -25,7 +25,7 @@ interface
 uses
   SysUtils,
   Graphics,
-  uzbtypes,uzbUsable;
+  uzbUsable;
 type
   TUsableInteger=GUsable<integer>;
   PTUsableInteger=^TUsableInteger;

@@ -19,7 +19,7 @@
 unit uzgeomproxy;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgeomentity,sysutils,uzbtypes,uzegeometrytypes,uzegeometry,gzctnrVectorTypes;
+uses uzgeomentity,sysutils,uzegeometrytypes,uzegeometry,gzctnrVectorTypes;
 type
 
 PTGeomProxy=^TGeomProxy;

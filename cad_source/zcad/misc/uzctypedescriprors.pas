@@ -33,7 +33,7 @@ uses
   uzgldrawergdi,
   uzcSysParams,
   Graphics,
-  URecordDescriptor,uzbtypes,uzcTypes,uzObjectInspectorManager;
+  URecordDescriptor,uzcTypes,uzObjectInspectorManager;
 
 type
   TZeDimLessDescriptor=object(DoubleDescriptor)

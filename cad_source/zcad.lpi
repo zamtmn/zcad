@@ -412,7 +412,7 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="30">
+    <RequiredPackages Count="29">
       <Item1>
         <PackageName Value="fphunspell"/>
       </Item1>
@@ -486,23 +486,20 @@
         <PackageName Value="zcontainers"/>
       </Item24>
       <Item25>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontrols"/>
       </Item25>
       <Item26>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="FCL"/>
       </Item26>
       <Item27>
-        <PackageName Value="FCL"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item27>
       <Item28>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="AnchorDocking"/>
       </Item28>
       <Item29>
-        <PackageName Value="AnchorDocking"/>
-      </Item29>
-      <Item30>
         <PackageName Value="LCL"/>
-      </Item30>
+      </Item29>
     </RequiredPackages>
     <Units Count="181">
       <Unit0>

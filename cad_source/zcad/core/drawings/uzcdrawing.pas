@@ -24,7 +24,7 @@ uses
   uzcTranslations,uzcinterface,uzgldrawcontext,zeundostack,gzUndoCmdChgData,
   gzUndoCmdChgMethod,zUndoCmdChgCameraBaseProp,zebaseundocommands,uzbpaths,
   uzestylesdim,uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,
-  uzeblockdef,UUnitManager,uzbtypes,varmandef,varman,sysutils,uzegeometry,
+  uzeblockdef,UUnitManager,varmandef,varman,sysutils,uzegeometry,
   uzeconsts,uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,uzbUnits,
   uzegeometrytypes,uzctnrVectorBytesStream,gzctnrVectorTypes,uzglviewareadata;
 type

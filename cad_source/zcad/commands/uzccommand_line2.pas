@@ -28,7 +28,7 @@ uses
   uzcdrawings,uzeconsts,uzcinterface,
   uzcstrconsts,uzegeometrytypes,
   uzglviewareadata,uzccommandsmanager,
-  varmandef,uzbtypes,uzegeometry,
+  varmandef,uzegeometry,
   uzeentity,uzeentline,uzgldrawcontext,
   uzeentitiesmanager,uzcutils,uzeentsubordinated,uzeentgenericsubentry,
   zcmultiobjectcreateundocommand,uzcdrawing;

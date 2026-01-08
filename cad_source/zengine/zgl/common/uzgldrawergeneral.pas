@@ -23,7 +23,7 @@ interface
 uses
   uzegeometrytypes,uzgvertex3sarray,uzgprimitivescreatorabstract,uzgprimitivescreator,
   uzgldrawerabstract,uzepalette,types,Classes,Graphics,
-  uzbtypes,uzeTypes,uzecamera,uzegeometry,UGDBPoint3DArray,uzbLogIntf;
+  uzeTypes,uzecamera,uzegeometry,UGDBPoint3DArray,uzbLogIntf;
 type
 TPaintState=(TPSBufferNotSaved,TPSBufferSaved);
 TZGLGeneralDrawer=class(TZGLAbstractDrawer)

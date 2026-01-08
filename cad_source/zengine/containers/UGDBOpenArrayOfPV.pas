@@ -21,7 +21,7 @@ unit UGDBOpenArrayOfPV;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,
-     gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,
+     gzctnrVectorTypes,sysutils,uzegeometry,
      uzeentsubordinated,uzeentityfactory,//uzctnrvectorpgdbaseobjects,
      uzctnrvectorpbaseentity,uzeEntBase,uzeTypes;
 type

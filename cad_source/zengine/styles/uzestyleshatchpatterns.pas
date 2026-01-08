@@ -21,7 +21,7 @@ unit uzeStylesHatchPatterns;
 interface
 uses
   LCLProc,LazUTF8,Classes,gzctnrVector,SysUtils,
-  uzbtypes,uzbBaseUtils,
+  uzbBaseUtils,
   uzegeometry,gzctnrVectorObjects,
   gzctnrVectorTypes,uzbstrproc,uzeStylesLineTypes,uzegeometrytypes,
   uzctnrVectorBytesStream,

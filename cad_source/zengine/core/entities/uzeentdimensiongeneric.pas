@@ -24,7 +24,7 @@ interface
 uses
   uzeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,
   uzestyleslayers,uzedrawingdef,uzbstrproc,uzctnrVectorBytesStream,uzegeometry,
-  SysUtils,uzeentity,uzbtypes,uzeTypes,uzeconsts,uzeffdxfsupport,uzeentsubordinated,
+  SysUtils,uzeentity,uzeTypes,uzeconsts,uzeffdxfsupport,uzeentsubordinated,
   uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned,
   uzMVReader;
 

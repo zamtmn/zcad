@@ -26,7 +26,7 @@ interface
 uses
   uzcLog,
   SysUtils,
-  uzbtypes,uzbBaseUtils,uzeTypes,
+  uzbBaseUtils,uzeTypes,
   uzeentitiestree,
   uzeentity,
   uzgldrawcontext,

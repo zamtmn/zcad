@@ -22,7 +22,7 @@ unit uzeentwithmatrix;
 interface
 
 uses
-  uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypes,gzctnrVectorTypes,
+  uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,gzctnrVectorTypes,
   uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree,uzeTypes;
 
 type

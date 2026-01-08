@@ -26,7 +26,7 @@ interface
 uses
   uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,uzeentityfactory,
   uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,uzestyleslayers,
-  SysUtils,uzbtypes,uzeTypes,uzcdrawings,varmandef,uzeconsts,
+  SysUtils,uzeTypes,uzcdrawings,varmandef,uzeconsts,
   UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,uzegeometrytypes,
   uzeentblockinsert,uzcinterface,gzctnrVectorTypes,uzeentitiesmanager,
   uzegeometry,zcmultiobjectchangeundocommand,uzeEntBase,UGDBVisibleTreeArray;

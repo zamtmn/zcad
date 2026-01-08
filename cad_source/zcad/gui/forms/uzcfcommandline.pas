@@ -29,7 +29,7 @@ uses
   varman,varmandef,uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,
   uzclog,uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,
   uzccommandsabstract,gzctnrVectorTypes,uzcctrlcommandlineprompt,
-  uzeparsercmdprompt,uzbtypes,uzeTypes,uzcFileStructure;
+  uzeparsercmdprompt,uzeTypes,uzcFileStructure;
 
 const
      cheight=48;

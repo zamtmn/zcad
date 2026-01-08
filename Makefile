@@ -384,7 +384,6 @@ endif
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)zcontainers.lpk
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)zbaseutils.lpk
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)zbaseutilsgui.lpk
-	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)zebase.lpk
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)zcontrols.lpk
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)zmacros.lpk
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)zmath.lpk

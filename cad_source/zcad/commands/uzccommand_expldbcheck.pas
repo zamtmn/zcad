@@ -35,7 +35,7 @@ uses
   URecordDescriptor,typedescriptors,Varman,varmandef,UUnitManager,
   uzcdevicebase,uzcdevicebaseabstract,
   uzcinterface,
-  uzbtypes,uzbBaseUtils,
+  uzbBaseUtils,
   uzcenitiesvariablesextender;
 
 implementation

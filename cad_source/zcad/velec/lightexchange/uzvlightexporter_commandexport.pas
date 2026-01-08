@@ -32,7 +32,7 @@ uses
   uzcinterface,
   uzcdrawings,
   uzcutils,
-  uzbtypes,
+  
   uzcstrconsts,
   uzeentity,
   gzctnrVectorTypes,

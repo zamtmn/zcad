@@ -21,7 +21,7 @@ unit uzeFontFileFormatSHX;
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
      uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,{$ENDIF}math,sysutils,
-     uzegeometrytypes,uzctnrVectorBytesStream,uzbtypes,uzgprimitives,
+     uzegeometrytypes,uzctnrVectorBytesStream,uzgprimitives,
      gzctnrVectorTypes,uzbLogIntf,uzefontbase;
 const
   arccount=16;

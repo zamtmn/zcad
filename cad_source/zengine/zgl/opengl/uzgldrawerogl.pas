@@ -30,7 +30,7 @@ uses
   {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
   Classes,Controls,
   uzgvertex3sarray,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-  uzgloglstatemanager,Graphics,uzbtypes,uzeTypes,
+  uzgloglstatemanager,Graphics,uzeTypes,
   uzegeometrytypes,uzecamera;
 
 const

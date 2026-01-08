@@ -22,7 +22,7 @@ unit UGDBVisibleOpenArray;
 interface
 uses
   gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzecamera,UGDBOpenArrayOfPV,
-  sysutils,uzbtypes,uzeTypes,uzegeometry;
+  sysutils,uzeTypes,uzegeometry;
 type
 
 PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;

@@ -27,7 +27,7 @@ uses
   uzOIEditors,UEnumDescriptor,uzObjectInspector,uzcinfoform,
   uzestyleslinetypes,uzctreenode,uzcfsnapeditor,
   uzeconsts,UGDBNamedObjectsArray,uzctnrvectorstrings,
-  varmandef,Varman,uzcfcolors,uzestyleslayers,uzbtypes,uzeTypes,uzcflineweights,
+  varmandef,Varman,uzcfcolors,uzestyleslayers,uzeTypes,uzcflineweights,
   usupportgui,uzccommandsmanager,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,
   uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,

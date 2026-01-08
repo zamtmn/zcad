@@ -12,7 +12,7 @@ uses
   Forms, Controls,
   Buttons, ExtCtrls, StdCtrls, ComCtrls, LCLIntf, LCLType, Spin,
 
-  uzcdrawings,uzbtypes,
+  uzcdrawings,
   uzestylesdim,
   uzclog,uzedrawingsimple,uzcsysvars,
   uzbUnits,uzeTypes,

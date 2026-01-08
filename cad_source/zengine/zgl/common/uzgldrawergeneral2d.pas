@@ -22,7 +22,7 @@ interface
 uses
   uzgindexsarray,{$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types,{$ENDIF}Controls,
   uzegeometrytypes,uzglviewareaabstract,uzgldrawergeneral,uzgprimitivescreator,
-  uzgvertex3sarray,uzgldrawerabstract,uzepalette,Classes,Graphics,uzbtypes,
+  uzgvertex3sarray,uzgldrawerabstract,uzepalette,Classes,Graphics,
   uzeTypes,uzegeometry,uzecamera;
 type
 DMatrix4dStackArray=array[0..10] of TzeTypedMatrix4d;

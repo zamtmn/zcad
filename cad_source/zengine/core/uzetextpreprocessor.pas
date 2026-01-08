@@ -22,7 +22,7 @@ unit uzetextpreprocessor;
 interface
 
 uses
-  uzbSets,uzbtypes,uzeTypes,uzbstrproc,sysutils,gzctnrSTL,uzbLogIntf,uzeparser;
+  uzbSets,uzeTypes,uzbstrproc,sysutils,gzctnrSTL,uzbLogIntf,uzeparser;
 
 type
   TSPFSourceEnum=LongWord;

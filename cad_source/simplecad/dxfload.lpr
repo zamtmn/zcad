@@ -1,7 +1,7 @@
 program dxfload;
 uses
  SysUtils,Interfaces,
- uzedrawingsimple,uzeffmanager,uzgldrawcontext,uzbtypes,uzeffdxf,
+ uzedrawingsimple,uzeffmanager,uzgldrawcontext,uzeffdxf,
 
  uzeent3Dface,uzeentlwpolyline,uzeentpolyline,uzeenttext,uzeentline,
  uzeentcircle,uzeentarc,uzeentmtext,uzeentdimensiongeneric,uzeentdimaligned,

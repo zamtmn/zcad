@@ -8,7 +8,7 @@ uses
   SysUtils,
   uzeentity,uzeparser,Masks,
   uzcoimultiproperties,
-  uzeTypes,uzbtypes,Varman,varmandef,uzcoimultipropertiesutil,uzcvariablesutils,
+  uzeTypes,Varman,varmandef,uzcoimultipropertiesutil,uzcvariablesutils,
   uzbUnits;
 
 type

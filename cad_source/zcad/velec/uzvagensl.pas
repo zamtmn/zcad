@@ -23,7 +23,7 @@ unit uzvagensl;
 interface
 uses
 
-{*uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,uzbtypes,
+{*uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,
      uzeentity,varmandef,uzeentsubordinated,
 
 
@@ -101,7 +101,7 @@ uses
                       //системные переменные
   uzgldrawcontext,
   uzcinterface,
-  //uzbtypes, //base types
+  // //base types
                       //описания базовых типов
   uzeconsts, //base constants
                       //описания базовых констант

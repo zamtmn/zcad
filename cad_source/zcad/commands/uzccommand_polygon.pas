@@ -32,7 +32,7 @@ uses
   uzccommandsmanager,
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcutils,
-  //uzbtypes,
+  //
   uzegeometry,
   URecordDescriptor,typedescriptors,Varman,varmandef;
 

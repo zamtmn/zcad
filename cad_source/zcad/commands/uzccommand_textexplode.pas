@@ -38,7 +38,7 @@ uses
   uzcinterface,
   zUndoCmdSaveEntityState,
   uzeentity,
-  uzbtypes,uzbBaseUtils;
+  uzbBaseUtils;
 
 implementation
 

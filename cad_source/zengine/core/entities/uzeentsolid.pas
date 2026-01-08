@@ -25,7 +25,7 @@ uses
   uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
   uzegeometry,uzeffdxfsupport,uzestyleslayers,
   UGDBSelectedObjArray,uzeentsubordinated,uzeentity,SysUtils,uzctnrVectorBytesStream,
-  uzegeometrytypes,uzbtypes,uzeTypes,uzeconsts,uzglviewareadata,
+  uzegeometrytypes,uzeTypes,uzeconsts,uzglviewareadata,
   uzMVReader,uzCtnrVectorpBaseEntity;
 
 type

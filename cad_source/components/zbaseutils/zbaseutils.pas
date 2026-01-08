@@ -8,10 +8,10 @@ unit zbaseutils;
 interface
 
 uses
-  uzbLog, uzbNamedHandles, uzbNamedHandlesWithData, uzbHandles, uzbSets, 
-  uzbexceptionscl, uzbexceptionsparams, uzbLogIntf, uzbLogDecorators, 
-  uzbLogFileBackend, uzbCommandLineParser, uzbGetterSetter, uzbUsable, 
-  uzbBaseUtils, uzbstrproc, uzbPaths, LazarusPackageIntf;
+  uzbBaseUtils, uzbCommandLineParser, uzbexceptionscl, uzbexceptionsparams, 
+  uzbGetterSetter, uzbHandles, uzbLog, uzbLogDecorators, uzbLogFileBackend, 
+  uzbLogIntf, uzbLogTypes, uzbNamedHandles, uzbNamedHandlesWithData, uzbPaths, 
+  uzbSets, uzbstrproc, uzbUsable, LazarusPackageIntf;
 
 implementation
 

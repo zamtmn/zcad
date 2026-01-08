@@ -44,7 +44,7 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="6">
+    <RequiredPackages Count="5">
       <Item1>
         <PackageName Value="zunits"/>
       </Item1>
@@ -52,17 +52,14 @@
         <PackageName Value="zreaders"/>
       </Item2>
       <Item3>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zmath"/>
       </Item3>
       <Item4>
-        <PackageName Value="zmath"/>
+        <PackageName Value="zcontainers"/>
       </Item4>
       <Item5>
-        <PackageName Value="zcontainers"/>
-      </Item5>
-      <Item6>
         <PackageName Value="FCL"/>
-      </Item6>
+      </Item5>
     </RequiredPackages>
     <Units Count="1">
       <Unit0>

@@ -339,9 +339,11 @@ cad_source/components/zbaseutils/zbaseutils.lpk:
 	${MAKE} submodulesinitupdate
 cad_source/components/zbaseutilsgui/zbaseutilsgui.lpk:
 	${MAKE} submodulesinitupdate
+cad_source/components/zcontainers/zcontainers.lpk:
+	${MAKE} submodulesinitupdate
 
 
-checksubmodules: cad_source/components/fpdwg/fpdwg.lpk cad_source/other/agraphlaz/lazarus/ag_graph.lpk cad_source/components/metadarkstyle/metadarkstyle.lpk cad_source/components/zmacros/zmacros.lpk cad_source/components/ztoolbars/ztoolbars.lpk cad_source/components/fpspreadsheet/laz_fpspreadsheet.lpk cad_source/components/lape/package/lape.lpk cad_source/components/zreaders/zreaders.lpk cad_source/components/callstack_memprofiler/source/callstack_memprofiler.pas cad_source/components/fphunspell/fphunspell.lpk cad_source/components/zmath/zmath.lpk cad_source/components/zbaseutils/zbaseutils.lpk cad_source/components/zbaseutilsgui/zbaseutilsgui.lpk
+checksubmodules: cad_source/components/fpdwg/fpdwg.lpk cad_source/other/agraphlaz/lazarus/ag_graph.lpk cad_source/components/metadarkstyle/metadarkstyle.lpk cad_source/components/zmacros/zmacros.lpk cad_source/components/ztoolbars/ztoolbars.lpk cad_source/components/fpspreadsheet/laz_fpspreadsheet.lpk cad_source/components/lape/package/lape.lpk cad_source/components/zreaders/zreaders.lpk cad_source/components/callstack_memprofiler/source/callstack_memprofiler.pas cad_source/components/fphunspell/fphunspell.lpk cad_source/components/zmath/zmath.lpk cad_source/components/zbaseutils/zbaseutils.lpk cad_source/components/zbaseutilsgui/zbaseutilsgui.lpk cad_source/components/zcontainers/zcontainers.lpk
 	@echo All submodules found!
 
 checkandinstallpckgifneed:

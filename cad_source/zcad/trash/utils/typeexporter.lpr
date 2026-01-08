@@ -135,9 +135,9 @@ writestring(createdfilehandle,'{$INCLUDE zengineconfig.inc}');
 writestring(createdfilehandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
 writestring(createdfilehandle,'interface');
 if uppercase(unitname)<>'VARMAN' then
-  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors,'+unitname+';')
+  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,uzsbTypeDescriptors,'+unitname+';')
 else
-  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors;');
+  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,uzsbTypeDescriptors;');
 writestring(createdfilehandle,'implementation');
 writestring(createdfilehandle,'var');
 writestring(createdfilehandle,'pt:PObjectDescriptor;');
@@ -164,9 +164,9 @@ writestring(createdfilehandle,'{$INCLUDE zengineconfig.inc}');
 writestring(createdfilehandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
 writestring(createdfilehandle,'interface');
 if uppercase(unitname)<>'VARMAN' then
-  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors,'+unitname+';')
+  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,uzsbTypeDescriptors,'+unitname+';')
 else
-  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,TypeDescriptors;');
+  writestring(createdfilehandle,'uses UObjectDescriptor,Varman,uzsbTypeDescriptors;');
 writestring(createdfilehandle,'implementation');
 writestring(createdfilehandle,'var');
 writestring(createdfilehandle,'pt:PObjectDescriptor;');
@@ -192,7 +192,7 @@ writestring(createdfilehandle,'unit '+filename+';');
 writestring(createdfilehandle,'{$INCLUDE zengineconfig.inc}');
 writestring(createdfilehandle,'{Этот модуль создан автоматически. НЕ РЕДАКТИРОВАТЬ}');
 writestring(createdfilehandle,'interface');
-writestring(createdfilehandle,'uses URecordDescriptor,Varman,TypeDescriptors,'+unitname+';');
+writestring(createdfilehandle,'uses URecordDescriptor,Varman,uzsbTypeDescriptors,'+unitname+';');
 writestring(createdfilehandle,'implementation');
 writestring(createdfilehandle,'var');
 writestring(createdfilehandle,'pr:PRecordDescriptor;');

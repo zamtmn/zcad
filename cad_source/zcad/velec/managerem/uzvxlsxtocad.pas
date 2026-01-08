@@ -38,7 +38,7 @@ uses
   gzctnrVectorTypes,
   uzcdrawings,
   //uzeconsts,
-  varmandef,
+  uzsbVarmanDef,
   uzcvariablesutils,
   //uzvconsts,
   uzcenitiesvariablesextender,

@@ -9,7 +9,7 @@ uses
   ActnList, laz.VirtualTrees,
   {}gzctnrVectorTypes,uzegeometrytypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,
-  varmandef,uzbstrproc,uzcnavigatorsnodedesk,LCLVersion;
+  uzsbVarmanDef,uzbstrproc,uzcnavigatorsnodedesk,LCLVersion;
 
 type
 

@@ -23,9 +23,9 @@ interface
 uses
   SysUtils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender,
-  uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytesStream,
+  uzeentdevice,uzsbTypeDescriptors,uzetextpreprocessor,uzctnrVectorBytesStream,
   uzeTypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
-  varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
+  uzsbVarmanDef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   uzeffdxfsupport,uzcvariablesutils,usimplegenerics,
   uzeBaseExtender,uzgldrawcontext,fpexprpars,uzcLog;
 const

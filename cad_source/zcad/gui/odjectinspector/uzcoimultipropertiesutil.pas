@@ -23,7 +23,7 @@ unit uzcoimultipropertiesutil;
 interface
 uses
   uzctnrVectorPointers,uzbstrproc,uzctnrvectorstrings,uzepalette,sysutils,
-  uzeentityfactory,uzegeometrytypes,varmandef,uzeentity,Varman,UGDBPoint3DArray,
+  uzeentityfactory,uzegeometrytypes,uzsbVarmanDef,uzeentity,Varman,UGDBPoint3DArray,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,
   uzeentpolyline,uzcentelleader,uzegeometry,uzcoimultiproperties,uzcLog,
   uzcstrconsts,gzctnrSTL,gzctnrVectorTypes,uzeNamedObject,zUndoCmdChgVariable,

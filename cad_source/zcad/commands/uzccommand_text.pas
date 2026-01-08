@@ -28,12 +28,12 @@ uses
   uzeTypes,
   uzcdrawings,
   uzeutils,uzcutils,
-  URecordDescriptor,typedescriptors,uzeentityfactory,uzegeometry,Varman,
+  URecordDescriptor,uzsbTypeDescriptors,uzeentityfactory,uzegeometry,Varman,
   uzccommandsabstract,uzccmdfloatinsert,uzeentabstracttext,uzeenttext,uzeentmtext,
   uzcinterface,uzcstrconsts,uzccommandsmanager,
   uzeentity,uzcLog,uzctnrvectorstrings,uzestylestexts,uzeconsts,
   uzcsysvars,uzctextenteditor,
-  varmandef,
+  uzsbVarmanDef,
   uzeExtdrAbstractDrawingExtender,uzedrawingabstract,uzedrawingsimple,uzbPaths,
   UBaseTypeDescriptor,UPointerDescriptor;
 

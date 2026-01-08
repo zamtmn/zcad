@@ -37,7 +37,7 @@ uses
   uzcstrconsts,
   uzcdrawings,
   UUnitManager,
-  UGDBSelectedObjArray,varmandef,uzeroot,UGDBOpenArrayOfPV,uzgldrawcontext,
+  UGDBSelectedObjArray,uzsbVarmanDef,uzeroot,UGDBOpenArrayOfPV,uzgldrawcontext,
   uzelongprocesssupport,
   uzctranslations,uzcuitypes;
 

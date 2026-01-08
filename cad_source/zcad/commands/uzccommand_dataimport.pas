@@ -30,7 +30,7 @@ uses
   uzbpaths,uzcinterface,
   uzeentitiestypefilter,
   uzcdrawings,uzedrawingsimple,uzgldrawcontext,
-  varmandef,Varman,uzcenitiesvariablesextender,
+  uzsbVarmanDef,Varman,uzcenitiesvariablesextender,
   CsvDocument,uzCtnrVectorpBaseEntity,
   uzeentsubordinated,UBaseTypeDescriptor,
   uzcoimultiproperties,uzcoimultipropertiesutil;

@@ -28,7 +28,7 @@ uses
   uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzcdrawing,
   uzctnrVectorBytesStream,UUnitManager,URecordDescriptor,gzctnrVectorTypes,
-  Varman,varmandef,typedescriptors,
+  Varman,uzsbVarmanDef,uzsbTypeDescriptors,
   uzgldrawcontext,
   uzedrawingsimple,uzeconsts,
   uzcinterface,

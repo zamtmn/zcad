@@ -36,10 +36,10 @@ uses
   uzeTypes,
   uzegeometry,
   uzeentity,uzeenttext,
-  URecordDescriptor,typedescriptors,Varman,gzctnrVectorTypes,
+  URecordDescriptor,uzsbTypeDescriptors,Varman,gzctnrVectorTypes,
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,
-  uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,
+  uzcoimultipropertiesutil,uzsbVarmanDef,uzcvariablesutils,Masks,uzcregother,
   uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzbUnits;
 
 resourcestring

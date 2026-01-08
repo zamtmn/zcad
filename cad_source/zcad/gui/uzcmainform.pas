@@ -35,7 +35,7 @@ uses
   uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
   uzctnrVectorBytesStream,uzeTypes,
   uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzcLog,uzbLogTypes,uzbLog,
-  varmandef,varman,UUnitManager,uzcsysinfo,
+  uzsbVarmanDef,varman,UUnitManager,uzcsysinfo,
   uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,
   {ZCAD ENTITIES}

@@ -29,7 +29,7 @@ uses
   uzeentdevice,
   uzcdrawings,
   uzcvariablesutils,
-  varmandef,
+  uzsbVarmanDef,
   uzeentsubordinated,
   gzctnrVectorTypes,
   uzeconsts,

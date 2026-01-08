@@ -24,7 +24,7 @@ interface
 
 uses
   uzcutils,uzgldrawcontext,uzglviewareageneral,uzglviewareaabstract,uzcsysvars,
-  uzegeometry,varmandef,uzeTypes,uzccommandsabstract,uzccommandsmanager,
+  uzegeometry,uzsbVarmanDef,uzeTypes,uzccommandsabstract,uzccommandsmanager,
   uzegeometrytypes,uzglviewareadata,uzcdrawings,
   uzcinterface,varman,uzclog,uzeSnap,Math;
 

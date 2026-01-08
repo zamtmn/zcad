@@ -41,7 +41,7 @@ uses
   uzcenitiesvariablesextender,
   uzcLog,
   uzeentsubordinated,
-  varmandef,UBaseTypeDescriptor,uzeconsts,uzeentdevice,Masks;
+  uzsbVarmanDef,UBaseTypeDescriptor,uzeconsts,uzeentdevice,Masks;
 
 type
   TEntsProcessedReport=record

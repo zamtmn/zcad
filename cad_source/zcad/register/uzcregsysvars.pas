@@ -22,10 +22,10 @@ unit uzcRegSysVars;
 interface
 uses
   SysUtils,uzcsysvars,
-  varmandef,
+  uzsbVarmanDef,
   varman,
   //UUnitManager,
-  TypeDescriptors;
+  uzsbTypeDescriptors;
   //UObjectDescriptor,
   //USinonimDescriptor,UBaseTypeDescriptor;
 procedure RegSysVars(ptsu:PTUnit);

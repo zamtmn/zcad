@@ -20,9 +20,10 @@ unit uzcregisterenitiesextenders;
 
 interface
 uses sysutils,
-     uzcenitiesvariablesextender,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,TypeDescriptors,
+     uzcenitiesvariablesextender,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,
+     uzsbTypeDescriptors,
      uzetextpreprocessor,uzctnrVectorBytesStream,uzeobjectextender,
-     uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
+     uzeentity,uzeenttext,uzeblockdef,uzsbVarmanDef,Varman,UUnitManager,
      uzventsuperline,uzcentelleader,
      URecordDescriptor,UBaseTypeDescriptor;
 implementation

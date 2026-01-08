@@ -24,7 +24,7 @@ uses
   uzeentwithlocalcs,Math,uzcoimultiobjects,uzepalette,SysUtils,uzeentityfactory,
   uzctranslations,
   uzegeometrytypes,
-  varmandef,
+  uzsbVarmanDef,
   uzeconsts,
   uzeentity,
   Varman,

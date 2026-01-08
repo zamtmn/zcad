@@ -28,7 +28,7 @@ uses
   uzeentpolyline,
   uzegeometrytypes,
   uzcenitiesvariablesextender,
-  varmandef,
+  uzsbVarmanDef,
   uzvlightexporter_types;
 
 {**Проверка находится ли точка внутри полилинии (ray casting алгоритм)}

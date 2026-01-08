@@ -61,7 +61,7 @@ uses
   uzcutils,         //different functions simplify the creation entities, while there are very few
   //разные функции упрощающие создание примитивов, пока их там очень мало
   uzestyleslayers,
-  varmandef,
+  uzsbVarmanDef,
   Varman,UBaseTypeDescriptor,uzbstrproc,
   gzctnrVectorTypes,
   uzcstrconsts,       //resouce strings

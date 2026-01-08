@@ -22,8 +22,8 @@ unit uzcregelectrotechfeatures;
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,uzctranslations,
      uzbstrproc,Varman,SysUtils,
-     UBaseTypeDescriptor,uzeTypes,uzctnrVectorBytesStream,varmandef,
-     uzcsysparams,TypeDescriptors,URecordDescriptor,
+     UBaseTypeDescriptor,uzeTypes,uzctnrVectorBytesStream,uzsbVarmanDef,
+     uzcsysparams,uzsbTypeDescriptors,URecordDescriptor,
      uzcLog,uzceltechtreeprop,uzcefstringstreeselector,
      uzccommandsimpl,uzccommandsabstract,uzOIDecorations,uzOIUI,
      uzcoidecorations,

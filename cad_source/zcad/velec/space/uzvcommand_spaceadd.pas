@@ -37,7 +37,7 @@ uses
   uzccommand_rectangle,
   uzcinterface,           // Interface utilities / Утилиты интерфейса
   
-  varmandef,              // Variable manager definitions / Определения менеджера переменных
+  uzsbVarmanDef,              // Variable manager definitions / Определения менеджера переменных
   uzestyleslayers,
   uzeconsts,
   uzeentlwpolyline,

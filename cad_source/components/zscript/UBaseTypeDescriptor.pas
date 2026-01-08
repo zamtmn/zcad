@@ -23,9 +23,9 @@ interface
 uses
   typinfo,LCLProc,Graphics,classes,Themes,
   uzbUnits,uzbUnitsUtils,
-  gzctnrVectorTypes,uzbstrproc,TypeDescriptors,
+  gzctnrVectorTypes,uzbstrproc,uzsbTypeDescriptors,
   sysutils,uzctnrVectorBytesStream,
-  USinonimDescriptor,varmandef,
+  USinonimDescriptor,uzsbVarmanDef,
   base64,uzctnrvectorstrings,math,uzbLogIntf;
 resourcestring
   rsDifferent='Different';

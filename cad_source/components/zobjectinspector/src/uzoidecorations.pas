@@ -22,7 +22,7 @@ unit uzOIDecorations;
 
 interface
 
-uses varmandef;
+uses uzsbVarmanDef;
 
 procedure DecorateType(PT:PUserTypeDescriptor;
   getvalueasstring:TDecoratorGetValueAsString;

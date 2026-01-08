@@ -23,7 +23,7 @@ interface
 uses uzegeometrytypes,uzepalette,LCLType,Printers,
      gl,glu,uzgloglstatemanager,
      {$IFDEF SLINUX}glx,{$ENDIF}
-     sysutils,varmandef,Graphics,uzcdrawings,uzegeometry;
+     sysutils,uzsbVarmanDef,Graphics,uzcdrawings,uzegeometry;
 type
     PTPrinterRasterizer=^TPrinterRasterizer;
     TPrinterRasterizer=object(TOGLStateManager)

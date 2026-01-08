@@ -38,7 +38,7 @@ uses
   gzctnrVectorTypes,
   uzeconsts,
   uzcenitiesvariablesextender,
-  varmandef;
+  uzsbVarmanDef;
 
 type
   { Структура данных одного помещения из таблицы }

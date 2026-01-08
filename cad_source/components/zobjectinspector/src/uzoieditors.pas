@@ -26,7 +26,7 @@ uses
   UEnumDescriptor,uzObjectInspector,Forms,sysutils,
   Graphics,LCLType,Themes,uzctnrvectorstrings,
   uzbUnits,
-  varmandef,Varman,
+  uzsbVarmanDef,Varman,
   gzctnrVectorTypes,StdCtrls,Controls,Classes,uzbstrproc;
 type
   TBaseTypesEditors=class

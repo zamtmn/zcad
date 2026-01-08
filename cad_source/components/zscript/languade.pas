@@ -21,7 +21,7 @@ unit languade;
 {$MODE DELPHI}
 interface
 uses
-  uzbstrproc,varman, langsystem, sysutils,varmandef,UObjectDescriptor;
+  uzbstrproc,varman, langsystem, sysutils,uzsbVarmanDef,UObjectDescriptor;
 {var
   s, s1: String;
   v: vardesk;}

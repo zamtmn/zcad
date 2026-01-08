@@ -34,7 +34,7 @@ uses
   uzcdrawings,            // Drawings manager / Менеджер чертежей
   uzestyleslayers,        // Layer management / Управление слоями
   uzeentity,
-  varmandef,
+  uzsbVarmanDef,
   uzeconsts,
   uzcEnitiesVariablesExtender,
   UBaseTypeDescriptor,

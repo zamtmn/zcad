@@ -36,7 +36,7 @@ uses
   uzeentity,
   uzeentmtext,
   uzeentblockinsert,
-  Varman, varmandef,
+  Varman, uzsbVarmanDef,
   uzcLog,
   uzccomdraw,UGDBSelectedObjArray,uzeentdevice,uzgldrawcontext,
   uzegeometrytypes,uzegeometry,uzeentwithlocalcs,garrayutils,

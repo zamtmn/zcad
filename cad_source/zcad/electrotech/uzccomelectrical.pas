@@ -26,7 +26,7 @@ uses
   uzcutils,
   SysUtils,
   LazUTF8,
-  varmandef,
+  uzsbVarmanDef,
   uzglviewareadata,uzglviewareaabstract,uzglviewareageneral,
   uzcinterface,
   uzegeometry,

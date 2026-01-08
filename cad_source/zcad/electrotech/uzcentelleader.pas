@@ -13,7 +13,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzcsysvars,uzbstrproc,uzctnrVectorBytesStream,math,
      uzeenttext,uzeentdevice,uzcentcable,uzeenttable,uzegeometry,
      uzeentline,uzeentcomplex,sysutils,uzctnrvectorstrings,
-     gzctnrVectorTypes,uzeentity,varmandef,uzeTypes,uzeconsts,uzeffdxfsupport,
+     gzctnrVectorTypes,uzeentity,uzsbVarmanDef,uzeTypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated,uzestylestables,uzclog,
      UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor,
      uzglviewareadata,uzCtnrVectorpBaseEntity,gzctnrSTL,uzeblockdef;

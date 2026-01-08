@@ -23,9 +23,9 @@ interface
 uses
   LCLProc,gzctnrVectorObjects,URecordDescriptor,uzctnrVectorBytesStream,sysutils,
   uzbUnits,
-  gzctnrVectorTypes,UBaseTypeDescriptor,TypeDescriptors,
-  uLexParser,uzctnrvectorstrings,objects,gzctnrVector,
-  varmandef,uzbstrproc,TypInfo,uzbLogIntf;
+  gzctnrVectorTypes,UBaseTypeDescriptor,uzsbTypeDescriptors,
+  uzsbLexParser,uzctnrvectorstrings,objects,gzctnrVector,
+  uzsbVarmanDef,uzbstrproc,TypInfo,uzbLogIntf;
 const
   FPVMT:FieldDescriptor=
     (base:(ProgramName:'#';

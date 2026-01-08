@@ -28,7 +28,7 @@ uses
   uzcdrawings,uzeconsts,uzcinterface,
   uzcstrconsts,uzegeometrytypes,
   uzglviewareadata,uzccommandsmanager,
-  varmandef,uzegeometry;
+  uzsbVarmanDef,uzegeometry;
 
 implementation
 

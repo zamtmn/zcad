@@ -27,7 +27,7 @@ uses
   FileUtil,LResources,Forms,Controls,Graphics,GraphType,
   Buttons,ExtCtrls,StdCtrls,ComCtrls,LCLIntf,lcltype, ActnList,
 
-  uzeconsts,uzestylestexts,uzcdrawings{,uzbtypes},varmandef,
+  uzeconsts,uzestylestexts,uzcdrawings{,uzbtypes},uzsbVarmanDef,
   uzcsuptypededitors,
 
   uzbpaths,uzcinterface,uzcstrconsts,uzbstrproc,UBaseTypeDescriptor,

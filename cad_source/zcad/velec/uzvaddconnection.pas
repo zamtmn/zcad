@@ -26,7 +26,7 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   uzcenitiesvariablesextender,
-  varmandef,
+  uzsbVarmanDef,
   UUnitManager,
   uzbpaths,
   uzctranslations,

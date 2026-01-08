@@ -22,7 +22,7 @@ interface
 uses
   uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,
   uzglviewareageneral,uzglviewareaabstract,
-     uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,uzcLog,
+     uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,uzsbTypeDescriptors,uzcLog,
      Varman,
      uzgldrawcontext,uzccommandsmanager,uzepalette,uzeffdxfsupport;
 type

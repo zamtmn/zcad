@@ -24,8 +24,8 @@ interface
 uses
   UEnumDescriptor,uzctnrVectorPointers,
   SysUtils,UBaseTypeDescriptor,uzctnrVectorBytesStream,
-  gzctnrVectorTypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
-  TypeDescriptors,URecordDescriptor,UObjectDescriptor,USinonimDescriptor,
+  gzctnrVectorTypes,uzctnrvectorstrings,uzsbVarmanDef,gzctnrSTL,
+  uzsbTypeDescriptors,URecordDescriptor,UObjectDescriptor,USinonimDescriptor,
   uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   gzctnrVectorPData,gzctnrVector,
@@ -295,7 +295,7 @@ procedure StoreBooleanToSavedUnit(const name,suffix:string;value:Boolean);
 procedure StoreAnsiStringToSavedUnit(const name,suffix:string;const value:string);
 procedure RegisterVarCategory(const CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 implementation
-uses uLexParser;
+uses uzsbLexParser;
 
 procedure RegisterVarCategory(const CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 begin

@@ -21,7 +21,7 @@ interface
 uses
   sysutils,
   gzctnrVectorTypes,gzctnrVector,gzctnrVectorClass,
-  varmandef,
+  uzsbVarmanDef,
   zebaseundocommands;
 const
   BeginUndo:String='BeginUndo';

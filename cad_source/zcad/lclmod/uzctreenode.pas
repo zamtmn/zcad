@@ -25,7 +25,7 @@ uses
   sysutils,Themes,ExtCtrls,lclproc,Graphics,ActnList,ComCtrls,
   Controls,Classes,menus,Forms,lcltype,LazUTF8,Buttons,
   uzcinterface,uzccommandsabstract,
-  uzcutils,uzbpaths,uzctranslations,varmandef,
+  uzcutils,uzbpaths,uzctranslations,uzsbVarmanDef,
   uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor,
   uzmenusmanager;
 type

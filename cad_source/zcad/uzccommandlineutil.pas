@@ -20,10 +20,10 @@ unit uzccommandlineutil;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzegeometrytypes,varmandef,uzctnrvectorstrings,uzccommandsmanager,
+  uzegeometrytypes,uzsbVarmanDef,uzctnrvectorstrings,uzccommandsmanager,
   gzctnrVectorTypes,SysUtils,uzbstrproc,uzcdrawings,uzegeometry,Math,
   UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
-  uLexParser,LCLProc,uzccommandsabstract,LazUtilities,uzeTypes;
+  uzsbLexParser,LCLProc,uzccommandsabstract,LazUtilities,uzeTypes;
 const
      commandsuffix='>';
      commandprefix=' ';

@@ -37,7 +37,7 @@ uses
   uzcdrawings,
   uzeutils,uzcutils,
   sysutils,
-  varmandef,
+  uzsbVarmanDef,
   uzglviewareadata,uzglviewareaabstract,uzglviewareageneral,
   uzcinterface,
   uzegeometry,
@@ -47,8 +47,9 @@ uses
   uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
   uzeentsubordinated,uzeentblockinsert,uzeentpolyline,uzclog,
   math,uzeenttable,uzctnrvectorstrings,
-  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
-  ,uzelongprocesssupport,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
+  uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,
+  uzsbTypeDescriptors,UGDBVisibleTreeArray,uzelongprocesssupport,
+  uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
   uzccommand_rebuildtree, uzeffmanager,
   masks;
 const

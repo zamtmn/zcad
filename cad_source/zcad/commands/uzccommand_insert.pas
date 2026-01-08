@@ -32,7 +32,7 @@ uses
   uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,
   uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,uzcutils,
   zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry,
-  URecordDescriptor,typedescriptors,varmandef;
+  URecordDescriptor,uzsbTypeDescriptors,uzsbVarmanDef;
 
 type
   TAfterInsertProc=procedure(PInsert:PGDBObjBlockInsert);

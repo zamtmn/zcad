@@ -29,7 +29,7 @@ uses
   uzcdrawings,uzcinterface,
   uzcstrconsts,uzegeometrytypes,
   uzccommandsmanager,
-  varmandef,uzegeometry;
+  uzsbVarmanDef,uzegeometry;
 
 implementation
 

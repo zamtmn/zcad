@@ -29,12 +29,12 @@ uses
   gzctnrVectorTypes,
   uzeblockdef,uzcdrawings,uzcinterface,
   uzctnrVectorStrings,
-  uzccomdraw,uzcstrconsts,uzccommandsmanager,varmandef,Varman,uzeconsts,
+  uzccomdraw,uzcstrconsts,uzccommandsmanager,uzsbVarmanDef,Varman,uzeconsts,
   uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,
   uzeentityfactory,uzegeometry,
   UGDBVisibleTreeArray,UGDBSelectedObjArray,uzcenitiesvariablesextender,
   uzeentdevice,UBaseTypeDescriptor,uzccommand_regen,URecordDescriptor,
-  typedescriptors,uzeentgenericsubentry;
+  uzsbTypeDescriptors,uzeentgenericsubentry;
 
 type
 

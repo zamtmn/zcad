@@ -25,7 +25,7 @@ interface
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  varmandef,Varman,
+  uzsbVarmanDef,Varman,
   uzeentity,
   uzcinterface,
   uzcdrawings,

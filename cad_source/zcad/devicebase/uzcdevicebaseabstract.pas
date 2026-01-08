@@ -2,7 +2,7 @@ unit uzcdevicebaseabstract;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzcsysvars,{$IFNDEF DELPHI}fileutil,{$ENDIF}uzbstrproc,//strmy,
-     uzeTypes,UUnitManager,varman,sysutils,typedescriptors,uzclog;
+     uzeTypes,UUnitManager,varman,sysutils,uzsbTypeDescriptors,uzclog;
 type
 TOborudCategory=(_misc(*'**Разное'*),
                  _elapp(*'**Электроаппараты'*),

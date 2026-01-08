@@ -14,11 +14,11 @@ uses
   {uzeentabstracttext,}uzeenttext,uzctnrvectorstrings,uzeentityfactory,uzcsysvars,uzbstrproc,
   uzcinterface,uzccommandsmanager,
   uzccommandsabstract,uzccommandsimpl,uzeTypes,uzcdrawings,uzeutils,
-  uzcutils,sysutils,varmandef,uzctnrVectorBytesStream,uzegeometry,uzeconsts,
+  uzcutils,sysutils,uzsbVarmanDef,uzctnrVectorBytesStream,uzegeometry,uzeconsts,
   uzccomdraw,UGDBVisibleOpenArray,uzeentline,uzbpaths,uzeentblockinsert,
   uzegeometrytypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
-  gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,uzcLog,
+  gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,uzsbTypeDescriptors,uzcLog,
   uzcstrconsts,uzccmdfloatinsert,//uzctnrvectorpgdbaseobjects,
   zUndoCmdChgTypes,zUndoCmdChgVariable,
   uzcdrawing,uzCtnrVectorpBaseEntity,UGDBVisibleTreeArray,uzeentabstracttext;

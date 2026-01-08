@@ -24,7 +24,7 @@ interface
 uses
   uzestyleslayers,uzepalette,uzeobjectextender,uzeentityfactory,
   uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,SysUtils,uzctnrVectorBytesStream,
-  uunitmanager,uzegeometry,uzeconsts,uzeentity,uzeentsubordinated,varmandef,
+  uunitmanager,uzegeometry,uzeconsts,uzeentity,uzeentsubordinated,uzsbVarmanDef,
   uzegeometrytypes,uzeentblockinsert,uzeTypes,UGDBVisibleOpenArray,
   UGDBObjBlockdefArray,gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,
   UGDBSelectedObjArray,uzeentitiestree,uzbLogIntf,uzestrconsts,uzglviewareadata,

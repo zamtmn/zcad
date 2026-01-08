@@ -25,7 +25,7 @@ uses
  uzctreenode,menus, {$IFDEF FPC}lcltype,{$ENDIF}
  Classes,FileUtil,Forms,stdctrls,Controls,ComCtrls,
  uzcdevicebaseabstract,SysUtils,uzcdrawings,varman,
- varmandef,uzccommandsimpl,uzccommandsabstract,
+ uzsbVarmanDef,uzccommandsimpl,uzccommandsabstract,
  uztoolbarsmanager,
  gzctnrVectorTypes,uzeblockdef,UBaseTypeDescriptor,uzcinterface,UUnitManager,uzcLog,uzmenusmanager;
 const

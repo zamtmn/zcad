@@ -34,7 +34,7 @@ uses
   uzcdrawings,
   uzeutils,uzcutils,
   SysUtils,
-  varmandef,
+  uzsbVarmanDef,
   uzglviewareadata,
   uzcinterface,
   uzegeometry,
@@ -42,7 +42,7 @@ uses
   uzeentblockinsert,uzeentpolyline,
   Math,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,
-  TypeDescriptors,uzelongprocesssupport,uzcLog,uzeiopalette,uzerasterizer,
+  uzsbTypeDescriptors,uzelongprocesssupport,uzcLog,uzeiopalette,uzerasterizer,
   uzcfPrintPreview;
 
 type

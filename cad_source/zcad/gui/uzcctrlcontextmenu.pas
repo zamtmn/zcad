@@ -22,7 +22,7 @@ interface
 
 uses
   ExtCtrls,lclproc,Graphics,ActnList,{ComCtrls,StdCtrls,}Controls,Classes,menus,Forms,{$IFDEF FPC}lcltype,{$ENDIF}fileutil,Buttons,
-  uzclog,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils{,strproc,varmandef,Varman,gdbasetypes,uzctnrVectorBytesStream};
+  uzclog,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}sysutils{,strproc,uzsbVarmanDef,Varman,gdbasetypes,uzctnrVectorBytesStream};
 
 type
    tcxmenumgr=class

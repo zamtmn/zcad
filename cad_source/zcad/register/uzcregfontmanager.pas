@@ -22,7 +22,7 @@ interface
 uses
   uzcsysvars,uzefontmanager,uzeFontFileFormatTTFBackend,
   uzbpaths,uzctranslations,UUnitManager,Varman,
-  TypeDescriptors,uzcLog;
+  uzsbTypeDescriptors,uzcLog;
 
 implementation
 var

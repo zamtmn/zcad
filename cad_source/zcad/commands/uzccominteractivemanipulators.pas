@@ -38,7 +38,7 @@ uses
     примитивов и действий с ними }
 
   SysUtils,Math,
-  URecordDescriptor,TypeDescriptors,
+  URecordDescriptor,uzsbTypeDescriptors,
   uzccommandsabstract,
   Forms,
   uzeutils,
@@ -79,7 +79,7 @@ uses
   //"Менеджер" чертежей
   uzcutils,         //different functions simplify the creation entities, while there are very few
   //разные функции упрощающие создание примитивов, пока их там очень мало
-  varmandef,
+  uzsbVarmanDef,
   Varman,
   gzctnrVectorTypes,
   uzclog;                //log system

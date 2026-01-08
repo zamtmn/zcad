@@ -42,7 +42,7 @@ uses
   uzeentblockinsert,
   uzclog,
   uzcenitiesvariablesextender,
-  varmandef;
+  uzsbVarmanDef;
 
 type
   {**Список индексов светильников}

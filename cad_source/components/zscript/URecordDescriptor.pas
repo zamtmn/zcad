@@ -23,8 +23,8 @@ interface
 uses
   UPointerDescriptor,uzbstrproc,uzctnrVectorBytesStream,sysutils,UBaseTypeDescriptor,
   uzbUnits,
-  gzctnrVectorTypes,TypeDescriptors,gzctnrVector,gzctnrSTL,
-  TypInfo,varmandef,uzbLogIntf,math;
+  gzctnrVectorTypes,uzsbTypeDescriptors,gzctnrVector,gzctnrSTL,
+  TypInfo,uzsbVarmanDef,uzbLogIntf,math;
 type
 TFieldDescriptor=GZVector<FieldDescriptor>;
 PRecordDescriptor=^RecordDescriptor;

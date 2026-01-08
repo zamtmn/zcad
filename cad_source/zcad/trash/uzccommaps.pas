@@ -14,11 +14,11 @@ uses
   uzeenttext,uzeentityfactory,uzcsysvars,uzbstrproc,
   uzcinterface,uzccommandsmanager,uzclog,
   uzccommandsabstract,uzccommandsimpl,uzcdrawings,uzeutils,uzcutils,sysutils,
-  varmandef,uzctnrVectorBytesStream,uzegeometry,uzeconsts,
+  uzsbVarmanDef,uzctnrVectorBytesStream,uzegeometry,uzeconsts,
   uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,
   uzegeometrytypes,varman,uzeentdevice,uzeentmtext,math,
   uzcentcable,UUnitManager,
-  gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,uzcLog,
+  gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,uzsbTypeDescriptors,uzcLog,
   gzctnrSTL,gutil,uzccmdfloatinsert;
 
 const

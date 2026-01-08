@@ -21,9 +21,9 @@ unit UPointerDescriptor;
 {$MODE DELPHI}
 interface
 uses
-  types,TypeDescriptors,uzctnrVectorBytesStream,
+  types,uzsbTypeDescriptors,uzctnrVectorBytesStream,
   uzbUnits,
-  varmandef,uzctnrvectorstrings,
+  uzsbVarmanDef,uzctnrvectorstrings,
   UBaseTypeDescriptor;
 resourcestring
   rsUnassigned='Unassigned';

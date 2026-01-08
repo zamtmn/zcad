@@ -21,7 +21,7 @@
 unit zUndoCmdChgTypes;
 interface
 uses
-  zeundostack,zebaseundocommands,uzeentity,varmandef,
+  zeundostack,zebaseundocommands,uzeentity,uzsbVarmanDef,
   uzcEnitiesVariablesExtender,gzUndoCmdChgData2,uzedrawingdef,
   uzestyleslayers,uzbBaseUtils,uzeExtdrAbstractEntityExtender,
   uzeExtdrBaseEntityExtender;

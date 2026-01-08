@@ -24,7 +24,7 @@ interface
 
 uses
   SysUtils,uzbpaths,uzctranslations,
-  varmandef,varman,UUnitManager,TypeDescriptors,UObjectDescriptor,
+  uzsbVarmanDef,varman,UUnitManager,uzsbTypeDescriptors,UObjectDescriptor,
   USinonimDescriptor,UBaseTypeDescriptor,
   uzcLog,uzegeometrytypes,
   uzbUnits,uzbUnitsUtils,uzeTypes,uzeblockdef,

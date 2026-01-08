@@ -19,7 +19,7 @@
 unit uzcreginterface;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
+uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,uzsbTypeDescriptors,
      Varman,uzcoidecorations,uzegluinterface,uzcLog,uzccommandlineutil,
      uzeSysParams,uzcSysParams;
 implementation

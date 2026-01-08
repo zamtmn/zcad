@@ -21,7 +21,7 @@ unit uzcpropertiesutils;
 
 interface
 uses sysutils,
-     uzeentity,varmandef,uzeentsubordinated,
+     uzeentity,uzsbVarmanDef,uzeentsubordinated,
      uzcoimultiproperties,uzcoimultipropertiesutil,uzcdrawings,
      Varman,uzbUnits;
 function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:String; out propertyvalue:String):boolean;

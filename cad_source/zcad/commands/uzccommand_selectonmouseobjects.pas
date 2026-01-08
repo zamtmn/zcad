@@ -32,7 +32,7 @@ uses
   uzcdrawings,
   gzctnrVectorTypes,
   uzcenitiesvariablesextender,
-  varmandef,
+  uzsbVarmanDef,
   uzcctrlcontextmenu;
 
 implementation

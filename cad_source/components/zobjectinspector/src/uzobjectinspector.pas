@@ -32,8 +32,8 @@ uses
   StdCtrls,ColorBox,
 
   uzbUnits,uzbUnitsUtils,
-  varmandef,
-  TypeDescriptors,
+  uzsbVarmanDef,
+  uzsbTypeDescriptors,
   gzctnrVectorTypes,uzctnrvectorstrings,
   uzObjectInspectorManager;
 const

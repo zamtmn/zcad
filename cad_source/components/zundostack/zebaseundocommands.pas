@@ -18,7 +18,7 @@
 {$MODE OBJFPC}{$H+}
 unit zebaseundocommands;
 interface
-uses varmandef,sysutils,gzctnrVectorTypes;
+uses uzsbVarmanDef,sysutils,gzctnrVectorTypes;
 type
   TTypeCommand=(TTC_MBegin,
                 TTC_MEnd,

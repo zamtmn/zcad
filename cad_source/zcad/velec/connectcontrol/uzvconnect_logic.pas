@@ -27,7 +27,7 @@ uses
   SysUtils,
   uzeentdevice,
   uzcenitiesvariablesextender,
-  varmandef,
+  uzsbVarmanDef,
   UUnitManager,
   uzbpaths,
   uzctranslations,

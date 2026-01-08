@@ -9,7 +9,7 @@ uses
   StdCtrls, ActnList, laz.VirtualTrees, LCLVersion,
   uzeTypes,gzctnrVectorTypes,uzegeometrytypes,uzegeometry,
   uzccommandsmanager,uzcinterface,uzeconsts,uzeentity,uzcimagesmanager,
-  uzcdrawings,varmandef,uzbstrproc,uzctreenode,
+  uzcdrawings,uzsbVarmanDef,uzbstrproc,uzctreenode,
   uzcnavigatorsnodedesk,Varman,uzcstrconsts,uztoolbarsmanager,uzmenusmanager,
   uzccommandsimpl,uzccommandsabstract,uzcutils,uzcenitiesvariablesextender,
   GraphType,generics.collections,uzglviewareaabstract,Menus,

@@ -30,7 +30,7 @@ uses
   uzeutils,
   uzglviewareadata,
   uzccommand_move,
-  uzccommandsabstract,varmandef,uzccommandsmanager,uzcinterface,
+  uzccommandsabstract,uzsbVarmanDef,uzccommandsmanager,uzcinterface,
   uzcstrconsts,uzegeometry,zcmultiobjectchangeundocommand,
   uzegeometrytypes,uzeentity,uzcLog;
 

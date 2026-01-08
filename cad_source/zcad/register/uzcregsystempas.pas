@@ -21,8 +21,8 @@ unit uzcregsystempas;
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,SysUtils,
-     UBaseTypeDescriptor,uzctnrVectorBytesStream,varmandef,
-     uzcsysparams,TypeDescriptors,URecordDescriptor,
+     UBaseTypeDescriptor,uzctnrVectorBytesStream,uzsbVarmanDef,
+     uzcsysparams,uzsbTypeDescriptors,URecordDescriptor,
      uzblog,uzcLog;
 implementation
 {$IFNDEF WINDOWS}

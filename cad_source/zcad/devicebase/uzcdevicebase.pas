@@ -8,7 +8,7 @@ uses
 
   LazUTF8,CsvDocument,uzcsysvars,
 
-  varmandef,Varman,URecordDescriptor,UObjectDescriptor,typedescriptors,UUnitManager,
+  uzsbVarmanDef,Varman,URecordDescriptor,UObjectDescriptor,uzsbTypeDescriptors,UUnitManager,
   uzcdevicebaseabstract,
 
   uzbpaths,uzeTypes;

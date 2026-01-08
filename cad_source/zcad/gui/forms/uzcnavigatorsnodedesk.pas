@@ -11,7 +11,7 @@ uses
   uzegeometry, uzccommandsmanager,
   uzcinterface, uzeentity, uzcimagesmanager,
   uzcenitiesvariablesextender,uzcExtdrSCHConnection,
-  varmandef, uzbstrproc,uzctreenode,
+  uzsbVarmanDef, uzbstrproc,uzctreenode,
   Varman, uzcoimultiproperties,LCLType,LCLVersion;
 
 type

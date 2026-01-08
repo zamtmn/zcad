@@ -27,7 +27,7 @@ uses
   uzeconsts,uzcctrldynamiccommandmenu,uzcinfoform,uzcstrconsts,
   gzctnrVectorTypes,uzegeometrytypes,uzbstrproc,gzctnrVectorP,
   uzccommandsabstract,SysUtils,uzglviewareadata,
-  uzclog,varmandef,varman,uzedrawingdef,uzcinterface,
+  uzclog,uzsbVarmanDef,varman,uzedrawingdef,uzcinterface,
   uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,Forms,
   uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
   uzeentity,uzgldrawcontext,Classes,

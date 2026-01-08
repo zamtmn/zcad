@@ -33,7 +33,7 @@ uses
   uzeentdevice,
   uzegeometrytypes,
   uzcenitiesvariablesextender,
-  varmandef,
+  uzsbVarmanDef,
   uzeconsts,
   gzctnrVectorTypes,
   uzclog,

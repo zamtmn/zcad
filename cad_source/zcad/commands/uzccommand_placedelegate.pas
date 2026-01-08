@@ -32,7 +32,7 @@ uses
   uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,
   uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,uzcutils,
   zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry,
-  URecordDescriptor,typedescriptors,varmandef,uzccommand_Insert,
+  URecordDescriptor,uzsbTypeDescriptors,uzsbVarmanDef,uzccommand_Insert,
   uzbBaseUtils,
   uzeentdevice,UUnitManager,uzbPaths,uzcTranslations,uzcEnitiesVariablesExtender;
 

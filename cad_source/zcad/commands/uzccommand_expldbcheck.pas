@@ -32,7 +32,7 @@ uses
   uzegeometry,
   uzeentity,uzeenttext,uzeconsts,
   uzbPaths,uzcTranslations,
-  URecordDescriptor,typedescriptors,Varman,varmandef,UUnitManager,
+  URecordDescriptor,uzsbTypeDescriptors,Varman,uzsbVarmanDef,UUnitManager,
   uzcdevicebase,uzcdevicebaseabstract,
   uzcinterface,
   uzbBaseUtils,

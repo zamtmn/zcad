@@ -25,7 +25,7 @@ uses
   Controls,
   AnchorDocking,
   uzbUnits,
-  uzcstrconsts,gzctnrSTL,zeundostack,varmandef,
+  uzcstrconsts,gzctnrSTL,zeundostack,uzsbVarmanDef,
   uzcuilcl2zc,uzcuitypes,Forms,Classes,LCLType,LCLProc,SysUtils,uzbHandles,
   uzbSets;
 

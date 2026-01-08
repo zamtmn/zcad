@@ -21,9 +21,9 @@ unit UUnitManager;
 {$MODE DELPHI}
 interface
 uses uzbpaths,uzbstrproc,Varman,languade,gzctnrVectorObjects,SysUtils,
-     UBaseTypeDescriptor, {}uzctnrVectorBytesStream,uLexParser,
-     varmandef,gzctnrVectorTypes,gzctnrVector,uzctnrvectorstrings,
-     TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
+     UBaseTypeDescriptor,uzctnrVectorBytesStream,uzsbLexParser,
+     uzsbVarmanDef,gzctnrVectorTypes,gzctnrVector,uzctnrvectorstrings,
+     uzsbTypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
      URecordDescriptor,UObjectDescriptor,USinonimDescriptor,uzbLogIntf;
 type
 

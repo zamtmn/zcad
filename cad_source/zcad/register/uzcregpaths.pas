@@ -21,7 +21,7 @@ unit uzcregpaths;
 interface
 uses
   uzcsysvars,uzbPaths,uzctranslations,UUnitManager,Varman,
-  TypeDescriptors,uzcLog,uzcsysparams;
+  uzsbTypeDescriptors,uzcLog,uzcsysparams;
 implementation
 
 initialization

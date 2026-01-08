@@ -40,3 +40,6 @@
 [submodule "cad_source/components/zbaseutilsgui"]
 	path = cad_source/components/zbaseutilsgui
 	url = https://github.com/zamtmn/zbaseutilsgui.git
+[submodule "cad_source/components/zcontainers"]
+	path = cad_source/components/zcontainers
+	url = https://github.com/zamtmn/zcontainers.git

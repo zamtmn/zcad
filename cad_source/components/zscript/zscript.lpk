@@ -8,54 +8,54 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="."/>
+        <OtherUnitFiles Value=".;src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Files Count="11">
       <Item1>
-        <Filename Value="langsystem.pas"/>
+        <Filename Value="src\langsystem.pas"/>
         <UnitName Value="langsystem"/>
       </Item1>
       <Item2>
-        <Filename Value="languade.pas"/>
+        <Filename Value="src\languade.pas"/>
         <UnitName Value="languade"/>
       </Item2>
       <Item3>
-        <Filename Value="UArrayDescriptor.pas"/>
+        <Filename Value="src\UArrayDescriptor.pas"/>
         <UnitName Value="UArrayDescriptor"/>
       </Item3>
       <Item4>
-        <Filename Value="UBaseTypeDescriptor.pas"/>
+        <Filename Value="src\UBaseTypeDescriptor.pas"/>
         <UnitName Value="UBaseTypeDescriptor"/>
       </Item4>
       <Item5>
-        <Filename Value="UEnumDescriptor.pas"/>
+        <Filename Value="src\UEnumDescriptor.pas"/>
         <UnitName Value="UEnumDescriptor"/>
       </Item5>
       <Item6>
-        <Filename Value="UObjectDescriptor.pas"/>
+        <Filename Value="src\UObjectDescriptor.pas"/>
         <UnitName Value="UObjectDescriptor"/>
       </Item6>
       <Item7>
-        <Filename Value="UPointerDescriptor.pas"/>
+        <Filename Value="src\UPointerDescriptor.pas"/>
         <UnitName Value="UPointerDescriptor"/>
       </Item7>
       <Item8>
-        <Filename Value="URecordDescriptor.pas"/>
+        <Filename Value="src\URecordDescriptor.pas"/>
         <UnitName Value="URecordDescriptor"/>
       </Item8>
       <Item9>
-        <Filename Value="varman.pas"/>
-        <UnitName Value="Varman"/>
+        <Filename Value="src\USinonimDescriptor.pas"/>
+        <UnitName Value="USinonimDescriptor"/>
       </Item9>
       <Item10>
-        <Filename Value="USinonimDescriptor.pas"/>
-        <UnitName Value="USinonimDescriptor"/>
+        <Filename Value="src\UUnitManager.pas"/>
+        <UnitName Value="UUnitManager"/>
       </Item10>
       <Item11>
-        <Filename Value="UUnitManager.pas"/>
-        <UnitName Value="UUnitManager"/>
+        <Filename Value="src\varman.pas"/>
+        <UnitName Value="Varman"/>
       </Item11>
     </Files>
     <CompatibilityMode Value="True"/>

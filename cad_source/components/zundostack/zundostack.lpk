@@ -8,17 +8,17 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="."/>
+        <OtherUnitFiles Value=".;src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Files Count="2">
       <Item1>
-        <Filename Value="zebaseundocommands.pas"/>
+        <Filename Value="src\zebaseundocommands.pas"/>
         <UnitName Value="zebaseundocommands"/>
       </Item1>
       <Item2>
-        <Filename Value="zeundostack.pas"/>
+        <Filename Value="src\zeundostack.pas"/>
         <UnitName Value="zeundostack"/>
       </Item2>
     </Files>

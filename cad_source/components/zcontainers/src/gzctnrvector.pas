@@ -17,6 +17,7 @@
 }
 {**Модуль описания базового генерика обьекта-массива}
 unit gzctnrVector;
+{$Mode delphi}{$H+}
 
 {DEFINE FILL0ALLOCATEDMEMORY}
 interface

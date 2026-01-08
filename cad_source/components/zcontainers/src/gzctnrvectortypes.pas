@@ -16,6 +16,8 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit gzctnrVectorTypes;
+{$Mode objfpc}{$H+}
+{$ModeSwitch advancedrecords}
 
 interface
 

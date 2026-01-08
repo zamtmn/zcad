@@ -17,6 +17,7 @@
 }
 
 unit gzctnrVectorSimple;
+{$Mode delphi}{$H+}
 
 interface
 uses gzctnrVector,gzctnrVectorTypes;

@@ -23,7 +23,8 @@ unit uzOIEditors;
 interface
 
 uses
-  UEnumDescriptor,uzObjectInspector,Forms,sysutils,
+  uzsbTypeDescriptors,UEnumDescriptor,
+  uzObjectInspector,Forms,sysutils,
   Graphics,LCLType,Themes,uzctnrvectorstrings,
   uzbUnits,
   uzsbVarmanDef,Varman,

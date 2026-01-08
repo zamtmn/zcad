@@ -36,13 +36,22 @@
       </Item5>
     </Files>
     <CompatibilityMode Value="True"/>
-    <RequiredPkgs Count="2">
+    <RequiredPkgs Count="5">
       <Item1>
         <PackageName Value="zscript"/>
       </Item1>
       <Item2>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zscriptbase"/>
       </Item2>
+      <Item3>
+        <PackageName Value="zbaseutils"/>
+      </Item3>
+      <Item4>
+        <PackageName Value="zunits"/>
+      </Item4>
+      <Item5>
+        <PackageName Value="FCL"/>
+      </Item5>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

@@ -1,0 +1,39 @@
+include::attributes.adoc[]
+
+Shortcuts kbd:[Ctrl+O]  - asciidoc ext
+
+Monospace text: `Monospace text` - asciidoc spec
+
+Highlight text: #Highlight text# - asciidoc spec
+
+Highlight text: [.hl]#Highlight text# - custom
+
+File or path: [.filepath]#File or path# - custom
+
+Command name: [.command]#Command name# - custom
+
+Menu path: [.menu]#Menu > Submenu# - custom
+
+Command line content: [.cmdline]#Command line content# - custom
+
+Shell command line content: [.shell]#Command line content# - custom
+
+Entity name: [.ent]#EntityName# - custom
+
+Tree:
+
+[plantuml, generated/ex1, svg]
+----
+!include styles/defaulttree-style.iuml
+legend
+root
+|_ level1.1
+|_ level1.2
+|_ level1.3
+  |_ level2.1
+|_ level1.4
+  |_ level2.2
+    |_ level3.1
+  |_ level2.3
+end legend
+----

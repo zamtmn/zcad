@@ -40,6 +40,13 @@ const
 
 type
   TReportExtender=class(TBaseEntityExtender)
+  public
+  const
+    ReportExtenderName='extdrReport';
+  private
+  public
+    fScriptName:AnsiString;
+
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
     destructor Destroy;override;
@@ -63,6 +70,8 @@ type
     procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
 
     procedure ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+
+    class function EntIOLoadScriptName(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
   end;
 
 var
@@ -102,6 +111,7 @@ begin
   if ReportExtender=nil then
     ReportExtender:=AddReportExtenderToEntity(pDestEntity);
   ReportExtender.Assign(PGDBObjEntity(pSourceEntity)^.EntExtensions.GetExtensionOf<TReportExtender>);
+  ReportExtender.fScriptName:=fScriptName;
 end;
 
 procedure TReportExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
@@ -143,8 +153,23 @@ end;
 
 procedure TReportExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
-   dxfStringout(outStream,1000,'REPORTEXTENDER=');
+  dxfStringout(outStream,1000,'REPORTEXTENDER=');
+  if fScriptName<>'' then
+    dxfStringout(outStream,1000,'RPRTEcriptName='+fScriptName);
 end;
+
+class function TReportExtender.EntIOLoadScriptName(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  RprtExtdr:TReportExtender;
+begin
+  RprtExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TReportExtender>;
+  if RprtExtdr=nil then
+    RprtExtdr:=AddReportExtenderToEntity(PEnt);
+  if RprtExtdr<>nil then
+    RprtExtdr.fScriptName:=_Value;
+  result:=true;
+end;
+
 
 procedure TReportExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
 begin
@@ -169,6 +194,7 @@ initialization
   //ReportScriptsManager.RunScript('test');
   EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('REPORTEXTENDER',TReportExtender.EntIOLoadReportExtender);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('RPRTEcriptName',TReportExtender.EntIOLoadScriptName);
 finalization
   TScriptsmanager.FreeExternalScriptData(temp);
 end.

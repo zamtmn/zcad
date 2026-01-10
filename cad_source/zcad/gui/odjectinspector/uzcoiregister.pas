@@ -101,14 +101,7 @@ begin
                                        GDBobjinsp.SetCurrentObjDefault;
                                   end;
 end;
-function isGDBObjInstance(const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer):boolean;
-begin
-  result:=false;
-  if (currobjgdbtype<>nil)and(pcurrobj<>nil) then
-    if IsObjectIt(typeof(currobjgdbtype^),typeof(ObjectDescriptor)) then
-      if IsObjectIt(PObjectDescriptor(currobjgdbtype)^.PVMT,typeof(GDBaseObject)) then
-        result:=True;
-end;
+
 procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;
   const valkey:string;const DD:TDisplayedData);
 var
@@ -134,44 +127,48 @@ begin
     vsa.sort;
   end;
 end;
+
+function isGDBaseObjectInstance(const PTypeDesc:PUserTypeDescriptor;const PData:pointer):boolean;
+begin
+  result:=false;
+  if (PTypeDesc<>nil)and(PData<>nil) then
+    if IsObjectIt(typeof(PTypeDesc^),typeof(ObjectDescriptor)) then
+      if IsObjectIt(PObjectDescriptor(PTypeDesc)^.PVMT,typeof(GDBaseObject)) then
+        result:=True;
+end;
+
+function isEntityInstance(const PTypeDesc:PUserTypeDescriptor;const PData:pointer):boolean;
+begin
+  result:=false;
+  if (PTypeDesc<>nil)and(PData<>nil) then
+    if IsObjectIt(typeof(PTypeDesc^),typeof(ObjectDescriptor)) then
+      if IsObjectIt(PObjectDescriptor(PTypeDesc)^.PVMT,typeof(GDBObjEntity)) then
+        result:=True;
+end;
+
 procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer{;const GDBobj:boolean});
-  function CurrObjIsEntity:boolean;
-  begin
-    result:=false;
-    //if GDBobj then
-    //  if PGDBaseObject(pcurrobj)^.IsEntity then
-    //    result:=true;
-  end;
   function IsEntityInCurrentContext:boolean;
   begin
-       if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple
-       then
-           result:=true
-      else
-           result:=false;
+    result:=PGDBObjEntity(pcurrobj).bp.ListPos.Owner=
+            PTDrawingDef(pcurcontext)^.GetCurrentRootSimple
   end;
 var
    dc:TDrawContext;
    pdwg:PTSimpleDrawing;
 begin
-  if isGDBObjInstance(currobjgdbtype,pcurcontext,pcurrobj) then
-                begin
-                     dc:=PTDrawingDef(pcurcontext)^.CreateDrawingRC;
-                    if CurrObjIsEntity then
-                                           begin
-                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^,dc);
-                                               if IsEntityInCurrentContext
-                                               then
-                                                   PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^)
-                                               else
-                                                   PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^,dc);
-                                           end
-                                       else
-                                        begin
-                                           if assigned(EDContext.ppropcurrentedit) then
-                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,currobjgdbtype);
-                                        end;
-                end;
+  if isGDBaseObjectInstance(currobjgdbtype,pcurrobj) then begin
+    dc:=PTDrawingDef(pcurcontext)^.CreateDrawingRC;
+    if isEntityInstance(currobjgdbtype,pcurrobj) then begin
+      PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^,dc);
+      if IsEntityInCurrentContext then
+        PGDBObjEntity( pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^)
+      else
+        PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^,dc);
+    end else begin
+      if assigned(EDContext.ppropcurrentedit) then
+        PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,currobjgdbtype);
+    end;
+  end;
   //zcUI.Do_GUIaction(nil,zcMsgUIResetOGLWNDProc);
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then

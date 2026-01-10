@@ -109,37 +109,29 @@ begin
       if IsObjectIt(PObjectDescriptor(currobjgdbtype)^.PVMT,typeof(GDBaseObject)) then
         result:=True;
 end;
-procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const f:TzeUnitsFormat);
+procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;
+  const valkey:string;const DD:TDisplayedData);
 var
   pentvarext:TVariablesExtender;
   pobj:pGDBObjEntity;
   ir:itrec;
   pv:pvardesk;
-  vv:String;
+  vv:string;
 begin
-  if (valkey<>'')and(pcurcontext<>nil) then
-  begin
-       pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.beginiterate(ir);
-       if pobj<>nil then
-       repeat
-             if isGDBObjInstance(currobjgdbtype,pcurcontext,pcurrobj) then
-             begin
-             pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-             if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
-             begin
-                  pv:={PTEntityUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
-                  if pv<>nil then
-                  begin
-                       vv:=pv.data.PTD.GetEditableAsString(pv.data.Addr.Instance,f);
-                       if vv<>'' then
-
-                       vsa.PushBackIfNotPresent(vv);
-                  end;
-             end;
-             end;
-             pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.iterate(ir);
-       until pobj=nil;
-       vsa.sort;
+  if (DD.PObj=@MSEditor)and(valkey<>'')and(DD.Ctx<>nil) then begin
+    pobj:=PTSimpleDrawing(DD.Ctx).GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pobj<>nil then
+      repeat
+        pentvarext:=pobj^.GetExtension<TVariablesExtender>;
+        pv:=pentvarext.entityunit.FindVariable(valkey);
+        if pv<>nil then begin
+          vv:=pv.Data.PTD.GetEditableAsString(pv.Data.Addr.Instance,DD.UnitsFormat);
+          if vv<>'' then
+            vsa.PushBackIfNotPresent(vv);
+        end;
+        pobj:=PTSimpleDrawing(DD.Ctx).GetCurrentROOT.ObjArray.iterate(ir);
+      until pobj=nil;
+    vsa.sort;
   end;
 end;
 procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer{;const GDBobj:boolean});

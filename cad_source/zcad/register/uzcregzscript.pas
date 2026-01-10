@@ -581,6 +581,9 @@ begin
   utd:=ptsu^.RegisterType(TypeInfo(TGDBPaletteColor),'TGDBPaletteColor');
   utd:=ptsu^.RegisterType(TypeInfo(PTGDBPaletteColor),'PTGDBPaletteColor');
 
+  utd:=ptsu^.RegisterType(TypeInfo(TArrayIndex),'TArrayIndex');
+  utd:=ptsu^.RegisterType(TypeInfo(PTArrayIndex),'PTArrayIndex');
+
   otd:=ptsu^.RegisterObjectType(TypeInfo(TZAbsVector),TypeOf(TZAbsVector),
                                         'TZAbsVector',true);
   ptsu^.RegisterType(TypeInfo(PZAbsVector),'PZAbsVector');

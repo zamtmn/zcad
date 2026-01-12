@@ -1,3 +1,33 @@
+function rndValue(AMax,AOffs:double):double;
 begin
-  line(1,2,3,4,5,6);
+  result:=AMax*random+AOffs;
+end;
+
+procedure DoRandomLinesTest(ALinesCount:int32;AMax,AOffs:double);
+var
+  i:int32;
+  p1,p2:TzePoint3d;
+  s:string;
+begin
+  randomize;
+  p1.z:=0;
+  p2.z:=0;
+  for i:=1 to ALinesCount do begin
+    if (i and 1) then
+      //вариант1
+      zeEntLine(rndValue(AMax,AOffs),rndValue(AMax,AOffs),0,rndValue(AMax,AOffs),rndValue(AMax,AOffs),0)
+    else begin
+      //вариант2
+      p1.x:=rndValue(AMax,AOffs);
+      p1.y:=rndValue(AMax,AOffs);
+      p2.x:=rndValue(AMax,AOffs);
+      p2.y:=rndValue(AMax,AOffs);
+      zeEntLine(p1,p2);
+    end;
+  end;
+end;
+
+begin
+  //zeDecEbableRedrawCounter;
+  DoRandomLinesTest(1000,10,0);
 end.

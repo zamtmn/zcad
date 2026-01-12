@@ -1,4 +1,4 @@
-//��������� ������ ��������:
+//запускаем скрипт командой:
 //LPCSRun(randomlines)
 
 function rndValue(AMax,AOffs:double):double;
@@ -13,7 +13,7 @@ var
   s:string;
   lpsh:TLPSHandle;
 begin
-  s:='������ ��� '+ToString(ALinesCount)+' �����';
+  s:='Скрипт про '+ToString(ALinesCount)+' линий';
   lpsh:=StartLongProcess(s,ALinesCount);
   randomize;
   p1.z:=0;
@@ -21,10 +21,10 @@ begin
   zcUndoStartCommand(s);
   for i:=1 to ALinesCount do begin
     if (i and 1) then
-      //�������1
+      //вариант1
       zeEntLine(rndValue(AMax,AOffs),rndValue(AMax,AOffs),0,rndValue(AMax,AOffs),rndValue(AMax,AOffs),0)
     else begin
-      //�������2
+      //вариант2
       p1.x:=rndValue(AMax,AOffs);
       p1.y:=rndValue(AMax,AOffs);
       p2.x:=rndValue(AMax,AOffs);
@@ -38,5 +38,7 @@ begin
 end;
 
 begin
-  DoRandomLinesTest(5000,100,0);
+  if zcUITextQuestion('Вопрос','Выкльчить перерисовку после добавления каждой линии?')then
+    zeDecEbableRedrawCounter;
+  DoRandomLinesTest(10000,100,0);
 end.

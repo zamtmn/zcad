@@ -53,7 +53,7 @@ begin
   processedCount:=0;
   needUndoCommand:=true;
   //drawing := PTZCADDrawing(drawings.GetCurrentDWG);
-  drawing:=Context.PCurrentDWG;
+  drawing:=Context.PDWG;
 
   dc:=drawing^.CreateDrawingRC;
 

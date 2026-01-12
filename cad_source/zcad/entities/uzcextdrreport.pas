@@ -33,16 +33,14 @@ uses
   {gzctnrSTL,}uzcsysvars,
   LazUTF8,
   {uzbLogTypes,}uzcLog,
-  uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcLapeScriptsImplDrawing;
-
-const
-  ReportExtenderName='extdrReport';
+  uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcLapeScriptsImplDrawing,
+  uzccommandsabstract;
 
 type
   TReportExtender=class(TBaseEntityExtender)
   public
   const
-    ReportExtenderName='extdrReport';
+    extdrName='extdrReport';
   private
   public
     fScriptName:AnsiString;
@@ -72,12 +70,12 @@ type
     procedure ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 
     class function EntIOLoadScriptName(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+
+    procedure Execute(var Context:TZCADCommandContext);
   end;
 
 var
   ReportScriptsManager:TScriptsManager;
-
-  temp:TScriptData;
 
 function AddReportExtenderToEntity(PEnt:PGDBObjEntity):TReportExtender;
 
@@ -137,7 +135,7 @@ end;
 
 class function TReportExtender.getExtenderName:string;
 begin
-  result:=ReportExtenderName;
+  result:=extdrName;
 end;
 
 class function TReportExtender.EntIOLoadReportExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -179,22 +177,30 @@ procedure TReportExtender.ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseSc
 begin
   if LSCMContextSetup in mode then begin
     TEntityExtentionContext(ctx).FThisEntity:=pThisEntity;
-    TEntityExtentionContext(ctx).FThisEntityExtender:=self;
+    //TEntityExtentionContext(ctx).FThisEntityExtender:=self;
   end;
+end;
+
+procedure TReportExtender.Execute(var Context:TZCADCommandContext);
+var
+ scrd:TScriptData;
+begin
+  scrd:=ReportScriptsManager.CreateExternalScriptData(fScriptName,TEntityExtentionContext,[]);
+  ReportScriptsManager.RunScript(Context,scrd);
+  ReportScriptsManager.FreeExternalScriptData(scrd);
 end;
 
 initialization
   //extdrAdd(extdrReport)
   ReportScriptsManager:=STManager.CreateType('lpr','Script test',
-  TEntityExtentionContext,LSCMCreateOnce,[TLapeDwg.ze2cplr]);
+    TEntityExtentionContext,LSCMCreateOnce,[TLapeDwg.zeGeom2cplr,
+    TLapeDwg.ze2cplr,TLapeDwg.zeEnt2cplr,TLapeDwg.ctxSetup,
+    TLapeEntityExtention.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);
-  temp:=ReportScriptsManager.CreateExternalScriptData('test',TEntityExtentionContext,[TLapeDwg.ze2cplr]);
-  //ReportScriptsManager.RunScript(temp);
-  //ReportScriptsManager.RunScript('test');
-  EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);
+
+  EntityExtenders.RegisterKey(uppercase(TReportExtender.extdrName),TReportExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('REPORTEXTENDER',TReportExtender.EntIOLoadReportExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('RPRTEcriptName',TReportExtender.EntIOLoadScriptName);
 finalization
-  TScriptsmanager.FreeExternalScriptData(temp);
 end.

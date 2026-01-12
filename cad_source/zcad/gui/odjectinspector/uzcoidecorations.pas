@@ -241,7 +241,7 @@ end;
 
 procedure runlayerswnd(PInstance:Pointer);
 begin
-     layer_cmd(TZCADCommandContext.CreateRec(PTZCADDrawing(drawings.GetCurrentDWG)),EmptyCommandOperands);
+     layer_cmd(TZCADCommandContext.CreateRec(PTZCADDrawing(drawings.GetCurrentDWG),drawings.GetCurrentROOT),EmptyCommandOperands);
 end;
 procedure runcolorswnd(PInstance:Pointer);
 var

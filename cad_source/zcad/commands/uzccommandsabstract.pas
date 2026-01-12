@@ -23,7 +23,8 @@ interface
 
 uses
   uzegeometrytypes,uzglviewareadata,uzclog,gzctnrVectorTypes,
-  uzcdrawing,uzeentity,
+  uzcdrawing,uzeentgenericsubentry,
+  uzeentity,UGDBVisibleOpenArray,uzeentsubordinated,
   SysUtils;
 
 const
@@ -70,8 +71,10 @@ type
   TGetPossibleResult=set of TGetPossible;
   PTZCADCommandContext=^TZCADCommandContext;
   TZCADCommandContext=record
-    PCurrentDWG:PTZCADDrawing;
-    constructor CreateRec(ACDWG:PTZCADDrawing);
+    PDWG:PTZCADDrawing;
+    PRoot:PGDBObjGenericSubEntry;
+    POwner:PGDBObjGenericWithSubordinated;
+    constructor CreateRec(ADWG:PTZCADDrawing;ARoot:PGDBObjGenericSubEntry);
   end;
   TCommandEndAction=(CEGUIRePrepare,CEGUIReturnToDefaultObject,
     CEDeSelect,CEDWGNChanged);
@@ -162,7 +165,9 @@ implementation
 
 constructor TZCADCommandContext.CreateRec;
 begin
-  PCurrentDWG:=ACDWG;
+  PDWG:=ADWG;
+  PRoot:=ARoot;
+  POwner:=nil;
 end;
 
 function CommandObjectDef.IsRTECommand:boolean;

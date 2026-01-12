@@ -94,7 +94,7 @@ procedure CalcZ(z:Double);
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 procedure startup(preloadedfile1,preloadedfile2:String);
 procedure finalize;
-procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
+procedure SetObjCreateManipulator(out ADoMth,AUnDoMth:TMethod);overload;
 procedure clearotrack;
 procedure clearcp;
 //procedure redrawoglwnd(GUIAction:TZMessageID);
@@ -306,13 +306,15 @@ begin
 
      end;
 end;
- procedure SetObjCreateManipulator(out domethod,undomethod:tmethod);
- begin
-      domethod.Code:=pointer(drawings.GetCurrentROOT^.GoodAddObjectToObjArray);
-      domethod.Data:=drawings.GetCurrentROOT;
-      undomethod.Code:=pointer(drawings.GetCurrentROOT^.GoodRemoveMiFromArray);
-      undomethod.Data:=drawings.GetCurrentROOT;
- end;
+
+procedure SetObjCreateManipulator(out ADoMth,AUnDoMth:TMethod);
+begin
+  ADoMth.Code:=pointer(drawings.GetCurrentROOT^.GoodAddObjectToObjArray);
+  ADoMth.Data:=drawings.GetCurrentROOT;
+  AUnDoMth.Code:=pointer(drawings.GetCurrentROOT^.GoodRemoveMiFromArray);
+  AUnDoMth.Data:=drawings.GetCurrentROOT;
+end;
+
 function TZCADDrawingsManager.FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:Boolean):PGDBObjEntity;
 var
    //pobj:pGDBObjEntity;

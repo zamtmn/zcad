@@ -36,6 +36,8 @@ uses
     @param(Drawing Чертеж куда будет добавлен примитив)}
   procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjBaseEntity;var Drawing:TZCADDrawing);
 
+  procedure zcAddEntToDrawingWithOutUndo(const APEnt:PGDBObjBaseEntity;var ADwg:TZCADDrawing);
+
   procedure zcMoveEntsFromConstructRootToCurrentDrawingWithUndo(CommandName:String);
 
   procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:TzeTypedMatrix4d);
@@ -153,6 +155,13 @@ begin
           comit;
      end;
 end;
+
+procedure zcAddEntToDrawingWithOutUndo(const APEnt:PGDBObjBaseEntity;var ADwg:TZCADDrawing);
+begin
+  ADwg.GetCurrentROOT^.GoodAddObjectToObjArray(PGDBObjEntity(APEnt));
+  PGDBObjEntity(APEnt)^.YouChanged(drawings.GetCurrentDWG^);
+end;
+
 procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
 begin
      zcAddEntToDrawingWithUndo(PEnt,PTZCADDrawing(drawings.GetCurrentDWG)^);

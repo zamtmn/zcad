@@ -27,10 +27,10 @@ uses
   uzcLog,
   UGDBSelectedObjArray,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,
+  uzeentity,uzeentdevice,
   uzcExtdrReport,
   uzeentsubordinated,
-  uzcstrconsts,uzcinterface;
+  uzcstrconsts,uzcinterface,uzeconsts;
 
 implementation
 
@@ -47,17 +47,26 @@ var
   ext:TReportExtender;
   psd:PSelectedObjDesc;
   RepE:TReportExtender;
+  tmpCtx:TZCADCommandContext;
 begin
   try
       Count:=0;
-
+      tmpCtx:=Context;
       psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+
       if psd<>nil then
         repeat
           RepE:=psd^.objaddr^.GetExtension<TReportExtender>;
             if RepE<>nil then begin
               pEntity:=psd^.objaddr;
-
+              if pEntity^.GetObjType=GDBDeviceID then begin
+                tmpCtx.POwner:=pEntity;
+                //tmpCtx.PArr:=@PGDBObjDevice(pEntity).VarObjArray;
+              end else begin
+                tmpCtx.POwner:=nil;
+                //tmpCtx.PArr:=nil;
+              end;
+              RepE.Execute(tmpCtx);
               Inc(Count);
             end;
           psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);

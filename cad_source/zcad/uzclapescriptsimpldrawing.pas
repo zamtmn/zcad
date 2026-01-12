@@ -27,15 +27,23 @@ uses
   LazUTF8,
   {uzbLogTypes,}uzcLog,
   uzeentity,uzeExtdrAbstractEntityExtender,
-  uzeentline,uzeEntSpline,
+  uzeentline,uzeEntSpline,uzeentdevice,
   uzeentityfactory,uzeconsts,
   uzcutils,uzeutils,uzcdrawing,
   uzegeometry,uzegeometrytypes,
   uzelongprocesssupport,uzcLapeScriptsImplBase,uzccommandsabstract,
   uzestyleslayers,uzcinterface,uzcuitypes,
-  uzccommandsmanager;
+  uzccommandsmanager,uzeentgenericsubentry,UGDBVisibleOpenArray,
+  uzeentsubordinated;
+
+type
+
+  TDrawingAction=(DBRedraw,DBUndo);
+  TDrawingBehavior=set of TDrawingAction;
 
 const
+  cDWGDefaultBehavior=[DBRedraw,DBUndo];
+  cDWGFastBehavior=[DBUndo];
 
   cZeBase='zeBase';
   cZeGeometry='zeGeometry';
@@ -49,13 +57,26 @@ type
 
   EScriptAbort=class(Exception);
 
-  TCurrentDrawingContext=class(TBaseScriptContext)
-    DWG:PTZCADDrawing;
+  TDrawingContextOptions=record
+  private
+    fEnadleRedrawCounter:integer;
+    fBehavior:TDrawingBehavior;
+  public
+    constructor CreateRec(ABhv:TDrawingBehavior);
+    function NeedRedaraw:Boolean;
+    function NeedUndo:Boolean;
   end;
 
-  TEntityExtentionContext=class(TBaseScriptContext)
-    FThisEntity:PGDBObjEntity;
-    FThisEntityExtender:TAbstractEntityExtender;
+  TCurrentDrawingContext=class(TBaseScriptContext)
+    Options:TDrawingContextOptions;
+    DWG:PTZCADDrawing;
+    Root:PGDBObjGenericSubEntry;
+  end;
+
+  TEntityExtentionContext=class(TCurrentDrawingContext)
+    FThisEntity:PGDBObjGenericWithSubordinated;
+    PArr:PGDBObjEntityOpenArray;
+    //FThisEntityExtender:TAbstractEntityExtender;
   end;
 
   TLapeDwg=class
@@ -71,6 +92,11 @@ type
     class procedure ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
+  TLapeEntityExtention=class
+    class procedure ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+  end;
+
+
 implementation
 
 const
@@ -82,6 +108,81 @@ type
   PzePoints3d=^TzePoints3d;
   TSingles=array of Single;
   PSingles=^TSingles;
+
+constructor TDrawingContextOptions.CreateRec(ABhv:TDrawingBehavior);
+begin
+  fEnadleRedrawCounter:=1;
+  fBehavior:=ABhv;
+end;
+
+function TDrawingContextOptions.NeedRedaraw:Boolean;
+begin
+  if DBRedraw in fBehavior then
+    result:=fEnadleRedrawCounter>0
+  else
+    result:=false;
+end;
+function TDrawingContextOptions.NeedUndo:Boolean;
+begin
+  result:=DBUndo in fBehavior;
+end;
+procedure zeIncEbableRedrawCounter(const Params: PParamArray);
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  inc(ctx.Options.fEnadleRedrawCounter);
+end;
+
+procedure zeDecEbableRedrawCounter(const Params: PParamArray);
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  dec(ctx.Options.fEnadleRedrawCounter);
+end;
+
+procedure zeEbableRedraw(const Params: PParamArray);
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  ctx.Options.fBehavior:=ctx.Options.fBehavior+[DBRedraw];
+end;
+
+procedure zeDisableRedraw(const Params: PParamArray);
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  ctx.Options.fBehavior:=ctx.Options.fBehavior-[DBRedraw];
+end;
+
+procedure AddEntityToDWG(AEnt:PGDBObjEntity;constref ACtx:TCurrentDrawingContext);
+begin
+  //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
+  zeSetEntPropFromDrawingProp(AEnt,ACtx.DWG^);
+  //zcSetEntPropFromCurrentDrawingProp(pline);
+
+  //добавляем в чертеж
+  if ACtx.Options.NeedUndo then
+    zcAddEntToDrawingWithUndo(AEnt,ACtx.DWG^)
+  else begin
+    if ACtx.Root=nil then
+      zcAddEntToDrawingWithOutUndo(AEnt,ACtx.DWG^)
+    else begin
+      if ACtx.Root^.GetObjType=GDBDeviceID then
+        PGDBObjDevice(ACtx.Root)^.VarObjArray.AddPEntity(AEnt^)
+      else
+        ACtx.Root^.GoodAddObjectToObjArray(@AEnt);
+      AEnt^.YouChanged(ACtx.DWG^);
+    end;
+  end;
+
+  //перерисовываем
+  if ACtx.Options.NeedRedaraw then
+    zcRedrawCurrentDrawing;
+end;
 
 procedure zeEntLine(const Params: PParamArray;const Result: Pointer{(x1,y1,z1,x2,y2,z2:double):PzeEntity}); cdecl;
 var
@@ -99,19 +200,10 @@ begin
     z2:=PDouble(Params^[6])^;
 
     pline:=AllocEnt(GDBLineID);
-    pline^.init(nil,nil,LnWtByLayer,CreateVertex(x1,y1,z1),CreateVertex(x2,y2,z2));
+    pline^.init(ctx.Root,nil,LnWtByLayer,CreateVertex(x1,y1,z1),CreateVertex(x2,y2,z2));
     PGDBObjLine(Result^):=pline;
 
-    //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-    zeSetEntPropFromDrawingProp(pline,ctx.DWG^);
-    //zcSetEntPropFromCurrentDrawingProp(pline);
-
-    //добавляем в чертеж
-    zcAddEntToDrawingWithUndo(pline,ctx.DWG^);
-    //zcAddEntToCurrentDrawingWithUndo(pline);
-
-    //перерисовываем
-    zcRedrawCurrentDrawing;
+    AddEntityToDWG(pline,ctx);
   end;
 end;
 
@@ -127,19 +219,10 @@ begin
     p2:=PzePoint3d(Params^[2])^;
 
     pline:=AllocEnt(GDBLineID);
-    pline^.init(nil,nil,LnWtByLayer,p1,p2);
+    pline^.init(ctx.Root,nil,LnWtByLayer,p1,p2);
     PGDBObjLine(Result^):=pline;
 
-    //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-    zeSetEntPropFromDrawingProp(pline,ctx.DWG^);
-    //zcSetEntPropFromCurrentDrawingProp(pline);
-
-    //добавляем в чертеж
-    zcAddEntToDrawingWithUndo(pline,ctx.DWG^);
-    //zcAddEntToCurrentDrawingWithUndo(pline);
-
-    //перерисовываем
-    zcRedrawCurrentDrawing;
+    AddEntityToDWG(pline,ctx);
   end;
 end;
 
@@ -422,6 +505,10 @@ begin
     if CheckBaseDefs(cplr,cZeEnts,[cZeBase,cZeGeometry])then begin
       cplr.StartImporting;
       cplr.addBaseDefine(cZeEnts);
+      cplr.addGlobalMethod('procedure zeIncEbableRedrawCounter;',@zeIncEbableRedrawCounter,ctx);
+      cplr.addGlobalMethod('procedure zeDecEbableRedrawCounter;',@zeDecEbableRedrawCounter,ctx);
+      cplr.addGlobalMethod('procedure zeEbableRedraw;',@zeEbableRedraw,ctx);
+      cplr.addGlobalMethod('procedure zeDisableRedraw;',@zeDisableRedraw,ctx);
       cplr.addGlobalMethod('function zeEntLine(x1,y1,z1,x2,y2,z2:double):PzeEntity;overload;',@zeEntLine,ctx);
       cplr.addGlobalMethod('function zeEntLine(p1,p2:TzePoint3d):PzeEntity;overload;',@zeEntLine2,ctx);
       cplr.addGlobalMethod('function zeEntSpline(const Degree:int32;const Closed:boolean;pts:TzePoints3d;kts:TSingles):PzeEntity;',@zeEntSpline,ctx);
@@ -479,8 +566,29 @@ end;
 class procedure TLapeDwg.ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMContextSetup in mode then begin
-    if ctx is TCurrentDrawingContext then
-      (ctx as TCurrentDrawingContext).DWG:=ACommandContext.PCurrentDWG;
+    if ctx is TCurrentDrawingContext then begin
+      (ctx as TCurrentDrawingContext).DWG:=ACommandContext.PDWG;
+      (ctx as TCurrentDrawingContext).Root:=ACommandContext.PRoot;
+      (ctx as TCurrentDrawingContext).Options.CreateRec(cDWGDefaultBehavior);
+    end;
+  end;
+end;
+
+class procedure TLapeEntityExtention.ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMContextSetup in mode then begin
+    if ctx is TEntityExtentionContext then begin
+      (ctx as TCurrentDrawingContext).Root:=pointer(ACommandContext.POwner);
+      (ctx as TEntityExtentionContext).FThisEntity:=ACommandContext.POwner;
+      if ACommandContext.POwner<>nil then begin
+        if ACommandContext.POwner^.GetObjType=GDBDeviceID then
+          (ctx as TEntityExtentionContext).PArr:=@PGDBObjDevice(ACommandContext.POwner).VarObjArray
+        else
+          (ctx as TEntityExtentionContext).PArr:=nil;
+      end else
+        (ctx as TEntityExtentionContext).PArr:=nil;
+      (ctx as TCurrentDrawingContext).Options.CreateRec([]);
+    end;
   end;
 end;
 

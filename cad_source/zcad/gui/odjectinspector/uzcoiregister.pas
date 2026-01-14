@@ -116,11 +116,13 @@ begin
     if pobj<>nil then
       repeat
         pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-        pv:=pentvarext.entityunit.FindVariable(valkey);
-        if pv<>nil then begin
-          vv:=pv.Data.PTD.GetEditableAsString(pv.Data.Addr.Instance,DD.UnitsFormat);
-          if vv<>'' then
-            vsa.PushBackIfNotPresent(vv);
+        if pentvarext<>nil then begin
+          pv:=pentvarext.entityunit.FindVariable(valkey);
+          if pv<>nil then begin
+            vv:=pv.Data.PTD.GetEditableAsString(pv.Data.Addr.Instance,DD.UnitsFormat);
+            if vv<>'' then
+              vsa.PushBackIfNotPresent(vv);
+          end;
         end;
         pobj:=PTSimpleDrawing(DD.Ctx).GetCurrentROOT.ObjArray.iterate(ir);
       until pobj=nil;

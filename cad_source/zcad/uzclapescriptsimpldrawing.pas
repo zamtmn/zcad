@@ -34,7 +34,8 @@ uses
   uzelongprocesssupport,uzcLapeScriptsImplBase,uzccommandsabstract,
   uzestyleslayers,uzcinterface,uzcuitypes,
   uzccommandsmanager,uzeentgenericsubentry,UGDBVisibleOpenArray,
-  uzeentsubordinated;
+  uzeentsubordinated,uzeenttable,uzestylestables,uzctnrVectorStrings,
+  uzgldrawcontext;
 
 type
 
@@ -84,6 +85,7 @@ type
     class procedure ze2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeStyles2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeEnt2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure zeBehavior2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 
     class procedure zc2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zcUndo2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
@@ -307,6 +309,67 @@ begin
     PGDBLayerProp(Result^):=nil;
 end;
 
+procedure zeLayerName(const Params: PParamArray;const Result: Pointer{(ALayer:PzeLayer):string});cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  pl:PGDBLayerProp;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  pl:=PGDBLayerProp(Params^[1]^);
+  if PGDBLayerProp(Params^[1])<>nil then
+     PString(Result)^:=PGDBLayerProp(Params^[1]^)^.GetName
+   else
+     PString(Result)^:='';
+end;
+
+procedure zeDwgGetTableStylesCount(const Params: PParamArray;const Result: Pointer);cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  ptsa:PGDBTableStyleArray;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if ctx.DWG<>nil then
+    ptsa:=ctx.DWG^.GetTableStyleTable
+  else
+    ptsa:=nil;
+  if ptsa<>nil then
+    Integer(Result^):=ptsa^.GetCount
+  else
+    Integer(Result^):=0;
+end;
+
+procedure zeDwgGetTableStyle(const Params: PParamArray;const Result: Pointer);cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  ptsa:PGDBTableStyleArray;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if ctx.DWG<>nil then
+    ptsa:=ctx.DWG^.GetTableStyleTable
+  else
+    ptsa:=nil;
+  if ptsa<>nil then
+    PTGDBTableStyle(Result^):=ptsa^.getDataMutable(PInteger(Params^[1])^)
+  else
+    PTGDBTableStyle(Result^):=nil;
+end;
+
+procedure zeDWGGetTableStyle2(const Params: PParamArray;const Result: Pointer);cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  ptsa:PGDBTableStyleArray;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if ctx.DWG<>nil then
+    ptsa:=ctx.DWG^.GetTableStyleTable
+  else
+    ptsa:=nil;
+  if ptsa<>nil then
+    PTGDBTableStyle(Result^):=ptsa^.getAddres(PString(Params^[1])^)
+  else
+    PTGDBTableStyle(Result^):=nil;
+end;
+
 procedure zcUIHistoryOut(const Params: PParamArray{(AMsg:string)}); cdecl;
 //var
 //  ctx:TCurrentDrawingContext;
@@ -328,19 +391,6 @@ begin
   PBoolean(Result)^:=zcUI.TextQuestion(PString(Params^[1])^,PString(Params^[2])^)=zccbYes;
 end;
 
-
-procedure zeLayerName(const Params: PParamArray;const Result: Pointer{(ALayer:PzeLayer):string});cdecl;
-var
-  ctx:TCurrentDrawingContext;
-  pl:PGDBLayerProp;
-begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  pl:=PGDBLayerProp(Params^[1]^);
-  if PGDBLayerProp(Params^[1])<>nil then
-     PString(Result)^:=PGDBLayerProp(Params^[1]^)^.GetName
-   else
-     PString(Result)^:='';
-end;
 
 procedure zePt3d(const Params: PParamArray;const Result: Pointer{(x,y,z:double):TzePoint3d});cdecl;
 //var
@@ -375,7 +425,7 @@ begin
   if ctx.DWG<>nil then begin
 
     pspline:=AllocEnt(GDBSplineID);
-    pspline^.init(nil,nil,LnWtByLayer,PBoolean(Params^[2])^);
+    pspline^.init(ctx.Root,nil,LnWtByLayer,PBoolean(Params^[2])^);
     PGDBObjSpline(Result^):=pspline;
 
     pspline^.Degree:=PInteger(Params^[1])^;
@@ -389,19 +439,51 @@ begin
     for i:=0 to length(PSingles(Params^[4])^)-1 do
       pspline^.Knots.getDataMutable(i)^:=PSingles(Params^[4])^[i];
 
-    //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-    zeSetEntPropFromDrawingProp(pspline,ctx.DWG^);
-    //zcSetEntPropFromCurrentDrawingProp(pline);
-
-    //добавляем в чертеж
-    zcAddEntToDrawingWithUndo(pspline,ctx.DWG^);
-    //zcAddEntToCurrentDrawingWithUndo(pline);
-
-    //перерисовываем
-    zcRedrawCurrentDrawing;
+    AddEntityToDWG(pspline,ctx);
   end;
 end;
 
+procedure zeEntTable(const Params:PParamArray;const Result: Pointer);cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  pt:PGDBObjTable;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  //pt:=AllocEnt(GDBTableID);
+  Getmem(pointer(pt),sizeof(GDBObjTable));
+  pt^.initnul;
+  pt^.bp.ListPos.Owner:=ctx.Root;
+  pt^.ptablestyle:=PPointer(Params^[1])^;
+  pt^.tbl.free;
+  PGDBObjTable(Result^):=pt;
+  AddEntityToDWG(pt,ctx);
+end;
+
+procedure zeEntTableAddRow(const Params: PParamArray);
+type
+  StringArray=array of string;
+  PStringArray=^StringArray;
+var
+  ctx:TCurrentDrawingContext;
+  pt:PGDBObjTable;
+  row:StringArray;
+  i:integer;
+  psl:PTZctnrVectorStrings;
+  DC:TDrawContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  pt:=PPointer(Params^[1])^;
+  row:=PStringArray(Params^[2])^;
+  psl:=pt^.tbl.CreateObject;
+  psl.init(length(row));
+  for i:=low(row) to high(row) do
+    psl^.PushBackData(row[i]);
+  if PBoolean(Params^[3])^ then begin
+    pt^.Build(ctx.DWG^);
+    dc:=ctx.DWG^.CreateDrawingRC;
+    pt^.FormatEntity(ctx.DWG^,dc);
+  end;
+end;
 procedure zcGetEntity(const Params:PParamArray;const Result:Pointer); cdecl;
                   {(APrompt:string;out APEntity:PzeEntity):TzcInteractiveResult}
 var
@@ -461,6 +543,7 @@ begin
 
     cplr.addGlobalType('Pointer','PzeEntity');
     cplr.addGlobalType('Pointer','PzeLayer');
+    cplr.addGlobalType('Pointer','PzeTableStyle');
 
     cplr.EndImporting;
   end;
@@ -495,6 +578,10 @@ begin
       cplr.addGlobalMethod('function zeDWGGetLayer(ALayerName:string):PzeLayer;overload;',@zeDwgGetLayer2,ctx);
       cplr.addGlobalMethod('function zeLayerName(ALayer:PzeLayer):string;',@zeLayerName,ctx);
 
+      cplr.addGlobalMethod('function zeDwgGetTableStylesCount:int32;',@zeDwgGetTableStylesCount,ctx);
+      cplr.addGlobalMethod('function zeDwgGetTableStyle(ATableStyleIndex:int32):PzeTableStyle;overload;',@zeDwgGetTableStyle,ctx);
+      cplr.addGlobalMethod('function zeDWGGetTableStyle(ATableStyleName:string):PzeTableStyle;overload;',@zeDwgGetTableStyle2,ctx);
+
       cplr.EndImporting;
   end;
 end;
@@ -505,13 +592,26 @@ begin
     if CheckBaseDefs(cplr,cZeEnts,[cZeBase,cZeGeometry])then begin
       cplr.StartImporting;
       cplr.addBaseDefine(cZeEnts);
+      cplr.addGlobalMethod('function zeEntLine(x1,y1,z1,x2,y2,z2:double):PzeEntity;overload;',@zeEntLine,ctx);
+      cplr.addGlobalMethod('function zeEntLine(p1,p2:TzePoint3d):PzeEntity;overload;',@zeEntLine2,ctx);
+      cplr.addGlobalMethod('function zeEntSpline(const Degree:int32;const Closed:boolean;pts:TzePoints3d;kts:TSingles):PzeEntity;',@zeEntSpline,ctx);
+      cplr.addGlobalMethod('function zeEntTable(PStyle:PzeTableStyle):PzeEntity;',@zeEntTable,ctx);
+      cplr.addGlobalMethod('procedure zeEntTableAddRow(PTable:PzeEntity;row:array of string;build:boolean);',@zeEntTableAddRow,ctx);
+      cplr.EndImporting;
+    end;
+  end;
+end;
+
+class procedure TLapeDwg.zeBehavior2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    if CheckBaseDefs(cplr,cZeEnts,[cZeBase,cZeGeometry])then begin
+      cplr.StartImporting;
+      cplr.addBaseDefine(cZeEnts);
       cplr.addGlobalMethod('procedure zeIncEbableRedrawCounter;',@zeIncEbableRedrawCounter,ctx);
       cplr.addGlobalMethod('procedure zeDecEbableRedrawCounter;',@zeDecEbableRedrawCounter,ctx);
       cplr.addGlobalMethod('procedure zeEbableRedraw;',@zeEbableRedraw,ctx);
       cplr.addGlobalMethod('procedure zeDisableRedraw;',@zeDisableRedraw,ctx);
-      cplr.addGlobalMethod('function zeEntLine(x1,y1,z1,x2,y2,z2:double):PzeEntity;overload;',@zeEntLine,ctx);
-      cplr.addGlobalMethod('function zeEntLine(p1,p2:TzePoint3d):PzeEntity;overload;',@zeEntLine2,ctx);
-      cplr.addGlobalMethod('function zeEntSpline(const Degree:int32;const Closed:boolean;pts:TzePoints3d;kts:TSingles):PzeEntity;',@zeEntSpline,ctx);
       cplr.EndImporting;
     end;
   end;

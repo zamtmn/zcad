@@ -25,7 +25,7 @@ uses
   uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
   UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzeentwithmatrix,uzeentsubordinated,
   uzegeometry,uzeentity,gzctnrVectorTypes,uzegeometrytypes,uzeconsts,
-  uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity,uzeTypes;
+  uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity,uzeTypes,uzeEntBase;
 
 type
   PTDrawingPreCalcData=^TDrawingPreCalcData;
@@ -37,8 +37,8 @@ type
 
   GDBObjGenericSubEntry=object(GDBObjWithMatrix)
     ObjArray:GDBObjEntityTreeArray;
-    ObjCasheArray:GDBObjOpenArrayOfPV;
-    ObjToConnectedArray:GDBObjOpenArrayOfPV;
+    ObjCasheArray:TZctnrVectorPGDBaseEntity;
+    ObjToConnectedArray:TZctnrVectorPGDBaseEntity;
     lstonmouse:PGDBObjEntity;
     InFrustumAABB:TBoundingBox;
     function AddObjectToObjArray(p:Pointer):integer;virtual;
@@ -528,8 +528,12 @@ begin
 end;
 
 procedure GDBObjGenericSubEntry.formatafteredit;
+var
+  PEntity:PGDBObjBaseEntity;
 begin
-  ObjCasheArray.Formatafteredit(drawing,dc);
+  for PEntity in ObjCasheArray do
+    PEntity^.Formatafteredit(drawing,dc);
+  //ObjCasheArray.Formatafteredit(drawing,dc);
 
   ObjCasheArray.Clear;
   calcbb(dc);

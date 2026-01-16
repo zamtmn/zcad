@@ -23,7 +23,8 @@ interface
 
 uses
   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,gzctnrVectorTypes,
-  uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree,uzeTypes;
+  uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree,
+  uzeTypes;
 
 type
   PGDBObjWithMatrix=^GDBObjWithMatrix;

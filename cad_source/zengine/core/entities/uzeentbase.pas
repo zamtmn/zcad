@@ -23,16 +23,21 @@ unit uzeEntBase;
 interface
 
 uses
-  uzeTypes,
+  uzeTypes,uzedrawingdef,uzgldrawcontext,
   SysUtils;
 
 type
+
   PGDBObjBaseEntity=^GDBObjBaseEntity;
 
   GDBObjBaseEntity=object
     destructor Done;virtual;abstract;
     function GetObjType:TObjID;virtual;abstract;
     constructor initnul;
+    procedure FormatEntity(var drawing:TDrawingDef;
+      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;abstract;
+    procedure FormatAfterEdit(var drawing:TDrawingDef;
+      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;abstract;
   end;
 
 implementation

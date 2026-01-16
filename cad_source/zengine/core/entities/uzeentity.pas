@@ -31,11 +31,6 @@ uses
 
 type
   taddotrac=procedure(var posr:os_record;const axis:TzePoint3d) of object;
-  TEFStage=(EFCalcEntityCS,EFDraw);
-  TEFStages=set of TEFStage;
-
-const
-  EFAllStages=[EFCalcEntityCS,EFDraw];
 
 type
   PGDBObjEntity=^GDBObjEntity;

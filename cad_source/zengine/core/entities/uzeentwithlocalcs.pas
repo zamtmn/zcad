@@ -22,8 +22,8 @@ unit uzeentwithlocalcs;
 interface
 
 uses
-  uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzegeometrytypes,
-  UGDBOutbound2DIArray,uzctnrVectorBytesStream,uzeentwithmatrix,uzeTypes,
+  uzepalette,uzgldrawcontext,uzedrawingdef,uzeentity,uzegeometrytypes,
+  uzctnrVectorBytesStream,uzeentwithmatrix,uzeTypes,
   uzegeometry,uzeffdxfsupport,SysUtils,uzeentsubordinated,uzestyleslayers,
   uzMVReader,uzbLogIntf,uzestrconsts;
 

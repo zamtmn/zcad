@@ -26,8 +26,13 @@ uses
   SysUtils,
   uzbHandles,uzegeometrytypes,uzbGetterSetter,Graphics;
 
+type
+  TEFStage=(EFCalcEntityCS,EFDraw);
+  TEFStages=set of TEFStage;
+
 const
   NotActual=0;
+  EFAllStages=[EFCalcEntityCS,EFDraw];
 
 type
   TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:integer);

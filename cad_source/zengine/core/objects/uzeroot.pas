@@ -25,7 +25,7 @@ Uses
   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,
   uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,UGDBOpenArrayOfPV,
-  uzelongprocesssupport,uzeTypes,uzbBaseUtils;
+  uzelongprocesssupport,uzeTypes,uzbBaseUtils,uzCtnrVectorPBaseEntity;
 
 type
 
@@ -59,7 +59,7 @@ type
       property FrustumPosition:TzePoint3d read fFrustumPosition write fFrustumPosition;
   end;
 
-procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connected:GDBObjOpenArrayOfPV;var drawing:TDrawingDef;var DC:TDrawContext;lpsh:TLPSHandle;Stage:TEFStages{=EFAllStages});
+procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connected:TZctnrVectorPGDBaseEntity;var drawing:TDrawingDef;var DC:TDrawContext;lpsh:TLPSHandle;Stage:TEFStages{=EFAllStages});
 
 implementation
 
@@ -186,7 +186,7 @@ begin
      result:=GDBRootId;
 end;
 
-procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connected:GDBObjOpenArrayOfPV;var drawing:TDrawingDef;var DC:TDrawContext;lpsh:TLPSHandle;Stage:TEFStages{=EFAllStages});
+procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connected:TZctnrVectorPGDBaseEntity;var drawing:TDrawingDef;var DC:TDrawContext;lpsh:TLPSHandle;Stage:TEFStages{=EFAllStages});
 var
   p:pGDBObjEntity;
   ir:itrec;

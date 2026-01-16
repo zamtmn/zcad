@@ -1,0 +1,18 @@
+//запускаем скрипт командой:
+//LPCSRun(tablestyles)
+
+procedure DoTableStylesTest;
+var
+  i:int32;
+  ts:PzeTableStyle;
+begin
+  for i:=0 to zeDwgGetTableStylesCount-1 do begin
+    ts:=zeDwgGetTableStyle(i);
+    if ts<>nil then
+      zcUIMessageBox(zeLayerName(ts));
+  end;
+end;
+
+begin
+  DoTableStylesTest;
+end.

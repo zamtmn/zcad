@@ -635,6 +635,8 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TMSPrimitiveDetector),
                                   'TMSPrimitiveDetector');
+  if  utd<>nil then
+    registerRecTypeDescriptorOverrider(utd,@GDBEnumDataDescriptorObj);
   utd:=ptsu^.RegisterType(TypeInfo(TMSBlockNamesDetector),
                                   'TMSBlockNamesDetector');
   utd:=ptsu^.RegisterType(TypeInfo(TMSTextsStylesDetector),

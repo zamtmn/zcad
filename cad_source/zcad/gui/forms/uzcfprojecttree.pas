@@ -192,12 +192,10 @@ begin
         begin
          offset:=0;
          pvdeq^.data.PTD^.ApplyOperator('.','TreeCoord',offset,tc);
-         if (offset<>0)and(tc^.GetFactTypedef=@FundamentalStringDescriptorObj) then
-         begin
-              treesuperpos:=pString(ptruint(pvdeq^.data.Addr.Instance) + offset)^;
-         end
+         if offset<>0 then
+           treesuperpos:=tc^.GetFactTypedef^.GetValueAsString(pvdeq^.data.Addr.Instance+offset)
          else
-             treesuperpos:='';
+           treesuperpos:='';
          if treesuperpos='' then
                             treesuperpos:=uncat_+pvdeq^.name;
          repeat

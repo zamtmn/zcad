@@ -43,7 +43,7 @@ type
     VPS_AllEntsSeparated(*'All ents separated'*)
     );
 
-  TMSPrimitiveDetector=TEnumData;
+  TMSPrimitiveDetector=type TEnumData;
   TMSBlockNamesDetector=TEnumDataWithOtherStrings;
   TMSTextsStylesDetector=TEnumDataWithOtherPointers;
   TMSEntsLayersDetector=TEnumDataWithOtherPointers;

@@ -53,10 +53,16 @@ GDBObjNet= object(GDBObjConnected)
                  function IsHaveGRIPS:Boolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                  function GetObjType:TObjID;virtual;
+                 function IsNeedSeparate:boolean;virtual;
            end;
 var
     GDBObjNetDXFFeatures:TDXFEntIODataManager;
 implementation
+function GDBObjNet.IsNeedSeparate:boolean;
+begin
+  result:=true;
+end;
+
 function GDBObjNet.IsHaveGRIPS:Boolean;
 begin
      result:=false;

@@ -310,6 +310,10 @@ begin
   inherited;
   ObjArray.SetInFrustumFromTree(frustum,Actuality,Counters,
     ProjectProc,zoom,currentdegradationfactor);
+  ObjArray.ObjTree.NodeData.infrustum:=Actuality.InfrustumActualy;
+  ObjArray.ObjTree.BoundingBox:=vp.BoundingBox;
+  ProcessTree(frustum,Actuality,ObjArray.ObjTree,IRFully,
+    TDTFulDraw,Counters,ProjectProc,zoom,currentdegradationfactor);
 end;
 
 function GDBObjGenericSubEntry.CalcVisibleByTree(const frustum:TzeFrustum;

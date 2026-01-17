@@ -13,7 +13,7 @@ type
                                  _02_75(*'2х0.75'*),
                                  _03_75(*'3х0.75'*),
                                  _04_75(*'4х0.75'*),
-                                 _05_75(*'5х1.0'*),
+                                 _05_75(*'5х0.75'*),
                                  _02_10(*'2х1.0'*),
                                  _03_10(*'3х1.0'*),
                                  _04_10(*'4х1.0'*),
@@ -21,7 +21,7 @@ type
                                  _02_15(*'2х1.5'*),
                                  _03_15(*'3х1.5'*),
                                  _04_15(*'4х1.5'*),
-                                 _05_15(*'5х2.5'*),
+                                 _05_15(*'5х1.5'*),
                                  _02_25(*'2х2.5'*),
                                  _03_25(*'3х2.5'*),
                                  _04_25(*'4х2.5'*),
@@ -36,11 +36,20 @@ type
     TsegmentenergoMKESngALSLTx=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TsegmentenergoMKSngALS_WCS;
                   end; 
+    TsegmentenergoMKSngAHF=packed object(CableDeviceBaseObject)
+                        Wire_Count_Section_DESC:TsegmentenergoMKSngALS_WCS;
+                  end;
+    TsegmentenergoMKESngAHF=packed object(CableDeviceBaseObject)
+                        Wire_Count_Section_DESC:TsegmentenergoMKSngALS_WCS;
+                  end; 
+
 
 var
    _EQ_segmentenergoMKSngALS:TsegmentenergoMKSngALS;
    _EQ_segmentenergoMKSngALSLTx:TsegmentenergoMKSngALSLTx;
    _EQ_segmentenergoMKESngALSLTx:TsegmentenergoMKESngALSLTx;
+   _EQ_segmentenergoMKSngAHF:TsegmentenergoMKSngAHF;
+   _EQ_segmentenergoMKESngAHF:TsegmentenergoMKESngAHF;
 implementation
 begin
      _EQ_segmentenergoMKSngALS.initnul;
@@ -113,5 +122,49 @@ begin
 
      _EQ_segmentenergoMKESngALSLTx.format;
 
+
+     _EQ_segmentenergoMKSngAHF.initnul;
+
+     _EQ_segmentenergoMKSngAHF.Category:=_kables;
+     _EQ_segmentenergoMKSngAHF.Group:=_cables;
+     _EQ_segmentenergoMKSngAHF.EdIzm:=_m;
+     _EQ_segmentenergoMKSngAHF.ID:='segmentenergoMKSngAHF';
+     _EQ_segmentenergoMKSngAHF.Standard:='ТУ 3581-003-17648068-2014';
+     _EQ_segmentenergoMKSngAHF.OKP:='';
+     _EQ_segmentenergoMKSngAHF.Manufacturer:='ООО «СегментЭнерго» г.Москва';
+     _EQ_segmentenergoMKSngAHF.Description:='Кабели предназначенные для переносного и фиксированного межприборного монтажа электрических устройств, работающих при номинальном переменном напряжении до 500 В частоты до 400 Гц или постоянном напряжении до 750 В';
+
+     _EQ_segmentenergoMKSngAHF.NameShortTemplate:='МКШng(A)-HF-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKSngAHF.NameTemplate:='Кабель монтажный МКШng(A)-HF-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKSngAHF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKSngAHF.NameFullTemplate:='Кабель монтажный для фиксированного межприборного монтажа электрических устройств, до 500В, до 400Гц или постоянном напряжении до 750В. Пучковой скрутки, безгалогенный. Температура эксплуатации −50 … +50 °С, сечением %%[Wire_Count_Section_DESC]';
+
+     _EQ_segmentenergoMKSngAHF.Wire_Count_Section_DESC:=_02_75;
+
+     _EQ_segmentenergoMKSngAHF.TreeCoord:='BP_СегментЭнерго_Кабели монтажные_МКШng(A)-HF|BC_Кабельная продукция_контрольные_МКШng(A)-HF(СегментЭнерго)';
+
+     _EQ_segmentenergoMKSngAHF.format;
+
+     _EQ_segmentenergoMKESngAHF.initnul;
+
+     _EQ_segmentenergoMKESngAHF.Category:=_kables;
+     _EQ_segmentenergoMKESngAHF.Group:=_cables;
+     _EQ_segmentenergoMKESngAHF.EdIzm:=_m;
+     _EQ_segmentenergoMKESngAHF.ID:='segmentenergoMKESngAHF';
+     _EQ_segmentenergoMKESngAHF.Standard:='ТУ 3581-003-17648068-2014';
+     _EQ_segmentenergoMKESngAHF.OKP:='';
+     _EQ_segmentenergoMKESngAHF.Manufacturer:='ООО «СегментЭнерго» г.Москва';
+     _EQ_segmentenergoMKESngAHF.Description:='Кабели предназначенные для переносного и фиксированного межприборного монтажа электрических устройств, работающих при номинальном переменном напряжении до 500 В частоты до 400 Гц или постоянном напряжении до 750 В.';
+
+     _EQ_segmentenergoMKESngAHF.NameShortTemplate:='МКЭШng(A)-HF-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKESngAHF.NameTemplate:='Кабель монтажный экранированный МКЭШng(A)-HF-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKESngAHF.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKESngAHF.NameFullTemplate:='Кабель монтажный экранированный для фиксированного межприборного монтажа электрических устройств, до 500В, до 400Гц или постоянном напряжении до 750В. Пучковой скрутки, безгалогенный. Температура эксплуатации −50 … +50 °С, сечением %%[Wire_Count_Section_DESC]';
+
+     _EQ_segmentenergoMKESngAHF.Wire_Count_Section_DESC:=_02_75;
+
+     _EQ_segmentenergoMKESngAHF.TreeCoord:='BP_СегментЭнерго_Кабели монтажные_МКЭШng(A)-HF|BC_Кабельная продукция_контрольные_МКЭШng(A)-HF(СегментЭнерго)';
+
+     _EQ_segmentenergoMKESngAHF.format;
 
 end.

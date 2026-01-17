@@ -44,7 +44,7 @@ begin
 
      _EQ_KAMKABEL_PVS.Wire_Count_Section_DESC:=_03_1_50;
 
-     _EQ_KAMKABEL_PVS.TreeCoord:='BP_Камский кабель_Силовые провода_ПВС|BC_Кабельная продукция_Силовыее провода_ПВС(КамКабель)';
+     _EQ_KAMKABEL_PVS.TreeCoord:='BP_Камский кабель_Силовые провода_ПВС|BC_Кабельная продукция_Силовые провода_ПВС(КамКабель)';
 
      _EQ_KAMKABEL_PVS.format;
 

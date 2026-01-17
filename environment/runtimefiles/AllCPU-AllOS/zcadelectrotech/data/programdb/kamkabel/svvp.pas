@@ -32,7 +32,7 @@ begin
 
      _EQ_KAMKABEL_SVVP.Wire_Count_Section_DESC:=_02_0_50;
 
-     _EQ_KAMKABEL_SVVP.TreeCoord:='BP_Камский кабель_Силовые шнуры_ШВВП|BC_Кабельная продукция_Силовыее Шнуры_ШВВП(КамКабель)';
+     _EQ_KAMKABEL_SVVP.TreeCoord:='BP_Камский кабель_Силовые шнуры_ШВВП|BC_Кабельная продукция_Силовые Шнуры_ШВВП(КамКабель)';
 
      _EQ_KAMKABEL_SVVP.format;
 

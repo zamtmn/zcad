@@ -75,7 +75,7 @@ begin
 
      _EQ_SEVCABLEVVG.Wire_Count_Section_DESC:=_01_1_50;
 
-     _EQ_SEVCABLEVVG.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВВГ|BC_Кабельная продукция_Силовыее_ВВГ(СЕВКАБЕЛЬ)';
+     _EQ_SEVCABLEVVG.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВВГ|BC_Кабельная продукция_Силовые_ВВГ(СЕВКАБЕЛЬ)';
 
      _EQ_SEVCABLEVVG.format;
 
@@ -98,7 +98,7 @@ begin
 
      _EQ_SEVCABLEVVGngLS.Wire_Count_Section_DESC:=_01_1_50;
 
-     _EQ_SEVCABLEVVGngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВВГнг(A)-LS|BC_Кабельная продукция_Силовыее_ВВГнг(A)-LS(СЕВКАБЕЛЬ)';
+     _EQ_SEVCABLEVVGngLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВВГнг(A)-LS|BC_Кабельная продукция_Силовые_ВВГнг(A)-LS(СЕВКАБЕЛЬ)';
 
      _EQ_SEVCABLEVVGngLS.format;
 
@@ -120,7 +120,7 @@ begin
 
      _EQ_SEVCABLEVVGSV1.Wire_Count_Section_DESC:=_01_1_50;
 
-     _EQ_SEVCABLEVVGSV1.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВБбШв-1|BC_Кабельная продукция_Силовыее_ВБбШв-1(СЕВКАБЕЛЬ)';
+     _EQ_SEVCABLEVVGSV1.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВБбШв-1|BC_Кабельная продукция_Силовые_ВБбШв-1(СЕВКАБЕЛЬ)';
 
      _EQ_SEVCABLEVVGSV1.format;
 

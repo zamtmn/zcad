@@ -110,7 +110,7 @@ begin
 
      _EQ_SEVCABLEVVGNGAFRLS.Wire_Count_Section_DESC:=_01_1_50;
 
-     _EQ_SEVCABLEVVGNGAFRLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВВГнг(А)FRLS|BC_Кабельная продукция_Силовыее_ВВГнг(А)FRLS(СЕВКАБЕЛЬ)';
+     _EQ_SEVCABLEVVGNGAFRLS.TreeCoord:='BP_СЕВКАБЕЛЬ-ХОЛДИНГ_Силовые_ВВГнг(А)FRLS|BC_Кабельная продукция_Силовые_ВВГнг(А)FRLS(СЕВКАБЕЛЬ)';
 
      _EQ_SEVCABLEVVGNGAFRLS.format;
 

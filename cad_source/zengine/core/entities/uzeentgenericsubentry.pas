@@ -25,9 +25,23 @@ uses
   uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
   UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzeentwithmatrix,uzeentsubordinated,
   uzegeometry,uzeentity,gzctnrVectorTypes,uzegeometrytypes,uzeconsts,
-  uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity,uzeTypes,uzeEntBase;
+  uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity,uzeTypes,uzeEntBase,
+  Generics.Collections;
 
 type
+  TZctnrVectorPGDBaseEntityNoDbl=object(TZctnrVectorPGDBaseEntity)
+    type
+      TDic=TDictionary<PGDBObjBaseEntity,Integer>;
+    const
+      MaxCountWithoutSet=100;
+    var
+    Dctr:TDic;
+    function PushBackIfNotPresent(data:PGDBObjBaseEntity):Integer;virtual;
+    function IsDataExist(pobj:PGDBObjBaseEntity):Integer;virtual;
+    procedure Clear;virtual;
+    destructor destroy; virtual;
+  end;
+
   PTDrawingPreCalcData=^TDrawingPreCalcData;
 
   TDrawingPreCalcData=record
@@ -37,8 +51,8 @@ type
 
   GDBObjGenericSubEntry=object(GDBObjWithMatrix)
     ObjArray:GDBObjEntityTreeArray;
-    ObjCasheArray:TZctnrVectorPGDBaseEntity;
-    ObjToConnectedArray:TZctnrVectorPGDBaseEntity;
+    ObjCasheArray:TZctnrVectorPGDBaseEntityNoDbl{TZctnrVectorPGDBaseEntity};
+    ObjToConnectedArray:TZctnrVectorPGDBaseEntityNoDbl{TZctnrVectorPGDBaseEntity};
     lstonmouse:PGDBObjEntity;
     InFrustumAABB:TBoundingBox;
     function AddObjectToObjArray(p:Pointer):integer;virtual;
@@ -121,6 +135,55 @@ type
   end;
 
 implementation
+
+destructor TZctnrVectorPGDBaseEntityNoDbl.destroy;
+begin
+  Dctr.Free;
+  inherited;
+end;
+procedure TZctnrVectorPGDBaseEntityNoDbl.Clear;
+begin
+  inherited;
+  if Dctr<>nil then
+    Dctr.Clear;
+end;
+function TZctnrVectorPGDBaseEntityNoDbl.IsDataExist(pobj:PGDBObjBaseEntity):Integer;
+var
+  PTempObj:PGDBObjBaseEntity;
+  ir:itrec;
+begin
+  if Count<MaxCountWithoutSet then
+    result:=inherited IsDataExist(pobj)
+  else begin
+    if Dctr=nil then
+      Dctr:=TDic.Create(MaxCountWithoutSet);
+    result:=-1;
+    if Dctr.Count=0 then begin
+      PTempObj:=beginiterate(ir);
+      if PTempObj<>nil then
+        repeat
+          if PTempObj=pobj then
+            Result:=ir.itc;
+          Dctr.Add(PTempObj,ir.itc);
+          PTempObj:=iterate(ir);
+        until PTempObj=nil;
+      if result<>-1 then
+        exit;
+    end;
+    if not Dctr.TryGetValue(pobj,Result) then
+      result:=-1;
+  end;
+end;
+function TZctnrVectorPGDBaseEntityNoDbl.PushBackIfNotPresent(data:PGDBObjBaseEntity):Integer;
+var
+  c:integer;
+begin
+  c:=count;
+  result:=inherited PushBackIfNotPresent(data);
+  if Dctr<>nil then
+    if (c<>count)and(Dctr.Count>0) then
+      Dctr.Add(data,result);
+end;
 
 function GDBObjGenericSubEntry.calcvisible(const frustum:TzeFrustum;
   const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;

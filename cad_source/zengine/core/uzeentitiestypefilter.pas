@@ -57,18 +57,22 @@ type
 
       procedure AddType(EntType:TObjID);
       procedure AddTypeName(EntTypeName:String);
+      procedure AddTypeNames(EntTypeNames:array of String);
       procedure AddTypeNameMask(EntTypeNameMask:String);
 
       procedure SubType(EntType:TObjID);
       procedure SubTypeName(EntTypeName:String);
+      procedure SubTypeNames(EntTypeNames:array of String);
       procedure SubTypeNameMask(EntTypeNameMask:String);
 
       procedure AddExtdr(ExtdrType:TMetaExtender);
       procedure AddExtdrName(ExtdrTypeName:String);
+      procedure AddExtdrNames(ExtdrTypeNames:array of String);
       procedure AddExtdrNameMask(ExtdrTypeNameMask:String);
 
       procedure SubExtdr(ExtdrType:TMetaExtender);
       procedure SubExtdrName(ExtdrTypeName:String);
+      procedure SubExtdrNames(ExtdrTypeNames:array of String);
       procedure SubExtdrNameMask(ExtdrTypeNameMask:String);
 
       procedure SetFilter;
@@ -115,6 +119,13 @@ begin
   if ENTName2EntInfoData.TryGetValue(UpperCase(EntTypeName),EntInfoData) then
     EntInclude.CountKey(EntInfoData.EntityID,1);
 end;
+procedure TEntsTypeFilter.AddTypeNames(EntTypeNames:array of String);
+var
+  EntTypeName:string;
+begin
+  for EntTypeName in EntTypeNames do
+    AddTypeName(EntTypeName);
+end;
 
 procedure TEntsTypeFilter.AddTypeNameMask(EntTypeNameMask:String);
 var
@@ -130,6 +141,14 @@ end;
 procedure TEntsTypeFilter.SubType(EntType:TObjID);
 begin
   EntExclude.CountKey(EntType,1);
+end;
+
+procedure TEntsTypeFilter.SubTypeNames(EntTypeNames:array of String);
+var
+  EntTypeName:string;
+begin
+  for EntTypeName in EntTypeNames do
+    SubTypeName(EntTypeName);
 end;
 
 procedure TEntsTypeFilter.SubTypeName(EntTypeName:String);
@@ -162,6 +181,14 @@ begin
     ExtdrInclude.CountKey(Extdr,1);
 end;
 
+procedure TEntsTypeFilter.AddExtdrNames(ExtdrTypeNames:array of String);
+var
+  ExtdrTypeName:String;
+begin
+  for ExtdrTypeName in ExtdrTypeNames do
+    AddExtdrName(ExtdrTypeName);
+end;
+
 procedure TEntsTypeFilter.AddExtdrNameMask(ExtdrTypeNameMask:String);
 var
   pair:EntityExtenders.TDictionaryPair;
@@ -186,6 +213,15 @@ begin
   if EntityExtenders.TryGetValue(UpperCase(ExtdrTypeName),Extdr) then
     ExtdrExclude.CountKey(Extdr,1);
 end;
+
+procedure TEntsTypeFilter.SubExtdrNames(ExtdrTypeNames:array of String);
+var
+  ExtdrTypeName:String;
+begin
+  for ExtdrTypeName in ExtdrTypeNames do
+    SubExtdrName(ExtdrTypeName);
+end;
+
 
 procedure TEntsTypeFilter.SubExtdrNameMask(ExtdrTypeNameMask:String);
 var

@@ -28,7 +28,8 @@ uses
   uzcLog,
   uzeentity,uzeExtdrAbstractEntityExtender,
   uzeentline,uzeentityfactory,
-  uzelongprocesssupport,uzccommandsabstract;
+  uzelongprocesssupport,uzccommandsabstract,
+  gzctnrSTL;
 
 type
   TLapeScriptContextMode=(LSCMCompilerSetup,LSCMContextSetup);
@@ -39,10 +40,18 @@ const
   DoCtx=[LSCMContextSetup];
 
 type
+  TThings=TMyVector<TObject>;
+  TThingsIndex=record
+    Things:TThings;
+    Index:Integer;
+  end;
+  PThingsIndex=^TThingsIndex;
   TBaseScriptContext=class
   private
     fLPS:TZELongProcessSupport;
+    fThings:TThings;
     function getLPS:TZELongProcessSupport;
+    function getThings:TThings;
   public
     constructor CreateContext;virtual;
     destructor Destroy;override;
@@ -50,6 +59,7 @@ type
     procedure CleanUp;virtual;
 
     property LongProcessSupport:TZELongProcessSupport read getLPS;
+    property Things:TThings read getThings;
   end;
   TMetaScriptContext=class of TBaseScriptContext;
 
@@ -74,6 +84,13 @@ begin
   end;
   result:=fLPS;
 end;
+function TBaseScriptContext.getThings:TThings;
+begin
+  if fThings=nil then begin
+    fThings:=TThings.Create;
+  end;
+  result:=fThings;
+end;
 constructor TBaseScriptContext.CreateContext;
 begin
   fLPS:=nil;
@@ -83,11 +100,19 @@ end;
 destructor TBaseScriptContext.Destroy;
 begin
   CleanUp;
+  fThings.Free;
   inherited;
 end;
 
 procedure TBaseScriptContext.CleanUp;
+var
+  inst:TObject;
 begin
+  if fThings<>nil then begin
+    for inst in fThings do
+      inst.free;
+    fThings.Clear;
+  end;
   FreeAndNil(fLPS);
 end;
 

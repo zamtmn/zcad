@@ -36,7 +36,8 @@ uses
   uzccommandsmanager,uzeentgenericsubentry,UGDBVisibleOpenArray,
   uzeentsubordinated,uzeenttable,uzestylestables,uzctnrVectorStrings,
   uzgldrawcontext,uzeentitiestypefilter,uzCtnrVectorPBaseEntity,
-  uzeEntBase,gzctnrVectorTypes;
+  uzeEntBase,gzctnrVectorTypes,uzcEnitiesVariablesExtender,
+  uzsbVarmanDef,UBaseTypeDescriptor;
 
 type
 
@@ -45,6 +46,8 @@ type
 
 const
   cEScriptAVmsg='Access violation: "%s" not created or already freed';
+  cEScriptAVNil='Access violation: "%s" is nil';
+  cEScriptRangeMsg='Range check: index (%d) must be  in %d..%d';
   cDWGDefaultBehavior=[DBRedraw,DBUndo];
   cDWGFastBehavior=[DBUndo];
 
@@ -53,6 +56,7 @@ const
   cZeStyles='zeStyles';
   cZeEnts='zcEnts';
   cZeEntsArrays='zcEntsArrays';
+  cZeEntsExtenders='zeEntsExtenders';
 
   cZcBase='zсBase';
   cZcUndo='zcUndo';
@@ -60,12 +64,14 @@ const
 
   cThngNameTEntsTypeFilter='TEntsTypeFilter';
   cThngNameThEnts='ThEnts';
+  cNamePzeEntity='PzeEntity';
+  cNameTVariablesExtender='TVariablesExtender';
 type
 
   EScriptException=class(Exception);
   EScriptAbort=class(EScriptException);
   EScriptAV=class(EScriptException);
-
+  EScriptRange=class(EScriptException);
   TDrawingContextOptions=record
   private
     fEnadleRedrawCounter:integer;
@@ -95,6 +101,8 @@ type
     constructor Create;
     destructor Destroy;override;
     function PushBack(const data:PGDBObjBaseEntity):TArrayIndex;
+    function Count:TArrayIndex;
+    function GetData(idx:TArrayIndex):PGDBObjBaseEntity;
   end;
 
   TLapeDwg=class
@@ -103,6 +111,7 @@ type
     class procedure zeStyles2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeEnt2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeEntsArrays2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure zeEntsExtenders2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeBehavior2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 
     class procedure zc2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
@@ -143,7 +152,17 @@ end;
 
 function ThEnts.PushBack(const data:PGDBObjBaseEntity):TArrayIndex;
 begin
-  fEnts.PushBackData(data);
+  result:=fEnts.PushBackData(data);
+end;
+
+function ThEnts.Count:TArrayIndex;
+begin
+  result:=fEnts.Count;
+end;
+
+function ThEnts.GetData(idx:TArrayIndex):PGDBObjBaseEntity;
+begin
+  result:=fEnts.getData(idx);
 end;
 
 constructor TDrawingContextOptions.CreateRec(ABhv:TDrawingBehavior);
@@ -575,9 +594,9 @@ begin
 
     cplr.addGlobalType('record Things:Pointer;Index:Int32; end;','TThingsIndex');
 
-    cplr.addGlobalType('Pointer','PzeEntity');
-    cplr.addGlobalType('Pointer','PzeLayer');
-    cplr.addGlobalType('Pointer','PzeTableStyle');
+    cplr.addGlobalType('type Pointer','PzeEntity');
+    cplr.addGlobalType('type Pointer','PzeLayer');
+    cplr.addGlobalType('type Pointer','PzeTableStyle');
 
     cplr.EndImporting;
   end;
@@ -820,7 +839,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThEnts]);
 end;
 
-procedure GetEntsFromCurrentRoot(const Params: PParamArray;const Result: Pointer{(x,y:double):TzePoint3d});cdecl;
+procedure GetEntsFromCurrentRoot(const Params: PParamArray;const Result: Pointer);cdecl;
 var
   ctx:TCurrentDrawingContext;
   Index:TThingsIndex;
@@ -860,8 +879,61 @@ begin
   PInt32(Result)^:=entscount;
 end;
 
+procedure ThEnts_Low(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  ents:ThEnts;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    //ents:=ThEnts(TThings(Index.Things)[Index.Index]);
+    PInt32(Result)^:=0;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThEnts]);
+end;
 
+procedure ThEnts_High(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  ents:ThEnts;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    ents:=ThEnts(TThings(Index.Things)[Index.Index]);
+    PInt32(Result)^:=ents.Count-1;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThEnts]);
+end;
 
+procedure ThEnts_Count(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  ents:ThEnts;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    ents:=ThEnts(TThings(Index.Things)[Index.Index]);
+    PInt32(Result)^:=ents.Count;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThEnts]);
+end;
+
+procedure ThEnts_GetData(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  ents:ThEnts;
+  i:Int32;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if(Index.Things<>nil)and(Index.Index>=0)then begin
+    ents:=ThEnts(TThings(Index.Things)[Index.Index]);
+    i:=PInt32(Params^[1])^;
+    if(i<0)or(i>=ents.Count)then
+      EScriptRange.CreateFmt(cEScriptRangeMsg,[i,0,ents.Count-1]);
+    PPointer(Result)^:=ents.GetData(i);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThEnts]);
+end;
 
 class procedure TLapeDwg.zeEntsArrays2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
@@ -875,6 +947,11 @@ begin
 
       cplr.addGlobalMethod('function ThEnts.Create: ThEnts; static;',@ThEnts_Create,ctx);
       cplr.addGlobalFunc('procedure ThEnts.Free;',@ThEnts_Free);
+      cplr.addGlobalFunc('function ThEnts.Low:int32;',@ThEnts_Low);
+      cplr.addGlobalFunc('function ThEnts.High:int32;',@ThEnts_High);
+      cplr.addGlobalFunc('function ThEnts.Count:int32;',@ThEnts_Count);
+      cplr.addGlobalFunc('function ThEnts.Data(i:int32):PzeEntity;',@ThEnts_GetData);
+
 
       cplr.addGlobalMethod('function ThEntsTypeFilter.Create: ThEntsTypeFilter; static;',@ThEntsTypeFilter_Create,ctx);
       cplr.addGlobalFunc('procedure ThEntsTypeFilter.Free;',@ThEntsTypeFilter_Free);
@@ -895,6 +972,144 @@ begin
     end;
   end;
 end;
+
+procedure GetEntityExtenderClass(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  extdrName:string;
+begin
+  extdrName:=PString(Params^[0])^;
+  if not EntityExtenders.tryGetValue(uppercase(extdrName),TzeEntityExtenderClass(PPointer(Result)^)) then
+    PPointer(Result)^:=nil;
+end;
+
+procedure PzeEntity_GetVariableExtdr(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  pent:PGDBObjEntity;
+begin
+  pent:=ppointer(Params^[0])^;
+  if pent<>nil then begin
+    PPointer(Result)^:=pent^.GetExtension<TVariablesExtender>;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePzeEntity]);
+end;
+
+procedure TVariablesExtender_GetVarValue_string(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  vn:string;
+  pvv:pstring;
+  varsextdr:TVariablesExtender;
+  InInterfaceOnly:boolean;
+  pvd:pvardesk;
+begin
+  varsextdr:=TVariablesExtender((Params^[0])^);
+  if varsextdr<>nil then begin
+    vn:=pstring(Params^[1])^;
+    pvv:=Params^[2];
+    InInterfaceOnly:=pboolean(Params^[3])^;
+    pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
+    if pvd=nil then
+      PGVResult(Result)^:=GVRNotFound
+    else if pvd^.data.PTD.GetFactTypedef=@FundamentalStringDescriptorObj then begin
+      PGVResult(Result)^:=GVROk;
+      pvv^:=pstring(pvd^.data.Addr.Instance)^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalAnsiStringDescriptorObj then begin
+      PGVResult(Result)^:=GVROk;
+      pvv^:=PAnsiString(pvd^.data.Addr.Instance)^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalUnicodeStringDescriptorObj then begin
+      PGVResult(Result)^:=GVRImplicitCast;
+      pvv^:=PUnicodeString(pvd^.data.Addr.Instance)^;
+    end else
+      PGVResult(Result)^:=GVRWrongType;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
+end;
+
+procedure TVariablesExtender_GetVarValue_double(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  vn:string;
+  pvv:pdouble;
+  varsextdr:TVariablesExtender;
+  InInterfaceOnly:boolean;
+  pvd:pvardesk;
+begin
+  varsextdr:=TVariablesExtender((Params^[0])^);
+  if varsextdr<>nil then begin
+    vn:=pstring(Params^[1])^;
+    pvv:=Params^[2];
+    InInterfaceOnly:=pboolean(Params^[3])^;
+    pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
+    if pvd=nil then
+      PGVResult(Result)^:=GVRNotFound
+    else if pvd^.data.PTD.GetFactTypedef=@FundamentalDoubleDescriptorObj then begin
+      PGVResult(Result)^:=GVROk;
+      pvv^:=PDouble(pvd^.data.Addr.Instance)^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalSingleDescriptorObj then begin
+      PGVResult(Result)^:=GVRImplicitCast;
+      pvv^:=PSingle(pvd^.data.Addr.Instance)^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalLongIntDescriptorObj then begin
+      PGVResult(Result)^:=GVRImplicitCast;
+      pvv^:=PLongInt(pvd^.data.Addr.Instance)^;
+    end else
+      PGVResult(Result)^:=GVRWrongType;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
+end;
+
+procedure TVariablesExtender_GetVarValue_int32(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  vn:string;
+  pvv:pint32;
+  varsextdr:TVariablesExtender;
+  InInterfaceOnly:boolean;
+  pvd:pvardesk;
+begin
+  varsextdr:=TVariablesExtender((Params^[0])^);
+  if varsextdr<>nil then begin
+    vn:=pstring(Params^[1])^;
+    pvv:=Params^[2];
+    InInterfaceOnly:=pboolean(Params^[3])^;
+    pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
+    if pvd=nil then
+      PGVResult(Result)^:=GVRNotFound
+    else if pvd^.data.PTD.GetFactTypedef=@FundamentalLongIntDescriptorObj then begin
+      PGVResult(Result)^:=GVROk;
+      pvv^:=PLongInt(pvd^.data.Addr.Instance)^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalWordDescriptorObj then begin
+      PGVResult(Result)^:=GVRImplicitCast;
+      pvv^:=PWord(pvd^.data.Addr.Instance)^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalByteDescriptorObj then begin
+      PGVResult(Result)^:=GVRImplicitCast;
+      pvv^:=PByte(pvd^.data.Addr.Instance)^;
+    end else
+      PGVResult(Result)^:=GVRWrongType;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
+end;
+
+class procedure TLapeDwg.zeEntsExtenders2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    if CheckBaseDefs(cplr,cZeEntsExtenders,[cZeBase])then begin
+      cplr.StartImporting;
+      cplr.addBaseDefine(cZeEntsExtenders);
+
+      cplr.addGlobalType('type Pointer','TzeEntityExtenderClass');
+      cplr.addGlobalType('type Pointer','TVariablesExtender');
+
+      cplr.addGlobalType('(GVRNotFound,GVRWrongType,GVRImplicitCast,GVROk)','TGVResult');
+
+      cplr.addGlobalFunc('function GetEntityExtenderClass(extdrName:string):TzeEntityExtenderClass;',@GetEntityExtenderClass);
+      cplr.addGlobalFunc('function PzeEntity.GetVariableExtdr:TVariablesExtender;',@PzeEntity_GetVariableExtdr);
+
+      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:Int32;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_int32);
+      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:double;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_double);
+      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:string;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_string);
+
+      cplr.EndImporting;
+    end;
+  end;
+end;
+
 
 class procedure TLapeDwg.zeBehavior2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin

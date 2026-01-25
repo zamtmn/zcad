@@ -27,7 +27,26 @@ begin
   end;
 end;
 
+var
+  fltr:ThEntsTypeFilter;
+  ents:ThEnts;
+  ent:PzeEntity;
+  vars:TVariablesExtender;
+  basename:string;
+  i:int32;
 begin
+  fltr:=ThEntsTypeFilter.create;   
+  fltr.AddTypeNames(['Device']);
+  //fltr.AddTypeNameMask('*');
+  ents:=ThEnts.create;
+  GetEntsFromCurrentRoot(ents,fltr);
+  fltr.free;
+  for i:=ents.low to ents.high do begin
+    ent:=ents.data(i);
+    vars:=ent.GetVariableExtdr;
+    vars.GetVarValue('NMO_Name',basename);
+  end;
+  ents.free;
   //zeDecEbableRedrawCounter;
-  DoRandomLinesTest(1000,10,0);
+  //DoRandomLinesTest(1000,10,0);
 end.

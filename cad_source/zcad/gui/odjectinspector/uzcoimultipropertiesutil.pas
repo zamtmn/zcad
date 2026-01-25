@@ -442,7 +442,7 @@ end;
 procedure FreeExtendersCounterData(piteratedata:Pointer;mp:TMultiProperty);
 var
   pair:TTObjectCounter.TDictionaryPair;
-   s:TMetaEntityExtender;
+   s:TzeEntityExtenderClass;
    c:integer;
    name:string;
    PVD:pvardesk;
@@ -454,7 +454,7 @@ begin
   t^.Enums.PushBackData(format('Total (%d)',[PTTObjectCounterData(piteratedata)^.totalcount]));
   t^.Pointers.PushBackData(nil);
   for pair in PTTObjectCounterData(piteratedata)^.counter do begin
-    s:=TMetaEntityExtender(pair.Key);
+    s:=TzeEntityExtenderClass(pair.Key);
     c:=pair.Value;
     if assigned(s) then
       name:=s.getExtenderName

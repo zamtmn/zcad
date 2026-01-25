@@ -1092,7 +1092,7 @@ var
   pv:pGDBObjEntity;
   ir:itrec;
   Count,selected:integer;
-  extdrClass:TMetaEntityExtender;
+  extdrClass:TzeEntityExtenderClass;
   ents:TZctnrVectorPGDBaseEntity;
 begin
   selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
@@ -1366,7 +1366,7 @@ var
   pv:pGDBObjEntity;
   ir:itrec;
   Count,selected:integer;
-  extdrClass:TMetaEntityExtender;
+  extdrClass:TzeEntityExtenderClass;
   ents:TZctnrVectorPGDBaseEntity;
 begin
   selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;

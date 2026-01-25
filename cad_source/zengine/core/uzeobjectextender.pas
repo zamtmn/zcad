@@ -46,7 +46,7 @@ TDXFEntSaveDataVector=TmyVector<TDXFEntSaveData>;
 TDXFEntFormatProcsVector=TmyVector<TDXFEntFormatFeature>;
 TCreateEntFeatureVector=TmyVector<TCreateEntFeatureData>;
 TDXFEntAfterLoadFeatureVector=TmyVector<TDXFEntAfterLoadFeature>;
-TEntityCreateExtenderVector=TmyVector<TMetaEntityExtender>;
+TEntityCreateExtenderVector=TmyVector<TzeEntityExtenderClass>;
 TDXFEntIODataManager=class
                       fDXFEntLoadDataMapByName:TDXFEntLoadDataMap;
                       fDXFEntLoadDataMapByPrefix:TDXFEntLoadDataMap;
@@ -69,7 +69,7 @@ TDXFEntIODataManager=class
                       procedure RunConstructorFeature(pEntity:Pointer);
                       procedure RunDestructorFeature(pEntity:Pointer);
 
-                      procedure RegisterEntityExtenderObject(ExtenderClass:TMetaEntityExtender);
+                      procedure RegisterEntityExtenderObject(ExtenderClass:TzeEntityExtenderClass);
                       procedure AddExtendersToEntity(pEntity:Pointer);
 
                       constructor create;
@@ -192,7 +192,7 @@ begin
         fCreateEntFeatureVector[i].destr(pEntity);
 end;
 
-procedure TDXFEntIODataManager.RegisterEntityExtenderObject(ExtenderClass:TMetaEntityExtender);
+procedure TDXFEntIODataManager.RegisterEntityExtenderObject(ExtenderClass:TzeEntityExtenderClass);
 begin
      fTEntityExtenderVector.PushBack(ExtenderClass);
 end;

@@ -187,7 +187,7 @@ begin
 end;
 
 procedure TEntsTypeFilter.AddExtdrName(ExtdrTypeName:String);
-var Extdr:TMetaEntityExtender;
+var Extdr:TzeEntityExtenderClass;
 begin
   if EntityExtenders.TryGetValue(UpperCase(ExtdrTypeName),Extdr) then
     ExtdrInclude.CountKey(Extdr,1);
@@ -223,7 +223,7 @@ begin
 end;
 
 procedure TEntsTypeFilter.SubExtdrName(ExtdrTypeName:String);
-var Extdr:TMetaEntityExtender;
+var Extdr:TzeEntityExtenderClass;
 begin
   if EntityExtenders.TryGetValue(UpperCase(ExtdrTypeName),Extdr) then
     ExtdrExclude.CountKey(Extdr,1);

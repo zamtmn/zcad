@@ -35,7 +35,8 @@ uses
   uzestyleslayers,uzcinterface,uzcuitypes,
   uzccommandsmanager,uzeentgenericsubentry,UGDBVisibleOpenArray,
   uzeentsubordinated,uzeenttable,uzestylestables,uzctnrVectorStrings,
-  uzgldrawcontext,uzeentitiestypefilter;
+  uzgldrawcontext,uzeentitiestypefilter,uzCtnrVectorPBaseEntity,
+  uzeEntBase,gzctnrVectorTypes;
 
 type
 
@@ -58,6 +59,7 @@ const
   cZcInteractive='zcInteractive';
 
   cThngNameTEntsTypeFilter='TEntsTypeFilter';
+  cThngNameThEnts='ThEnts';
 type
 
   EScriptException=class(Exception);
@@ -84,6 +86,15 @@ type
     FThisEntity:PGDBObjGenericWithSubordinated;
     PArr:PGDBObjEntityOpenArray;
     //FThisEntityExtender:TAbstractEntityExtender;
+  end;
+
+  ThEnts=class
+  private
+    fEnts:TZctnrVectorPGDBaseEntity;
+  public
+    constructor Create;
+    destructor Destroy;override;
+    function PushBack(const data:PGDBObjBaseEntity):TArrayIndex;
   end;
 
   TLapeDwg=class
@@ -120,6 +131,21 @@ type
   TSingles=array of Single;
   PSingles=^TSingles;
 
+constructor ThEnts.Create;
+begin
+  fEnts.init(32);
+end;
+
+destructor ThEnts.Destroy;
+begin
+  fEnts.destroy;
+end;
+
+function ThEnts.PushBack(const data:PGDBObjBaseEntity):TArrayIndex;
+begin
+  fEnts.PushBackData(data);
+end;
+
 constructor TDrawingContextOptions.CreateRec(ABhv:TDrawingBehavior);
 begin
   fEnadleRedrawCounter:=1;
@@ -137,7 +163,7 @@ function TDrawingContextOptions.NeedUndo:Boolean;
 begin
   result:=DBUndo in fBehavior;
 end;
-procedure zeIncEbableRedrawCounter(const Params: PParamArray);
+procedure zeIncEnableRedrawCounter(const Params: PParamArray);
 var
   ctx:TCurrentDrawingContext;
 begin
@@ -145,7 +171,7 @@ begin
   inc(ctx.Options.fEnadleRedrawCounter);
 end;
 
-procedure zeDecEbableRedrawCounter(const Params: PParamArray);
+procedure zeDecEnableRedrawCounter(const Params: PParamArray);
 var
   ctx:TCurrentDrawingContext;
 begin
@@ -153,7 +179,7 @@ begin
   dec(ctx.Options.fEnadleRedrawCounter);
 end;
 
-procedure zeEbableRedraw(const Params: PParamArray);
+procedure zeEnableRedraw(const Params: PParamArray);
 var
   ctx:TCurrentDrawingContext;
 begin
@@ -610,7 +636,7 @@ begin
   end;
 end;
 
-procedure TEntsTypeFilter_Create(const Params:PParamArray;const Result:Pointer); cdecl;
+procedure ThEntsTypeFilter_Create(const Params:PParamArray;const Result:Pointer); cdecl;
 var
   ctx:TCurrentDrawingContext;
   fltr:TEntsTypeFilter;
@@ -622,7 +648,7 @@ begin
   PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
 end;
 
-procedure TEntsTypeFilter_Free(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_Free(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -638,7 +664,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
-procedure TEntsTypeFilter_AddTypeNames(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_AddTypeNames(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -655,7 +681,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
-procedure TEntsTypeFilter_SubTypeNames(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_SubTypeNames(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -672,7 +698,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
-procedure TEntsTypeFilter_AddExtdrNames(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_AddExtdrNames(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -689,7 +715,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
-procedure TEntsTypeFilter_SubExtdrNames(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_SubExtdrNames(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -706,7 +732,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
-procedure TEntsTypeFilter_AddTypeNameMask(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_AddTypeNameMask(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -721,7 +747,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
-procedure TEntsTypeFilter_SubTypeNameMask(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_SubTypeNameMask(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -736,7 +762,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
-procedure TEntsTypeFilter_AddExtdrNameMask(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_AddExtdrNameMask(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -751,7 +777,7 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
-procedure TEntsTypeFilter_SubExtdrNameMask(const Params:PParamArray); cdecl;
+procedure ThEntsTypeFilter_SubExtdrNameMask(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
   fltr:TEntsTypeFilter;
@@ -766,6 +792,77 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 end;
 
+procedure ThEnts_Create(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  ents:ThEnts;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  ents:=ThEnts.Create;
+  ctx.Things.PushBack(ents);
+  PThingsIndex(Result)^.Things:=ctx.Things;
+  PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
+end;
+
+procedure ThEnts_Free(const Params:PParamArray); cdecl;
+var
+  Index:TThingsIndex;
+  ents:ThEnts;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    ents:=ThEnts(TThings(Index.Things)[Index.Index]);
+    ents.Free;
+    TThings(Index.Things).mutable[Index.Index]^:=nil;
+    PThingsIndex(Params^[0])^.Index:=-1;
+    PThingsIndex(Params^[0])^.Things:=nil;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThEnts]);
+end;
+
+procedure GetEntsFromCurrentRoot(const Params: PParamArray;const Result: Pointer{(x,y:double):TzePoint3d});cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  Index:TThingsIndex;
+  ents:ThEnts;
+  fltr:TEntsTypeFilter;
+  entscount:integer;
+
+  pent:PGDBObjEntity;
+  ir:itrec;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+
+  Index:=PThingsIndex(Params^[1])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    ents:=ThEnts(TThings(Index.Things)[Index.Index]);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThEnts]);
+
+  Index:=PThingsIndex(Params^[2])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    fltr:=TEntsTypeFilter(TThings(Index.Things)[Index.Index]);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
+
+  entscount:=0;
+
+  pent:=ctx.Root.ObjArray.beginiterate(ir);
+  if pent<>nil then
+    repeat
+      if fltr.IsEntytyAccepted(pent) then begin
+        ents.PushBack(pent);
+        inc(entscount);
+      end;
+      pent:=ctx.Root.ObjArray.iterate(ir);
+    until pent=nil;
+
+  PInt32(Result)^:=entscount;
+end;
+
+
+
+
 class procedure TLapeDwg.zeEntsArrays2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
@@ -773,20 +870,25 @@ begin
       cplr.StartImporting;
       cplr.addBaseDefine(cZeEntsArrays);
 
-      cplr.addGlobalType('type TThingsIndex','TEntsTypeFilter');
+      cplr.addGlobalType('type TThingsIndex','ThEntsTypeFilter');
+      cplr.addGlobalType('type TThingsIndex','ThEnts');
 
-      cplr.addGlobalMethod('function TEntsTypeFilter.Create: TEntsTypeFilter; static;',@TEntsTypeFilter_Create,ctx);
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.Free;',@TEntsTypeFilter_Free);
+      cplr.addGlobalMethod('function ThEnts.Create: ThEnts; static;',@ThEnts_Create,ctx);
+      cplr.addGlobalFunc('procedure ThEnts.Free;',@ThEnts_Free);
 
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.AddTypeNames(EntTypeNames:array of String);',@TEntsTypeFilter_AddTypeNames);
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.SubTypeNames(EntTypeNames:array of String);',@TEntsTypeFilter_SubTypeNames);
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.AddExtdrNames(ExtdrTypeNames:array of String);',@TEntsTypeFilter_AddExtdrNames);
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.SubExtdrNames(ExtdrTypeNames:array of String);',@TEntsTypeFilter_SubExtdrNames);
+      cplr.addGlobalMethod('function ThEntsTypeFilter.Create: ThEntsTypeFilter; static;',@ThEntsTypeFilter_Create,ctx);
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.Free;',@ThEntsTypeFilter_Free);
+      cplr.addGlobalMethod('function GetEntsFromCurrentRoot(var Ents:ThEnts;fltr:ThEntsTypeFilter):int32;',@GetEntsFromCurrentRoot,ctx);
 
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.AddTypeNameMask(EntTypeNameMask:String);',@TEntsTypeFilter_AddTypeNameMask);
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.SubTypeNameMask(EntTypeNameMask:String);',@TEntsTypeFilter_SubTypeNameMask);
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.AddExtdrNameMask(ExtdrTypeNameMask:String);',@TEntsTypeFilter_AddExtdrNameMask);
-      cplr.addGlobalFunc('procedure TEntsTypeFilter.SubExtdrNameMask(ExtdrTypeNameMask:String);',@TEntsTypeFilter_SubExtdrNameMask);
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.AddTypeNames(EntTypeNames:array of String);',@ThEntsTypeFilter_AddTypeNames);
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.SubTypeNames(EntTypeNames:array of String);',@ThEntsTypeFilter_SubTypeNames);
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.AddExtdrNames(ExtdrTypeNames:array of String);',@ThEntsTypeFilter_AddExtdrNames);
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.SubExtdrNames(ExtdrTypeNames:array of String);',@ThEntsTypeFilter_SubExtdrNames);
+
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.AddTypeNameMask(EntTypeNameMask:String);',@ThEntsTypeFilter_AddTypeNameMask);
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.SubTypeNameMask(EntTypeNameMask:String);',@ThEntsTypeFilter_SubTypeNameMask);
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.AddExtdrNameMask(ExtdrTypeNameMask:String);',@ThEntsTypeFilter_AddExtdrNameMask);
+      cplr.addGlobalFunc('procedure ThEntsTypeFilter.SubExtdrNameMask(ExtdrTypeNameMask:String);',@ThEntsTypeFilter_SubExtdrNameMask);
 
 
       cplr.EndImporting;
@@ -800,9 +902,9 @@ begin
     if CheckBaseDefs(cplr,cZeEnts,[cZeBase,cZeGeometry])then begin
       cplr.StartImporting;
       cplr.addBaseDefine(cZeEnts);
-      cplr.addGlobalMethod('procedure zeIncEbableRedrawCounter;',@zeIncEbableRedrawCounter,ctx);
-      cplr.addGlobalMethod('procedure zeDecEbableRedrawCounter;',@zeDecEbableRedrawCounter,ctx);
-      cplr.addGlobalMethod('procedure zeEbableRedraw;',@zeEbableRedraw,ctx);
+      cplr.addGlobalMethod('procedure zeIncEnableRedrawCounter;',@zeIncEnableRedrawCounter,ctx);
+      cplr.addGlobalMethod('procedure zeDecEnableRedrawCounter;',@zeDecEnableRedrawCounter,ctx);
+      cplr.addGlobalMethod('procedure zeEnableRedraw;',@zeEnableRedraw,ctx);
       cplr.addGlobalMethod('procedure zeDisableRedraw;',@zeDisableRedraw,ctx);
       cplr.EndImporting;
     end;
@@ -870,7 +972,7 @@ class procedure TLapeEntityExtention.ctxSetup(const ACommandContext:TZCADCommand
 begin
   if LSCMContextSetup in mode then begin
     if ctx is TEntityExtentionContext then begin
-      (ctx as TCurrentDrawingContext).Root:=pointer(ACommandContext.POwner);
+      //(ctx as TCurrentDrawingContext).Root:=pointer(ACommandContext.POwner);
       (ctx as TEntityExtentionContext).FThisEntity:=ACommandContext.POwner;
       if ACommandContext.POwner<>nil then begin
         if ACommandContext.POwner^.GetObjType=GDBDeviceID then

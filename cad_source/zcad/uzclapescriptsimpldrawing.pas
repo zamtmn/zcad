@@ -57,6 +57,7 @@ const
   cZeEnts='zcEnts';
   cZeEntsArrays='zcEntsArrays';
   cZeEntsExtenders='zeEntsExtenders';
+  cZeReport='zeReport';
 
   cZcBase='zсBase';
   cZcUndo='zcUndo';
@@ -117,6 +118,8 @@ type
     class procedure zc2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zcUndo2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zcInteractive2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+
+    class procedure zcReport2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 
     class procedure ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
@@ -967,6 +970,45 @@ begin
       cplr.addGlobalFunc('procedure ThEntsTypeFilter.AddExtdrNameMask(ExtdrTypeNameMask:String);',@ThEntsTypeFilter_AddExtdrNameMask);
       cplr.addGlobalFunc('procedure ThEntsTypeFilter.SubExtdrNameMask(ExtdrTypeNameMask:String);',@ThEntsTypeFilter_SubExtdrNameMask);
 
+
+      cplr.EndImporting;
+    end;
+  end;
+end;
+
+procedure ThisReportOwner(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  ents:ThEnts;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if ctx is TEntityExtentionContext then
+    PPointer(Result)^:=TEntityExtentionContext(ctx).FThisEntity
+  else
+    PPointer(Result)^:=nil;
+end;
+
+procedure ThisReportVariableExtdr(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  ents:ThEnts;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if (ctx is TEntityExtentionContext)and(TEntityExtentionContext(ctx).FThisEntity<>nil) then
+    PPointer(Result)^:=TEntityExtentionContext(ctx).FThisEntity.GetExtension<TVariablesExtender>
+  else
+    PPointer(Result)^:=nil;
+end;
+
+class procedure TLapeDwg.zcReport2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    if CheckBaseDefs(cplr,cZeEntsArrays,[cZeBase])then begin
+      cplr.StartImporting;
+      cplr.addBaseDefine(cZeReport);
+
+      cplr.addGlobalMethod('function ThisReport:PzeEntity;',@ThisReportOwner,ctx);
+      cplr.addGlobalMethod('function ThisReportVariableExtdr:TVariablesExtender;',@ThisReportVariableExtdr,ctx);
 
       cplr.EndImporting;
     end;

@@ -26,13 +26,13 @@ uses
   uzeentdevice,uzctnrVectorBytesStream,
   uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
   uzsbVarmanDef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-  {uzeentitiestree,}usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-  {gzctnrVectorTypes,}uzeBaseExtender,{uzeconsts,}uzgldrawcontext,
-  lptypes,lpvartypes,lpparser,lpcompiler,//lputils,
-  lpeval,//lpinterpreter,lpmessages,
-  {gzctnrSTL,}uzcsysvars,
+  usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
+  uzeBaseExtender,uzgldrawcontext,
+  lptypes,lpvartypes,lpparser,lpcompiler,
+  lpeval,
+  uzcsysvars,
   LazUTF8,
-  {uzbLogTypes,}uzcLog,
+  uzcLog,
   uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcLapeScriptsImplDrawing,
   uzccommandsabstract;
 
@@ -196,6 +196,7 @@ initialization
     TEntityExtentionContext,LSCMCreateOnce,[TLapeDwg.zeGeom2cplr,
     TLapeDwg.ze2cplr,TLapeDwg.zeStyles2cplr,TLapeDwg.zeEnt2cplr,
     TLapeDwg.zeEntsArrays2cplr,TLapeDwg.zeEntsExtenders2cplr,
+    TLapeDwg.zc2cplr,TLapeDwg.zcReport2cplr,
     TLapeDwg.ctxSetup,TLapeEntityExtention.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);

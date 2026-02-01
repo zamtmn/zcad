@@ -9,6 +9,7 @@ uses
   {$IFDEF HASAMIGA}
   athreads,
   {$ENDIF}
+  Types, SysUtils,
   Interfaces, // this includes the LCL widgetset
   Classes,Graphics,LCLType,LCLIntf,Forms,
   Common.Graphics;
@@ -22,13 +23,15 @@ var
   Form1: TForm1;
 
 procedure TForm1.FormPaint(Sender: TObject);
+type
+  TmyHighlight=specialize THighlight<integer>;
 const
   TestString =
     'polylines? [Yes-turn into polyline/No-leave as is] <Yes-turn into polyline>:';
 var
   R: TRect;
-  Highlight: THighlight;
-  Item: THighlightItem;
+  Highlight: TmyHighlight;
+  Item: TmyHighlight.THighlightItem;
 begin
   R := Rect(20, 20, ClientWidth - 20, 45);
   Canvas.Font.Color := clWindowText;
@@ -39,7 +42,7 @@ begin
   Canvas.Brush.Color := clBlack;
   Canvas.FillRect(R);
   Canvas.Font.Color := clWhite;
-  Highlight := THighlight.Create;
+  Highlight := TmyHighlight.Create;
   try
     // первая буква Y
     Item := Highlight.AddHighlight;
@@ -86,7 +89,7 @@ begin
     Item.BrushColor := RGB(112, 120, 129);
     Item.UseBrush := True;
 
-    DrawHighlitedText(Canvas, TestString, R, DT_SINGLELINE, Highlight);
+    specialize DrawHighlitedText<integer>(Canvas, TestString, R, DT_SINGLELINE, Highlight);
   finally
     Highlight.Free;
   end;

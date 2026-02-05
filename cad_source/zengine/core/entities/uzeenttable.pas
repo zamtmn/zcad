@@ -171,7 +171,7 @@ begin
           if pstr^<>'' then begin
             pointer(pgdbmtext):=
               self.ConstObjArray.CreateInitObj(GDBMtextID,@self);
-            pgdbmtext.Template:=UTF8ToString(Tria_AnsiToUtf8(pstr^));
+            pgdbmtext.Template:=UTF8ToString({Tria_AnsiToUtf8}(pstr^));
             pgdbmtext.textprop.size:=PTableStyle^.textheight*scale;
             pgdbmtext.linespacef:=1;
             pgdbmtext.linespacef:=

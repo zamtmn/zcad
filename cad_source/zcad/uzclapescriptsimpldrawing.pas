@@ -233,10 +233,14 @@ begin
     if ACtx.Root=nil then
       zcAddEntToDrawingWithOutUndo(AEnt,ACtx.DWG^)
     else begin
-      if ACtx.Root^.GetObjType=GDBDeviceID then
-        PGDBObjDevice(ACtx.Root)^.VarObjArray.AddPEntity(AEnt^)
-      else
-        ACtx.Root^.GoodAddObjectToObjArray(@AEnt);
+      if ACtx is TEntityExtentionContext then begin
+        PGDBObjDevice(TEntityExtentionContext(ACtx).FThisEntity).VarObjArray.AddPEntity(AEnt^)
+      end else begin
+        if ACtx.Root^.GetObjType=GDBDeviceID then
+          PGDBObjDevice(ACtx.Root)^.VarObjArray.AddPEntity(AEnt^)
+        else
+          ACtx.Root^.GoodAddObjectToObjArray(AEnt);
+      end;
       AEnt^.YouChanged(ACtx.DWG^);
     end;
   end;
@@ -244,6 +248,14 @@ begin
   //перерисовываем
   if ACtx.Options.NeedRedaraw then
     zcRedrawCurrentDrawing;
+end;
+
+function getctxroot(ACtx:TCurrentDrawingContext):pointer;
+begin
+  if ACtx is TEntityExtentionContext then
+    result:=PGDBObjDevice(TEntityExtentionContext(ACtx).FThisEntity)
+  else
+    result:=ACtx.Root;
 end;
 
 procedure zeEntLine(const Params: PParamArray;const Result: Pointer{(x1,y1,z1,x2,y2,z2:double):PzeEntity}); cdecl;
@@ -262,7 +274,7 @@ begin
     z2:=PDouble(Params^[6])^;
 
     pline:=AllocEnt(GDBLineID);
-    pline^.init(ctx.Root,nil,LnWtByLayer,CreateVertex(x1,y1,z1),CreateVertex(x2,y2,z2));
+    pline^.init(getctxroot(ctx),nil,LnWtByLayer,CreateVertex(x1,y1,z1),CreateVertex(x2,y2,z2));
     PGDBObjLine(Result^):=pline;
 
     AddEntityToDWG(pline,ctx);
@@ -281,7 +293,7 @@ begin
     p2:=PzePoint3d(Params^[2])^;
 
     pline:=AllocEnt(GDBLineID);
-    pline^.init(ctx.Root,nil,LnWtByLayer,p1,p2);
+    pline^.init(getctxroot(ctx),nil,LnWtByLayer,p1,p2);
     PGDBObjLine(Result^):=pline;
 
     AddEntityToDWG(pline,ctx);
@@ -485,7 +497,7 @@ begin
   if ctx.DWG<>nil then begin
 
     pspline:=AllocEnt(GDBSplineID);
-    pspline^.init(ctx.Root,nil,LnWtByLayer,PBoolean(Params^[2])^);
+    pspline^.init(getctxroot(ctx),nil,LnWtByLayer,PBoolean(Params^[2])^);
     PGDBObjSpline(Result^):=pspline;
 
     pspline^.Degree:=PInteger(Params^[1])^;
@@ -512,7 +524,7 @@ begin
   //pt:=AllocEnt(GDBTableID);
   Getmem(pointer(pt),sizeof(GDBObjTable));
   pt^.initnul;
-  pt^.bp.ListPos.Owner:=ctx.Root;
+  pt^.bp.ListPos.Owner:=getctxroot(ctx);
   pt^.ptablestyle:=PPointer(Params^[1])^;
   pt^.tbl.free;
   PGDBObjTable(Result^):=pt;

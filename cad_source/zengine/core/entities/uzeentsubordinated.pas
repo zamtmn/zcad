@@ -62,6 +62,11 @@ type
     procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
     procedure AddMi(pobj:PGDBObjSubordinated);virtual;abstract;
     //procedure RemoveInArray(pobjinarray:integer);virtual;abstract;
+    procedure GoodAddObjectToObjArray(
+      const obj:PGDBObjSubordinated);virtual;abstract;
+    procedure GoodRemoveMiFromArray(
+      const obj:PGDBObjSubordinated;
+      const drawing:TDrawingDef);virtual;abstract;
     procedure createfield;virtual;
     function GetMatrix:PzeTypedMatrix4d;virtual;abstract;
     function GetLayer:PGDBLayerProp;virtual;abstract;

@@ -30,8 +30,16 @@ var
    PFCTTD:Pointer=nil;
    extvarunit:TUnit;
 
+function GetVarTemplate(varsextdr:TVariablesExtender;pvd:pvardesk;pEntity:PGDBObjEntity):string;
+function ResolveTemplate(const formatstr:String; pEntity:PGDBObjGenericWithSubordinated):string;
+
 implementation
 type
+  TVarWithTemplate=record
+    Name,Template:String;
+  end;
+  TVarsWithTemplates=array of TVarWithTemplate;
+
   TDummy=class
     class function EntIOLoad_OWNERHANDLE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoad_HANDLE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -44,6 +52,25 @@ type
     class function BlockDefIOLoad_GROUP(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function BlockDefIOLoad_BORDER(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
   end;
+
+var
+  CalculatedStringDesk:PUserTypeDescriptor=nil;
+
+const
+  DevVarsWithTemplates:TVarsWithTemplates=[
+    (Name:'NMO_Name';Template:'NMO_Template'),
+    (Name:'NMO_TerminalName';Template:'NMO_TerminalNameTemplate'),
+    (Name:'NMO_NetName';Template:'NMO_NetNameTemplate'),
+    (Name:'GC_NameGroup';Template:'GC_NameGroupTemplate'),
+    (Name:'INFOPERSONALUSE_Text';Template:'INFOPERSONALUSE_TextTemplate')
+  ];
+
+  CableVarsWithTemplates:TVarsWithTemplates=[
+    (Name:'NMO_Name';Template:'NMO_Template'),
+    (Name:'GC_HDGroup';Template:'GC_HDGroupTemplate'),
+    (Name:'GC_HeadDevice';Template:'GC_HeadDeviceTemplate'),
+    (Name:'GC_HDShortName';Template:'GC_HDShortNameTemplate')
+  ];
 
 class function TDummy.EntIOLoad_OWNERHANDLE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 begin
@@ -202,69 +229,53 @@ else if _Value='BB_EMPTY' then
                                 result:=true;
                           end;
 end;
+function ResolveTemplate(const formatstr:String; pEntity:PGDBObjGenericWithSubordinated):string;
+begin
+  if pEntity<>nil then
+    result:=textformat(formatstr,SPFSources.GetFull,pEntity)
+  else
+    result:='!!ERR(pEnttity=nil)';
+end;
 procedure DeviceNameSubProcess(pvn:pvardesk; const formatstr:String; pEntity:PGDBObjGenericWithSubordinated);
 begin
-     if (pvn<>nil) then
-     begin
-     if (formatstr<>'') then
-                                      begin
-                                           if pEntity<>nil then
-                                                               pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,SPFSources.GetFull,pEntity)
-                                                            else
-                                                               pstring(pvn^.data.Addr.Instance)^:='!!ERR(pEnttity=nil)';
-                                           pvn^.attrib:=pvn^.attrib or vda_RO;
-                                      end
-                                         else
-                                             pvn^.attrib:=pvn^.attrib and (not vda_RO);
-     end;
-
+  if (pvn<>nil) then begin
+    if (formatstr<>'') then begin
+      pvn^.SetValueFromString(textformat(formatstr,SPFSources.GetFull,pEntity));
+      {if pEntity<>nil then
+        pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,SPFSources.GetFull,pEntity)
+      else
+        pstring(pvn^.data.Addr.Instance)^:='!!ERR(pEnttity=nil)';}
+      pvn^.attrib:=pvn^.attrib or vda_RO;
+    end else
+      pvn^.attrib:=pvn^.attrib and (not vda_RO);
+  end;
 end;
-procedure DeviceNameProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
+
+procedure GeneralVarsProcess(templates:TVarsWithTemplates;pEntity:PGDBObjEntity;pentvarext:TVariablesExtender;const drawing:TDrawingDef);
 var
    pvn,pvnt:pvardesk;
-   pentvarext:TVariablesExtender;
    ir:itrec;
-   p:PUserTypeDescriptor;
    ptcs:PTCalculatedString;
+   VarWithTemplate:TVarWithTemplate;
 begin
   pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then begin
-    pvn:=pentvarext.entityunit.FindVariable('NMO_Name',true);
-    pvnt:=pentvarext.entityunit.FindVariable('NMO_Template',true);
-    if (pvnt<>nil)and(pvnt<>nil) then
-      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
-
-    pvn:=pentvarext.entityunit.FindVariable('NMO_TerminalName',true);
-    pvnt:=pentvarext.entityunit.FindVariable('NMO_TerminalNameTemplate',true);
-    if (pvnt<>nil)and(pvnt<>nil) then
-      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
-
-    pvn:=pentvarext.entityunit.FindVariable('NMO_NetName',true);
-    pvnt:=pentvarext.entityunit.FindVariable('NMO_NetNameTemplate',true);
-    if (pvnt<>nil)and(pvnt<>nil) then
-      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
-
-    pvn:=pentvarext.entityunit.FindVariable('GC_NameGroup',true);
-    pvnt:=pentvarext.entityunit.FindVariable('GC_NameGroupTemplate',true);
-    if (pvnt<>nil)and(pvnt<>nil) then
-      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
-
-    pvn:=pentvarext.entityunit.FindVariable('INFOPERSONALUSE_Text',true);
-    pvnt:=pentvarext.entityunit.FindVariable('INFOPERSONALUSE_TextTemplate',true);
-    if (pvnt<>nil)and(pvnt<>nil) then
-      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
-
-
-    pvnt:=pentvarext.entityunit.FindVariable('RiserName',true);
-    if (pvnt<>nil)and(pvn<>nil)then
-      pstring(pvnt^.data.Addr.Instance)^:=pstring(pvn^.data.Addr.Instance)^;
+    for VarWithTemplate in templates do begin
+      pvn:=pentvarext.entityunit.FindVariable(VarWithTemplate.Name,true);
+      if pvn<>nil then begin
+        pvnt:=pentvarext.entityunit.FindVariable(VarWithTemplate.Template,true);
+        DeviceNameSubProcess(pvn,pvnt^.GetValueAsString,pEntity);
+      end;
+    end;
   end;
 
-  p:=SysUnit.TypeName2PTD('TCalculatedString');
-  if p<>nil then begin
+  if CalculatedStringDesk=nil then
+    CalculatedStringDesk:=SysUnit.TypeName2PTD('TCalculatedString');
+
+  if CalculatedStringDesk<>nil then begin
     pvn:=pentvarext.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
     if pvn<>nil then repeat
-      if pvn.data.PTD=p then begin
+      if pvn.data.PTD=CalculatedStringDesk then begin
         ptcs:=pvn.data.Addr.Instance;
         ptcs.value:=textformat(ptcs.format,SPFSources.GetFull,pEntity)
       end;
@@ -274,6 +285,89 @@ begin
 
   DBLinkProcess(pentity,drawing);
 end;
+
+
+procedure DeviceVarsProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
+var
+  pvn,pvnt:pvardesk;
+  pentvarext:TVariablesExtender;
+begin
+  pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
+  if pentvarext<>nil then begin
+    pvn:=pentvarext.entityunit.FindVariable('NMO_Name',true);
+    pvnt:=pentvarext.entityunit.FindVariable('RiserName',true);
+    if (pvnt<>nil)and(pvn<>nil)then
+      pstring(pvnt^.data.Addr.Instance)^:=pvn^.GetValueAsString;
+  end;
+  GeneralVarsProcess(DevVarsWithTemplates,pEntity,pentvarext,drawing);
+end;
+
+procedure CableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);
+var
+   pvn,pvnt:pvardesk;
+   ptn:PTNodeProp;
+   pdev:PGDBObjDevice;
+   pentvarext:TVariablesExtender;
+begin
+  pentvarext:=pCable^.GetExtension<TVariablesExtender>;
+  if pentvarext<>nil then begin
+    if pCable^.NodePropArray.Count>0 then begin
+      ptn:=pCable^.NodePropArray.getDataMutable(0);
+      pdev:=ptn^.DevLink;
+    end else
+      pdev:=nil;
+    pvn:=pentvarext.entityunit.FindVariable('NMO_Prefix');
+    pvnt:=pentvarext.entityunit.FindVariable('NMO_PrefixTemplate');
+    DeviceNameSubProcess(pvn,pvnt^.GetValueAsString,pdev);
+
+    if pCable^.NodePropArray.Count>0 then begin
+      ptn:=pCable^.NodePropArray.getDataMutable(pCable^.NodePropArray.Count-1);
+      pdev:=ptn^.DevLink;
+    end else
+      pdev:=nil;
+    pvn:=pentvarext.entityunit.FindVariable('NMO_Suffix');
+    pvnt:=pentvarext.entityunit.FindVariable('NMO_SuffixTemplate');
+    DeviceNameSubProcess(pvn,pvnt^.GetValueAsString,pdev);
+  end;
+  GeneralVarsProcess(CableVarsWithTemplates,pCable,pentvarext,drawing);
+end;
+
+function GetVarTemplate(varsextdr:TVariablesExtender;pvd:pvardesk;pEntity:PGDBObjEntity):string;
+var
+  VarsWithTemplates:TVarsWithTemplates;
+  VarWithTemplate:TVarWithTemplate;
+  UCVn:TInternalScriptString;
+  pvnt:pvardesk;
+begin
+  Result:='';
+
+  if(pvd=nil)or(varsextdr=nil)then
+    exit;
+
+  if pEntity^.GetObjType=GDBCableID then
+    VarsWithTemplates:=CableVarsWithTemplates
+  else
+    VarsWithTemplates:=DevVarsWithTemplates;
+
+  UCVn:=UpperCase(pvd.name);
+
+  for VarWithTemplate in VarsWithTemplates do begin
+    if UCVn=UpperCase(VarWithTemplate.Name) then begin
+      pvnt:=varsextdr.entityunit.FindVariable(VarWithTemplate.Template);
+      result:=pvnt.GetValueAsString;
+      Break;
+    end;
+  end;
+
+  if (result='')and(pvd^.data.PTD<>nil) then begin
+    if CalculatedStringDesk=nil then
+      CalculatedStringDesk:=SysUnit.TypeName2PTD('TCalculatedString');
+
+    if pvd^.data.PTD^.GetFactTypedef=CalculatedStringDesk then
+      result:=PTCalculatedString(pvd^.data.Addr.Instance)^.format;
+  end;
+end;
+
 procedure DeviceSilaProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 var
    pvn,pvp,pvphase,pvi,pvcos:pvardesk;
@@ -343,82 +437,6 @@ begin
                end;
           end;
      end;
-end;
-procedure CableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);
-var
-   pvn,pvnt:pvardesk;
-   ptn:PTNodeProp;
-   s:String;
-   //c:Integer;
-   pdev:PGDBObjDevice;
-   pentvarext:TVariablesExtender;
-begin
-     pentvarext:=pCable^.GetExtension<TVariablesExtender>;
-     pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
-     if pvn<>nil then
-     //if pstring(pvn^.Instance)^='@1' then
-     //                                         pvn^.Instance:=pvn^.Instance;
-     if pCable^.NodePropArray.Count>0 then
-                                           begin
-                                                ptn:=pCable^.NodePropArray.getDataMutable(0);
-                                                pdev:=ptn^.DevLink;
-                                           end
-                                      else
-                                          pdev:=nil;
-     pvn:=pentvarext.entityunit.FindVariable('NMO_Prefix');
-     pvnt:=pentvarext.entityunit.FindVariable('NMO_PrefixTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Addr.Instance)^
-                    else
-                        s:='';
-     DeviceNameSubProcess(pvn,s,pdev);
-
-     if pCable^.NodePropArray.Count>0 then
-                                           begin
-                                                ptn:=pCable^.NodePropArray.getDataMutable(pCable^.NodePropArray.Count-1);
-                                                pdev:=ptn^.DevLink;
-                                           end
-                                      else
-                                          pdev:=nil;
-     pvn:=pentvarext.entityunit.FindVariable('NMO_Suffix');
-     pvnt:=pentvarext.entityunit.FindVariable('NMO_SuffixTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Addr.Instance)^
-                    else
-                        s:='';
-     DeviceNameSubProcess(pvn,s,pdev);
-
-     pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
-     pvnt:=pentvarext.entityunit.FindVariable('NMO_Template');
-     if (pvnt<>nil) then
-     DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pCable);
-
-     pvn:=pentvarext.entityunit.FindVariable('GC_HDGroup');
-     pvnt:=pentvarext.entityunit.FindVariable('GC_HDGroupTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Addr.Instance)^
-                    else
-                        s:='';
-     DeviceNameSubProcess(pvn,s,pCable);
-
-     pvn:=pentvarext.entityunit.FindVariable('GC_HeadDevice');
-     pvnt:=pentvarext.entityunit.FindVariable('GC_HeadDeviceTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Addr.Instance)^
-                    else
-                        s:='';
-     DeviceNameSubProcess(pvn,s,pCable);
-
-
-     pvn:=pentvarext.entityunit.FindVariable('GC_HDShortName');
-     pvnt:=pentvarext.entityunit.FindVariable('GC_HDShortNameTemplate');
-     if (pvnt<>nil) then
-                        s:=pstring(pvnt^.data.Addr.Instance)^
-                    else
-                        s:='';
-     DeviceNameSubProcess(pvn,s,pCable);
-
-     DBLinkProcess(pCable,drawing);
 end;
 
 procedure ConstructorFeature(pEntity:PGDBObjEntity);
@@ -501,11 +519,11 @@ begin
   GDBObjBlockdef.GetDXFIOFeatures.RegisterAfterLoadFeature(@GDBObjBlockDefLoadVarsFromFile);
 
   {from GDBObjDevice}
-  GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
+  GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceVarsProcess);
   GDBObjDevice.GetDXFIOFeatures.RegisterFormatFeature(@DeviceSilaProcess);
 
   {from GDBObjNet}
-  GDBObjNet.GetDXFIOFeatures.RegisterFormatFeature(@DeviceNameProcess);
+  GDBObjNet.GetDXFIOFeatures.RegisterFormatFeature(@DeviceVarsProcess);
 
   {from GDBObjCable}
   GDBObjCable.GetDXFIOFeatures.RegisterFormatFeature(@CableNameProcess);

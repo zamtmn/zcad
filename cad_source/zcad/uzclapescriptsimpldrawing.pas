@@ -37,7 +37,8 @@ uses
   uzeentsubordinated,uzeenttable,uzestylestables,uzctnrVectorStrings,
   uzgldrawcontext,uzeentitiestypefilter,uzCtnrVectorPBaseEntity,
   uzeEntBase,gzctnrVectorTypes,uzcEnitiesVariablesExtender,
-  uzsbVarmanDef,UBaseTypeDescriptor;
+  uzsbVarmanDef,UBaseTypeDescriptor,uzcregisterenitiesfeatures,
+  uzcCounter,varman,uzcdevicebaseabstract;
 
 type
 
@@ -65,8 +66,10 @@ const
 
   cThngNameTEntsTypeFilter='TEntsTypeFilter';
   cThngNameThEnts='ThEnts';
+  cThngNameThCombineCounter='ThCombineCounter';
   cNamePzeEntity='PzeEntity';
   cNameTVariablesExtender='TVariablesExtender';
+  cNamePVarDesk='PVarDesk';
 type
 
   EScriptException=class(Exception);
@@ -1000,12 +1003,119 @@ begin
     PPointer(Result)^:=nil;
 end;
 
+procedure ThCombineCounter_Create(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  counter:TCombineCounter;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  counter:=TCombineCounter.Create;
+  ctx.Things.PushBack(counter);
+  PThingsIndex(Result)^.Things:=ctx.Things;
+  PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
+end;
+
+procedure ThCombineCounter_Free(const Params:PParamArray); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TCombineCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TCombineCounter(TThings(Index.Things)[Index.Index]);
+    counter.Free;
+    TThings(Index.Things).mutable[Index.Index]^:=nil;
+    PThingsIndex(Params^[0])^.Index:=-1;
+    PThingsIndex(Params^[0])^.Things:=nil;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThCombineCounter_CombineAndCount(const Params: PParamArray); cdecl;
+//procedure ThCombineCounter.CombineAndCount(AEnt:PzeEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;AKey:string);',@ThCombineCounter_CombineAndCount)
+var
+  Index:TThingsIndex;
+  cc:TCombineCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if(Index.Things<>nil)and(Index.Index>=0)then begin
+    cc:=TCombineCounter(TThings(Index.Things)[Index.Index]);
+    cc.CombineAndCount(PGDBObjEntity((Params^[1])^),TVariablesExtender((Params^[2])^),
+                       pvardesk((Params^[3])^),String((Params^[4])^));
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThCombineCounter_SetCombineVarNames(const Params: PParamArray); cdecl;
+//procedure ThCombineCounter.SetCombineVarNames(AVarNames:array of String);
+var
+  Index:TThingsIndex;
+  cc:TCombineCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if(Index.Things<>nil)and(Index.Index>=0)then begin
+    cc:=TCombineCounter(TThings(Index.Things)[Index.Index]);
+    cc.SetCombineVarNames(PStringArray(Params^[1])^);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThCombineCounter_SaveTo(const Params: PParamArray); cdecl;
+//procedure ThCombineCounter.SaveTo(AResult:TCounterResults);
+type
+  TNames=array of string;
+  TCounterResult=record names:Tnames;Key:string;Value:double;isInteger:boolean; end;
+  TCounterResults=array of TCounterResult;
+  PCounterResults=^TCounterResults;
+var
+  Index:TThingsIndex;
+  cc:TCombineCounter;
+  //CounterResults:TCounterResults;
+  i:integer;
+  pair:TCombineCounter.TContainer.TDictionaryPair;
+  pvd:pvardesk;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if(Index.Things<>nil)and(Index.Index>=0)then begin
+    cc:=TCombineCounter(TThings(Index.Things)[Index.Index]);
+    //CounterResults:=PCounterResults(Params^[1])^;
+    SetLength(PCounterResults(Params^[1])^,cc.Container.Count);
+    i:=0;
+    for pair in cc.Container do begin
+      with PCounterResults(Params^[1])^[i] do begin
+        names:=pair.Value.getNames;
+        pvd:=DWGDBUnit^.FindVariable(pair.Key);
+        if pvd=nil then
+          Key:=pair.Key
+        else
+          Key:=PDbBaseObject(pvd^.data.Addr.Instance)^.Name;
+        Value:=pair.Value.Value;
+        isInteger:=pair.Value.isInteger;
+      end;
+      inc(i);
+    end;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
 class procedure TLapeDwg.zcReport2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     if CheckBaseDefs(cplr,cZeEntsArrays,[cZeBase])then begin
       cplr.StartImporting;
       cplr.addBaseDefine(cZeReport);
+
+      cplr.addGlobalType('type TThingsIndex','ThCombineCounter');
+      cplr.addGlobalType('array of string','TNames');
+      cplr.addGlobalType('record names:Tnames;Key:string;Value:double;isInteger:boolean; end;','TCounterResult');
+      cplr.addGlobalType('array of TCounterResult','TCounterResults');
+
+      cplr.addGlobalMethod('function ThCombineCounter.Create: ThCombineCounter; static;',@ThCombineCounter_Create,ctx);
+      cplr.addGlobalFunc('procedure ThCombineCounter.Free;',@ThCombineCounter_Free);
+      cplr.addGlobalFunc('procedure ThCombineCounter.SetCombineVarNames(AVarNames:array of String);',@ThCombineCounter_SetCombineVarNames);
+      cplr.addGlobalFunc('procedure ThCombineCounter.CombineAndCount(AEnt:PzeEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;AKey:string);',@ThCombineCounter_CombineAndCount);
+      cplr.addGlobalFunc('procedure ThCombineCounter.SaveTo(AResult:TCounterResults);',@ThCombineCounter_SaveTo);
+
 
       cplr.addGlobalMethod('function ThisReport:PzeEntity;',@ThisReportOwner,ctx);
       cplr.addGlobalMethod('function ThisReportVariableExtdr:TVariablesExtender;',@ThisReportVariableExtdr,ctx);
@@ -1062,6 +1172,34 @@ begin
       pvv^:=PUnicodeString(pvd^.data.Addr.Instance)^;
     end else
       PGVResult(Result)^:=GVRWrongType;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
+end;
+
+procedure TVariablesExtender_GetVarDesk(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  vn:string;
+  varsextdr:TVariablesExtender;
+begin
+  varsextdr:=TVariablesExtender((Params^[0])^);
+  if varsextdr<>nil then begin
+    vn:=pstring(Params^[1])^;
+    ppointer(Result)^:=varsextdr.entityunit.FindVarDesc(vn{,InInterfaceOnly}).Instance;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
+end;
+
+procedure TVariablesExtender_GetVarTemplate(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  varsextdr:TVariablesExtender;
+  pvd:pvardesk;
+  pent:PGDBObjEntity;
+begin
+  varsextdr:=TVariablesExtender((Params^[0])^);
+  if varsextdr<>nil then begin
+    pvd:=ppointer(Params^[1])^;
+    pent:=ppointer(Params^[2])^;
+    pstring(Result)^:=GetVarTemplate(varsextdr,pvd,pent);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;
@@ -1128,6 +1266,18 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;
 
+procedure PVarDesk_GetValueAsString(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  pvd:pvardesk;
+begin
+  pvd:=pvardesk((Params^[0])^);
+  if pvd<>nil then begin
+    pstring(Result)^:=pvd^.GetValueAsString;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePVarDesk]);
+end;
+
+
 class procedure TLapeDwg.zeEntsExtenders2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
@@ -1137,8 +1287,11 @@ begin
 
       cplr.addGlobalType('type Pointer','TzeEntityExtenderClass');
       cplr.addGlobalType('type Pointer','TVariablesExtender');
+      cplr.addGlobalType('type Pointer','PVarDesk');
 
       cplr.addGlobalType('(GVRNotFound,GVRWrongType,GVRImplicitCast,GVROk)','TGVResult');
+      cplr.addGlobalType('set of TGVResult','TGVResults');
+      cplr.addGlobalVar('TGVResults','[GVRImplicitCast,GVROk]','GVRFounded');
 
       cplr.addGlobalFunc('function GetEntityExtenderClass(extdrName:string):TzeEntityExtenderClass;',@GetEntityExtenderClass);
       cplr.addGlobalFunc('function PzeEntity.GetVariableExtdr:TVariablesExtender;',@PzeEntity_GetVariableExtdr);
@@ -1146,6 +1299,10 @@ begin
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:Int32;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_int32);
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:double;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_double);
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:string;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_string);
+      cplr.addGlobalFunc('function TVariablesExtender.GetVarDesk(VarName:string):PVarDesk;',@TVariablesExtender_GetVarDesk);
+      cplr.addGlobalFunc('function TVariablesExtender.GetValueTemplate(PVD:PVarDesk;PEnt:PzeEntity):String;',@TVariablesExtender_GetVarTemplate);
+
+      cplr.addGlobalFunc('function PVarDesk.GetValueAsString:String;',@PVarDesk_GetValueAsString);
 
       cplr.EndImporting;
     end;

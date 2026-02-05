@@ -340,11 +340,15 @@ end;
 function TEntsTypeFilter.IsEntytyAccepted(pv:pGDBObjEntity):boolean;
 var
   i:integer;
+  DummyCount:SizeUInt;
 begin
   if FNeedSetFilter then
     SetFilter;
   result:=IsEntytyTypeAccepted(pv.GetObjType);
   if result and (ExtdrFilter.Count>0) then begin
+    for i:=0 to pv^.GetExtensionsCount-1 do
+      if ExtdrExclude.TryGetValue(typeof(pv^.GetExtension(i)),DummyCount)then
+        exit(false);
     for i:=0 to pv^.GetExtensionsCount-1 do
       if IsExtdrTypeAccepted(typeof(pv^.GetExtension(i)))then
         exit(true);

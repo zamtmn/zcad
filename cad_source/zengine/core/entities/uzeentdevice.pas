@@ -278,9 +278,11 @@ begin
         pv^.FormatEntity(drawing,dc,EFAllStages-[EFDraw]);
       end;
       IODXFContext.LocalEntityFlags:=DefaultLocalEntityFlags;
-      pv^.SaveToDXF(outStream,drawing,IODXFContext);
-      pv^.SaveToDXFPostProcess(outStream,IODXFContext);
-      pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+
+      pv^.DXFOut(outStream,drawing,IODXFContext);
+      //pv^.SaveToDXF(outStream,drawing,IODXFContext);
+      //pv^.SaveToDXFPostProcess(outStream,IODXFContext);
+      //pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
       pvc2.rtsave(pv);
 
       pvc2.rtsave(pv);

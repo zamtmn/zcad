@@ -581,22 +581,22 @@ begin
   tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
   if AutoHAlaign then begin
   if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
-  tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
+  tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width;
   end else begin
   case HorizontalAlign of
   THAlign.HALeft:;
-  THAlign.HAMidle:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w/2;
-  THAlign.HARight:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
+  THAlign.HAMidle:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width/2;
+  THAlign.HARight:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width;
   end
   end;
   if AutoVAlaign then begin
   if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
-  tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+  tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height;
   end else begin
   case VerticalAlign of
   TVAlign.VATop:;
-  TVAlign.VAMidle:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h/2;
-  TVAlign.VABottom:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+  TVAlign.VAMidle:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height/2;
+  TVAlign.VABottom:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height;
   end
   end;
   tbl.FormatEntity(drawing,dc);
@@ -646,7 +646,7 @@ begin
   ptext.textprop.justify:=jsbl;
   ptext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
   if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then begin
-    ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;
+    ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.Width;
     textpoint:=ptext.Local.P_insert;
     ptext.Local.P_insert.x:= ptext.Local.P_insert.x-textoffset;
     ptext.textprop.justify:=jsbr;

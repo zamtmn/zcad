@@ -175,7 +175,9 @@ const {as_normal=0;
   {Upgrade объектов DXF}
   UD_LineToLeader=1;
   UD_LineToNet=2;
+
   UD_LineToSuperLine=10;
+  UD_BlockInsertToTable=11;
 
   ClByBlock=0;
   ClByLayer=256;

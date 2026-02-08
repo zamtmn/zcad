@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzeenttable;
+unit uzeEntTable;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -25,7 +25,8 @@ uses
   uzctnrVectorBytesStream,uzestylestables,uzeentline,uzeentcomplex,SysUtils,
   gzctnrVectorPObjects,uzctnrvectorstrings,uzeentmtext,uzeentity,
   uzeTypes,uzeconsts,uzegeometry,gzctnrVectorTypes,uzegeometrytypes,
-  uzeentblockinsert,uzeffdxfsupport;
+  uzeentblockinsert,uzeffdxfsupport,uzeentityfactory,uzeobjectextender,uzsbVarmanDef,
+  Varman;
 
 type
 
@@ -42,21 +43,33 @@ type
   PGDBObjTable=^GDBObjTable;
 
   GDBObjTable=object(GDBObjComplex)
+  private
+    w,h:double;
+  public
     PTableStyle:PTGDBTableStyle;
     tbl:GDBTableArray;
-    w,h:double;
     scale:double;
     constructor initnul;
     destructor done;virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     procedure Build(var drawing:TDrawingDef);virtual;
+    procedure DXFOut(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;
-      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     function GetObjType:TObjID;virtual;
+    procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
+
+    class function GetDXFIOFeatures:TDXFEntIODataManager;static;
+
+    property Width:double read w;
+    property Height:double read h;
   end;
 
 implementation
+
+var
+  GDBObjTableDXFFeatures:TDXFEntIODataManager;
 
 procedure GDBObjTable.ReCalcFromObjMatrix;
 begin
@@ -78,8 +91,10 @@ var
   ir:itrec;
   m4:TzeTypedMatrix4d;
   DC:TDrawContext;
+  first:boolean;
 begin
   inherited;
+  first:=true;
   m4:=getmatrix^;
   dc:=drawing.CreateDrawingRC;
   pv:=ConstObjArray.beginiterate(ir);
@@ -103,9 +118,20 @@ begin
       pvc.rtsave(pv);
       p:=pv^.bp.ListPos.Owner;
       pv^.bp.ListPos.Owner:=@GDBTrash;
-      pv^.SaveToDXF(outStream,drawing,IODXFContext);
-      pv^.SaveToDXFPostProcess(outStream,IODXFContext);
-      pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+
+      if first then begin
+        first:=false;
+        if (self.PTableStyle.HeadBlockName<>'')and(pv^.GetObjType=GDBBlockInsertID) then begin
+          pv^.SaveToDXF(outStream,drawing,IODXFContext);
+          SaveToDXFPostProcess(outStream,IODXFContext);
+          pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+        end;
+      end else begin
+        pv^.SaveToDXF(outStream,drawing,IODXFContext);
+        pv^.SaveToDXFPostProcess(outStream,IODXFContext);
+        pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+      end;
+
       pvc2.rtsave(pv);
       pv^.bp.ListPos.Owner:=p;
 
@@ -118,6 +144,21 @@ begin
     until pv=nil;
   objmatrix:=m4;
 end;
+
+procedure GDBObjTable.DXFOut;
+begin
+     SaveToDXF(outStream,drawing,IODXFContext);
+     //SaveToDXFPostProcess(outStream);
+     SaveToDXFFollow(outStream,drawing,IODXFContext);
+end;
+
+
+procedure GDBObjTable.SaveToDXFObjXData;
+begin
+     GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
+     inherited;
+end;
+
 
 function GDBObjTable.Clone;
 var
@@ -157,6 +198,18 @@ begin
   xcount:=0;
   xw:=0;
   dc:=drawing.CreateDrawingRC;
+
+  if self.PTableStyle.HeadBlockName<>'' then begin
+    drawing.AddBlockFromDBIfNeed(PTableStyle.HeadBlockName);
+    pointer(pgdbins):=self.ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
+    pgdbins^.Name:=self.PTableStyle.HeadBlockName;
+    pgdbins^.scale.x:=scale;
+    pgdbins^.scale.y:=scale;
+    pgdbins^.scale.z:=scale;
+    CopyVPto(pgdbins^);
+    pgdbins^.BuildGeometry(drawing);
+  end;
+
   if psa<>nil then begin
     repeat
       x:=0;
@@ -263,16 +316,6 @@ begin
 
   h:=ccount*PTableStyle^.rowheight*scale;
   w:=x*scale;
-  if self.PTableStyle.HeadBlockName<>'' then begin
-    drawing.AddBlockFromDBIfNeed(PTableStyle.HeadBlockName);
-    pointer(pgdbins):=self.ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
-    pgdbins^.Name:=self.PTableStyle.HeadBlockName;
-    pgdbins^.scale.x:=scale;
-    pgdbins^.scale.y:=scale;
-    pgdbins^.scale.z:=scale;
-    CopyVPto(pgdbins^);
-    pgdbins^.BuildGeometry(drawing);
-  end;
   BuildGeometry(drawing);
 end;
 
@@ -294,5 +337,95 @@ begin
   tbl.done;
 end;
 
+class function GDBObjTable.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
+  result:=GDBObjTableDXFFeatures;
+end;
+
+function UpgradeBlockInsert2Table(ptu:PExtensionData;pent:PGDBObjBlockInsert;const drawing:TDrawingDef):PGDBObjTable;
+var
+  pvd:pvardesk;
+begin
+
+  Getmem(result,sizeof(GDBObjTable));
+  result^.initnul;
+  pent.CopyVPto(Result^);
+  Result^.Local:=pent^.local;
+  Result^.P_insert_in_WCS:=pent^.P_insert_in_WCS;
+
+  if pent^.PExtAttrib<>nil then
+    Result^.PExtAttrib:=pent^.CopyExtAttrib;
+
+  pvd:=PTUnit(ptu).FindVariable('style');
+  if pvd<>nil then begin
+    result^.PTableStyle:=drawing.GetTableStyleTable.AddStyle('KZ');
+    pvd^.GetValueAsString;
+  end;
+
+end;
+{
+var
+   pvi:pvardesk;
+begin
+     Getmem(pointer(result),sizeof(GDBObjElLeader));
+     result^.initnul;
+     result^.MainLine.CoordInOCS:=pent^.CoordInOCS;
+     pent.CopyVPto(result^);
+     //result^.vp.Layer:=pent^.vp.Layer;
+     //result^.vp.LineWeight:=pent^.vp.LineWeight;
+
+   if ptu<>nil then
+   begin
+   pvi:=PTUnit(ptu).FindVariable('size');
+   if pvi<>nil then
+                   begin
+                        result^.size:=PInteger(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('scale');
+   if pvi<>nil then
+                   begin
+                        result^.scale:=pDouble(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('twidth');
+   if pvi<>nil then
+                   begin
+                        result^.twidth:=pDouble(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('AutoHAlaign');
+   if pvi<>nil then
+                   begin
+                        result^.AutoHAlaign:=PBoolean(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('HorizontalAlign');
+   if pvi<>nil then
+                   begin
+                        result^.HorizontalAlign:=PTHAlign(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('AutoVAlaign');
+   if pvi<>nil then
+                   begin
+                        result^.AutoVAlaign:=PBoolean(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('VerticalAlign');
+   if pvi<>nil then
+                   begin
+                        result^.VerticalAlign:=PTVAlign(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('ShowTable');
+    if pvi<>nil then
+      result^.ShowTable:=PBoolean(pvi^.data.Addr.Instance)^;
+
+   pvi:=PTUnit(ptu).FindVariable('ShowHeader');
+    if pvi<>nil then
+      result^.ShowHeader:=PBoolean(pvi^.data.Addr.Instance)^;
+   end;
+end;}
+
+
+initialization
+  RegisterEntity(GDBTableID,'Table',nil,nil);
+  RegisterEntityUpgradeInfo(GDBBlockInsertID,UD_BlockInsertToTable,@UpgradeBlockInsert2Table);
+  GDBObjTableDXFFeatures:=TDXFEntIODataManager.create;
+finalization
+  GDBObjTableDXFFeatures.destroy;
 end.

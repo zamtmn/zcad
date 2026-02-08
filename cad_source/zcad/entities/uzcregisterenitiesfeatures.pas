@@ -19,13 +19,15 @@ unit uzcregisterenitiesfeatures;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzcTranslations,sysutils,
-     uzcenitiesvariablesextender,uzcstrconsts,uzeconsts,devices,uzccomdb,
-     uzcentcable,uzcentnet,uzeentdevice,uzeffdxfsupport,
-     uzetextpreprocessor,uzctnrVectorBytesStream,uzeTypes,uzeobjectextender,
-     uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,uzsbVarmanDef,Varman,UUnitManager,
-     URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,
-     uzbstrproc,uzeentitiesprop,uzcentelleader,math,gzctnrVectorTypes,uzccommandsmanager;
+
+uses
+  uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzcTranslations,sysutils,uzcenitiesvariablesextender,
+  uzcstrconsts,uzeconsts,devices,uzccomdb,uzcentcable,uzcentnet,uzeentdevice,uzeffdxfsupport,
+  uzetextpreprocessor,uzctnrVectorBytesStream,uzeTypes,uzeobjectextender,uzeentsubordinated,
+  uzeentity,uzeenttext,uzeblockdef,uzsbVarmanDef,Varman,UUnitManager,URecordDescriptor,
+  UBaseTypeDescriptor,uzedrawingdef,uzbstrproc,uzeentitiesprop,uzcentelleader,math,
+  gzctnrVectorTypes,uzccommandsmanager,uzeEntTable;
+
 var
    PFCTTD:Pointer=nil;
    extvarunit:TUnit;
@@ -158,6 +160,14 @@ begin
   if not PGDBObjElLeader(PEnt)^.ShowHeader then
       dxfStringout(outStream,1000,'%9=ShowHeader|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.ShowHeader,true)+'|');
 end;
+
+procedure TableSave(var outStream:TZctnrVectorBytes;PTable:PGDBObjTable;var IODXFContext:TIODXFSaveContext);
+begin
+  dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_BlockInsertToTable));
+  if PTable^.PTableStyle<>nil then
+    dxfStringout(outStream,1000,'%1=style|String|'+PTable^.PTableStyle.Name+'|');
+end;
+
 
 procedure EntityIOSave_all(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFSaveContext);
 begin
@@ -531,6 +541,8 @@ begin
   {from GDBObjElLeader}
   GDBObjElLeader.GetDXFIOFeatures.RegisterSaveFeature(@ElLeaderSave);
 
+  {from GDBObjTable}
+  GDBObjTable.GetDXFIOFeatures.RegisterSaveFeature(@TableSave);
 
   {test}
   //GDBObjEntity.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);

@@ -67,7 +67,7 @@ type
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
-      var IODXFContext:TIODXFSaveContext);virtual;
+      var IODXFContext:TIODXFSaveContext;AAPS:TAdditionalPostProcess=nil;AAPSData:PtrUInt=0);virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure ProcessLine(const c:integer;const l1,l2,c1,c2:TzePoint2d;
@@ -228,7 +228,7 @@ begin
 end;
 
 procedure GDBObjHatch.SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
-  var IODXFContext:TIODXFSaveContext);
+  var IODXFContext:TIODXFSaveContext;AAPS:TAdditionalPostProcess=nil;AAPSData:PtrUInt=0);
 begin
   inherited;
   if not IsVectorNul(Origin) then

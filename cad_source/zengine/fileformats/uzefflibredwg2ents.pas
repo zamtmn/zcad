@@ -94,7 +94,7 @@ begin
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.x:=PLine^.&end.x;
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.y:=PLine^.&end.y;
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=PLine^.&end.x;
-  ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
+  ZContext.PDrawing^.pObjRoot^.AddMi(pobj);
   //PGDBObjEntity(pobj)^.BuildGeometry(drawing);
   //PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
 end;

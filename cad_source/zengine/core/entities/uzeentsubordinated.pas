@@ -51,6 +51,8 @@ type
   GDBObjDrawable=object(GDBObjExtendable)
   end;
 
+  DXFLoadTryMiResult=(TR_NeedTrash,TR_Nothing);
+
   PGDBObjSubordinated=^GDBObjSubordinated;
   PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 
@@ -60,7 +62,10 @@ type
     procedure ImSelected(pobj:PGDBObjSubordinated;
       pobjinarray:integer);virtual;
     procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
-    procedure AddMi(pobj:PGDBObjSubordinated);virtual;abstract;
+    procedure AddMi(var pobj:PGDBObjSubordinated);virtual;abstract;
+    procedure DXFLoadAddMi(var pobj:PGDBObjSubordinated);virtual;
+    function DXFLoadTryMi(ptu:PExtensionData;var pobj:PGDBObjSubordinated):DXFLoadTryMiResult;virtual;
+    function DXFDelayedBuildGeometry:boolean;virtual;
     //procedure RemoveInArray(pobjinarray:integer);virtual;abstract;
     procedure GoodAddObjectToObjArray(
       const obj:PGDBObjSubordinated);virtual;abstract;
@@ -398,6 +403,21 @@ end;
 procedure GDBObjGenericWithSubordinated.ImEdited(pobj:PGDBObjSubordinated;
   pobjinarray:integer;var drawing:TDrawingDef);
 begin
+end;
+
+procedure GDBObjGenericWithSubordinated.DXFLoadAddMi(var pobj:PGDBObjSubordinated);
+begin
+  AddMi(pobj);
+end;
+
+function GDBObjGenericWithSubordinated.DXFLoadTryMi(ptu:PExtensionData;var pobj:PGDBObjSubordinated):DXFLoadTryMiResult;
+begin
+  Result:=TR_Nothing;
+end;
+
+function GDBObjGenericWithSubordinated.DXFDelayedBuildGeometry:boolean;
+begin
+  Result:=false;
 end;
 
 procedure GDBObjGenericWithSubordinated.ImSelected(pobj:PGDBObjSubordinated;

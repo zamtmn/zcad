@@ -33,6 +33,8 @@ type
   taddotrac=procedure(var posr:os_record;const axis:TzePoint3d) of object;
 
 type
+  TAdditionalPostProcess=procedure(var outStream:TZctnrVectorBytes;
+    var IODXFContext:TIODXFSaveContext;AData:PtrUInt)of object;
   PGDBObjEntity=^GDBObjEntity;
   TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;
     var SelectedObjCount:integer) of object;
@@ -90,7 +92,7 @@ type
     procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
-      var IODXFContext:TIODXFSaveContext);virtual;
+      var IODXFContext:TIODXFSaveContext;AAPS:TAdditionalPostProcess=nil;AAPSData:PtrUInt=0);virtual;
     procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;
       var IODXFContext:TIODXFSaveContext);virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -783,6 +785,8 @@ begin
   dxfStringout(outStream,1001,ZCADAppNameInDXF);
   dxfStringout(outStream,1002,'{');
   self.SaveToDXFObjXData(outStream,IODXFContext);
+  if @AAPS<>nil then
+    AAPS(outStream,IODXFContext,AAPSData);
   dxfStringout(outStream,1002,'}');
 end;
 

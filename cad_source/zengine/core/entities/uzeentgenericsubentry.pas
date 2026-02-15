@@ -85,7 +85,7 @@ type
     procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:integer;
       var drawing:TDrawingDef);virtual;
     //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
-    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
+    procedure AddMi(var pobj:PGDBObjSubordinated);virtual;
     procedure ImEdited(pobj:PGDBObjSubordinated;
       pobjinarray:integer;var drawing:TDrawingDef);virtual;
     function ReturnLastOnMouse(InSubEntry:boolean):PGDBObjEntity;
@@ -430,10 +430,10 @@ end;
 
 procedure GDBObjGenericSubEntry.AddMi;
 begin
-  ObjArray.AddPEntity(pGDBObjEntity(ppointer(pobj)^)^);
-  pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
-  if assigned(pGDBObjEntity(ppointer(pobj)^).EntExtensions) then
-    pGDBObjEntity(ppointer(pobj)^).EntExtensions.RunSetRoot(pobj,@self);
+  ObjArray.AddPEntity(pGDBObjEntity(pobj)^);
+  pGDBObjEntity(pobj)^.bp.ListPos.Owner:=@self;
+  if assigned(pGDBObjEntity(pobj)^.EntExtensions) then
+    pGDBObjEntity(pobj)^.EntExtensions.RunSetRoot(pobj,@self);
 end;
 
 procedure GDBObjGenericSubEntry.correctobjects;

@@ -161,12 +161,9 @@ begin
       dxfStringout(outStream,1000,'%9=ShowHeader|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.ShowHeader,true)+'|');
 end;
 
-procedure TableSave(var outStream:TZctnrVectorBytes;PTable:PGDBObjTable;var IODXFContext:TIODXFSaveContext);
+{procedure TableSave(var outStream:TZctnrVectorBytes;PTable:PGDBObjTable;var IODXFContext:TIODXFSaveContext);
 begin
-  dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_BlockInsertToTable));
-  if PTable^.PTableStyle<>nil then
-    dxfStringout(outStream,1000,'%1=style|String|'+PTable^.PTableStyle.Name+'|');
-end;
+end;}
 
 
 procedure EntityIOSave_all(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFSaveContext);
@@ -542,7 +539,7 @@ begin
   GDBObjElLeader.GetDXFIOFeatures.RegisterSaveFeature(@ElLeaderSave);
 
   {from GDBObjTable}
-  GDBObjTable.GetDXFIOFeatures.RegisterSaveFeature(@TableSave);
+  //GDBObjTable.GetDXFIOFeatures.RegisterSaveFeature(@TableSave);
 
   {test}
   //GDBObjEntity.GetDXFIOFeatures.RegisterEntityExtenderObject(@TTestExtende.CreateTestExtender);

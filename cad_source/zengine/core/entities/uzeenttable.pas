@@ -26,7 +26,7 @@ uses
   gzctnrVectorPObjects,uzctnrvectorstrings,uzeentmtext,uzeentity,
   uzeTypes,uzeconsts,uzegeometry,gzctnrVectorTypes,uzegeometrytypes,
   uzeentblockinsert,uzeffdxfsupport,uzeentityfactory,uzeobjectextender,uzsbVarmanDef,
-  Varman;
+  Varman,uzeentsubordinated;
 
 type
 
@@ -51,11 +51,17 @@ type
     scale:double;
     constructor initnul;
     destructor done;virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    function IsStagedFormatEntity:boolean;virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     procedure Build(var drawing:TDrawingDef);virtual;
+    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
     procedure DXFOut(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-    procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;
-    var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure AdditionalPostProcess(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext;AData:PtrUInt);
+    procedure DXFLoadAddMi(var pobj:PGDBObjSubordinated);virtual;
+    function DXFLoadTryMi(ptu:PExtensionData;var pobj:PGDBObjSubordinated):DXFLoadTryMiResult;virtual;
+    function DXFDelayedBuildGeometry:boolean;virtual;
     procedure ReCalcFromObjMatrix;virtual;
     function GetObjType:TObjID;virtual;
     procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
@@ -67,6 +73,14 @@ type
   end;
 
 implementation
+
+type
+  TTblIterData=record
+    psa:PTZctnrVectorStrings;
+    pstr:pString;
+    ir1,ir2:itrec;
+  end;
+  PTTblIterData=^TTblIterData;
 
 var
   GDBObjTableDXFFeatures:TDXFEntIODataManager;
@@ -84,19 +98,107 @@ begin
   Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
 end;
 
+function GDBObjTable.DXFDelayedBuildGeometry:boolean;
+begin
+  Result:=true;
+end;
+
+procedure GDBObjTable.DXFLoadAddMi(var pobj:PGDBObjSubordinated);
+begin
+  pobj:=pobj;
+  //pobj:=nil;
+end;
+
+function GDBObjTable.DXFLoadTryMi(ptu:PExtensionData;var pobj:PGDBObjSubordinated):DXFLoadTryMiResult;
+var
+  row,col:integer;
+  &val:string;
+  pvd:pvardesk;
+  pvs:PTZctnrVectorStrings;
+begin
+  Result:=TR_NeedTrash;
+  if ptu<>nil then begin
+    pvd:=PTUnit(ptu).FindVariable('row');
+    if pvd<>nil then
+      row:=PInteger(pvd^.data.Addr.Instance)^
+    else
+      exit;
+    pvd:=PTUnit(ptu).FindVariable('col');
+    if pvd<>nil then
+      col:=PInteger(pvd^.data.Addr.Instance)^
+    else
+      exit;
+    pvd:=PTUnit(ptu).FindVariable('val');
+    if pvd<>nil then
+      &val:=pvd^.GetValueAsString
+    else
+      exit;
+    if tbl.Count-1<row then begin
+      while tbl.Count-1<row do begin
+        pvs:=tbl.CreateObject;
+        pvs.init(10);
+      end;
+    end else begin
+      pvs:=tbl.getDataMutable(row);
+    end;
+
+    while pvs.Count-1<col do
+      pvs^.PushBackData('');
+
+    pvs^.getDataMutable(col)^:=val;
+  end;
+
+end;
+
+
+procedure gotoNext(var tbl:GDBTableArray; var irstring:TTblIterData;next,notEmpty:boolean);
+begin
+  if next then begin
+    if irstring.psa<>nil then
+      irstring.pstr:=irstring.psa.iterate(irstring.ir2);
+    if irstring.pstr=nil then begin
+      irstring.psa:=tbl.iterate(irstring.ir1);
+      if irstring.psa<>nil then
+        irstring.pstr:=irstring.psa.beginiterate(irstring.ir2);
+    end;
+  end;
+  if notEmpty then
+    while (not((irstring.pstr<>nil) and (irstring.pstr^<>'')))and(irstring.psa<>nil) do begin
+    if irstring.psa<>nil then
+      irstring.pstr:=irstring.psa.iterate(irstring.ir2);
+    if irstring.pstr=nil then begin
+      irstring.psa:=tbl.iterate(irstring.ir1);
+      if irstring.psa<>nil then
+        irstring.pstr:=irstring.psa.beginiterate(irstring.ir2);
+    end;
+  end;
+end;
+
 procedure GDBObjTable.SaveToDXFFollow;
 var
   p:pointer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
+
+  irstring:TTblIterData;
+
   m4:TzeTypedMatrix4d;
   DC:TDrawContext;
   first:boolean;
+  PBlockInsert:pointer;
 begin
   inherited;
   first:=true;
+  PBlockInsert:=nil;
   m4:=getmatrix^;
   dc:=drawing.CreateDrawingRC;
+
+  irstring.psa:=tbl.beginiterate(irstring.ir1);
+  if irstring.psa<>nil then
+    irstring.pstr:=irstring.psa.beginiterate(irstring.ir2);
+  gotoNext(tbl,irstring,false,true);
+
+
   pv:=ConstObjArray.beginiterate(ir);
   if pv<>nil then
     repeat
@@ -117,18 +219,22 @@ begin
       pv.rtsave(pvc2);
       pvc.rtsave(pv);
       p:=pv^.bp.ListPos.Owner;
-      pv^.bp.ListPos.Owner:=@GDBTrash;
+      if PBlockInsert=nil then
+        pv^.bp.ListPos.Owner:=@GDBTrash
+      else
+        pv^.bp.ListPos.Owner:=@self;
 
       if first then begin
         first:=false;
         if (self.PTableStyle.HeadBlockName<>'')and(pv^.GetObjType=GDBBlockInsertID) then begin
           pv^.SaveToDXF(outStream,drawing,IODXFContext);
+          PBlockInsert:=pv;
           SaveToDXFPostProcess(outStream,IODXFContext);
           pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
         end;
       end else begin
         pv^.SaveToDXF(outStream,drawing,IODXFContext);
-        pv^.SaveToDXFPostProcess(outStream,IODXFContext);
+        pv^.SaveToDXFPostProcess(outStream,IODXFContext,AdditionalPostProcess,PtrUInt(@irstring));
         pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
       end;
 
@@ -145,6 +251,18 @@ begin
   objmatrix:=m4;
 end;
 
+procedure GDBObjTable.AdditionalPostProcess(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext;AData:PtrUInt);
+begin
+  AData:=AData;
+  if PTTblIterData(AData).pstr<>nil then
+    if PTTblIterData(AData).pstr^<>'' then begin
+      dxfStringout(outStream,1000,'%999=row|integer|'+IntToStr(PTTblIterData(AData).ir1.itc)+'|');
+      dxfStringout(outStream,1000,'%999=col|integer|'+IntToStr(PTTblIterData(AData).ir2.itc)+'|');
+      dxfStringout(outStream,1000,'%999=val|string|'+PTTblIterData(AData).pstr^+'|');
+    end;
+  gotoNext(tbl,PTTblIterData(AData)^,true,true);
+end;
+
 procedure GDBObjTable.DXFOut;
 begin
      SaveToDXF(outStream,drawing,IODXFContext);
@@ -155,8 +273,12 @@ end;
 
 procedure GDBObjTable.SaveToDXFObjXData;
 begin
-     GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
-     inherited;
+  if PTableStyle<>nil then
+    dxfStringout(outStream,1000,'%1=style|String|'+PTableStyle.Name+'|');
+  dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+  dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_BlockInsertToTable));
+  GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
+  inherited;
 end;
 
 
@@ -176,6 +298,33 @@ begin
   tvo^.bp.ListPos.Owner:=own;
   tvo^.scale:=scale;
   Result:=tvo;
+end;
+
+procedure GDBObjTable.BuildGeometry(var drawing:TDrawingDef);
+begin
+  Build(drawing);
+end;
+
+function GDBObjTable.IsStagedFormatEntity:boolean;
+begin
+  Result:=True;
+end;
+
+procedure GDBObjTable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+begin
+  if EFCalcEntityCS in stage then begin
+    if assigned(EntExtensions) then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+    calcobjmatrix;
+    //ConstObjArray.FormatEntity(drawing,dc);
+    calcbb(dc);
+  end;
+  CalcActualVisible(dc.DrawingContext.VActuality);
+  if EFDraw in stage then begin
+    self.BuildGeometry(drawing);
+      if assigned(EntExtensions) then
+        EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
 
 procedure GDBObjTable.Build;
@@ -316,7 +465,7 @@ begin
 
   h:=ccount*PTableStyle^.rowheight*scale;
   w:=x*scale;
-  BuildGeometry(drawing);
+  inherited BuildGeometry(drawing);
 end;
 
 constructor GDBObjTable.initnul;
@@ -358,68 +507,11 @@ begin
 
   pvd:=PTUnit(ptu).FindVariable('style');
   if pvd<>nil then begin
-    result^.PTableStyle:=drawing.GetTableStyleTable.AddStyle('KZ');
+    result^.PTableStyle:=drawing.GetTableStyleTable.AddStyle(pvd.GetValueAsString);
     pvd^.GetValueAsString;
   end;
 
 end;
-{
-var
-   pvi:pvardesk;
-begin
-     Getmem(pointer(result),sizeof(GDBObjElLeader));
-     result^.initnul;
-     result^.MainLine.CoordInOCS:=pent^.CoordInOCS;
-     pent.CopyVPto(result^);
-     //result^.vp.Layer:=pent^.vp.Layer;
-     //result^.vp.LineWeight:=pent^.vp.LineWeight;
-
-   if ptu<>nil then
-   begin
-   pvi:=PTUnit(ptu).FindVariable('size');
-   if pvi<>nil then
-                   begin
-                        result^.size:=PInteger(pvi^.data.Addr.Instance)^;
-                   end;
-   pvi:=PTUnit(ptu).FindVariable('scale');
-   if pvi<>nil then
-                   begin
-                        result^.scale:=pDouble(pvi^.data.Addr.Instance)^;
-                   end;
-   pvi:=PTUnit(ptu).FindVariable('twidth');
-   if pvi<>nil then
-                   begin
-                        result^.twidth:=pDouble(pvi^.data.Addr.Instance)^;
-                   end;
-   pvi:=PTUnit(ptu).FindVariable('AutoHAlaign');
-   if pvi<>nil then
-                   begin
-                        result^.AutoHAlaign:=PBoolean(pvi^.data.Addr.Instance)^;
-                   end;
-   pvi:=PTUnit(ptu).FindVariable('HorizontalAlign');
-   if pvi<>nil then
-                   begin
-                        result^.HorizontalAlign:=PTHAlign(pvi^.data.Addr.Instance)^;
-                   end;
-   pvi:=PTUnit(ptu).FindVariable('AutoVAlaign');
-   if pvi<>nil then
-                   begin
-                        result^.AutoVAlaign:=PBoolean(pvi^.data.Addr.Instance)^;
-                   end;
-   pvi:=PTUnit(ptu).FindVariable('VerticalAlign');
-   if pvi<>nil then
-                   begin
-                        result^.VerticalAlign:=PTVAlign(pvi^.data.Addr.Instance)^;
-                   end;
-   pvi:=PTUnit(ptu).FindVariable('ShowTable');
-    if pvi<>nil then
-      result^.ShowTable:=PBoolean(pvi^.data.Addr.Instance)^;
-
-   pvi:=PTUnit(ptu).FindVariable('ShowHeader');
-    if pvi<>nil then
-      result^.ShowHeader:=PBoolean(pvi^.data.Addr.Instance)^;
-   end;
-end;}
 
 
 initialization

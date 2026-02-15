@@ -285,9 +285,16 @@ end;
 function GDBObjTable.Clone;
 var
   tvo:PGDBObjTable;
+  i:integer;
+  pvs:PTZctnrVectorStrings;
 begin
   Getmem(Pointer(tvo),sizeof(GDBObjTable));
   tvo^.initnul;
+  for i:=0 to tbl.Count-1 do begin
+    pvs:=tvo^.tbl.CreateObject;
+    pvs^.initnul;
+    tbl.getDataMutable(i).copyto(pvs^);
+  end;
   tvo^.PTableStyle:=PTableStyle;
   tvo^.w:=w;
   tvo^.h:=h;

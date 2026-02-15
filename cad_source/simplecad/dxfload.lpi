@@ -32,13 +32,22 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="zreaders"/>
+      </Item>
+      <Item>
+        <PackageName Value="zunits"/>
+      </Item>
+      <Item>
+        <PackageName Value="zmath"/>
+      </Item>
+      <Item>
+        <PackageName Value="LCL"/>
+      </Item>
+      <Item>
         <PackageName Value="LCLBase"/>
       </Item>
       <Item>
         <PackageName Value="zcontainers"/>
-      </Item>
-      <Item>
-        <PackageName Value="zebase"/>
       </Item>
     </RequiredPackages>
     <Units>
@@ -56,7 +65,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);..\zengine"/>
-      <OtherUnitFiles Value="..\zengine\containers;..\zengine;..\zengine\core;..\zengine\core\utils;..\zengine\core\objects;..\zengine\core\entities;..\zengine\zgl;..\zengine\geomlib;..\zengine\styles;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings"/>
+      <OtherUnitFiles Value="..\zengine\containers;..\zengine;..\zengine\core;..\zengine\core\utils;..\zengine\core\objects;..\zengine\core\entities;..\zengine\zgl;..\zengine\geomlib;..\zengine\styles;..\zengine\zgl\common;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

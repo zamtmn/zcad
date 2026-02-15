@@ -46,7 +46,7 @@ begin
   arc^.EndAngle:=3*Pi/2;
   // Конечный угол π радиан (полукруг)
   //Добавление дуги в чертёж
-  drawing.GetCurrentRoot^.AddMi(@arc);
+  drawing.GetCurrentRoot^.AddMi(arc);
   // Создание контекста рисования
   dc:=drawing.CreateDrawingRC;
   // Построение геометрии

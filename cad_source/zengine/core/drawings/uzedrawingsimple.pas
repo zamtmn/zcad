@@ -993,6 +993,33 @@ begin
 
 
 
+     ts:=TableStyleTable.AddStyle('PE');
+
+        ts.rowheight:=8;
+        ts.textheight:=3.5;
+
+        ts.HeadBlockName:='TBL_PE_HEAD';
+
+        cs.Width:=20;
+        cs.TextWidth:=cs.Width-2;
+        cs.cf:=jcc;
+        ts.tblformat.PushBackData(cs);
+
+        cs.Width:=110;
+        cs.TextWidth:=cs.Width-2;
+        cs.cf:=jcl;
+        ts.tblformat.PushBackData(cs);
+
+        cs.Width:=10;
+        cs.TextWidth:=cs.Width-2;
+        cs.cf:=jcc;
+        ts.tblformat.PushBackData(cs);
+
+        cs.Width:=45;
+        cs.TextWidth:=cs.Width-2;
+        cs.cf:=jcl;
+        ts.tblformat.PushBackData(cs);
+
 
   ts:=TableStyleTable.AddStyle('KZ');
 

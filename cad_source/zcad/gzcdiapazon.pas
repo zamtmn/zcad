@@ -43,6 +43,7 @@ type
     procedure TryCombine;
   public
     constructor Create;
+    destructor Destroy;override;
     procedure AddIndex(index:GIndexType);
     property Diap:TVec read fDiapozon;
   end;
@@ -63,6 +64,11 @@ end;
 constructor GDiapazon<GIndexType>.Create;
 begin
   fDiapozon:=TVec.create;
+end;
+
+destructor GDiapazon<GIndexType>.Destroy;
+begin
+  fDiapozon.Destroy;
 end;
 
 function GDiapazon<GIndexType>.Compare(const index:GIndexType;var Indexs:TIndexs):integer;

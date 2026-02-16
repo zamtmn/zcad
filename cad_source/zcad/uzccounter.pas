@@ -68,6 +68,7 @@ type
         fDiapazon:TDiapazon;
     public
       constructor Create;
+      destructor Destroy;override;
       //procedure CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
       property Diapazon:TDiapazon read fDiapazon;
     end;
@@ -85,6 +86,7 @@ type
         fOtherNames:TOtherNames;
     public
       constructor Create(AVarName:TInternalScriptString);
+      destructor Destroy;override;
       procedure CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
       function getNamesLength:integer;
       function getNames:TArrayOfString;
@@ -104,6 +106,7 @@ type
       procedure CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
     public
       constructor Create(AVarNames:TVarNames);
+      destructor Destroy;override;
       procedure CombineAndCount(Value:integer;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
       procedure CombineAndCount(Value:double;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
       function getNames:TArrayOfString;
@@ -130,6 +133,12 @@ constructor GCombineCounter<GKeyType,GIndexType>.TMorphemElement.Create;
 begin
   fDiapazon:=TDiapazon.Create;
 end;
+
+destructor GCombineCounter<GKeyType,GIndexType>.TMorphemElement.Destroy;
+begin
+  fDiapazon.destroy;
+end;
+
 
 function TMorphemeComparer.Equals({$IF FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}ALeft,ARight:TMorpheme):boolean;
 var
@@ -164,6 +173,18 @@ begin
   fVarName2:=AVarName;
   fMorphemsContainer:=TMorphemsContainer.Create(TMorphemeComparer.Create);
   fOtherNames:=TOtherNames.Create;
+end;
+
+destructor GCombineCounter<GKeyType,GIndexType>.TVarElement.Destroy;
+var
+  pair:TMorphemsContainer.TDictionaryPair;
+begin
+  fVarName:='';
+  fVarName2:='';
+  for pair in fMorphemsContainer do
+    pair.Value.free;
+  fMorphemsContainer.Destroy;
+  fOtherNames.Destroy;
 end;
 
 procedure GCombineCounter<GKeyType,GIndexType>.TVarElement.CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
@@ -284,6 +305,15 @@ begin
   end;
 end;
 
+destructor GCombineCounter<GKeyType,GIndexType>.TKeyElement.Destroy;
+var
+  i:Integer;
+begin
+  for i:=low(fVarElements) to high(fVarElements) do begin
+    fVarElements[i].Destroy;
+  end;
+end;
+
 procedure GCombineCounter<GKeyType,GIndexType>.TKeyElement.CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
 var
   i:Integer;
@@ -336,8 +366,12 @@ begin
 end;
 
 destructor GCombineCounter<GKeyType,GIndexType>.Destroy;
+var
+  pair:TContainer.TDictionaryPair;
 begin
   fCombineVarNames:=[];
+  for pair in fContainer do
+    pair.Value.free;
   fContainer.Destroy;
 end;
 

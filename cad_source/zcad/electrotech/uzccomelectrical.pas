@@ -3527,6 +3527,7 @@ end;
 procedure finalize;
 begin
      MainSpecContentFormat.Done;
+  cabcomparam.Traces.Enums.done;
 end;
 initialization
   startup;

@@ -341,18 +341,8 @@ begin
         PGDBObjEntity(pobj)^.vp.LineType:=bylayerlt;
       if assigned(PGDBObjEntity(pobj)^.EntExtensions) then
         PGDBObjEntity(pobj)^.EntExtensions.RunSupportOldVersions(pobj,drawing);
-      case owner.DXFLoadTryMi(PExtLoadData,pobj) of
-        TR_NeedTrash:begin
-          postobj:=nil;
-          trash:=true;
-        end;
-        TR_Nothing:begin
-          pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(PExtLoadData,drawing);
-          trash:=false;
-        end;
-      end;
-      //pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(PExtLoadData,drawing);
-      //trash:=false;
+      pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(PExtLoadData,drawing);
+      trash:=false;
       if postobj=nil  then begin
         newowner:=owner;
         if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
@@ -362,6 +352,19 @@ begin
           end;
           if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
             newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle).p;
+
+          if newowner<>nil then
+            case newowner.DXFLoadTryMi(PExtLoadData,pobj) of
+              TR_NeedTrash:begin
+                postobj:=nil;
+                trash:=true;
+              end;
+              TR_Nothing:begin
+                pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(PExtLoadData,drawing);
+                trash:=false;
+              end;
+          end;
+
           if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
             trash:=true;
         end;

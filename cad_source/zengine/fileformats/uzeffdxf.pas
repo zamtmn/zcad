@@ -351,8 +351,8 @@ begin
           trash:=false;
         end;
       end;
-      pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(PExtLoadData,drawing);
-      trash:=false;
+      //pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(PExtLoadData,drawing);
+      //trash:=false;
       if postobj=nil  then begin
         newowner:=owner;
         if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
@@ -364,15 +364,6 @@ begin
             newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle).p;
           if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
             trash:=true;
-          case newowner.DXFLoadTryMi(PExtLoadData,pobj) of
-            TR_NeedTrash:begin
-              trash:=true;
-            end;
-            TR_Nothing:begin
-              trash:=false;
-            end;
-          end;
-
         end;
         if newowner=nil then begin
           zDebugLn('{EH}Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');

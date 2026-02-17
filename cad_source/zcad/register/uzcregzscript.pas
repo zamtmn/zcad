@@ -605,7 +605,11 @@ begin
   otd:=ptsu^.RegisterObjectType(TypeInfo(varmanager),TypeOf(varmanager));
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorPointer),
-                                  TypeOf(TZctnrVectorPointer));
+                                  TypeOf(TZctnrVectorPointer),
+                                        'TZctnrVectorPointer');
+  if otd<>nil then begin
+    otd^.AddMetod('','done','',@TZctnrVectorPointer.done,m_destructor);
+  end;
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TSimpleUnit),TypeOf(TSimpleUnit));
 
@@ -621,6 +625,10 @@ begin
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorStrings),
                                   TypeOf(TZctnrVectorStrings));
+  if otd<>nil then begin
+    otd^.AddMetod('','done','',@TZctnrVectorStrings.done,m_destructor);
+  end;
+
   utd:=ptsu^.RegisterType(TypeInfo(TEnumData),'TEnumData');
   utd:=ptsu^.RegisterType(TypeInfo(PTEnumData),'PTEnumData');
   utd:=ptsu^.RegisterType(TypeInfo(TEnumDataWithOtherStrings),
@@ -635,7 +643,7 @@ begin
 
   utd:=ptsu^.RegisterType(TypeInfo(TMSPrimitiveDetector),
                                   'TMSPrimitiveDetector');
-  if  utd<>nil then
+  if utd<>nil then
     registerRecTypeDescriptorOverrider(utd,@GDBEnumDataDescriptorObj);
   utd:=ptsu^.RegisterType(TypeInfo(TMSBlockNamesDetector),
                                   'TMSBlockNamesDetector');

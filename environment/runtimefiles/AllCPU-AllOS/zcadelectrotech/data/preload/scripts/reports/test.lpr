@@ -1,24 +1,33 @@
 var
-  sa:TStringArray;
   EntTypeInclude,EntTypeExclude,EntExtdrInclude,EntExtdrExclude:String;
+  CombineVariables:String;
   fltr:ThEntsTypeFilter;
   ents:ThEnts;
   ent,report:PzeEntity;
   vars,reportvars:TVariablesExtender;
-  basename:string;
-  i:int32;
+  cc:ThCombineCounter;
+  i,j:int32;
+  pvd_DB_link,pvd_NMO_Name:pvardesk;
+  names,DB_link,NMO_Name:string;
+
+  CounterResults:TCounterResults;
+
+  table:PzeEntity;
 begin
   report:=ThisReport;
   reportvars:=ThisReportVariableExtdr;
 
-  reportvars.GetVarValue('RPRT_EntTypeInclude',EntTypeInclude);
-  reportvars.GetVarValue('RPRT_EntTypeExclude',EntTypeExclude);
-  reportvars.GetVarValue('RPRT_EntExtdrInclude',EntExtdrInclude);
-  reportvars.GetVarValue('RPRT_EntExtdrExclude',EntExtdrExclude);
+  reportvars.GetVarValue('RPRTFLTR_EntTypeInclude',EntTypeInclude);
+  reportvars.GetVarValue('RPRTFLTR_EntTypeExclude',EntTypeExclude);
+  reportvars.GetVarValue('RPRTFLTR_EntExtdrInclude',EntExtdrInclude);
+  reportvars.GetVarValue('RPRTFLTR_EntExtdrExclude',EntExtdrExclude);
+  reportvars.GetVarValue('RPRTBUILD_CombineVariables',CombineVariables);
+
   zcUIHistoryOut('EntTypeInclude='+EntTypeInclude);
   zcUIHistoryOut('EntTypeExclude='+EntTypeExclude);
   zcUIHistoryOut('EntExtdrInclude='+EntExtdrInclude);
   zcUIHistoryOut('EntExtdrExclude='+EntExtdrExclude);
+  zcUIHistoryOut('CombineVariables='+CombineVariables);
 
   fltr:=ThEntsTypeFilter.create;   
   fltr.AddTypeNames(EntTypeInclude.split(','));
@@ -29,11 +38,39 @@ begin
   ents:=ThEnts.create;
   GetEntsFromCurrentRoot(ents,fltr);
   fltr.free;
+  cc:=ThCombineCounter.create;
+  cc.SetCombineVarNames(CombineVariables.split(','));
   for i:=ents.low to ents.high do begin
     ent:=ents.data(i);
     vars:=ent.GetVariableExtdr;
-    vars.GetVarValue('NMO_Name',basename);
-    zcUIHistoryOut(basename);
+    {if vars.GetVarValue('NMO_Name',NMO_Name) in GVRFounded then
+      zcUIHistoryOut(NMO_Name)
+    else
+      zcUIMessageBox('NMO_Name not found');}
+    pvd_DB_link:=vars.GetVarDesk('DB_link');
+    if pvd_DB_link<>nil then begin
+      DB_link:=pvd_DB_link.GetValueAsString;
+
+      pvd_NMO_Name:=vars.GetVarDesk('NMO_Name');
+
+      cc.CombineAndCount(ent,vars,pvd_NMO_Name,DB_link);
+    end;
   end;
+  cc.SaveTo(CounterResults);
+  table:=zeEntTable(zeDwgGetTableStyle('PE'));
+  for i:=0 to length(CounterResults)-1 do begin
+    _ArraySort(CounterResults[i].names);
+    if length(CounterResults[i].names)>0 then begin
+    names:=CounterResults[i].names[0];
+      for j:=1 to length(CounterResults[i].names)-1 do
+        names:=names+', '+CounterResults[i].names[j];
+    end else
+      names:='';
+    zeEntTableAddRow(table,[names,CounterResults[i].Key,ToString(CounterResults[i].Value),''],false);
+    //zcUIHistoryOut(names+'  '+CounterResults[i].Key+'  '+ToString(CounterResults[i].Value));
+  end;
+  //zeEntLine(0,0,0,100,100,0);
+  zeEntTableAddRow(table,[''],true);
   ents.free;
+  cc.free;
 end.

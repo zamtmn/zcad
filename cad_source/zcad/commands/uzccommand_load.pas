@@ -125,9 +125,11 @@ begin
       LastFileHandle:=Ext2LoadProcMap.GetDefaultFileFormatHandle(
         Ext2LoadProcMap.DefaultExt);
     zcUI.Do_BeforeShowModal(nil);
-    isload:=OpenFileDialog(s,LastFileHandle,'',Ext2LoadProcMap.GetCurrentFileFilter,
-      '',rsOpenFile);
-    zcUI.Do_AfterShowModal(nil);
+    try
+      isload:=OpenFileDialog(s,LastFileHandle,'',Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
+    finally
+      zcUI.Do_AfterShowModal(nil);
+    end;
     if not isload then begin
       Result:=cmd_cancel;
       exit;

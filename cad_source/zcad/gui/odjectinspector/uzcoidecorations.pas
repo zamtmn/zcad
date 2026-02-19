@@ -251,12 +251,14 @@ begin
      Application.CreateForm(TColorSelectForm, ColorSelectForm);
      SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
      zcUI.Do_BeforeShowModal(ColorSelectForm);
-     mr:=ColorSelectForm.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
-     if mr=ZCmrOk then
-                    begin
-                    PTGDBPaletteColor(PInstance)^:=ColorSelectForm.ColorInfex;
-                    end;
-     zcUI.Do_AfterShowModal(ColorSelectForm);
+     try
+       mr:=ColorSelectForm.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
+       if mr=ZCmrOk then begin
+         PTGDBPaletteColor(PInstance)^:=ColorSelectForm.ColorInfex;
+       end;
+     finally
+       zcUI.Do_AfterShowModal(ColorSelectForm);
+     end;
      freeandnil(ColorSelectForm);
 end;
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);

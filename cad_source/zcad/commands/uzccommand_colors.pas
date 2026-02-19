@@ -44,10 +44,13 @@ begin
     ColorSelectForm:=TColorSelectForm.Create(nil);
   SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
   zcUI.Do_BeforeShowModal(ColorSelectForm);
-  mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,True){showmodal};
-  if mr=ZCmrOK then
-    SysVar.dwg.DWG_CColor^:=ColorSelectForm.ColorInfex;
-  zcUI.Do_AfterShowModal(ColorSelectForm);
+  try
+    mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,True){showmodal};
+    if mr=ZCmrOK then
+      SysVar.dwg.DWG_CColor^:=ColorSelectForm.ColorInfex;
+  finally
+    zcUI.Do_AfterShowModal(ColorSelectForm);
+  end;
   FreeAndNil(ColorSelectForm);
   Result:=cmd_ok;
 end;

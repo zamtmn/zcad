@@ -80,9 +80,11 @@ begin
      programlog.logoutstr(s,0,LM_Fatal);
      s:=(s);
      zcUI.Do_BeforeShowModal(nil);
-     Application.MessageBox(@s[1],'',MB_OK or MB_ICONSTOP);
-     zcUI.Do_AfterShowModal(nil);
-
+     try
+       Application.MessageBox(@s[1],'',MB_OK or MB_ICONSTOP);
+     finally
+       zcUI.Do_AfterShowModal(nil);
+     end;
      halt(0);
 end;
 
@@ -143,70 +145,70 @@ begin
     end else
       MsgID:='';
     zcUI.Do_BeforeShowModal(nil);
+    try
+      CorrectButtons(buttons);
 
-    CorrectButtons(buttons);
-
-    if MsgTitle='' then
-      Task.Caption:=rsMsgWndTitle
-    else
-      Task.Caption:=MsgTitle;
-
-    Task.{Inst}Title:='';
-    Task.Text:=MsgStr;
-    if (NeedAskDonShow)and((lps.isProcessed)or(assigned(PContext^))) then begin
-      if buttons=[zccbOK] then
-        Task.VerificationText:=format(rsDontShowThisNextTime,[TaskName])
+      if MsgTitle='' then
+        Task.Caption:=rsMsgWndTitle
       else
-        Task.VerificationText:=format(rsMsgKeepChoice,[TaskName]);
-    end
-    else
-      Task.VerificationText:='';
-    Task.Flags:=Task.Flags-[tfVerificationFlagChecked];
-    //Task.VerifyChecked := false;
+        Task.Caption:=MsgTitle;
 
-    ParentHWND:=0;
-
-    //считаем сколько фактически форм зкада показано на экране
-    FirstMainParent:=nil;
-    MainParent:=nil;
-    for i:=0 to Screen.CustomFormCount-1 do begin
-      MainParent:=Screen.CustomForms[i];
-      if MainParent.IsVisible then begin
-        while MainParent.Parent<>nil do
-          MainParent:=MainParent.Parent;
-        if MainParent is TCustomForm then
-          //сплэшскрин за отдельнцю форму не считаем
-          if (MainParent as TCustomForm).FormStyle=fsSplash then
-            continue;
-        if FirstMainParent=nil then
-          FirstMainParent:=MainParent
+      Task.{Inst}Title:='';
+      Task.Text:=MsgStr;
+      if (NeedAskDonShow)and((lps.isProcessed)or(assigned(PContext^))) then begin
+        if buttons=[zccbOK] then
+          Task.VerificationText:=format(rsDontShowThisNextTime,[TaskName])
         else
-          if FirstMainParent<>MainParent then
-            Break;
-      end else
-        MainParent:=FirstMainParent;
+          Task.VerificationText:=format(rsMsgKeepChoice,[TaskName]);
+      end
+      else
+        Task.VerificationText:='';
+      Task.Flags:=Task.Flags-[tfVerificationFlagChecked];
+      //Task.VerifyChecked := false;
+
+      ParentHWND:=0;
+
+      //считаем сколько фактически форм зкада показано на экране
+      FirstMainParent:=nil;
+      MainParent:=nil;
+      for i:=0 to Screen.CustomFormCount-1 do begin
+        MainParent:=Screen.CustomForms[i];
+        if MainParent.IsVisible then begin
+          while MainParent.Parent<>nil do
+            MainParent:=MainParent.Parent;
+          if MainParent is TCustomForm then
+            //сплэшскрин за отдельнцю форму не считаем
+            if (MainParent as TCustomForm).FormStyle=fsSplash then
+              continue;
+          if FirstMainParent=nil then
+            FirstMainParent:=MainParent
+          else
+            if FirstMainParent<>MainParent then
+              Break;
+        end else
+          MainParent:=FirstMainParent;
+      end;
+
+      //если одна, Task в центре формы, если несколько или нет вообще - в центре экрана
+      if (FirstMainParent=MainParent)and(FirstMainParent<>nil) then
+        TDF:=[tfPositionRelativeToWindow]
+      else
+        TDF:=[];
+
+      Task.Flags:=Task.Flags+TDF;
+      Task.CommonButtons:=TZCMsgCommonButtons2TCommonButtons.Convert(buttons);
+      Task.MainIcon:=TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon);
+      //Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,TDF,TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tdiWarning,0,0,}ParentHWND)
+
+      if Task.Execute{(ParentHWND)} then begin
+        Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.ModalResult);
+        //Result.RadioRes:=Task.RadioRes;
+        //Result.SelectionRes:=Task.SelectionRes;
+        Result.VerifyChecked:={Task.VerifyChecked}tfVerificationFlagChecked in Task.Flags;
+      end;
+    finally
+      zcUI.Do_AfterShowModal(nil);
     end;
-
-    //если одна, Task в центре формы, если несколько или нет вообще - в центре экрана
-    if (FirstMainParent=MainParent)and(FirstMainParent<>nil) then
-      TDF:=[tfPositionRelativeToWindow]
-    else
-      TDF:=[];
-
-    Task.Flags:=Task.Flags+TDF;
-    Task.CommonButtons:=TZCMsgCommonButtons2TCommonButtons.Convert(buttons);
-    Task.MainIcon:=TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon);
-    //Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,TDF,TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tdiWarning,0,0,}ParentHWND)
-
-    if Task.Execute{(ParentHWND)} then begin
-    Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.ModalResult);
-    //Result.RadioRes:=Task.RadioRes;
-    //Result.SelectionRes:=Task.SelectionRes;
-    Result.VerifyChecked:={Task.VerifyChecked}tfVerificationFlagChecked in Task.Flags;
-    end;
-
-
-    zcUI.Do_AfterShowModal(nil);
 
     if {Task.VerifyChecked}tfVerificationFlagChecked in Task.Flags then begin
       if MsgID='' then
@@ -222,8 +224,11 @@ end;
 function zcQuestion(Caption,Question:TZCMsgStr;buttons:TZCMsgCommonButtons;icon:TZCMsgDlgIcon):TZCMsgCommonButton;
 begin
   zcUI.Do_BeforeShowModal(nil);
-  result:=TZCMsgModalResult2TZCMsgCommonButton(zcMsgDlg(Question,icon,buttons,False,nil,Caption).ModalResult);
-  zcUI.Do_AfterShowModal(nil);
+  try
+    result:=TZCMsgModalResult2TZCMsgCommonButton(zcMsgDlg(Question,icon,buttons,False,nil,Caption).ModalResult);
+  finally
+    zcUI.Do_AfterShowModal(nil);
+  end;
 end;
 
 initialization

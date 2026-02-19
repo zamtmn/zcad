@@ -104,28 +104,31 @@ var
   dr:TZCMsgDialogResult;
 begin
   zcUI.Do_BeforeShowModal(nil);
-  s:=drawings.GetCurrentDWG.GetFileName;
-  if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then begin
-    if FileExists(s) then begin
-      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,
-        [zccbYes,zccbNo,zccbCancel],False,nil,rsQuitCaption);
-      if dr.ModalResult=ZCmrCancel then
-        exit(cmd_cancel)
-      else if dr.ModalResult=ZCmrNo then
-        exit(cmd_ok);
+  try
+    s:=drawings.GetCurrentDWG.GetFileName;
+    if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then begin
+      if FileExists(s) then begin
+        dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,
+          [zccbYes,zccbNo,zccbCancel],False,nil,rsQuitCaption);
+        if dr.ModalResult=ZCmrCancel then
+          exit(cmd_cancel)
+        else if dr.ModalResult=ZCmrNo then
+          exit(cmd_ok);
+      end;
+      fileext:=uppercase(ExtractFileEXT(s));
+      if fileext='.DXF' then begin
+        SaveDXFDPAS(s);
+        drawings.GetCurrentDWG.SetFileName(s);
+        drawings.GetCurrentDWG.ChangeStampt(False);
+        zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
+      end else begin
+        zcUI.TextMessage(Format(rsunknownFileExt,[fileext]),TMWOShowError);
+      end;
     end;
-    fileext:=uppercase(ExtractFileEXT(s));
-    if fileext='.DXF' then begin
-      SaveDXFDPAS(s);
-      drawings.GetCurrentDWG.SetFileName(s);
-      drawings.GetCurrentDWG.ChangeStampt(False);
-      zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
-    end else begin
-      zcUI.TextMessage(Format(rsunknownFileExt,[fileext]),TMWOShowError);
-    end;
+  finally
+    Result:=cmd_ok;
+    zcUI.Do_AfterShowModal(nil);
   end;
-  Result:=cmd_ok;
-  zcUI.Do_AfterShowModal(nil);
 end;
 
 initialization

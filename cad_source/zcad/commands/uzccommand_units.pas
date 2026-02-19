@@ -53,12 +53,15 @@ begin
   _UnitsFormat:=drawings.GetUnitsFormat;
 
   zcUI.Do_BeforeShowModal(UnitsForm);
-  Result:=UnitsForm.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
-  if Result=ZCmrOK then begin
-    drawings.SetUnitsFormat(_UnitsFormat);
-    zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
+  try
+    Result:=UnitsForm.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
+    if Result=ZCmrOK then begin
+      drawings.SetUnitsFormat(_UnitsFormat);
+      zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
+    end;
+  finally
+    zcUI.Do_AfterShowModal(UnitsForm);
   end;
-  zcUI.Do_AfterShowModal(UnitsForm);
   StoreBoundsToSavedUnit('UnitsWND',UnitsForm.BoundsRect);
   FreeAndNil(UnitsForm);
   Result:=cmd_ok;

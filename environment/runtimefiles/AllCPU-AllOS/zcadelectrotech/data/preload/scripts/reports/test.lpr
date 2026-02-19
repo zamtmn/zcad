@@ -1,4 +1,5 @@
 var
+  EntSourceIncludingVolumeFunction:String;
   EntTypeInclude,EntTypeExclude,EntExtdrInclude,EntExtdrExclude:String;
   CombineVariables:String;
   fltr:ThEntsTypeFilter;
@@ -17,12 +18,14 @@ begin
   report:=ThisReport;
   reportvars:=ThisReportVariableExtdr;
 
+  reportvars.GetVarValue('RPRTSRC_EntSourceIncludingVolumeFunction',EntSourceIncludingVolumeFunction);
   reportvars.GetVarValue('RPRTFLTR_EntTypeInclude',EntTypeInclude);
   reportvars.GetVarValue('RPRTFLTR_EntTypeExclude',EntTypeExclude);
   reportvars.GetVarValue('RPRTFLTR_EntExtdrInclude',EntExtdrInclude);
   reportvars.GetVarValue('RPRTFLTR_EntExtdrExclude',EntExtdrExclude);
   reportvars.GetVarValue('RPRTBUILD_CombineVariables',CombineVariables);
 
+  zcUIHistoryOut('EntSourceIncludingVolumeFunction='+EntSourceIncludingVolumeFunction);
   zcUIHistoryOut('EntTypeInclude='+EntTypeInclude);
   zcUIHistoryOut('EntTypeExclude='+EntTypeExclude);
   zcUIHistoryOut('EntExtdrInclude='+EntExtdrInclude);
@@ -36,8 +39,14 @@ begin
   fltr.SubExtdrNames(EntExtdrExclude.split(','));
   
   ents:=ThEnts.create;
-  GetEntsFromCurrentRoot(ents,fltr);
+  if EntSourceIncludingVolumeFunction='' then
+    GetEntsFromCurrentRoot(ents,fltr)
+  else
+    GetEntsFromConnectedIncludingVolume(ents,fltr,report,'ENTID_Function',EntSourceIncludingVolumeFunction);
   fltr.free;
+  zcUIHistoryOut('ents.low='+ToString(ents.low));
+  zcUIHistoryOut('ents.high='+ToString(ents.high));
+
   cc:=ThCombineCounter.create;
   cc.SetCombineVarNames(CombineVariables.split(','));
   for i:=ents.low to ents.high do begin
@@ -47,7 +56,7 @@ begin
       zcUIHistoryOut(NMO_Name)
     else
       zcUIMessageBox('NMO_Name not found');}
-    pvd_DB_link:=vars.GetVarDesk('DB_link');
+    pvd_DB_link:=vars.GetVarDesk('DB_link',true);
     if pvd_DB_link<>nil then begin
       DB_link:=pvd_DB_link.GetValueAsString;
 
@@ -56,6 +65,7 @@ begin
       cc.CombineAndCount(ent,vars,pvd_NMO_Name,DB_link);
     end;
   end;
+
   cc.SaveTo(CounterResults);
   table:=zeEntTable(zeDwgGetTableStyle('PE'));
   for i:=0 to length(CounterResults)-1 do begin

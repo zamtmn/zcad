@@ -36,9 +36,9 @@ uses
   uzccommandsmanager,uzeentgenericsubentry,UGDBVisibleOpenArray,
   uzeentsubordinated,uzeenttable,uzestylestables,uzctnrVectorStrings,
   uzgldrawcontext,uzeentitiestypefilter,uzCtnrVectorPBaseEntity,
-  uzeEntBase,gzctnrVectorTypes,uzcEnitiesVariablesExtender,
+  uzeEntBase,gzctnrVectorTypes,uzcEnitiesVariablesExtender,uzcExtdrIncludingVolume,
   uzsbVarmanDef,UBaseTypeDescriptor,uzcregisterenitiesfeatures,
-  uzcCounter,varman,uzcdevicebaseabstract;
+  uzcCounter,varman,uzcdevicebaseabstract,Masks;
 
 type
 
@@ -897,6 +897,80 @@ begin
   PInt32(Result)^:=entscount;
 end;
 
+procedure GetEntsFromConnectedIncludingVolume(const Params: PParamArray;const Result: Pointer);cdecl;
+//function GetEntsFromConnectedIncludingVolume(var Ents:ThEnts;fltr:ThEntsTypeFilter;AConnectedEnt:PzeEntity;AVarName,AVarValue:string):int32
+var
+  ctx:TCurrentDrawingContext;
+  Index:TThingsIndex;
+  ents:ThEnts;
+  fltr:TEntsTypeFilter;
+  entscount:integer;
+
+  pent:PGDBObjEntity;
+  ir:itrec;
+
+  AConnectedEnt:PGDBObjEntity;
+  AVarName,AVarValue:string;
+
+  VarsExtdr,ConnectedVarsExtdr,FoundedVarsExtd:TVariablesExtender;
+  VolExtdr:TIncludingVolumeExtender;
+  pvd:pvardesk;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+
+  Index:=PThingsIndex(Params^[1])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    ents:=ThEnts(TThings(Index.Things)[Index.Index]);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThEnts]);
+
+  Index:=PThingsIndex(Params^[2])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    fltr:=TEntsTypeFilter(TThings(Index.Things)[Index.Index]);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
+
+  AConnectedEnt:=ppointer(Params^[3])^;
+  AVarName:=Pstring(Params^[4])^;
+  AVarValue:=Pstring(Params^[5])^;
+
+  VarsExtdr:=nil;
+  FoundedVarsExtd:=nil;
+  if AConnectedEnt<>nil then begin
+    VarsExtdr:=AConnectedEnt^.GetExtension<TVariablesExtender>;
+    if VarsExtdr<>nil then begin
+      for ConnectedVarsExtdr in VarsExtdr.ConnectedVariablesExtenders do begin
+        pvd:=ConnectedVarsExtdr.EntityUnit.FindVariable(AVarName,true);
+        if pvd<>nil then
+          if MatchesMask(pvd^.GetValueAsString,AVarValue) then begin
+            FoundedVarsExtd:=ConnectedVarsExtdr;
+            break;
+          end;
+      end;
+    end;
+  end;
+
+  entscount:=0;
+  if FoundedVarsExtd<>nil then begin
+    VolExtdr:=FoundedVarsExtd.pThisEntity^.GetExtension<TIncludingVolumeExtender>;
+    if VolExtdr<>nil then begin
+      pent:=VolExtdr.InsideEnts.beginiterate(ir);
+      if pent<>nil then
+        repeat
+          if fltr.IsEntytyAccepted(pent) then begin
+            ents.PushBack(pent);
+            inc(entscount);
+          end;
+          pent:=VolExtdr.InsideEnts.iterate(ir);
+        until pent=nil;
+    end;
+
+  end;
+
+  PInt32(Result)^:=entscount;
+end;
+
+
 procedure ThEnts_Low(const Params: PParamArray;const Result: Pointer); cdecl;
 var
   Index:TThingsIndex;
@@ -974,6 +1048,7 @@ begin
       cplr.addGlobalMethod('function ThEntsTypeFilter.Create: ThEntsTypeFilter; static;',@ThEntsTypeFilter_Create,ctx);
       cplr.addGlobalFunc('procedure ThEntsTypeFilter.Free;',@ThEntsTypeFilter_Free);
       cplr.addGlobalMethod('function GetEntsFromCurrentRoot(var Ents:ThEnts;fltr:ThEntsTypeFilter):int32;',@GetEntsFromCurrentRoot,ctx);
+      cplr.addGlobalMethod('function GetEntsFromConnectedIncludingVolume(var Ents:ThEnts;fltr:ThEntsTypeFilter;AConnectedEnt:PzeEntity;AVarName,AVarValue:string):int32;',@GetEntsFromConnectedIncludingVolume,ctx);
 
       cplr.addGlobalFunc('procedure ThEntsTypeFilter.AddTypeNames(EntTypeNames:array of String);',@ThEntsTypeFilter_AddTypeNames);
       cplr.addGlobalFunc('procedure ThEntsTypeFilter.SubTypeNames(EntTypeNames:array of String);',@ThEntsTypeFilter_SubTypeNames);
@@ -1192,11 +1267,13 @@ procedure TVariablesExtender_GetVarDesk(const Params: PParamArray;const Result: 
 var
   vn:string;
   varsextdr:TVariablesExtender;
+  InInterfaceOnly:boolean;
 begin
   varsextdr:=TVariablesExtender((Params^[0])^);
   if varsextdr<>nil then begin
     vn:=pstring(Params^[1])^;
-    ppointer(Result)^:=varsextdr.entityunit.FindVarDesc(vn{,InInterfaceOnly}).Instance;
+    InInterfaceOnly:=pboolean(Params^[2])^;
+    ppointer(Result)^:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;
@@ -1311,7 +1388,7 @@ begin
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:Int32;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_int32);
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:double;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_double);
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:string;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_string);
-      cplr.addGlobalFunc('function TVariablesExtender.GetVarDesk(VarName:string):PVarDesk;',@TVariablesExtender_GetVarDesk);
+      cplr.addGlobalFunc('function TVariablesExtender.GetVarDesk(VarName:string;InInterfaceOnly:boolean=false):PVarDesk;',@TVariablesExtender_GetVarDesk);
       cplr.addGlobalFunc('function TVariablesExtender.GetValueTemplate(PVD:PVarDesk;PEnt:PzeEntity):String;',@TVariablesExtender_GetVarTemplate);
 
       cplr.addGlobalFunc('function PVarDesk.GetValueAsString:String;',@PVarDesk_GetValueAsString);

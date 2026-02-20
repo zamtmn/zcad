@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzcLapeScriptsImplDrawing;
-{$Codepage UTF8}
+{$Codepage UTF8}{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -38,7 +38,8 @@ uses
   uzgldrawcontext,uzeentitiestypefilter,uzCtnrVectorPBaseEntity,
   uzeEntBase,gzctnrVectorTypes,uzcEnitiesVariablesExtender,uzcExtdrIncludingVolume,
   uzsbVarmanDef,UBaseTypeDescriptor,uzcregisterenitiesfeatures,
-  uzcCounter,varman,uzcdevicebaseabstract,Masks;
+  uzcCounter,varman,uzcdevicebaseabstract,Masks,Generics.Defaults,Generics.Collections,
+  gzctnrSTL;
 
 type
 
@@ -145,6 +146,37 @@ type
   PzePoints3d=^TzePoints3d;
   TSingles=array of Single;
   PSingles=^TSingles;
+
+type
+  TNames=array of string;
+  TCounterResult=record names:Tnames;Key:string;Value:double;isInteger:boolean; end;
+  TCounterResults=array of TCounterResult;
+  PCounterResults=^TCounterResults;
+
+  ICounterResultComparer=Generics.Defaults.IComparer<TCounterResult>;
+  TCounterResultComparer=class(TInterfacedObject,ICounterResultComparer)
+    function Compare(const Left,Right:TCounterResult):Integer;overload;
+  end;
+
+  TPCounter=TMyMapCounter<pointer>;
+
+function TCounterResultComparer.Compare(const Left,Right:TCounterResult):Integer;overload;
+var
+  l0,r0:string;
+begin
+  if length(left.names)=0 then
+    l0:=''
+  else
+    l0:=left.names[0];
+
+  if length(right.names)=0 then
+    r0:=''
+  else
+    r0:=right.names[0];
+  Result:=CompareStr(l0,r0);
+  if Result=0 then
+    Result:=CompareStr(left.Key,right.Key);
+end;
 
 constructor ThEnts.Create;
 begin
@@ -1102,6 +1134,63 @@ begin
   PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
 end;
 
+procedure ThDictionary_Create(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  counter:TPCounter;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  counter:=TPCounter.Create;
+  ctx.Things.PushBack(counter);
+  PThingsIndex(Result)^.Things:=ctx.Things;
+  PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
+end;
+
+procedure ThDictionary_Free(const Params:PParamArray); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TPCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TPCounter(TThings(Index.Things)[Index.Index]);
+    counter.Free;
+    TThings(Index.Things).mutable[Index.Index]^:=nil;
+    PThingsIndex(Params^[0])^.Index:=-1;
+    PThingsIndex(Params^[0])^.Things:=nil;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThDictionary_Add(const Params:PParamArray); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TPCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TPCounter(TThings(Index.Things)[Index.Index]);
+    counter.CountKey(PPointer(Params^[1])^);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThDictionary_Contains(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TPCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TPCounter(TThings(Index.Things)[Index.Index]);
+    if counter.ContainsKey(PPointer(Params^[1])^) then
+      PBoolean(Result)^:=true
+    else
+      PBoolean(Result)^:=false;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
 procedure ThCombineCounter_Free(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
@@ -1149,11 +1238,6 @@ end;
 
 procedure ThCombineCounter_SaveTo(const Params: PParamArray); cdecl;
 //procedure ThCombineCounter.SaveTo(AResult:TCounterResults);
-type
-  TNames=array of string;
-  TCounterResult=record names:Tnames;Key:string;Value:double;isInteger:boolean; end;
-  TCounterResults=array of TCounterResult;
-  PCounterResults=^TCounterResults;
 var
   Index:TThingsIndex;
   cc:TCombineCounter;
@@ -1171,16 +1255,18 @@ begin
     for pair in cc.Container do begin
       with PCounterResults(Params^[1])^[i] do begin
         names:=pair.Value.getNames;
+        TArrayHelper<string>.Sort(names);
         pvd:=DWGDBUnit^.FindVariable(pair.Key);
         if pvd=nil then
           Key:=pair.Key
         else
-          Key:=PDbBaseObject(pvd^.data.Addr.Instance)^.Name;
+          Key:=PDbBaseObject(pvd^.data.Addr.Instance)^.Name+'; '+PDbBaseObject(pvd^.data.Addr.Instance)^.NameShort;
         Value:=pair.Value.Value;
         isInteger:=pair.Value.isInteger;
       end;
       inc(i);
     end;
+    TArrayHelper<TCounterResult>.Sort(PCounterResults(Params^[1])^,TCounterResultComparer.Create);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
 end;
@@ -1196,12 +1282,18 @@ begin
       cplr.addGlobalType('array of string','TNames');
       cplr.addGlobalType('record names:Tnames;Key:string;Value:double;isInteger:boolean; end;','TCounterResult');
       cplr.addGlobalType('array of TCounterResult','TCounterResults');
+      cplr.addGlobalType('type TThingsIndex','ThDictionary');
 
       cplr.addGlobalMethod('function ThCombineCounter.Create: ThCombineCounter; static;',@ThCombineCounter_Create,ctx);
       cplr.addGlobalFunc('procedure ThCombineCounter.Free;',@ThCombineCounter_Free);
       cplr.addGlobalFunc('procedure ThCombineCounter.SetCombineVarNames(AVarNames:array of String);',@ThCombineCounter_SetCombineVarNames);
       cplr.addGlobalFunc('procedure ThCombineCounter.CombineAndCount(AEnt:PzeEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;AKey:string);',@ThCombineCounter_CombineAndCount);
       cplr.addGlobalFunc('procedure ThCombineCounter.SaveTo(AResult:TCounterResults);',@ThCombineCounter_SaveTo);
+
+      cplr.addGlobalMethod('function ThDictionary.Create: ThDictionary; static;',@ThDictionary_Create,ctx);
+      cplr.addGlobalFunc('procedure ThDictionary.Free;',@ThDictionary_Free);
+      cplr.addGlobalFunc('procedure ThDictionary.Add(P:Pointer);',@ThDictionary_Add);
+      cplr.addGlobalFunc('function ThDictionary.Contains(P:Pointer):boolean;',@ThDictionary_Contains);
 
 
       cplr.addGlobalMethod('function ThisReport:PzeEntity;',@ThisReportOwner,ctx);
@@ -1289,6 +1381,24 @@ begin
     pvd:=ppointer(Params^[1])^;
     pent:=ppointer(Params^[2])^;
     pstring(Result)^:=GetVarTemplate(varsextdr,pvd,pent);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
+end;
+
+procedure TVariablesExtender_GetMainFunction(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  varsextdr:TVariablesExtender;
+  pvd:pvardesk;
+  pent:PGDBObjEntity;
+begin
+  varsextdr:=TVariablesExtender((Params^[0])^);
+  if varsextdr<>nil then begin
+    pvd:=ppointer(Params^[1])^;
+    pent:=ppointer(Params^[2])^;
+    if varsextdr.pMainFuncEntity=nil then
+      ppointer(Result)^:=varsextdr
+    else
+      ppointer(Result)^:=varsextdr.pMainFuncEntity^.GetExtension<TVariablesExtender>;
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;
@@ -1390,6 +1500,8 @@ begin
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:string;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_string);
       cplr.addGlobalFunc('function TVariablesExtender.GetVarDesk(VarName:string;InInterfaceOnly:boolean=false):PVarDesk;',@TVariablesExtender_GetVarDesk);
       cplr.addGlobalFunc('function TVariablesExtender.GetValueTemplate(PVD:PVarDesk;PEnt:PzeEntity):String;',@TVariablesExtender_GetVarTemplate);
+
+      cplr.addGlobalFunc('function TVariablesExtender.GetMainFunction:TVariablesExtender;',@TVariablesExtender_GetMainFunction);
 
       cplr.addGlobalFunc('function PVarDesk.GetValueAsString:String;',@PVarDesk_GetValueAsString);
 

@@ -5,13 +5,14 @@ var
   fltr:ThEntsTypeFilter;
   ents:ThEnts;
   ent,report:PzeEntity;
-  vars,reportvars:TVariablesExtender;
+  vars,mainvars,reportvars:TVariablesExtender;
   cc:ThCombineCounter;
   i,j:int32;
   pvd_DB_link,pvd_NMO_Name:pvardesk;
   names,DB_link,NMO_Name:string;
 
   CounterResults:TCounterResults;
+  dic:ThDictionary;
 
   table:PzeEntity;
 begin
@@ -44,11 +45,12 @@ begin
   else
     GetEntsFromConnectedIncludingVolume(ents,fltr,report,'ENTID_Function',EntSourceIncludingVolumeFunction);
   fltr.free;
-  zcUIHistoryOut('ents.low='+ToString(ents.low));
-  zcUIHistoryOut('ents.high='+ToString(ents.high));
+  //zcUIHistoryOut('ents.low='+ToString(ents.low));
+  //zcUIHistoryOut('ents.high='+ToString(ents.high));
 
   cc:=ThCombineCounter.create;
   cc.SetCombineVarNames(CombineVariables.split(','));
+  dic:=ThDictionary.create;
   for i:=ents.low to ents.high do begin
     ent:=ents.data(i);
     vars:=ent.GetVariableExtdr;
@@ -63,13 +65,25 @@ begin
       pvd_NMO_Name:=vars.GetVarDesk('NMO_Name');
 
       cc.CombineAndCount(ent,vars,pvd_NMO_Name,DB_link);
+      dic.add(vars);
+    end else begin
+      mainvars:=vars.GetMainFunction;
+      if not dic.contains(mainvars) then begin
+        pvd_DB_link:=mainvars.GetVarDesk('DB_link',true);
+        if pvd_DB_link<>nil then begin
+          DB_link:=pvd_DB_link.GetValueAsString;
+          pvd_NMO_Name:=mainvars.GetVarDesk('NMO_Name');
+          cc.CombineAndCount(ent,vars,pvd_NMO_Name,DB_link);
+          dic.add(vars);
+        end;
+      end;
     end;
   end;
-
+  dic.free;
   cc.SaveTo(CounterResults);
   table:=zeEntTable(zeDwgGetTableStyle('PE'));
   for i:=0 to length(CounterResults)-1 do begin
-    _ArraySort(CounterResults[i].names);
+    //_ArraySort(CounterResults[i].names);
     if length(CounterResults[i].names)>0 then begin
     names:=CounterResults[i].names[0];
       for j:=1 to length(CounterResults[i].names)-1 do

@@ -344,7 +344,7 @@ var
   psa:PTZctnrVectorStrings;
   pstr:pString;
   pcf:PTGDBTableItemFormat;
-  x,xw:double;
+  x,xw,tblwidth:double;
   xcount,xcurrcount,ycount,ycurrcount,ccount:integer;
   DC:TDrawContext;
 begin
@@ -364,6 +364,7 @@ begin
     pgdbins^.scale.z:=scale;
     CopyVPto(pgdbins^);
     pgdbins^.BuildGeometry(drawing);
+    pgdbins^.FormatEntity(drawing,dc);
   end;
 
   if psa<>nil then begin
@@ -371,6 +372,16 @@ begin
       x:=0;
       ycount:=0;
       xcurrcount:=0;
+      tblwidth:=0;
+      pcf:=PTableStyle^.tblformat.beginiterate(icf);
+      if pcf<>nil then begin
+        repeat
+          tblwidth:=tblwidth+pcf^.Width;
+        pcf:=PTableStyle^.tblformat.iterate(icf);
+        until pcf=nil;
+      end;
+      tblwidth:=tblwidth*scale;
+
       pcf:=PTableStyle^.tblformat.beginiterate(icf);
       pstr:=psa.beginiterate(ic);
       if pstr<>nil then begin
@@ -434,7 +445,10 @@ begin
     pointer(pl):=self.ConstObjArray.CreateInitObj(GDBLineID,@self);
     pl^.CoordInOCS.lBegin.x:=0;
     pl^.CoordInOCS.lBegin.y:=-i*PTableStyle^.rowheight*scale;
-    pl^.CoordInOCS.lEnd.x:=xw;
+    if xw>tblwidth then
+      pl^.CoordInOCS.lEnd.x:=xw
+    else
+      pl^.CoordInOCS.lEnd.x:=tblwidth;
     pl^.CoordInOCS.lEnd.y:=-i*PTableStyle^.rowheight*scale;
     CopyVPto(pl^);
     pl^.FormatEntity(drawing,dc);

@@ -292,7 +292,10 @@ var
   scl:double;
 begin
   p1:=getOwnerInsertPoint(pEntity);
-  p2:=getBaseLineStartPoint(pEntity);
+  if FBaseLine then
+    p2:=getBaseLineStartPoint(pEntity)
+  else
+    p2:=getTextInsertPoint(pEntity);
   scl:=FExtensionLineStartShift*abs(getOwnerScale(pEntity));
   if FExtensionLineStartShift>0 then
     result:=p1+(p2-p1).NormalizeVertex*scl
@@ -350,7 +353,10 @@ begin
     if PGDBObjText(pEntity)^.bp.ListPos.Owner<>nil then
       if typeof(PGDBObjText(pEntity)^.bp.ListPos.Owner^)=TypeOf(GDBObjDevice) then begin
         if isNeedLeadert(pEntity) then begin
-          p:=getBaseLineStartPoint(pEntity);
+          if FBaseLine then
+              p:=getBaseLineStartPoint(pEntity)
+            else
+              p:=getTextInsertPoint(pEntity);
           if FExtensionLine then
             tdd(IODXFContext,outStream,pEntity,getExtensionLinetStartPoint(pEntity),p,drawing,DC);
           if FBaseLine then begin
@@ -432,7 +438,12 @@ begin
       newYDir:=-sign(v1*getTextNormal(pEntity));//getYsign({PGDBObjText(pEntity).Local.P_insert}v1);
       if isNeedLeadert(pEntity) then begin
         case getTextLinesCount(pEntity) of
-          1:PD2J:=@dir2j_TextLeader;
+          1:begin
+            if FBaseLine then
+              PD2J:=@dir2j_TextLeader
+            else
+              PD2J:=@dir2j;
+          end;
           2:PD2J:=@dir2j_2LineLeader;
        else PD2J:=@dir2j_TextLeader;
         end;

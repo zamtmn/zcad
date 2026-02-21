@@ -155,12 +155,12 @@ type
 
   ICounterResultComparer=Generics.Defaults.IComparer<TCounterResult>;
   TCounterResultComparer=class(TInterfacedObject,ICounterResultComparer)
-    function Compare(const Left,Right:TCounterResult):Integer;overload;
+    function Compare({$IF FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}Left,Right:TCounterResult):Integer;overload;
   end;
 
   TPCounter=TMyMapCounter<pointer>;
 
-function TCounterResultComparer.Compare(const Left,Right:TCounterResult):Integer;overload;
+function TCounterResultComparer.Compare({$IF FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}Left,Right:TCounterResult):Integer;overload;
 var
   l0,r0:string;
 begin

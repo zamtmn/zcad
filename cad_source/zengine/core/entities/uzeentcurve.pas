@@ -210,7 +210,7 @@ begin
   if ptv<>nil then
     repeat
       SaveToDXFObjPrefix(outStream,'VERTEX','AcDbVertex',IODXFContext,True);
-      dxfStringout(outStream,100,'AcDb3dPolylineVertex');
+      dxfStringWithoutEncodeOut(outStream,100,'AcDb3dPolylineVertex');
       dxfvertexout(outStream,10,ptv^);
 
       ptv:=vertexarrayinocs.iterate(ir);

@@ -55,7 +55,7 @@ end;
 procedure GDBObjSuperLine.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);
 begin
      inherited;
-     dxfStringout(outStream,1000,'_UPGRADE=10');
+     dxfStringWithoutEncodeOut(outStream,1000,'_UPGRADE=10');
 end;
 class function GDBObjSuperLine.GetDXFIOFeatures:TDXFEntIODataManager;
 begin

@@ -409,7 +409,7 @@ begin
       PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
     end;
   end;
-  InsideEnts.PushBackData(p);
+  InsideEnts.PushBackIfNotPresent(p);
 end;
 
 procedure TIncludingVolumeExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -444,7 +444,7 @@ end;
 
 procedure TIncludingVolumeExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
-   dxfStringout(outStream,1000,'INCLUDINGVOLUMEEXTENDER=');
+   dxfStringWithoutEncodeOut(outStream,1000,'INCLUDINGVOLUMEEXTENDER=');
 end;
 
 

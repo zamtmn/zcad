@@ -131,34 +131,34 @@ procedure ElLeaderSave(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IO
 var
   al:string;
 begin
-  dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
-  dxfStringout(outStream,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
-  dxfStringout(outStream,1000,'%2=scale|Double|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
-  dxfStringout(outStream,1000,'%3=twidth|Double|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
+  dxfStringWithoutEncodeOut(outStream,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
+  dxfStringWithoutEncodeOut(outStream,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
+  dxfStringWithoutEncodeOut(outStream,1000,'%2=scale|Double|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
+  dxfStringWithoutEncodeOut(outStream,1000,'%3=twidth|Double|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
   if not PGDBObjElLeader(PEnt)^.AutoHAlaign then
-    dxfStringout(outStream,1000,'%4=AutoHAlaign|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.AutoHAlaign,true)+'|');
+    dxfStringWithoutEncodeOut(outStream,1000,'%4=AutoHAlaign|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.AutoHAlaign,true)+'|');
   if PGDBObjElLeader(PEnt)^.HorizontalAlign<>THAlign.HALeft then begin
     case PGDBObjElLeader(PEnt)^.HorizontalAlign of
       THAlign.HALeft:al:='HALeft';
       THAlign.HAMidle:al:='HAMidle';
       THAlign.HARight:al:='HARight';
     end;
-    dxfStringout(outStream,1000,'%5=HorizontalAlign|THAlign|'+al+'|');
+    dxfStringWithoutEncodeOut(outStream,1000,'%5=HorizontalAlign|THAlign|'+al+'|');
   end;
   if not PGDBObjElLeader(PEnt)^.AutoVAlaign then
-    dxfStringout(outStream,1000,'%6=AutoVAlaign|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.AutoVAlaign,true)+'|');
+    dxfStringWithoutEncodeOut(outStream,1000,'%6=AutoVAlaign|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.AutoVAlaign,true)+'|');
   if PGDBObjElLeader(PEnt)^.VerticalAlign<>TVAlign.VATop then begin
     case PGDBObjElLeader(PEnt)^.VerticalAlign of
       TVAlign.VATop:al:='VATop';
       TVAlign.VAMidle:al:='VAMidle';
       TVAlign.VABottom:al:='VABottom';
     end;
-    dxfStringout(outStream,1000,'%7=VerticalAlign|TVAlign|'+al+'|');
+    dxfStringWithoutEncodeOut(outStream,1000,'%7=VerticalAlign|TVAlign|'+al+'|');
   end;
   if not PGDBObjElLeader(PEnt)^.ShowTable then
-      dxfStringout(outStream,1000,'%8=ShowTable|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.ShowTable,true)+'|');
+      dxfStringWithoutEncodeOut(outStream,1000,'%8=ShowTable|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.ShowTable,true)+'|');
   if not PGDBObjElLeader(PEnt)^.ShowHeader then
-      dxfStringout(outStream,1000,'%9=ShowHeader|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.ShowHeader,true)+'|');
+      dxfStringWithoutEncodeOut(outStream,1000,'%9=ShowHeader|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.ShowHeader,true)+'|');
 end;
 
 {procedure TableSave(var outStream:TZctnrVectorBytes;PTable:PGDBObjTable;var IODXFContext:TIODXFSaveContext);
@@ -168,10 +168,10 @@ end;}
 
 procedure EntityIOSave_all(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFSaveContext);
 begin
-  dxfStringout(outStream,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
+  dxfStringWithoutEncodeOut(outStream,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
   case PEnt^.OSnapModeControl of
-    off    :dxfStringout(outStream,1000,'_OSNAPMODECONTROL=OFF');
-    on     :dxfStringout(outStream,1000,'_OSNAPMODECONTROL=ON');
+    off    :dxfStringWithoutEncodeOut(outStream,1000,'_OSNAPMODECONTROL=OFF');
+    on     :dxfStringWithoutEncodeOut(outStream,1000,'_OSNAPMODECONTROL=ON');
     AsOwner:;//заглушка
   end;
 end;
@@ -189,7 +189,7 @@ procedure TextIOSave_TMPL1(var outStream:TZctnrVectorBytes;PEnt:PGDBObjText; var
 begin
   //if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>pent^.template then
   if (IODXFContext.LocalEntityFlags and CLEFNotNeedSaveTemplate)=0 then
-    dxfStringout(outStream,1000,'_TMPL1='+string(pent^.template));
+    dxfStringWithoutEncodeOut(outStream,1000,'_TMPL1='+string(pent^.template));
 end;
 
 class function TDummy.BlockDefIOLoad_TYPE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;

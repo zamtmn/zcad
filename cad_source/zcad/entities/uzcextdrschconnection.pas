@@ -312,7 +312,7 @@ end;
 
 procedure TSCHConnectionExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
-   dxfStringout(outStream,1000,'SCHConnection=');
+   dxfStringWithoutEncodeOut(outStream,1000,'SCHConnection=');
 end;
 
 procedure drawArrow(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);

@@ -111,11 +111,11 @@ begin
         dxfvertexout(outStream,10,ptn2^.Nextp);
         dxfvertexout(outStream,11,ptn1^.PrevP);
 
-         dxfStringout(outStream,1001,ZCADAppNameInDXF);
-         dxfStringout(outStream,1002,'{');
-         dxfStringout(outStream,1000,'_OWNERHANDLE=6E');
+         dxfStringWithoutEncodeOut(outStream,1001,ZCADAppNameInDXF);
+         dxfStringWithoutEncodeOut(outStream,1002,'{');
+         dxfStringWithoutEncodeOut(outStream,1000,'_OWNERHANDLE=6E');
          //self.SaveToDXFObjXData(handle);
-         dxfStringout(outStream,1002,'}');
+         dxfStringWithoutEncodeOut(outStream,1002,'}');
 
 
         ptn2:=ptn1;
@@ -128,9 +128,9 @@ procedure GDBObjCable.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODX
    //s:String;
 begin
      inherited;
-     dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
-     dxfStringout(outStream,1000,'_UPGRADE=1');
-     dxfStringout(outStream,1000,'_LAYER='+vp.Layer.name);
+     dxfStringWithoutEncodeOut(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+     dxfStringWithoutEncodeOut(outStream,1000,'_UPGRADE=1');
+     dxfStringWithoutEncodeOut(outStream,1000,'_LAYER='+vp.Layer.name);
 end;
 procedure GDBObjCable.SaveToDXF;
 var

@@ -782,12 +782,12 @@ end;
 
 procedure GDBObjEntity.SaveToDXFPostProcess;
 begin
-  dxfStringout(outStream,1001,ZCADAppNameInDXF);
-  dxfStringout(outStream,1002,'{');
+  dxfStringWithoutEncodeout(outStream,1001,ZCADAppNameInDXF);
+  dxfStringWithoutEncodeout(outStream,1002,'{');
   self.SaveToDXFObjXData(outStream,IODXFContext);
   if @AAPS<>nil then
     AAPS(outStream,IODXFContext,AAPSData);
-  dxfStringout(outStream,1002,'}');
+  dxfStringWithoutEncodeout(outStream,1002,'}');
 end;
 
 function GDBObjEntity.CalcInFrustum;
@@ -1023,7 +1023,7 @@ procedure GDBObjEntity.SaveToDXFObjPrefix;
 var
   tmpHandle:TDWGHandle;
 begin
-  dxfStringout(outStream,0,entname);
+  dxfStringWithoutEncodeout(outStream,0,entname);
   //TODO: MyGetOrCreateValue можно желать не для всех примитивов, а только для главных функций
   //TODO: это чуток ускорит сохранение с ним 0.35сек, без 0.34~0.33 в тесте
   if notprocessHandle then begin
@@ -1039,17 +1039,17 @@ begin
       Inc(IODXFContext.handle);
     end;
   end;
-  dxfStringout(outStream,5,inttohex(tmpHandle,0));
-  dxfStringout(outStream,100,dxfName_AcDbEntity);
-  dxfStringout(outStream,8,dxfEnCodeString(vp.layer^.Name,IODXFContext.header));
+  dxfStringWithoutEncodeout(outStream,5,inttohex(tmpHandle,0));
+  dxfStringWithoutEncodeout(outStream,100,dxfName_AcDbEntity);
+  dxfStringout(outStream,8,vp.layer^.Name,IODXFContext.Header);
   if vp.color<>ClByLayer then
-    dxfStringout(outStream,62,IntToStr(vp.color));
+    dxfStringWithoutEncodeOut(outStream,62,IntToStr(vp.color));
   if vp.lineweight<>-1 then
     dxfIntegerout(outStream,370,vp.lineweight);
   if dbname<>'' then
-    dxfStringout(outStream,100,dbname);
+    dxfStringWithoutEncodeOut(outStream,100,dbname);
   if vp.LineType<>nil then
-    dxfStringout(outStream,6,dxfEnCodeString(vp.LineType^.Name,IODXFContext.header));
+    dxfStringout(outStream,6,vp.LineType^.Name,IODXFContext.header);
   if vp.LineTypeScale<>1 then
     dxfDoubleout(outStream,48,vp.LineTypeScale);
 end;

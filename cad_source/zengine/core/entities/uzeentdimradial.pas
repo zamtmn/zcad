@@ -61,8 +61,8 @@ begin
   dxfvertexout(outStream,10,DimData.P10InWCS);
   dxfvertexout(outStream,11,DimData.P11InOCS);
   dxfIntegerout(outStream,70,4+128);
-  dxfStringout(outStream,3,PDimStyle^.Name);
-  dxfStringout(outStream,100,'AcDbRadialDimension');
+  dxfStringout(outStream,3,PDimStyle^.Name,IODXFContext.Header);
+  dxfStringWithoutEncodeOut(outStream,100,'AcDbRadialDimension');
   dxfvertexout(outStream,15,DimData.P15InWCS);
 end;
 

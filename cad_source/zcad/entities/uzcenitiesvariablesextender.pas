@@ -499,7 +499,7 @@ begin
        repeat
          if typeof(pvu^)<>typeof(TEntityUnit) then begin
            str:='USES='+pvu^.Name;
-           dxfStringout(outStream,1000,str);
+           dxfStringWithoutEncodeOut(outStream,1000,str);
            IsNothingWrite:=false;
          end;
         pvu:=vardata.entityunit.InterfaceUses.iterate(ir);
@@ -509,7 +509,7 @@ begin
      if vardata.pMainFuncEntity<>nil then begin
        IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
        str:='MAINFUNCTION='+inttohex(th,0);
-       dxfStringout(outStream,1000,str);
+       dxfStringWithoutEncodeOut(outStream,1000,str);
        IsNothingWrite:=false;
      end;
 
@@ -525,11 +525,11 @@ begin
              sv:=StringReplace(sv,#13,'',[rfReplaceAll]);
              str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
              str:=str+'|'+sv+'|'+pvd^.username;
-             dxfStringout(outStream,1000,str);
+             dxfStringWithoutEncodeOut(outStream,1000,str);
              IsNothingWrite:=false;
            end else begin
              str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
-             dxfStringout(outStream,1000,str);
+             dxfStringWithoutEncodeOut(outStream,1000,str);
              IsNothingWrite:=false;
              inc(i);
              tp:=pvd^.data.Addr.Instance;
@@ -537,7 +537,7 @@ begin
              if pfd<>nil then
              repeat
                str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
-               dxfStringout(outStream,1000,str);
+               dxfStringWithoutEncodeOut(outStream,1000,str);
                ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInBytes); { TODO : сделать на оффсете }
                inc(i);
                pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
@@ -550,7 +550,7 @@ begin
          until pvd=nil;
      end;
     if IsNothingWrite then
-      dxfStringout(outStream,1000,'EMPTYVARIABLESEXTENDER=');
+      dxfStringWithoutEncodeOut(outStream,1000,'EMPTYVARIABLESEXTENDER=');
   end;
 end;
 

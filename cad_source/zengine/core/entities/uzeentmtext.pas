@@ -789,17 +789,17 @@ begin
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
   s:=dxfEnCodeString(s,IODXFContext.Header);
   if length(s)<maxdxfmtextlen then begin
-    dxfStringout(outStream,1,z2dxfmtext(s,ul));
+    dxfStringWithoutEncodeOut(outStream,1,z2dxfmtext(s,ul));
   end else begin
-    dxfStringout(outStream,1,z2dxfmtext(copy(s,1,maxdxfmtextlen),ul));
+    dxfStringWithoutEncodeOut(outStream,1,z2dxfmtext(copy(s,1,maxdxfmtextlen),ul));
     s:=copy(s,maxdxfmtextlen+1,length(s)-maxdxfmtextlen);
     while length(s)>maxdxfmtextlen+1 do begin
-      dxfStringout(outStream,3,z2dxfmtext(copy(s,1,maxdxfmtextlen),ul));
+      dxfStringWithoutEncodeOut(outStream,3,z2dxfmtext(copy(s,1,maxdxfmtextlen),ul));
       s:=copy(s,maxdxfmtextlen+1,length(s)-maxdxfmtextlen);
     end;
-    dxfStringout(outStream,3,z2dxfmtext(s,ul));
+    dxfStringWithoutEncodeOut(outStream,3,z2dxfmtext(s,ul));
   end;
-  dxfStringout(outStream,7,TXTStyle^.Name);
+  dxfStringout(outStream,7,TXTStyle^.Name,IODXFContext.Header);
   SaveToDXFObjPostfix(outStream);
   dxfvertexout(outStream,11,Local.basis.ox);
   dxfIntegerout(outStream,73,2);

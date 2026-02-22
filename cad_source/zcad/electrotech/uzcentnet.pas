@@ -202,8 +202,8 @@ begin
      inherited;
      //s:=inttohex(GetHandle,10);
      //TMWOHistoryOut(@s[1]);
-     dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
-     dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_LineToNet));
+     dxfStringWithoutEncodeOut(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+     dxfStringWithoutEncodeOut(outStream,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
 procedure GDBObjNet.SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 var pobj:PGDBObjEntity;

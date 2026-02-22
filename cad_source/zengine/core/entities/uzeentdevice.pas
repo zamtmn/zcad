@@ -305,8 +305,8 @@ procedure GDBObjDevice.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;
   var IODXFContext:TIODXFSaveContext);
 begin
   inherited;
-  dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
-  dxfStringout(outStream,1000,'_UPGRADE=1');
+  dxfStringWithoutEncodeOut(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+  dxfStringWithoutEncodeOut(outStream,1000,'_UPGRADE=1');
 end;
 
 function GDBObjDevice.GetObjTypeName;

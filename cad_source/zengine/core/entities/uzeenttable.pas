@@ -256,9 +256,9 @@ begin
   AData:=AData;
   if PTTblIterData(AData).pstr<>nil then
     if PTTblIterData(AData).pstr^<>'' then begin
-      dxfStringout(outStream,1000,'%999=row|integer|'+IntToStr(PTTblIterData(AData).ir1.itc)+'|');
-      dxfStringout(outStream,1000,'%999=col|integer|'+IntToStr(PTTblIterData(AData).ir2.itc)+'|');
-      dxfStringout(outStream,1000,'%999=val|string|'+PTTblIterData(AData).pstr^+'|');
+      dxfStringWithoutEncodeOut(outStream,1000,'%999=row|integer|'+IntToStr(PTTblIterData(AData).ir1.itc)+'|');
+      dxfStringWithoutEncodeOut(outStream,1000,'%999=col|integer|'+IntToStr(PTTblIterData(AData).ir2.itc)+'|');
+      dxfStringWithoutEncodeOut(outStream,1000,'%999=val|string|'+PTTblIterData(AData).pstr^+'|');
     end;
   gotoNext(tbl,PTTblIterData(AData)^,true,true);
 end;
@@ -274,9 +274,9 @@ end;
 procedure GDBObjTable.SaveToDXFObjXData;
 begin
   if PTableStyle<>nil then
-    dxfStringout(outStream,1000,'%1=style|String|'+PTableStyle.Name+'|');
-  dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
-  dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_BlockInsertToTable));
+    dxfStringWithoutEncodeOut(outStream,1000,'%1=style|String|'+PTableStyle.Name+'|');
+  dxfStringWithoutEncodeOut(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+  dxfStringWithoutEncodeOut(outStream,1000,'_UPGRADE='+inttostr(UD_BlockInsertToTable));
   GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
   inherited;
 end;

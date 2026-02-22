@@ -133,7 +133,8 @@ procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint
 procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint2d);
 procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
 procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
-procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
+//procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
+procedure dxfStringWithoutEncodeOut(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String; const FileHdrInfo:TDXFHeaderInfo);overload;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);overload;
 
@@ -436,7 +437,7 @@ begin
      f.TXTAddStringEOL(inttostr(v));
      //WriteString_EOL(outfile,inttostr(v));
 end;
-procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);
+procedure dxfStringWithoutEncodeOut(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);
 begin
   f.TXTAddStringEOL(inttostr(dxfcode));
   f.TXTAddStringEOL(v);

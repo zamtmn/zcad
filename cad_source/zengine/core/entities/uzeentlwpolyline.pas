@@ -584,11 +584,11 @@ var
   tv:TzePoint3d;
 begin
   SaveToDXFObjPrefix(outStream,'LWPOLYLINE','AcDbPolyline',IODXFContext);
-  dxfStringout(outStream,90,IntToStr(Vertex2D_in_OCS_Array.Count));
+  dxfStringWithoutEncodeOut(outStream,90,IntToStr(Vertex2D_in_OCS_Array.Count));
   if closed then
-    dxfStringout(outStream,70,'1')
+    dxfStringWithoutEncodeOut(outStream,70,'1')
   else
-    dxfStringout(outStream,70,'0');
+    dxfStringWithoutEncodeOut(outStream,70,'0');
 
 
   dxfDoubleout(outStream,38,local.p_insert.z);

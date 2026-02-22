@@ -138,28 +138,28 @@ procedure SaveLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVector
 begin
   //SaveToDXFObjPrefix(outStream,'LINE','AcDbLine',IODXFContext);
 
-  dxfStringout(outStream,0,dxfName_Line);
+  dxfStringWithoutEncodeOut(outStream,0,dxfName_Line);
 
-  dxfStringout(outStream,5,inttohex(IODXFContext.handle, 0));
+  dxfStringWithoutEncodeOut(outStream,5,inttohex(IODXFContext.handle, 0));
   inc(IODXFContext.handle);
 
-  dxfStringout(outStream,100,dxfName_AcDbEntity);
-  dxfStringout(outStream,8,pEntity^.vp.layer^.name);
+  dxfStringWithoutEncodeOut(outStream,100,dxfName_AcDbEntity);
+  dxfStringout(outStream,8,pEntity^.vp.layer^.name,IODXFContext.Header);
   if pEntity^.vp.color<>ClByLayer then
-                             dxfStringout(outStream,62,inttostr(pEntity^.vp.color));
+                             dxfStringWithoutEncodeOut(outStream,62,inttostr(pEntity^.vp.color));
   if pEntity^.vp.lineweight<>-1 then dxfIntegerout(outStream,370,pEntity^.vp.lineweight);
 
-  dxfStringout(outStream,100,dxfName_AcDbLine);
-  if pEntity^.vp.LineType<>{''}nil then dxfStringout(outStream,6,pEntity^.vp.LineType^.Name);
+  dxfStringWithoutEncodeOut(outStream,100,dxfName_AcDbLine);
+  if pEntity^.vp.LineType<>{''}nil then dxfStringout(outStream,6,pEntity^.vp.LineType^.Name,IODXFContext.Header);
   if pEntity^.vp.LineTypeScale<>1 then dxfDoubleout(outStream,48,pEntity^.vp.LineTypeScale);
 
   dxfvertexout(outStream,10,p1);
   dxfvertexout(outStream,11,p2);
 
-  dxfStringout(outStream,1001,'DSTP_XDATA');
-  dxfStringout(outStream,1002,'{');
-  dxfStringout(outStream,1000,'_OWNERHANDLE=6E');
-  dxfStringout(outStream,1002,'}');
+  dxfStringWithoutEncodeOut(outStream,1001,'DSTP_XDATA');
+  dxfStringWithoutEncodeOut(outStream,1002,'{');
+  dxfStringWithoutEncodeOut(outStream,1000,'_OWNERHANDLE=6E');
+  dxfStringWithoutEncodeOut(outStream,1002,'}');
 end;
 
 procedure TSmartTextEntExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
@@ -471,31 +471,31 @@ end;
 procedure TSmartTextEntExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
   if isDefault then
-    dxfStringout(outStream,1000,'STEDefault=TRUE')
+    dxfStringWithoutEncodeOut(outStream,1000,'STEDefault=TRUE')
   else
     begin
       if not FExtensionLine then
-        dxfStringout(outStream,1000,'STEExtensionLine=FALSE');
+        dxfStringWithoutEncodeOut(outStream,1000,'STEExtensionLine=FALSE');
       if not FBaseLine then
-        dxfStringout(outStream,1000,'STEBaseLineLine=FALSE');
+        dxfStringWithoutEncodeOut(outStream,1000,'STEBaseLineLine=FALSE');
       if not IsDoubleEqual(FExtensionLineStartShift,ExtensionLineStartShiftDef)then
-        dxfStringout(outStream,1000,'STEExtensionLineStartShift='+FloatToStr(FExtensionLineStartShift));
+        dxfStringWithoutEncodeOut(outStream,1000,'STEExtensionLineStartShift='+FloatToStr(FExtensionLineStartShift));
       if not IsDoubleEqual(FLeaderStartDrawDist,ExtensionLeaderStartDrawDist)then
-        dxfStringout(outStream,1000,'STELeaderStartDrawDist='+FloatToStr(FLeaderStartDrawDist));
+        dxfStringWithoutEncodeOut(outStream,1000,'STELeaderStartDrawDist='+FloatToStr(FLeaderStartDrawDist));
       if not IsDoubleEqual(FTextHeightOverride,ExtensionTextHeightOverrideDef)then
-        dxfStringout(outStream,1000,'STETextHeightOverride='+FloatToStr(FTextHeightOverride));
+        dxfStringWithoutEncodeOut(outStream,1000,'STETextHeightOverride='+FloatToStr(FTextHeightOverride));
       if not FHJOverride then
-        dxfStringout(outStream,1000,'STEHJOverride=FALSE');
+        dxfStringWithoutEncodeOut(outStream,1000,'STEHJOverride=FALSE');
       if not FVJOverride then
-        dxfStringout(outStream,1000,'STEVJOverride=FALSE');
+        dxfStringWithoutEncodeOut(outStream,1000,'STEVJOverride=FALSE');
       if not IsDoubleEqual(FBaseLineOffset.x,BaseLineOffsetDef.x)then
-        dxfStringout(outStream,1000,'STEBaseLineOffsetX='+FloatToStr(FBaseLineOffset.x));
+        dxfStringWithoutEncodeOut(outStream,1000,'STEBaseLineOffsetX='+FloatToStr(FBaseLineOffset.x));
       if not IsDoubleEqual(FBaseLineOffset.y,BaseLineOffsetDef.y)then
-        dxfStringout(outStream,1000,'STEBaseLineOffsetY='+FloatToStr(FBaseLineOffset.y));
+        dxfStringWithoutEncodeOut(outStream,1000,'STEBaseLineOffsetY='+FloatToStr(FBaseLineOffset.y));
       if not FRotateOverride then
-        dxfStringout(outStream,1000,'STERotateOverride=FALSE');
+        dxfStringWithoutEncodeOut(outStream,1000,'STERotateOverride=FALSE');
       if not IsDoubleEqual(FRotateOverrideValue,RotateOverrideValueDef)then
-        dxfStringout(outStream,1000,'STERotateOverrideValue='+FloatToStr(FRotateOverrideValue));
+        dxfStringWithoutEncodeOut(outStream,1000,'STERotateOverrideValue='+FloatToStr(FRotateOverrideValue));
     end;
 end;
 procedure TSmartTextEntExtender.SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);

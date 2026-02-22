@@ -257,7 +257,7 @@ begin
   dxfDoubleout(outStream,40,r);
   SaveToDXFObjPostfix(outStream);
 
-  dxfStringout(outStream,100,'AcDbArc');
+  dxfStringWithoutEncodeOut(outStream,100,'AcDbArc');
   dxfDoubleout(outStream,50,startangle*180/pi);
   dxfDoubleout(outStream,51,endangle*180/pi);
 end;

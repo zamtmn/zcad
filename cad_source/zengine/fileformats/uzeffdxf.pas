@@ -1637,11 +1637,11 @@ begin
                 outstream.TXTAddStringEOL(dxfGroupCode(100));
                 outstream.TXTAddStringEOL('AcDbBlockEnd');
 
-                dxfStringout(outstream,1001,ZCADAppNameInDXF);
-                dxfStringout(outstream,1002,'{');
+                dxfStringWithoutEncodeOut(outstream,1001,ZCADAppNameInDXF);
+                dxfStringWithoutEncodeOut(outstream,1002,'{');
                 if assigned(PBlockdefArray(drawing.BlockDefArray.parray)^[i].EntExtensions) then
                   PBlockdefArray(drawing.BlockDefArray.parray)^[i].EntExtensions.RunSaveToDxf(outstream,@PBlockdefArray(drawing.BlockDefArray.parray)^[i],IODXFContext);
-                dxfStringout(outstream,1002,'}');
+                dxfStringWithoutEncodeOut(outstream,1002,'}');
 
 
               end;

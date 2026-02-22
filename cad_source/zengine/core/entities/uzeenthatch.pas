@@ -200,7 +200,7 @@ begin
   SaveToDXFObjPrefix(outStream,'HATCH','AcDbHatch',IODXFContext);
   dxfvertexout(outStream,10,Local.p_insert);
   dxfvertexout(outStream,210,local.basis.oz);
-  dxfStringout(outStream,2,PatternName);
+  dxfStringout(outStream,2,PatternName,IODXFContext.Header);
   if PPattern=nil then
     dxfIntegerout(outStream,70,1)
   else

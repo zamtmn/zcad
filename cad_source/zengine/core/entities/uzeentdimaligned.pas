@@ -143,8 +143,8 @@ begin
     dxfIntegerout(outStream,70,1+128)
   else
     dxfIntegerout(outStream,70,1);
-  dxfStringout(outStream,3,PDimStyle^.Name);
-  dxfStringout(outStream,100,'AcDbAlignedDimension');
+  dxfStringout(outStream,3,PDimStyle^.Name,IODXFContext.Header);
+  dxfStringWithoutEncodeOut(outStream,100,'AcDbAlignedDimension');
   dxfvertexout(outStream,13,DimData.P13InWCS);
   dxfvertexout(outStream,14,DimData.P14InWCS);
 end;

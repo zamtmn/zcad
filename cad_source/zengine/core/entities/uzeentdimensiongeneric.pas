@@ -146,7 +146,7 @@ begin
                     if not dxfLoadGroupCodeInteger(rdr,70,byt,dtype) then
                       if not dxfLoadGroupCodeDouble(rdr,50,byt,a50) then
                         if not dxfLoadGroupCodeDouble(rdr,52,byt,a52) then
-                          if dxfLoadGroupCodeString(rdr,3,byt,style) then begin
+                          if dxfLoadGroupCodeString(rdr,3,byt,style,context.Header) then begin
                             PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
                             {if PDimStyle=nil then
                               PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));}

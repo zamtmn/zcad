@@ -144,14 +144,15 @@ function dxfLoadGroupCodeVertex1(var rdr:TZMemReader;const DXFCode,CurrentDXFCod
 function dxfLoadGroupCodeDouble(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
 function dxfLoadGroupCodeFloat(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
 function dxfLoadGroupCodeInteger(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
-function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String):Boolean;overload;
-function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
+//function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String):Boolean;overload;
+//function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
 function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String; const FileHdrInfo:TDXFHeaderInfo):Boolean;overload;
+//function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType; const FileHdrInfo:TDXFHeaderInfo):Boolean;overload;
 
 function dxfDeCodeString(const v:String; const FileHdrInfo:TDXFHeaderInfo):string;
 
-procedure dxfLoadString(var rdr:TZMemReader;out v:String;const FileHdrInfo:TDXFHeaderInfo);
-procedure dxfLoadAddString(var rdr:TZMemReader;var v:String;const FileHdrInfo:TDXFHeaderInfo);
+procedure dxfLoadString(var rdr:TZMemReader;out v:String;const FileHdrInfo:TDXFHeaderInfo);overload;
+procedure dxfLoadAddString(var rdr:TZMemReader;var v:String;const FileHdrInfo:TDXFHeaderInfo);overload;
 
 function dxfGroupCode(const DXFCode:Integer):String;
 function DXFHandle(const sh:string):TDWGHandle;
@@ -536,7 +537,7 @@ begin
      result:=false;
      if CurrentDXFCode=DXFCode then begin v:=rdr.ParseInteger; result:=true end
 end;
-function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer;var v:String):Boolean;
+{function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer;var v:String):Boolean;
 //var s:String;
 begin
      result:=false;
@@ -544,8 +545,8 @@ begin
        v:=v+rdr.ParseString;
        result:=true;
      end;
-end;
-function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;
+end;}
+(*function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;
 begin
      { #todo : Нужно убрать уникодный вариант. читать утф8 потом за 1 раз присваивать }
      result:=false;
@@ -553,7 +554,7 @@ begin
        v:=v+TDXFEntsInternalStringType(rdr.ParseString);
        result:=true;
      end;
-end;
+end;*)
 
 function dxfDeCodeString(const v:String; const FileHdrInfo:TDXFHeaderInfo):string;
 var
@@ -571,7 +572,7 @@ begin
     Result:=v;
 end;
 
-procedure dxfLoadString(var rdr:TZMemReader;out v:String;const FileHdrInfo:TDXFHeaderInfo);
+procedure dxfLoadString(var rdr:TZMemReader;out v:String;const FileHdrInfo:TDXFHeaderInfo);overload;
 var
   s:RawByteString;
 begin
@@ -586,13 +587,49 @@ begin
   v:=s;
 end;
 
-procedure dxfLoadAddString(var rdr:TZMemReader;var v:String;const FileHdrInfo:TDXFHeaderInfo);
+procedure dxfLoadString(var rdr:TZMemReader;out v:TDXFEntsInternalStringType;const FileHdrInfo:TDXFHeaderInfo);overload;
+var
+  s:RawByteString;
+begin
+  s:=rdr.ParseString;
+  if FileHdrInfo.iVersion<1021 then begin
+    //младше версии DXF R2007 (AC1021)
+    //нужно перекодировать в соответствии с DWGCodepage
+    //начиная с DXF R2007 в dxf тексты уже хранятся в utf8
+    SetCodePage(s,FileHdrInfo.iDWGCodePage,false);
+    SetCodePage(s,CP_UTF8,true);
+  end;
+  v:=s;
+end;
+
+
+procedure dxfLoadAddString(var rdr:TZMemReader;var v:String;const FileHdrInfo:TDXFHeaderInfo);overload;
 var
   s:String;
 begin
   dxfLoadString(rdr,s,FileHdrInfo);
   v:=v+s;
 end;
+
+procedure dxfLoadAddString(var rdr:TZMemReader;var v:TDXFEntsInternalStringType;const FileHdrInfo:TDXFHeaderInfo);overload;
+var
+  s:TDXFEntsInternalStringType;
+begin
+  dxfLoadString(rdr,s,FileHdrInfo);
+  v:=v+s;
+end;
+
+
+(*function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType; const FileHdrInfo:TDXFHeaderInfo):Boolean;
+begin
+     { #todo : Нужно убрать уникодный вариант. читать утф8 потом за 1 раз присваивать }
+     result:=false;
+     if CurrentDXFCode=DXFCode then begin
+       dxfLoadAddString(rdr,v,FileHdrInfo);
+       //v:=v+TDXFEntsInternalStringType(rdr.ParseString);
+       result:=true;
+     end;
+end;*)
 
 function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String; const FileHdrInfo:TDXFHeaderInfo):Boolean;
 begin

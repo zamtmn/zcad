@@ -717,7 +717,7 @@ begin
                       rdr,1,byt,ttemplate,context.Header) then
                       if not dxfLoadGroupCodeString(
                         rdr,3,byt,ttemplate,context.Header) then
-                        if dxfLoadGroupCodeString(rdr,7,byt,style) then begin
+                        if dxfLoadGroupCodeString(rdr,7,byt,style,context.Header) then begin
                           TXTStyle:=drawing.GetTextStyleTable^.FindStyle(Style,False);
                           if TXTStyle=nil then
                             TXTStyle:=

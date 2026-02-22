@@ -214,7 +214,7 @@ begin
         if (hlGDBWord and 1)=1 then
           closed:=True;
       end
-      else if dxfLoadGroupCodeString(rdr,0,byt,s) then begin
+      else if dxfLoadGroupCodeString(rdr,0,byt,s,context.Header) then begin
         if s='VERTEX' then
           vertexgo:=True;
         if s='SEQEND' then

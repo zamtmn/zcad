@@ -33,7 +33,7 @@ type
     paths:GZVector<GDBPolyline2DArray>;
     constructor init(m:TArrayIndex);
     destructor done;virtual;
-    function LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
+    function LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var context:TIODXFLoadContext):boolean;
     {todo: вынести это нафиг из простых типов}
     procedure SaveToDXF(var outStream:TZctnrVectorBytes);
     procedure CloneTo(var Dest:TBoundaryPath);
@@ -161,7 +161,7 @@ begin
   zDebugLn('{E}'+GLUIntrf.ErrorString(v));
 end;
 
-function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
+function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var context:TIODXFLoadContext):boolean;
 
   procedure DrawArc(constref p1,p2:TzePoint2d;
   const bulge:double;var currpath:GDBPolyline2DArray;divcount:integer);//inline;
@@ -466,7 +466,7 @@ begin
         if EdgeType<>0 then
           currDXFGroupCode:=rdr.ParseInteger;
       for EdgeNum:=1 to EdgeType do begin
-        if (dxfLoadGroupCodeString(rdr,330,currDXFGroupCode,s))and
+        if (dxfLoadGroupCodeString(rdr,330,currDXFGroupCode,s,context.Header))and
           (EdgeNum<>EdgeType) then
           currDXFGroupCode:=rdr.ParseInteger;
       end;

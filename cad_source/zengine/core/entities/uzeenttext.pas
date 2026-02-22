@@ -453,7 +453,7 @@ begin
             else if dxfLoadGroupCodeDouble(rdr,51,byt,textprop.oblique) then
               textprop.oblique:=
                 textprop.oblique*pi/180
-            else if dxfLoadGroupCodeString(rdr,7,byt,style) then begin
+            else if dxfLoadGroupCodeString(rdr,7,byt,style,context.Header) then begin
               TXTStyle:=
                 drawing.GetTextStyleTable^.FindStyle(Style,False);
               if TXTStyle=nil then

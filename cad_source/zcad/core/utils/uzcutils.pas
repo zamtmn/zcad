@@ -190,7 +190,7 @@ var
   pcd:PTZCADDrawing;
   pobj: pGDBObjEntity;
   ir:itrec;
-  dc:TDrawContext;
+  //dc:TDrawContext;
   im:TzeTypedMatrix4d;
   count:integer;
   m:tmethod;
@@ -208,7 +208,7 @@ begin
     im:=Transform;
     uzegeometry.MatrixInvert(im);
     pcd^.UndoStack.PushStartMarker(CommandName);
-    dc:=pcd^.CreateDrawingRC;
+    //dc:=pcd^.CreateDrawingRC;
     with PushCreateTGMultiObjectChangeCommand(@pcd^.UndoStack,Transform,im,Count) do begin
       pobj:=pcd^.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pobj<>nil then
@@ -218,7 +218,7 @@ begin
           m.Data:=pobj;
           AddMethod(m);
           dec(pobj^.vp.LastCameraPos);
-          pobj^.Formatentity(drawings.GetCurrentDWG^,dc);
+          //pobj^.Formatentity(drawings.GetCurrentDWG^,dc);
         end;
       pobj:=pcd^.GetCurrentROOT.ObjArray.iterate(ir);
       until pobj=nil;

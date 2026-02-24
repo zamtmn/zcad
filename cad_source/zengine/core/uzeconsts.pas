@@ -49,6 +49,8 @@ const {as_normal=0;
   GDBGenericDimensionID = 14;
   GDBBlockDefID = 15;
   GDBHatchID = 16;
+  GDBPolyFaceMeshID = 17;
+  GDBGenericPolylineID = 18;
 
   GDBNetID = 100;
   GDBDeviceID = 101;
@@ -157,6 +159,7 @@ const {as_normal=0;
   ObjN_GDBObjCable='GDBObjCable';
   ObjN_GDBObjElLeader='GDBObjElLeader';
   ObjN_GDBObjHatch='GDBObjHatch';
+  ObjN_GDBObjPolyFaceMesh='GDBObjPolyFaceMesh';
 
   DevicePrefix='DEVICE_';
   DrawingDeviceBaseUnitName='drawingdevicebase';

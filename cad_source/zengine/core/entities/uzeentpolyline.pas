@@ -344,5 +344,6 @@ begin
 end;
 
 begin
-  RegisterDXFEntity(GDBPolylineID,'POLYLINE','3DPolyLine',@AllocPolyline,@AllocAndInitPolyline);
+  // Регистрация только для создания через GenericPolyline
+  RegisterEntity(GDBPolylineID,'3DPolyLine',@AllocPolyline,@AllocAndInitPolyline);
 end.

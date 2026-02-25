@@ -35,8 +35,8 @@ type
     Closed:boolean;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
       LW:smallint;c:boolean);
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
-      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+    {procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
+      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;}
 
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -189,7 +189,7 @@ begin
     dxfIntegerout(outStream,70,8);
 end;
 
-procedure GDBObjPolyline.LoadFromDXF;
+{procedure GDBObjPolyline.LoadFromDXF;
 var
   s:string;
   byt:integer;
@@ -227,7 +227,7 @@ begin
   vertexarrayinocs.SetSize(context.GDBVertexLoadCache.Count);
   context.GDBVertexLoadCache.copyto(vertexarrayinocs);
   context.GDBVertexLoadCache.Clear;
-end;
+end;}
 
 function AllocPolyline:PGDBObjPolyline;
 begin

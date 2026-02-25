@@ -202,6 +202,7 @@ begin
         AddMethod(m);
 
         Dec(pcd^.sourceEnt^.vp.LastCameraPos);
+        pcd^.sourceEnt^.Formatentity(drawings.GetCurrentDWG^,dc);
 
         pcd:=pcoa^.iterate(ir);
       until pcd=nil;

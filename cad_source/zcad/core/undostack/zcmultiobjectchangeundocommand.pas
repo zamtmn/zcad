@@ -19,7 +19,7 @@
 unit zcmultiobjectchangeundocommand;
 {$INCLUDE zengineconfig.inc}
 interface
-uses gzctnrVector,zeundostack,zebaseundocommands,uzgldrawcontext,
+uses gzctnrVector,zeundostack,zebaseundocommands,
      gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzcdrawings;
 
 {DEFINE TCommand  := TGDBTransformChangeCommand}
@@ -74,14 +74,11 @@ type
 var
   p:PTMethod;
   ir:itrec;
-  dc:TDrawContext;
 begin
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   p:=ObjArray.beginiterate(ir);
   if p<>nil then
   repeat
         TCangeMethod(p^)(UnDoData);
-        PGDBObjEntity(p^.Data)^.FormatEntity(drawings.GetCurrentDWG^,dc);
         PGDBObjEntity(p^.Data)^.YouChanged(drawings.GetCurrentDWG^);
         //PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
 
@@ -95,14 +92,11 @@ type
 var
   p:PTMethod;
   ir:itrec;
-  dc:TDrawContext;
 begin
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   p:=ObjArray.beginiterate(ir);
   if p<>nil then
   repeat
         TCangeMethod(p^)(DoData);
-        PGDBObjEntity(p^.Data)^.FormatEntity(drawings.GetCurrentDWG^,dc);
         PGDBObjEntity(p^.Data)^.YouChanged(drawings.GetCurrentDWG^);
         //PGDBObjSubordinated(p^.Data)^.bp.owner^.ImEdited(PGDBObjSubordinated(p^.Data),PGDBObjSubordinated(p^.Data)^.bp.PSelfInOwnerArray);
 

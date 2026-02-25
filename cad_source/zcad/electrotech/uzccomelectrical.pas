@@ -2038,13 +2038,13 @@ begin
 
     handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
     if summMM='' then
-      line:=Tria_Utf8ToAnsi('Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10)
+      line:={Tria_Utf8ToAnsi}('Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10)
     else begin
       line:='Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец';
       for i:=0 to totalMMC do
         line:=line+';'+Store[i];
       line:=line+#13#10;
-      line:=Tria_Utf8ToAnsi(line);
+      line:={Tria_Utf8ToAnsi}(line);
     end;
     FileWrite(handle,line[1],length(line));
 
@@ -2055,7 +2055,7 @@ begin
       for SummatorItr in Summator do
         line:=line+';'+floattostr(SummatorItr.Value);
       line:=line+#13#10;
-      line:=Tria_Utf8ToAnsi(line);
+      line:={Tria_Utf8ToAnsi}(line);
     end;
     FileWrite(handle,line[1],length(line));
 
@@ -2115,12 +2115,12 @@ begin
               if firstline then begin
                 line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+devstart+';'+devend+#13#10;
                 s:='';
-                psl.PushBackData(Tria_Utf8ToAnsi(cablename));
-                psl.PushBackData(Tria_Utf8ToAnsi(devstart));
+                psl.PushBackData({Tria_Utf8ToAnsi}(cablename));
+                psl.PushBackData({Tria_Utf8ToAnsi}(devstart));
               end else begin
                 line:={cablename+}';'+{CableMaterial+}';'+{CableLength+}';'+devstart+';'+devend+#13#10;
               end;
-              line:=Tria_Utf8ToAnsi(line);
+              line:={Tria_Utf8ToAnsi}(line);
               //FileWrite(handle,line[1],length(line));
               firstline:=false;
               devstart:=devend;
@@ -2160,20 +2160,20 @@ begin
             else
               line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+puredevstart+';'+devend+#13#10;
 
-            line:=Tria_Utf8ToAnsi(line);
+            line:={Tria_Utf8ToAnsi}(line);
             FileWrite(handle,line[1],length(line));
             s:='';
-            psl.PushBackData(Tria_Utf8ToAnsi(devend));
-            psl.PushBackData(Tria_Utf8ToAnsi(s));
-            psl.PushBackData(Tria_Utf8ToAnsi(s));
-            psl.PushBackData(Tria_Utf8ToAnsi(s));
-            psl.PushBackData(Tria_Utf8ToAnsi(s));
-            psl.PushBackData(Tria_Utf8ToAnsi(CableMaterial));
-            psl.PushBackData(Tria_Utf8ToAnsi(CableLength));
-            psl.PushBackData(Tria_Utf8ToAnsi(s));
-            psl.PushBackData(Tria_Utf8ToAnsi(s));
+            psl.PushBackData({Tria_Utf8ToAnsi}(devend));
+            psl.PushBackData({Tria_Utf8ToAnsi}(s));
+            psl.PushBackData({Tria_Utf8ToAnsi}(s));
+            psl.PushBackData({Tria_Utf8ToAnsi}(s));
+            psl.PushBackData({Tria_Utf8ToAnsi}(s));
+            psl.PushBackData({Tria_Utf8ToAnsi}(CableMaterial));
+            psl.PushBackData({Tria_Utf8ToAnsi}(CableLength));
+            psl.PushBackData({Tria_Utf8ToAnsi}(s));
+            psl.PushBackData({Tria_Utf8ToAnsi}(s));
             s:='';
-            psl.PushBackData(Tria_Utf8ToAnsi(s));
+            psl.PushBackData({Tria_Utf8ToAnsi}(s));
 
            //zcUI.TextMessage('Cable "'+pv^.Name+'", segments '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,TMWOHistoryOut);
             zcUI.TextMessage(format('Cable %s, %d segments, %s, from: %s to: %s',[pv^.Name,pv^.Segments.Count,CableMaterial,puredevstart,devend]),TMWOHistoryOut);
@@ -2342,7 +2342,7 @@ begin
                    s:='';
                    psl.PushBackData(s);
 
-                   s:=Tria_Utf8ToAnsi(currentgroup^);
+                   s:={Tria_Utf8ToAnsi}(currentgroup^);
                    s:='  '+system.copy(s,2,length(s)-1);
                    //s:='  '+system.copy(currentgroup^,2,length(currentgroup^)-1);
                    psl.PushBackData(s);
@@ -2376,34 +2376,34 @@ begin
                    notempty:=true;
 
                    s:=pdbi^.Position;
-                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData({Tria_Utf8ToAnsi}(s));
 
                    s:=' '+pdbi^.NameFull;
-                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData({Tria_Utf8ToAnsi}(s));
 
                    s:=pdbi^.NameShort+' '+pdbi^.Standard;
-                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData({Tria_Utf8ToAnsi}(s));
 
                    s:=pdbi^.OKP;
-                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData({Tria_Utf8ToAnsi}(s));
 
                    s:=pdbi^.Manufacturer;
-                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData({Tria_Utf8ToAnsi}(s));
 
                    s:='??';
                    case pdbi^.EdIzm of
                                       _sht:s:='шт.';
                                       _m:s:='м';
                    end;
-                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData({Tria_Utf8ToAnsi}(s));
 
                    s:=floattostr(PBOMITEM^.Amount);
                    psl.PushBackData(s);
 
                    s:='';
-                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData({Tria_Utf8ToAnsi}(s));
                    s:=PBOMITEM.Names;
-                   psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   psl.PushBackData({Tria_Utf8ToAnsi}(s));
                    end;
 
 

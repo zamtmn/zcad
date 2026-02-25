@@ -522,7 +522,7 @@ begin
                                psl.init(10);
                           end;
   s:=ps^;
-  psl.PushBackData(Tria_Utf8ToAnsi(s));
+  psl.PushBackData({Tria_Utf8ToAnsi}(s));
   S:='';
   ps:=sta.iterate(ir);
   until ps=nil;

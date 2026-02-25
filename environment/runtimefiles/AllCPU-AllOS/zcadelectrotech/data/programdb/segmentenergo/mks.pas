@@ -30,6 +30,9 @@ type
     TsegmentenergoMKSngALS=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TsegmentenergoMKSngALS_WCS;
                   end;
+    TsegmentenergoMKSngAFRLS=packed object(CableDeviceBaseObject)
+                        Wire_Count_Section_DESC:TsegmentenergoMKSngALS_WCS;
+                  end;
     TsegmentenergoMKSngALSLTx=packed object(CableDeviceBaseObject)
                         Wire_Count_Section_DESC:TsegmentenergoMKSngALS_WCS;
                   end; 
@@ -46,6 +49,7 @@ type
 
 var
    _EQ_segmentenergoMKSngALS:TsegmentenergoMKSngALS;
+   _EQ_segmentenergoMKSngAFRLS:TsegmentenergoMKSngAFRLS;
    _EQ_segmentenergoMKSngALSLTx:TsegmentenergoMKSngALSLTx;
    _EQ_segmentenergoMKESngALSLTx:TsegmentenergoMKESngALSLTx;
    _EQ_segmentenergoMKSngAHF:TsegmentenergoMKSngAHF;
@@ -73,6 +77,30 @@ begin
      _EQ_segmentenergoMKSngALS.TreeCoord:='BP_СегментЭнерго_Кабели монтажные_МКШng(A)-LS|BC_Кабельная продукция_контрольные_МКШng(A)-LS(СегментЭнерго)';
 
      _EQ_segmentenergoMKSngALS.format;
+
+
+     _EQ_segmentenergoMKSngAFRLS.initnul;
+
+     _EQ_segmentenergoMKSngAFRLS.Category:=_kables;
+     _EQ_segmentenergoMKSngAFRLS.Group:=_cables;
+     _EQ_segmentenergoMKSngAFRLS.EdIzm:=_m;
+     _EQ_segmentenergoMKSngAFRLS.ID:='segmentenergoMKSngAFRLS';
+     _EQ_segmentenergoMKSngAFRLS.Standard:='ТУ 3581-003-17648068-2014';
+     _EQ_segmentenergoMKSngAFRLS.OKP:='';
+     _EQ_segmentenergoMKSngAFRLS.Manufacturer:='ООО «СегментЭнерго» г.Москва';
+     _EQ_segmentenergoMKSngAFRLS.Description:='Кабели предназначенные для переносного и фиксированного межприборного монтажа электрических устройств, работающих при номинальном переменном напряжении до 500 В частоты до 400 Гц или постоянном напряжении до 750 В';
+
+     _EQ_segmentenergoMKSngAFRLS.NameShortTemplate:='МКШng(A)-FRLS-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKSngAFRLS.NameTemplate:='Кабель монтажный МКШng(A)-FRLS-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKSngAFRLS.UIDTemplate:='%%[ID]-%%[Wire_Count_Section_DESC]';
+     _EQ_segmentenergoMKSngAFRLS.NameFullTemplate:='Кабель монтажный огнестойкий, для фиксированного межприборного монтажа электрических устройств, до 500В, до 400Гц или постоянном напряжении до 750В. Пучковой скрутки, с низким дымо- и газовыделением. Температура эксплуатации −50 … +50 °С, сечением %%[Wire_Count_Section_DESC]';
+
+     _EQ_segmentenergoMKSngAFRLS.Wire_Count_Section_DESC:=_02_75;
+
+     _EQ_segmentenergoMKSngAFRLS.TreeCoord:='BP_СегментЭнерго_Кабели монтажные_МКШng(A)-FRLS|BC_Кабельная продукция_контрольные_МКШng(A)-FRLS(СегментЭнерго)';
+
+     _EQ_segmentenergoMKSngAFRLS.format;
+
 
 
 

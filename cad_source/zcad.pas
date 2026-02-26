@@ -98,7 +98,9 @@ uses
   uzeentlwpolyline,
   uzeenttext,uzeentmtext,
   uzeentpoint,
+  uzeentpolylinegeneric,
   uzeentpolyline,
+  uzeentpolyfacemesh,
   uzeEntSpline,
   uzeenttable,
 

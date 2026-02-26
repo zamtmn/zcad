@@ -552,7 +552,7 @@ begin
 end;
 initialization
   RegisterEntity(GDBCableID,'Cable',@AllocCable,@AllocAndInitCable);
-  RegisterEntityUpgradeInfo(GDBPolylineID,1,@Upgrade3DPolyline2Cable);
+  RegisterEntityUpgradeInfo({GDBPolylineID}GDBGenericPolylineID,1,@Upgrade3DPolyline2Cable);
   GDBObjCableDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

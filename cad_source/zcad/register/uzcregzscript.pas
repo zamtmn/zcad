@@ -52,6 +52,8 @@ begin
   //TZeAngleDegDescriptorObj.init('TZeAngleDeg',nil);
   //TZeAngleDescriptorObj.init('TZeAngle',nil);
 
+  ptsu^.InterfaceTypes.AddTypeByRef(CalculatedStringDescriptor);
+
   ptsu^.InterfaceTypes.AddTypeByRef(TZeDimLessDescriptorObj);
   ptsu^.InterfaceTypes.AddTypeByRef(TZeAngleDegDescriptorObj);
   ptsu^.InterfaceTypes.AddTypeByRef(TZeAngleDescriptorObj);

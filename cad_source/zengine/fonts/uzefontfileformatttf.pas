@@ -27,6 +27,7 @@ uses
   uzbLogIntf,uzeFontFileFormatTTFBackend,
   {$IFDEF USELAZFREETYPETTFIMPLEMENTATION}uzeFontFileFormatTTFBackendLFT,{$ENDIF}
   {$IFDEF USEFREETYPETTFIMPLEMENTATION}uzeFontFileFormatTTFBackendFT,{$ENDIF}
+  uzeFontFileFormatTTFBackendFTTest,//нужно проверить наличи freetype до выбора бакэнда ttf
   Types;
 type
   TTTFSymInfo=record

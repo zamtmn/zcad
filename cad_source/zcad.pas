@@ -78,8 +78,8 @@ uses
 
   UUnitManager,
   uzefontmanager,
-  uzeFontFileFormatSHX,
-  uzeFontFileFormatTTFBackendFTTest,uzeffttf,
+  uzeFontFileFormatSHX,uzeFontFileFormatTTF,
+  uzeffttf,
 
   uzcregfileformats,
 

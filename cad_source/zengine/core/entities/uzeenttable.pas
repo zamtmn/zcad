@@ -231,6 +231,10 @@ begin
           PBlockInsert:=pv;
           SaveToDXFPostProcess(outStream,IODXFContext);
           pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+        end else begin
+          pv^.SaveToDXF(outStream,drawing,IODXFContext);
+          pv^.SaveToDXFPostProcess(outStream,IODXFContext,AdditionalPostProcess,PtrUInt(@irstring));
+          pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
         end;
       end else begin
         pv^.SaveToDXF(outStream,drawing,IODXFContext);

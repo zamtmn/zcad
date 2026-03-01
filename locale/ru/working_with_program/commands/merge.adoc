@@ -1,0 +1,12 @@
+
+#### Merge
+
+:cmdcommand: Merge
+:cmdoperands: Обязательный. Путь и имя файла dxf
+:cmdexample: Merge(E:\myfile.dxf)
+
+include::../../_elements/commandsummary.adoc[]
+
+Подгружает файл DXF в текущий чертеж. Повторные определения блоков игнорируются
+
+include::commandsummaryfree.adoc[]

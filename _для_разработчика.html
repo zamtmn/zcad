@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<meta name="author" content="Андрей Зубарев">
+<title>ZCAD Руководство пользователя</title>
+<style>
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";
+@import "https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css";
+
+.filepath {
+  font-family: monospace;
+  font-size: 1.1em;
+  line-height: calc(1 / 1.1);
+  color: #ff0000;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
+                       font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
+             .nav-footer{text-align: center; margin-top: auto;}
+             .nav-footer > p > a {white-space: nowrap;}</style>
+</head>
+<body id="_для_разработчика" class="article toc2 toc-left">
+<div id="header">
+<h1>ZCAD Руководство пользователя<br></h1>
+<div class="details">
+<span id="author" class="author">Андрей Зубарев</span><br>
+<span id="email" class="email"><a href="mailto:zamtmn@yandex.ru">zamtmn@yandex.ru</a></span><br>
+<span id="revdate">v0.9.15.0-189-gf536d006b</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Содержание</div>
+<p><span class="toc-root"><a href="userguide.ru.html">ZCAD Руководство пользователя<br></a></span></p><ul class="sectlevel1">
+<li><a href="_общая_информация.html">1. Общая информация</a>
+</li>
+<li><a href="_быстрый_старт.html">2. Быстрый старт</a>
+</li>
+<li><a href="_работа_с_программой.html">3. Работа с программой</a>
+</li>
+<li><a href="_настройка_программы.html">4. Настройка программы</a>
+</li>
+<li><a href="_для_разработчика.html"><span class="toc-current">5. Для разработчика</span></a>
+<ul class="sectlevel2">
+<li><a href="_для_разработчика.html#building_from_sources">5.1. Cборка программы из исходников</a>
+<ul class="sectlevel3">
+<li><a href="_для_разработчика.html#_установка_lazarus">5.1.1. Установка Lazarus</a>
+</li>
+<li><a href="_для_разработчика.html#_получение_zcad">5.1.2. Получение ZCAD</a>
+</li>
+<li><a href="_для_разработчика.html#_установка_пакетов_от_которых_зависит_zcad">5.1.3. Установка пакетов от которых зависит ZCAD</a>
+</li>
+<li><a href="_для_разработчика.html#_компиляция_zcad">5.1.4. Компиляция ZCAD</a>
+</li>
+</ul>
+</li>
+<li><a href="_для_разработчика.html#localization">5.2. Локализация программы</a>
+</li>
+<li><a href="_для_разработчика.html#make_documentation">5.3. Написание документации ZCAD</a>
+<ul class="sectlevel3">
+<li><a href="_для_разработчика.html#_установка_asciidoctor_для_windows">5.3.1. Установка AsciiDoctor для Windows</a>
+</li>
+<li><a href="_для_разработчика.html#_установка_graphviz">5.3.2. Установка GraphViz</a>
+</li>
+<li><a href="_для_разработчика.html#_генерация_руководства_пользователя">5.3.3. Генерация руководства пользователя</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_для_разработчика">5. Для разработчика</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="building_from_sources">5.1. Cборка программы из исходников</h3>
+<div class="paragraph">
+<p>Программа имеет 2 режима сборки <span class="hl">ZCAD</span> и <span class="hl">ZCADELECTROTECH</span>, в первом только базовые CAD функции, во втором плюсом чуток электрической специфики.
+Советую пробовать собрать <span class="hl">ZCADELECTROTECH</span>, т.к. я его сам всегда использую, соответственно он более стабилен.</p>
+</div>
+<div class="paragraph">
+<p>Простая компиляция исходников даст вам только файл <span class="filepath">zcad.exe</span>, но для для работы нужны некоторые другие файлы, без которых программа не работает
+(не говоря о <span class="filepath">allgeneratedfiles.inc</span>, <span class="filepath">zcadversion.inc</span> и <span class="filepath">buildmode.inc</span> без которых даже не скомпилируется)</p>
+</div>
+<div class="paragraph">
+<p>Для автоматизации процесса сборки был написан скрипт на основе системы сборки <span class="hl">make</span>.
+Опишу его использование применительно к тридцати двух битным <span class="hl">Lazarus2.2</span> и <span class="hl">fpc3.2.2</span> под управлением ОС <span class="hl">Windows</span></p>
+</div>
+<div class="paragraph">
+<p>Итак:</p>
+</div>
+<div class="sect3">
+<h4 id="_установка_lazarus">5.1.1. Установка Lazarus</h4>
+<div class="paragraph">
+<p>Устанавливаем последний релизный <span class="hl">Lazarus</span> (2.2 на момент написания текста). Гарантированно <span class="hl">ZCAD</span> компилится в транковом <span class="hl">Lazarus</span> транковом <span class="hl">fpc</span>,
+с релизами бывают нюансы, но они решаемы.</p>
+</div>
+<div class="paragraph">
+<p>Запускаем, проверяем работоспособность <span class="hl">Lazarus</span> - собираем тестовый пустой проект. тут проблем быть не должно.</p>
+</div>
+<div class="paragraph">
+<p>Ищем идущую в комплекте <span class="hl">fpc</span> утилиту <span class="hl">make</span>, она скорее всего лежит тут <span class="filepath">lazarus\fpc\3.2.2\bin\i386-win32\make.exe</span> но, мало ли.
+В дальнейшем я считаю что Lazarus установлен на диск <span class="filepath">C</span>, и путь для запуска <span class="hl">make</span> соответственно <span class="filepath">C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe</span>
+если что - уточнить по месту)).</p>
+</div>
+<div class="paragraph">
+<p>Также еще понадобятся такие пути:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>путь к Lazarus <span class="filepath">C:\lazarus</span></p>
+</li>
+<li>
+<p>путь к первичному файлу настроек Lazarus, по умолчанию он <span class="filepath">C:\Users\&lt;ИМЯПОЛЬЗОВАТЕЛЯ&gt;\AppData\Local\lazarus</span></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Если имя пользователя у вас на кириллице, примите мои поздравления! Требуются дополнительные действия, пользователи с нормальными именами спокойно переходят к пункту 2.</p>
+</div>
+<div class="paragraph">
+<p>Кириллица в путях не поддерживается утилитой <span class="hl">make</span>, или я с этим не разобрался. Придется "перенастроить" Lazarus чтоб настройки хранились по 'нормальным' путям.
+Для этого в папке <span class="filepath">C:\lazarus</span> создаем файл <span class="filepath">runlazarus.bat</span> следующего содержания:</p>
+</div>
+<div class="paragraph">
+<p><span class="shell">startlazarus.exe --pcp=C:\lazarus\mylazcfg</span></p>
+</div>
+<div class="paragraph">
+<p>и далее всегда используем его для запуска Lazarus IDE, все что написано ниже вам следует отредактировать из расчета что путь к настройкам Lazarus будет <span class="filepath">C:\lazarus\mylazcfg</span></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_получение_zcad">5.1.2. Получение ZCAD</h4>
+<div class="paragraph">
+<p>Клонируем исходники зкада (или скачиваем архивом, но это плохо, лучше клонировать <span class="shell">git</span> ом). Некоторые части исходников оформлены
+субмодулями <span class="hl">git</span> , поэтому:</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Предупреждение"></i>
+</td>
+<td class="content">
+субмодули <span class="hl">git</span> используемые <span class="hl">ZCAD</span> нужно инициализировать и обновить.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>По описанным выше причинам путь до папки <span class="filepath">zcad</span> не
+должен содержать не латинские символы
+Тут будет много файлов\папок, но основные:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="filepath">zcad\cad_source</span> - папка с исходниками зкад</p>
+</li>
+<li>
+<p><span class="filepath">zcad\environment</span> - папка с файлами окружения программы и исходник небольшой программы <span class="hl">typeexporter</span> настраивающей исходники зкад для компиляции</p>
+</li>
+<li>
+<p><span class="filepath">zcad\Makefile</span> - файл с скриптами установки</p>
+</li>
+<li>
+<p><span class="filepath">zcad\cad</span> - данной папки изначально нет, будет создана в пункте 4 и содержит скомпилированный дистрибутив zcad со всеми нужными файлами</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_установка_пакетов_от_которых_зависит_zcad">5.1.3. Установка пакетов от которых зависит ZCAD</h4>
+<div class="paragraph">
+<p>Для облегчения я приложил пакеты от которых зависит <span class="hl">ZCAD</span> в дистрибутив исходников (за исключением идущих в составе <span class="hl">Lazarus</span>). Открываем командную строку в папке <span class="filepath">zcad</span>,
+там где лежит файл <span class="filepath">Makefile</span></p>
+</div>
+<div class="paragraph">
+<p>Нужно установить в <span class="hl">Lazarus</span> пакеты требуемые для компиляции <span class="hl">ZCAD</span>, данный пункт выполняется только один раз, для свеже установленного <span class="hl">Lazarus</span>, если пакеты установлены,
+пропускаем данный пункт (но если что, то повторное выполнение ничего страшного не несет).
+Выполняем:</p>
+</div>
+<div class="paragraph">
+<p><span class="shell">C:\lazarus\fpc\3.2.2\bin\i386-win32\make installpkgstolaz LP=C:\lazarus PCP=C:\Users\&lt;ИМЯПОЛЬЗОВАТЕЛЯ&gt;\AppData\Local\lazarus</span></p>
+</div>
+<div class="paragraph">
+<p><span class="hl">installpkgstolaz</span> это пропишет в конфигах <span class="hl">Lazarus</span> требуемые пакеты из <span class="filepath">zcad\cad_source\other</span> и <span class="filepath">zcad\cad_source\components</span> и пересобирет <span class="hl">Lazarus</span>.
+По неясным причинам пересборка в данном пункте иногда завершается ошибкой, но ничего страшного, просто идем дальше, <span class="hl">Lazarus</span> докомпилирует все нужное в 4.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_компиляция_zcad">5.1.4. Компиляция ZCAD</h4>
+<div class="paragraph">
+<p>Собственно запускаем компиляцию зкад, запустив следующее:</p>
+</div>
+<div class="paragraph">
+<p>[.shell]C:\lazarus\fpc\3.2.2\bin\i386-win32\make cleanzcadelectrotech LP=C:\lazarus PCP=C:\Users\&lt;ИМЯПОЛЬЗОВАТЕЛЯ&gt;\AppData\Local\lazarus#</p>
+</div>
+<div class="paragraph">
+<p><span class="hl">cleanzcadelectrotech</span> - данная цель выполнит сборку программы в режиме <span class="hl">ZCADELECTROTECH</span>, замените на <span class="hl">cleanzcad</span> - если желаете режим <span class="hl">ZCAD</span></p>
+</div>
+<div class="paragraph">
+<p>Скрипт выполнит следующее:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">СОТРЕТ</span> папки <span class="filepath">zcad\cad</span> и <span class="filepath">zcad\cad_source\autogenerated</span> если они присутствует <span class="hl">СО ВСЕМ ИХ СОДЕРЖИМЫМ</span> ничего не спрашивая</p>
+</li>
+<li>
+<p>создаст папки <span class="filepath">zcad\cad</span> и <span class="filepath">zcad\cad_source\autogenerated</span></p>
+</li>
+<li>
+<p>скопирует нужные для работы файлы из <span class="filepath">zcad\environment\runtimefiles</span> в <span class="filepath">zcad\cad</span></p>
+</li>
+<li>
+<p>создаст файл <span class="filepath">zcad\cad_source\zcadversion.inc</span></p>
+</li>
+<li>
+<p>создаст файл <span class="filepath">zcad\cad_source\autogenerated\buildmode.inc</span></p>
+</li>
+<li>
+<p>скомпилирует <span class="filepath">zcad\cad_source\cad_source\utils\typeexporter.lpi</span> и запустит его с нужными параметрами, <span class="hl">typeexporter</span> в свою очередь наполнит <span class="filepath">zcad\cad_source\autogenerated</span> в том числе создаст <span class="filepath">zcad\cad_source\autogenerated\allgeneratedfiles.inc</span> (только после этого шага зкад может быть собран)</p>
+</li>
+<li>
+<p>скомпилирует <span class="hl">ZCAD</span></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Если все прошло нормально, имеем наполненную как надо папку <span class="filepath">zcad\cad</span>, в том числе свежесозданный запускаемый бинарник <span class="filepath">zcad\cad\bin\i386-win32\zcad.exe</span>
+В дальнейшем можно просто открыть в Lazarus файл <span class="filepath">zcad\cad_source\zcad.lpi</span> и смотреть-собирать исходники как обычно в IDE</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Примечание"></i>
+</td>
+<td class="content">
+<span class="hl">Lazarus</span>, <span class="hl">FPC</span> и <span class="hl">ZCAD</span> развивающиеся проекты, информация устаревает и бывают нюансы. В частности на данный момент из-за бага FPC
+<a href="https://gitlab.com/freepascal.org/fpc/source/-/issues/39387" class="bare">https://gitlab.com/freepascal.org/fpc/source/-/issues/39387</a> в IDE работает только полная пересборка зкада, т.е. в Lazarus если просто нажать
+<span class="hl">F9</span> зкад не соберется с вылетом компилятора, при любых изменениях надо всегда выполнять полную пересборку <span class="hl">shift-F9</span>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="localization">5.2. Локализация программы</h3>
+<div class="paragraph">
+<p>Для локализации <span class="hl">ZCAD</span> используется система интернационализации на основе <span class="hl">Gettext</span> и <span class="filepath">*.po</span>
+ файлов встроенная в <span class="hl">Lazarus</span>. Локализации подлежат как тексты прописанные в исходниках программы, так и
+заданные в файлах загружаемых во время работы программы - например файл <span class="filepath">zcad\menu\menuscontent.xml</span>
+содержит наполнение палитр программы, его содержимое неизвестно в момент компиляции программы, он будет прочитан
+только при запуске. Обычный подход предполагает разные копии загружаемых в рантайм файлов для каждой локализации.
+Но в <span class="hl">ZCAD</span> принят несколько другой подход - перевод содержимого данных файлов в момент их загрузки.</p>
+</div>
+<div class="paragraph">
+<p>Прежде всего стоит заметить, как описано в (<a href="_настройка_программы.html#distrib_file_structure">Структура директорий</a>) файлы локализаций используемые программой
+лежат в папке <span class="filepath">cad/languages</span>, данная папка создается в процессе (<a href="_для_разработчика.html#building_from_sources">Cборка программы из исходников</a>) в нее
+копируются файлы из соответствующих мест <span class="filepath">environment</span>. Поэтому работа с локализацией осуществляется
+в <span class="filepath">cad/languages</span>, но для коммита файлы нужно скопировать в папку <span class="filepath">environment</span>.</p>
+</div>
+<div class="paragraph">
+<p>Тексты прописанные в исходниках программы и оформленные как <span class="hl">resourcestring</span> при компиляции программы
+автоматически собираются в файле <span class="filepath">zcad.po</span> и разносятся по файлам локализаций <span class="filepath">zcad.XX.po</span>
+где <span class="hl">XX</span> - идентификатор языка. Файлы <span class="filepath">zcad.XX.po</span> можно непосредственно переводить используя
+предназначенные для этого программы например <span class="hl">Poedit</span> и подобные. На данный момент <span class="hl">ZCAD</span> имеет только
+русскую локализацию <span class="filepath">zcad.ru.po</span>. добавить локализацию можно просто создав соответствующий файл,
+например <span class="filepath">zcad.de.po</span> для немецкой.</p>
+</div>
+<div class="paragraph">
+<p>Также в <span class="filepath">cad/languages</span> лежат файлы перевода пакетов используемых в <span class="hl">ZCAD</span>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="filepath">anchordockstr.XX.po</span> перевод пакета докинга окон <a href="_работа_с_программой.html#anchordocking">AnchorDocking</a></p>
+</li>
+<li>
+<p><span class="filepath">lclstrconsts.XX.po</span> перевод LCL</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Тексты получаемые из рантайм файлов собираются в файле <span class="filepath">rtzcad.po</span>, переводы находятся в <span class="filepath">zcad.XX.po</span>
+также как и описано выше новую локализацию можно получить созданием соответствующего файла. Актуализация
+<span class="filepath">rtzcad.po</span> и <span class="filepath">zcad.XX.po</span> не производится автоматически, для этого нужно выполнить
+описанные ниже действия.</p>
+</div>
+<div class="paragraph">
+<p>Запускаем программу с ключом командной строки (<a href="_настройка_программы.html#command_line_switch">Переключатели командной строки</a>) <span class="hl">updatepo</span>. При этом локализация программы
+не будет выполняться, будет работать оригинальный английский интерфейс. Создаем новый чертеж и вводим команду
+<span class="command">UpdatePO</span> (<a href="_работа_с_программой.html#cmd_updatepo">UpdatePO</a>) будет показано окно с информацией сколько обнаружено неактуальных строк
+и сколько добавлено новых. При нажатии <span class="hl">Ok</span> будет перезаписан файл <span class="filepath">rtzcad.po</span>, неактуальные
+строки будут удалены, новые добавлены.</p>
+</div>
+<div class="paragraph">
+<p>Далее из <span class="filepath">rtzcad.po</span> строки нужно обновить в файлах локализаций <span class="filepath">rtzcad.XX.po</span>, это можно
+сделать с помощью команды</p>
+</div>
+<div class="paragraph">
+<p><span class="shell">C:\lazarus\fpc\3.2.2\bin\i386-win32\make updatelocalizedpofiles LP=C:\lazarus PCP=C:\Users\&lt;ИМЯПОЛЬЗОВАТЕЛЯ&gt;\AppData\Local\lazarus</span></p>
+</div>
+<div class="paragraph">
+<p>Образование путей смотри (<a href="_для_разработчика.html#building_from_sources">Cборка программы из исходников</a>), сценарий <span class="hl">updatelocalizedpofiles</span> выполняет обновление
+файлов локализации.</p>
+</div>
+<div class="paragraph">
+<p>После этого файлы <span class="filepath">rtzcad.XX.po</span> можно переводить в специализированной программе</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="make_documentation">5.3. Написание документации ZCAD</h3>
+<div class="paragraph">
+<p>Документация программы разрабатывается в формате AsciiDoc. Исходники
+данного руководства лежат в папке <span class="filepath">cad_source/docs/userguide/</span>.
+AsciiDoc - простой текстовый формат, но для генерации pdf и html из него
+потребуются дополнительные манипуляций</p>
+</div>
+<div class="sect3">
+<h4 id="_установка_asciidoctor_для_windows">5.3.1. Установка AsciiDoctor для Windows</h4>
+<div class="paragraph">
+<p>Т.к. AsciiDoc написан на языке Ruby, придется установить средства разработки
+этого языка:</p>
+</div>
+<div class="paragraph">
+<p>Идем на сайт <a href="https://rubyinstaller.org/downloads/" class="bare">https://rubyinstaller.org/downloads/</a> Скачиваем и устанавливаем
+последний Ruby+Devkit (на момент написания это 3.2.2-1) В процессе установки
+нужно будет указать какой вариант MSYS использовать, выбираем базовый 1,
+затем для завершения установки просто жмем enter</p>
+</div>
+<div class="paragraph">
+<p>После установки Ruby в командной строке можно будет использовать gem -
+пакетный менеджер Ruby, с помощью его собственно устанавливает
+AsciiDoctor и требуемые расширения. Открываем командную строку и вводим эти
+три команды последовательно:</p>
+</div>
+<div class="paragraph">
+<p><span class="shell">gem install asciidoctor</span></p>
+</div>
+<div class="paragraph">
+<p><span class="shell">gem install asciidoctor-pdf</span></p>
+</div>
+<div class="paragraph">
+<p><span class="shell">gem install asciidoctor-diagram</span></p>
+</div>
+<div class="paragraph">
+<p>Дополнительно для работы asciidoctor-diagram требуется наличие в системе
+Java версии не ниже 11, если необходимо идем и устанавливаем по ссылке
+<a href="https://www.oracle.com/java/technologies/downloads/#jdk21-windows" class="bare">https://www.oracle.com/java/technologies/downloads/#jdk21-windows</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_установка_graphviz">5.3.2. Установка GraphViz</h4>
+<div class="paragraph">
+<p>Также понадобятся средства визуализации графов из состава Graphviz.
+Идем на <a href="https://graphviz.org/download/" class="bare">https://graphviz.org/download/</a> и качаем установщик для Windows
+на момент написания это graphviz-9.0.0 (64-bit) EXE installer при установке
+выбираем вариант <span class="hl">Add Graphviz to the system PATH for all users</span>
+чтоб графвиз был доступен из командной строки.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_генерация_руководства_пользователя">5.3.3. Генерация руководства пользователя</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Примечание"></i>
+</td>
+<td class="content">
+Описанное выше нужно произвести один раз, это установит на
+компьютер необходимые программы и их зависимости
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>После всех установок запускаем новую командную строку (рекомендую Far)
+чтобы все изменения системной переменной PATH вступили в силу. Идем
+в корневую директорию zcad (там где лежит makefile) и вводим</p>
+</div>
+<div class="paragraph">
+<p><span class="shell">make documentation</span></p>
+</div>
+<div class="paragraph">
+<p>Ждем выполнения скриптов, по завершению в папке
+<span class="path">zcad\cad_source\docs\userguide\</span> находим сгенерированные файлы
+<span class="path">userguide.ru.pdf</span> и <span class="path">userguide.ru.html</span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph nav-footer">
+<p>← Previous: <a href="_настройка_программы.html">Настройка программы</a> | ↑ Up: <a href="userguide.ru.html">ZCAD Руководство пользователя&lt;br</a>&gt;</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Последнее обновление 2026-03-01 21:15:23 UTC
+</div>
+</div>
+</body>
+</html>

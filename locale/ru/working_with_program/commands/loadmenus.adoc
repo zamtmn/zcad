@@ -1,0 +1,13 @@
+
+#### LoadMenus
+
+:cmdcommand: LoadMenus
+:cmdoperands: Обязательный. Путь и имя файла с описанием меню
+:cmdexample: LoadMenus(E:\menuscontent.xml)
+
+include::../../_elements/commandsummary.adoc[]
+
+Загрузка файла описаний меню !!NEEDLINK!!. Загрузка обычно происходит на ранней стадии запуска программы,
+поэтому команда обычно используется в скрипте [.filepath]#$(ZCADPath)/preload/stage0.cmd0# !!NEEDLINK!!.
+
+include::commandsummaryfree.adoc[]

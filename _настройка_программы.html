@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<meta name="author" content="Андрей Зубарев">
+<title>ZCAD Руководство пользователя</title>
+<style>
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";
+@import "https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css";
+
+.filepath {
+  font-family: monospace;
+  font-size: 1.1em;
+  line-height: calc(1 / 1.1);
+  color: #ff0000;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
+                       font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
+             .nav-footer{text-align: center; margin-top: auto;}
+             .nav-footer > p > a {white-space: nowrap;}</style>
+</head>
+<body id="_настройка_программы" class="article toc2 toc-left">
+<div id="header">
+<h1>ZCAD Руководство пользователя<br></h1>
+<div class="details">
+<span id="author" class="author">Андрей Зубарев</span><br>
+<span id="email" class="email"><a href="mailto:zamtmn@yandex.ru">zamtmn@yandex.ru</a></span><br>
+<span id="revdate">v0.9.15.0-189-gf536d006b</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Содержание</div>
+<p><span class="toc-root"><a href="userguide.ru.html">ZCAD Руководство пользователя<br></a></span></p><ul class="sectlevel1">
+<li><a href="_общая_информация.html">1. Общая информация</a>
+</li>
+<li><a href="_быстрый_старт.html">2. Быстрый старт</a>
+</li>
+<li><a href="_работа_с_программой.html">3. Работа с программой</a>
+</li>
+<li><a href="_настройка_программы.html"><span class="toc-current">4. Настройка программы</span></a>
+<ul class="sectlevel2">
+<li><a href="_настройка_программы.html#_параметры_работы">4.1. Параметры работы</a>
+<ul class="sectlevel3">
+<li><a href="_настройка_программы.html#_пути">4.1.1. Пути</a>
+</li>
+<li><a href="_настройка_программы.html#_графика">4.1.2. Графика</a>
+</li>
+<li><a href="_настройка_программы.html#_отображение">4.1.3. Отображение</a>
+</li>
+<li><a href="_настройка_программы.html#_система">4.1.4. Система</a>
+</li>
+<li><a href="_настройка_программы.html#_сохранение">4.1.5. Сохранение</a>
+</li>
+<li><a href="_настройка_программы.html#_черчение">4.1.6. Черчение</a>
+</li>
+</ul>
+</li>
+<li><a href="_настройка_программы.html#distrib_file_structure">4.2. Структура директорий</a>
+</li>
+<li><a href="_настройка_программы.html#_переключатели_командной_строки">4.3. Переключатели командной строки</a>
+</li>
+</ul>
+</li>
+<li><a href="_для_разработчика.html">5. Для разработчика</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_настройка_программы">4. Настройка программы</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_параметры_работы">4.1. Параметры работы</h3>
+<div class="paragraph">
+<p>ZCAD пока не имеет отдельного окна настроек, настройки постоянно доступны в инспекторе объектов (см. раздел <a href="_работа_с_программой.html#objectinspector">2. Инспектор объектов</a>)
+когда на чертеже не выбрано никаких примитивов.</p>
+</div>
+<div id="zcad_options" class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_oi_options.png" alt="zcad oi options" width="25%">
+</div>
+<div class="title">Рисунок 18. Настройки программы</div>
+</div>
+<div class="paragraph">
+<p>Настройки сгруппированы следующим образом</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">Пути</span> - настройка путей программы</p>
+</li>
+<li>
+<p><span class="hl">Графика</span> - настройка путей программы</p>
+</li>
+<li>
+<p><span class="hl">Отображение</span> - настройка путей программы</p>
+</li>
+<li>
+<p><span class="hl">Система</span> - настройка путей программы</p>
+</li>
+<li>
+<p><span class="hl">Черчение</span> - настройка путей программы</p>
+</li>
+<li>
+<p><span class="hl">Проектирование</span> - настройка путей программы</p>
+</li>
+<li>
+<p><span class="hl">Интерфейс</span> - настройка путей программы</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_пути">4.1.1. Пути</h4>
+<div class="paragraph">
+<p>На данной вкладке сгруппированы пути используемые программой для поиска файлов.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">Файлы поддержки</span> - пути поиска различных файлов программы</p>
+</li>
+<li>
+<p><span class="hl">Шрифты</span> - пути поиска шрифтов</p>
+</li>
+<li>
+<p><span class="hl">Файл альтернативного шрифта</span> - файл шрифта используемый для замены отсутствующих шрифтов</p>
+</li>
+<li>
+<p><span class="hl">Шаблоны</span> - путь для поиска файлов шаблонов чертежей</p>
+</li>
+<li>
+<p><span class="hl">Шаблон по умолчанию</span> - файл шаблона используемый программой при создании нового чертежа</p>
+</li>
+<li>
+<p><span class="hl">Текущая раскладка окон</span> - файл раскладки окон загружаемый при запуске программы</p>
+</li>
+<li>
+<p><span class="hl">Программа</span> - путь к бинарному файлу (вычисляется при запуске, доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Временные файлы</span> - путь к папке временных файлов (вычисляется при запуске, доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">База описаний устройств</span> - путь к "базе данных" оборудования программы</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>В качестве разделителя для путей используется <span class="hl">";"</span>, разделитель путей <span class="hl">"/"</span>, также доступны следующие макросы:</p>
+</div>
+<table id="path_macros" class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 3. Макросы сокращений путей</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">$(ZCADPath)</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Путь к бинарному файлу</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">$(LastAutoSaveFile)</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Путь к последнему файлу автосохранения</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">$(TEMP)</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Путь к папке временных файлов</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">$(SystemFontsPath)</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Путь к папке шрифтов ОС (пока только win, возвращает <span class="filepath">SHGetSpecialFolderPath(CSIDL_FONTS)</span>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">$(UserFontsPath)</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Путь к папке шрифтов пользователя (пока только win, возвращает <span class="filepath">SHGetSpecialFolderPath(CSIDL_LOCAL_APPDATA)\Microsoft\Windows\Fonts</span>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_графика">4.1.2. Графика</h4>
+<div class="paragraph">
+<p>На данной вкладке сгруппированы настройки графической подсистемы зкад</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">Устройство отображения</span> - графическая библиотека используемая для рендера чертежа. Доступны варианты:
+<span class="hl2">OpenGL</span> - предпочтительный вариант (требует наличия драйвера производителя видеокарты), <span class="hl2">GDI</span> -
+вариант для случая когда первый вариант не работает, <span class="hl2">LCLCanvas</span> - данный вариант не предназначен для
+работы с чертежом, но если не работают на <span class="hl">OpenGL</span>, ни <span class="hl">GDI</span> можно попробовать его. Настройка работает
+только для вновь открытых/созданных чертежей, уже открытые чертежи по прежнему будут использовать устройство
+отображения выбранное на момент их создания</p>
+</li>
+<li>
+<p><span class="hl">Параметры текущего устройства отображения</span> - здесь собраны некоторые настройки и отладочная информация
+устройства отображения используемого текущим чертежом</p>
+</li>
+<li>
+<p><span class="hl">Версия GLU</span> - версия библиотеки GLU используемая программой (используется для триангуляции и построения
+сплайнов, ZCAD не может работать с реализацией GLU от Microsoft, в комплекте поставляется MESA GLU) (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Расширения GLU</span> - список расширений предоставляемый GLU (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Время рендера</span> - время в миллисекундах затраченное на последнее полное отображение чертежа (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Время обновления</span> - время в миллисекундах затраченное на последнее последнее обновление чертежа. Для
+экономии ресурсов ZCAD старается по возможности не перечерчивать весь чертеж, а только обновлять его
+измененные фрагменты (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Максимальное время одного прохода рендера</span> - время в миллисекундах доступное на рендер чертежа, в случае
+его превышения ретдер будет остановлен и продолжен в следующем цикле обработки событий. 0 - возможность не
+используется (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Ухудшение изображения</span> - параметры управления детализацией отрисовки чертежа. При включении и превышении
+порога времени рендера, детализация чертежа будет уменьшаться для уменьшения времени отрисовки</p>
+</li>
+<li>
+<p><span class="hl">Деградация при перетаскивании</span> - При включении понижает детализацию чертежа при выполнении операций
+зумирования и паранамирования, для повышения отзывчивости. при завершении данных операций чертеж отрисовывается с
+нормальной детализацией</p>
+</li>
+<li>
+<p><span class="hl">Максимально шаблонов типа в линии</span> - Максимально доступное количество штрихов\точек\символов в примитивах,
+при превышении примитив будет отрисован сплошной линией</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_отображение">4.1.3. Отображение</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">Системная геометрия</span> - отображение некоторой вспомогательной информации, например габаритов примитивов</p>
+</li>
+<li>
+<p><span class="hl">Цвет вспомогательной геометрии</span> - цвет для вывода информации из предыдущего пункта</p>
+</li>
+<li>
+<p><span class="hl">Масштаб колеса мыши</span> - коэффициент масштабирования чертежа при вращении колеса</p>
+</li>
+<li>
+<p><span class="hl">Размер апертуры привязки</span> - размер в пикселях зоны "притягивания" курсора к точкам привязки</p>
+</li>
+<li>
+<p><span class="hl">Размер прицела</span> - размер в процентах от размера видимой области графического курсора ZCAD</p>
+</li>
+<li>
+<p><span class="hl">Убирать системный курсор в области отрисовки</span> - опция отключает системный курсор при черчении, оставляя
+только курсор ZCAD</p>
+</li>
+<li>
+<p><span class="hl">Размер ручек</span> - размер "ручек" редактирования примитивов</p>
+</li>
+<li>
+<p><span class="hl">Цвет фона</span> - RGB цвет фона чертежа</p>
+</li>
+<li>
+<p><span class="hl">Цвет не выбранных ручек</span> - индексный цвет "ручек" примитивов</p>
+</li>
+<li>
+<p><span class="hl">Цвет выбранных ручек</span> - индексный цвет выбранных "ручек" примитивов</p>
+</li>
+<li>
+<p><span class="hl">Цвет горячих ручек</span> - индексный цвет "ручек" находящихся под курсором</p>
+</li>
+<li>
+<p><span class="hl">Масштаб отображения толщин линий</span> - число от 2 до 20 характеризующее толщину отображения веса линий на чертеже,
+больше - жирнее</p>
+</li>
+<li>
+<p><span class="hl">Толщина линий по умолчанию</span> - толщина линий принятая для отображения веса линий Default</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_система">4.1.4. Система</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">Версия программы</span> - версия сборки в формате <span class="shell">git describe --tags</span> (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Информация о сборке</span> - разная информация: целевая платформа, версия компилятора и т.п. (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Время работы</span> - длительность текущей сессии (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Один экземпляр</span> - контроль повторного запуска программы. При установке данного параметра возможен запуск только одной
+сессии программы, попытки запустить следующую сессию только активируют уже запущенную</p>
+</li>
+<li>
+<p><span class="hl">Не показывать заставку</span> - отключение сплэш скрина при запуске программы</p>
+</li>
+<li>
+<p><span class="hl">Не загружать раскладку окон</span> - не загружает файл раскладки окон программы при старте, программа запускается в
+"не пристыкованном" режиме (доступен только для чтения, устанавливается ключем командной строки !!NEEDLINK!!)</p>
+</li>
+<li>
+<p><span class="hl">Обновления PO файлов</span> - режим контроля и обновления файлов локализации программы, используется совместно с
+командой <span class="command">UpdatePO</span> !!NEEDLINK!! (доступен только для чтения, устанавливается ключем командной строки !!NEEDLINK!!)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_сохранение">4.1.5. Сохранение</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">Автосохранение</span> - включает работу автосохранения</p>
+</li>
+<li>
+<p><span class="hl">Время до автосохранения</span> - время в секундах оставшееся до очередного автосохранения (доступен только для чтения)</p>
+</li>
+<li>
+<p><span class="hl">Время между автосохранениями</span> - настройка времени между сохранениями в секундах</p>
+</li>
+<li>
+<p><span class="hl">Файл автосохранения</span> - путь и имя файла автосохранения</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_черчение">4.1.6. Черчение</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">Отображать вес линий</span> - Включение отображения веса линий</p>
+</li>
+<li>
+<p><span class="hl">Режим привязки</span> - Битовая маска настроек привязок. в данном месте просто для информации, не используется</p>
+</li>
+<li>
+<p><span class="hl">Режим полярной трассировки</span> - Включение трассировки</p>
+</li>
+<li>
+<p><span class="hl">Текущий слой</span> - отображает и позволяет редактировать текущий слой</p>
+</li>
+<li>
+<p><span class="hl">Текущий вес линии</span> - отображает и позволяет редактировать текущий вес линии</p>
+</li>
+<li>
+<p><span class="hl">Текущий вес цвет</span> - отображает и позволяет редактировать текущий цвет</p>
+</li>
+<li>
+<p><span class="hl">Масштаб типов линий чертежа</span> - отображает и позволяет редактировать глобальный масштаб типов линий чертежа</p>
+</li>
+<li>
+<p><span class="hl">Текущий масштаб типов линий примитивов</span> - отображает и позволяет редактировать текущий масштаб типов линий</p>
+</li>
+<li>
+<p><span class="hl">Стиль размеров</span> - отображает и позволяет редактировать текущий стиль размеров</p>
+</li>
+<li>
+<p><span class="hl">Поворачивать текст в описании линий</span> - Поворачивает текстовые элементы в стилях линий для более удобного чтения</p>
+</li>
+<li>
+<p><span class="hl">Стиль текста</span> - отображает и позволяет редактировать текущий стиль текста</p>
+</li>
+<li>
+<p><span class="hl">LUnits (формат линейных единиц)</span> - аналог DXF переменной LUnits</p>
+</li>
+<li>
+<p><span class="hl">LUPrec (точность линейных единиц)</span> - аналог DXF переменной LUPrec</p>
+</li>
+<li>
+<p><span class="hl">AUnits (формат угловых единиц)</span> - аналог DXF переменной AUnits</p>
+</li>
+<li>
+<p><span class="hl">AUPrec (точность угловых единиц)</span> - аналог DXF переменной AUPrec</p>
+</li>
+<li>
+<p><span class="hl">AngDir (направление положительного угла)</span> - аналог DXF переменной AngDir</p>
+</li>
+<li>
+<p><span class="hl">AngBase (базовый угол)</span> - аналог DXF переменной AngBase</p>
+</li>
+<li>
+<p><span class="hl">InsUnits (масштаб вставки блока)</span> - аналог DXF переменной InsUnits</p>
+</li>
+<li>
+<p><span class="hl">TextSize (размер вновь созданных текстовых примитивов)</span> - аналог DXF переменной TextSize</p>
+</li>
+<li>
+<p><span class="hl">Настройка шаговой привязки</span> - настройки привязки к регулярной прямоугольной сетке</p>
+</li>
+<li>
+<p><span class="hl">Шаг сетки</span> - настройки отображения регулярной прямоугольной сетки</p>
+</li>
+<li>
+<p><span class="hl">Показать сетку</span> - включение отображения сетки</p>
+</li>
+<li>
+<p><span class="hl">Шаг</span> - включение шаговой привязки</p>
+</li>
+<li>
+<p><span class="hl">Редактирование составных объектов</span> - включение отдельного выделения примитивов являющихся частью сложных примитивов !!NEEDLINK!!</p>
+</li>
+<li>
+<p><span class="hl">Вспомогательная геометрия</span> - отображение вспомогательной геометрии</p>
+</li>
+<li>
+<p><span class="hl">Отображать выбранный объект в инспекторе</span> - показывать свойства выбранного примитива в инспекторе</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="distrib_file_structure">4.2. Структура директорий</h3>
+<div class="paragraph">
+<p>Общая структура директорий программы имеет вид:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: Could not load PlantUML. Either require 'asciidoctor-diagram-plantuml' or specify the location of the PlantUML JAR(s) using the 'DIAGRAM_PLANTUML_CLASSPATH' environment variable. Alternatively a PlantUML binary can be provided (plantuml-native in $PATH).
+!include styles/filesystem-tree-style.iuml
+legend
+**cad**
+|_ **bin** //бинарные файлы в подкаталогах по платформам//
+  |_ **i386-win32**
+  |_ **x86_64-linux**
+  |_ **x86_64-win64**
+|_ **cfg** //конфигурационные файлы программы//
+  |_ **components** //разлирчные скрипты, конфигурационные файлы//
+  |_ **configs** //разлирчные конфигурационные файлы//
+    |_ **navigators** //пресеты навигаторов//
+  |_ **menu** //конфигурационные файлы элементов пользовательского интерфейса//
+|_ **data** //файлы данных программы//
+  |_ **blocks** //библиотека блоков//
+    |_ **el**
+    |_ **ops**
+  |_ **dictionaries** //словари проверки орфографии//
+  |_ **examples** //примеры файлов dxf//
+  |_ **fonts** //шрифты shx и ttf//
+  |_ **images** //иконки//
+    |_ **actions**
+      |_ **draw**
+      |_ **snap**
+      |_ **valec**
+      |_ **zelectro**
+    |_ **palettes**
+  |_ **languages** //PO файлы локализаций//
+  |_ **preload** //папка для скриптов выполняемых при запуске программы//
+  |_ **programdb** //встроенная база оборудования//
+  |_ **rtl** //различные скрипты//
+    |_ **dwg**
+    |_ **objcalc**
+    |_ **objdefunits**
+    |_ **include**
+    |_ **styles**
+    |_ **velec**
+  |_ **templates** //шаблоны пустых чертежей//
+end legend</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Дистрибутив разбит на 3 директории <span class="filepath">bin</span>, <span class="filepath">cfg</span>, <span class="filepath">data</span></p>
+</div>
+<div class="paragraph">
+<p>Директория <span class="filepath">bin</span> содержит исполняемые файлы и может распологаться
+в любом месте файловой системы</p>
+</div>
+<div class="paragraph">
+<p>Директория <span class="filepath">cfg</span> может распологаться либо лядом с <span class="filepath">bin</span> либо
+ее содержимое должно находиться в <span class="filepath">C:\ProgramData\zcad\</span>
+(на линуксе в <span class="filepath">/etc/zcad/</span>)</p>
+</div>
+<div class="paragraph">
+<p>Директория <span class="filepath">data</span> может распологаться либо лядом с <span class="filepath">bin</span> либо
+местоположение ее содержимого должно быть указано в ключе <mark>PreferredDistribPath</mark>
+в файле <span class="filepath">cfg\configs\config.xml</span></p>
+</div>
+<div class="paragraph">
+<p>Отдельно стоит рассмотреть содержимое директории <span class="filepath">data/preload</span>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: Could not load PlantUML. Either require 'asciidoctor-diagram-plantuml' or specify the location of the PlantUML JAR(s) using the 'DIAGRAM_PLANTUML_CLASSPATH' environment variable. Alternatively a PlantUML binary can be provided (plantuml-native in $PATH).
+!include styles/filesystem-tree-style.iuml
+legend
+**preload**
+|_ **Различные поддиректории**
+|_ **autorun.cmd** //командный скрипт выполняемый на последней стадии запуска программы//
+|_ **stage0.cmd0** //командный скрипт выполняемый на ранней стадии запуска программы//
+end legend</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>При запуске программы осуществляется сканирование <span class="filepath">data/preload</span> и вложенных
+директорий и выполнение найденных скриптов <span class="filepath">cmd0</span> и <span class="filepath">cmd</span>
+скрипты с расширением <span class="filepath">cmd0</span> выполняются на ранней стадии запуска программы
+(до создания GUI) и содержат в себе команды загрузки описаний экшенов, меню и тулбаров.
+Файлы с расширением <span class="filepath">cmd</span> выполняются при завершении инициализации, после
+создания GUI и содержат в себе команды загрузки файлов определений блоков и устройств.</p>
+</div>
+<div class="paragraph">
+<p>При сканировании директорий первым будет выполнен скрипт <span class="filepath">stage0.cmd0</span> далее
+будут выполнены все фпйлы с расширением <span class="filepath">cmd0</span> лежащие в данной директории и
+ниже по иерархии файловой системы. Для каждой вложенной директории также первым выполняется
+<span class="filepath">autorun.cmd</span> и далее другие скрипты <span class="filepath">\*.cmd</span> лежащие в данной
+директории</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_переключатели_командной_строки">4.3. Переключатели командной строки</h3>
+<div class="paragraph">
+<p>При запуске ZCAD из командной строки можно задать опции командной строки корректирующие его поведение. Некоторые опции работают
+как флаги, некоторые опции требуют указания аргументов</p>
+</div>
+<table id="command_line_switch" class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 4. Переключатели командной строки</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">nosplash</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Не показывать сплэшскрин</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">updatepo</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обновить файлы локализации (используется совместно с командой UpdatePO) ведет учет всех запросов на
+локализацию, помечает не используемые и добавляет вновь встреченные строки. При использовании ключа фактически перевод строк не
+производится, интерфейс остается английским</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">noloadlayout</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Не загружать файл раскладки окон</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">debugui</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Включить "отладочный" интерфейс - некоторые элементы интерфейса для разработчика</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">experimentalfeatures</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Включить "экспериментральные" фичи - то что разрабатывается на данный момент не закончено и не нужно пользователю</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">notcheckuniqueinstance</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Не проверять повторный запуск, с данным ключом может быть запущено несколько копий программы</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">logfile</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Принудительно задать путь к лог файлу. Требует аргумент - путь и имя файла</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">leam</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Принудительно разрешить все модули логирования</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">lem</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Принудительно разрешить указанный модуль (модули) логирования. Требует аргумент(ы) - имя модуля(лей)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">ldm</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Принудительно запретить указанный модуль (модули) логирования. Требует аргумент(ы) - имя модуля(лей)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">lemm</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Принудительно разрешить модули логирования чьи имена соответствуют маске(кам). Требует аргумент(ы) - маску(ки) имени модуля(лей)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">ldmm</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Принудительно запретить модули логирования чьи имена соответствуют маске(кам). Требует аргумент(ы) - маску(ки) имени модуля(лей)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">lcl</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Установить уровень логирования. Требует аргумент - уровень логирования</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">maxstackframecount</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Установить максимальную глубину размотки стека при обработке ошибок</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">runscript</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Запустить скрипт(ы) после запуска программы. Требует аргумент(ы) - Имя файла(ов) скрипта(ов)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">memprofiling</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Запуск профилировщика памяти на этапе инициализации программы. см. команду dbgMemProfiler !!NEEDLINK!!</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 5. Уровни логирования</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">LM_Trace</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Вывод всего подряд. Максимально подробный и перегруженный лог.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">LM_Debug</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Журналирование моментов вызова «крупных» операций</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">LM_Info</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Разовые операции, которые повторяются крайне редко, но не регулярно. (загрузка конфига, плагина, запуск бэкапа)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">LM_Warning</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Неожиданные параметры вызова и т.п. Вообще все, что может свидетельствовать о не штатном использовании.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">LM_Error</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Вывод сообщений об ошибках.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">LM_Fatal</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Вывод сообщений об критических ошибках, имхо стоит убрать.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><span class="filepath">LM_Necessarily</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Вывод в любом случае.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>При штатном запуске программы используется <span class="filepath">LM_Info</span> как текущий уровень. В лог попадают сообщения текущего уровня
+и уровней ниже по таблице, все что выше фильтруется</p>
+</div>
+<div class="paragraph">
+<p>Список доступных модулей логирования пока не определен, его можно посмотреть в конце лога при штатном запуске</p>
+</div>
+<div class="paragraph">
+<p>Пример запуска программы:</p>
+</div>
+<div class="paragraph">
+<p><span class="filepath">zcad nosplash logfile d:\zcad.log lem translator,shx ldm default lcl lm_trace</span></p>
+</div>
+<div class="paragraph">
+<p>Не показывать сплэшскрин,переназначить вывод лога в <span class="filepath">d:\zcad.log</span>, разрешить вывод сообщений в лог от системы (модуля)
+перевода и парсера shx шрифтов, запретить сообщения модуля по умолчанию, установить уровень логирования LM_Trace</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="paragraph nav-footer">
+<p>← Previous: <a href="_работа_с_программой.html">Работа с программой</a> | ↑ Up: <a href="userguide.ru.html">ZCAD Руководство пользователя&lt;br</a>&gt; | Next: <a href="_для_разработчика.html">Для разработчика</a> →</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Последнее обновление 2026-03-01 21:15:23 UTC
+</div>
+</div>
+</body>
+</html>

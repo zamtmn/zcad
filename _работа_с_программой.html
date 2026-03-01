@@ -1,0 +1,4204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<meta name="author" content="Андрей Зубарев">
+<title>ZCAD Руководство пользователя</title>
+<style>
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";
+@import "https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css";
+
+.filepath {
+  font-family: monospace;
+  font-size: 1.1em;
+  line-height: calc(1 / 1.1);
+  color: #ff0000;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
+                       font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
+             .nav-footer{text-align: center; margin-top: auto;}
+             .nav-footer > p > a {white-space: nowrap;}</style>
+</head>
+<body id="_работа_с_программой" class="article toc2 toc-left">
+<div id="header">
+<h1>ZCAD Руководство пользователя<br></h1>
+<div class="details">
+<span id="author" class="author">Андрей Зубарев</span><br>
+<span id="email" class="email"><a href="mailto:zamtmn@yandex.ru">zamtmn@yandex.ru</a></span><br>
+<span id="revdate">v0.9.15.0-189-gf536d006b</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Содержание</div>
+<p><span class="toc-root"><a href="userguide.ru.html">ZCAD Руководство пользователя<br></a></span></p><ul class="sectlevel1">
+<li><a href="_общая_информация.html">1. Общая информация</a>
+</li>
+<li><a href="_быстрый_старт.html">2. Быстрый старт</a>
+</li>
+<li><a href="_работа_с_программой.html"><span class="toc-current">3. Работа с программой</span></a>
+<ul class="sectlevel2">
+<li><a href="_работа_с_программой.html#_интерфейс_пользователя">3.1. Интерфейс пользователя</a>
+<ul class="sectlevel3">
+<li><a href="_работа_с_программой.html#_общий_обзор">3.1.1. Общий обзор</a>
+</li>
+<li><a href="_работа_с_программой.html#anchordocking">3.1.2. AnchorDocking</a>
+<ul class="sectlevel4">
+<li><a href="_работа_с_программой.html#_панели_инструментов">Панели инструментов</a>
+</li>
+<li><a href="_работа_с_программой.html#_окна">Окна</a>
+</li>
+</ul>
+</li>
+<li><a href="_работа_с_программой.html#_навигаторы">3.1.3. Навигаторы</a>
+</li>
+</ul>
+</li>
+<li><a href="_работа_с_программой.html#_примитивы">3.2. Примитивы</a>
+<ul class="sectlevel3">
+<li><a href="_работа_с_программой.html#_device">3.2.1. Device</a>
+</li>
+</ul>
+</li>
+<li><a href="_работа_с_программой.html#ent_extenders">3.3. Расширения примитивов</a>
+<ul class="sectlevel3">
+<li><a href="_работа_с_программой.html#_extdrlayercontrol">3.3.1. extdrLayerControl</a>
+</li>
+<li><a href="_работа_с_программой.html#_extdrsmarttextent">3.3.2. extdrSmartTextEnt</a>
+</li>
+<li><a href="_работа_с_программой.html#extdrVariables">3.3.3. extdrVariables</a>
+<ul class="sectlevel4">
+<li><a href="_работа_с_программой.html#zcadsimplytypes">Перечень простых типов данных</a>
+</li>
+<li><a href="_работа_с_программой.html#centralization">Централизация</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="_работа_с_программой.html#command_list">3.4. Команды</a>
+<ul class="sectlevel3">
+<li><a href="_работа_с_программой.html#_3dpoly">3.4.1. 3DPoly</a>
+</li>
+<li><a href="_работа_с_программой.html#_about">3.4.2. About</a>
+</li>
+<li><a href="_работа_с_программой.html#_arc">3.4.3. Arc</a>
+</li>
+<li><a href="_работа_с_программой.html#_bedit">3.4.4. BEdit</a>
+</li>
+<li><a href="_работа_с_программой.html#_cam_reset">3.4.5. Cam_reset</a>
+</li>
+<li><a href="_работа_с_программой.html#_cancel">3.4.6. Cancel</a>
+</li>
+<li><a href="_работа_с_программой.html#_circle">3.4.7. Circle</a>
+</li>
+<li><a href="_работа_с_программой.html#_copy">3.4.8. Copy</a>
+</li>
+<li><a href="_работа_с_программой.html#_copybase">3.4.9. CopyBase</a>
+</li>
+<li><a href="_работа_с_программой.html#_copyclip">3.4.10. CopyClip</a>
+</li>
+<li><a href="_работа_с_программой.html#_cutclip">3.4.11. CutClip</a>
+</li>
+<li><a href="_работа_с_программой.html#DataExport_com">3.4.12. DataExport</a>
+<ul class="sectlevel4">
+<li><a href="_работа_с_программой.html#enttypefilter_lng">Формат фильтра по типам примитивов</a>
+</li>
+<li><a href="_работа_с_программой.html#entpropfilter_lng">Формат фильтра по свойствам примитивов</a>
+</li>
+<li><a href="_работа_с_программой.html#exporter_lng">Формат скрипта экспорта</a>
+</li>
+</ul>
+</li>
+<li><a href="_работа_с_программой.html#DataImport_com">3.4.13. DataImport</a>
+</li>
+<li><a href="_работа_с_программой.html#_devdefsync">3.4.14. DevDefSync</a>
+</li>
+<li><a href="_работа_с_программой.html#_dockingoptions">3.4.15. DockingOptions</a>
+</li>
+<li><a href="_работа_с_программой.html#_dwgclose">3.4.16. DWGClose</a>
+</li>
+<li><a href="_работа_с_программой.html#_dwgnew">3.4.17. DWGNew</a>
+</li>
+<li><a href="_работа_с_программой.html#_dwgnext">3.4.18. DWGNext</a>
+</li>
+<li><a href="_работа_с_программой.html#_dwgprev">3.4.19. DWGPrev</a>
+</li>
+<li><a href="_работа_с_программой.html#_erase">3.4.20. Erase</a>
+</li>
+<li><a href="_работа_с_программой.html#extdrRemove_com">3.4.21. extdrRemove</a>
+</li>
+<li><a href="_работа_с_программой.html#extdrAllList_com">3.4.22. extdrAllList</a>
+</li>
+<li><a href="_работа_с_программой.html#extdrEntsList_com">3.4.23. extdrEntsList</a>
+</li>
+<li><a href="_работа_с_программой.html#extdrAdd_com">3.4.24. extdrAdd</a>
+</li>
+<li><a href="_работа_с_программой.html#_layer">3.4.25. Layer</a>
+</li>
+<li><a href="_работа_с_программой.html#_load">3.4.26. Load</a>
+</li>
+<li><a href="_работа_с_программой.html#_loadactions">3.4.27. LoadActions</a>
+</li>
+<li><a href="_работа_с_программой.html#_loadlayout">3.4.28. LoadLayout</a>
+</li>
+<li><a href="_работа_с_программой.html#_loadmenus">3.4.29. LoadMenus</a>
+</li>
+<li><a href="_работа_с_программой.html#_loadpalettes">3.4.30. LoadPalettes</a>
+</li>
+<li><a href="_работа_с_программой.html#_loadtoolbars">3.4.31. LoadToolbars</a>
+</li>
+<li><a href="_работа_с_программой.html#_matchprop">3.4.32. MatchProp</a>
+</li>
+<li><a href="_работа_с_программой.html#_merge">3.4.33. Merge</a>
+</li>
+<li><a href="_работа_с_программой.html#_mergeblocks">3.4.34. MergeBlocks</a>
+</li>
+<li><a href="_работа_с_программой.html#_mirror">3.4.35. Mirror</a>
+</li>
+<li><a href="_работа_с_программой.html#_move">3.4.36. Move</a>
+</li>
+<li><a href="_работа_с_программой.html#_rotate">3.4.37. Rotate</a>
+</li>
+<li><a href="_работа_с_программой.html#_saveas">3.4.38. SaveAs</a>
+</li>
+<li><a href="_работа_с_программой.html#_savelayout">3.4.39. SaveLayout</a>
+</li>
+<li><a href="_работа_с_программой.html#_saveoptions">3.4.40. SaveOptions</a>
+</li>
+<li><a href="_работа_с_программой.html#cmd_updatepo">3.4.41. UpdatePO</a>
+</li>
+<li><a href="_работа_с_программой.html#VarsEd_com">3.4.42. VarsEd</a>
+</li>
+<li><a href="_работа_с_программой.html#_varsedbd">3.4.43. VarsEdBD</a>
+</li>
+<li><a href="_работа_с_программой.html#VarsEdSel_com">3.4.44. VarsEdSel</a>
+</li>
+<li><a href="_работа_с_программой.html#VarsLink">3.4.45. VarsLink</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="_настройка_программы.html">4. Настройка программы</a>
+</li>
+<li><a href="_для_разработчика.html">5. Для разработчика</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_работа_с_программой">3. Работа с программой</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_интерфейс_пользователя">3.1. Интерфейс пользователя</h3>
+<div class="sect3">
+<h4 id="_общий_обзор">3.1.1. Общий обзор</h4>
+<div class="paragraph">
+<p>Интерфейс программы по умолчанию представлен на скриншоте:</p>
+</div>
+<div id="zcad_ui" class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_ui.png" alt="zcad ui" width="50%">
+</div>
+<div class="title">Рисунок 1. Внешний вид окна программы</div>
+</div>
+<div class="paragraph">
+<p>Можно выделить следующие основные элементы:</p>
+</div>
+<div class="paragraph">
+<div class="title">1. Окно отображения</div>
+<p>Тут производится отображение и редактирование графической информации.</p>
+</div>
+<div class="paragraph">
+<p>Навигация по чертежу осуществляется мышкой. Масштабировать чертеж можно вращая колесо мыши, если при этом нажать и удерживать клавишу <kbd>Shift</kbd> коэффициент масштабирования будет меньше и точки временных привязок не будут сброшены. Панарамировать чертеж можно двигая мышь с нажатой средней кнопкой. Если при панарамировании удерживать клавишу <kbd>Ctrl</kbd>, будет осуществляться вращение камеры. Также для навигации доступны некоторые сочетания клавиш !!NEEDLINK!!</p>
+</div>
+<div class="paragraph">
+<p>Редактирование чертежа также производится курсором мыши, при этом его форма зависит от ожидаемого действия: <code>перекрестие</code> - указание точки на чертеже, <code>прямоугольник</code> - выбор графического примитива. Комбинация прямоугольника и перекрестия - можно как выбрать примитив, так и указать точку на чертеже.</p>
+</div>
+<div class="paragraph">
+<p>Программа позволяет выбирать примитивы несколькими способами:</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>кликнув прямоугольником по примитиву - примитив будет добавлен к текущему набору выбора</p>
+</li>
+<li>
+<p>рамкой выбора - при клике по пустой области чертежа начинает чертиться прямоугольная рамка выбора, при следующем клике построение рамки будет закончено. Рамка начерченная слева на прово называется <code>прямой</code> и рисуется сплошными линиями с синей заливкой, справа на лево - называется <code>обратной</code> и рисуется пунктирными линиями с зеленой заливкой. По завершению процедуры будут выбраны все примитивы полностью попавшие в прямую рамку или хотя бы частично попавшие в обратную рамку. При черчении рамки чертеж можно масштабировать и панарамировать, если начальная точка при этом выйдет за границы экрана, рамка будет подрезана по экрану. Данное поведение можно изменить нажав и удерживая клавишу <code>control</code> перед указанием второй точки рамки. О наличии и отсутствии подрезки можно судить по диагональным линиям рисуемой рамки.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_ui_selectframes.png" alt="zcad ui selectframes" width="75%">
+</div>
+<div class="title">Рисунок 2. Варианты рамок выбора</div>
+</div>
+<div id="objectinspector" class="paragraph">
+<div class="title">2. Инспектор объектов</div>
+<p>Тут отображаются и редактируются свойства различных сущностей. По умолчанию в нем отображаются настройки программы, но в зависимости от ситуации могут отображаться например свойства выделенных примитивов или параметры запущенной команды.</p>
+</div>
+<div class="paragraph">
+<p>На рис. <a href="_работа_с_программой.html#zcad_ui">Внешний вид окна программы</a> в инспекторе отображаются настройки программы. Если в области отображения выделить несколько примитивов, инспектор примет примерно следующий вид:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_ui_objectinspector.png" alt="zcad ui objectinspector" width="25%">
+</div>
+<div class="title">Рисунок 3. Свойства выделенных примитивов</div>
+</div>
+<div class="paragraph">
+<p>Имена свойств доступных только для чтения отображаются серым цветом. Если выделенные примитивы имеют различные значения одноименных свойств, данные значения отображаются как "Разный".  Если данные значения фактически отличаются, но из за настроек отображения !!NEEDLINK!! (округления) выглядят одинаково, данные значения помечаются знаком "≈".</p>
+</div>
+<div class="paragraph">
+<p>При клике на значение свойства откроется строка редактирования и можно будет изменить значение свойства. Для некоторых свойств доступны специализированные редакторы, открывающиеся в отдельном окне по нажатию кнопки [&#8230;&#8203;]</p>
+</div>
+<div class="paragraph">
+<p>Свойства примитивов структурированы следующим образом:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Failed to generate image: Could not load PlantUML. Either require 'asciidoctor-diagram-plantuml' or specify the location of the PlantUML JAR(s) using the 'DIAGRAM_PLANTUML_CLASSPATH' environment variable. Alternatively a PlantUML binary can be provided (plantuml-native in $PATH).
+!include styles/defaulttree-style.iuml
+legend
+Инспектор
+|_ Обрабатывать_примитивы
+|_ Обработка_переменных
+|_ Связанные переменные
+  |_ Переменные связанных примитивов
+|_ Переменные
+  |_ Свои переменные
+|_ Расширения
+  |_ Свойства расширений примитивов
+|_ Общие
+  |_ Основные свойства примитивов
+|_ Геометрия
+  |_ Геометрические свойства примитивов
+|_ Разное
+  |_ Не геометрические свойства примитивов
+|_ Суммарно
+  |_ FILTER
+    |_ Свойства_для_фильтрации
+  |_ Просуммированные свойства
+end legend</pre>
+</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>Обрабатывать примитивы</code> - тут можно выбрать тип примитивов свойства которых отображаются в инспекторе, а нажатием кнопок <code>[*]</code> или <code>[-]</code> оставить только примитивы данного типа в текущем выборе или исключить их из текущего выбора</p>
+</li>
+<li>
+<p><code>Обработка переменных</code> - Управляет способом оотображения набора переменных примитива (см. <a href="_работа_с_программой.html#extdrVariables">extdrVariables</a> и <a href="_работа_с_программой.html#centralization">Централизация</a>) . <code>Выбранный примитив</code> - только переменные выбранных примитивов; <code>Связанные примитивы</code> - только переменные связанных примитивов; <code>Все примитивы</code> - обрабатываются переменные и примитивов из текущего выбора и связанных с ними примитивов, все переменные отображаются на одной вкладке; <code>Все примитивы раздельно</code> - обрабатываются переменные и примитивов из текущего выбора и связанных с ними примитивов, переменные отображаются на разных вкладках;</p>
+</li>
+<li>
+<p><code>Связанные переменные</code> - на этом уровне структуры будут отображены переменные связанных примитивов, при с значением Process Обработка_переменных=<code>Все примитивы раздельно</code></p>
+</li>
+<li>
+<p><code>Переменные</code> - на этом уровне структуры будут отображены все доступные в соответствии с значением Process variables переменные. При отображении переменных свзанных примитивов возможна цветовая раскраска значений !!NEEDLINK!!</p>
+</li>
+<li>
+<p><code>Общие</code> - тут перечислены общие свойства примитивов: слой, цвет, вес и т.п.</p>
+</li>
+<li>
+<p><code>Расширения</code> - если к выделенным примитивам добавлены расширения, их свойства отображаются здесь.</p>
+</li>
+<li>
+<p><code>Геометрия</code> - различные геометрические свойства: точки вставки, координаты, длины и т.п.</p>
+</li>
+<li>
+<p><code>Суммарно</code> - некоторые свойства допускающие суммирование, например при выборе нескольких отрезков тут будет их суммарная длина. Здесь же в ветке <code>FILTER</code> будут некоторые свойства допускающие фильтрацию, например можно кнопкой <code>[*]</code> оставить в текущем выборе только примитивы лежащие на определенном слое.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<div class="title">3. Окно сообщений</div>
+<p>Тут отображается различные сообщения по ходу работы программы. Информация о процессах, сообщения о ошибках, предупреждения, подсказки для пользователя и т.п.</p>
+</div>
+<div class="paragraph">
+<div class="title">4. Командная строка</div>
+<p>Тут можно ввести имя команды, тем самым запустив ее, либо ввести координату точки на запрос уже выполняемой команды.</p>
+</div>
+<div class="paragraph">
+<p>Поле ввода имеет подсказку меняющуюся по текущей ситуации. Когда программа ожидает ввода команды подсказка имеет вид <code>Команда&gt;</code> и <code>&gt;</code> когда ожидается координата. Также некоторые команды имеют контекстную подсказку, в которой можно выбрать мышью опции команды</p>
+</div>
+<div class="paragraph">
+<p>Перечень доступных команд приведен в <a href="_работа_с_программой.html#command_list">Команды</a> команда может быть введена как просто по имени, так с операндом. Операнд указывается в скобках после имени команды. Например ввод <code>Load</code> вызовет диалог открытия файла чертежа и последующую его загрузку. Ввод <code>Load(D:\file.dxf)</code> сразу вызовет загрузку файла <code>D:\file.dxf</code>. Парсинг операндов выполняется силами команды, поэтому синтаксис в разных командах отличается.</p>
+</div>
+<div class="paragraph">
+<p>Координаты можно вводить как 2D, так и 3D, при этом 2D будут переведены в 3D подстановкой 0 в качестве координаты Z. Также можно вводить как абсолютные, так и относительные (относительно последней указанной точки) значения. Относительные координаты задаются указанием знака <code>@</code> перед координатой X. Если включен режим трассировки !!NEEDLINK!! и имеется привязка к оси трассировки, можно указать точку введя расстояние от точки трассировки, отложенное по оси трассировки.</p>
+</div>
+<div class="paragraph">
+<p>Например если в открытом чертеже на запрос <code>Команда&gt;</code> ввести <code>Line</code>, затем <code>10,30</code>, затем <code>@1,2</code> будет построена линия с координатами (10,30)-(11,32)</p>
+</div>
+<div class="paragraph">
+<p>Командная строка может быть отключена. !!NEEDLINK!! В режиме с выключенной командной строкой становятся доступны буквенные сочетания клавиш - с включенной нажатия букв обрабатываются командной строкой</p>
+</div>
+<div class="paragraph">
+<div class="title">5. Статусная строка.</div>
+<p>Здесь отображаются координаты курсора и прогрессбары долгих процессов. Также есть быстрый доступ к кнопкам переключения различных режимов работы программы !!NEEDLINK!!</p>
+</div>
+<div class="paragraph">
+<div class="title">6. Панели инструментов</div>
+<p>Здесь сгруппированы иконки различных команд для их быстрого запуска. !!NEEDLINK!!</p>
+</div>
+<div class="paragraph">
+<div class="title">7. Палитры</div>
+<p>Могут отображаться в древовидном виде и в виде списка иконок. К каждому листу дерева или иконке списка может быть привязана произвольная команда, запускаемая при клике по элементу. Как правило это команды вставки устройств или блоков. Древовидные палитры дополнительно оснащены полем фильтра для быстрого нахождения элементов !!NEEDLINK!!</p>
+</div>
+<div class="paragraph">
+<div class="title">8. Навигаторы</div>
+<p>Навигаторы служат для быстрой навигации по чертежу, нахождению на нем тех или иных элементов. Представляют из себя настраиваимую древовидную структуру отображения данных. На данный момент в программе доступны навигаторы устройств, кабелей, стояков и примитивов !!NEEDLINK!!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="anchordocking">3.1.2. AnchorDocking</h4>
+<div class="paragraph">
+<p>ZCAD в своей работе использует библиотеку <code>AnchorDocking</code> !!NEEDLINK!! данная библиотека позволяет склеить (пристыковывать) различные окна в одно. На <a href="_работа_с_программой.html#zcad_ui">Внешний вид окна программы</a> 1,2,3,7,8 являются отдельными окнами склеенными в одно окно. Пустое окно программы выглядит следующим образом:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui.png" alt="zcad empty ui" width="50%">
+</div>
+<div class="title">Рисунок 4. Пустое окно программы</div>
+</div>
+<div class="paragraph">
+<p>По периметру окна расположены области для пристыковки панелей инструментов, в центре область пристыковки окон.</p>
+</div>
+<div class="sect4">
+<h5 id="_панели_инструментов">Панели инструментов</h5>
+<div class="paragraph">
+<p>Включить панель инструментов можно командой <code>ShowToolBar</code> передав ей в качестве операнда имя панели инструментов (или в меню <code>Вид/Показать окно/Панели инструментов</code>). Например включаем панель <code>View</code>, по умолчанию она отображается в непристыкованном состоянии:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_with_toolbar.png" alt="zcad empty ui with toolbar" width="25%">
+</div>
+<div class="title">Рисунок 5. Панель инструментов</div>
+</div>
+<div class="paragraph">
+<p>Для пристыковки панели начинаем ее перетаскивать за свободное место (не за заголовок!), при этом будет подсвечиваться предпологаемое новое место расположения панели. При подведении мышки к краю окна будет подсвечена область вдоль края, при отпускании кнопки мыши панель инструментов будет пристыкована
+.Стыковка панели инструментов</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Действие</th>
+<th class="tableblock halign-left valign-top">Процесс</th>
+<th class="tableblock halign-left valign-top">Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Стыковка панели инструментов</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_drag_toolbar.png" alt="zcad empty ui drag toolbar">
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_docked_toolbar.png" alt="zcad empty ui docked toolbar">
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>В пристыкованном состоянии панели инструментов имеют заголовок в виде двух полосок в начале панели, за этот заголовок панель можно передвигать вдоль края пристыковки и отствковывать, двойной клик по заголовку панели приведет к ее полному раскрытию. Закрыть панель инструментов можно только в отстыкованном состоянии</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_окна">Окна</h5>
+<div class="paragraph">
+<p>Включить окно программы можно командой <code>Show</code> передав ей в качестве операнда имя окна (или в меню <code>Вид/Показать окно</code>). Например включаем окно <code>ObjectInspector</code>, по умолчанию окно отображается в неприствкованном состоянии:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_with_objectinspector.png" alt="zcad empty ui with objectinspector" width="25%">
+</div>
+<div class="title">Рисунок 6. Не пристыкованное окно инспектора объектов</div>
+</div>
+<div class="paragraph">
+<p>Не пристыкованные окна программы имеют два заголовка - стандартный и нестандартный. За стандартный окна можно только перемещать, за нестандартный - перемещать и пристыковывать. Стыковка окон осуществляется перетаскиванием окна на желаемое место стыковки, при этом область стыковки будет подсвечена.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 1. Варианты стыковки окон программы</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Действие</th>
+<th class="tableblock halign-left valign-top">Процесс</th>
+<th class="tableblock halign-left valign-top">Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Стыковка первого окна</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_try_dock_oi.png" alt="zcad empty ui try dock oi">
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_dock_oi.png" alt="zcad empty ui dock oi">
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Стыковка следующего окна справа от первого</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_try_dock_second.png" alt="zcad empty ui try dock second">
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_dock_second.png" alt="zcad empty ui dock second">
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Стыковка следующего окна поверх второго</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_try_dock_third.png" alt="zcad empty ui try dock third">
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_empty_ui_dock_third.png" alt="zcad empty ui dock third">
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>В таблице приведены возможные варианты стыковки окон. Первое окно может быть пристыковано только в центр главного окна. Последующие окна могут быть пристыкованы с любой стороны от уже имеющихся, либо поверх них, при этом будет окна будут переключаться вкладками, как показано в третьей строке таблицы. При стыковке окон слева\справа\сверху\снизу между ними появляется разделительный сплитер которым можно регулировать размер окон.</p>
+</div>
+<div class="paragraph">
+<p>В заголовке пристыкованных окон появляется дополнительная кнопка минимизации, которая позволяет свернуть окно в тонкий заголовок и разворачивать его при наведении мыши</p>
+</div>
+<div class="paragraph">
+<p>При щелчке правой кнопкой мыши по любому разделительному сплитеру можно вызвать контекстное меню стыковки для настройки ее параметров.</p>
+</div>
+<div class="paragraph">
+<p>Сохранить раскладку окон и тулбаров можно командой <code>SaveLayout</code> или в меню <code>настройка\Сохранить разбивку окон по умолчанию</code></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_навигаторы">3.1.3. Навигаторы</h4>
+<div class="paragraph">
+<p>Отдельно стоит рассмотреть элемент интерфейса - навигаторы. Навигатор представляет из себя полностью настраиваемую
+древовидную структуру отображающую определенные свойства определенных примитивов чертежа. Каждая строка в
+структуре навигатора - отдельный примитив. На данный момент доступны навигаторы устройств, кабелей и стояков</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_ui_navigator.png" alt="zcad ui navigator" width="25%">
+</div>
+<div class="title">Рисунок 7. Навигатор устройств</div>
+</div>
+<div class="paragraph">
+<p>Настройка навигатора производится следующим образом:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_ui_navigator_prepare.png" alt="zcad ui navigator prepare" width="25%">
+</div>
+<div class="title">Рисунок 8. Органы управления навигатора</div>
+</div>
+<div id="treeprop_lng" class="paragraph">
+<div class="title">1. Кнопка настройки ветвлений древовидной структуры</div>
+<p>Вызывает редактор описания ветвлений древовидной структуры навигатора, либо открывает меню действий с навигатором при нажатии
+на стрелку</p>
+</div>
+<div class="paragraph">
+<div class="title">2. Кнопка главной функции</div>
+<p>Включает-выключает использование в навигаторе "Главной функции" (Централизация)</p>
+</div>
+<div class="paragraph">
+<div class="title">3. Кнопка редактора фильтра примитивов по типу</div>
+<p>Вызывает редактор скрипта фильтрации по типу примитивов см.<a href="_работа_с_программой.html#enttypefilter_lng">Формат фильтра по типам примитивов</a></p>
+</div>
+<div class="paragraph">
+<div class="title">4. Кнопка редактора фильтра примитивов по свойствам</div>
+<p>Вызывает редактор скрипта фильтрации по свойствам примитивов см.<a href="_работа_с_программой.html#entpropfilter_lng">Формат фильтра по свойствам примитивов</a></p>
+</div>
+<div class="paragraph">
+<div class="title">5. Кнопка редактора скрипта настройки отображения дерева</div>
+<p>Вызывает редактор скрипта настройки отображения дерева. Ветвление дерева зависит от (<a href="_работа_с_программой.html#treeprop_lng">1. Кнопка настройки ветвлений древовидной структуры</a>),
+в данном скрипте настраивается например количество столбцов и их заполнение. Данный скрипт выполняется
+при создании навигатора, при изменении скрипта выполняется пересоздание навигатора для применения изменений
+В общем случае скрипт выглядит так:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Оператор(Операнд[,Операнд,Операнд ...])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Доступные типы операндов:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>'Строка'</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Строковой параметр - любой текст заключенный в апострофы</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Целое положительное число</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Операторы могут разделяться точкой с запятой, запятой, пробелом, переводом строки. Доступны следующие
+операторы:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>SetColumnsCount(Операнд1,Операнд2)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Задает количество столбцов в навигаторе, должна присутствовать 1 раз в начале скрипта<br>
+<code>Операнд1</code> - Целое положительное число. Количество столбцов в навигаторе<br>
+<code>Операнд2</code> - Целое положительное число. Номер столбца чья ширина будет рассчитываться автоматически (нумерация с 0)<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>SetColumnParams(Операнд1,Операнд2,Операнд3,Операнд4,Операнд5)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Задает параметры столбцов, должна присутствовать для каждого столбца<br>
+<code>Операнд1</code> - Целое положительное число. Номер столбца для которого задатются параметры (нумерация с 0)<br>
+<code>Операнд2</code> - Строка. Название столбца<br>
+<code>Операнд3</code> - Строка. Содержимое столбца<br>
+<code>Операнд4</code> - Строка. Имя переменной в которой сохраняется ширина столбца (в файле <code>rtl\savedvar.pas</code>) между сессиями работы. Если
+переменной пока нет нет, она будет создана с начальным значением 50<br>
+<code>Операнд5</code> - Целое положительное число. Пока не используется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Примеры скриптов экспорта:<br>
+Два столбца Tree и Comment, содержимое переменной NMO_Name примитива в первом и статичная надпись 'Тут что то тоже надо сделать' во втором<br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>SetColumnsCount(2,0);
+SetColumnParams(0,'Tree','@@[NMO_Name]','tmpGUIParamSave_NavDev_C0',1);
+SetColumnParams(1,'Comment','Тут что то тоже надо сделать','tmpGUIParamSave_NavDev_C1',1)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Три столбца Tree Elevation и Text, с содержимым переменных RiserName, Elevation и Text примитивов<br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>SetColumnsCount(3,0);
+SetColumnParams(0,'Tree','@@[RiserName]','tmpGUIParamSave_NavRis_C0',1);
+SetColumnParams(1,'Elevation','@@[Elevation]','tmpGUIParamSave_NavRis_C1',1);
+SetColumnParams(2,'Text','@@[Text]','tmpGUIParamSave_NavRis_C2',1)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">6. Кнопка обновления</div>
+<p>Вызывает перестроение дерева в навигаторе. Обычно при изменениях на чертеже навигаторы обновляются
+автоматически, но могут быть ситуации когда требуется в ручную вызвать обновление навигатора</p>
+</div>
+<div class="paragraph">
+<div class="title">7. Кнопки управления ветвлением</div>
+<p>Количество и название кнопок зависит от (<a href="_работа_с_программой.html#treeprop_lng">1. Кнопка настройки ветвлений древовидной структуры</a>) нажатое или отжатое состояние показывает
+включен или нет данный узел в текущий момент. Узлы можно включать\выключать.</p>
+</div>
+<div class="paragraph">
+<div class="title">8. Сохранение текущих настроек навигатора в файл</div>
+<p>Открывает окно выбора файла</p>
+</div>
+<div class="paragraph">
+<div class="title">9. Загрузка настроек навигатора из файл</div>
+<p>Открывает окно выбора файла</p>
+</div>
+<div class="paragraph">
+<div class="title">10. Подменю выбора вариантов настроек навигатора</div>
+<p>Подменю выбора заранее подготовленных вариантов настроек навигатора. Для того чтобы вариант появился в данном подменю
+настройку необходимо сохранить в папку $(ZCADPath)/configs</p>
+</div>
+<div class="paragraph">
+<div class="title">11. Быстрый фильтр содержимого навигатора</div>
+<p>Поле ввода для быстрой фильтрации содержимого инспектора по тексту. 5Допускает применение символов ? и *</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_примитивы">3.2. Примитивы</h3>
+<div class="paragraph">
+<p>Основной формат файла хранения графических данных программы – DXF версии 2000, со следующими ограничениями:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Не поддерживается THICKNESS</p>
+</li>
+<li>
+<p>Не поддерживаются листы, только МОДЕЛЬ</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Перечень доступных примитивов:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 2. Примитивы DXF поддерживаемые программой</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Примитив</th>
+<th class="tableblock halign-left valign-top">ZCAD имя</th>
+<th class="tableblock halign-left valign-top">DXF имя</th>
+<th class="tableblock halign-left valign-top">Предоставляющая версия</th>
+<th class="tableblock halign-left valign-top">Ограничения</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Точка</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Point</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">POINT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Линия</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Line</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LINE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3D Полилиния</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3DPolyLine</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">POLYLINE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Дуговые сегменты, тип линии</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Полилиния</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LWPolyline</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LWPOLYLINE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Сглаживание</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Сплайн</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spline</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SPLINE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Экспериментально</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3D Фэйс</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3DFace</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3DFACE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Солид</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Solid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SOLID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Штриховка</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hatch</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HATCH</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Дуговые сегменты, сплайны, ассоциативность</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Дуга</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arc</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ARC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Окружность</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Circle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIRCLE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Элипс</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ellipse</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ELLIPSE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Текст</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TEXT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">МТекст</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MText</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MTEXT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Коды форматирования</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Вставка блока</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BlockInsert</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INSERT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Устройство</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Device</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Выровненный размер</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AlignedDimension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DIMENSION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Экспериментально</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Повернутый размер</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RotatedDimension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DIMENSION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Экспериментально</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Диаметральный размер</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DiametricDimension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DIMENSION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Экспериментально</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Радиальный размер</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RadialDimension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DIMENSION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCAD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Экспериментально</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Кабель</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cable</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCADElectroTech</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Электрическая выноска</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Leader</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCADElectroTech</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Трасса</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Net</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCADElectroTech</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Суперлиния</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SuperLine</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ZCADElectroTech</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Экспериментально</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Данный список будет расширен, но не до полного охвата примитивов DXF.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Предупреждение"></i>
+</td>
+<td class="content">
+Файлы, обработанные ZCAD, можно редактировать в AutoCAD (и других CAD программах) не применяя команды,
+очищающие расширенные данные примитивов. Если расширенные данные примитива будут разрушены, при последующей
+обработке файла ZCAD, он будет воспринят как стандартный примитив DXF, т.е. кабель станет просто полилинией,
+а устройство обычным блоком
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_device">3.2.1. Device</h4>
+<div class="paragraph">
+<p>Условное графическое обозначение (далее УГО) оборудования на чертеже - это примитив <span class="ent">DEVICE</span> (устройство)
+в терминах ZCAD. В отличие от стандартного примитива DXF – <span class="ent">INSERT</span> (вставка блока) содержит в себе как жестко
+определенные в описании блока примитивы, так и динамические, которые можно двигать относительно точки вставки.
+Динамические примитивы уникальны для каждой вставки устройства, их количество и конфигурация могут отличаться и
+настраиваться
+Все имена описаний устройств начинаются с приставки <span class="hl">DEVICE_</span>, при вставке блока с названием, начинающимся с
+<span class="hl">DEVICE_</span>, он автоматически будет конвертирован в примитив <span class="ent">DEVICE</span></p>
+</div>
+<div class="paragraph">
+<p>Например, чтобы вставить на план дымовой пожарный извещатель как устройство, нужно вставить блок <span class="hl">DEVICE_PS_DAT_SMOKE</span>.
+Если вставить просто блок <span class="hl">PS_DAT_SMOKE</span>, он не будет конвертирован в примитив <span class="ent">DEVICE</span> и останется примитивом
+DXF – <span class="ent">INSERT</span> (вставка блока), не приобретая свойств устройства.</p>
+</div>
+<div class="paragraph">
+<p>Устройство <span class="hl">DEVICE_PS_DAT_SMOKE</span> состоит из 2х блоков:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">DEVICE_PS_DAT_SMOKE</span> – динамическая часть устройства</p>
+</li>
+<li>
+<p><span class="hl">PS_DAT_SMOKE</span> постоянная часть устройства</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Постоянная часть устройства содержит в себе собственно УГО:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/ents_device_const_part.png" alt="ents device const part" width="50%">
+</div>
+<div class="title">Рисунок 9. Постоянная часть устройства</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/ents_device_var_part.png" alt="ents device var part" width="50%">
+</div>
+<div class="title">Рисунок 10. Динамическая часть устройства</div>
+</div>
+<div class="paragraph">
+<p>Динамическая часть устройства содержит дополнительные примитивы например в данном случае:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Обозначение имени устройства</p>
+</li>
+<li>
+<p>контур подрезки присоединенных кабелей</p>
+</li>
+<li>
+<p>коннектор для присоединения кабелей (коннекторов может быть несколько, это самостоятельное устройство).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Как создать новое устройство показанно на данном видео:</p>
+</div>
+<div class="videoblock">
+<div class="content">
+<iframe width="640" height="480" src="https://www.youtube.com/embed/zUKcJVM55fQ?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ent_extenders">3.3. Расширения примитивов</h3>
+<div class="paragraph">
+<p>Для расширения функционала примитивов ZCAD предусматривает механизм расширений. К любому примитиву может быть
+привязано расширение добавляющее некоторую функциональность. Также расширения могут быть привязаны к типу примитивов,
+например к примитиву <span class="ent">DEVICE</span> привязано расширение <span class="hl">extdrVariables</span> Для работы с расширениями предусмотрены
+следующие команды:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="_работа_с_программой.html#extdrAdd_com">extdrAdd</a> - привязать расширение к примитиву/примитивам</p>
+</li>
+<li>
+<p><a href="_работа_с_программой.html#extdrRemove_com">extdrRemove</a> - отвязать расширение от примитив/примитивов</p>
+</li>
+<li>
+<p><a href="_работа_с_программой.html#extdrAllList_com">extdrAllList</a> - вывести список всех доступных расширений</p>
+</li>
+<li>
+<p><a href="_работа_с_программой.html#extdrEntsList_com">extdrEntsList</a> - вывести список расширений привязанных к примитиву/примитивам</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_extdrlayercontrol">3.3.1. extdrLayerControl</h4>
+<div class="paragraph">
+<p>Управление слоем применяется для управления видимостью примитивов в динамической части устройств.
+У примитива с данным расширением появляются дополнительные параметры</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/extdr_params_extdrlayercontrol.png" alt="extdr params extdrlayercontrol" width="25%">
+</div>
+<div class="title">Рисунок 11. Параметры расширения extdrLayerControl</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">True слой</span> - Имя слоя при <span class="hl">True</span> результате выражения</p>
+</li>
+<li>
+<p><span class="hl">False слой</span> - Имя слоя при <span class="hl">False</span> результате выражения</p>
+</li>
+<li>
+<p><span class="hl">Выражение</span> - Выражение имеющее Boolean резудльтат</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Выражение может состоять из простых математических функция и включать имена переменных. При вычислении переменные
+ищутся в расширении <a href="_работа_с_программой.html#extdrVariables">extdrVariables</a> данного примитива, при отсутствии запрашиваются у <span class="hl">централи</span>
+(см. раздел <a href="_работа_с_программой.html#centralization">Централизация</a>) и далее у владельца примитива по иерархии.</p>
+</div>
+<div class="paragraph">
+<p>При ошибке в выражении или отсутствии требуемого слоя в чертеже текущий слой примитива не меняется.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_extdrsmarttextent">3.3.2. extdrSmartTextEnt</h4>
+<div class="paragraph">
+<p>Управление текстовыми примитивами для управления параметрами текстов в динамической части устройств.
+У примитива с данным расширением появляются дополнительные параметры</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/extdr_params_extdrsmarttextent.png" alt="extdr params extdrsmarttextent" width="25%">
+</div>
+<div class="title">Рисунок 12. Параметры расширения extdrSmartTextEnt</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">Дистанция начала отображения выноски</span> - После удаления текста от точки вставки устройства на данную дистанцию
+к тексту начинает пририсовываться выноска</p>
+</li>
+<li>
+<p><span class="hl">Выносная линия</span> - Отображение выноссной линии</p>
+</li>
+<li>
+<p><span class="hl">Сдвиг начала выносной линии</span> - Сдвиг начала выносной линии от точки вставки устройства. Положительное значение -
+радиус круга, отрицательное - половина стороны квадрата</p>
+</li>
+<li>
+<p><span class="hl">Базовая линия</span> - Отображение базовой линии</p>
+</li>
+<li>
+<p><span class="hl">Смещение X базовой линии</span> - Смещение X координаты начала базовой линии от точки вставки текста. Положительное
+значение - абсолютное смещение, отрицательное - относительное смещение, домножается на высоту текста</p>
+</li>
+<li>
+<p><span class="hl">Смещение Y базовой линии</span> - Смещение Y координаты начала базовой линии от точки вставки текста. Положительное
+значение - абсолютное смещение, отрицательное - относительное смещение, домножается на высоту текста</p>
+</li>
+<li>
+<p><span class="hl">Переопределение высоты</span> - Если не нулевое значение, высота текста всегда будет равна этой величине, независимо
+от масштаба устройства</p>
+</li>
+<li>
+<p><span class="hl">Переопределение горизонтального выравнивания</span> - Разрешение переопределения горизонтальной
+составляющей выравнивания текста в зависимости от точки вставки текста относительно устройства</p>
+</li>
+<li>
+<p><span class="hl">Переопределение вертикального выравнивания</span> - Разрешение переопределения вертикальной
+составляющей выравнивания текста в зависимости от точки вставки текста относительно устройства</p>
+</li>
+<li>
+<p><span class="hl">Переопределение угла поворота</span> - Разрешение переопределения угла поворота текста</p>
+</li>
+<li>
+<p><span class="hl">Значение угла поворота</span> - Абсолютное значение угла поворота</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="extdrVariables">3.3.3. extdrVariables</h4>
+<div class="paragraph">
+<p>Представляет собой хранилище дополнительных типизированных данных (<span class="hl">Переменных</span>) привязанных к примитиву.
+Каждая переменная имеет имя, тип и "пользователькое" имя.
+ * <span class="hl">Имя</span> - идентификатор состоящий из латинских букв и цифр, начинается с буквы. По имени программа обращается
+к переменным и различает их. Имя регистронезависимо
+ * <span class="hl">Тип</span> - определяет содержимое переменной, может быть как простым (<a href="_работа_с_программой.html#zcadsimplytypes">Перечень простых типов данных</a>), так и сложным. сложные типы являются
+комбинацией простых и определены в файле <span class="filepath">rtl\system.pas</span> на паскалеподобном скриптовом языке
+ * <span class="hl">Пользователькое имя</span> - имя переменной для пользователя, пользователь видтит его например в инспекторе
+объектов, может быть любым</p>
+</div>
+<div class="sect4">
+<h5 id="zcadsimplytypes">Перечень простых типов данных</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Число двойной точности</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Single</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Число одинарной точности</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">UnicodeString</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Строка UTF16</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Платформозависимо. UTF8/16 На данный момент строка UTF8, возможно станет UTF16</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">AnsiString</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Строка UTF8</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">False/True</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Byte</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8 бит, без знака</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">ShortInt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8 бит, c знаком</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">SmallInt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16 бит, c знаком</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">LongInt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">32 бит, c знаком</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Int64</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">64 бит, c знаком</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Cardinal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Алиас к LongWord</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Платформозависимо. 64/32/16 бит, c знаком</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">PtrInt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Размерность указателя, c знаком</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Word</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16 бит, без знака</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">LongWord</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">32 бит, без знака</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">QWord</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">64 бит, без знака</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">DWord</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Алиас к LongWord</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Uint64</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Алиас к QWord</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">Pointer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Платформозависимо. Указатель 64/32/16 бит, c знаком</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Набор и значения переменных у примитивов можно редактировать командами <a href="_работа_с_программой.html#VarsEd_com">VarsEd</a> и <a href="_работа_с_программой.html#VarsEdSel_com">VarsEdSel</a>
+Значения переменных доступны для изменения в инспекторе объектов (см. раздел <a href="_работа_с_программой.html#objectinspector">2. Инспектор объектов</a>) при выделении примитивов.
+Значения переменных можно экспортировать-импортировать командами <a href="_работа_с_программой.html#DataExport_com">DataExport</a> и <a href="_работа_с_программой.html#DataImport_com">DataImport</a></p>
+</div>
+<div class="paragraph">
+<p>Примитивы в черетеже имеют древовидную структуру, так все примитивы являются дочерними объектами чертежа,
+примитивы в динамической части устройства это дочерние объекты этого устройства и т.д. При поиске у примитива какойлибо
+переменной и не нахождении ее зкад обращается к родительскому примитиву и ищет ее там, так пока не дойддет до
+вершины дерева - чертежа !!NEEDLINK!!</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="centralization">Централизация</h5>
+<div class="paragraph">
+<p>Дополнительно к древовидной иерархии примитивов расширения переменных у разных примитивов могут ссылаться друг на друга.
+Этот механизм называется <span class="hl">централизация</span></p>
+</div>
+<div class="paragraph">
+<p>Например при выполнении схемы автоматизации и плана расположения оборудования можно примитивы <span class="ent">DEVICE</span> обозначающие
+один датчик на схеме и на плане связать между собой. Это позволит хранить характеризующий этот датчик набор переменных
+в одном примитиве, но иметь к ним доступ из другого.</p>
+</div>
+<div class="paragraph">
+<p>При таком объединении один примитив в связке выбирается главным (<span class="hl">централь</span>), другие сылаются на него
+(<span class="hl">представители</span>) В идеальном случае все переменные связки хранятся в централи, у представителей нет своих переменных,
+они лишь предоставляют доступ к централи, при такой организации у пользователя не возникает путаницы с
+фактическим местом нахождения переменной. Но также возможно хранить переменные и в представителях.</p>
+</div>
+<div class="paragraph">
+<p>Создать централизованные примитивы можно командой <a href="_работа_с_программой.html#VarsLink">VarsLink</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="command_list">3.4. Команды</h3>
+<div class="sect3">
+<h4 id="_3dpoly">3.4.1. 3DPoly</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">3DPoly</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/draw/pline.png" alt="pline"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Черчение &gt; 3D Полилиния</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Черчение примитива <span class="ent">3DPolyLine</span>. После запуска команды последовательно указать мышью вершины полилинии.
+Завершение черчения - ESC или запуск другой команды</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_about">3.4.2. About</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">About</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/about.png" alt="about"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Справка &gt; О программе</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Показ окна "О программе"</p>
+</div>
+<div class="paragraph">
+<p>AddToOwner</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_arc">3.4.3. Arc</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Arc</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/draw/arc.png" alt="arc"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Черчение &gt; Дуга</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Черчение примитива <span class="ent">Arc</span> (дуга) по 3м точкам. После запуска команды последовательно указать 3 точки
+дуги</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_bedit">3.4.4. BEdit</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">BEdit</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/bedit.png" alt="bedit"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Изменить &gt; Блок/Устройство &gt; Редактор блоков</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Не требуется, но можно заранее выделить вставку редактируемого блока или устройства</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Редактирование определения блока из чертежа. В случае если до запуска команды выбрана вставка блока, редактор переходит
+в режим редактирования определения этого блока. Если выделение отсутствует, команда позволяет выбрать редактируемое
+определение в инспекторе объектов.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/cmd_params_bedit.png" alt="cmd params bedit" width="25%">
+</div>
+<div class="title">Рисунок 13. Опции команды BEdit</div>
+</div>
+<div class="paragraph">
+<p><span class="hl">Текущий блок</span> тут показан текущий редактируемый блок или <span class="hl">Модель</span> если редактирование блока не осуществляется,
+в окне чертежа отображено пространство модели. В поле <span class="hl">Выбор блока</span> можно выбрать блок для редактирования. При этом в
+окне чертежа откроется определение выбранного блока, а название вкладки чертежа поменяется на <span class="hl">BEdit(ИмяЧертежа:ИмяБлока)</span>
+После завершения редактирования повторный запуск <span class="command">BEdit</span> вернет редактор в модель. Все внесенные изменения будут сохранены
+в определении блока без запроса на сохранение. Для обновления вставок блока на чертеже требуется выполнить регенерацию чертежа
+<span class="command">Regen</span> Если редактировалась динамическая часть определения устройств, обновить ее для уже вставленных устройств
+возможно только повторной вставкой  <span class="command">BlockReplace</span> (заменить вставленные устройства на самих себя)</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Предупреждение"></i>
+</td>
+<td class="content">
+При переключении из пространства модели в пространство определения блока и обратно положение камеры не меняется,
+возможна ситуация когда после переключения в окне чертежа ничего не видно. Исправить ситуацию можно командой <span class="command">Zoom</span>
+с опцией <span class="hl">All</span> - <span class="cmdline">Zoom(All)</span>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>BlockPreViewExport
+BlockReplace
+BlockRotate
+BlockScale
+BlocksInBasePreViewExport</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cam_reset">3.4.5. Cam_reset</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Cam_reset</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Вид &gt; Камера в начало</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Сброс текущих настроек видового окна чертежа (положения камеры), после выполнения команды в центре видового окна отображается
+начало координат, напраление взгляда совпадает с осью <span class="hl">Z</span></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cancel">3.4.6. Cancel</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Cancel</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Прерывает текущую выполняемую команду</p>
+</div>
+<div class="paragraph">
+<p>ChangeProjType</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_circle">3.4.7. Circle</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Circle</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/draw/circle.png" alt="circle"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Черчение &gt; Окружность &gt;</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CR, CD, 2P, 3P. Не обязательный (CR используется в случае не указания)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">Circle</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования 2</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">Circle(3P)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Черчение примитива <span class="ent">Circle</span>. После запуска команды последовательно задать точки на окружности,
+в зависимости от операнда команды.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="hl">CR</span> - указывается центр и радиус окружности</p>
+</li>
+<li>
+<p><span class="hl">CD</span> - указывается центр и диаметр окружности</p>
+</li>
+<li>
+<p><span class="hl">2P</span> - указывается центр 2 точки на окружности (лежащие на концах диаметра)</p>
+</li>
+<li>
+<p><span class="hl">3P</span> - указывается центр 3 точки на окружности</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Circle2
+ClearFileHistory
+Colors</p>
+</div>
+<div class="paragraph">
+<p>Connection2Dot</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_copy">3.4.8. Copy</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Copy</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/copy.png" alt="copy"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>ALT</kbd>+<kbd>C</kbd></span>; <kbd>C</kbd></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Копирование выбранных примитивов. Исходные примитивы нужно выбрать до запуска команды.
+После запуска требуется базовую точку для копирования и базовые точки для вставки.
+Завершение копирования - ESC или запуск другой команды</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_copybase">3.4.9. CopyBase</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">CopyBase</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/copyclipbase.png" alt="copyclipbase"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Правка &gt; Копировать в буфер обмена с базовой точкой</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Копирует выбранные примитивы в буфер обмена, перед копированием нужно указать базовую точку</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_copyclip">3.4.10. CopyClip</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">CopyClip</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/copyclip.png" alt="copyclip"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>; <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>INS</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Правка &gt; Копировать в буфер обмена</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Копирует выбранные примитивы в буфер обмена</p>
+</div>
+<div class="paragraph">
+<p>CopyFromOwner</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cutclip">3.4.11. CutClip</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">CutClip</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/cutclip.png" alt="cutclip"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>X</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Правка &gt; Вырезать в буфер обмена</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Копирует выбранные примитивы в буфер обмена и стирает их из чертежа</p>
+</div>
+<div class="paragraph">
+<p>DBaseAdd
+DBaseLink
+DBaseRename</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="DataExport_com">3.4.12. DataExport</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">DataExport</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Команда экспорта параметров графических примитивов в внешний файл <span class="filepath">CSV</span>. Команда применяет к всем примитивам
+текущего чертежа фильтр типа примитивов, передавая на дальнейшую обработку только примитивы определенного
+типа. Далее применяется фильтр свойств примитивов, оставляя только примитивы имеющие требуемве свойства.
+Над прошедшими фильтрацию примитивами выполняется скрипт экспорта записывая требуемые параметры во внешний
+файл<br>
+При запуске подсказка командной строки принимает вид:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/generated/cmdprompt_dataexport.svg" alt="cmdprompt dataexport" width="1408" height="222">
+</div>
+</div>
+<div class="paragraph">
+<p>Что позволяет выполнить в командной строке следующие действия:</p>
+</div>
+<div class="paragraph">
+<div class="title">1. Задать имя файла с экспортируемыми значениями</div>
+<p>Ожидание ввода имени файла или пустой строки. Можно ввести имя файла, введенное значение будет использовано
+в дальнейшем как файл по умолчанию. Пустой ввод не изменяет текущее значение файла по умолчанию. После ввода
+значения экспорт будет выполнен и команда завершится</p>
+</div>
+<div class="paragraph">
+<div class="title">2. Задать фильтр примитивов</div>
+<p>Ожидание ввода значения фильтра примитивов по типу. см. <a href="_работа_с_программой.html#enttypefilter_lng">Формат фильтра по типам примитивов</a></p>
+</div>
+<div class="paragraph">
+<div class="title">3. Задать фильтр свойств примитивов</div>
+<p>Ожидание ввода значения фильтра примитивов по параметрам. см. <a href="_работа_с_программой.html#entpropfilter_lng">Формат фильтра по свойствам примитивов</a></p>
+</div>
+<div class="paragraph">
+<div class="title">4. Задать скрипт экспорта</div>
+<p>Ожидание ввода скрипта выполняющего экспорт. см. <a href="_работа_с_программой.html#exporter_lng">Формат скрипта экспорта</a></p>
+</div>
+<div class="paragraph">
+<div class="title">5. Задать имя файла в диалоговом режиме</div>
+<p>Откроет диалог выбора файла, можно выбрать любой файл csv. Выбор файла сделает его файлом
+по умолчанию и также как (1) выполнит экспорт и завершит команду</p>
+</div>
+<div class="paragraph">
+<p>Также все это можно сделать с помощью инспектора объектов, который при выполнении команды имеет вид:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/cmd_params_dataexport.png" alt="cmd params dataexport" width="25%">
+</div>
+<div class="title">Рисунок 14. Опции команды DataExport</div>
+</div>
+<div class="sect4">
+<h5 id="enttypefilter_lng">Формат фильтра по типам примитивов</h5>
+<div class="paragraph">
+<p>Данный фильтр позволяет включить в набор или исключить из набора для экспорта определенные типы примитивов и
+содержащие определенные расширения.
+Включать/исключать типы примитивов/расширения можно как по имени, так и по маске. Изначально в набор для
+обработки не включены никакие примитивы. Для добавления тип примитива/расширение должен быть добавлен и не
+должен быть исключен. Причем для примитивов с несколькими расширениями достаточно попадания в разрешенный
+список хотябы одного расширения. Если не задано не одного условия для расширений, включение\выключение в
+список происходит только по типу примитива. Фильтр задается в текстовом виде и в общем случае выглядит так:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Оператор(Операнд)[;Оператор(Операнд)]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Операторы могут разделяться точкой с запятой, запятой, пробелом, переводом строки. Доступны следующие
+операторы:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeEntityMask('Mask*')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Включить типы примитивов по маске</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeEntityName('Name')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Включить тип примитивов по имени</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>ExcludeEntityMask('Mask*')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Исключить типы примитивов по маске</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>ExcludeEntityName('Name')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Исключить тип примитивов по имени</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeExtenderMask('Mask*')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Включить примитив c расширением по маске</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeExtenderName('Name')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Включить примитив c расширением по имени</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>ExcludeExtenderMask('Mask*')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Исключить примитив c расширением по маске</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>ExcludeExtenderName('Name')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Исключить примитив c расширением по имени</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Все операторы в качестве операнда принимают строковой параметр заключенный в апострофы.<br>
+<mark><mark></mark></mark> Примеры фильтров примитивов:<br>
+Включить в экспорт примитивы <span class="ent">Cable</span> и <span class="ent">Device</span>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeEntityName('Cable');
+IncludeEntityName('Device')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Включить в экспорт все типы примитивов:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeEntityMask('*')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Включить в экспорт примитивы <span class="ent">PolyLine</span> и <span class="ent">Line</span>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeEntityName('*Line') ExcludeEntityName('3DPolyLine')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="entpropfilter_lng">Формат фильтра по свойствам примитивов</h5>
+<div class="paragraph">
+<p>Данный фильтр применяется последовательно к каждому примитиву прошедшему фильтрацию по типу. Фильтр
+задается в текстовом виде и в общем случае выглядит так:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Оператор(Операнд[,Операнд])[;Оператор(Операнд[,Операнд])]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Операторы могут разделяться точкой с запятой, запятой, пробелом, переводом строки. Доступны следующие
+операторы:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeIfMask(Операнд,'Маска*')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Включить примитив в результат если операнд соответствует маске</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeIfSame(Условие)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Включить примитив в результат в случае выполнения условия</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Условный операторы пока доступен только один:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>SameMask(Операнд1,'Маска')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Условие считается выполненным если текстовое значение операнда1 соответствует маске</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Or(Условие1,Условие2)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Объединение условий 1 и 2 по закону ИЛИ</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Доступные типы операндов:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>'Строка'</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Строковой параметр - любой текст заключенный в апострофы</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>%%('ИмяПараметра')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Возвращает значение параметра текущего примитива в виде строки</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Имена параметров для разных примитивов могут отличатся, в общем случае это параметры
+доступные в инспекторе объектов для данного типа примитивов, в случае отсутствия у примитива данного параметра
+возвращается пустая строка. Примерный перечень доступных параметров смотри в
+<a href="https://github.com/zamtmn/zcad/blob/master/cad_source/zcad/gui/odjectinspector/uzcoiregistermultiproperties.pas" class="bare">https://github.com/zamtmn/zcad/blob/master/cad_source/zcad/gui/odjectinspector/uzcoiregistermultiproperties.pas</a><br>
+<mark><mark></mark></mark> Примеры фильтров по свойствам примитивов:<br>
+Включить в результат только примитивы типа кабель, или примитивы с параметром 'Name' удовлетворяющим маске
+'CABLE_*' (это  блоки\устройства, т.к. только у них есть имя)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeIfSame(
+              Or(SameMask(%%('Name'),'CABLE_*'),
+              SameMask(%%('EntityName'),'Cable'))
+             )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Включить в результат только примитивы с параметром 'Name' удовлетворяющим маске 'EL_CABLE_*' (это
+блоки\устройства, т.к. только у них есть имя)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>IncludeIfMask(%%('Name'),'EL_CABLE_*')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="exporter_lng">Формат скрипта экспорта</h5>
+<div class="paragraph">
+<p>Данный скрипт применяется последовательно к каждому примитиву прошедшему фильтрацию предыдущими двумя. Скрипт
+задается в текстовом виде и в общем случае выглядит так:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Оператор(Операнд[,Операнд])[;Оператор(Операнд[,Операнд])]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Операторы могут разделяться точкой с запятой, запятой, пробелом, переводом строки. Доступны следующие
+операторы:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Export(Операнд1[,Операнд2, ...])</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">записать строку операндов c разделителями в новую строку файла csv</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>DoIf(Условие,Оператор)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Выполнить оператор в случае выполнения условия</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Условный операторы пока доступен только один:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>SameMask(Операнд1,'Маска')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Условие считается выполненным если текстовое значение операнда1 соответствует маске</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Доступные типы операндов:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>'Строка'</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Строковой параметр - любой текст заключенный в апострофы</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>%%('ИмяПараметра')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Возвращает значение параметра текущего примитива в виде строки</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>@@('ИмяПеременной')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Возвращает значение переменной текущего примитива в виде строки</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Имена переменных могут быть любыми, в случае отсутствия у примитива данной переменной возвращается значение
+<code>'!!ERR(ИмяПеременной)!!'</code>. Имена параметров для разных примитивов могут отличатся, в общем случае это параметры
+доступные в инспекторе объектов для данного типа примитивов, в случае отсутствия у примитива данного параметра
+возвращается пустая строка. Примерный перечень доступных параметров смотри в
+<a href="https://github.com/zamtmn/zcad/blob/master/cad_source/zcad/gui/odjectinspector/uzcoiregistermultiproperties.pas" class="bare">https://github.com/zamtmn/zcad/blob/master/cad_source/zcad/gui/odjectinspector/uzcoiregistermultiproperties.pas</a></p>
+</div>
+<div class="sect5">
+<h6 id="_примеры_скриптов_экспорта">Примеры скриптов экспорта:<br></h6>
+<div class="paragraph">
+<p>Если текущий примитив устройство, записываем в csv строку 'Device','NMO_Name',Значение переменной NMO_Name,'Position',Значение переменной Position</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>DoIf(
+     SameMask(%%('EntityName'),'Device'),
+     Export(%%('EntityName'),'NMO_Name',@@('NMO_Name'),'Position',@@('Position'))
+     )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Если текущий примитив устройство, записываем в csv строку 'Device','NMO_Name',Значение переменной NMO_Name,'Power',Значение переменной Power</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>DoIf(
+     SameMask(%%('EntityName'),'Device'),
+     Export(%%('EntityName'),'NMO_Name',@@('NMO_Name'),'Power',@@('Power'))
+     )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Если текущий примитив кабель, записываем в csv строку 'Cable','NMO_Name',Значение переменной NMO_Name,'AmountD',Значение переменной AmountD</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>DoIf(
+     SameMask(%%('EntityName'),'Cable'),
+     Export(%%('EntityName'),'NMO_Name',@@('NMO_Name'),'AmountD',@@('AmountD'))
+     )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Если текущий примитив кабель, записываем в csv строку 'Cable','NMO_Name',Значение переменной NMO_Name,'CABLE_Segment',Значение переменной CABLE_Segment</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>DoIf(SameMask(%%('EntityName'),'Cable'),
+     Export(%%('EntityName'),
+            'NMO_Name',@@('NMO_Name'),
+            'CABLE_Segment',@@('CABLE_Segment'))
+     )</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="DataImport_com">3.4.13. DataImport</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">DataImport</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Не обязательный. Путь и имя файла CSV</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">DataImport</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования 2</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">DataImport(E:\myfile.csv)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Импорт данных примитивов из внешнего файла CSV. При вызове без параметров будет открыто окно выбора файла,
+после выбора данные будут импортированы из соответствующего файла. Имя файла можно передать параметром, тогда
+данные из файла будет импортированы сразу, без окна выбора. В составе строки параметра могут использоваться
+макросы !!NEEDLINK!!.<br>
+Разделителем в CSV файле должна быть точка с запятой, файл должен состоять из строк следующей структуры:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 8.3333%;">
+<col style="width: 8.3333%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ИмяПримитива</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Переменная1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Значение1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ПеременнаяN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ЗначениеN</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Где <code>ИмяПримитива</code> - внутреннее имя примитива ZCAD, например <span class="ent">DEVICE</span>, <span class="ent">CABLE</span> и т.д.<br>
+Далее попарно идут <code>Переменная</code> - имя переменной, <code>Значение</code> - значение данной переменной. Причем все
+переменные кроме последней являются идентифицирующими, последняя переменная - собственно импортируемое
+значение<br>
+Например при импорте следующей строки:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DEVICE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NMO_Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">M1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Position</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Power</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.5</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Произойдет следующее: с текущего чертежа будут выбраны все устройства (примитивы <span class="ent">DEVICE</span>) среди них будут
+отобраны имеющие имя M1 (переменная <code>NMO_Name='M1'</code>) и позицию 10 (переменная <code>Position=10</code>) при наличии у
+отобранных устройств переменной <code>Power</code> ей будет присвоено значение 1.5 Если переменной <code>Power</code> у устройства
+нет с ним никаких действий произведено не будет.</p>
+</div>
+<div class="paragraph">
+<p>dbgAppExplorer
+dbgBlocksList
+dbgClipboard
+dbgCmdList
+dbgGetAV
+dbgMemSummary
+dbgPlaceAllBlocks
+DeSelectAll</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_devdefsync">3.4.14. DevDefSync</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">DevDefSync</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Синхронизация динамической части выбранных на чертеже устройств с определением устройства. Устройство
+на чертеже может быть изменено. Добавлены\убраны примитивы в динамическую часть, к примитивам в
+динамической части привязаны различные расширения. Для того чтобы данные изменения были доступны для
+вновь вставленных устройств необходимо перенести изменения из вставки устройства в определение
+устройства</p>
+</div>
+<div class="paragraph">
+<p>DimAligned
+DimDiameter
+DimLinear
+DimRadius
+DimStyles
+Dist</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dockingoptions">3.4.15. DockingOptions</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">DockingOptions</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Показ модального окна настройки параметров стыковки. Также окно настройки можно вызвать в контекстном меню сплитеров
+и заголовков окон докинга</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_ui_dockingoptions.png" alt="zcad ui dockingoptions" width="25%">
+</div>
+<div class="title">Рисунок 15. Окно настройки параметров стыковки</div>
+</div>
+<div class="paragraph">
+<p>!!NEEDDETAILS!!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dwgclose">3.4.16. DWGClose</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">DWGClose</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/close.png" alt="close"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>F4</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Файл &gt; Закрыть</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Закрыть текущий чертеж. В случае присутствия изменений в чертеже, будет предложено сохранить
+файл чертежа на диск</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dwgnew">3.4.17. DWGNew</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">DWGNew</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/new.png" alt="new"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>N</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Файл &gt; Новый чертеж</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Создать новый чертеж. !!NEEDDETAILS!!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dwgnext">3.4.18. DWGNext</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">DWGNext</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Tab</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Окно &gt; Следующее окно</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Если в программе открыто несколько чертежей текущим становится следующий открытый чертеж</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dwgprev">3.4.19. DWGPrev</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">DWGPrev</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Окно &gt; Предидущее окно</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Если в программе открыто несколько чертежей текущим становится предыдущий открытый чертеж</p>
+</div>
+<div class="paragraph">
+<p>EL_AutoGen_Cable_Remove
+EL_Cable
+EM_SEPBUILD
+EM_SRBUILD
+El_CableMan
+El_Cable_Invert
+El_Cable_Join
+El_Cable_Legend
+El_Cable_RenN_0N
+El_Cable_Select
+El_ExternalKZ
+El_Find
+El_Leader
+El_Material_Legend
+El_Wire
+El_Wire</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_erase">3.4.20. Erase</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Erase</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/erase.png" alt="erase"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>Del</kbd></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Правка &gt; Стереть</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Стирает выбранные примитивы на чертеже</p>
+</div>
+<div class="paragraph">
+<p>ExampleCreateLayer
+ExampleInsertDevice
+ExecuteFile
+ExportDevWithAxis
+ExportTextToCSV</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="extdrRemove_com">3.4.21. extdrRemove</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">extdrRemove</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Имя расширения</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">extdrRemove(extdrVariables)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Отвязка указанного расширения (см. <a href="_работа_с_программой.html#ent_extenders">Расширения примитивов</a>) от выбранных примитивов. В случае к выбраному примитиву не привязано данное расширение,
+он будет проигнорирован</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="extdrAllList_com">3.4.22. extdrAllList</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">extdrAllList</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Команда выводит список доступных для привязки расширений (см. <a href="_работа_с_программой.html#ent_extenders">Расширения примитивов</a>)</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="extdrEntsList_com">3.4.23. extdrEntsList</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">extdrEntsList</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Команда выводит список привязанных к выбранным примитивам расширений (см. <a href="_работа_с_программой.html#ent_extenders">Расширения примитивов</a>)</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="extdrAdd_com">3.4.24. extdrAdd</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">extdrAdd</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Имя расширения</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">extdrAdd(extdrVariables)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Привязка указанного расширения (см. <a href="_работа_с_программой.html#ent_extenders">Расширения примитивов</a>) к выбраным примитивам. В случае к выбраному примитиву уже привязано данное расширение,
+он будет проигнорирован</p>
+</div>
+<div class="paragraph">
+<p>FindAllIntersections
+Get3DPoint
+Get3DPoint_DrawRect
+GetLength
+GetPoint
+GetRect
+GetVertexX
+GetVertexY
+GetVertexZ
+Help
+Import
+Insert
+Insert2
+InsertLayersFromBase
+InsertTestTable
+InverseSelected
+KIP_CDBuild
+KIP_Cable_Mark
+KIP_LugTableBuild</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_layer">3.4.25. Layer</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Layer</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/layers.png" alt="layers"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Format &gt; Слои &#8230;&#8203;</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Показ модального окна управления слоями</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/zcad_ui_layersform_prepare.png" alt="zcad ui layersform prepare" width="75%">
+</div>
+<div class="title">Рисунок 16. Окно управления слоями</div>
+</div>
+<div class="paragraph">
+<p>!!NEEDDETAILS!!</p>
+</div>
+<div class="paragraph">
+<p>LayerOff
+LayerOn
+LayOff
+Line
+LineOld
+LineTypes</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_load">3.4.26. Load</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Load</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/open.png" alt="open"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>O</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Файл &gt; Открыть</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Не обязательный. Путь и имя файла dxf</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">Load</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования 2</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">Load(E:\myfile.dxf)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Загрузка файла DXF. При вызове без параметров будет открыто окно выбора файла, после выбора будет открыт данный файл.
+Имя файла можно передать параметром, тогда файл будет открыт сразу, без окна выбора. В составе строки параметра
+могут использоваться <a href="_настройка_программы.html#path_macros">Макросы сокращений путей</a>, например команда <span class="cmdline">Load($(LastAutoSaveFile))</span> приведет к загрузке
+последнего файла автосохранения</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_loadactions">3.4.27. LoadActions</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">LoadActions</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Путь и имя файла с описанием экшенов</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">LoadActions(E:\actionscontent.xml)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Загрузка файла описаний экшенов !!NEEDLINK!!. Загрузка обычно происходит на ранней стадии запуска программы,
+поэтому команда обычно используется в скрипте <span class="filepath">$(ZCADPath)/preload/stage0.cmd0</span> !!NEEDLINK!!.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_loadlayout">3.4.28. LoadLayout</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">LoadLayout</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Не обязательный. Имя файла раскладки окон и тулбаров</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">LoadLayout</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования 2</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">LoadLayout(defaultlayout.xml)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Загрузка и применение файла раскладки окон !!NEEDLINK!!. При отсутствии операнда будет произведена загрузка файла раскладки поумолчанию !!NEEDLINK!!.
+При отсутствии файла раскладки указанного поумолчанию будет загружен файл <span class="filepath">defaultlayout.xml</span>
+Файлы раскладки ищутся в папке <span class="filepath">$(ZCADPath)/components</span></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_loadmenus">3.4.29. LoadMenus</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">LoadMenus</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Путь и имя файла с описанием меню</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">LoadMenus(E:\menuscontent.xml)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Загрузка файла описаний меню !!NEEDLINK!!. Загрузка обычно происходит на ранней стадии запуска программы,
+поэтому команда обычно используется в скрипте <span class="filepath">$(ZCADPath)/preload/stage0.cmd0</span> !!NEEDLINK!!.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_loadpalettes">3.4.30. LoadPalettes</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">LoadPalettes</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Путь и имя файла с описанием палитр</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">LoadPalettes(E:\palettescontent.xml)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Загрузка файла описаний палитр !!NEEDLINK!!. Загрузка обычно происходит на ранней стадии запуска программы,
+поэтому команда обычно используется в скрипте <span class="filepath">$(ZCADPath)/preload/stage0.cmd0</span> !!NEEDLINK!!.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_loadtoolbars">3.4.31. LoadToolbars</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">LoadToolbars</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Путь и имя файла с описанием тулбаров</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">LoadMenus(E:\toolbarscontent.xml)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Загрузка файла описаний тулбаров !!NEEDLINK!!. Загрузка обычно происходит на ранней стадии запуска программы,
+поэтому команда обычно используется в скрипте <span class="filepath">$(ZCADPath)/preload/stage0.cmd0</span> !!NEEDLINK!!.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_matchprop">3.4.32. MatchProp</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">MatchProp</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/matchprop.png" alt="matchprop"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">MatchProp</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Перенос свойств примитива на другие примитивы. После запуска предлагается выбрать исходный примитив, чьи свойства
+будут взяты как исходные. После выбора в инспекторе объектов будут показаны опции команды</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="locale/ru/_images/cmd_params_matchprop.png" alt="cmd params matchprop" width="25%">
+</div>
+<div class="title">Рисунок 17. Опции команды MatchProp</div>
+</div>
+<div class="paragraph">
+<p>Далее предлагается выбрать целевые примитивы, свойства исходного примитива отмеченые в опциях будут присвоены целевым
+примитивам.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_merge">3.4.33. Merge</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Merge</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Путь и имя файла dxf</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">Merge(E:\myfile.dxf)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Подгружает файл DXF в текущий чертеж. Повторные определения блоков игнорируются</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mergeblocks">3.4.34. MergeBlocks</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">MergeBlocks</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Путь и имя DXF файла</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">MergeBlocks (E:\actionscontent.xml)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Подгружает файл DXF в библиотеку блоков !!NEEDLINK!!. Повторные определения блоков игнорируются !!NEEDLINK!!.
+Загрузка обычно происходит на стадии запуска программы, поэтому команда обычно используется в скрипте
+<span class="filepath">$(ZCADPath)/preload/autorun.cmd</span> !!NEEDLINK!!.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mirror">3.4.35. Mirror</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Mirror</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/mirror.png" alt="mirror"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Зеркальное отражение выбранных примитивов относительно прямой. Исходные примитивы нужно выбрать до запуска команды.
+После запуска требуется указать 2 точки лежащие на прямой относительно которой будет произветено отражение.
+Во время указания прямой в инспекторе объектов можно указать действие над исходными примитивами - удалить или отавить
+в чертеже</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_move">3.4.36. Move</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Move</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/move.png" alt="move"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>ALT</kbd>+<kbd>M</kbd></span>; <kbd>M</kbd></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Перенос выбранных примитивов. Исходные примитивы нужно выбрать до запуска команды.
+После запуска требуется указать 2 точки вектора на который будет произветен перенос.</p>
+</div>
+<div class="paragraph">
+<p>MultiSelect2ObjIbsp
+NavSelectSubNodes
+NumDevices
+OPS_SPBuild
+OPS_Sensor_Mark
+ObjInspCopyToClip
+OnDrawingEd
+Options
+OrtoDevPlace
+Pan
+PasteClip
+PlaceSmokeDetectorOrto
+PolyDiv
+PolyEd
+PolyTest
+Polygon
+Print
+ProfileBuild
+ProjectTree
+QSave
+Quit
+ReadBlockLibrary
+RebuildTree
+Rectangle
+Redo
+Regen
+RegenZEnts</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rotate">3.4.37. Rotate</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">Rotate</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/rotate.png" alt="rotate"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>ALT</kbd>+<kbd>R</kbd></span>; <kbd>R</kbd></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Требуется</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Поворот выбранных примитивов. Исходные примитивы нужно выбрать до запуска команды.
+После запуска требуется указать точку определяющую угол поворота.</p>
+</div>
+<div class="paragraph">
+<p>RotateEnts</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_saveas">3.4.38. SaveAs</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">SaveAs</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/saveas.png" alt="saveas"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Сочетания клавиш</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="keyseq"><kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>S</kbd></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Файл &gt; Сохранить как &#8230;&#8203;</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Сохранить текущий чертеж под новым именем. Будет открыто окно выбора файла, после чего произойдет сохранение. Имя чертежа
+будет изменено, дальнейшие команды <span class="command">QSave</span> будут сохранять файл под новым именем</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_savelayout">3.4.39. SaveLayout</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">SaveLayout</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Настройки &gt; Сохранить разбивку окон по умолчанию</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Соxранить текущую разбивку окон как разбивку по умолчанию в файл <span class="filepath">$(ZCADPath)/components/defaultlayout.xml</span></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_saveoptions">3.4.40. SaveOptions</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">SaveOptions</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Настройки &gt; Сохранить параметры</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Соxранить текущие настройки программы в файлы <span class="filepath">$(ZCADPath)/rtl/sysvar.pas</span> !!NEEDLINK!! и
+<span class="filepath">$(ZCADPath)/rtl/config.xml</span> !!NEEDLINK!!</p>
+</div>
+<div class="paragraph">
+<p>Scale
+SelMat
+SelObjChangeColorToCurrent
+SelObjChangeDimStyleToCurrent
+SelObjChangeLTypeToCurrent
+SelObjChangeLWToCurrent
+SelObjChangeLayerToCurrent
+SelObjChangeTStyleToCurrent
+SelSim
+SelectAll
+SelectFrame
+SelectObjectByAddres
+SelectOnMouseObjects
+SetObjInsp
+Show
+ShowPage
+ShowToolBar
+SnapProperties
+StoreFrustum
+Stretch
+Text
+TextStyles
+TreeStat
+Undo
+Units
+UnitsMan</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cmd_updatepo">3.4.41. UpdatePO</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">UpdatePO</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Обновление файлов локазизации (<a href="_для_разработчика.html#localization">Локализация программы</a>), выполнить команду можно только запустив программу с ключом командной
+строки <span class="hl">updatepo</span> (<a href="_настройка_программы.html#command_line_switch">Переключатели командной строки</a>) Команда позволяет записать в файл <span class="filepath">languages\rtzcad.po</span>
+все новые строки требующиеперевода обнаруженные в файлах данных при этом запуске программы и стереть из данного
+файла строки которые требовали перевода раньше, но при этом запуске обнаружены небыли. Команда выводит диалоговое окно
+на подтверждение действий, в случае подтверждения, <span class="filepath">rtzcad.po</span> перезаписывается</p>
+</div>
+<div class="paragraph">
+<p>VarReport</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="VarsEd_com">3.4.42. VarsEd</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">VarsEd</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/varsed.png" alt="varsed"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Изменить &gt; Редактор переменных примитива</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Примитив, редактирование переменных которого будет осуществляться</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>!!NEEDDETAILS!!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_varsedbd">3.4.43. VarsEdBD</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">VarsEdBD</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Операнды</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Обязательный. Имя блока набор переменных которого будет редактироваться</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Пример использования 2</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="cmdline">Load(DEVICE_PS_SMOKE)</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>!!NEEDDETAILS!!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="VarsEdSel_com">3.4.44. VarsEdSel</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">VarsEdSel</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Иконка</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><img src="../images/actions/varsedsel.png" alt="varsedsel"></span></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Меню</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="menu">Изменить &gt; Редактор переменных нескольких примитивов</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Предвыбор примитивов</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Примитивы, редактирование переменных которых будет осуществляться</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>!!NEEDDETAILS!!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="VarsLink">3.4.45. VarsLink</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>Команда</strong>:</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><span class="command">VarsLink</span></p>
+</div>
+<div class="ulist">
+<ul>
+</ul>
+</div>
+<div class="paragraph nav-footer">
+<p></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Создание централизованной связки примитивов (см. <a href="_работа_с_программой.html#centralization">Централизация</a>) После запуска команды предлагается указать
+главный примитив звязки (<span class="hl">централь</span>) затем его <span class="hl">представителей</span>. Указанные примитивы должны иметь
+расширение <a href="_работа_с_программой.html#extdrVariables">extdrVariables</a> и не участвовать в других связках</p>
+</div>
+<div class="paragraph">
+<p>!!NEEDDETAILS!!</p>
+</div>
+<div class="paragraph">
+<p>View
+Zoom
+ZoomWindow
+ft
+rt
+test</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph nav-footer">
+<p>← Previous: <a href="_быстрый_старт.html">Быстрый старт</a> | ↑ Up: <a href="userguide.ru.html">ZCAD Руководство пользователя&lt;br</a>&gt; | Next: <a href="_настройка_программы.html">Настройка программы</a> →</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Последнее обновление 2026-03-01 21:15:23 UTC
+</div>
+</div>
+</body>
+</html>

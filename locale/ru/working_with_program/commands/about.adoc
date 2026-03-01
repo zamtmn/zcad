@@ -1,0 +1,12 @@
+
+#### About
+
+:cmdcommand: About
+:cmdicon: ../../../../images/actions/about.png
+:cmdmenu: Справка > О программе
+
+include::../../_elements/commandsummary.adoc[]
+
+Показ окна "О программе"
+
+include::commandsummaryfree.adoc[]

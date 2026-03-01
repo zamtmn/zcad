@@ -1532,8 +1532,12 @@ begin
         valuei := strtoint('$' + values);
                           {if valuei<>0 then
                                        begin}
-        if valuei=0 then
-                        valuei:=0;
+        if valuei=0 then begin
+          if not ignoredsource then begin
+            outstream.TXTAddStringEOL(groups);
+            outstream.TXTAddStringEOL('0');
+          end;
+        end else begin
         if inlayertable and (groupi=390) then
                                              plottablefansdle:={handle-1}intable;  {поймать плоттабле}
         intable :=OldHandele2NewHandle.MyGetValue(valuei);
@@ -1566,6 +1570,7 @@ begin
                                              dimtablehandle:=lasthandle;  {поймать dimtable}
         (*{if instyletable and (groupi=5) then
                                              standartstylehandle:=lasthandle;{intable;}  {поймать standart}*)
+        end
       end
       else
         if (groupi = 2) and (values = 'ENTITIES') then

@@ -804,6 +804,7 @@ begin
                        pcamera.zmax:=100000.0;
                        pcamera.fovy:=35.0;
                      end;
+  LTScale:=1;
   LTypeStyleTable.init(100);
   LayerTable.init(200,LTypeStyleTable.GetSystemLT(TLTContinous));
   DimStyleTable.init(100);

@@ -50,6 +50,7 @@ GDBObjCable= object(GDBObjCurve)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function GetObjTypeName:String;virtual;
+                 function IsStagedFormatEntity:boolean;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
@@ -184,66 +185,56 @@ begin
 
 end;
 
-procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
-var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
-    currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
-    devpoint,{cabpoint,}tp,tp2,tp3,{_XWCS,}_YWCS,_ZWCS:TzePoint3d;
-    ptv,ptvpred,ptvnext,ptlast,ptpred:PzePoint3d;
-    ptn,{ptnfirst,ptnfirst2,}ptnlastCutted,ptnlast2Cutted:PTNodeProp;
-    tn:TNodeProp;
-    psldb:pointer;
-    I3DPPrev,I3DPNext,I3DP:Intercept3DProp;
-    m,rotmatr:TzeTypedMatrix4d;
-    pvd,{pvd2,}pvds,pvdal,pvdrt:pvardesk;
-    {group,pribor,}count:Integer;
-    l:Double;
-    pentvarext,pentvarextcirrobj:TVariablesExtender;
-
-    ptn1,ptn2:PTNodeProp;
+function GDBObjCable.IsStagedFormatEntity:boolean;
 begin
+  Result:=True;
+end;
+
+procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+var
+  ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
+  currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
+  devpoint,tp,tp2,tp3,_YWCS,_ZWCS:TzePoint3d;
+  ptv,ptvpred,ptvnext,ptlast,ptpred:PzePoint3d;
+  ptn,ptnlastCutted,ptnlast2Cutted:PTNodeProp;
+  tn:TNodeProp;
+  psldb:pointer;
+  I3DPPrev,I3DPNext,I3DP:Intercept3DProp;
+  m,rotmatr:TzeTypedMatrix4d;
+  pvd,pvds,pvdal,pvdrt:pvardesk;
+  Count:integer;
+  l:double;
+  pentvarext,pentvarextcirrobj:TVariablesExtender;
+
+  ptn1,ptn2:PTNodeProp;
+begin
+  if EFCalcEntityCS in stage then begin
   inherited;
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   calcbb(dc);
-  psldb:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
+  psldb:=drawing.GetLayerTable^.getAddres('SYS_DEVICE_BORDER');
 
-  //CreateDeviceNameProcess(@self);
-
-  {pvd:=ou.FindVariable('GC_HeadDevice');
-  group:=PInteger(pvd^.Instance)^;
-  pvd:=ou.FindVariable('GC_HDGroup');
-  pribor:=PInteger(pvd^.Instance)^;}
-
-
-  //pvd:=ou.FindVariable('Cable_Length');
-  //pvds:=ou.FindVariable('LENGTH_Scale');
-  //pvdal:=ou.FindVariable('LENGTH_Add');
-  //pDouble(pvd^.Instance)^:=length*pDouble(pvds^.Instance)^+pDouble(pvdal^.Instance)^;
   ptv:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
   NodePropArray.clear;
-  if ptv<>nil then
-  begin
-       repeat
-             //if ptn<>nil then
-                             begin
-                                  tn.DevLink:=nil;
-                                  tn.PrevP:=ptv^;
-                                  tn.NextP:=ptv^;
-                                  NodePropArray.PushBackData(tn)
+  if ptv<>nil then begin
+    repeat
+      tn.DevLink:=nil;
+      tn.PrevP:=ptv^;
+      tn.NextP:=ptv^;
+      NodePropArray.PushBackData(tn);
 
-                             end;
-             ptv:=vertexarrayInWCS.iterate(ir_inVertexArray);
-       until ptv=nil;
+      ptv:=vertexarrayInWCS.iterate(ir_inVertexArray);
+    until ptv=nil;
   end;
-  //ptnfirst:=NodePropArray.getelement(0);
-  //ptnlastCutted:=NodePropArray.getelement(vertexarrayInWCS.Count-1);
-  CurrentObj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.beginiterate(ir_inGDB);
+
+  CurrentObj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjArray.beginiterate(ir_inGDB);
   if (CurrentObj<>nil) then
      repeat
            if (CurrentObj<>@self)and(CurrentObj^.GetObjType=GDBDeviceID) then
            begin
                 if boundingintersect(vp.BoundingBox,CurrentObj^.vp.BoundingBox)
-                   and true{CurrentObj^.GetDeviceType=DT_Connector} then
+                   and true then
                 begin
                      CurrentSubObj:=CurrentObj^.VarObjArray.beginiterate(ir_inDevice);
                      if (CurrentSubObj<>nil) then
@@ -332,7 +323,6 @@ begin
      until CurrentObj=nil;
 
 
-  GetDXFIOFeatures.RunFormatProcs(drawing,@self);
   //CreateCableNameProcess(@self,drawing);
 
 
@@ -444,7 +434,11 @@ begin
        end;
   end;
   NodePropArray.Shrink;
+  end;
+  GetDXFIOFeatures.RunFormatProcs(drawing,@self);
 
+  if EFDraw in stage then begin
+  if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
   Representation.Clear;
   ptn2:=NodePropArray.beginiterate(ir_inNodeArray);
   ptn1:=NodePropArray.iterate(ir_inNodeArray);
@@ -457,9 +451,10 @@ begin
     ptn1:=NodePropArray.iterate(ir_inNodeArray);
   until ptn1=nil;
   end;
-
+  end;
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
 function GDBObjCable.GetObjTypeName;
 begin

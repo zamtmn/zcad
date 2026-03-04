@@ -601,8 +601,7 @@ begin
   end;
   tbl.FormatEntity(drawing,dc);
   ConstObjArray.free;
-  if (pdev<>nil)and ShowHeader then
-  begin
+
   pentvarext:=self.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then begin
     pvNote:=pentvarext.entityunit.FindVariable('NOTE_Note');
@@ -611,6 +610,13 @@ begin
     pvNote:=nil;
     pvNoteFormat:=nil;
   end;
+
+  if ((pdev=nil)and ShowHeader)and(Objects.Count=1)and(pvNoteFormat<>nil)and(pvNoteFormat.GetValueAsString<>'')then begin
+    pdev:=pointer(Objects.getData(0));
+  end;
+
+  if (pdev<>nil)and ShowHeader then
+  begin
   if (pvNote<>nil)and(pvNoteFormat<>nil) then
     pstring(pvNote^.data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.data.Addr.Instance)^,SPFSources.GetFull,pdev);
   if (pvNote<>nil)and(pstring(pvNote^.data.Addr.Instance)^<>'') then

@@ -26,7 +26,7 @@ uses
   uzestyleslayers,uzedrawingdef,uzctnrVectorBytesStream,uzegeometry,
   SysUtils,uzeentity,uzeTypes,uzeconsts,uzeffdxfsupport,uzeentsubordinated,
   uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned,
-  uzMVReader;
+  uzMVReader,uzegeometrytypes;
 
 type
   TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
@@ -130,6 +130,7 @@ procedure GDBObjGenericDimension.LoadFromDXF;
 var
   byt,dtype:integer;
   style:string;
+  d13,d14:TzePoint3d;
 begin
   byt:=rdr.ParseInteger;
   dtype:=-1;
@@ -173,6 +174,10 @@ begin
     else
       DimData.TextMoved:=False;
   end;
+  d13:=DimData.P10InWCS-DimData.P13InWCS;
+  d14:=DimData.P10InWCS-DimData.P14InWCS;
+  if SqrOneVertexlength(d13)<SqrOneVertexlength(d14) then
+    DimData.P10InWCS:=DimData.P14InWCS+d13;
 end;
 
 constructor GDBObjGenericDimension.initnul;

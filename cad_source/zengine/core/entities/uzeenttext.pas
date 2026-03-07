@@ -483,8 +483,10 @@ begin
   OldVersTextReplace(tcontent);
   content:=utf8tostring(tcontent);
   textprop.justify:=jt[vv,gv];
-  if doublepoint then
+  if doublepoint then begin
     Local.p_Insert:=P_drawInOCS;
+    P_drawInOCS:=NulVertex;
+  end;
   if angleload then begin
     Local.basis.ox:=GetXfFromZ(Local.basis.oz);
     local.basis.OX:=VectorTransform3D(local.basis.OX,CreateAffineRotationMatrix(

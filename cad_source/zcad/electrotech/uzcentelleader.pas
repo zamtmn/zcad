@@ -52,6 +52,7 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
             function beforertmodify:Pointer;virtual;
             function select(var SelectedObjCount:Integer;s2s:TSelect2Stage):Boolean;virtual;
+            function IsStagedFormatEntity:boolean;virtual;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
 
@@ -307,6 +308,11 @@ begin
    end;
 end;
 
+function GDBObjElLeader.IsStagedFormatEntity:boolean;
+begin
+  Result:=True;
+end;
+
 procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 const
   textoffset=0.5;
@@ -335,11 +341,15 @@ var
   pentvarext:TVariablesExtender;
   ss:shortstring;
 begin
+  if EFCalcEntityCS in stage then begin
   if assigned(EntExtensions)then
   EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+  end;
+
+  //todo: для построения примитивов зависимых от других надо выделять стадию, или делать очередность
+
   tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
-  //TCP:=CodePage;
-  //CodePage:=CP_utf8;
+
   pdev:=nil;
   sta.init(10);
   stcnt:=TStringCounter.Create(10);
@@ -443,131 +453,132 @@ begin
   sl:=0;
   ps:=sta.beginiterate(ir);
   if ps<>nil then
-  repeat
-  sl:=sl+length(ps^);
-  ps:=sta.iterate(ir);
-  if ps<>nil then
-  inc(sl);
-  until ps=nil;
+    repeat
+      sl:=sl+length(ps^);
+      ps:=sta.iterate(ir);
+      if ps<>nil then
+        Inc(sl);
+    until ps=nil;
 
   SetLength(self.textcontent,sl);
   sl:=1;
   ps:=sta.beginiterate(ir);
   if ps<>nil then
-  repeat
-  for l:=1 to length(ps^) do begin
-  textcontent[sl]:=ps^[l];
-  inc(sl);
-  end;
-  ps:=sta.iterate(ir);
-  if ps<>nil then begin
-  self.textcontent[sl]:=',';
-  inc(sl);
-  end;
-  until ps=nil;
+    repeat
+      for l:=1 to length(ps^) do begin
+        textcontent[sl]:=ps^[l];
+        Inc(sl);
+      end;
+      ps:=sta.iterate(ir);
+      if ps<>nil then begin
+        self.textcontent[sl]:=',';
+        Inc(sl);
+      end;
+    until ps=nil;
 
 
   sl:=0;
   MaterialContent:='';
   for stcntpair in stcnt do begin
-  //MaterialContent:=MaterialContent+stcntpair.Key+'*'+inttostr(stcntpair.Value)+';';
-  sl:=sl+length(stcntpair.Key)+getDigitsCount(stcntpair.Value)+2;
+    //MaterialContent:=MaterialContent+stcntpair.Key+'*'+inttostr(stcntpair.Value)+';';
+    sl:=sl+length(stcntpair.Key)+getDigitsCount(stcntpair.Value)+2;
   end;
 
   SetLength(MaterialContent,sl);
   sl:=1;
   for stcntpair in stcnt do begin
-  for l:=1 to length(stcntpair.Key) do begin
-  MaterialContent[sl]:=stcntpair.Key[l];
-  inc(sl);
+    for l:=1 to length(stcntpair.Key) do begin
+      MaterialContent[sl]:=stcntpair.Key[l];
+      Inc(sl);
+    end;
+    MaterialContent[sl]:='*';
+    Inc(sl);
+    ss:=IntToStr(stcntpair.Value);
+    for l:=1 to length(ss) do begin
+      MaterialContent[sl]:=ss[l];
+      Inc(sl);
+    end;
+    MaterialContent[sl]:=';';
+    Inc(sl);
   end;
-  MaterialContent[sl]:='*';
-  inc(sl);
-  ss:=inttostr(stcntpair.Value);
-  for l:=1 to length(ss) do begin
-  MaterialContent[sl]:=ss[l];
-  inc(sl);
-  end;
-  MaterialContent[sl]:=';';
-  inc(sl);
-  end;
-  stcnt.free;
-
-
-
+  stcnt.Free;
 
   if ShowTable then begin
-  //textcontent:=Tria_AnsiToUtf8(textcontent);
-  if sta.Count=0 then begin
-  s:='??';
-  sta.PushBackData(s);
-  end;
+    //textcontent:=Tria_AnsiToUtf8(textcontent);
+    if sta.Count=0 then begin
+      s:='??';
+      sta.PushBackData(s);
+    end;
 
-  CopyVPto(tbl);
-  tbl.tbl.free{clear};
-  psl:=tbl.tbl.CreateObject;
-  psl.init(10);
+    CopyVPto(tbl);
+    tbl.tbl.Free{clear};
+    psl:=tbl.tbl.CreateObject;
+    psl.init(10);
 
-  if size>=0 then
-            if size<>0 then width:=size
-                      else width:=floor(sqrt(sta.Count))
-       else
-           width:=ceil(abs(sta.Count/size));
-  ps:=sta.beginiterate(ir);
-  if ps<>nil then
-  repeat
-   if width<=psl.Count then
-                          begin
-                               psl:=tbl.tbl.CreateObject;
-                               psl.init(10);
-                          end;
-  s:=ps^;
-  psl.PushBackData({Tria_Utf8ToAnsi}(s));
-  S:='';
-  ps:=sta.iterate(ir);
-  until ps=nil;
+    if size>=0 then
+      if size<>0 then
+        Width:=size
+      else
+        Width:=floor(sqrt(sta.Count))
+    else
+      Width:=ceil(abs(sta.Count/size));
+    ps:=sta.beginiterate(ir);
+    if ps<>nil then
+      repeat
+        if Width<=psl.Count then begin
+          psl:=tbl.tbl.CreateObject;
+          psl.init(10);
+        end;
+        s:=ps^;
+        psl.PushBackData({Tria_Utf8ToAnsi}(s));
+        S:='';
+        ps:=sta.iterate(ir);
+      until ps=nil;
 
-  sta.Done;
-  //sta.done;
-  tbl.scale:=scale;
-  if twidth>0 then
-             PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=twidth
-         else
-             PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;
-  tbl.vp.Layer:=vp.Layer;
-  tbl.Build(drawing);
+    sta.Done;
+    //sta.done;
+    tbl.scale:=scale;
+    if twidth>0 then
+      PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=twidth
+    else
+      PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=
+        SysVar.DSGN.DSGN_LeaderDefaultWidth^;
+    tbl.vp.Layer:=vp.Layer;
+    tbl.Build(drawing);
 
   end else begin
     tbl.tbl.Clear;
     tbl.Build(drawing);
   end;
-  if {(pdev=nil)and}(pcable<>nil) then
-  begin
-  tv:=uzegeometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);
-  tv:=uzegeometry.NormalizeVertex(tv);
-  tv:=uzegeometry.VertexMulOnSc(tv,scale);
 
-  if pcable<>nil then
-                begin
-                     tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,mainline.CoordInWCS.lBegin,false);
-                     //tv3:=uzegeometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
-                     if {tv3.z}scalardot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin))>0 then
-                                    tv2:=uzegeometry.vectordot(tv2,Local.basis.OZ)
-                                else
-                                    tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2);
-                     //tv2:=uzegeometry.vectordot(tv2,Local.OZ);
-                     tv2:=uzegeometry.NormalizeVertex(tv2);
-                     tv2:=uzegeometry.VertexMulOnSc(tv2,scale);
+  if {(pdev=nil)and}(pcable<>nil) then begin
+    tv:=uzegeometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,
+      mainline.CoordInWCS.lBegin),Local.basis.OZ);
+    tv:=uzegeometry.NormalizeVertex(tv);
+    tv:=uzegeometry.VertexMulOnSc(tv,scale);
 
-                     tv:=vertexadd(tv2,tv);
-                     tv:=uzegeometry.NormalizeVertex(tv);
-                     tv:=uzegeometry.VertexMulOnSc(tv,scale);
+    if pcable<>nil then begin
+      tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,
+        mainline.CoordInWCS.lBegin,False);
+      //tv3:=uzegeometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
+      if {tv3.z}scalardot(
+        tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin))>0 then
+        tv2:=uzegeometry.vectordot(tv2,Local.basis.OZ)
+      else
+        tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2);
+      //tv2:=uzegeometry.vectordot(tv2,Local.OZ);
+      tv2:=uzegeometry.NormalizeVertex(tv2);
+      tv2:=uzegeometry.VertexMulOnSc(tv2,scale);
 
-                     //tv:=tv2;
-                end;
+      tv:=vertexadd(tv2,tv);
+      tv:=uzegeometry.NormalizeVertex(tv);
+      tv:=uzegeometry.VertexMulOnSc(tv,scale);
 
-  end
-  else tv:=nulvertex;
+      //tv:=tv2;
+    end;
+
+  end else
+    tv:=nulvertex;
   //MarkLine.done;
   //MarkLine.init(@self,vp.Layer,vp.LineWeight,VertexSub(MainLine.CoordInOCS.lBegin,tv),VertexAdd(MainLine.CoordInOCS.lBegin,tv));
   CopyVPto(MarkLine);
@@ -580,27 +591,27 @@ begin
 
   tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
   if AutoHAlaign then begin
-  if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
-  tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width;
+    if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
+      tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width;
   end else begin
-  case HorizontalAlign of
-  THAlign.HALeft:;
-  THAlign.HAMidle:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width/2;
-  THAlign.HARight:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width;
-  end
+    case HorizontalAlign of
+      THAlign.HALeft:;
+      THAlign.HAMidle:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width/2;
+      THAlign.HARight:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.Width;
+    end;
   end;
   if AutoVAlaign then begin
-  if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
-  tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height;
+    if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
+      tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height;
   end else begin
-  case VerticalAlign of
-  TVAlign.VATop:;
-  TVAlign.VAMidle:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height/2;
-  TVAlign.VABottom:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height;
-  end
+    case VerticalAlign of
+      TVAlign.VATop:;
+      TVAlign.VAMidle:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height/2;
+      TVAlign.VABottom:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.Height;
+    end;
   end;
   tbl.FormatEntity(drawing,dc);
-  ConstObjArray.free;
+  ConstObjArray.Free;
 
   pentvarext:=self.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then begin
@@ -611,86 +622,84 @@ begin
     pvNoteFormat:=nil;
   end;
 
-  if ((pdev=nil)and ShowHeader)and(Objects.Count=1)and(pvNoteFormat<>nil)and(pvNoteFormat.GetValueAsString<>'')then begin
+  if ((pdev=nil)and ShowHeader)and(Objects.Count=1)and(pvNoteFormat<>nil)and(pvNoteFormat.GetValueAsString<>'') then begin
     pdev:=pointer(Objects.getData(0));
   end;
 
-  if (pdev<>nil)and ShowHeader then
-  begin
-  if (pvNote<>nil)and(pvNoteFormat<>nil) then
-    pstring(pvNote^.data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.data.Addr.Instance)^,SPFSources.GetFull,pdev);
-  if (pvNote<>nil)and(pstring(pvNote^.data.Addr.Instance)^<>'') then
-    s:={pstring(pvNote^.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Addr.Instance)
-  else begin
-    s:='';
-    pentvarext:=pdev^.GetExtension<TVariablesExtender>;
-    //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
-    pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
-    if pvn<>nil then
-    begin
-         s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
-         //s:=pstring(pvn^.Instance)^;
+  if (pdev<>nil)and ShowHeader then begin
+    if (pvNote<>nil)and(pvNoteFormat<>nil) then
+      pstring(pvNote^.Data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.Data.Addr.Instance)^,SPFSources.GetFull,pdev);
+    if (pvNote<>nil)and(pstring(pvNote^.Data.Addr.Instance)^<>'') then
+      s:=pvNote^.Data.PTD.GetValueAsString(pvNote^.Data.Addr.Instance)
+    else begin
+      s:='';
+      pentvarext:=pdev^.GetExtension<TVariablesExtender>;
+      //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
+      pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
+      if pvn<>nil then begin
+        s:=pvn^.Data.PTD.GetValueAsString(pvn^.Data.Addr.Instance);
+        //s:=pstring(pvn^.Instance)^;
+      end;
+      //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('Text');
+      pvn:=pentvarext.entityunit.FindVariable('Text');
+      if pvn<>nil then begin
+        s:=s+pvn^.Data.PTD.GetValueAsString(pvn^.Data.Addr.Instance);;
+      end;
     end;
-    //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('Text');
-    pvn:=pentvarext.entityunit.FindVariable('Text');
-    if pvn<>nil then
-    begin
-         s:=s+{pstring(pvn^.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);;
-    end;
-  end;
-  if ShowTable then
-    textyoffset:=1.5
-  else
-    textyoffset:=0.5;
-  if s<>'' then
-  begin
-  ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
-  ptext.vp.Layer:=vp.Layer;
-  ptext.Template:=UTF8ToString({Tria_AnsiToUtf8}(s));
-  ptext.Local.P_insert:=tbl.Local.P_insert;
-  ptext.Local.P_insert.y:=ptext.Local.P_insert.y+textyoffset*scale;
-  ptext.textprop.justify:=jsbl;
-  ptext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
-  if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then begin
-    ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.Width;
-    textpoint:=ptext.Local.P_insert;
-    ptext.Local.P_insert.x:= ptext.Local.P_insert.x-textoffset;
-    ptext.textprop.justify:=jsbr;
-  end else begin
-    textpoint:=ptext.Local.P_insert;
-    ptext.Local.P_insert.x:=ptext.Local.P_insert.x+textoffset;
-  end;
-  ptext.textprop.size:=2.5*scale;
-  ptext.FormatEntity(drawing,dc);
+    if ShowTable then
+      textyoffset:=1.5
+    else
+      textyoffset:=0.5;
+    if s<>'' then begin
+      ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
+      ptext.vp.Layer:=vp.Layer;
+      ptext.Template:=UTF8ToString({Tria_AnsiToUtf8}(s));
+      ptext.Local.P_insert:=tbl.Local.P_insert;
+      ptext.Local.P_insert.y:=ptext.Local.P_insert.y+textyoffset*scale;
+      ptext.textprop.justify:=jsbl;
+      ptext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+      if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then begin
+        ptext.Local.P_insert.x:=ptext.Local.P_insert.x+tbl.Width;
+        textpoint:=ptext.Local.P_insert;
+        ptext.Local.P_insert.x:=ptext.Local.P_insert.x-textoffset;
+        ptext.textprop.justify:=jsbr;
+      end else begin
+        textpoint:=ptext.Local.P_insert;
+        ptext.Local.P_insert.x:=ptext.Local.P_insert.x+textoffset;
+      end;
+      ptext.textprop.size:=2.5*scale;
+      ptext.FormatEntity(drawing,dc);
 
-  if ShowTable then begin
-  pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
-  pl.vp.Layer:=vp.Layer;
-  pl.CoordInOCS.lBegin:=textpoint;
-  pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
-  pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
-  pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
-  pl.FormatEntity(drawing,dc);
-  end;
-  pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
-  pl.vp.Layer:=vp.Layer;
-  pl.CoordInOCS.lBegin:=textpoint;
-  pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
-  pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
-  if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x>0 then
-                           pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor +2*textoffset
-                       else
-                           pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor-2*textoffset;
-  pl.FormatEntity(drawing,dc);
-  end;
+      if ShowTable then begin
+        pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
+        pl.vp.Layer:=vp.Layer;
+        pl.CoordInOCS.lBegin:=textpoint;
+        pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
+        pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
+        pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
+        pl.FormatEntity(drawing,dc);
+      end;
+      pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
+      pl.vp.Layer:=vp.Layer;
+      pl.CoordInOCS.lBegin:=textpoint;
+      pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
+      pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
+      if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x>0 then
+        pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor+2*textoffset
+      else
+        pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor-2*textoffset;
+      pl.FormatEntity(drawing,dc);
+    end;
 
   end;
   inherited;
   objects.Clear;
   objects.Done;
+  if EFDraw in stage then begin
   buildgeometry(drawing);
-  if assigned(EntExtensions)then
-  EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  if assigned(EntExtensions) then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
 function GDBObjElLeader.select(var SelectedObjCount:Integer;s2s:TSelect2Stage):Boolean;
 //var tdesc:pselectedobjdesc;

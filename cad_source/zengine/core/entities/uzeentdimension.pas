@@ -289,7 +289,7 @@ end;
 function GDBObjDimension.TextNeedOffset(const dimdir:TzePoint3d):boolean;
 begin
   Result:=(((textangle<>0)or(PDimStyle.Text.DIMTAD=DTVPCenters))and
-    (TextInside and not PDimStyle.Text.DIMTIH))or(abs(dimdir.x)<eps)or(DimData.TextMoved);
+    ((TextInside or (not DimData.TextMoved)) and not PDimStyle.Text.DIMTIH))or(abs(dimdir.x)<eps)or(DimData.TextMoved);
 end;
 
 function GDBObjDimension.TextAlwaysMoved:boolean;

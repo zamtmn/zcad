@@ -151,6 +151,16 @@
       <Action Name="ACN_BInsert"/>
       <Action Name="ACN_SPLINE"/>
     </Draw>
+	<Dimension Type="ToolBar">
+      <Action Name="ACN_DIMALIGNED"/>
+      <Action Name="ACN_DIMLINEAR"/>
+      <Action Name="ACN_DIMRADIAL"/>
+      <Action Name="ACN_DIMDIAMETRIC"/>
+	  <Separator/>
+	  <Action Name="ACN_DSTYLES"/>
+	  <Separator/>
+      <Action Name="ACN_DIST"/>
+    </Dimension>
     <Status Type="ToolBar">
       <Separator/>
       <Action Name="VACN_SNAPGRID"/>

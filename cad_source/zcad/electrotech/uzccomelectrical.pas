@@ -699,7 +699,10 @@ begin
       //возвращаем расширители
       dn.pdev^.EntExtensions:=extensionssave;
 
+      //получаем переменные
       entvarext:=dn.pdev^.GetExtension<TVariablesExtender>;
+      //но нам нужна толко главная функция
+      entvarext:=entvarext.getMainFuncVariablesExtender;
       //добавляем клону расширение с переменными
       pnevdev^.AddExtension(TVariablesExtender.Create(pnevdev));
       delvarext:=pnevdev^.GetExtension<TVariablesExtender>;

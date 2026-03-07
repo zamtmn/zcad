@@ -67,7 +67,10 @@ TVariablesExtender=class(TBaseVariablesExtender)
     // возвращает сам себя если
     function getMainFuncEntity:PGDBObjEntity;
     //**Если примитив - устройство, тогда возвращает ссылку на устройство. Если примитив - не устройство, тогда возвращает ноль
+    //todo: убрать getMainFuncDevice
     function getMainFuncDevice:PGDBObjDevice;
+
+    function getMainFuncVariablesExtender:TVariablesExtender;
 
     ////**Если примитив - кабель, тогда возвращает ссылку на кабель. Если примитив - не кабель, тогда возвращает ноль
     //function getMainFuncCable:PGDBObjCable;
@@ -121,6 +124,14 @@ begin
      result:=pThisEntity
   else
      result:=pMainFuncEntity;
+end;
+
+function TVariablesExtender.getMainFuncVariablesExtender:TVariablesExtender;
+begin
+  if isMainFunction then
+     result:=self
+  else
+     result:=pMainFuncEntity^.GetExtension<TVariablesExtender>;
 end;
 
 //**Если примитив - устройство, тогда возвращает ссылку на устройство. Если примитив - не устройство, тогда возвращает ноль

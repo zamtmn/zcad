@@ -59,28 +59,20 @@ type
     IslandDetection:THatchIslandDetection;
     Angle,Scale:double;
     Origin:TzePoint3d;//по идее должно быть TzePoint2d, но в автокаде 3d
-    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:TzePoint3d);
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint;p:TzePoint3d);
     constructor initnul;
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
-      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
-    procedure SaveToDXF(var outStream:TZctnrVectorBytes;
-      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-    procedure SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
-      var IODXFContext:TIODXFSaveContext;AAPS:TAdditionalPostProcess=nil;AAPSData:PtrUInt=0);virtual;
-    procedure FormatEntity(var drawing:TDrawingDef;
-      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-    procedure ProcessLine(const c:integer;const l1,l2,c1,c2:TzePoint2d;
-      var IV:TIntercept2dpropWithLICVector);
-    procedure ProcessLines(const p1,p2:TzePoint2d;
-      var IV:TIntercept2dpropWithLICVector);
-    procedure ProcessStroke(var Strokes:TPatStrokesArray;
-      var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
-    procedure DrawStrokes(var Strokes:TPatStrokesArray;
-      var st:double;const p1,p2:TzePoint2d;var DC:TDrawContext);
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext;AAPS:TAdditionalPostProcess=nil;AAPSData:PtrUInt=0);virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    procedure ProcessLine(const c:integer;const l1,l2,c1,c2:TzePoint2d;var IV:TIntercept2dpropWithLICVector);
+    procedure ProcessLines(const p1,p2:TzePoint2d;var IV:TIntercept2dpropWithLICVector);
+    function CheckPathsIntersect2(const p1,p2:TzePoint2d;const nextPath:integer):boolean;
+    function CheckPathsIntersect:boolean;
+    procedure ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
+    procedure DrawStrokes(var Strokes:TPatStrokesArray;var st:double;const p1,p2:TzePoint2d;var DC:TDrawContext);
     procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
-    procedure DrawGeometry(lw:integer;var DC:TDrawContext;
-      const inFrustumState:TInBoundingVolume);virtual;
+    procedure DrawGeometry(lw:integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
     function ObjToString(const prefix,sufix:string):string;virtual;
     destructor done;virtual;
     function GetObjTypeName:string;virtual;
@@ -89,10 +81,8 @@ type
     function GetObjType:TObjID;virtual;
     procedure createpoint;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
-    function CalcTrueInFrustum(
-      const frustum:TzeFrustum):TInBoundingVolume;virtual;
-    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
-      ProjectProc:GDBProjectProc);virtual;
+    function CalcTrueInFrustum(const frustum:TzeFrustum):TInBoundingVolume;virtual;
+    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -365,17 +355,86 @@ begin
   end;
 end;
 
+function trueIntercept2d(const l1begin,l1end,l2begin,l2end:TzePoint2d):boolean;
+begin
+  with intercept2dmy(l1begin,l1end,l2begin,l2end) do begin
+    if isintercept then
+      exit((t1>0)and(t2>0)and(t1<1)and(t2<1))
+    else
+      result:=false;
+  end;
+end;
+
+function GDBObjHatch.CheckPathsIntersect2(const p1,p2:TzePoint2d;const nextPath:integer):boolean;
+var
+  i,j:integer;
+  ppath:PGDBPolyline2DArray;
+  FirstP,PrevP,CurrP:PzePoint2d;
+begin
+  result:=false;
+  for i:=nextPath to Path.paths.Count-1 do begin
+    ppath:=Path.paths.getDataMutable(i);
+    FirstP:=ppath.getDataMutable(0);
+    PrevP:=FirstP;
+    CurrP:=nil;
+    for j:=1 to ppath^.Count-1 do begin
+      CurrP:=ppath.getDataMutable(j);
+      result:=trueIntercept2d(p1,p2,PrevP^,CurrP^);
+      if result then
+        exit;
+      PrevP:=CurrP;
+    end;
+    if PrevP<>FirstP then begin
+      result:=trueIntercept2d(p1,p2,PrevP^,FirstP^);
+      if result then
+        exit;
+    end;
+  end;
+end;
+
+
+function GDBObjHatch.CheckPathsIntersect:boolean;
+var
+  i,j:integer;
+  ppath:PGDBPolyline2DArray;
+  FirstP,PrevP,CurrP:PzePoint2d;
+begin
+  result:=false;
+  for i:=0 to Path.paths.Count-1 do begin
+    ppath:=Path.paths.getDataMutable(i);
+    FirstP:=ppath.getDataMutable(0);
+    PrevP:=FirstP;
+    CurrP:=nil;
+    for j:=1 to ppath^.Count-1 do begin
+      CurrP:=ppath.getDataMutable(j);
+      if CheckPathsIntersect2(PrevP^,CurrP^,i+1)then
+        exit(true);
+      PrevP:=CurrP;
+    end;
+    if PrevP<>FirstP then
+      if CheckPathsIntersect2(PrevP^,FirstP^,i+1)then
+        exit(true);
+  end;
+end;
+
 procedure GDBObjHatch.ProcessStroke(var Strokes:TPatStrokesArray;
   var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
 var
   p1,p2:PzePoint2d;
   t1:double;
-  i,First,current:integer;
+  i,j,First,current:integer;
   inside:boolean;
+  id:THatchIslandDetection;
 begin
   if IV.Size>1 then begin
     TVSorter.Sort(IV,IV.Size);
-    case IslandDetection of
+    id:=IslandDetection;
+    //если есть пересечения контуров HID_Outer применить неполучится
+    //скатываемся на HID_Normal
+    if id=HID_Outer then
+      if CheckPathsIntersect then
+        id:=HID_Normal;
+    case id of
       HID_Normal:begin
         p1:=@IV.Mutable[0].i2dprop.interceptcoord;
         t1:=IV.Mutable[0].i2dprop.t1;
@@ -414,7 +473,50 @@ begin
       HID_Outer:begin
         if IV.Size>3 then begin
 
-          p1:=@IV.Mutable[0].i2dprop.interceptcoord;
+          with IV.Mutable[0]^ do begin
+            p1:=@i2dprop.interceptcoord;
+            t1:=i2dprop.t1;
+            First:=LIC.C;
+          end;
+          i:=1;
+          while i<IV.Size do begin
+            with IV.Mutable[i]^ do begin
+              p2:=@i2dprop.interceptcoord;
+              if Odd(i) then begin
+                DrawStrokes(Strokes,t1,p1^,p2^,DC);
+                if first<>LIC.c then
+                  break;
+              end;
+              p1:=p2;
+              First:=LIC.C;
+              inc(i);
+            end;
+          end;
+
+          if i<(IV.Size-1) then begin
+          with IV.Mutable[IV.Size-1]^ do begin
+            p1:=@i2dprop.interceptcoord;
+            t1:=i2dprop.t1;
+            First:=LIC.C;
+          end;
+          j:=IV.Size-1;
+          while j>i do begin
+            with IV.Mutable[j]^ do begin
+              p2:=@i2dprop.interceptcoord;
+              if Odd(i) then begin
+                DrawStrokes(Strokes,t1,p1^,p2^,DC);
+                if first<>LIC.c then
+                  break;
+              end;
+              p1:=p2;
+              First:=LIC.C;
+              dec(j);
+            end;
+          end;
+          end;
+
+
+          {p1:=@IV.Mutable[0].i2dprop.interceptcoord;
           t1:=IV.Mutable[0].i2dprop.t1;
           First:=IV.Mutable[0].LIC.C;
           inside:=True;
@@ -433,7 +535,7 @@ begin
 
             if First=IV.Mutable[i].LIC.C then
               inside:=not inside;
-          end;
+          end;}
 
         end else begin
           p1:=@IV.Mutable[0].i2dprop.interceptcoord;

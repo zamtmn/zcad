@@ -140,30 +140,63 @@ end;
 procedure GDBObjARC.transform;
 var
   sav,eav,pins:TzePoint3d;
+  tempAngle:double;
+  cosVal, sinVal:double;
+  det:double;
 begin
   precalc;
-  if t_matrix.mtr.v[0].v[0]*t_matrix.mtr.v[1].v[1]*t_matrix.mtr.v[2].v[2]<eps then begin
+  
+  // Вычисляем определитель матрицы для определения зеркальности трансформации
+  det := t_matrix.mtr.v[0].v[0]*t_matrix.mtr.v[1].v[1]*t_matrix.mtr.v[2].v[2] +
+         t_matrix.mtr.v[0].v[1]*t_matrix.mtr.v[1].v[2]*t_matrix.mtr.v[2].v[0] +
+         t_matrix.mtr.v[0].v[2]*t_matrix.mtr.v[1].v[0]*t_matrix.mtr.v[2].v[1] -
+         t_matrix.mtr.v[0].v[2]*t_matrix.mtr.v[1].v[1]*t_matrix.mtr.v[2].v[0] -
+         t_matrix.mtr.v[0].v[1]*t_matrix.mtr.v[1].v[0]*t_matrix.mtr.v[2].v[1] -
+         t_matrix.mtr.v[0].v[0]*t_matrix.mtr.v[1].v[2]*t_matrix.mtr.v[2].v[0];
+  
+  if det < 0 then begin
+    // Зеркальная трансформация - меняем местами начало и конец
     sav:=q2;
     eav:=q0;
   end else begin
     sav:=q0;
     eav:=q2;
   end;
+  
   pins:=P_insert_in_WCS;
   sav:=VectorTransform3D(sav,t_matrix);
   eav:=VectorTransform3D(eav,t_matrix);
   pins:=VectorTransform3D(pins,t_matrix);
+  
+  // Вызываем inherited для обновления objmatrix (трансформация базиса)
   inherited;
+  
+  // Вычисляем новые векторы направления относительно нового центра
   sav:=NormalizeVertex(VertexSub(sav,pins));
   eav:=NormalizeVertex(VertexSub(eav,pins));
 
-  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
-  if sav.y<eps then
-    StartAngle:=2*pi-StartAngle;
+  // Вычисляем углы относительно глобальной оси X с использованием ArcTan2
+  cosVal := sav.x;
+  sinVal := sav.y;
+  StartAngle := ArcTan2(sinVal, cosVal);
+  if StartAngle < 0 then
+    StartAngle := 2*pi + StartAngle;
 
-  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
-  if eav.y<eps then
-    EndAngle:=2*pi-EndAngle;
+  cosVal := eav.x;
+  sinVal := eav.y;
+  EndAngle := ArcTan2(sinVal, cosVal);
+  if EndAngle < 0 then
+    EndAngle := 2*pi + EndAngle;
+
+  // Обновляем центр дуги в Local и objmatrix
+  Local.p_insert := pins;
+  PzePoint3d(@objmatrix.mtr.v[3])^ := pins;
+  
+  // Обновляем P_insert_in_WCS напрямую
+  P_insert_in_WCS := pins;
+  
+  // Пересчитываем точки q0, q1, q2 с новыми углами
+  precalc;
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;

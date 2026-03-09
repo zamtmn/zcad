@@ -340,9 +340,9 @@ begin
               l:=l+pDouble(pvd^.Data.Addr.Instance)^;
             end;
             Inc(Count);
-            CurrentObj^.FormatEntity(drawing,dc);
-            CurrentObj^.getoutbound(dc);
-            CurrentObj^.calcbb(dc);
+            //CurrentObj^.FormatEntity(drawing,dc);
+            //CurrentObj^.getoutbound(dc);
+            //CurrentObj^.calcbb(dc);
           end;
 
           ptn:=NodePropArray.iterate(ir_inNodeArray);

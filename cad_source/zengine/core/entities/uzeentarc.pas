@@ -21,11 +21,12 @@ unit uzeentarc;
 interface
 
 uses
+  SysUtils, Math,
   uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,
   uzeentwithlocalcs,uzecamera,uzestyleslayers,UGDBSelectedObjArray,uzeentity,
   UGDBPoint3DArray,uzctnrVectorBytesStream,uzeTypes,uzegeometrytypes,
   uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,uzeSnap,
-  Math,uzMVReader,uzCtnrVectorpBaseEntity;
+  uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
 
@@ -53,6 +54,7 @@ type
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
+    function CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;virtual;
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
     procedure precalc;
     procedure FormatEntity(var drawing:TDrawingDef;
@@ -137,83 +139,114 @@ begin
   processaxis(posr,tv);
 end;
 
-// GDBObjARC.transform - откорректирована с использованием ИИ кодера
-// GDBObjARC.transform - adjusted using the AI coder
+// Процедура трансформации дуги: поворот, масштабирование и зеркализация.
+// Углы дуги (StartAngle, EndAngle) измеряются от оси X локальной СК объекта
+// (определяется алгоритмом Arbitrary Axis из DXF). После любого поворота, в том
+// числе вокруг осей X и Y, углы пересчитываются путём проекции новых направлений
+// к точкам начала/конца дуги на оси новой локальной СК.
+//
+// ВАЖНО: После трансформации необходимо обновить Local.basis.ox и Local.basis.oy
+// с использованием того же алгоритма Arbitrary Axis, который используется в
+// CalcObjMatrixWithoutOwner. Это гарантирует согласованность между углами,
+// вычисленными здесь, и матрицей объекта, построенной в CalcObjMatrix.
 procedure GDBObjARC.transform;
 var
-  sav,eav,pins:TzePoint3d;
-  tempAngle:double;
-  cosVal, sinVal:double;
-  det:double;
+  // Мировые координаты точек дуги до трансформации
+  oldStartPoint, oldEndPoint, oldCenter: TzePoint3d;
+  // Мировые координаты точек дуги после трансформации
+  newStartPoint, newEndPoint, newCenter: TzePoint3d;
+  // Оси новой локальной СК (Arbitrary Axis Algorithm)
+  newOcsX, newOcsY: TzePoint3d;
+  // Нормализованные направления от нового центра к точкам дуги
+  dirToStart, dirToEnd: TzePoint3d;
+  // Определитель матрицы трансформации (знак указывает на зеркальность)
+  det: double;
 begin
+  // Шаг 1. Вычисляем текущие 3D-позиции ключевых точек дуги в WCS
   precalc;
-  
-  // Вычисляем определитель матрицы для определения зеркальности трансформации
-  det := t_matrix.mtr.v[0].v[0]*t_matrix.mtr.v[1].v[1]*t_matrix.mtr.v[2].v[2] +
-         t_matrix.mtr.v[0].v[1]*t_matrix.mtr.v[1].v[2]*t_matrix.mtr.v[2].v[0] +
-         t_matrix.mtr.v[0].v[2]*t_matrix.mtr.v[1].v[0]*t_matrix.mtr.v[2].v[1] -
-         t_matrix.mtr.v[0].v[2]*t_matrix.mtr.v[1].v[1]*t_matrix.mtr.v[2].v[0] -
-         t_matrix.mtr.v[0].v[1]*t_matrix.mtr.v[1].v[0]*t_matrix.mtr.v[2].v[1] -
-         t_matrix.mtr.v[0].v[0]*t_matrix.mtr.v[1].v[2]*t_matrix.mtr.v[2].v[0];
-  
+  oldCenter    := P_insert_in_WCS;
+  oldStartPoint := q0;
+  oldEndPoint   := q2;
+
+  // Шаг 2. Вычисляем определитель для обнаружения зеркальной трансформации.
+  // При det < 0 матрица содержит отражение — порядок начала и конца дуги меняется
+  // Для матрицы трансформации с последней строкой [0,0,0,1] определитель равен
+  // определителю верхнего левого блока 3×3
+  det := t_matrix.mtr.v[0].v[0] * (t_matrix.mtr.v[1].v[1] * t_matrix.mtr.v[2].v[2] - t_matrix.mtr.v[1].v[2] * t_matrix.mtr.v[2].v[1])
+       - t_matrix.mtr.v[0].v[1] * (t_matrix.mtr.v[1].v[0] * t_matrix.mtr.v[2].v[2] - t_matrix.mtr.v[1].v[2] * t_matrix.mtr.v[2].v[0])
+       + t_matrix.mtr.v[0].v[2] * (t_matrix.mtr.v[1].v[0] * t_matrix.mtr.v[2].v[1] - t_matrix.mtr.v[1].v[1] * t_matrix.mtr.v[2].v[0]);
+
+  // Шаг 3. Переносим точки начала и конца дуги в новые мировые позиции
+  newCenter     := VectorTransform3D(oldCenter, t_matrix);
   if det < 0 then begin
-    // Зеркальная трансформация - меняем местами начало и конец
-    sav:=q2;
-    eav:=q0;
+    // Зеркальная трансформация: меняем местами начало и конец
+    newStartPoint := VectorTransform3D(oldEndPoint, t_matrix);
+    newEndPoint   := VectorTransform3D(oldStartPoint, t_matrix);
   end else begin
-    sav:=q0;
-    eav:=q2;
+    newStartPoint := VectorTransform3D(oldStartPoint, t_matrix);
+    newEndPoint   := VectorTransform3D(oldEndPoint, t_matrix);
   end;
-  
-  pins:=P_insert_in_WCS;
-  sav:=VectorTransform3D(sav,t_matrix);
-  eav:=VectorTransform3D(eav,t_matrix);
-  pins:=VectorTransform3D(pins,t_matrix);
-  
-  // Вызываем inherited для обновления objmatrix (трансформация базиса)
+
+  // Шаг 4. Обновляем objmatrix и Local.basis через базовый класс.
+  // После этого: Local.basis.oz содержит новую нормаль, Local.basis.ox/oy —
+  // нормализованные оси из обновлённой objmatrix, Local.P_insert и R обновлены.
   inherited;
-  
-  // Вычисляем новые векторы направления относительно нового центра
-  sav:=NormalizeVertex(VertexSub(sav,pins));
-  eav:=NormalizeVertex(VertexSub(eav,pins));
 
-  // Вычисляем углы относительно глобальной оси X с использованием ArcTan2
-  cosVal := sav.x;
-  sinVal := sav.y;
-  StartAngle := ArcTan2(sinVal, cosVal);
+  // Шаг 5. Строим канонические оси новой локальной СК (Arbitrary Axis Algorithm).
+  // Алгоритм DXF определяет ось X из нормали oz; углы дуги отсчитываются от неё.
+  newOcsX := GetXfFromZ(Local.basis.oz);
+  newOcsY := NormalizeVertex(VectorDot(Local.basis.oz, newOcsX));
+
+  // Шаг 5.1. Обновляем Local.basis.ox и Local.basis.oy для согласованности
+  // с CalcObjMatrixWithoutOwner, который также использует Arbitrary Axis Algorithm.
+  Local.basis.ox := NormalizeVertex(newOcsX);
+  Local.basis.oy := NormalizeVertex(newOcsY);
+
+  // Шаг 6. Используем Local.P_insert (извлечённый из ObjMatrix) как новый центр
+  // для согласованности с дальнейшими вычислениями.
+  newCenter := Local.P_insert;
+
+  // Шаг 7. Вычисляем нормализованные направления от нового центра к точкам дуги
+  dirToStart := NormalizeVertex(VertexSub(newStartPoint, newCenter));
+  dirToEnd   := NormalizeVertex(VertexSub(newEndPoint, newCenter));
+
+  // Шаг 8. Проецируем направления на оси локальной СК и вычисляем новые углы.
+  // scalardot — скалярное произведение; оно даёт косинус и синус угла в плоскости дуги
+  StartAngle := ArcTan2(scalardot(dirToStart, newOcsY), scalardot(dirToStart, newOcsX));
   if StartAngle < 0 then
-    StartAngle := 2*pi + StartAngle;
+    StartAngle := 2 * pi + StartAngle;
 
-  cosVal := eav.x;
-  sinVal := eav.y;
-  EndAngle := ArcTan2(sinVal, cosVal);
+  EndAngle := ArcTan2(scalardot(dirToEnd, newOcsY), scalardot(dirToEnd, newOcsX));
   if EndAngle < 0 then
-    EndAngle := 2*pi + EndAngle;
+    EndAngle := 2 * pi + EndAngle;
 
-  // Обновляем центр дуги в Local и objmatrix
-  Local.p_insert := pins;
-  PzePoint3d(@objmatrix.mtr.v[3])^ := pins;
-  
-  // Обновляем P_insert_in_WCS напрямую
-  P_insert_in_WCS := pins;
-  
-  // Пересчитываем точки q0, q1, q2 с новыми углами
+  // Шаг 9. Пересчитываем вспомогательные точки q0, q1, q2 с новыми углами
   precalc;
+
 end;
 
+// Процедура восстанавливает поля Local и R из текущей ObjMatrix.
+// Вызывается после трансформации, когда ObjMatrix уже обновлена.
+// ObjMatrix для дуги: строки 0–2 содержат масштабированные оси (радиус R),
+// строка 3 содержит координаты центра дуги (Local.P_insert).
 procedure GDBObjARC.ReCalcFromObjMatrix;
-var
-  ox,oy:TzePoint3d;
-  m:TzeTypedMatrix4d;
 begin
+  // Восстанавливаем нормализованные оси Local.basis из строк ObjMatrix
   inherited;
 
-  ox:=GetXfFromZ(Local.basis.oz);
-  oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
-  m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
+  // Центр дуги (Local.P_insert) хранится напрямую в строке переноса ObjMatrix.
+  // В GDBObjARC.CalcObjMatrixWithoutOwner: ObjMatrix = rot * disp(p_insert),
+  // строка 3 результата равна Local.P_insert (без искажения поворотом).
+  // GDBObjARC.CalcObjMatrix масштабирует только строки 0–2 (оси), не строку 3.
+  Local.P_insert := PzePoint3d(@objmatrix.mtr.v[3])^;
 
-  Local.P_insert:=VectorTransform3D(PzePoint3d(@objmatrix.mtr.v[3])^,m);
-  self.R:=PzePoint3d(@objmatrix.mtr.v[0])^.x/local.basis.OX.x;
+  // P_insert_in_WCS также обновляем из строки 3 ObjMatrix.
+  // Это эквивалентно VectorTransform3D(nulvertex, objmatrix), но без лишних вычислений.
+  P_insert_in_WCS := Local.P_insert;
+
+  // Радиус — длина первого вектора-оси в ObjMatrix (масштаб по оси X)
+  self.R := oneVertexLength(PzePoint3d(@objmatrix.mtr.v[0])^);
+
 end;
 
 function GDBObjARC.CalcTrueInFrustum;
@@ -297,21 +330,61 @@ begin
   dxfDoubleout(outStream,51,endangle*180/pi);
 end;
 
-procedure GDBObjARC.CalcObjMatrix;
+// Функция строит матрицу объекта без учёта матрицы владельца.
+// Перегружает базовый метод для корректного расположения центра дуги в WCS.
+// Порядок умножения: сначала поворот (rotmatr), затем перенос (dispmatr).
+// В базовом классе порядок обратный (dispmatr * rotmatr), что приводит
+// к ошибочному повороту центра при наклоне оси OZ (после поворота вокруг X или Y).
+// Этот метод аналогичен реализации в GDBObjEllipse.
+function GDBObjARC.CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;
 var
-  m1:TzeTypedMatrix4d;
-  v:TzeVector4d;
+  rotmatr, dispmatr: TzeTypedMatrix4d;
 begin
-  inherited CalcObjMatrix;
-  m1:=CreateScaleMatrix(r);
-  objmatrix:=matrixmultiply(m1,objmatrix);
+  // Пересчитываем нормализованные оси из текущего oz
+  Local.basis.ox := GetXfFromZ(Local.basis.oz);
+  Local.basis.oy := VectorDot(Local.basis.oz, Local.basis.ox);
+  Local.basis.ox := NormalizeVertex(Local.basis.ox);
+  Local.basis.oy := NormalizeVertex(Local.basis.oy);
+  Local.basis.oz := NormalizeVertex(Local.basis.oz);
 
-  PzePoint3d(@v)^:=local.p_insert;
-  v.z:=0;
-  v.w:=1;
-  m1:=objMatrix;
-  MatrixInvert(m1);
-  v:=VectorTransform(v,m1);
+  // Матрица поворота из базисных векторов OCS
+  rotmatr  := CreateMatrixFromBasis(Local.basis.ox, Local.basis.oy, Local.basis.oz);
+  // Матрица переноса на центр дуги в WCS
+  dispmatr := CreateTranslationMatrix(Local.p_insert);
+
+  // Порядок: сначала поворот, затем перенос — строка 3 результата = Local.p_insert
+  Result := MatrixMultiply(rotmatr, dispmatr);
+end;
+
+// Процедура строит ObjMatrix для дуги.
+// Вызывает CalcObjMatrixWithoutOwner (с корректным порядком поворот*перенос),
+// применяет матрицу владельца если она задана, затем масштабирует строки
+// осей (0–2) на радиус R.
+// Строка переноса (3) остаётся нетронутой — она содержит Local.P_insert.
+procedure GDBObjARC.CalcObjMatrix;
+begin
+  // Явно вызываем CalcObjMatrix базового класса, который использует
+  // наш переопределённый CalcObjMatrixWithoutOwner с правильным порядком матриц
+  inherited CalcObjMatrix;
+  // Масштабируем только строки осей (радиус), не строку переноса!
+  // objmatrix после inherited = rot * disp(p_insert): строка 3 = Local.P_insert
+  with objmatrix.mtr do begin
+    v[0].v[0] := v[0].v[0] * r;
+    v[0].v[1] := v[0].v[1] * r;
+    v[0].v[2] := v[0].v[2] * r;
+    v[0].v[3] := v[0].v[3] * r;
+
+    v[1].v[0] := v[1].v[0] * r;
+    v[1].v[1] := v[1].v[1] * r;
+    v[1].v[2] := v[1].v[2] * r;
+    v[1].v[3] := v[1].v[3] * r;
+
+    v[2].v[0] := v[2].v[0] * r;
+    v[2].v[1] := v[2].v[1] * r;
+    v[2].v[2] := v[2].v[2] * r;
+    v[2].v[3] := v[2].v[3] * r;
+  end;
+
 end;
 
 procedure GDBObjARC.precalc;

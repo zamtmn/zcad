@@ -74,7 +74,7 @@ uses
   //base types
   //описания базовых типов
   //описания базовых констант
-  uzccommandsmanager,
+  //uzccommandsmanager,
   uzcdrawings,     //Drawings manager, all open drawings are processed him
   //"Менеджер" чертежей
   uzcutils,         //different functions simplify the creation entities, while there are very few
@@ -95,7 +95,6 @@ type
   end;
   TCircleDrawMode=(TCDM_CR,TCDM_CD,TCDM_2P,TCDM_3P);
   TPolygonDrawMode=(TPDM_CV,TPDM_CC);
-  PT3PointCircleModePentity=^T3PointCircleModePentity;
 
   T3PointCircleModePEntity=record
     p1,p2,p3:TzePoint3d;
@@ -103,7 +102,7 @@ type
     npoint:integer;
     pentity:PGDBObjEntity;
   end;
-  PTPointPolygonDrawModePentity=^TPointPolygonDrawModePentity;
+  PT3PointCircleModePentity=^T3PointCircleModePentity;
 
   TPointPolygonDrawModePentity=record
     p1:TzePoint3d;
@@ -113,6 +112,13 @@ type
     pentity:PGDBObjPolyline;
     plwentity:PGDBObjLWPolyline;
   end;
+  PTPointPolygonDrawModePentity=^TPointPolygonDrawModePentity;
+
+  TRotateManipulatorData=record
+    Base:TzePoint3d;
+    Axis,Arefv:TzeVector3d;
+  end;
+  PRotateManipulatorData=^TRotateManipulatorData;
 
 procedure InteractiveLineEndManipulator(const PInteractiveData:PGDBObjLine;
   Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
@@ -132,7 +138,9 @@ procedure InteractiveRectangleManipulator(const PInteractiveData:PGDBObjPolyline
   Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 procedure InteractivePolygonManipulator(const PInteractiveData:TPointPolygonDrawModePentity;
   Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
-procedure InteractiveConstructRootManipulator(const PInteractiveData:Pointer;
+procedure InteractiveConstructRootToPtManipulator(const PInteractiveData:Pointer;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+procedure InteractiveConstructRootRotateManipulator(const PInteractiveData:PRotateManipulatorData;
   Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 
 implementation
@@ -142,8 +150,71 @@ implementation
 { Interactive procedures are used together with Get3DPointInteractive,
   later to be moved to a separate unit }
 
+procedure InteractiveConstructRootRotateManipulator(const PInteractiveData:PRotateManipulatorData;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+ var
+  ir:itrec;
+  p:PGDBObjEntity;
+  t_matrix:TzeTypedMatrix4d;
+  RC:TDrawContext;
+  m:TzeTypedMatrix4d;
+  a:Double;
+  tr:TzePoint3d;
+  rotmatr:TzeTypedMatrix4d;
+  FrPos:TzePoint3d;
+  v:TzeVector3d;
+  tmatr,dispmatr,tempmatr:TzeTypedMatrix4d;
+
+begin
+
+  v:=(Point-PInteractiveData^.Base).NormalizeVertex;
+  rotmatr:=CreateAffineRotationMatrix(PInteractiveData^.Axis,PInteractiveData^.ARefV,v);
+
+  if click then begin
+    t_matrix:=CreateTranslationMatrix(-PInteractiveData^.Base);
+    t_matrix:=MatrixMultiply(t_matrix,rotmatr);
+    t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(PInteractiveData^.Base));
+
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+    p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
+    if p<>nil then
+      repeat
+        p^.transform(t_matrix);
+        p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
+      until p=nil;
+  end else begin
+
+    if (drawings.GetCurrentDWG^.GetPcamera^.notuseLCS) then
+      tr:=PInteractiveData^.Base
+    else
+      tr:=PInteractiveData^.Base+drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset;
+
+    tempmatr:=uzegeometry.CreateTranslationMatrix(-PInteractiveData^.Base);
+    tempmatr:=uzegeometry.MatrixMultiply(tempmatr,rotmatr);
+    FrPos.x:=PInteractiveData^.Base.x+tempmatr.mtr.v[3].x;
+    FrPos.y:=PInteractiveData^.Base.y+tempmatr.mtr.v[3].y;
+    FrPos.z:=PInteractiveData^.Base.z+tempmatr.mtr.v[3].z;
+
+    dispmatr:=uzegeometry.CreateTranslationMatrix(-tr);
+    tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
+    dispmatr:=uzegeometry.CreateTranslationMatrix(tr);
+    dispmatr:=uzegeometry.MatrixMultiply(tmatr,dispmatr);
+
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
+    drawings.GetCurrentDWG^.ConstructObjRoot.FrustumPosition:=FrPos;
+
+    {m:=CreateTranslationMatrix(-PInteractiveData^.Base);
+    a:=TwoVectorAngle(PInteractiveData^.Arefv,(Point-PInteractiveData^.Base).NormalizeVertex);
+    m:=MatrixMultiply(m,CreateAffineRotationMatrix(PInteractiveData^.Axis,a));
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=MatrixMultiply(m,CreateTranslationMatrix(PInteractiveData^.Base));}
+    RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
+    drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
+  end;
+end;
+
+
 {Процедура интерактивного "перемещения" конструкторской области}
-procedure InteractiveConstructRootManipulator(const PInteractiveData:Pointer;
+procedure InteractiveConstructRootToPtManipulator(const PInteractiveData:Pointer;
   Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   ir:itrec;

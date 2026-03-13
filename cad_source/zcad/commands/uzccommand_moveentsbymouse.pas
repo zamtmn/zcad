@@ -43,6 +43,7 @@ uses
 resourcestring
   RSHelloWorld='HELLO WORLD!';
 
+function CloneEnts:integer;
 
 implementation
 

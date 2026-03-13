@@ -89,7 +89,9 @@ uses
 
   {DXF entities}
   uzeent3dface,uzeentsolid,
-  uzeentcircle,uzeentarc,uzeentellipse,
+  uzeentcircle,
+  uzeentarc, //use Ai for GDBObjARC.transform, GDBObjARC.ReCalcFromObjMatrix, GDBObjARC.CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;, GDBObjARC.CalcObjMatrix;
+  uzeentellipse,
   uzeentblockinsert,uzeentdevice,
   uzeentdimaligned,uzeentdimdiametric,uzeentdimension,
   uzeentdimensiongeneric,uzeentdimradial,uzeentdimrotated,

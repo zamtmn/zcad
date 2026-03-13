@@ -470,11 +470,12 @@ var
   CmdMode:TCmdMode;
   filename:string;
 
-  procedure SetCmdMode(Mode:TCmdMode);
+  procedure SetCmdMode(const ANewMode:TCmdMode;const AForce:boolean=false);
   begin
-    if CmdMode=Mode then
-      exit;
-    case Mode of
+    if not AForce then
+      if CmdMode=ANewMode then
+        exit;
+    case ANewMode of
       CMWaitFile:begin
         if clFilePrompt=nil then
           clFilePrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportWaitFile);
@@ -517,12 +518,12 @@ var
       end;
       CMExport:;//заглушка на варнинг
     end;
-    CmdMode:=Mode;
+    CmdMode:=ANewMode;
   end;
 
 begin
   zcShowCommandParams(SysUnit^.TypeName2PTD('TDataExportParam'),@DataExportParam);
-  SetCmdMode(CMWaitFile);
+  SetCmdMode(CMWaitFile,true);
   repeat
     gr:=commandmanager.GetInput('',inpt);
     case gr of
@@ -718,8 +719,6 @@ finalization
     LM_Info,UnitsFinalizeLMId);
   ExporterParser.Free;
   VU.done;
-  if clFilePrompt<>nil then
-    clFilePrompt.Free;
-  if clOptionsPrompt<>nil then
-    clOptionsPrompt.Free;
+  clFilePrompt.Free;
+  clOptionsPrompt.Free;
 end.

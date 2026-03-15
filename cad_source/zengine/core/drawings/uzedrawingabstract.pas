@@ -53,6 +53,8 @@ TAbstractDrawing= object(TDrawingDef)
                        InsUnits:TInsUnits;
                        TextSize:Double;
 
+                       constructor init;
+
                        procedure myGluProject2(objcoord:TzePoint3d; out wincoord:TzePoint3d);virtual;abstract;
                        procedure myGluUnProject(const win:TzePoint3d;out obj:TzePoint3d);virtual;abstract;
                        function GetPcamera:PGDBObjCamera;virtual;abstract;
@@ -73,4 +75,37 @@ TAbstractDrawing= object(TDrawingDef)
                  end;
 
 implementation
+constructor TAbstractDrawing.init;
+begin
+  DXFCodePage:=TZCCodePage.ZCCPINVALID;
+  LWDisplay:=false;
+  SnapGrid:=false;
+  DrawGrid:=false;
+  GridSpacing.x:=0.5;
+  GridSpacing.y:=0.5;
+  snap.Base.x:=0;
+  snap.Base.y:=0;
+  snap.Spacing.x:=0.5;
+  snap.Spacing.y:=0.5;
+
+  CurrentLayer:=nil;
+  CurrentLType:=nil;
+  CurrentTextStyle:=nil;
+  CurrentDimStyle:=nil;
+  CurrentLineW:=0;
+  LTScale:=1;
+  CLTScale:=1;
+  CColor:=7;
+
+  LUnits:=LUDecimal;
+  LUPrec:=UPrec4;
+  AUnits:=AUDecimalDegrees;
+  AUPrec:=UPrec4;
+  AngDir:=ADClockwise;
+  AngBase:=0;
+  UnitMode:=UMWithoutSpaces;
+  InsUnits:=IUUnspecified;
+  TextSize:=2.5;
+end;
+
 end.

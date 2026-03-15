@@ -766,16 +766,9 @@ var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
     cs:TGDBTableCellStyle;
 begin
-  DXFCodePage:=TZCCodePage.ZCCPINVALID;
+  inherited init;
+
   LastActl.CreateDef;
-  LWDisplay:=false;
-  SnapGrid:=false;
-  GridSpacing.x:=0.5;
-  GridSpacing.y:=0.5;
-  snap.Base.x:=0;
-  snap.Base.y:=0;
-  snap.Spacing.x:=0.5;
-  snap.Spacing.y:=0.5;
   pcamera:=pcam;
   internalcamera:=false;
   if pcamera=nil then
@@ -804,7 +797,6 @@ begin
                        pcamera.zmax:=100000.0;
                        pcamera.fovy:=35.0;
                      end;
-  LTScale:=1;
   LTypeStyleTable.init(100);
   LayerTable.init(200,LTypeStyleTable.GetSystemLT(TLTContinous));
   DimStyleTable.init(100);

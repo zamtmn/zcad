@@ -215,7 +215,7 @@ uses
 
   uzccommand_line2,uzccommand_circle2,//old commands
 
-  uzccommand_scale,uzccommand_rotate,uzccommand_rotate2,uzccommand_rotateents,uzccommand_erase,
+  uzccommand_scale,uzcCommand_RotateXYZ,uzcCommand_Rotate,uzccommand_rotateents,uzccommand_erase,
   uzccommand_inverseselected,uzccommand_cutclip,
 
   uzccommand_polyed,

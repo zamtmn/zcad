@@ -511,12 +511,7 @@ var
 begin
      result:=nil;
      result:=AllocAndInitCable(pent^.bp.ListPos.Owner);
-     if pent^.PExtAttrib<>nil then
-     begin
-       result^.PExtAttrib:=pent^.CopyExtAttrib;
-       //result^.PExtAttrib:=pent^.PExtAttrib;
-       //pent^.PExtAttrib:=nil;
-     end;
+
      //result^.vp:=pent^.vp;
      pent.CopyVPto(result^);
      //result^.vp.id:=GDBCableID;

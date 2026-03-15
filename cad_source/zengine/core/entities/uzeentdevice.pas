@@ -653,9 +653,6 @@ begin
     Result^.scale:=pent^.scale;
     Result^.rotate:=pent^.rotate;
     Result^.P_insert_in_WCS:=pent^.P_insert_in_WCS;
-    {БЛЯДЬ так делать нельзя!!!!}
-    if pent^.PExtAttrib<>nil then
-      Result^.PExtAttrib:=pent^.CopyExtAttrib;
     Result^.Name:=copy(Result^.Name,8,length(Result^.Name)-7);
     Result^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(
       Result^.Name);

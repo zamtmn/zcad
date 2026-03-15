@@ -402,6 +402,7 @@ begin
       end else begin
         newowner:=owner;
         if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
+          postobj^.PExtAttrib:=pobj^.CopyExtAttrib;
         if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
           newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle).p;
         end;

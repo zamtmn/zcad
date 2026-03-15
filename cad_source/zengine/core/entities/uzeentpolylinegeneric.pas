@@ -102,7 +102,7 @@ begin
         Getmem(PGDBObjPolyline(Result),sizeof(GDBObjPolyline));
         PGDBObjPolyline(Result)^.initnul(bp.ListPos.Owner);
         CopyVPto(PGDBObjPolyline(Result)^);
-        CopyExtensionsTo(PGDBObjPolyline(Result)^);
+        //CopyExtensionsTo(PGDBObjPolyline(Result)^);
         // Копируем вершины
         PGDBObjPolyline(Result)^.vertexarrayinocs.SetSize(VertexArrayInOCS.Count);
         VertexArrayInOCS.copyto(PGDBObjPolyline(Result)^.vertexarrayinocs);
@@ -113,7 +113,7 @@ begin
         Getmem(PGDBObjPolyFaceMesh(Result),sizeof(GDBObjPolyFaceMesh));
         PGDBObjPolyFaceMesh(Result)^.initnul(bp.ListPos.Owner);
         CopyVPto(PGDBObjPolyFaceMesh(Result)^);
-        CopyExtensionsTo(PGDBObjPolyFaceMesh(Result)^);
+        //CopyExtensionsTo(PGDBObjPolyFaceMesh(Result)^);
         // Копируем вершины
         PGDBObjPolyFaceMesh(Result)^.vertexarrayinocs.SetSize(VertexArrayInOCS.Count);
         VertexArrayInOCS.copyto(PGDBObjPolyFaceMesh(Result)^.vertexarrayinocs);

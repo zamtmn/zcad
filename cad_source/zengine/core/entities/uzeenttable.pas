@@ -527,9 +527,6 @@ begin
   Result^.Local:=pent^.local;
   Result^.P_insert_in_WCS:=pent^.P_insert_in_WCS;
 
-  if pent^.PExtAttrib<>nil then
-    Result^.PExtAttrib:=pent^.CopyExtAttrib;
-
   pvd:=PTUnit(ptu).FindVariable('style');
   if pvd<>nil then begin
     result^.PTableStyle:=drawing.GetTableStyleTable.AddStyle(pvd.GetValueAsString);

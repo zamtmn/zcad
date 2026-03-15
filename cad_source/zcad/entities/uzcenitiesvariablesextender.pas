@@ -272,7 +272,11 @@ procedure TVariablesExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var
     pDestVariablesExtender,pbdunit:TVariablesExtender;
 begin
-     pDestVariablesExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TVariablesExtender>;
+  if PGDBObjEntity(pDestEntity)^.EntExtensions<>nil then
+    pDestVariablesExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TVariablesExtender>
+  else
+    pDestVariablesExtender:=nil;
+
      if pDestVariablesExtender=nil then
                        pDestVariablesExtender:=AddVariablesToEntity(pDestEntity);
      entityunit.CopyTo(@pDestVariablesExtender.entityunit);

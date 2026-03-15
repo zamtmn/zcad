@@ -85,7 +85,11 @@ procedure TLayerControlExtender.onEntityClone(pSourceEntity,pDestEntity:pointer)
 var
     pDestLayerControlExtender:TLayerControlExtender;
 begin
-     pDestLayerControlExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TLayerControlExtender>;
+  if PGDBObjEntity(pDestEntity)^.EntExtensions<>nil then
+    pDestLayerControlExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TLayerControlExtender>
+  else
+    pDestLayerControlExtender:=nil;
+
      if pDestLayerControlExtender=nil then
                        pDestLayerControlExtender:=AddLayerControlExtenderToEntity(pDestEntity);
      pDestLayerControlExtender.Assign(self);

@@ -131,8 +131,11 @@ begin
 
       // Выделяем созданную полилинию для последующего редактирования в инспекторе
       // Select created polyline for subsequent editing in inspector
-      if APEnt <> nil then
+      if APEnt <> nil then begin
+         zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,zcMsgUIReturnToDefaultObject);
          APEnt^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount, drawings.GetCurrentDWG^.Selector);
+         zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,zcMsgUIActionSelectionChanged);
+      end;
 
       result := False;
     end;

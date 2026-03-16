@@ -164,7 +164,7 @@ begin
   if CommandParamsShowed then
     zcHideCommandParams;
   if assigned(ESP) then
-    ESP(ESSCommandEnd,nil);
+    ESP(ESSCommandEnd,polyObj);
   Result:=cmd_ok;
 end;
 

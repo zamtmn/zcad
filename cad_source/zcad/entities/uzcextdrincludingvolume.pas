@@ -222,7 +222,17 @@ begin
 end;
 
 procedure TIncludingVolumeExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
+var
+  pDestIncludingVolumeExtender:TIncludingVolumeExtender;
 begin
+  if PGDBObjEntity(pDestEntity)^.EntExtensions<>nil then
+    pDestIncludingVolumeExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TIncludingVolumeExtender>
+  else
+    pDestIncludingVolumeExtender:=nil;
+
+  if pDestIncludingVolumeExtender=nil then
+    pDestIncludingVolumeExtender:=AddVolumeExtenderToEntity(pDestEntity);
+
 end;
 procedure TIncludingVolumeExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
 begin
@@ -417,6 +427,7 @@ begin
 end;
 procedure TIncludingVolumeExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
 begin
+  onEntityClone(pSourceEntity,pDestEntity);
 end;
 procedure TIncludingVolumeExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
 begin

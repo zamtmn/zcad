@@ -40,7 +40,8 @@ uses
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,
   uzcoimultipropertiesutil,uzsbVarmanDef,uzcvariablesutils,Masks,uzcregother,
-  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzbUnits;
+  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzbUnits,
+  uzcEnitiesVariablesExtender;
 
 resourcestring
   RSCLPDataExportWaitFile=
@@ -469,6 +470,7 @@ var
   gr:TzcInteractiveResult;
   CmdMode:TCmdMode;
   filename:string;
+  VarsExtdr:TVariablesExtender;
 
   procedure SetCmdMode(const ANewMode:TCmdMode;const AForce:boolean=false);
   begin
@@ -606,20 +608,24 @@ begin
       pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
       if pv<>nil then
         repeat
-          if EntsTypeFilter.IsEntytyAccepted(pv) then begin
-            if assigned(EntityIncluder) then begin
-              propdata.CurrentEntity:=pv;
-              propdata.IncludeEntity:=T3SB_Default;
-              EntityIncluder.Doit(PropData);
-            end else
-              propdata.IncludeEntity:=T3SB_True;
+          {TODO: сделать настройку в скрипте экспорта для экспорта из главных функций\делегатов}
+          {TODO: убрать хардкод}
+          VarsExtdr:=pv^.GetExtension<TVariablesExtender>;
+          if (VarsExtdr<>nil)and(VarsExtdr.isMainFunction)then
+            if EntsTypeFilter.IsEntytyAccepted(pv) then begin
+              if assigned(EntityIncluder) then begin
+                propdata.CurrentEntity:=pv;
+                propdata.IncludeEntity:=T3SB_Default;
+                EntityIncluder.Doit(PropData);
+              end else
+                propdata.IncludeEntity:=T3SB_True;
 
-            if propdata.IncludeEntity=T3SB_True then begin
-              Data.CurrentEntity:=pv;
-              if assigned(pet) then
-                pet.Doit(Data);
+              if propdata.IncludeEntity=T3SB_True then begin
+                Data.CurrentEntity:=pv;
+                if assigned(pet) then
+                  pet.Doit(Data);
+              end;
             end;
-          end;
 
           pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
           LPS.ProgressLongProcess(lpsh,ir.itc);

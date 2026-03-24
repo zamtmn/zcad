@@ -188,6 +188,7 @@
       <Action Name="ACN_MIRROR"/>
 	  <Separator/>
       <Action Name="ACN_STRETCH"/>	  
+	  <Action Name="ACN_ALIGN"/>	
     </Menu>
     <Menu Name="Window">
       <Action Name="ACN_CLOSE"/>

@@ -256,6 +256,10 @@ uses
   uzcCommand_Duplicate,
 
   uzcCommand_PlaceDelegate,
+
+  uzccommand_scale2,  //Created using AI
+  uzccommand_align,   //Created using AI
+
   {$IFDEF ELECTROTECH}
   uzcExtdrReport,uzccommand_ReportsUpdate,
   {$ENDIF}

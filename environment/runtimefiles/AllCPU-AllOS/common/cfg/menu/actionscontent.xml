@@ -83,9 +83,10 @@
       <ZAction Name="ACN_ROTATE" Command="Rotate" Img="rotate" Caption="Rotate" Hint="Rotate primitives" ShortCut="CTRL+ALT+R" SecondaryShortCuts="R"/>
       <ZAction Name="ACN_ROTATEENTS_R" Command="RotateEnts" Img="rotater" Caption="Rotate ents right" Hint="Turn ents right" ShortCut="CTRL+G" SecondaryShortCuts="G"/>
       <ZAction Name="ACN_ROTATEENTS_L" Command="RotateEnts(-)" Img="rotatel" Caption="Rotate ents left" Hint="Turn ents left" ShortCut="CTRL+K" SecondaryShortCuts="K"/>
-      <ZAction Name="ACN_SCALE" Command="Scale" Img="scale" Caption="Scale" Hint="Scale primitives"/>
+      <ZAction Name="ACN_SCALE" Command="Scale2" Img="scale" Caption="Scale" Hint="Scale primitives"/>
       <ZAction Name="ACN_STRETCH" Command="Stretch" Img="stretch" Caption="Stretch" Hint="Stretch primitives"/>
       <ZAction Name="ACN_MIRROR" Command="Mirror" Img="mirror" Caption="Mirror" Hint="Mirror primitives"/>
+	  <ZAction Name="ACN_ALIGN" Command="Align" Img="align" Caption="Align" Hint="Move, rotate, and (optionally) scale selected objects"/>
       <ZAction Name="ACN_BEDIT" Command="BEdit" Img="bedit" Caption="Block editor"/>
       <ZAction Name="ACN_BREPLACE" Command="BlockReplace" Img="#BR" Caption="Block replace"/>
       <ZAction Name="ACN_BSCALE" Command="BlockScale" Img="#BS" Caption="Block scale"/>

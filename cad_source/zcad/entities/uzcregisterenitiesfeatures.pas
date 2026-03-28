@@ -60,18 +60,18 @@ var
 
 const
   DevVarsWithTemplates:TVarsWithTemplates=[
-    (Name:'NMO_Name';Template:'NMO_Template'),
     (Name:'NMO_TerminalName';Template:'NMO_TerminalNameTemplate'),
     (Name:'NMO_NetName';Template:'NMO_NetNameTemplate'),
     (Name:'GC_NameGroup';Template:'GC_NameGroupTemplate'),
-    (Name:'INFOPERSONALUSE_Text';Template:'INFOPERSONALUSE_TextTemplate')
+    (Name:'INFOPERSONALUSE_Text';Template:'INFOPERSONALUSE_TextTemplate'),
+    (Name:'NMO_Name';Template:'NMO_Template')
   ];
 
   CableVarsWithTemplates:TVarsWithTemplates=[
-    (Name:'NMO_Name';Template:'NMO_Template'),
     (Name:'GC_HDGroup';Template:'GC_HDGroupTemplate'),
     (Name:'GC_HeadDevice';Template:'GC_HeadDeviceTemplate'),
-    (Name:'GC_HDShortName';Template:'GC_HDShortNameTemplate')
+    (Name:'GC_HDShortName';Template:'GC_HDShortNameTemplate'),
+    (Name:'NMO_Name';Template:'NMO_Template')
   ];
 
 class function TDummy.EntIOLoad_OWNERHANDLE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;

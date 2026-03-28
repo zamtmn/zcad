@@ -257,7 +257,7 @@ uses
 
   uzcCommand_PlaceDelegate,
   {$IFDEF ELECTROTECH}
-  uzcExtdrReport,uzccommand_ReportsUpdate,
+  uzcExtdrReport,uzccommand_ReportsUpdate,uzcCommand_FlattenZEnts,
   {$ENDIF}
   uzcCommand_TextExplode,
 

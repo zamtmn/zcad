@@ -263,7 +263,7 @@ uses
   {$IFDEF ELECTROTECH}
   uzcExtdrReport,uzccommand_ReportsUpdate,uzcCommand_FlattenZEnts,
   {$ENDIF}
-  uzcCommand_TextExplode,
+  uzcCommand_TextExplode,uzcCommand_Hatch2Line,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,

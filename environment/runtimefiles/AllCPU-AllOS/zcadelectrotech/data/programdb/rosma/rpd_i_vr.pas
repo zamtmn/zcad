@@ -13,7 +13,7 @@ type
                         _100_0(*'100'*),
                         _160_0(*'160'*));
   TROSMA_RPD_I_VR=packed object(ElDeviceBaseObject);
-    Predel:TROSMA_RD_2Predel;
+    Predel:TROSMA_RPD_I_VRPredel;
   end;
 var
    _EQ_ROSMA_RPD_I_VR:TROSMA_RPD_I_VR;
@@ -36,5 +36,5 @@ begin
   _EQ_ROSMA_RPD_I_VR.UIDTemplate:='%%[ID]-%%[Predel]';
 
   _EQ_ROSMA_RPD_I_VR.TreeCoord:='BP_РОСМА_Датчики давления_РПД-И-ВР|BC_Оборудование автоматизации_Датчики давления_РПД-И-ВР';
-  _EQ_ROSMA_RD_2R_MODEL35.format;
+  _EQ_ROSMA_RPD_I_VR.format;
 end.

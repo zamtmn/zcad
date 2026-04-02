@@ -34,7 +34,7 @@ uses
   uzcdrawings,
   uzccommandsabstract,uzccommandsimpl,
   uzegeometry,uzegeometrytypes,uzcCommand_Duplicate,
-  uzcFileStructure;
+  uzcFileStructure,uzeTypes;
 
 const
   ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
@@ -61,8 +61,8 @@ begin
   //s:=GetTempPath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
   //   +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+'.dxf';
   CopyClipFile:=s;
-  savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),
-    ClipboardDWG^,ZCCodePage2SysCP(drawings.GetCurrentDwg^.DXFCodePage));
+  ClipboardDWG^.DXFCodePage:=drawings.GetCurrentDwg^.DXFCodePage;
+  savedxf20XX(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),ClipboardDWG^,cDefaultSaveDxfVefsion);
   s:=s+#0;
   suni:=unicodestring(s);
   Clipboard.Open;

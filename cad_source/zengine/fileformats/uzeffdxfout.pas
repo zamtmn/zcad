@@ -31,7 +31,7 @@ uses
   uzeffmanager,uzbLogIntf,uzeLogIntf,
   uzMVSMemoryMappedFile,uzMVReader,uzbBaseUtils;
 
-function savedxf2000(const SavedFileName:string;const TemplateFileName:string;var drawing:TSimpleDrawing;codepage:integer):boolean;
+function savedxf20XX(const SavedFileName:string;const TemplateFileName:string;var drawing:TSimpleDrawing;AVer:TZCDxfVersion):boolean;
 
 implementation
 
@@ -133,7 +133,7 @@ begin
 end;
 
 
-function savedxf2000(const SavedFileName:string;const TemplateFileName:string;var drawing:TSimpleDrawing;codepage:integer):boolean;
+function savedxf20XX(const SavedFileName:string;const TemplateFileName:string;var drawing:TSimpleDrawing;AVer:TZCDxfVersion):boolean;
 var
   sysfilename:rawbytestring;
   templatefile:TZctnrVectorBytes;
@@ -168,11 +168,17 @@ var
 begin
   intable:=0;
   IODXFContext.InitRec;
-  IODXFContext.Header.Version:=AC1015;
-  IODXFContext.Header.iVersion:=1015;
 
-  IODXFContext.Header.DWGCodePage:=SysCP2ACCP(codepage);
-  IODXFContext.Header.iDWGCodePage:=codepage;
+  IODXFContext.Header.Version:=ZCDxfVer2DXF_ACVer(AVer);
+  IODXFContext.Header.iVersion:=ZCDxfVer2ACVer(AVer);
+
+  //if AVer<ZCDxf2007 then begin
+    IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(drawing.DXFCodePage){SysCP2ACCP(ACodePage)};
+    IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(drawing.DXFCodePage);//ACodePage;
+  //end else begin
+  //  IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(drawing.DXFCodePage){SysCP2ACCP(ACodePage)};
+  //  IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(drawing.DXFCodePage);//ACodePage;
+  //end;
 
   DefaultFormatSettings.DecimalSeparator:='.';
   outstream.init(10*1024*1024);

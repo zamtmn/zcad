@@ -60,7 +60,7 @@ type
 
 
 var
-  LastFileHandle:integer=-1;
+  LastUsedProjectFileExtIndex:integer=-1;
 
 class function TZCADPathsMacroMethods.MacroFuncCurrentDrawingPath(
   const {%H-}Param:string;const Data:PtrInt;var {%H-}Abort:boolean):string;
@@ -121,21 +121,18 @@ var
 begin
   loadproc:=nil;
   if length(operands)=0 then begin
-    if LastFileHandle=-1 then
-      LastFileHandle:=Ext2LoadProcMap.GetDefaultFileFormatHandle(
-        Ext2LoadProcMap.DefaultExt);
+    if LastUsedProjectFileExtIndex=-1 then
+      LastUsedProjectFileExtIndex:=Ext2LoadProcMap.GetDefaultFileFormatHandle(Ext2LoadProcMap.DefaultExt);
     zcUI.Do_BeforeShowModal(nil);
     try
-      isload:=OpenFileDialog(s,LastFileHandle,'',Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
+      isload:=OpenFileDialog(s,LastUsedProjectFileExtIndex,'',Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
     finally
       zcUI.Do_AfterShowModal(nil);
     end;
-    if not isload then begin
-      Result:=cmd_cancel;
-      exit;
-    end;
-    if LastFileHandle>=0 then
-      loadproc:=Ext2LoadProcMap.vec.GetPLincedData(LastFileHandle)^.FileLoadProcedure;
+    if not isload then
+      exit(cmd_cancel);
+    if LastUsedProjectFileExtIndex>=0 then
+      loadproc:=Ext2LoadProcMap.vec.GetPLincedData(LastUsedProjectFileExtIndex)^.FileLoadProcedure;
   end else begin
     s:=FindInPaths(GetSupportPaths,operands);
     if s='' then
@@ -158,30 +155,23 @@ begin
     drawings.GetCurrentDWG^.LostActuality;
     Result:=cmd_ok;
   end else begin
-    zcUI.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),
-      TMWOShowError);
+    zcUI.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);
     Result:=cmd_error;
   end;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@Load_com,'Load',0,0).CEndActionAttr:=[CEDWGNChanged];
-  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingPath','',
-    'Current drawing path',
+  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingPath','','Current drawing path',
     TZCADPathsMacroMethods.MacroFuncCurrentDrawingPath,[]));
-  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingFileNameOnly','',
-    'Current drawing file name only',
+  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingFileNameOnly','','Current drawing file name only',
     TZCADPathsMacroMethods.MacroFuncCurrentDrawingFileNameOnly(),[]));
-  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingFileName','',
-    'Current drawing file name',
+  DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingFileName','','Current drawing file name',
     TZCADPathsMacroMethods.MacroFuncCurrentDrawingFileName(),[]));
-  DefaultMacros.AddMacro(TTransferMacro.Create('LastAutoSaveFile','',
-    'Last auto save file',
+  DefaultMacros.AddMacro(TTransferMacro.Create('LastAutoSaveFile','','Last auto save file',
     TZCADPathsMacroMethods.MacroFuncLastAutoSaveFile,[]));
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

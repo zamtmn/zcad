@@ -23,7 +23,7 @@ interface
 uses
   SysUtils,
   uzeTypes,uzeffdxfsupport,uzeffmanager,uzeLogIntf,
-  uzeffdxf,
+  uzeffdxf,uzccommand_saveas,
   uzeffLibreDWG,uzeffLibreDWG2Ents;
 implementation
 function DWGCodePage2DXFCodePage(ADWGCP:TACDWGCodePage):TZCCodePage;
@@ -57,10 +57,25 @@ begin
   else
     dwgCtx.PDrawing^.DXFCodePage:=sysvarSysDWG_CodePage;
 end;
+
+procedure SaveDXF2000viaZEnfine(const AFileName: String);
+begin
+  SaveDXFDPAS(AFileName,true,ZCDxf2000);
+end;
+
+procedure SaveDXF2007viaZEnfine(const AFileName: String);
+begin
+  SaveDXFDPAS(AFileName,true,ZCDxf2007);
+end;
+
 begin
   Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via zengine (*.dxf)',@LoadDXFviaZEnfine,true);
   Ext2LoadProcMap.DefaultExt:='dxf';
 
   Ext2LoadProcMap.RegisterExt('dwg','AutoCAD DWG files via LibreDWG (*.dwg)',@uzeffLibreDWG.addfromdwg);
   Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via LibreDWG (*.dxf)',@uzeffLibreDWG.addfromdxf);
+
+  Ext2SaveProcMap.RegisterExt('dxf','AutoCAD DXF2000 files via zengine (*.dxf)',@SaveDXF2000viaZEnfine,true);
+  Ext2SaveProcMap.DefaultExt:='dxf';
+  Ext2SaveProcMap.RegisterExt('dxf','AutoCAD DXF2007 files via zengine (*.dxf)',@SaveDXF2007viaZEnfine);
 end.

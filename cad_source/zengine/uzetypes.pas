@@ -104,6 +104,10 @@ type
     ZCCP1257,ZCCP1258);
   PTZCCodePage=^TZCCodePage;
 
+  TZCDxfVersion=((*ZCDxf12{AC1009},*)ZCDxf2000{AC1015},(*ZCDxf2004{AC1018},*)ZCDxf2007{AC1021}
+    (*,ZCDxf2010{2010},ZCDxf2013{AC1027},ZCDxf2018{AC1032}*));
+  PZCDxfVersion=^TZCDxfVersion;
+
   GDBSnap2D=record
     Base:TzePoint2d;(*'Base'*)
     Spacing:TzePoint2d;(*'Spacing'*)
@@ -202,6 +206,9 @@ type
     destructor Done;virtual;
   end;
   PGDBaseObject=^GDBaseObject;
+
+const
+  cDefaultSaveDxfVefsion=ZCDxf2000;
 
 var
   zeHandles:TZHandleCreator;

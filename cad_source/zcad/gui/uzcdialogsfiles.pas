@@ -31,9 +31,10 @@ const
     CSVFileFilter: String ='CSV files (*.csv)|*.csv|All files (*.*)|*.*';
 function OpenFileDialog(out FileName:String;var DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;overload;
 function OpenFileDialog(out FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;overload;
-function SaveFileDialog(var FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;
+function SaveFileDialog(var FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;overload;
+function SaveFileDialog(var FileName:String;var DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;overload;
 implementation
-function SaveFileDialog;
+function SaveFileDialog(var FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;
 var
    SD:TSaveDialog;
 begin
@@ -51,6 +52,25 @@ begin
     result:=false;;
   sd.Free;
 end;
+function SaveFileDialog(var FileName:String;var DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
+var
+   SD:TSaveDialog;
+begin
+  sd:=TSaveDialog.Create(nil);
+  sd.Title:=Title;
+  sd.InitialDir:=(InitialDir);
+  sd.Filter:=Filter;
+  sd.DefaultExt:=DefExt;
+  sd.FilterIndex:=DefFilterIndex;
+  sd.FileName:=extractfilename(FileName);
+  if sd.Execute then begin
+    FileName:=sd.FileName;
+    DefFilterIndex:=sd.FilterIndex;
+    result:=true;
+  end else
+    result:=false;;
+  sd.Free;
+end;
 function OpenFileDialog(out FileName:String;var DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;
 var
   OD:TOpenDialog;
@@ -59,11 +79,11 @@ begin
   od.Title:=Title;
   od.InitialDir:=InitialDir;
   od.Filter:=Filter;
-  od.DefaultExt :=DefExt;
-  od.FilterIndex := DefFilterIndex;
-  od.Options := [ofFileMustExist];
+  od.DefaultExt:=DefExt;
+  od.FilterIndex:=DefFilterIndex;
+  od.Options:=[ofFileMustExist];
   if od.Execute then begin
-    FileName := od.FileName;
+    FileName:= od.FileName;
     DefFilterIndex:=od.FilterIndex;
     result:=true;
   end else

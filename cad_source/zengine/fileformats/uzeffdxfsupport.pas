@@ -172,8 +172,26 @@ function ZCCP2Str(ZCCP:TZCCodePage):string;
 function ZCCodePage2ACDWGCodePage(ZCCP:TZCCodePage):TACDWGCodePage;
 function ZCCodePage2SysCP(ZCCP:TZCCodePage):TSystemCodePage;
 
+function ZCDxfVer2ACVer(AZCVer:TZCDxfVersion):integer;
+function ZCDxfVer2DXF_ACVer(AZCVer:TZCDxfVersion):TACDWGVer;
+
 implementation
 
+function ZCDxfVer2ACVer(AZCVer:TZCDxfVersion):integer;
+begin
+  case AZCVer of
+    ZCDxf2000:result:=1015;
+    ZCDxf2007:result:=1021;
+  end;
+end;
+
+function ZCDxfVer2DXF_ACVer(AZCVer:TZCDxfVersion):TACDWGVer;
+begin
+  case AZCVer of
+    ZCDxf2000:result:=AC1015;
+    ZCDxf2007:result:=AC1021;
+  end;
+end;
 
 function ACVer2ACVerStr(ACVer:integer):string;
 begin

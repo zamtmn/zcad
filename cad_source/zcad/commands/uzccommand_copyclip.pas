@@ -28,7 +28,7 @@ uses
   LCLType,LazUTF8,Clipbrd,
   uzbpaths,
   uzeentity,
-  uzeffdxf,uzeffdxfsupport,
+  uzeffDxfOut,uzeffdxfsupport,
   gzctnrVectorTypes,
   uzgldrawcontext,
   uzcdrawings,

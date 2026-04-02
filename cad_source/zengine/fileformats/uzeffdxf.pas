@@ -29,8 +29,10 @@ uses
   uzctnrVectorBytesStream,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
   uzeffmanager,uzbLogIntf,uzeLogIntf,
   uzMVSMemoryMappedFile,uzMVReader,uzbBaseUtils;
+
 resourcestring
   rsLoadDXFFile='Load DXF file';
+
 type
   TCreateExtLoadData=function:pointer;
   TProcessExtLoadData=procedure(peld:pointer);
@@ -38,19 +40,13 @@ type
     UCASEEntName:String;
   end;
   TLongProcessIndicator=Procedure(a:integer) of object;
-const
-  IgnoredDXFEntsArray:array [0..1] of DXFEntDesc=(
-    (UCASEEntName:'HATCH'),
-    (UCASEEntName:'ACAD_PROXY_ENTITY')
-  );
 
-{ todo: вернуть как было после https://gitlab.com/freepascal.org/fpc/source/-/issues/40073
--     IgnoredDXFEntsArray:array of DXFEntDesc=[
-+     IgnoredDXFEntsArray:array [0..1] of DXFEntDesc=(
-        (UCASEEntName:'HATCH'),
-        (UCASEEntName:'ACAD_PROXY_ENTITY')
--     ];
-+     );}
+const
+  IgnoredDXFEntsArray:array of DXFEntDesc=[
+    //(UCASEEntName:'HATCH'),
+    (UCASEEntName:'ACAD_PROXY_ENTITY')
+  ];
+
 var
   CreateExtLoadData:TCreateExtLoadData=nil;
   ClearExtLoadData:TProcessExtLoadData=nil;

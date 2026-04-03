@@ -49,8 +49,8 @@ implementation
 function getDxfTemplateFile(AVer:TZCDxfVersion):string;
 begin
   case AVer of
-    ZCDxf2000:result:=ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]);
-    ZCDxf2007:result:=ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]);
+    ZCDxf2000:result:=ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSDxf2000TemplateFile]);
+    ZCDxf2007:result:=ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSDxf2007TemplateFile]);
     else
       raise Exception.Create('getDxfTemplateFile: Template not found((');
   end;

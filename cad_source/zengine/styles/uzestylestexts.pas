@@ -22,7 +22,7 @@ unit uzestylestexts;
 interface
 uses LCLProc,uzbpaths,uzefontmanager,sysutils,
      uzefont,uzestrconsts,UGDBNamedObjectsArray,uzeNamedObject,
-     uzeLogIntf;
+     uzeLogIntf,gzctnrVectorTypes;
 type
 
   GDBTextStyleProp=record
@@ -57,6 +57,18 @@ GDBTextStyleArray= object(GDBNamedObjectsArray<PGDBTextStyle,GDBTextStyle>)
                     function setstyle(const StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
                     procedure internalsetstyle(var style:GDBTextStyle;const AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean;const LogProc:TZELogProc=nil);
                     function FindStyle(const StyleName:String;ult:Boolean):PGDBTextStyle;
+                    { Поиск стиля текста по имени файла шрифта (FontFile).
+                      Используется при разборе proxy-объектов, где сохранено
+                      имя файла шрифта (например, "times.ttf"), а не имя стиля.
+                      Возвращает nil, если стиль с таким FontFile не найден. }
+                    function FindStyleByFont(const FontFileName:String):PGDBTextStyle;
+                    { Поиск стиля текста по имени typeface (FontFamily).
+                      Используется при разборе proxy-объектов (OpCode=38
+                      UnicodeText2), где сохранено читаемое имя шрифта
+                      ("Times New Roman"), а в таблице стилей это значение
+                      хранится в поле FontFamily (группа 1000 расширенных
+                      данных). Возвращает nil, если стиль не найден. }
+                    function FindStyleByTypeface(const TypefaceName:String):PGDBTextStyle;
                     procedure freeelement(PItem:PT);virtual;
                     function CorrectNilledTextStyle(pts:PGDBTextStyle):PGDBTextStyle;
               end;
@@ -142,6 +154,88 @@ begin
   internalsetstyle(ts^,AFontFile,AFontFamily,tp,USedInLT,LogProc);
   result:=pointer(getDataMutable(PushBackData(ts)));
 end;
+{ Возвращает имя файла без расширения.
+  Используется для сравнения шрифтов, когда в одном источнике хранится
+  полное имя файла ("times.ttf"), а в другом только базовое имя ("times"
+  или "txt"). }
+function StripFontExtension(const FontFileName:String):String;
+begin
+  Result:=ChangeFileExt(FontFileName,'');
+end;
+
+{ Поиск стиля текста по имени файла шрифта (FontFile).
+  Используется при разборе proxy-объектов: в бинарном потоке сохранено
+  имя файла шрифта ("times.ttf" или "txt.shx"), а в таблице стилей
+  чертежа — либо то же имя, либо имя без расширения ("txt"). Поэтому
+  сначала выполняется точное сравнение, затем — сравнение базовых имён
+  без расширений. Сравнение выполняется без учёта регистра.
+  Стили-служебные элементы типов линий (UsedInLTYPE=true) пропускаются. }
+function GDBTextStyleArray.FindStyleByFont(const FontFileName:String):PGDBTextStyle;
+var
+  pStyle:PGDBTextStyle;
+  ir:itrec;
+  FontBase,StyleBase:String;
+begin
+  result:=nil;
+  if FontFileName='' then Exit;
+  FontBase:=StripFontExtension(FontFileName);
+  pStyle:=beginiterate(ir);
+  while pStyle<>nil do
+  begin
+    if not pStyle^.UsedInLTYPE then
+    begin
+      { Точное сравнение имён файлов }
+      if (Length(pStyle^.FontFile)=Length(FontFileName))
+        and (CompareText(pStyle^.FontFile,FontFileName)=0) then
+      begin
+        result:=pStyle;
+        Exit;
+      end;
+      { Сравнение базовых имён (без расширения) — AutoCAD в proxy
+        graphic часто пишет "txt.shx", тогда как в таблице стилей
+        имя хранится как "txt". }
+      StyleBase:=StripFontExtension(pStyle^.FontFile);
+      if (StyleBase<>'') and (FontBase<>'')
+        and (Length(StyleBase)=Length(FontBase))
+        and (CompareText(StyleBase,FontBase)=0) then
+      begin
+        result:=pStyle;
+        Exit;
+      end;
+    end;
+    pStyle:=iterate(ir);
+  end;
+end;
+
+{ Поиск стиля по имени typeface (FontFamily в GDBTextStyle).
+  Используется при разборе proxy-объектов OpCode=38 (UnicodeText2), где
+  AutoCAD сохраняет человекочитаемое имя шрифта (например "Times New Roman")
+  в поле TypeFace. В таблице стилей ZCAD это значение хранится в FontFamily
+  (читается из расширенных данных STYLE, группа 1000 под регистрацией "ACAD").
+  Сравнение выполняется без учёта регистра.
+  Стили-служебные элементы типов линий (UsedInLTYPE=true) пропускаются. }
+function GDBTextStyleArray.FindStyleByTypeface(const TypefaceName:String):PGDBTextStyle;
+var
+  pStyle:PGDBTextStyle;
+  ir:itrec;
+begin
+  result:=nil;
+  if TypefaceName='' then Exit;
+  pStyle:=beginiterate(ir);
+  while pStyle<>nil do
+  begin
+    if not pStyle^.UsedInLTYPE then
+      if (pStyle^.FontFamily<>'')
+        and (Length(pStyle^.FontFamily)=Length(TypefaceName))
+        and (CompareText(pStyle^.FontFamily,TypefaceName)=0) then
+      begin
+        result:=pStyle;
+        Exit;
+      end;
+    pStyle:=iterate(ir);
+  end;
+end;
+
 function GDBTextStyleArray.FindStyle;
 begin
 

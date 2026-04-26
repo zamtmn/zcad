@@ -168,8 +168,10 @@
 	  <Separator/>
 	  <Action Name="ACN_BEDIT"/>
       <SubMenu Name="Block/Device">
+	    <Action Name="ACN_CreateBlockInsert"/>
         <Action Name="ACN_ADDTOOWNER"/>
         <Action Name="ACN_COPYFROMOWNER"/>
+		<Action Name="ACN_ExplodeBlockInsert"/>
         <Separator/>
         <Action Name="ACN_BREPLACE"/>
         <Action Name="ACN_BSCALE"/>

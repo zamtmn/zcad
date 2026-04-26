@@ -87,7 +87,9 @@
       <ZAction Name="ACN_STRETCH" Command="Stretch" Img="stretch" Caption="Stretch" Hint="Stretch primitives"/>
       <ZAction Name="ACN_MIRROR" Command="Mirror" Img="mirror" Caption="Mirror" Hint="Mirror primitives"/>
 	  <ZAction Name="ACN_ALIGN" Command="Align" Img="align" Caption="Align" Hint="Move, rotate, and (optionally) scale selected objects"/>
+	  <ZAction Name="ACN_CreateBlockInsert" Command="CreateBlockInsert" Img="#BC" Caption="Create Block"/>
       <ZAction Name="ACN_BEDIT" Command="BEdit" Img="bedit" Caption="Block editor"/>
+	  <ZAction Name="ACN_ExplodeBlockInsert" Command="ExplodeBlockProxy" Img="#BE" Caption="Explode Block/Proxy"/>
       <ZAction Name="ACN_BREPLACE" Command="BlockReplace" Img="#BR" Caption="Block replace"/>
       <ZAction Name="ACN_BSCALE" Command="BlockScale" Img="#BS" Caption="Block scale"/>
       <ZAction Name="ACN_BROTATE" Command="BlockRotate" Img="#BR" Caption="Block rotate"/>

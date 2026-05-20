@@ -4,6 +4,13 @@
     <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
       <ZTreeNode Caption='Velectrical'>
 	    <ZTreeNode Caption='Plan'>
+		    <ZTreeNode Caption='Risers'>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_BREAK)" Img='DEVICE_EL_VL_CABLE_BREAK_300' Caption='Обрыв'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_UP)" Img='DEVICE_EL_VL_CABLE_UP_300' Caption='Кабель в верх'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_DOWN)" Img='DEVICE_EL_VL_CABLE_DOWN_300' Caption='Кабель в низ'/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMDOWN)" Img='DEVICE_EL_VL_CABLE_FROMDOWN_300' Caption='Кабель c низу'/>
+      	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_FROMUP)" Img='DEVICE_EL_VL_CABLE_FROMUP_300' Caption='Кабель c верху'/>
+			</ZTreeNode>	
 		    <ZTreeNode Caption='Shields'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHR1)" Caption='Щит распределительный' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHR05)" Caption='Щит распределительный 1/2' />
@@ -13,12 +20,16 @@
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHAO05)" Caption='Щит аварийного освещения 1/2' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHU1)" Caption='Щит управления вид 1' />
               <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHU2)" Caption='Щит управления вид 2' />			  
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHUVENT)" Caption='Щит управления вентиляции' />
 			</ZTreeNode>	
 		    <ZTreeNode Caption='ElReceiver'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_MOTOR)" Caption='Двигатель' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_HEATER)" Caption='Электрообогреватель' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_BU)" Caption='Блок управления' />
               <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_ARK)" Caption='Прибор ПКОП' />			  
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_VALVENO)" Caption='Клапан нормально открытый' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_VALVENC)" Caption='Клапан нормально закрытый' />			  
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_CABLEOUT)" Caption='Выпуск кабеля' />			  
 			</ZTreeNode>			
 		    <ZTreeNode Caption='Sockets'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_1P31IN)" Caption='Розетка СП31 1Р' />

@@ -43,7 +43,7 @@ var
 begin
   BITCODE_T2Text(PDWGLayer^.name,DWGContext,name);
   zDebugLn(['{WH}Layer: ',name]);
-  if DWGContext.DWGVer>R_2006 then
+  if DWGContext.DWGVer>R_2007 then
     name:=Tria_Utf8ToAnsi(name);
   player:=ZContext.PDrawing^.LayerTable.MergeItem(name,ZContext.LoadMode);
   if player<>nil then begin
@@ -51,7 +51,7 @@ begin
     player^.color:=PDWGLayer^.color.index;
     player^.lineweight:=PDWGLayer^.linewt;
     //LT:Pointer;
-    player^._on:=(PDWGLayer^.&on<>0);
+    player^._on:=(PDWGLayer^.off=0);
     player^._lock:=(PDWGLayer^.locked<>0);
     player^._print:=(PDWGLayer^.plotflag<>0);
     //desk:AnsiString;
@@ -91,9 +91,9 @@ begin
   PGDBObjLine(pobj)^.CoordInOCS.lBegin.x:=PLine^.start.x;
   PGDBObjLine(pobj)^.CoordInOCS.lBegin.y:=PLine^.start.y;
   PGDBObjLine(pobj)^.CoordInOCS.lBegin.z:=PLine^.start.x;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.x:=PLine^.&end.x;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.y:=PLine^.&end.y;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=PLine^.&end.x;
+  PGDBObjLine(pobj)^.CoordInOCS.lEnd.x:=PLine^.end_.x;
+  PGDBObjLine(pobj)^.CoordInOCS.lEnd.y:=PLine^.end_.y;
+  PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=PLine^.end_.x;
   ZContext.PDrawing^.pObjRoot^.AddMi(pobj);
   //PGDBObjEntity(pobj)^.BuildGeometry(drawing);
   //PGDBObjEntity(pobj)^.formatEntity(drawing,dc);

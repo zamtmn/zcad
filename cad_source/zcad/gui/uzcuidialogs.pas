@@ -189,11 +189,11 @@ begin
           MainParent:=FirstMainParent;
       end;
 
+      TDF:=[tfForceNonNative];
+
       //если одна, Task в центре формы, если несколько или нет вообще - в центре экрана
       if (FirstMainParent=MainParent)and(FirstMainParent<>nil) then
-        TDF:=[tfPositionRelativeToWindow]
-      else
-        TDF:=[];
+        TDF:=TDF+[tfPositionRelativeToWindow];
 
       Task.Flags:=Task.Flags+TDF;
       Task.CommonButtons:=TZCMsgCommonButtons2TCommonButtons.Convert(buttons);

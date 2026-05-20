@@ -235,9 +235,6 @@ begin
   ltd:=tstringlist.Create;
   ltd.Text:=self.Memo1.Text;
   pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
-  LTName:=uzbstrproc.Tria_Utf8ToAnsi(LTName);
-  LTDesk:=uzbstrproc.Tria_Utf8ToAnsi(LTDesk);
-  LTImpl:=uzbstrproc.Tria_Utf8ToAnsi(LTImpl);
 
   if (pdwg^.GetLTypeTable.AddItem(LTName,pltp)<>IsCreated) then begin
     zcUI.TextMessage('Line type name already exist!!!',TMWOShowError);

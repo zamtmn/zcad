@@ -33,36 +33,63 @@ implementation
 {$R *.lfm}
 
 { TLineTypesLoadForm }
-procedure TLineTypesLoadForm.LoadFromFile(filename:string);
-var
-   li:TListItem;
-   ltd:TStringList;
-   pdwg:PTSimpleDrawing;
-   CurrentLine:integer;
-   LTName,LTDesk,LTImpl:String;
-begin
-     ltd:=TStringList.Create;
-     ltd.LoadFromFile(filename);
-     ListView1.BeginUpdate;
-     ListView1.Clear;
-     pdwg:=drawings.GetCurrentDWG;
 
-     CurrentLine:=1;
-     repeat
-     pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
-     LTName:={Tria_AnsiToUtf8}(LTName);
-     LTDesk:={Tria_AnsiToUtf8}(LTDesk);
-     LTImpl:={Tria_AnsiToUtf8}(LTImpl);
-     if (LTName<>'')and(LTImpl<>'')then
-     if (length(LTName)<200)and(length(LTImpl)<200)then
-     begin
-     li:=ListView1.Items.Add;
-     li.Caption:=LTName;
-     li.SubItems.Add(LTDesk);
-     li.SubItems.Add(LTImpl);
-     end;
-     until CurrentLine>ltd.Count;
-     ListView1.EndUpdate;
+procedure TLineTypesLoadForm.LoadFromFile(FileName:string);
+var
+  FileStream:TFileStream;
+  Buffer:TBytes;
+  BytesRead:integer;
+  AEncoding:TEncoding;
+  li:TListItem;
+  ltd:TStringList;
+  pdwg:PTSimpleDrawing;
+  CurrentLine:integer;
+  LTName,LTDesk,LTImpl:string;
+begin
+  AEncoding:=nil;
+  ltd:=TStringList.Create;
+  try
+    FileStream:=TFileStream.Create(FileName,fmOpenRead or fmShareDenyNone);
+    try
+      //пытаемся прочитать BOM
+      SetLength(Buffer,4);
+      BytesRead:=FileStream.Read(Buffer[0],4);
+      if BytesRead>=2 then begin
+        SetLength(Buffer,BytesRead);
+        TEncoding.GetBufferEncoding(Buffer,AEncoding,nil);
+      end;
+
+      //если был BOM становимся за него, если нет выставляем системную кодировку
+      if AEncoding=nil then begin
+        AEncoding:={$IfDef WINDOWS}TEncoding.ANSI{$ElseIf}TEncoding.UTF8{$endif};
+        FileStream.Seek(0,soBeginning);
+      end else
+        FileStream.Seek(Length(AEncoding.GetPreamble),soBeginning);
+
+      ltd.LoadFromStream(FileStream,AEncoding);
+    finally
+      FileStream.Free;
+    end;
+
+    ListView1.BeginUpdate;
+    ListView1.Clear;
+    pdwg:=drawings.GetCurrentDWG;
+
+    CurrentLine:=1;
+    repeat
+      pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
+      if (LTName<>'')and(LTImpl<>'') then
+        if (length(LTName)<200)and(length(LTImpl)<200) then begin
+          li:=ListView1.Items.Add;
+          li.Caption:=LTName;
+          li.SubItems.Add(LTDesk);
+          li.SubItems.Add(LTImpl);
+        end;
+    until CurrentLine>ltd.Count;
+    ListView1.EndUpdate;
+  finally
+    ltd.Free;
+  end;
 end;
 
 procedure TLineTypesLoadForm._onSelect(Sender: TObject; Item: TListItem;
@@ -95,7 +122,7 @@ end;
 
 function TLineTypesLoadForm.run(filename:string):integer;
 begin
-     LoadFromFile(filename);
+     //LoadFromFile(filename);
      FileNameEdit1.FileName:=filename;
      FileNameEdit1.InitialDir:=ExtractFilePath(filename);
      result:=TLCLModalResult2TZCMsgModalResult.Convert(showmodal);

@@ -117,35 +117,50 @@ begin
 end;
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 var
-   pvn,pvnt,pdbv:pvardesk;
-   pdbu:ptunit;
-   pum:PTUnitManager;
-   pentvarext:TVariablesExtender;
+  pvn,pvnt,pdbv:pvardesk;
+  pdbu:ptunit;
+  pum:PTUnitManager;
+  pentvarext:TVariablesExtender;
+
+  procedure setdbvar(nevValue:string);
+  begin
+    if pvnt<>nil then
+      pvnt^.attrib:=pvnt^.attrib or (vda_RO);
+    if (pvn<>nil)and(pvnt<>nil) then begin
+      if nevValue<>'' then
+        pvnt.SetValueFromString(nevValue)
+      else
+        pvnt.SetValueFromString('Error!!!');
+    end else begin
+      if pvnt<>nil then
+        pvnt.SetValueFromString('Error!!!');
+    end;
+  end;
+
 begin
-     pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
-     pvn:=pentvarext.entityunit.FindVariable('DB_link');
-     pvnt:=pentvarext.entityunit.FindVariable('DB_MatName');
-     if pvnt<>nil then
-     pvnt^.attrib:=pvnt^.attrib or (vda_RO);
-     if (pvn<>nil)and(pvnt<>nil) then
-     begin
-          pum:=drawing.GetDWGUnits;
-          if pum<>nil then
-          begin
-            pdbu:=pum^.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
-            if pdbu<>nil then
-            begin
-              pdbv:=pdbu^.FindVariable(pstring(pvn.data.Addr.Instance)^);
-              if pdbv<>nil then
-                               pstring(pvnt.data.Addr.Instance)^:=PDbBaseObject(pdbv.data.Addr.Instance)^.Name
-                           else
-                               pstring(pvnt.data.Addr.Instance)^:='Error!!!';
-              exit;
-            end;
-          end;
-     end;
-     if pvnt<>nil then
-                      pstring(pvnt.data.Addr.Instance)^:='Error!!!'
+  pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
+  pvn:=pentvarext.entityunit.FindVariable('DB_link');
+  pum:=drawing.GetDWGUnits;
+  if pum<>nil then begin
+    pdbu:=pum^.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
+    if (pdbu<>nil)and(pvn<>nil) then
+      pdbv:=pdbu^.FindVariable(pstring(pvn.data.Addr.Instance)^)
+    else
+      pdbv:=nil;
+  end else
+    pdbv:=nil;
+
+  pvnt:=pentvarext.entityunit.FindVariable('DB_MatName');
+  if pdbv<>nil then
+    setdbvar(PDbBaseObject(pdbv.data.Addr.Instance)^.Name)
+  else
+    setdbvar('');
+
+  pvnt:=pentvarext.entityunit.FindVariable('DB_MatNameShort');
+  if pdbv<>nil then
+    setdbvar(PDbBaseObject(pdbv.data.Addr.Instance)^.NameShort)
+  else
+    setdbvar('');
 end;
 function DBaseLink_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;

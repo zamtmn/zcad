@@ -61,7 +61,7 @@ begin
 
       //если был BOM становимся за него, если нет выставляем системную кодировку
       if AEncoding=nil then begin
-        AEncoding:={$IfDef WINDOWS}TEncoding.ANSI{$ElseIf}TEncoding.UTF8{$endif};
+        AEncoding:={$IfDef WINDOWS}TEncoding.ANSI{$Else}TEncoding.UTF8{$endif};
         FileStream.Seek(0,soBeginning);
       end else
         FileStream.Seek(Length(AEncoding.GetPreamble),soBeginning);

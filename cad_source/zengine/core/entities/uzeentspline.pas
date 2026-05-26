@@ -78,6 +78,9 @@ type
     function GetObjType:TObjID;virtual;
   end;
 
+function AllocSpline:PGDBObjSpline;
+function AllocAndInitSpline(owner:PGDBObjGenericWithSubordinated):PGDBObjSpline;
+
 implementation
 
 type

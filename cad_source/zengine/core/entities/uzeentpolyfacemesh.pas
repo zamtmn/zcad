@@ -80,6 +80,7 @@ type
   public
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
       LW:smallint);
+    constructor initnul(owner:PGDBObjGenericWithSubordinated);
     
     // Основные методы сущности
     //procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
@@ -120,6 +121,14 @@ constructor GDBObjPolyFaceMesh.init(own:Pointer;layeraddres:PGDBLayerProp;
   LW:smallint);
 begin
   inherited init(own,layeraddres,lw);
+  FVertexCount := 0;
+  FFaceCount := 0;
+  FFaces.initnul;
+end;
+
+constructor GDBObjPolyFaceMesh.initnul(owner:PGDBObjGenericWithSubordinated);
+begin
+  inherited initnul(owner);
   FVertexCount := 0;
   FFaceCount := 0;
   FFaces.initnul;
@@ -677,7 +686,7 @@ var
   pFace:PTempFaceIndices;
 begin
   //programlog.LogOutFormatStr('uzeentpolyfacemesh: InitFacesFromTempFaces START Count=%d',[Count],LM_Info);
-  FFaces.initnul; // Инициализация вектора перед использованием
+  FFaces.Clear;
   FFaceCount:=Count;
   for i:=0 to Count-1 do begin
     pFace:=PTempFaceIndices(PtrUInt(TempFaces)+PtrUInt(i*SizeOf(TTempFaceIndices)));

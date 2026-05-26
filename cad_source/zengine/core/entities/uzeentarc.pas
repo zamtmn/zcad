@@ -93,6 +93,8 @@ type
     function IsStagedFormatEntity:boolean;virtual;
   end;
 
+function AllocAndInitArc(owner:PGDBObjGenericWithSubordinated):PGDBObjArc;
+
 implementation
 
 function GDBObjARC.IsStagedFormatEntity:boolean;

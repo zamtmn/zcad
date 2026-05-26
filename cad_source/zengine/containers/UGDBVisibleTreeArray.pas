@@ -32,6 +32,7 @@ GDBObjEntityTreeArray= object(GDBObjEntityOpenArray)
                             procedure done;virtual;
                             procedure free;virtual;
                             function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
+                            function AddPEntityToArrayOnly(var entity:GDBObjEntity):TArrayIndex;virtual;
                             procedure RemoveFromTree(p:PGDBObjEntity);
 
                       end;
@@ -65,6 +66,12 @@ begin
   ObjTree.AddObjectToNodeTree(PGDBObjEntity(p^));}
   //result:=inherited PushBackPointerToEntity({ppointer(p)^}@entity);
   //{pGDBObjEntity(p^)}entity.bp.ListPos.SelfIndex:=result;
+end;
+function GDBObjEntityTreeArray.AddPEntityToArrayOnly;
+begin
+  result:=inherited AddPEntity(entity);
+  entity.bp.TreePos.Owner:=nil;
+  entity.bp.TreePos.SelfIndexInNode:=-1;
 end;
 constructor GDBObjEntityTreeArray.init;
 begin

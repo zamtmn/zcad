@@ -86,6 +86,7 @@ type
       var drawing:TDrawingDef);virtual;
     //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
     procedure AddMi(var pobj:PGDBObjSubordinated);virtual;
+    procedure AddMiToArrayOnly(var pobj:PGDBObjSubordinated);virtual;
     procedure ImEdited(pobj:PGDBObjSubordinated;
       pobjinarray:integer;var drawing:TDrawingDef);virtual;
     function ReturnLastOnMouse(InSubEntry:boolean):PGDBObjEntity;
@@ -431,6 +432,14 @@ end;
 procedure GDBObjGenericSubEntry.AddMi;
 begin
   ObjArray.AddPEntity(pGDBObjEntity(pobj)^);
+  pGDBObjEntity(pobj)^.bp.ListPos.Owner:=@self;
+  if assigned(pGDBObjEntity(pobj)^.EntExtensions) then
+    pGDBObjEntity(pobj)^.EntExtensions.RunSetRoot(pobj,@self);
+end;
+
+procedure GDBObjGenericSubEntry.AddMiToArrayOnly;
+begin
+  ObjArray.AddPEntityToArrayOnly(pGDBObjEntity(pobj)^);
   pGDBObjEntity(pobj)^.bp.ListPos.Owner:=@self;
   if assigned(pGDBObjEntity(pobj)^.EntExtensions) then
     pGDBObjEntity(pobj)^.EntExtensions.RunSetRoot(pobj,@self);

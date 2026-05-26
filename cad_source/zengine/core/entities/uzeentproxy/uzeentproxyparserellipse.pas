@@ -62,7 +62,7 @@ uses
   uzegeometry,
   UGDBPoint3DArray,
   gzctnrVectorTypes,
-  uzcLog;
+  uzeentproxylog;
 
 const
   { OpCode эллиптической дуги в формате AcGiWorldDraw }
@@ -222,18 +222,18 @@ begin
   StartParam := Stream.ReadDouble;
   EndParam := Stream.ReadDouble;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparserellipse: Center=(%.4f,%.4f,%.4f) Ratio=%.4f' +
     ' Start=%.4f End=%.4f',
     [Center.x, Center.y, Center.z, MinorAxisRatio,
-     StartParam, EndParam], LM_Info);
+     StartParam, EndParam]);
 
   { Соотношение осей должно быть положительным }
   if MinorAxisRatio < ELLIPSE_MIN_AXIS_RATIO then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparserellipse: MinorAxisRatio=%.9f is invalid, skipping',
-      [MinorAxisRatio], LM_Info);
+      [MinorAxisRatio]);
     Exit;
   end;
 
@@ -273,11 +273,11 @@ begin
 
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparserellipse: OK, %d vertices, BBox=(%.3f,%.3f)-(%.3f,%.3f)',
     [HandlerResult.Vertices.Count,
      HandlerResult.BBoxMin.x, HandlerResult.BBoxMin.y,
-     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y], LM_Info);
+     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y]);
 end;
 
 { --- Построитель подпримитивов --- }

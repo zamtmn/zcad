@@ -73,6 +73,14 @@ The script will do the following:
 If everything went fine, we have a properly filled folder `zcad\cad`, including a newly created executable binary `zcad\cad\bin\i386-win32\zcad.exe`
 In the future, you can simply open the file `zcad\cad_source\zcad.lpi` in Lazarus and watch-collect the sources as usual in the IDE
 
+### LINUX ###  
+Linux installation at 3 steps:  
+ 1. `cd ./zcad` - go to zcad directory  
+ 2. `git pull&&git submodule update --init --recursive` - pull all dependencies  
+ 3. `sudo make` - make with sudo (you can chown user later)  
+Inside cad/bin directory run zcad executy.  
+
+
 PS.
 Lazarus, FPC and ZCAD are developing projects, information is fast outdated and there are nuances. In particular, at the moment due to the FPC bug
 https://gitlab.com/freepascal.org/fpc/source/-/issues/39387 in the IDE only a complete rebuild of the code works, i.e. in Lazarus if you just click

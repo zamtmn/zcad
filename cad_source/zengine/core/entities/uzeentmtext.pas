@@ -71,6 +71,7 @@ procedure FormatMtext(pfont:pgdbfont;Width,size,wfactor:double;
 function GetLinesH(linespace,size:double;var Lines:XYZWStringArray):double;
 function GetLinesW(var Lines:XYZWStringArray):double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:double):double;
+function AllocAndInitMText(owner:PGDBObjGenericWithSubordinated):PGDBObjMText;
 
 implementation
 

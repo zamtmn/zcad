@@ -74,7 +74,7 @@ type
 
 const
   jt:array[0..3,0..4] of TTextJustify=
-    ((jsbl,jsbc,jsbr,jsbl,jsmc),(jsbtl,jsbtc,jsbtr,jsbl,jsbl),
+    ((jsbl,jsbtc,jsbr,jsbl,jsmc),(jsbtl,jsbtc,jsbtr,jsbl,jsbl),
     (jsml,jsmc,jsmr,jsbl,jsbl),(jstl,jstc,jstr,jsbl,jsbl));
   j2b:array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
   b2j:array[1..12] of TTextJustify=
@@ -82,6 +82,8 @@ const
 
 var
   GDBObjTextDXFFeatures:TDXFEntIODataManager;
+
+function AllocAndInitText(owner:PGDBObjGenericWithSubordinated):PGDBObjText;
 
 implementation
 
@@ -145,6 +147,17 @@ begin
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
+    // Issue #1194: DWG-loaded TEXT entities (in particular inside anonymous
+    // block defs) can reach FormatEntity with TXTStyle=nil if their text
+    // style ref didn't resolve during BeginDWGImport. The DXF loader already
+    // has the same fallback in LoadFromDXF; mirror it here so any caller is
+    // protected against a nil dereference at uzeenttext.pas:247.
+    if TXTStyle=nil then
+      TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',False);
+    if (TXTStyle<>nil) and (TXTStyle^.pfont=nil) then
+      TXTStyle^.pfont:=pbasefont;
+    if (TXTStyle=nil) or (TXTStyle^.pfont=nil) or (TXTStyle^.pfont^.font=nil) then
+      Exit;
     if template='' then
       template:=content;
     content:=textformat(template,SPFSources.GetFull,@self);
@@ -240,6 +253,12 @@ begin
   obj_height:=1;
   obj_width:=0;
   obj_y:=0;
+  // Issue #1194: bail out if the text style chain is incomplete. FormatEntity
+  // already resolves a Standard-style fallback, but CalcGabarit is virtual and
+  // can be reached from other paths (extensions, recovery, tests) before that
+  // fallback runs.
+  if (TXTStyle=nil) or (TXTStyle^.pfont=nil) or (TXTStyle^.pfont^.font=nil) then
+    Exit;
   i:=1;
   while i<=length(content) do begin
     sym:=getsymbol_fromGDBText(content,i,l,TXTStyle^.pfont^.font.IsUnicode);

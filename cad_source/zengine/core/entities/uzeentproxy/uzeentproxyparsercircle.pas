@@ -65,7 +65,7 @@ uses
   uzegeometrytypes,
   uzegeometry,
   uzeconsts,
-  uzcLog;
+  uzeentproxylog;
 
 const
   { OpCode круга в формате AcGiWorldDraw }
@@ -148,16 +148,16 @@ begin
   Radius := Stream.ReadDouble;
   Normal := Stream.ReadVector;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsercircle: Center=(%.4f,%.4f,%.4f) Radius=%.4f',
-    [Center.x, Center.y, Center.z, Radius], LM_Info);
+    [Center.x, Center.y, Center.z, Radius]);
 
   { Радиус должен быть положительным }
   if Radius <= 0 then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparsercircle: Radius=%.4f is invalid, skipping',
-      [Radius], LM_Info);
+      [Radius]);
     Exit;
   end;
 
@@ -178,10 +178,10 @@ begin
 
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsercircle: OK, CircleItem filled, BBox=(%.3f,%.3f)-(%.3f,%.3f)',
     [HandlerResult.BBoxMin.x, HandlerResult.BBoxMin.y,
-     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y], LM_Info);
+     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y]);
 end;
 
 { --- Построитель подпримитивов --- }
@@ -236,10 +236,10 @@ begin
 
   pCircle^.FormatEntity(Drawing^, DC^);
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsercircle: BuildCircleSubEntities CIRCLE at (%.3f,%.3f,%.3f) R=%.4f',
     [LocalCenter.x, LocalCenter.y, LocalCenter.z,
-     HandlerResult.CircleItem.Radius], LM_Info);
+     HandlerResult.CircleItem.Radius]);
 end;
 
 initialization

@@ -83,8 +83,7 @@ function CrossProduct(const V1, V2: TzePoint3d): TzePoint3d; inline;
 implementation
 
 uses
-  Math,
-  uzcLog;
+  Math;
   //uzeentproxyparser;
 
 const

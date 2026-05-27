@@ -111,7 +111,7 @@ uses
   uzeconsts,
   uzeentabstracttext,
   UGDBPoint3DArray,
-  uzcLog;
+  uzeentproxylog;
 
 const
   { OpCode ANSI-текста }
@@ -206,9 +206,9 @@ begin
 
   Text := Stream.ReadString(TEncoding.ANSI);
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsertext: Text1 Insert=(%.3f,%.3f,%.3f) H=%.3f Text="%s"',
-    [Insert.x, Insert.y, Insert.z, Height, Text], LM_Info);
+    [Insert.x, Insert.y, Insert.z, Height, Text]);
 
   if (Height <= 0) or (Text = '') then
     Exit;
@@ -241,9 +241,9 @@ begin
 
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsertext: Text1 OK, angle=%.3f rad, TextItem filled',
-    [Angle], LM_Info);
+    [Angle]);
 end;
 
 { Читает расширенный Unicode-текст формата OpCode=38 (UnicodeText2).
@@ -318,11 +318,10 @@ begin
   FontName := Stream.ReadPaddedUnicodeString;
   BigFont := Stream.ReadPaddedUnicodeString;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsertext: UnicodeText2 Insert=(%.3f,%.3f,%.3f) H=%.3f' +
     ' Text="%s" TypeFace="%s" Font="%s" BigFont="%s"',
-    [Insert.x, Insert.y, Insert.z, Height, Text, TypeFace, FontName, BigFont],
-    LM_Info);
+    [Insert.x, Insert.y, Insert.z, Height, Text, TypeFace, FontName, BigFont]);
 
   if (Height <= 0) or (Text = '') then
     Exit;
@@ -355,9 +354,9 @@ begin
 
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsertext: UnicodeText2 OK, angle=%.3f rad, TextItem filled',
-    [Angle], LM_Info);
+    [Angle]);
 end;
 
 { Читает расширенный текст формата OpCode=11 (Text2).
@@ -427,11 +426,10 @@ begin
     Stream.UnicodeText := SavedUnicodeText;
   end;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsertext: Text2 Insert=(%.3f,%.3f,%.3f) H=%.3f' +
     ' Text="%s" Font="%s" BigFont="%s"',
-    [Insert.x, Insert.y, Insert.z, Height, Text, FontName, BigFont],
-    LM_Info);
+    [Insert.x, Insert.y, Insert.z, Height, Text, FontName, BigFont]);
 
   if (Height <= 0) or (Text = '') then
     Exit;
@@ -465,9 +463,9 @@ begin
 
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsertext: Text2 OK, angle=%.3f rad, TextItem filled',
-    [Angle], LM_Info);
+    [Angle]);
 end;
 
 { --- Построитель подпримитивов --- }
@@ -530,10 +528,10 @@ begin
     StyleName, FontName, TypeFace, tp, False);
 
   if Result <> nil then
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparsertext: Created MtXpl style "%s"'
       + ' (FontFile="%s", TypeFace="%s")',
-      [StyleName, FontName, TypeFace], LM_Info);
+      [StyleName, FontName, TypeFace]);
 end;
 
 { Подбирает стиль текста для TextItem.
@@ -615,9 +613,9 @@ begin
     HandlerResult.TextItem.TypeFace);
   if TxtStyle = nil then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparsertext: BuildTextSubEntities no style, skipping',
-      [], LM_Info);
+      []);
     Exit;
   end;
 
@@ -662,12 +660,12 @@ begin
 
   pText^.FormatEntity(Drawing^, DC^);
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsertext: BuildTextSubEntities TEXT "%s" at (%.3f,%.3f)' +
     ' typeface="%s" font="%s" style="%s"',
     [HandlerResult.TextItem.Text, InsertPt.x, InsertPt.y,
      HandlerResult.TextItem.TypeFace,
-     HandlerResult.TextItem.FontName, TxtStyle^.Name], LM_Info);
+     HandlerResult.TextItem.FontName, TxtStyle^.Name]);
 end;
 
 { === Реализация MTEXT (закомментирована, сохранена для истории) =============
@@ -703,9 +701,9 @@ begin
     HandlerResult.TextItem.TypeFace);
   if TxtStyle = nil then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparsertext: BuildTextSubEntitiesMText no style, skipping',
-      [], LM_Info);
+      []);
     Exit;
   end;
 
@@ -745,12 +743,12 @@ begin
 
   pMText^.FormatEntity(Drawing^, DC^);
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsertext: BuildTextSubEntitiesMText "%s" at (%.3f,%.3f)' +
     ' typeface="%s" font="%s" style="%s"',
     [HandlerResult.TextItem.Text, InsertPt.x, InsertPt.y,
      HandlerResult.TextItem.TypeFace,
-     HandlerResult.TextItem.FontName, TxtStyle^.Name], LM_Info);
+     HandlerResult.TextItem.FontName, TxtStyle^.Name]);
 end;
 ============================================================================== }
 

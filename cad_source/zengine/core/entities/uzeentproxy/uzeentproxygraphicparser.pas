@@ -190,7 +190,7 @@ procedure FreeParseResult(var ParseResult: TProxyGraphicParseResult);
 implementation
 
 uses
-  uzcLog;
+  uzeentproxylog;
 
 const
   { Системные OpCode, обрабатываемые напрямую в этом модуле }
@@ -269,7 +269,7 @@ begin
   FResult.Primitives[Idx].Thickness := FState.Thickness;
   FResult.Primitives[Idx].TrueColor := FState.TrueColor;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxygraphicparser: AppendPrimitive[%d] OpCode=%d' +
     ' vertices=%d closed=%s filled=%s hasText=%s' +
     ' lineweight=%d color=%d trueColor=%d layer="%s" linetype="%s"' +
@@ -281,7 +281,7 @@ begin
      BoolToStr(HandlerResult.HasTextItem, True),
      FState.LineWeight, FState.Color, FState.TrueColor,
      FState.Layer, FState.Linetype,
-     FState.LtScale, FState.Thickness], LM_Info);
+     FState.LtScale, FState.Thickness]);
 end;
 
 { Расширяет суммарный BBox данными из результата обработчика }
@@ -306,16 +306,16 @@ begin
   try
     ChunkSize := FStream.ReadInt32;
     CommandCount := FStream.ReadInt32;
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: Header ChunkSize=%d CommandCount=%d',
-      [ChunkSize, CommandCount], LM_Info);
+      [ChunkSize, CommandCount]);
     Result := (ChunkSize > 0)
       and (CommandCount > 0)
       and (CommandCount < MAX_COMMAND_COUNT);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
-        'uzeentproxygraphicparser: ParseHeader error: %s', [E.Message], LM_Info);
+      ProxyLogInfoFormatStr(
+        'uzeentproxygraphicparser: ParseHeader error: %s', [E.Message]);
   end;
 end;
 
@@ -327,8 +327,8 @@ begin
   DataSize := CommandSize - COMMAND_HEADER_SIZE;
   if DataSize > 0 then
   begin
-    programlog.LogOutFormatStr(
-      'uzeentproxygraphicparser: SkipDataBytes %d bytes', [DataSize], LM_Info);
+    ProxyLogInfoFormatStr(
+      'uzeentproxygraphicparser: SkipDataBytes %d bytes', [DataSize]);
     FStream.Skip(DataSize);
   end;
 end;
@@ -341,17 +341,17 @@ begin
   try
     MinPt := FStream.ReadVertex;
     MaxPt := FStream.ReadVertex;
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: Extents Min=(%.3f,%.3f,%.3f) Max=(%.3f,%.3f,%.3f)',
-      [MinPt.x, MinPt.y, MinPt.z, MaxPt.x, MaxPt.y, MaxPt.z], LM_Info);
+      [MinPt.x, MinPt.y, MinPt.z, MaxPt.x, MaxPt.y, MaxPt.z]);
     { Extents из файла используем только как начальный BBox,
       если реальные примитивы ещё не дали своего }
     if not FResult.BBoxLoaded then
       MergeBBox(MinPt, MaxPt, FResult.BBoxMin, FResult.BBoxMax, FResult.BBoxLoaded);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
-        'uzeentproxygraphicparser: HandleExtents error: %s', [E.Message], LM_Info);
+      ProxyLogInfoFormatStr(
+        'uzeentproxygraphicparser: HandleExtents error: %s', [E.Message]);
   end;
 end;
 
@@ -363,12 +363,12 @@ begin
   try
     Color := FStream.ReadInt32;
     FState.Color := Color;
-    programlog.LogOutFormatStr(
-      'uzeentproxygraphicparser: SetColor value=%d', [Color], LM_Info);
+    ProxyLogInfoFormatStr(
+      'uzeentproxygraphicparser: SetColor value=%d', [Color]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
-        'uzeentproxygraphicparser: HandleSetColor error: %s', [E.Message], LM_Info);
+      ProxyLogInfoFormatStr(
+        'uzeentproxygraphicparser: HandleSetColor error: %s', [E.Message]);
   end;
 end;
 
@@ -380,12 +380,12 @@ begin
   try
     LayerIndex := FStream.ReadInt32;
     FState.Layer := IntToStr(LayerIndex);
-    programlog.LogOutFormatStr(
-      'uzeentproxygraphicparser: SetLayer index=%d', [LayerIndex], LM_Info);
+    ProxyLogInfoFormatStr(
+      'uzeentproxygraphicparser: SetLayer index=%d', [LayerIndex]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
-        'uzeentproxygraphicparser: HandleSetLayer error: %s', [E.Message], LM_Info);
+      ProxyLogInfoFormatStr(
+        'uzeentproxygraphicparser: HandleSetLayer error: %s', [E.Message]);
   end;
 end;
 
@@ -422,19 +422,18 @@ begin
       SetLength(FMatrixStack, FMatrixStackDepth);
     FMatrixStack[FMatrixStackDepth - 1] := NewMatrix;
 
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: PushMatrix depth=%d ' +
       'translation=(%.3f, %.3f, %.3f)',
       [FMatrixStackDepth,
        NewMatrix.mtr.v[3].v[0],
        NewMatrix.mtr.v[3].v[1],
-       NewMatrix.mtr.v[3].v[2]],
-      LM_Info);
+       NewMatrix.mtr.v[3].v[2]]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: HandlePushMatrix error: %s',
-        [E.Message], LM_Info);
+        [E.Message]);
   end;
 end;
 
@@ -444,14 +443,14 @@ begin
   if FMatrixStackDepth > 0 then
   begin
     Dec(FMatrixStackDepth);
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: PopMatrix depth=%d',
-      [FMatrixStackDepth], LM_Info);
+      [FMatrixStackDepth]);
   end
   else
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: PopMatrix on empty stack',
-      [], LM_Info);
+      []);
 end;
 
 { Проверяет, есть ли активная (не единичная) матрица в стеке }
@@ -549,14 +548,14 @@ begin
   try
     LinetypeIndex := FStream.ReadInt32;
     FState.Linetype := IntToStr(LinetypeIndex);
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: SetLinetype index=%d',
-      [LinetypeIndex], LM_Info);
+      [LinetypeIndex]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: HandleSetLinetype error: %s',
-        [E.Message], LM_Info);
+        [E.Message]);
   end;
 end;
 
@@ -567,9 +566,9 @@ begin
     FStream.ReadInt32;
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: HandleSetMarker error: %s',
-        [E.Message], LM_Info);
+        [E.Message]);
   end;
 end;
 
@@ -583,14 +582,14 @@ begin
   try
     FillValue := FStream.ReadInt32;
     FFillActive := (FillValue = 1);
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: SetFill value=%d active=%s',
-      [FillValue, BoolToStr(FFillActive, True)], LM_Info);
+      [FillValue, BoolToStr(FFillActive, True)]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: HandleSetFill error: %s',
-        [E.Message], LM_Info);
+        [E.Message]);
   end;
 end;
 
@@ -602,14 +601,14 @@ begin
   try
     TrueColor := FStream.ReadInt32;
     FState.TrueColor := TrueColor;
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: SetTrueColor value=%d',
-      [TrueColor], LM_Info);
+      [TrueColor]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: HandleSetTrueColor error: %s',
-        [E.Message], LM_Info);
+        [E.Message]);
   end;
 end;
 
@@ -621,14 +620,14 @@ begin
   try
     LineWeight := FStream.ReadInt32;
     FState.LineWeight := LineWeight;
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: SetLineweight value=%d',
-      [LineWeight], LM_Info);
+      [LineWeight]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: HandleSetLineweight error: %s',
-        [E.Message], LM_Info);
+        [E.Message]);
   end;
 end;
 
@@ -640,14 +639,14 @@ begin
   try
     LtScale := FStream.ReadDouble;
     FState.LtScale := LtScale;
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: SetLtScale value=%.3f',
-      [LtScale], LM_Info);
+      [LtScale]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: HandleSetLtScale error: %s',
-        [E.Message], LM_Info);
+        [E.Message]);
   end;
 end;
 
@@ -659,14 +658,14 @@ begin
   try
     Thickness := FStream.ReadDouble;
     FState.Thickness := Thickness;
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: SetThickness value=%.3f',
-      [Thickness], LM_Info);
+      [Thickness]);
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: HandleSetThickness error: %s',
-        [E.Message], LM_Info);
+        [E.Message]);
   end;
 end;
 
@@ -706,9 +705,9 @@ begin
     заново для payload каждой команды. }
   FStream.PaddingBase := FStream.Index;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxygraphicparser: Command OpCode=%d Size=%d',
-    [OpCode, CommandSize], LM_Info);
+    [OpCode, CommandSize]);
 
   { Слишком маленький размер команды — пропускаем }
   if CommandSize < COMMAND_HEADER_SIZE then
@@ -791,9 +790,9 @@ begin
         end
         else
         begin
-          programlog.LogOutFormatStr(
+          ProxyLogInfoFormatStr(
             'uzeentproxygraphicparser: Handler for OpCode=%d returned invalid result',
-            [OpCode], LM_Info);
+            [OpCode]);
           { Handler вернул invalid — на всякий случай освобождаем вершины,
             если они были инициализированы. }
           if HandlerResult.HasVertices then
@@ -803,9 +802,9 @@ begin
       end
       else
       begin
-        programlog.LogOutFormatStr(
+        ProxyLogInfoFormatStr(
           'uzeentproxygraphicparser: OpCode=%d not registered, skipping %d bytes',
-          [OpCode, CommandSize - COMMAND_HEADER_SIZE], LM_Info);
+          [OpCode, CommandSize - COMMAND_HEADER_SIZE]);
         SkipDataBytes(CommandSize);
       end;
     end;
@@ -817,9 +816,9 @@ begin
     BytesRemaining := ExpectedEnd - FStream.Index;
     if BytesRemaining > 0 then
     begin
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: Skipping %d trailing bytes for OpCode=%d',
-        [BytesRemaining, OpCode], LM_Info);
+        [BytesRemaining, OpCode]);
       FStream.Skip(BytesRemaining);
     end
     else if BytesRemaining < 0 then
@@ -829,9 +828,9 @@ begin
         команда будет прочитана с неверной позиции. Пропускать назад
         TProxyByteStream не умеет — это поможет лишь обнаружить
         проблему в логах. }
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxygraphicparser: WARNING OpCode=%d overran by %d bytes',
-        [OpCode, -BytesRemaining], LM_Info);
+        [OpCode, -BytesRemaining]);
     end;
   end;
 end;
@@ -845,15 +844,15 @@ begin
   FResult.BBoxLoaded := False;
   FResult.PrimitiveCount := 0;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxygraphicparser: Parse START (registered handlers: %d)',
-    [TProxyOpCodeDispatcher.GetRegisteredCount], LM_Info);
+    [TProxyOpCodeDispatcher.GetRegisteredCount]);
 
   try
     if not ParseHeader(CommandCount) then
     begin
-      programlog.LogOutFormatStr(
-        'uzeentproxygraphicparser: ParseHeader failed', [], LM_Info);
+      ProxyLogInfoFormatStr(
+        'uzeentproxygraphicparser: ParseHeader failed', []);
       Result := FResult;
       Exit;
     end;
@@ -880,23 +879,23 @@ begin
             выхода — продолжаем со следующей команды по тому же
             принципу: ищем границу команды и сбрасываем флаги
             заливки/состояния как при штатной обработке. }
-          programlog.LogOutFormatStr(
+          ProxyLogInfoFormatStr(
             'uzeentproxygraphicparser: Command %d exception (continuing): %s',
-            [I, E.Message], LM_Info);
+            [I, E.Message]);
           FFillActive := False;
         end;
       end;
     end;
 
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxygraphicparser: Parse DONE: primitives=%d bbox=%s',
       [FResult.PrimitiveCount,
-       BoolToStr(FResult.BBoxLoaded, True)], LM_Info);
+       BoolToStr(FResult.BBoxLoaded, True)]);
 
   except
     on E: Exception do
-      programlog.LogOutFormatStr(
-        'uzeentproxygraphicparser: Parse exception: %s', [E.Message], LM_Info);
+      ProxyLogInfoFormatStr(
+        'uzeentproxygraphicparser: Parse exception: %s', [E.Message]);
   end;
 
   Result := FResult;

@@ -58,7 +58,7 @@ uses
   uzeentproxysubentitybuilder,
   uzegeometrytypes,
   UGDBPoint3DArray,
-  uzcLog;
+  uzeentproxylog;
 
 const
   { OpCode оболочки в формате AcGiWorldDraw }
@@ -115,16 +115,16 @@ begin
   { Читаем количество вершин }
   VertexCount := Stream.ReadInt32;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsershell: VertexCount=%d',
-    [VertexCount], LM_Info);
+    [VertexCount]);
 
   if (VertexCount < SHELL_MIN_VERTEX_COUNT)
     or (VertexCount > SHELL_MAX_VERTEX_COUNT) then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparsershell: VertexCount=%d is invalid, skipping',
-      [VertexCount], LM_Info);
+      [VertexCount]);
     Exit;
   end;
 
@@ -143,16 +143,16 @@ begin
   { Читаем количество записей в списке граней }
   FaceEntryCount := Stream.ReadInt32;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsershell: FaceEntryCount=%d',
-    [FaceEntryCount], LM_Info);
+    [FaceEntryCount]);
 
   if (FaceEntryCount < 0)
     or (FaceEntryCount > SHELL_MAX_FACE_ENTRY_COUNT) then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparsershell: FaceEntryCount=%d is invalid',
-      [FaceEntryCount], LM_Info);
+      [FaceEntryCount]);
     Exit;
   end;
 
@@ -220,9 +220,9 @@ begin
   HandlerResult.HasBBox := BBoxInitialized;
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparsershell: OK, %d source vertices, %d output vertices',
-    [VertexCount, HandlerResult.Vertices.Count], LM_Info);
+    [VertexCount, HandlerResult.Vertices.Count]);
 end;
 
 { --- Построитель подпримитивов --- }

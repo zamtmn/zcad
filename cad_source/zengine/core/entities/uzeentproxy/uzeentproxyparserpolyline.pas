@@ -55,7 +55,7 @@ uses
   uzeentproxysubentitybuilder,
   uzegeometrytypes,
   UGDBPoint3DArray,
-  uzcLog;
+  uzeentproxylog;
 
 const
   { OpCode полилинии (и линии как частного случая) в формате AcGiWorldDraw }
@@ -109,16 +109,16 @@ begin
   { Читаем количество вершин }
   VertexCount := Stream.ReadInt32;
 
-  programlog.LogOutFormatStr(
-    'uzeentproxyparserpolyline: VertexCount=%d', [VertexCount], LM_Info);
+  ProxyLogInfoFormatStr(
+    'uzeentproxyparserpolyline: VertexCount=%d', [VertexCount]);
 
   { Проверяем корректность количества вершин }
   if (VertexCount < POLYLINE_MIN_VERTEX_COUNT)
     or (VertexCount > POLYLINE_MAX_VERTEX_COUNT) then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparserpolyline: VertexCount=%d is invalid, skipping',
-      [VertexCount], LM_Info);
+      [VertexCount]);
     Exit;
   end;
 
@@ -138,11 +138,11 @@ begin
   HandlerResult.HasBBox := BBoxInitialized;
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparserpolyline: OK, %d vertices, BBox=(%.3f,%.3f)-(%.3f,%.3f)',
     [HandlerResult.Vertices.Count,
      HandlerResult.BBoxMin.x, HandlerResult.BBoxMin.y,
-     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y], LM_Info);
+     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y]);
 end;
 
 { --- Построитель подпримитивов --- }

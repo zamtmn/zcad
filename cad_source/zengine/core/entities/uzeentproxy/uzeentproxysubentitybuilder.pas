@@ -145,9 +145,7 @@ uses
   uzestyleslinetypes,
   uzepalette,
   uzeconsts,
-  gzctnrVectorTypes,
-  uzbLogIntf,
-  uzclog;
+  gzctnrVectorTypes;
 
 { --- Локальные утилиты --- }
 

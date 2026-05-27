@@ -27,7 +27,7 @@ uses
   uzegeometry,uzestyleslayers,uzeentity,UGDBPoint3DArray,UGDBPolyLine2DArray,
   uzctnrVectorBytesStream,uzeTypes,uzeentwithlocalcs,uzeconsts,Math,
   gzctnrVectorTypes,uzegeometrytypes,uzeffdxfsupport,SysUtils,
-  UGDBSelectedObjArray,uzMVReader,uzCtnrVectorpBaseEntity;
+  UGDBSelectedObjArray,uzMVReader,uzCtnrVectorpBaseEntity,uzclog;
 
 type
 
@@ -99,6 +99,8 @@ type
     class function CreateInstance:PGDBObjLWPolyline;static;
     function GetObjType:TObjID;virtual;
   end;
+
+function AllocAndInitLWpolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjLWPolyline;
 
 implementation
 
@@ -516,6 +518,7 @@ var
 begin
   hlGDBWord:=0;
   numv:=0;
+      //programlog.LogOutStr('GDBObjLWpolyline: Внутри LoadFromDXF', LM_Info);
   globalwidth:=0;
   widthload:=False;
   closed:=False;
@@ -656,6 +659,7 @@ begin
   createpoint;
   CalcWidthSegment;
   Square:=CalcSquare;
+    //programlog.LogOutStr('GDBObjLWpolyline: Внутри formatEntity', LM_Info);
   calcbb(dc);
   if assigned(EntExtensions) then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

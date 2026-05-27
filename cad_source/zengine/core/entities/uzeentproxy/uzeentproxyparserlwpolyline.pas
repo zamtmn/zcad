@@ -70,7 +70,7 @@ uses
   uzeentproxysubentitybuilder,
   uzegeometrytypes,
   UGDBPoint3DArray,
-  uzcLog;
+  uzeentproxylog;
 
 const
   { OpCode 2D полилинии в формате AcGiWorldDraw }
@@ -160,19 +160,19 @@ begin
     ровно (4 + NumDataBytes) байт основного потока. }
   if Stream.RemainingBytes < 4 then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparserlwpolyline: too few bytes for length prefix',
-      [], LM_Info);
+      []);
     Exit;
   end;
 
   NumDataBytes := Stream.ReadInt32;
   if (NumDataBytes <= 0) or (NumDataBytes > Stream.RemainingBytes) then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparserlwpolyline: NumDataBytes=%d does not fit in stream ' +
       '(remaining=%d), skipping',
-      [NumDataBytes, Stream.RemainingBytes], LM_Info);
+      [NumDataBytes, Stream.RemainingBytes]);
     Exit;
   end;
   SetLength(Payload, NumDataBytes);
@@ -184,9 +184,9 @@ begin
     try
       Flag := Bits.ReadBitShort;
 
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxyparserlwpolyline: bitpacked numDataBytes=%d flag=0x%x',
-        [NumDataBytes, Flag], LM_Info);
+        [NumDataBytes, Flag]);
 
       if (Flag and LWPLINE_FLAG_CONST_WIDTH) <> 0 then
         ConstWidth := Bits.ReadBitDouble;
@@ -207,9 +207,9 @@ begin
       if (NumPoints < LWPOLYLINE_MIN_VERTEX_COUNT)
         or (NumPoints > LWPOLYLINE_MAX_VERTEX_COUNT) then
       begin
-        programlog.LogOutFormatStr(
+        ProxyLogInfoFormatStr(
           'uzeentproxyparserlwpolyline: NumPoints=%d invalid, skipping',
-          [NumPoints], LM_Info);
+          [NumPoints]);
         Exit;
       end;
 
@@ -225,11 +225,11 @@ begin
       if (Flag and LWPLINE_FLAG_HAS_WIDTHS) <> 0 then
         NumWidths := Bits.ReadBitLong;
 
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxyparserlwpolyline: numPoints=%d closed=%s bulges=%d ' +
         'vids=%d widths=%d',
         [NumPoints, BoolToStr(IsClosed, True), NumBulges,
-         NumVertexIds, NumWidths], LM_Info);
+         NumVertexIds, NumWidths]);
 
       HandlerResult.Vertices.init(NumPoints);
       BBoxInitialized := False;
@@ -268,18 +268,18 @@ begin
       HandlerResult.HasBBox := BBoxInitialized;
       HandlerResult.Valid := True;
 
-      programlog.LogOutFormatStr(
+      ProxyLogInfoFormatStr(
         'uzeentproxyparserlwpolyline: OK, %d vertices, closed=%s, ' +
         'BBox=(%.3f,%.3f)-(%.3f,%.3f)',
         [HandlerResult.Vertices.Count, BoolToStr(IsClosed, True),
          HandlerResult.BBoxMin.x, HandlerResult.BBoxMin.y,
-         HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y], LM_Info);
+         HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y]);
     except
       on E: Exception do
       begin
-        programlog.LogOutFormatStr(
+        ProxyLogInfoFormatStr(
           'uzeentproxyparserlwpolyline: bit-stream parse error: %s',
-          [E.Message], LM_Info);
+          [E.Message]);
         if HandlerResult.HasVertices then
         begin
           HandlerResult.Vertices.done;

@@ -313,7 +313,7 @@ procedure MergeBBox(
 implementation
 
 uses
-  uzcLog;
+  uzeentproxylog;
 
 { === Вспомогательные функции === }
 
@@ -385,9 +385,9 @@ begin
   { Проверяем диапазон OpCode }
   if (OpCode < 0) or (OpCode > PROXY_MAX_OPCODE) then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxymanager: RegisterOpCode - OpCode %d out of range [0..%d]',
-      [OpCode, PROXY_MAX_OPCODE], LM_Info);
+      [OpCode, PROXY_MAX_OPCODE]);
     Exit;
   end;
 
@@ -396,9 +396,9 @@ begin
   FTable[OpCode].Handler := Handler;
   FTable[OpCode].Builder := Builder;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxymanager: Registered OpCode %d (%s), builder=%s',
-    [OpCode, Name, BoolToStr(Assigned(Builder), True)], LM_Info);
+    [OpCode, Name, BoolToStr(Assigned(Builder), True)]);
 end;
 
 class function TProxyOpCodeDispatcher.BuildSubEntities(
@@ -419,9 +419,9 @@ begin
       Result := True;
     except
       on E: Exception do
-        programlog.LogOutFormatStr(
+        ProxyLogInfoFormatStr(
           'uzeentproxymanager: BuildSubEntities %d (%s) exception: %s',
-          [OpCode, FTable[OpCode].Name, E.Message], LM_Info);
+          [OpCode, FTable[OpCode].Name, E.Message]);
     end;
   end;
 end;
@@ -456,9 +456,9 @@ begin
     except
       on E: Exception do
       begin
-        programlog.LogOutFormatStr(
+        ProxyLogInfoFormatStr(
           'uzeentproxymanager: HandleOpCode %d (%s) exception: %s',
-          [OpCode, FTable[OpCode].Name, E.Message], LM_Info);
+          [OpCode, FTable[OpCode].Name, E.Message]);
         Result := False;
       end;
     end;

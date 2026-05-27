@@ -68,7 +68,7 @@ uses
   uzegeometrytypes,
   uzegeometry,
   uzeconsts,
-  uzcLog;
+  uzeentproxylog;
 
 const
   { OpCode дуги в формате AcGiWorldDraw }
@@ -169,15 +169,15 @@ begin
   SweepAngle := Stream.ReadDouble;
   Stream.ReadInt32; { ArcType — тип дуги, пока не используется }
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparserarc: Center=(%.4f,%.4f,%.4f) R=%.4f Sweep=%.4f rad',
-    [Center.x, Center.y, Center.z, Radius, SweepAngle], LM_Info);
+    [Center.x, Center.y, Center.z, Radius, SweepAngle]);
 
   { Радиус должен быть положительным }
   if Radius <= 0 then
   begin
-    programlog.LogOutFormatStr(
-      'uzeentproxyparserarc: Radius=%.4f is invalid, skipping', [Radius], LM_Info);
+    ProxyLogInfoFormatStr(
+      'uzeentproxyparserarc: Radius=%.4f is invalid, skipping', [Radius]);
     Exit;
   end;
 
@@ -207,11 +207,11 @@ begin
 
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparserarc: OK, ArcItem filled, Start=%.4f End=%.4f BBox=(%.3f,%.3f)-(%.3f,%.3f)',
     [StartAngle, EndAngle,
      HandlerResult.BBoxMin.x, HandlerResult.BBoxMin.y,
-     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y], LM_Info);
+     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y]);
 end;
 
 { --- Построитель подпримитивов --- }
@@ -268,13 +268,13 @@ begin
 
   pArc^.FormatEntity(Drawing^, DC^);
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparserarc: BuildArcSubEntities ARC at (%.3f,%.3f,%.3f)' +
     ' R=%.4f S=%.4f E=%.4f',
     [LocalCenter.x, LocalCenter.y, LocalCenter.z,
      HandlerResult.ArcItem.Radius,
      HandlerResult.ArcItem.StartAngle,
-     HandlerResult.ArcItem.EndAngle], LM_Info);
+     HandlerResult.ArcItem.EndAngle]);
 end;
 
 initialization

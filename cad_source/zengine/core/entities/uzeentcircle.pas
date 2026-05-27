@@ -97,7 +97,10 @@ type
     class function CreateInstance:PGDBObjCircle;static;
     function GetObjType:TObjID;virtual;
     function IsStagedFormatEntity:boolean;virtual;
+
   end;
+
+function AllocAndInitCircle(owner:PGDBObjGenericWithSubordinated):PGDBObjCircle;
 
 implementation
 

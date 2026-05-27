@@ -40,7 +40,7 @@ uses
   uzeentproxymanager,
   uzeentproxysubentitybuilder,
   uzegeometrytypes,
-  uzcLog;
+  uzeentproxylog;
 
 const
   POLYLINE_WITH_NORMALS_OPCODE = 32;
@@ -80,16 +80,16 @@ begin
 
   VertexCount := Stream.ReadInt32;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparserpolylinewithnormals: VertexCount=%d',
-    [VertexCount], LM_Info);
+    [VertexCount]);
 
   if (VertexCount < POLYLINE_MIN_VERTEX_COUNT)
     or (VertexCount > POLYLINE_MAX_VERTEX_COUNT) then
   begin
-    programlog.LogOutFormatStr(
+    ProxyLogInfoFormatStr(
       'uzeentproxyparserpolylinewithnormals: VertexCount=%d is invalid, skipping',
-      [VertexCount], LM_Info);
+      [VertexCount]);
     Exit;
   end;
 
@@ -110,11 +110,11 @@ begin
   HandlerResult.HasBBox := BBoxInitialized;
   HandlerResult.Valid := True;
 
-  programlog.LogOutFormatStr(
+  ProxyLogInfoFormatStr(
     'uzeentproxyparserpolylinewithnormals: OK, %d vertices, BBox=(%.3f,%.3f)-(%.3f,%.3f)',
     [HandlerResult.Vertices.Count,
      HandlerResult.BBoxMin.x, HandlerResult.BBoxMin.y,
-     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y], LM_Info);
+     HandlerResult.BBoxMax.x, HandlerResult.BBoxMax.y]);
 end;
 
 { --- Построитель подпримитивов --- }

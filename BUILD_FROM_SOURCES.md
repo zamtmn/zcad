@@ -75,6 +75,7 @@ In the future, you can simply open the file `zcad\cad_source\zcad.lpi` in Lazaru
 
 ### LINUX ###  
 First of all, you need Lazarus to be installed.  
+If you have old `lazarus`, install from official site (rpm or deb) and also dependency `fpc-laz` (for example, for `lazarus=4.6` - `fpc-laz=3.2.2`)   
 Linux installation at 3 steps:  
  1. `cd ./zcad` - go to zcad directory  
  2. `git pull&&git submodule update --init --recursive` - pull all dependencies  

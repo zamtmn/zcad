@@ -36,7 +36,7 @@ uses
   uzgldrawerogl,uzgldrawergdi,
   uzcSysParams,
   uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics,
-  URecordDescriptor,uzcTypeDescriprors,uzcTypes;
+  URecordDescriptor,uzcTypeDescriprors,uzcTypes,uzcgui2arrows;
 
 implementation
 
@@ -642,6 +642,9 @@ begin
   utd:=ptsu^.RegisterType(TypeInfo(PTEnumDataWithOtherPointers),
                                   'PTEnumDataWithOtherPointers');
 
+  utd:=ptsu^.RegisterType(TypeInfo(TArrowStyleData),'TArrowStyleData');
+  if utd<>nil then
+    registerRecTypeDescriptorOverrider(utd,@GDBEnumDataDescriptorObj);
 
   utd:=ptsu^.RegisterType(TypeInfo(TMSPrimitiveDetector),
                                   'TMSPrimitiveDetector');
@@ -842,7 +845,27 @@ begin
                             'TSRightAngle','TSOpen30','TSDotSmall','TSDotBlank',
                             'TSDotSmallBlank','TSBox','TSBoxFilled',
                             'TSDatumTriangle','TSDatumtTriangleFilled',
-                            'TSIntegral','TSUserDef'],[FNProgram,FNUser]);
+                            'TSIntegral','TSUserDef'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,[GetArrowStyleName(TSClosedFilled),
+                            GetArrowStyleName(TSClosedBlank),
+                            GetArrowStyleName(TSClosed),
+                            GetArrowStyleName(TSDot),
+                            GetArrowStyleName(TSArchitecturalTick),
+                            GetArrowStyleName(TSOblique),
+                            GetArrowStyleName(TSOpen),
+                            GetArrowStyleName(TSOriginIndicator),
+                            GetArrowStyleName(TSOriginIndicator2),
+                            GetArrowStyleName(TSRightAngle),
+                            GetArrowStyleName(TSOpen30),
+                            GetArrowStyleName(TSDotSmall),
+                            GetArrowStyleName(TSDotBlank),
+                            GetArrowStyleName(TSDotSmallBlank),
+                            GetArrowStyleName(TSBox),
+                            GetArrowStyleName(TSBoxFilled),
+                            GetArrowStyleName(TSDatumTriangle),
+                            GetArrowStyleName(TSDatumtTriangleFilled),
+                            GetArrowStyleName(TSIntegral),
+                            GetArrowStyleName(TSUserDef)],[FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(TDimTextVertPosition),
                                   'TDimTextVertPosition');

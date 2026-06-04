@@ -150,6 +150,8 @@
       <Action Name="ACN_BInsert"/>
 	  <Separator/>
       <Action Name="ACN_TEXT"/>
+	  <Separator/>
+      <Action Name="ACN_ALEADER"/>	  
     </Menu>
     <Menu Name="Dimension">
       <Action Name="ACN_DIMALIGNED"/>

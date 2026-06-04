@@ -35,7 +35,7 @@ uses
   uzeentabstracttext,
   uzeentsubordinated,
   uzeenttext, uzeentmtext, uzeentblockinsert,
-  uzeentdimension, uzeentdimensiongeneric,
+  uzeentdimension, uzeentdimensiongeneric, uzeentleader,
   uzeblockdef, UGDBObjBlockdefArray,
   uzeconsts,
   uzeTypes,
@@ -769,6 +769,13 @@ begin
             PGDBObjGenericDimension(pobj)^.PDimStyle := pDimStyle
           else
             PGDBObjDimension(pobj)^.PDimStyle := pDimStyle;
+        end
+        else if pobj^.GetObjType = GDBLeaderID then begin
+          // GDBObjLeader keeps the dimstyle by name (DXF group 3); resolve the
+          // referenced dimstyle handle to its name so leader arrow/line styling
+          // matches the DXF load path.
+          if pDimStyle <> nil then
+            PGDBObjLeader(pobj)^.DimStyleName := pDimStyle^.Name;
         end;
         if (Reason <> arResolved) and
            DWGShouldEmitFallbackDetail(Reason, EntityHandle) then
@@ -1140,6 +1147,8 @@ begin
       ApplyDWGCurrentLineType(ZContext);
       ApplyDWGCurrentTextStyle(ZContext);
       ApplyDWGCurrentDimStyle(ZContext);
+      ZContext.PDrawing^.DimStyleTable.ResolveLineTypes(
+        ZContext.PDrawing^.LTypeStyleTable);
       ApplyDWGHeaderEntityProps(ZContext);
       ApplyDWGViewState(ZContext);
     finally

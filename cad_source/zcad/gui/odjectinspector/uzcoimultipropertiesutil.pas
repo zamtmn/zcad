@@ -28,7 +28,8 @@ uses
   uzeentpolyline,uzcentelleader,uzegeometry,uzcoimultiproperties,uzcLog,
   uzcstrconsts,gzctnrSTL,gzctnrVectorTypes,uzeNamedObject,zUndoCmdChgVariable,
   uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,
-  uzeExtdrAbstractEntityExtender,uzbUnits;
+  uzeExtdrAbstractEntityExtender,uzbUnits,
+  uzeentpolyfacemesh;
 type
   GCacheCalculatedValue<GT,PGT>=record
     PValue:PGT;
@@ -95,6 +96,7 @@ function GetExtenderCounterData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 function GetTEnumDataForHAlign(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 function GetTEnumDataForVAlign(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+function GetTEnumData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 
 procedure FreeOneVarData(piteratedata:Pointer;mp:TMultiProperty);
 procedure FreeStringCounterData(piteratedata:Pointer;mp:TMultiProperty);
@@ -108,6 +110,7 @@ procedure GeneralEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMulti
 procedure EntityNameEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure EntityAddressEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure PolyFaceMeshFaceCountEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 procedure Double2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure TArrayIndex2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -579,6 +582,35 @@ begin
                             ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,vda_different,vda_approximately);
                     end;
 end;
+
+procedure PolyFaceMeshFaceCountEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+{
+процедура копирования количества граней PolyFaceMesh в мультипроперти
+pdata - указатель на структуру созданную GetOneVarData или аналогичной процедурой
+ChangedData - указатель на примитив и на копируемое\устанавливаемое поле
+mp - описание мультипроперти
+fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
+ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
+}
+var
+  PVD:pvardesk;
+  faceCount: TArrayIndex;
+begin
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  faceCount := PGDBObjPolyFaceMesh(ChangedData.PEntity)^.GetFaceCount;
+  if fistrun then begin
+    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    mp.MPType.CopyValueToInstance(@faceCount,PVD.data.Addr.Instance);
+    PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@faceCount,f);
+  end else begin
+    if mp.MPType.Compare(@faceCount,PVD.data.Addr.Instance)<>CREqual then
+      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+    if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@faceCount,f) then
+      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+  end;
+end;
+
 procedure PolylineVertex3DControlFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
    tv:PzePoint3d;

@@ -103,6 +103,7 @@ uses
   uzeentpolylinegeneric,
   uzeentpolyline,
   uzeentpolyfacemesh,
+  uzeentleader,    //Created using AI
   uzeEntSpline,
   uzeenttable,
 
@@ -259,6 +260,7 @@ uses
 
   uzccommand_scale2,  //Created using AI
   uzccommand_align,   //Created using AI
+  uzccommand_leader,   //Created using AI
 
   {$IFDEF ELECTROTECH}
   uzcExtdrReport,uzccommand_ReportsUpdate,uzcCommand_FlattenZEnts,
@@ -333,6 +335,7 @@ uses
   uzcregisterenitiesfeatures,
   uzcregisterenitiesextenders,
   uzcoiregistermultiproperties,
+  uzcregleader,     //Created using AI
   uzclibraryblocksregister,
   {$IF not((DEFINED(WINDOWS))and(DEFINED(LCLQT5)))}uzglviewareaogl,uzglviewareaoglmodern,{$ENDIF}
   uzglviewareagdi,uzglviewareacanvas,

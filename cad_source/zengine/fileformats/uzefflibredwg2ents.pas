@@ -74,6 +74,7 @@ uses
   uzedwgentspline,
   uzedwgenthatch,
   uzedwgentpolyline,
+  uzedwgentleader,
   uzedwgentproxy;
 
 procedure BeginDWGImport(var ZContext: TZDrawingContext;

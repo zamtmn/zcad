@@ -2090,134 +2090,107 @@ begin
       result:=on;
   end
 end;
-procedure TGeneralViewArea.getosnappoint({pva: PGDBObjEntityOpenArray; }radius: Single);
+procedure TGeneralViewArea.getosnappoint(radius:single);
 var
   pv,pv2:PGDBObjEntity;
   osp:os_record;
-  dx,dy:Double;
-//  oldit:itrec;
-      ir,ir2:itrec;
+  dx,dy:double;
+  ir,ir2:itrec;
   pdata:Pointer;
-  DefaultRadius,DefaultTextRadius:Double;
+  DefaultRadius,DefaultTextRadius:double;
 begin
   DefaultRadius:=sysvarDISPCursorSize*sysvarDISPCursorSize+1;
   DefaultTextRadius:=(5*5)*DefaultRadius;
   param.ospoint.radius:=DefaultRadius;
   param.ospoint.ostype:=os_none;
-      if param.md.mouseonworkplan
-      then
-          begin
-               param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
-               //if SysVar.DWG.DWG_SnapGrid<>nil then
-               if PDWG^.SnapGrid then
-               begin
-                    param.ospoint.worldcoord:=correcttogrid(param.ospoint.worldcoord,PDWG^.Snap);
-                    //param.ospoint.worldcoord.x:=round((param.md.mouseonworkplanecoord.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
-                    //param.ospoint.worldcoord.y:=round((param.md.mouseonworkplanecoord.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
-                    param.ospoint.ostype:=os_snap;
-                    currentmousemovesnaptogrid:=true;
-               end;
-          end
-      else
-          begin
-               param.ospoint.worldcoord:=param.md.mouseray.lbegin;
-          end;
+  if param.md.mouseonworkplan then begin
+    param.ospoint.worldcoord:=param.md.mouseonworkplanecoord;
+    //if SysVar.DWG.DWG_SnapGrid<>nil then
+    if PDWG^.SnapGrid then begin
+      param.ospoint.worldcoord:=correcttogrid(param.ospoint.worldcoord,PDWG^.Snap);
+      //param.ospoint.worldcoord.x:=round((param.md.mouseonworkplanecoord.x-SysVar.DWG.DWG_OriginGrid.x)/SysVar.DWG.DWG_StepGrid.x)*SysVar.DWG.DWG_StepGrid.x+SysVar.DWG.DWG_OriginGrid.x;
+      //param.ospoint.worldcoord.y:=round((param.md.mouseonworkplanecoord.y-SysVar.DWG.DWG_OriginGrid.y)/SysVar.DWG.DWG_StepGrid.y)*SysVar.DWG.DWG_StepGrid.y+SysVar.DWG.DWG_OriginGrid.y;
+      param.ospoint.ostype:=os_snap;
+      currentmousemovesnaptogrid:=True;
+    end;
+  end else begin
+    param.ospoint.worldcoord:=param.md.mouseray.lbegin;
+  end;
 
   param.ospoint.PGDBObject:=nil;
-  if (param.scrollmode)or(PDWG.GetOnMouseObj.Count=0)then exit;
-  if PDWG.GetOnMouseObj.Count>0 then
-     begin
-     pv:=PDWG.GetOnMouseObj.beginiterate(ir);
-     if pv<>nil then
-     repeat
-     if (not sysvarDWGOSModeControl) or (GetFoctOSnapMode(pv)=on) then
-     begin
-       pv.startsnap(osp,pdata);
-       while pv.getsnap(osp,pdata,param,pdwg.myGluProject2,sysvarDWGOSMode) do
-       begin
-            if osp.ostype<>os_none then
-            begin
-            dx:=osp.dispcoord.x-param.md.glmouse.x;
-            dy:=osp.dispcoord.y-param.md.glmouse.y;
-            osp.radius:=dx*dx+dy*dy;
-            if osp.ostype<>os_nearest
-            then
-            begin
-                 if param.ospoint.ostype=os_nearest then
-                 begin
-                      if (osp.radius<DefaultRadius) then copyospoint(param.ospoint,osp);
-                 end
-                 else
-                 if (osp.radius<=param.ospoint.radius)or(osp.ostype=os_textinsert) then
-                                                                                       begin
-                                                                                            if (osp.radius<param.ospoint.radius) then
-                                                                                                                                     begin
-                                                                                                                                     if SnapHandles.GetPLincedData(osp.ostype)^.Order>SnapHandles.GetPLincedData(param.ospoint.ostype)^.Order then
-                                                                                                                                          copyospoint(param.ospoint,osp)
+  if (param.scrollmode)or(PDWG.GetOnMouseObj.Count=0) then
+    exit;
+  if PDWG.GetOnMouseObj.Count>0 then begin
+    pv:=PDWG.GetOnMouseObj.beginiterate(ir);
+    if pv<>nil then
+      repeat
+        if (not sysvarDWGOSModeControl) or (GetFoctOSnapMode(pv)=on) then begin
+          pv.startsnap(osp,pdata);
+          while pv.getsnap(osp,pdata,param,pdwg.myGluProject2,sysvarDWGOSMode) do begin
+            if osp.ostype<>os_none then begin
+              dx:=osp.dispcoord.x-param.md.glmouse.x;
+              dy:=osp.dispcoord.y-param.md.glmouse.y;
+              osp.radius:=dx*dx+dy*dy;
+              if osp.ostype<>os_nearest then begin
+                if param.ospoint.ostype=os_nearest then begin
+                  if (osp.radius<DefaultRadius) then
+                    copyospoint(param.ospoint,osp);
+                end else if (osp.radius<=param.ospoint.radius)or(osp.ostype=os_textinsert) then begin
+                  if (osp.radius<param.ospoint.radius) then begin
+                    if SnapHandles.GetPLincedData(osp.ostype)^.Order>SnapHandles.GetPLincedData(param.ospoint.ostype)^.Order then
+                      copyospoint(param.ospoint,osp);
+                  end else if ((osp.ostype<>os_perpendicular)and(osp.ostype<>os_textinsert))or((osp.ostype=os_textinsert)and (osp.radius<=DefaultTextRadius)) then
+                    copyospoint(param.ospoint,osp);
+                end;
+              end else begin
+                if (osp.radius<DefaultRadius)and(param.ospoint.ostype=os_none) then
+                  copyospoint(param.ospoint,osp)
+                else if param.ospoint.ostype=os_nearest then
+                  if (osp.radius<param.ospoint.radius) then
+                    copyospoint(param.ospoint,osp);
+              end;
+            end;
+          end;
+          pv.endsnap(osp,pdata);
+        end;
+        pv:=PDWG.GetOnMouseObj.iterate(ir);
+      until pv=nil;
+  end;
+  if ((sysvarDWGOSMode and osm_apparentintersection)<>0)or((sysvarDWGOSMode and osm_intersection)<>0) then begin
+    if (PDWG.GetOnMouseObj.Count>1)and(PDWG.GetOnMouseObj.Count<10) then begin
+      pv:=PDWG.GetOnMouseObj.beginiterate(ir);
+      repeat
+        if pv<>nil then begin
+          pv2:=PDWG.GetOnMouseObj.beginiterate(ir2);
+          if pv2<>nil then
+            repeat
+              if pv<>pv2 then
+                if (not sysvarDWGOSModeControl) or ((GetFoctOSnapMode(pv)=on)and(GetFoctOSnapMode(pv2)=on)) then begin
+                  pv.startsnap(osp,pdata);
+                  while pv.getintersect(osp,pv2,param,PDWG.myGluProject2,sysvarDWGOSMode) do begin
+                    if osp.ostype<>os_none then begin
+                      dx:=osp.dispcoord.x-param.md.glmouse.x;
+                      dy:=osp.dispcoord.y-param.md.glmouse.y;
+                      osp.radius:=dx*dx+dy*dy;
+                      if (osp.radius<=param.ospoint.radius) then begin
+                        if param.ospoint.ostype=os_nearest then begin
+                          if (osp.radius<DefaultRadius) then
+                            copyospoint(param.ospoint,osp);
+                        end else //if (osp.radius<param.ospoint.radius) then copyospoint(param.ospoint,osp);
+                        if param.ospoint.ostype=os_none then
+                          copyospoint(param.ospoint,osp);
 
-                                                                                                                                     end
-                                                                                       else
-                                                                                           if ((osp.ostype<>os_perpendicular)and(osp.ostype<>os_textinsert))or((osp.ostype=os_textinsert)and (osp.radius<=DefaultTextRadius)) then
-                                                                                                                                     copyospoint(param.ospoint,osp)
-                                                                                       end;
-            end
-            else
-            begin
-                 if (osp.radius<DefaultRadius)and(param.ospoint.ostype=os_none) then copyospoint(param.ospoint,osp)
-                 else if param.ospoint.ostype=os_nearest then
-                                                            if (osp.radius<param.ospoint.radius) then
-                                                                                                   copyospoint(param.ospoint,osp);
-            end;
-            end;
-       end;
-       pv.endsnap(osp,pdata);
-     end;
-     pv:=PDWG.GetOnMouseObj.iterate(ir);
-     until pv=nil;
-     end;
-  if ((sysvarDWGOSMode and osm_apparentintersection)<>0)or((sysvarDWGOSMode and osm_intersection)<>0)then
-  begin
-  if (PDWG.GetOnMouseObj.Count>1)and(PDWG.GetOnMouseObj.Count<10) then
-  begin
-  pv:=PDWG.GetOnMouseObj.beginiterate(ir);
-  repeat
-  if pv<>nil then
-  begin
-  pv2:=PDWG.GetOnMouseObj.beginiterate(ir2);
-  if pv2<>nil then
-  repeat
-  if pv<>pv2 then
-  if (not sysvarDWGOSModeControl) or ((GetFoctOSnapMode(pv)=on)and(GetFoctOSnapMode(pv2)=on)) then
-  begin
-       pv.startsnap(osp,pdata);
-       while pv.getintersect(osp,pv2,param,PDWG.myGluProject2,sysvarDWGOSMode) do
-       begin
-            if osp.ostype<>os_none then
-            begin
-            dx:=osp.dispcoord.x-param.md.glmouse.x;
-            dy:=osp.dispcoord.y-param.md.glmouse.y;
-            osp.radius:=dx*dx+dy*dy;
-            if (osp.radius<=param.ospoint.radius) then
-            begin
-                 if param.ospoint.ostype=os_nearest then
-                 begin
-                      if (osp.radius<DefaultRadius) then copyospoint(param.ospoint,osp);
-                 end
-                 else
-                 //if (osp.radius<param.ospoint.radius) then copyospoint(param.ospoint,osp);
-                 if param.ospoint.ostype=os_none        then copyospoint(param.ospoint,osp);
-
-            end
-            end;
-       end;
-       pv.endsnap(osp,pdata);
-  end;
-  pv2:=PDWG.GetOnMouseObj.iterate(ir2);
-  until pv2=nil;
-  end;
-  pv:=PDWG.GetOnMouseObj.iterate(ir);
-  until pv=nil;
-  end;
+                      end;
+                    end;
+                  end;
+                  pv.endsnap(osp,pdata);
+                end;
+              pv2:=PDWG.GetOnMouseObj.iterate(ir2);
+            until pv2=nil;
+        end;
+        pv:=PDWG.GetOnMouseObj.iterate(ir);
+      until pv=nil;
+    end;
   end;
 end;
 
@@ -2913,239 +2886,219 @@ end;
 
 procedure TGeneralViewArea.reprojectaxis;
 var
-  i, j, a: Integer;
-  temp: TzePoint3d;
+  i,j,a:integer;
+  temp:TzePoint3d;
   pv:PzePoint3d;
   pt,pt2:ptraceprop;
   ir,ir2:itrec;
   ip:intercept3dprop;
-  lastontracdist,currentontracdist,tx,ty,tz:Double;
-  test:Boolean;
+  lastontracdist,currentontracdist:double;
+  t:TzePoint3d;
+  test:boolean;
   pobj:pgdbobjentity;
-//  dispraylen:double;
 begin
-  if param.ontrackarray.total = 0 then exit;
-  param.polarlinetrace := 0;
+  if param.ontrackarray.total=0 then
+    exit;
+  param.polarlinetrace:=0;
 
-    if tocommandmcliccount=0 then
-                                 a:=1
-                             else
-                                 a:=0;
-    for j := a to param.ontrackarray.total - 1 do
-    begin
-      PDWG.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
-                 param.ontrackarray.otrackarray[j].dispcoord);
-    end;
-    //if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
-    if not sysvarDWGPolarMode then exit;
-  for j := a to param.ontrackarray.total - 1 do
-  begin
+  if tocommandmcliccount=0 then
+    a:=1
+  else
+    a:=0;
+  for j:=a to param.ontrackarray.total-1 do begin
+    PDWG.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
+      param.ontrackarray.otrackarray[j].dispcoord);
+  end;
+  //if not assigned(sysvar.dwg.DWG_PolarMode) then exit;
+  if not sysvarDWGPolarMode then
+    exit;
+  for j:=a to param.ontrackarray.total-1 do begin
     {gdb.GetCurrentDWG^.myGluProject2(param.ontrackarray.otrackarray[j].worldcoord,
                param.ontrackarray.otrackarray[j].dispcoord);}
     param.ontrackarray.otrackarray[j].dispcoord.z:=0;
-    param.ontrackarray.otrackarray[j].dmousecoord.x :=
-    param.md.glmouse.x - param.ontrackarray.otrackarray[j].dispcoord.x;
-    param.ontrackarray.otrackarray[j].dmousecoord.y :=
-    //-(clientheight - param.md.glmouse.y - param.ontrackarray.otrackarray[j].dispcoord.y);
-    param.md.glmouse.y -  param.ontrackarray.otrackarray[j].dispcoord.y;
-    param.ontrackarray.otrackarray[j].dmousecoord.z := 0;
-     //caption:=floattostr(ontrackarray.otrackarray[j].dmousecoord.x)+';'+floattostr(ontrackarray.otrackarray[j].dmousecoord.y);
-     //caption:='' ;
-    param.ontrackarray.otrackarray[j].dmousecoord.z := 0;
+    param.ontrackarray.otrackarray[j].dmousecoord.x:=
+      param.md.glmouse.x-param.ontrackarray.otrackarray[j].dispcoord.x;
+    param.ontrackarray.otrackarray[j].dmousecoord.y:=
+      //-(clientheight - param.md.glmouse.y - param.ontrackarray.otrackarray[j].dispcoord.y);
+      param.md.glmouse.y-param.ontrackarray.otrackarray[j].dispcoord.y;
+    param.ontrackarray.otrackarray[j].dmousecoord.z:=0;
+    //caption:=floattostr(ontrackarray.otrackarray[j].dmousecoord.x)+';'+floattostr(ontrackarray.otrackarray[j].dmousecoord.y);
+    //caption:='' ;
+    param.ontrackarray.otrackarray[j].dmousecoord.z:=0;
     lastontracdist:=infinity;
     pt2:=nil;
-    if param.ontrackarray.otrackarray[j].arrayworldaxis.Count <> 0 then
-    begin
+    if param.ontrackarray.otrackarray[j].arrayworldaxis.Count<>0 then begin
       pv:=param.ontrackarray.otrackarray[j].arrayworldaxis.GetParrayAsPointer;
       pt:=param.ontrackarray.otrackarray[j].arraydispaxis.GetParrayAsPointer;
-      for i := 0 to param.ontrackarray.otrackarray[j].arrayworldaxis.count - 1 do
-      begin
-        PDWG.myGluProject2(createvertex(param.ontrackarray.otrackarray[j].worldcoord.x + pv.x,
-                   param.ontrackarray.otrackarray[j].worldcoord.y + pv.y,
-                   param.ontrackarray.otrackarray[j].worldcoord.z + pv.z),
-                   temp);
-        pt.dir.x := temp.x - param.ontrackarray.otrackarray[j].dispcoord.x;
-        pt.dir.y := (temp.y - param.ontrackarray.otrackarray[j].dispcoord.y);
-        pt.dir.z := temp.z - param.ontrackarray.otrackarray[j].dispcoord.z;
+      for i:=0 to param.ontrackarray.otrackarray[j].arrayworldaxis.Count-1 do begin
+        PDWG.myGluProject2(createvertex(param.ontrackarray.otrackarray[j].worldcoord.x+pv.x,param.ontrackarray.otrackarray[j].worldcoord.y+pv.y,param.ontrackarray.otrackarray[j].worldcoord.z+pv.z),temp);
+        pt.dir.x:=temp.x-param.ontrackarray.otrackarray[j].dispcoord.x;
+        pt.dir.y:=(temp.y-param.ontrackarray.otrackarray[j].dispcoord.y);
+        pt.dir.z:=temp.z-param.ontrackarray.otrackarray[j].dispcoord.z;
 
-        pt.trace:=false;
+        pt.trace:=False;
 
         if (pt.dir.x*pt.dir.x+pt.dir.y*pt.dir.y)>sqreps then
-
         begin
-        pt.tmouse :=
-          (pt.dir.x *
-          param.ontrackarray.otrackarray[j].dmousecoord.x +
-          pt.dir.y *
-          param.ontrackarray.otrackarray[j].dmousecoord.y)
-          / (sqr(pt.dir.x) + sqr(pt.dir.y));
-        //dispraylen:=
+          pt.tmouse:=(pt.dir.x*param.ontrackarray.otrackarray[j].dmousecoord.x+pt.dir.y*param.ontrackarray.otrackarray[j].dmousecoord.y)/(sqr(pt.dir.x)+sqr(pt.dir.y));
+          //dispraylen:=
 
-        tx:=pt.tmouse * pv.x;
-        ty:=pt.tmouse * pv.y;
-        tz:=pt.tmouse * pv.z;
+          t:=pv^*pt.tmouse;
+          {tx:=pt.tmouse*pv.x;
+          ty:=pt.tmouse*pv.y;
+          tz:=pt.tmouse*pv.z;}
 
-        pt.dispraycoord.x := param.ontrackarray.otrackarray[j].dispcoord.x + pt.tmouse * pt.dir.x;
-        pt.dispraycoord.y := param.ontrackarray.otrackarray[j].dispcoord.y + pt.tmouse * pt.dir.y;
-        pt.dispraycoord.z:=0;
-        pt.worldraycoord.x := param.ontrackarray.otrackarray[j].worldcoord.x + {pt.tmouse * pv.x}tx;
-        pt.worldraycoord.y := param.ontrackarray.otrackarray[j].worldcoord.y + {pt.tmouse * pv.y}ty;
-        pt.worldraycoord.z := param.ontrackarray.otrackarray[j].worldcoord.z + {pt.tmouse * pv.z}tz;
+          pt.dispraycoord.x:=param.ontrackarray.otrackarray[j].dispcoord.x+pt.tmouse*pt.dir.x;
+          pt.dispraycoord.y:=param.ontrackarray.otrackarray[j].dispcoord.y+pt.tmouse*pt.dir.y;
+          pt.dispraycoord.z:=0;
+          pt.worldraycoord:=param.ontrackarray.otrackarray[j].worldcoord+t;
+          {pt.worldraycoord.x:=param.ontrackarray.otrackarray[j].worldcoord.x+tx;
+          pt.worldraycoord.y:=param.ontrackarray.otrackarray[j].worldcoord.y+ty;
+          pt.worldraycoord.z:=param.ontrackarray.otrackarray[j].worldcoord.z+tz;}
+
           //temp.x:=ontrackarray.otrackarray[j].dmousecoord.x-ontrackarray.otrackarray[j].arraydispaxis.arr[i].dispraycoord.x;
           //temp.y:=ontrackarray.otrackarray[j].dmousecoord.y-ontrackarray.otrackarray[j].arraydispaxis.arr[i].dispraycoord.y;
-        temp.x := param.md.glmouse.x - pt.dispraycoord.x;
-        temp.y := param.md.glmouse.y - pt.dispraycoord.y {clientheight - param.md.glmouse.y - pt.dispraycoord.y};
+          temp.x:=param.md.glmouse.x-pt.dispraycoord.x;
+          temp.y:=param.md.glmouse.y-pt.dispraycoord.y {clientheight - param.md.glmouse.y - pt.dispraycoord.y};
 
 
 
 
-        pt.dmouse := round(sqrt(temp.x * temp.x + temp.y * temp.y));
-        pt.trace:=false;
-        if pt.dmouse < ontracdist then
-        begin
-        //currentontracdist:=pt.dmouse;
-        if (pt.dmouse<lastontracdist) then
-        if (param.ospoint.ostype=os_blockinsert)or(param.ospoint.ostype=os_insert)or(param.ospoint.ostype=os_textinsert)or(param.ospoint.ostype=os_none)or(param.ospoint.ostype={os_intersection}os_trace) then
-        begin
-        if uzegeometry.vertexlen2df(param.ontrackarray.otrackarray[j].dispcoord.x,
-                                 param.ontrackarray.otrackarray[j].dispcoord.y,
-                                 param.md.glmouse.x,
-                                 param.md.glmouse.y)>ontracignoredist then
+          pt.dmouse:=round(sqrt(temp.x*temp.x+temp.y*temp.y));
+          pt.trace:=False;
+          if pt.dmouse<ontracdist then begin
+            //currentontracdist:=pt.dmouse;
+            if (pt.dmouse<lastontracdist) then
+              if (param.ospoint.ostype=os_blockinsert)or(param.ospoint.ostype=os_insert)or(param.ospoint.ostype=os_textinsert)or
+                (param.ospoint.ostype=os_none)or(param.ospoint.ostype={os_intersection}os_trace) then begin
+                if uzegeometry.vertexlen2df(param.ontrackarray.otrackarray[j].dispcoord.x,
+                  param.ontrackarray.otrackarray[j].dispcoord.y,param.md.glmouse.x,
+                  param.md.glmouse.y)>ontracignoredist then
+                begin
+                  if param.polarlinetrace=0 then
+                    test:=True
+                  else
+                    test:=False;
+                  if not(test) then begin
+                    if not uzegeometry.vertexeq(pt.worldraycoord,param.ospoint.worldcoord) then
+                      test:=True;
+                  end;
+                  if test then
+                  begin
+                    lastontracdist:=pt.dmouse;
+                    if pt2<>nil then
+                      pt2.trace:=False;
+                    pt2:=pt;
+                    pt.trace:=True;
+                    param.ospoint.worldcoord:=pt.worldraycoord;
+                    param.ospoint.dispcoord:=pt.dispraycoord;
+                    param.ospoint.ostype:= {os_polar}{os_midle}{os_intersection}os_trace;
+                    param.pointnum:=j;
+                    param.axisnum:=i;
+                    //param.ospoint.tmouse:=pt.dmouse;
+                    Inc(param.polarlinetrace);
 
-        begin
-          if param.polarlinetrace=0 then
-                                        test:=true
-                                    else
-                                        test:=false;
-          if not(test) then
-                           begin
-                                if not uzegeometry.vertexeq(pt.worldraycoord,param.ospoint.worldcoord)
-                                then test:=true;
-                           end;
-          if test then
-
-          begin
-          lastontracdist:=pt.dmouse;
-          if pt2<>nil then
-                          pt2.trace:=false;
-          pt2:=pt;
-          pt.trace:=true;
-          param.ospoint.worldcoord := pt.worldraycoord;
-          param.ospoint.dispcoord := pt.dispraycoord;
-          param.ospoint.ostype := {os_polar}{os_midle}{os_intersection}os_trace;
-          param.pointnum := j;
-          param.axisnum := i;
-          //param.ospoint.tmouse:=pt.dmouse;
-          inc(param.polarlinetrace);
-
-          param.ontrackarray.otrackarray[j].tmouse:=sqrt(tx*tx+ty*ty+tz*tz);
+                    param.ontrackarray.otrackarray[j].tmouse:=t.Length;{ sqrt(tx*tx+ty*ty+tz*tz)};
+                  end;
+                end;
+              end;
           end;
         end;
-        end;
-        end;
-        end;
-        inc(pt);
-        inc(pv);
+        Inc(pt);
+        Inc(pv);
       end;
-   end;
+    end;
   end;
 
   lastontracdist:=infinity;
   if param.polarlinetrace>0 then
-  for i := a to param.ontrackarray.total - 1 do
-  begin
-       pt:=param.ontrackarray.otrackarray[i].arraydispaxis.beginiterate(ir2);
-       if pt<>nil then
-       begin
-       repeat
-            if pt^.trace then
-            begin
+    for i:=a to param.ontrackarray.total-1 do begin
+      pt:=param.ontrackarray.otrackarray[i].arraydispaxis.beginiterate(ir2);
+      if pt<>nil then begin
+        repeat
+          if pt^.trace then begin
             pobj:=PDWG.GetOnMouseObj.beginiterate(ir);
             if pobj<>nil then
-            repeat
-                  if (not sysvarDWGOSModeControl) or(GetFoctOSnapMode(pobj)=on) then
-                  begin
+              repeat
+                if (not sysvarDWGOSModeControl) or(GetFoctOSnapMode(pobj)=on) then begin
                   ip:=pobj.IsIntersect_Line(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord);
 
                   if ip.isintercept then
+                    if not IsPointEqual(ip.interceptcoord,param.ontrackarray.otrackarray[i].worldcoord,bigeps) then begin
+                      PDWG.myGluProject2(ip.interceptcoord,temp);
+                      currentontracdist:=vertexlen2df(temp.x,temp.y,param.md.glmouse.x,param.md.glmouse.y);
+                      if currentontracdist<lastontracdist then //if currentontracdist<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1 then
+                      begin
+                        param.ospoint.worldcoord:=ip.interceptcoord;
+                        param.ospoint.dispcoord:=temp;
+                        param.ospoint.ostype:= {os_polar}os_apparentintersection;
+                        lastontracdist:=currentontracdist;
+                      end;
+                    end;
+                end;
+
+
+
+                pobj:=PDWG.GetOnMouseObj.iterate(ir);
+              until pobj=nil;
+          end;
+          pt:=param.ontrackarray.otrackarray[i].arraydispaxis.iterate(ir2);
+        until pt=nil;
+      end;
+    end;
+
+
+
+  if param.polarlinetrace<2 then
+    exit;
+  //lastontracdist:=infinity;
+
+  for i:=a to param.ontrackarray.total-1 do
+    for j:=i+1 to param.ontrackarray.total-1 do begin
+      pt:=param.ontrackarray.otrackarray[i].arraydispaxis.beginiterate(ir);
+      if pt<>nil then
+        repeat
+          lastontracdist:=infinity;
+          pt2:=param.ontrackarray.otrackarray[j].arraydispaxis.beginiterate(ir2);
+          if pt2<>nil then
+            repeat
+              if (pt.trace)and(pt2.trace) then
+                if SqrOneVertexlength(vectordot(pt.dir,pt2.dir))>sqreps then begin
+                  //                           ip:=ip;
+                  ip.isintercept:=False;
+                  ip:=intercept3dmy2(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord,
+                    param.ontrackarray.otrackarray[j].worldcoord,pt2.worldraycoord);
+                  //ip:=intercept3dmy(createvertex(0,0,0),createvertex(0,2,0),createvertex(-1,1,0),createvertex(1,1,0));
                   begin
-                   PDWG.myGluProject2(ip.interceptcoord,temp);
-                  currentontracdist:=vertexlen2df(temp.x, temp.y,param.md.glmouse.x,param.md.glmouse.y);
-                  if currentontracdist<lastontracdist then
-                  //if currentontracdist<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1 then
-                  begin
-                  param.ospoint.worldcoord := ip.interceptcoord;
-                  param.ospoint.dispcoord := temp;
-                  param.ospoint.ostype := {os_polar}os_apparentintersection;
-                  lastontracdist:=currentontracdist;
+                    if ip.isintercept then begin
+                      PDWG.myGluProject2(ip.interceptcoord,
+                        temp);
+
+                      currentontracdist:=vertexlen2df(temp.x,temp.y,param.md.glmouse.x,param.md.glmouse.y);
+                      if currentontracdist<lastontracdist then
+                        if currentontracdist<sysvarDISPCursorSize*sysvarDISPCursorSize+1 then begin
+                          param.ospoint.worldcoord:=ip.interceptcoord;
+                          param.ospoint.dispcoord:=temp;
+                          param.ospoint.ostype:= {os_polar}os_apparentintersection;
+                          lastontracdist:=currentontracdist;
+                        end;
+                    end;
+                    //param.pointnum := j;
+                    //param.axisnum := i;
+                    //inc(param.polarlinetrace);
                   end;
-                  end;
-                  end;
+
+                end;
+
+              pt2:=param.ontrackarray.otrackarray[j].arraydispaxis.iterate(ir2);
+            until pt2=nil;
 
 
 
-                  pobj:=PDWG.GetOnMouseObj.iterate(ir);
-            until pobj=nil;
-            end;
-            pt:=param.ontrackarray.otrackarray[i].arraydispaxis.iterate(ir2);
-      until pt=nil;
-       end;
-  end;
+          pt:=param.ontrackarray.otrackarray[i].arraydispaxis.iterate(ir);
+        until pt=nil;
 
-
-
-  if param.polarlinetrace<2 then exit;
-    //lastontracdist:=infinity;
-
-  for i := a to param.ontrackarray.total - 1 do
-  for j := i+1 to param.ontrackarray.total - 1 do
-  begin
-       pt:=param.ontrackarray.otrackarray[i].arraydispaxis.beginiterate(ir);
-       if pt<>nil then
-       repeat
-                     lastontracdist:=infinity;
-                     pt2:=param.ontrackarray.otrackarray[j].arraydispaxis.beginiterate(ir2);
-                     if pt2<>nil then
-                     repeat
-                           if (pt.trace)and(pt2.trace) then
-                           if SqrOneVertexlength(vectordot(pt.dir,pt2.dir))>sqreps then
-                           begin
-//                           ip:=ip;
-                           ip.isintercept:=false;
-                           ip:=intercept3dmy2(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord,param.ontrackarray.otrackarray[j].worldcoord,pt2.worldraycoord);
-                           //ip:=intercept3dmy(createvertex(0,0,0),createvertex(0,2,0),createvertex(-1,1,0),createvertex(1,1,0));
-                                    begin
-                                      if ip.isintercept then
-                                      begin
-                                      PDWG.myGluProject2(ip.interceptcoord,
-                                                                       temp);
-
-                                      currentontracdist:=vertexlen2df(temp.x, temp.y,param.md.glmouse.x,param.md.glmouse.y);
-                                      if currentontracdist<lastontracdist then
-                                      if currentontracdist<sysvarDISPCursorSize*sysvarDISPCursorSize+1 then
-                                      begin
-                                      param.ospoint.worldcoord := ip.interceptcoord;
-                                      param.ospoint.dispcoord := temp;
-                                      param.ospoint.ostype := {os_polar}os_apparentintersection;
-                                      lastontracdist:=currentontracdist;
-                                      end;
-                                      end;
-                                      //param.pointnum := j;
-                                      //param.axisnum := i;
-                                      //inc(param.polarlinetrace);
-                                    end;
-
-                           end;
-
-                           pt2:=param.ontrackarray.otrackarray[j].arraydispaxis.iterate(ir2);
-                     until pt2=nil;
-
-
-
-             pt:=param.ontrackarray.otrackarray[i].arraydispaxis.iterate(ir);
-       until pt=nil;
-
-  end;
+    end;
 end;
 procedure TGeneralViewArea.myKeyPress(var Key: Word; Shift: TShiftState);
 {$IFDEF DELPHI}

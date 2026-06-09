@@ -132,8 +132,8 @@ begin
       polygonDrawModePentity.plwentity:=GDBObjLWPolyline.CreateInstance;
       polygonDrawModePentity.plwentity^.Closed:=True;
 
-      widthObj.endw:=PolygonParam.PolyWidth;
-      widthObj.startw:=PolygonParam.PolyWidth;
+      widthObj.data.endw:=PolygonParam.PolyWidth;
+      widthObj.data.startw:=PolygonParam.PolyWidth;
 
       ////drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polygonDrawModePentity.plwentity);//было, теперь стало, не @указатель, а просто указатель
       zcAddEntToCurrentDrawingConstructRoot(polygonDrawModePentity.plwentity);

@@ -60,9 +60,9 @@ begin
     pp^.y := Props.Vertices[i].Y;
     if i < wcount then begin
       pw := pobj^.Width2D_in_OCS_Array.getDataMutable(i);
-      pw^.startw := Props.Vertices[i].StartWidth;
-      pw^.endw := Props.Vertices[i].EndWidth;
-      pw^.hw := (pw^.startw <> 0) or (pw^.endw <> 0);
+      pw^.data.startw := Props.Vertices[i].StartWidth;
+      pw^.data.endw := Props.Vertices[i].EndWidth;
+      pw^.data.hw := (pw^.data.startw <> 0) or (pw^.data.endw <> 0);
     end;
   end;
   if GetLoadCtx <> nil then

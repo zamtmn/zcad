@@ -102,8 +102,8 @@ begin
     //устанавливаем ему флаг ридонли
 
     //Создаем сразу 4-е точки прямоугольника, что бы в манипуляторе только управльть их координатами
-    widthObj.endw:=RectangParam.PolyWidth;
-    widthObj.startw:=RectangParam.PolyWidth;
+    widthObj.data.endw:=RectangParam.PolyWidth;
+    widthObj.data.startw:=RectangParam.PolyWidth;
     if RectangParam.ET=RET_LWPoly then begin
       polyLWObj:=GDBObjLWPolyline.CreateInstance;
       polyLWObj^.Closed:=True;

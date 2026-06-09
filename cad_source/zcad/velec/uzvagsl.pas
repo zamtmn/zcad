@@ -603,8 +603,8 @@ implementation
        result:=GDBObjLWPolyline.CreateInstance;
        result^.Closed:=true;
        zcAddEntToCurrentDrawingConstructRoot(result);
-       widthObj.endw:=0.1;
-       widthObj.startw:=0.1;
+       widthObj.data.endw:=0.1;
+       widthObj.data.startw:=0.1;
        for i:=0 to contourRoom^.VertexArrayInOCS.GetRealCount-1 do begin
           pt:=contourRoom^.VertexArrayInOCS.getdata(i);
           vertexLWObj.x:=pt.x;
@@ -651,8 +651,8 @@ implementation
        polyLWObj:=GDBObjLWPolyline.CreateInstance;
        polyLWObj^.Closed:=true;
        zcAddEntToCurrentDrawingConstructRoot(polyLWObj);
-       widthObj.endw:=0.1;
-       widthObj.startw:=0.1;
+       widthObj.data.endw:=0.1;
+       widthObj.data.startw:=0.1;
        for i:=0 to contourRoom^.VertexArrayInOCS.GetRealCount-1 do begin
           pt:=contourRoom^.VertexArrayInOCS.getdata(i);
           vertexLWObj.x:=pt.x;

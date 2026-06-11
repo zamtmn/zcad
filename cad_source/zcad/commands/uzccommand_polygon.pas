@@ -70,7 +70,7 @@ var
   vertexLWObj:TzePoint2d;
   //переменная для добавления вершин в полилинию
   vertexObj:TzePoint3d;
-  widthObj:GLLWWidth;
+  widthObj:TSegmentParams;
   //переменная для добавления веса линии в начале и конце пути
   //polyLWObj:PGDBObjLWPolyline;
   //polyObj:PGDBObjPolyline;
@@ -142,7 +142,7 @@ begin
       for i:=0 to PolygonParam.VNum-1 do begin
         polygonDrawModePentity.plwentity^.Vertex2D_in_OCS_Array.PushBackData(
           vertexLWObj);
-        polygonDrawModePentity.plwentity^.Width2D_in_OCS_Array.PushBackData(
+        polygonDrawModePentity.plwentity^.SgmntsParams.PushBackData(
           widthObj);
       end;
 

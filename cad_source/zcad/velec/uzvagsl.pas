@@ -597,7 +597,7 @@ implementation
         i:integer;
         pt:TzePoint3d;
         vertexLWObj:TzePoint2d; //для двух серной полилинии
-        widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
+        widthObj:TSegmentParams;      //переменная для добавления веса линии в начале и конце пути
     begin
 
        result:=GDBObjLWPolyline.CreateInstance;
@@ -610,7 +610,7 @@ implementation
           vertexLWObj.x:=pt.x;
           vertexLWObj.y:=pt.y;
           result^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-          result^.Width2D_in_OCS_Array.PushBackData(widthObj);
+          result^.SgmntsParams.PushBackData(widthObj);
        end;
     end;
 
@@ -631,7 +631,7 @@ implementation
         polyLWObj:pgdbobjlwpolyline;
         pt:TzePoint3d;
         vertexLWObj:TzePoint2d; //для двух серной полилинии
-        widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
+        widthObj:TSegmentParams;      //переменная для добавления веса линии в начале и конце пути
 
         //drawing:PTSimpleDrawing; //для работы с чертежом
         NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
@@ -658,7 +658,7 @@ implementation
           vertexLWObj.x:=pt.x;
           vertexLWObj.y:=pt.y;
           polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-          polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+          polyLWObj^.SgmntsParams.PushBackData(widthObj);
        end;
        //***//
        num:=0;

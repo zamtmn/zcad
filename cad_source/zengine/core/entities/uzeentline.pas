@@ -37,57 +37,45 @@ type
     public
     CoordInOCS:GDBLineProp;
 
-    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p1,p2:TzePoint3d);
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint;p1,p2:TzePoint3d);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
-      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
-
-    procedure SaveToDXF(var outStream:TZctnrVectorBytes;
-      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;
+                          var context:TIODXFLoadContext);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;
+                        var IODXFContext:TIODXFSaveContext);virtual;
     function IsStagedFormatEntity:boolean;virtual;
-    procedure FormatEntity(var drawing:TDrawingDef;
-      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure CalcGeometry;virtual;
-    procedure DrawGeometry(lw:integer;var DC:TDrawContext;
-      const inFrustumState:TInBoundingVolume);virtual;
+    procedure DrawGeometry(lw:integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     procedure rtsave(refp:Pointer);virtual;
     procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
-    function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
-    function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:TzePoint3d):boolean;virtual;
-    function getsnap(var osp:os_record;var pdata:Pointer;
-      const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
-    function getintersect(var osp:os_record;pobj:PGDBObjEntity;
-      const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
+    function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
+    function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:TzePoint3d):boolean;virtual;
+    function getsnap(var osp:os_record;var pdata:Pointer;const param:OGLWndtype;
+                     ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
+    function getintersect(var osp:os_record;pobj:PGDBObjEntity;const param:OGLWndtype;
+                          ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     function beforertmodify:Pointer;virtual;
     procedure clearrtmodify(p:Pointer);virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-    function IsRTNeedModify(const Point:PControlPointDesc;
-      p:Pointer):boolean;virtual;
-    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
-      ProjectProc:GDBProjectProc);virtual;
+    function IsRTNeedModify(const Point:PControlPointDesc;p:Pointer):boolean;virtual;
+    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
     procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
-    function jointoline(pl:pgdbobjline;
-      var drawing:TDrawingDef):boolean;virtual;
+    function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):boolean;virtual;
 
     function ObjToString(const prefix,sufix:string):string;virtual;
     function GetObjTypeName:string;virtual;
     function GetCenterPoint:TzePoint3d;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
-    function CalcInFrustum(const frustum:TzeFrustum;
-      const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
-      const zoom,currentdegradationfactor:double):boolean;virtual;
-    function CalcTrueInFrustum(
-      const frustum:TzeFrustum):TInBoundingVolume;virtual;
+    function CalcInFrustum(const frustum:TzeFrustum;const Actuality:TVisActuality;
+                           var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
+                           const zoom,currentdegradationfactor:double):boolean;virtual;
+    function CalcTrueInFrustum(const frustum:TzeFrustum):TInBoundingVolume;virtual;
 
-    function IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
-      virtual;
-    procedure AddOnTrackAxis(var posr:os_record;
-      const processaxis:taddotrac);virtual;
+    function IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;virtual;
+    procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
     function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
 
     class function CreateInstance:PGDBObjLine;static;
@@ -95,8 +83,7 @@ type
 
     function getCoordInWCS:GDBLineProp;
 
-     property CoordInWCS:GDBLineProp
-      read fCoordInWCS write fCoordInWCS;
+    property CoordInWCS:GDBLineProp read fCoordInWCS write fCoordInWCS;
   end;
   ptlinertmodify=^tlinertmodify;
 
@@ -281,8 +268,8 @@ begin
   Result:=True;
 end;
 
-procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;
-  var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;
+                                  Stage:TEFStages=EFAllStages);
 begin
   if EFCalcEntityCS in stage then begin
     if assigned(EntExtensions) then

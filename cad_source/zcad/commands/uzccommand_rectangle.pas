@@ -62,7 +62,7 @@ var
   vertexLWObj:TzePoint2d;
   //переменная для добавления вершин в полилинию
   vertexObj:TzePoint3d;
-  widthObj:GLLWWidth;
+  widthObj:TSegmentParams;
   //переменная для добавления веса линии в начале и конце пути
   polyLWObj:PGDBObjLWPolyline;
   polyObj:PGDBObjPolyline;
@@ -112,16 +112,16 @@ begin
       vertexLWObj.x:=pe.p1.x;
       vertexLWObj.y:=pe.p1.y;
       polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-      polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+      polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-      polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+      polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-      polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+      polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-      polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+      polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       InteractiveLWRectangleManipulator(polyLWObj,pe.p1,False,nil);
       if commandmanager.Get3DPointInteractive(APrompt2,pe.p2,

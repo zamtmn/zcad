@@ -20,12 +20,12 @@ unit UGDBPolyLine2DArray;
 {$Mode delphi}{$H+}
 {$Include zengineconfig.inc}
 interface
-uses uzegeometrytypes,gzctnrVector,sysutils,uzegeometry,
-     gzctnrVectorTypes,math;
+uses uzegeometrytypes,sysutils,uzegeometry,
+     gzctnrVectorTypes,uzctnrVectorTzePoint2d,math;
 type
 
 PGDBPolyline2DArray=^GDBPolyline2DArray;
-GDBPolyline2DArray= object(GZVector<TzePoint2d>)
+GDBPolyline2DArray= object(TZctnrVectorTzePoint2d)
                       closed:Boolean;
                       constructor init(m:Integer;c:Boolean);
 

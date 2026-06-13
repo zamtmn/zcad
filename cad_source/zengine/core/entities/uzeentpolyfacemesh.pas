@@ -421,7 +421,7 @@ begin
         begin
           tempPoint1 := VertexArrayInWCS.Items[edgePairs.parray^[i].idx1 - 1];
           tempPoint2 := VertexArrayInWCS.Items[edgePairs.parray^[i].idx2 - 1];
-          Representation.DrawLineWithoutLT(dc, tempPoint1, tempPoint2);
+          Representation.CreateLineWithoutLT(dc,Self,tempPoint1,tempPoint2);
         end;
       end;
     finally

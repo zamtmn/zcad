@@ -136,7 +136,7 @@ begin
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then
     Representation.Clear;
     if VertexArrayInWCS.Count>1 then
-      Representation.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,False);
+      Representation.CreatePolyLine(dc,self,vp,OneMatrix,VertexArrayInWCS.getPFirst[0..VertexArrayInWCS.GetLastIndex],closed,False);
 
 
   if assigned(EntExtensions) then

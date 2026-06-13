@@ -131,7 +131,7 @@ implementation
 
 procedure DrawLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:TzePoint3d;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
-  pEntity.Representation.DrawLineWithLT(pEntity^,onematrix,DC,p1,p2,pEntity.vp);
+  pEntity.Representation.CreateLine(DC,pEntity^,pEntity.vp,onematrix,p1,p2);
 end;
 
 procedure SaveLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:TzePoint3d;const drawing:TDrawingDef;var DC:TDrawContext);

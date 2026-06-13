@@ -32,6 +32,7 @@ uses
   uzccommandsmanager,
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcutils,
+  uzeTypes,
   uzccommand_polygon,
   URecordDescriptor,uzsbTypeDescriptors,Varman,uzsbVarmanDef;
 

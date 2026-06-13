@@ -233,7 +233,7 @@ begin
     calcobjmatrix;
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
       Representation.Clear;
-      Representation.DrawTextContent(dc.drawer,content,TXTStyle^.pfont,
+      Representation.CreateTextContent(dc.drawer,content,TXTStyle^.pfont,
         DrawMatrix,objmatrix,textprop.size,Outbound);
     end;
     calcbb(dc);

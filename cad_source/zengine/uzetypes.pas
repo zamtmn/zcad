@@ -200,6 +200,20 @@ type
   TGetterSetterTColor=GGetterSetter<TColor>;
   PTGetterSetterTColor=^TGetterSetterTColor;
 
+  PSegmentParams=^TSegmentParams;
+  TGenSegmentParams=record
+    startw:double;
+    endw:double;
+    hw:boolean;
+    bulge:double;
+  end;
+
+  TSegmentParams=record
+    data:TGenSegmentParams;
+    quad:GDBQuad2d;
+  end;
+
+
   GDBaseObject=object
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
     constructor initnul;

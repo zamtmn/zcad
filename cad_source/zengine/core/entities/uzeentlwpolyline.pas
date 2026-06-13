@@ -16,6 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzeentlwpolyline;
+{$PointerMath ON}
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
@@ -29,22 +30,6 @@ uses
   gzctnrVectorTypes,uzegeometrytypes,uzeffdxfsupport,SysUtils,
   UGDBSelectedObjArray,uzMVReader,uzCtnrVectorpBaseEntity;
 
-type
-
-  PSegmentParams=^TSegmentParams;
-
-  TGenSegmentParams=record
-    startw:double;
-    endw:double;
-    hw:boolean;
-    bulge:double;
-  end;
-
-  TSegmentParams=record
-    data:TGenSegmentParams;
-    quad:GDBQuad2d;
-  end;
-
 const
   CDefaultPolySegmentWidth:TGenSegmentParams=(
   startw:0;
@@ -55,14 +40,14 @@ const
 
 type
 
-  GDBLineWidthArray=GZVector<TSegmentParams>;
+  TSegmentsParams=GZVector<TSegmentParams>;
   TWidth3D_in_WCS_Vector=GZVector<GDBQuad3d>;
 
   PGDBObjLWPolyline=^GDBObjLWpolyline;
 
   GDBObjLWPolyline=object(GDBObjWithLocalCS)
     Vertex2D_in_OCS_Array:GDBpolyline2DArray;
-    SgmntsParams:GDBLineWidthArray;
+    SgmntsParams:TSegmentsParams;
 
     Vertex3D_in_WCS_Array:GDBPoint3dArray;
     Width3D_in_WCS_Array:TWidth3D_in_WCS_Vector;
@@ -517,7 +502,7 @@ begin
   inherited;
 end;
 
-function EnsureWidthInicialized(var AWidths:GDBLineWidthArray;AIdx:Integer):PSegmentParams;
+function EnsureWidthInicialized(var AWidths:TSegmentsParams;AIdx:Integer):PSegmentParams;
 var
   c:Integer;
 begin
@@ -571,6 +556,7 @@ begin
         20:begin
           p.y:=rdr.ParseDouble;
           lwtv.PushBackData(p);
+          EnsureWidthInicialized(SgmntsParams,hlGDBWord);
           Inc(hlGDBWord);
         end;
         38:local.p_insert.z:=rdr.ParseDouble;
@@ -710,11 +696,15 @@ begin
       CalcWidthSegments;
       if assigned(EntExtensions) then begin
         if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
-          Representation.DrawLWPolyLineWithLT(self,GetMatrix^,vp,dc,Vertex2D_in_OCS_Array,closed,
-            {ltgen}false);
+          Representation.CreateLWPolyLine(dc,self,vp,GetMatrix^,
+          Vertex2D_in_OCS_Array.getPFirst[0..Vertex2D_in_OCS_Array.GetLastIndex],
+          SgmntsParams.getPFirst[0..SgmntsParams.GetLastIndex],
+          closed,{ltgen}false);
       end else
-        Representation.DrawLWPolyLineWithLT(self,GetMatrix^,vp,dc,Vertex2D_in_OCS_Array,closed,
-          {ltgen}false);
+        Representation.CreateLWPolyLine(dc,self,vp,GetMatrix^,
+        Vertex2D_in_OCS_Array.getPFirst[0..Vertex2D_in_OCS_Array.GetLastIndex],
+        SgmntsParams.getPFirst[0..SgmntsParams.GetLastIndex],
+        closed,{ltgen}false);
     end;
     Representation.Shrink;
     if assigned(EntExtensions) then

@@ -304,9 +304,7 @@ var
   newdrawlen:double;
 begin
   if Strokes.Count=0 then
-    Representation.DrawLineWithoutLT(DC,VectorTransform3D(
-      CreateVertex(p1.x,p1.y,0),ObjMatrix),VectorTransform3D(
-      CreateVertex(p2.x,p2.y,0),ObjMatrix))
+    Representation.CreateLineWithoutLT(DC,self,ObjMatrix,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0))
   else begin
     dir:=(p2-p1).NormalizeVertex;
     t:=Scale*normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
@@ -326,21 +324,16 @@ begin
       end;
       newdrawlen:=drawedlen+abs(d);
       if d=0 then
-        Representation.DrawPoint(DC,VectorTransform3D(
-          CreateVertex(p.x,p.y,0),ObjMatrix),vp)
+        Representation.CreatePoint(DC,self,vp,ObjMatrix,CreateVertex(p.x,p.y,0))
       else if d>0 then begin
         if newdrawlen<=l then begin
           pp.x:=p.x+dir.x*abs(d);
           pp.y:=p.y+dir.y*abs(d);
-          Representation.DrawLineWithoutLT(DC,VectorTransform3D(
-            CreateVertex(p.x,p.y,0),ObjMatrix),VectorTransform3D(
-            CreateVertex(pp.x,pp.y,0),ObjMatrix));
+          Representation.CreateLineWithoutLT(DC,self,ObjMatrix,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0));
         end else begin
           pp.x:=p.x+dir.x*(d-(newdrawlen-l));
           pp.y:=p.y+dir.y*(d-(newdrawlen-l));
-          Representation.DrawLineWithoutLT(DC,VectorTransform3D(
-            CreateVertex(p.x,p.y,0),ObjMatrix),VectorTransform3D(
-            CreateVertex(pp.x,pp.y,0),ObjMatrix));
+          Representation.CreateLineWithoutLT(DC,self,ObjMatrix,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0));
         end;
       end else begin
         pp.x:=p.x-dir.x*d;

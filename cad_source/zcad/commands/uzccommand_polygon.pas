@@ -33,6 +33,7 @@ uses
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcutils,
   //
+  uzeTypes,
   uzegeometry,
   URecordDescriptor,uzsbTypeDescriptors,Varman,uzsbVarmanDef;
 

@@ -284,11 +284,9 @@ begin
       Representation.Clear;
       if assigned(EntExtensions) then begin
         if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
-          Representation.DrawLineByConstRefLinePropWithLT(
-            self,getmatrix^,dc,CoordInOCS,vp,True);
+          Representation.CreateLineByConstRefLineProp(dc,self,vp,getmatrix^,CoordInOCS,True);
       end else
-        Representation.DrawLineByConstRefLinePropWithLT(
-          self,getmatrix^,dc,CoordInOCS,vp,True);
+        Representation.CreateLineByConstRefLineProp(dc,self,vp,getmatrix^,CoordInOCS,True);
     end;
     Representation.Shrink;
     if assigned(EntExtensions) then

@@ -27,7 +27,8 @@ uses
   uzedwgloadcontext,
   uzedwgentityregistry,
   uzeffmanager,
-  uzedwgimport;
+  uzedwgimport,
+  uzeTypes;
 
 implementation
 

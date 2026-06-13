@@ -146,7 +146,8 @@ uses
 dialogs,uzcinfoform,
  uzelongprocesssupport,//usimplegenerics,gzctnrSTL,
 
-  uzvtestdraw, uzccommand_drawsuperline;
+  uzvtestdraw, uzccommand_drawsuperline,
+   uzeTypes;
 
 
 type

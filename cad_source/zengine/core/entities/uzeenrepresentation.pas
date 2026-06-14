@@ -57,9 +57,10 @@ type
                                  (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;constref LP:GDBLineProp;OnlyOne:boolean=False);
     procedure CreateLineWithoutLT(var DC:TDrawContext;var Ent:GDBObjDrawable;const startpoint,endpoint:TzePoint3d);overload;
     procedure CreateLineWithoutLT(var DC:TDrawContext;var Ent:GDBObjDrawable;const Mtx:TzeTypedMatrix4d;const startpoint,endpoint:TzePoint3d);overload;
-    procedure CreatePolyLine     (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint3d;const closed,ltgen:boolean);virtual;
-    procedure CreatePolyLine2D   (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const closed,ltgen:boolean);virtual;
-    procedure CreateLWPolyLine   (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean);virtual;
+    procedure CreatePolyLine     (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint3d;const closed,ltgen:boolean);
+    procedure CreatePolyLine2D   (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const closed,ltgen:boolean);
+    procedure CreateLWPolyLine   (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean);
+    procedure CreateLWPolyLineWdh(var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed:boolean);
     procedure CreatePoint        (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const point:TzePoint3d);
     procedure StartSurface;
     procedure EndSurface;
@@ -307,6 +308,122 @@ begin
     _CreateTransformedPolylyne;
 end;
 
+procedure TZEntityRepresentation.CreateLWPolyLineWdh(var DC:TDrawContext;var Ent:GDBObjDrawable;
+  const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;
+  const Segments:array of TSegmentParams;const closed:boolean);
+
+type
+  TQuadData=record
+    Quad:GDBQuad2d;
+    hasStartWidth,hasEndWidth:boolean;
+    joinedWithNext,joinedWithPrew:boolean;
+  end;
+
+
+  procedure CalcSegment(const p1,p2:TzePoint2d;const plw:TSegmentParams;var quad:TQuadData);
+  var
+    k:integer;
+    vtangent,vnormal,vtemp:TzePoint2d;
+    q3d:GDBQuad3d;
+    v:TzeVector4d;
+  begin
+    vtangent:=p2-p1;
+    vnormal.x:=-vtangent.y;
+    vnormal.y:=vtangent.x;
+    vnormal:=vnormal.NormalizeVertex;
+
+    quad.hasStartWidth:=abs(plw.data.startw)>eps;
+    quad.hasEndWidth:=abs(plw.data.endw)>eps;
+
+    if quad.hasStartWidth then begin
+      vtemp:=vnormal*plw.data.startw/2;
+      quad.quad[0]:=p1+vtemp;
+      quad.quad[3]:=p1-vtemp;
+    end else begin
+      quad.quad[0]:=p1;
+      quad.quad[3]:=p1;
+    end;
+
+    if quad.hasEndWidth then begin
+      vtemp:=vnormal*plw.data.endw/2;
+      quad.quad[1]:=p2+vtemp;
+      quad.quad[2]:=p2-vtemp;
+    end else begin
+      quad.quad[1]:=p2;
+      quad.quad[2]:=p2;
+    end;
+
+    {for k:=0 to 3 do begin
+      v.x:=plw.quad[k].x;
+      v.y:=plw.quad[k].y;
+      v.z:=0;
+      v.w:=1;
+      v:=VectorTransform(v,objMatrix);
+      q3d[k]:=PzePoint3d(@v)^;
+    end;
+
+    Width3D_in_WCS_Array.PushBackData(q3d);}
+  end;
+
+  procedure JoinSegment(const p:TzePoint2d;const sp1,sp2:TSegmentParams;var q1,q2:TQuadData);
+  var
+    l:double;
+    ip,ip2:Intercept2DProp;
+  begin
+
+    if q1.hasEndWidth and q2.hasStartWidth then begin
+      if sp1.data.endw>sp2.data.startw then
+        l:=sp1.data.endw
+      else
+        l:=sp2.data.startw;
+      l:=4*l*l;//(2l)^2
+      ip:=intercept2dmy(q1.Quad[0],q1.Quad[1],q2.Quad[1],q2.Quad[0]);
+      ip2:=intercept2dmy(q1.Quad[3],q1.Quad[2],q2.Quad[2],q2.Quad[3]);
+
+      if ip.isintercept and ip2.isintercept then
+        if (ip.t1>0) and (ip.t2>0) then
+          if (ip2.t1>0) and (ip2.t2>0) then begin
+            if SqrVertexlength(p,ip.interceptcoord)<l then
+              if SqrVertexlength(p,ip2.interceptcoord)<l then begin
+                q1.Quad[1]:=ip.interceptcoord;
+                q1.Quad[2]:=ip2.interceptcoord;
+                q2.Quad[0]:=ip.interceptcoord;
+                q2.Quad[3]:=ip2.interceptcoord;
+                q1.joinedWithNext:=true;
+                q2.joinedWithPrew:=true;
+              end else begin
+                q1.joinedWithNext:=false;
+                q2.joinedWithPrew:=false;
+              end;
+          end;
+    end;
+  end;
+
+var
+  Quads:array of TQuadData;
+  i,j:integer;
+begin
+  //толстая полилиния без дуг
+  //длина Segments уже с учетом closed
+  SetLength(Quads,Length(Segments));
+
+  //считаем ширины сегментов
+  for i:=low(Segments) to high(Segments) do begin
+    if i=high(pts) then
+      j:=0
+    else
+      j:=i+1;
+    CalcSegment(pts[i],pts[j],segments[i],quads[i]);
+  end;
+
+  //пытается объеденить сегменты
+  for i:=low(Segments) to high(Segments)-1 do begin
+    j:=i+1;
+    JoinSegment(pts[j],segments[i],segments[j],quads[i],quads[j]);
+  end;
+  if closed then
+    JoinSegment(pts[0],segments[high(Segments)],segments[0],quads[high(Segments)],quads[0]);
+end;
 
 procedure TZEntityRepresentation.CreateLWPolyLine(var DC:TDrawContext;var Ent:GDBObjDrawable;
   const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;
@@ -315,11 +432,16 @@ procedure TZEntityRepresentation.CreateLWPolyLine(var DC:TDrawContext;var Ent:GD
 type
   TSegmentParamCheck=set of (SPHasBulge,SPHasWidth);
 var
-  i:integer;
-  spc:TSegmentParamCheck;
+  i,c:integer;
+  spc:TSegmentParamCheck=[];
 begin
-  spc:=[];
-  for i:=low(Segments)to high(Segments) do begin
+  //последний сегмент имеет смысл только ждя замкнутой полилинии
+  if closed then
+    c:=high(Segments)
+  else
+    c:=high(Segments)-1;
+  //проверяем есть ли в полилинии дуговые и широкие сегменты
+  for i:=low(Segments)to c do begin
     if abs(Segments[i].data.bulge)>eps then
       Include(spc,SPHasBulge);
     if Segments[i].data.hw then
@@ -328,7 +450,16 @@ begin
       Break;
   end;
   if spc=[] then
-    CreatePolyLine2d(DC,Ent,vp,Mtx,pts,closed,ltgen);
+    //тонкая полилиния без дуг
+    CreatePolyLine2d(DC,Ent,vp,Mtx,pts,closed,ltgen)
+  else if spc=[SPHasWidth] then begin
+    //толстая полилиния без дуг, отправляем Segments уже с учетом closed
+    CreateLWPolyLineWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed);
+  end else if spc=[SPHasBulge] then begin
+    //тонкая полилиния с дугами
+  end else if spc=[SPHasWidth,SPHasBulge] then begin
+    //толстая полилиния с дугами
+  end
 end;
 
 procedure TZEntityRepresentation.StartSurface;

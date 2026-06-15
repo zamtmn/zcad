@@ -17,6 +17,7 @@
 }
 
 unit uzctnrVectorTzePoint2d;
+{$mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses sysutils,gzctnrVector,uzegeometrytypes;

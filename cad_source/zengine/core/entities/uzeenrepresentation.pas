@@ -318,6 +318,7 @@ type
     hasStartWidth,hasEndWidth:boolean;
     joinedWithNext,joinedWithPrew:boolean;
   end;
+  TQtype=(QTStrip,QTLine);
 
 
   procedure CalcSegment(const p1,p2:TzePoint2d;const plw:TSegmentParams;var quad:TQuadData);
@@ -399,9 +400,56 @@ type
     end;
   end;
 
+  function Segment2QType(var q:TQuadData;var needbreak:boolean):TQtype;
+  begin
+    if q.hasEndWidth or q.hasEndWidth then begin
+      result:=QTStrip;
+      //needbreak:=(not q.hasEndWidth)or(not q.joinedWithNext);
+      needbreak:=not (q.hasEndWidth and q.joinedWithNext);
+    end else
+      result:=QTLine;
+  end;
+
+  procedure DrawLWPLLinearSegments(AType:TQtype;const quads:array of TQuadData);
+  var
+    pts3d:array[0..100]of TzePoint3d;
+    i,j:integer;
+  begin
+     case AType of
+       QTStrip:begin
+         pts3d[0]:=VectorTransform2D(quads[0].Quad[3],mtx);
+         pts3d[1]:=VectorTransform2D(quads[0].Quad[0],mtx);
+         pts3d[2]:=VectorTransform2D(quads[0].Quad[2],mtx);
+         pts3d[3]:=VectorTransform2D(quads[0].Quad[1],mtx);
+         j:=4;
+         for i:=low(quads)+1 to High(quads) do begin
+           pts3d[j]:=VectorTransform2D(quads[i].Quad[2],mtx);
+           inc(j);
+           pts3d[j]:=VectorTransform2D(quads[i].Quad[1],mtx);
+           inc(j);
+         end;
+         Graphix.AddTriangleStrip(DC,pts3d[0..j-1]);
+       end;
+       QTLine:begin
+         pts3d[0]:=VectorTransform2D(quads[0].Quad[0],mtx);
+         pts3d[1]:=VectorTransform2D(quads[0].Quad[1],mtx);
+         j:=2;
+         for i:=low(quads)+1 to High(quads) do begin
+           pts3d[j]:=VectorTransform2D(quads[i].Quad[1],mtx);
+           inc(j);
+         end;
+         Graphix.AddPolyLine(DC,false,pts3d[0..j-1]);
+       end;
+     end;
+  end;
+
 var
-  Quads:array of TQuadData;
+  Quads:array of TQuadData=nil;
   i,j:integer;
+
+  needbreak:boolean;
+  thisqtypestart:integer;
+  testqtype,qtype:TQtype;
 begin
   //толстая полилиния без дуг
   //длина Segments уже с учетом closed
@@ -423,7 +471,33 @@ begin
   end;
   if closed then
     JoinSegment(pts[0],segments[high(Segments)],segments[0],quads[high(Segments)],quads[0]);
+
+  needbreak:=true;
+  thisqtypestart:=-1;
+  for i:=low(Segments) to high(Segments)-1 do begin
+    if needbreak then begin
+      if thisqtypestart<>-1 then begin
+        DrawLWPLLinearSegments(qtype,quads[thisqtypestart..i-1]);
+      end;
+      thisqtypestart:=i;
+      qtype:=Segment2QType(quads[i],needbreak);
+    end else begin
+      testqtype:=Segment2QType(quads[i],needbreak);
+      if qtype<>testqtype then begin
+        DrawLWPLLinearSegments(qtype,quads[thisqtypestart..i]);
+        thisqtypestart:=i;
+        qtype:=testqtype;
+      end;
+    end;
+  end;
+  if needbreak then begin
+    DrawLWPLLinearSegments(qtype,quads[thisqtypestart..high(Segments)-1]);
+    qtype:=Segment2QType(quads[high(Segments)],needbreak);
+    DrawLWPLLinearSegments(qtype,quads[high(Segments)..high(Segments)])
+  end else
+    DrawLWPLLinearSegments(qtype,quads[thisqtypestart..high(Segments)])
 end;
+
 
 procedure TZEntityRepresentation.CreateLWPolyLine(var DC:TDrawContext;var Ent:GDBObjDrawable;
   const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;

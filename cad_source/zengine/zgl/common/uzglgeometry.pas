@@ -60,6 +60,7 @@ type
     procedure AddPolyLine(var DC:TDrawContext;const closed:boolean;const pts:array of TzePoint3d);
     procedure AddLine(var DC:TDrawContext;const p1,p2:TzePoint3d;OnlyOne:Boolean=False);
     procedure AddPoint(var DC:TDrawContext;const p:TzePoint3d);
+    procedure AddTriangleStrip(var DC:TDrawContext;const pts:array of TzePoint3d);
     {Patterns func}
     procedure PlaceNPatterns(var DC:TDrawContext;var Segmentator:ZSegmentator;const pli:TArrayIndex;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
     procedure PlaceOnePattern(var DC:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
@@ -307,6 +308,22 @@ begin
     DC.drawer.GetLLPrimitivesCreator.CreateLLPolyLine(LLprimitives,GeomData.Vertex3S.Count,Length(pts),closed);
   for i:=low(pts)to High(pts) do
     GeomData.Vertex3S.AddGDBVertex(pts[i]);
+end;
+
+procedure ZGLGraphix.AddTriangleStrip(var DC:TDrawContext;const pts:array of TzePoint3d);
+var
+  tsi,i:integer;
+  ptris:PTLLTriangleStrip;
+begin
+  if DC.drawer<>nil then begin
+    tsi:=DC.drawer.GetLLPrimitivesCreator.CreateLLTriangleStrip(LLprimitives);
+    pointer(ptris):=LLprimitives.getDataMutable(tsi);
+    ptris^.P1IndexInIndexesArray:=GeomData.Indexes.Count{-1};
+    ptris^.IndexInIndexesArraySize:=Length(pts);
+
+    for i:=low(pts)to High(pts) do
+      GeomData.Indexes.PushBackData(GeomData.Vertex3S.AddGDBVertex(pts[i]));
+  end;
 end;
 
 function CalcSegment(const startpoint,endpoint:TzePoint3d;out segment:ZPolySegmentData;prevlength:Double):Double;

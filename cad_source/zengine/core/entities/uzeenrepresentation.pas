@@ -24,7 +24,7 @@ uses
   uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,SysUtils,uzegeometrytypes,
   uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
   uzeentsubordinated,uzegeomentitiestree,uzeTypes,gzctnrVectorTypes,
-  uzgeomline3d,uzgeomproxy,uzctnrVectorTzePoint2d;
+  uzgeomline3d,uzgeomproxy,uzctnrVectorTzePoint2d,math;
 
 type
   PTZEntityRepresentation=^TZEntityRepresentation;
@@ -32,6 +32,10 @@ type
   TZEntityRepresentation=object(GDBaseObject)
   private
     procedure CreatePolyLineInternal(var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const pts:array of TzePoint3d;const closed,ltgen:boolean);virtual;
+    procedure CreateTransformedPolylyneInternal(var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint3d;const closed,ltgen:boolean);virtual;
+    procedure CreateTransformedPolylyne2DInternal(var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const closed,ltgen:boolean);virtual;
+    procedure CreatePolylyne2DInternal(var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const pts:array of TzePoint2d;const closed,ltgen:boolean);virtual;
+
   public
     Graphix:ZGLGraphix;
     Geometry:TGeomEntTreeNode;
@@ -59,6 +63,8 @@ type
     procedure CreateLineWithoutLT(var DC:TDrawContext;var Ent:GDBObjDrawable;const Mtx:TzeTypedMatrix4d;const startpoint,endpoint:TzePoint3d);overload;
     procedure CreatePolyLine     (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint3d;const closed,ltgen:boolean);
     procedure CreatePolyLine2D   (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const closed,ltgen:boolean);
+    procedure CreateBulgedPolyLine2D
+                                 (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean);
     procedure CreateLWPolyLine   (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean);
     procedure CreateLWPolyLineWdh(var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed:boolean);
     procedure CreatePoint        (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const point:TzePoint3d);
@@ -67,6 +73,14 @@ type
   end;
 
 implementation
+
+type
+  TQuadData=record
+    Quad:GDBQuad2d;
+    hasStartWidth,hasEndWidth:boolean;
+    joinedWithNext,joinedWithPrew:boolean;
+  end;
+  TQtype=(QTWrong,QTStrip,QTLine);
 
 function TZEntityRepresentation.GetGraphix:PZGLGraphix;
 begin
@@ -257,69 +271,101 @@ begin
   Geometry.UnLock;
 end;
 
+procedure TZEntityRepresentation.CreateTransformedPolylyneInternal(var DC:TDrawContext;
+  var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;
+  const pts:array of TzePoint3d;const closed,ltgen:boolean);
+var
+  i:integer;
+  tpts:array of TzePoint3d;
+begin
+  SetLength(tpts,Length(pts));
+  for i:={low(pts)}0 to High(pts) do
+    tpts[i]:=VectorTransform3D(pts[i],Mtx);
+  CreatePolyLineInternal(DC,Ent,vp,tpts,closed,ltgen);
+end;
 
 procedure TZEntityRepresentation.CreatePolyLine(var DC:TDrawContext;var Ent:GDBObjDrawable;
   const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint3d;
   const closed,ltgen:boolean);
-  procedure CreateTransformedPolylyne;
-  var
-    i:integer;
-    tpts:array of TzePoint3d;
-  begin
-    SetLength(tpts,Length(pts));
-    for i:={low(pts)}0 to High(pts) do
-      tpts[i]:=VectorTransform3D(pts[i],Mtx);
-    CreatePolyLineInternal(DC,Ent,vp,tpts,closed,ltgen);
-  end;
 begin
   if mtx.IsIdentity then
     CreatePolyLineInternal(DC,Ent,vp,pts,closed,ltgen)
   else
-    CreateTransformedPolylyne;
+    CreateTransformedPolylyneInternal(DC,Ent,vp,Mtx,pts,closed,ltgen);
+end;
+
+procedure TZEntityRepresentation.CreateTransformedPolylyne2DInternal(var DC:TDrawContext;
+  var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;
+  const pts:array of TzePoint2d;const closed,ltgen:boolean);
+var
+  i:integer;
+  tpts:array of TzePoint3d;
+begin
+  SetLength(tpts,Length(pts));
+  for i:={low(pts)}0 to High(pts) do
+    tpts[i]:=VectorTransform2D(pts[i],Mtx);
+  CreatePolyLineInternal(DC,Ent,vp,tpts,closed,ltgen);
+end;
+
+procedure TZEntityRepresentation.CreatePolylyne2DInternal(var DC:TDrawContext;var Ent:GDBObjDrawable;
+  const vp:GDBObjVisualProp;const pts:array of TzePoint2d;const closed,ltgen:boolean);
+var
+  i:integer;
+  tpts:array of TzePoint3d;
+begin
+  SetLength(tpts,Length(pts));
+  for i:={low(pts)}0 to High(pts) do
+    tpts[i]:=CreateVertex(pts[i].x,pts[i].y,0);
+  CreatePolyLineInternal(DC,Ent,vp,tpts,closed,ltgen);
 end;
 
 procedure TZEntityRepresentation.CreatePolyLine2d(var DC:TDrawContext;var Ent:GDBObjDrawable;
   const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;
   const closed,ltgen:boolean);
-  procedure _CreateTransformedPolylyne;
-  var
-    i:integer;
-    tpts:array of TzePoint3d;
-  begin
-    SetLength(tpts,Length(pts));
-    for i:={low(pts)}0 to High(pts) do
-      tpts[i]:=VectorTransform2D(pts[i],Mtx);
-    CreatePolyLineInternal(DC,Ent,vp,tpts,closed,ltgen);
-  end;
-  procedure _CreatePolylyne;
-  var
-    i:integer;
-    tpts:array of TzePoint3d;
-  begin
-    SetLength(tpts,Length(pts));
-    for i:={low(pts)}0 to High(pts) do
-      tpts[i]:=CreateVertex(pts[i].x,pts[i].y,0);
-    CreatePolyLineInternal(DC,Ent,vp,tpts,closed,ltgen);
-  end;
 begin
   if mtx.IsIdentity then
-    _CreatePolylyne
+    CreatePolylyne2DInternal(DC,Ent,vp,pts,closed,ltgen)
   else
-    _CreateTransformedPolylyne;
+    CreateTransformedPolylyne2DInternal(DC,Ent,vp,Mtx,pts,closed,ltgen);
+end;
+
+procedure DrawLWPLLinearQSegmentsInternal(var DC:TDrawContext;var Graphix:ZGLGraphix;
+  const quads:array of TQuadData;const Mtx:TzeTypedMatrix4d;var pts3d:array of TzePoint3d);inline;
+var
+  i,j:integer;
+begin
+  pts3d[0]:=VectorTransform2D(quads[0].Quad[3],mtx);
+  pts3d[1]:=VectorTransform2D(quads[0].Quad[0],mtx);
+  pts3d[2]:=VectorTransform2D(quads[0].Quad[2],mtx);
+  pts3d[3]:=VectorTransform2D(quads[0].Quad[1],mtx);
+  j:=4;
+  for i:=low(quads)+1 to High(quads) do begin
+    pts3d[j]:=VectorTransform2D(quads[i].Quad[2],mtx);
+    inc(j);
+    pts3d[j]:=VectorTransform2D(quads[i].Quad[1],mtx);
+    inc(j);
+  end;
+  Graphix.AddTriangleStrip(DC,pts3d[0..j-1]);
+end;
+
+procedure DrawLWPLLinearLSegmentsInternal(var DC:TDrawContext;var Graphix:ZGLGraphix;
+  const quads:array of TQuadData;const Mtx:TzeTypedMatrix4d;var pts3d:array of TzePoint3d);inline;
+var
+  i,j:integer;
+begin
+  pts3d[0]:=VectorTransform2D(quads[0].Quad[0],mtx);
+  pts3d[1]:=VectorTransform2D(quads[0].Quad[1],mtx);
+  j:=2;
+  for i:=low(quads)+1 to High(quads) do begin
+    pts3d[j]:=VectorTransform2D(quads[i].Quad[1],mtx);
+    inc(j);
+  end;
+  Graphix.AddPolyLine(DC,false,pts3d[0..j-1]);
 end;
 
 procedure TZEntityRepresentation.CreateLWPolyLineWdh(var DC:TDrawContext;var Ent:GDBObjDrawable;
   const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;
   const Segments:array of TSegmentParams;const closed:boolean);
-
-type
-  TQuadData=record
-    Quad:GDBQuad2d;
-    hasStartWidth,hasEndWidth:boolean;
-    joinedWithNext,joinedWithPrew:boolean;
-  end;
-  TQtype=(QTStrip,QTLine);
-
 
   procedure CalcSegment(const p1,p2:TzePoint2d;const plw:TSegmentParams;var quad:TQuadData);
   var
@@ -411,37 +457,36 @@ type
   end;
 
   procedure DrawLWPLLinearSegments(AType:TQtype;const quads:array of TQuadData);
-  var
-    pts3d:array[0..100]of TzePoint3d;
-    i,j:integer;
-  begin
-     case AType of
-       QTStrip:begin
-         pts3d[0]:=VectorTransform2D(quads[0].Quad[3],mtx);
-         pts3d[1]:=VectorTransform2D(quads[0].Quad[0],mtx);
-         pts3d[2]:=VectorTransform2D(quads[0].Quad[2],mtx);
-         pts3d[3]:=VectorTransform2D(quads[0].Quad[1],mtx);
-         j:=4;
-         for i:=low(quads)+1 to High(quads) do begin
-           pts3d[j]:=VectorTransform2D(quads[i].Quad[2],mtx);
-           inc(j);
-           pts3d[j]:=VectorTransform2D(quads[i].Quad[1],mtx);
-           inc(j);
-         end;
-         Graphix.AddTriangleStrip(DC,pts3d[0..j-1]);
-       end;
-       QTLine:begin
-         pts3d[0]:=VectorTransform2D(quads[0].Quad[0],mtx);
-         pts3d[1]:=VectorTransform2D(quads[0].Quad[1],mtx);
-         j:=2;
-         for i:=low(quads)+1 to High(quads) do begin
-           pts3d[j]:=VectorTransform2D(quads[i].Quad[1],mtx);
-           inc(j);
-         end;
-         Graphix.AddPolyLine(DC,false,pts3d[0..j-1]);
-       end;
-     end;
-  end;
+    const
+      PointsOnStackCount=100;
+    var
+      pts3d:array[0..PointsOnStackCount-1]of TzePoint3d;
+      dynpts3d:array of TzePoint3d;
+      ptscount:integer;
+    begin
+      case AType of
+        QTStrip:begin
+          ptscount:=(length(quads)+1)*2;
+          if ptscount<=PointsOnStackCount then
+            DrawLWPLLinearQSegmentsInternal(DC,Graphix,quads,Mtx,pts3d)
+          else begin
+            SetLength(dynpts3d,ptscount);
+            DrawLWPLLinearQSegmentsInternal(DC,Graphix,quads,Mtx,dynpts3d);
+          end;
+        end;
+        QTLine:begin
+          ptscount:=length(quads)+1;
+          if ptscount<=PointsOnStackCount then
+            DrawLWPLLinearLSegmentsInternal(DC,Graphix,quads,Mtx,pts3d)
+          else begin
+            SetLength(dynpts3d,ptscount);
+            DrawLWPLLinearLSegmentsInternal(DC,Graphix,quads,Mtx,dynpts3d);
+          end;
+        end;
+        QTWrong:
+          Raise Exception.Create('Unknown LPPolyLineSeg (QTWrong)');
+      end;
+    end;
 
 var
   Quads:array of TQuadData=nil;
@@ -449,7 +494,8 @@ var
 
   needbreak:boolean;
   thisqtypestart:integer;
-  testqtype,qtype:TQtype;
+  testqtype:TQtype;
+  qtype:TQtype=QTWrong;
 begin
   //толстая полилиния без дуг
   //длина Segments уже с учетом closed
@@ -498,6 +544,74 @@ begin
     DrawLWPLLinearSegments(qtype,quads[thisqtypestart..high(Segments)])
 end;
 
+procedure DrawArc(constref p1,p2:TzePoint2d;const bulge:double;var currpath:TZctnrVectorTzePoint2d;divcount:integer);//inline;  dg
+var
+  d,pc,pac,n:TzePoint2d;
+  l,h,nextbulge:double;
+begin
+  d:=p2-p1;
+  l:=d.Length;
+  h:=l*bulge/2;
+  pc:=(p1+p2)/2;
+  n.x:=-d.y;
+  n.y:=d.x;
+  n:=n.NormalizeVertex;
+  pac:=pc-n*h;
+  if divcount=-1 then begin
+    //пытаемся сделать лод. вариантов не много
+    divcount:=min(max(2,abs(round(bulge*2))),5);
+    {if abs(h)*2>l then
+      divcount:=3
+    else
+      divcount:=2}
+  end;
+  if divcount=0 then begin
+    currpath.PushBackData(p1);
+    currpath.PushBackData(pac);
+  end else begin
+    Dec(divcount);
+    nextbulge:=bulge/(1+sqrt(1+bulge*bulge));
+    DrawArc(p1,pac,nextbulge,currpath,divcount);
+    DrawArc(pac,p2,nextbulge,currpath,divcount);
+  end;
+end;
+
+
+procedure TZEntityRepresentation.CreateBulgedPolyLine2d(var DC:TDrawContext;var Ent:GDBObjDrawable;
+  const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;
+  const Segments:array of TSegmentParams;const closed,ltgen:boolean);
+type
+  TLastSegType=(LSTLine,LSTArc,LSTUnknown);
+var
+  i,StartLineSegmentIndex:integer;
+  LastLineSegment:TLastSegType;
+  currpath:TZctnrVectorTzePoint2d;
+begin
+  currpath.init(10);
+  StartLineSegmentIndex:=low(Segments);
+  LastLineSegment:=LSTUnknown;
+  if ltgen then begin
+
+  end else begin
+    for i:=low(Segments)to high(segments) do begin
+      if abs(Segments[i].data.bulge)>eps then begin
+        if LastLineSegment=LSTLine then begin
+          CreateTransformedPolylyne2DInternal(DC,Ent,vp,Mtx,pts[StartLineSegmentIndex..i],false,false);
+        end;
+        LastLineSegment:=LSTArc;
+        DrawArc(pts[i],pts[i+1],Segments[i].data.bulge,currpath,3);
+        currpath.PushBackData(pts[i+1]);
+        CreateTransformedPolylyne2DInternal(DC,Ent,vp,Mtx,currpath.getPFirst[0..currpath.GetLastIndex],false,false);
+        currpath.Clear;
+      end else begin
+        if LastLineSegment<>LSTLine then
+          StartLineSegmentIndex:=i;
+        LastLineSegment:=LSTLine;
+      end;
+    end;
+  end;
+  currpath.destroy;
+end;
 
 procedure TZEntityRepresentation.CreateLWPolyLine(var DC:TDrawContext;var Ent:GDBObjDrawable;
   const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;
@@ -531,6 +645,7 @@ begin
     CreateLWPolyLineWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed);
   end else if spc=[SPHasBulge] then begin
     //тонкая полилиния с дугами
+    CreateBulgedPolyLine2d(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen);
   end else if spc=[SPHasWidth,SPHasBulge] then begin
     //толстая полилиния с дугами
   end

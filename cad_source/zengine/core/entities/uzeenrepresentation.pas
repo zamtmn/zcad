@@ -536,6 +536,10 @@ begin
       end;
     end;
   end;
+  if thisqtypestart=-1 then begin
+    thisqtypestart:=low(Segments);
+    qtype:=Segment2QType(quads[thisqtypestart],needbreak);
+  end;
   if needbreak then begin
     DrawLWPLLinearSegments(qtype,quads[thisqtypestart..high(Segments)-1]);
     qtype:=Segment2QType(quads[high(Segments)],needbreak);
@@ -583,7 +587,7 @@ procedure TZEntityRepresentation.CreateBulgedPolyLine2d(var DC:TDrawContext;var 
 type
   TLastSegType=(LSTLine,LSTArc,LSTUnknown);
 var
-  i,StartLineSegmentIndex:integer;
+  i,j,StartLineSegmentIndex:integer;
   LastLineSegment:TLastSegType;
   currpath:TZctnrVectorTzePoint2d;
 begin
@@ -599,8 +603,12 @@ begin
           CreateTransformedPolylyne2DInternal(DC,Ent,vp,Mtx,pts[StartLineSegmentIndex..i],false,false);
         end;
         LastLineSegment:=LSTArc;
-        DrawArc(pts[i],pts[i+1],Segments[i].data.bulge,currpath,3);
-        currpath.PushBackData(pts[i+1]);
+        if i=high(pts) then
+          j:=0
+        else
+          j:=i+1;
+        DrawArc(pts[i],pts[j],Segments[i].data.bulge,currpath,4);
+        currpath.PushBackData(pts[j]);
         CreateTransformedPolylyne2DInternal(DC,Ent,vp,Mtx,currpath.getPFirst[0..currpath.GetLastIndex],false,false);
         currpath.Clear;
       end else begin

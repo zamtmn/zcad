@@ -52,6 +52,7 @@ type
     Vertex3D_in_WCS_Array:GDBPoint3dArray;
     Width3D_in_WCS_Array:TWidth3D_in_WCS_Vector;
     Closed:boolean;
+    Plinegen:boolean;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint;c:boolean);
     constructor initnul;
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;
@@ -382,6 +383,7 @@ var
 begin
   Getmem(Pointer(tpo),sizeof(GDBObjLWPolyline));
   tpo^.init(own,vp.Layer,vp.LineWeight,closed);
+  tpo^.Plinegen:=Plinegen;
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
   tpo^.Local:=local;
@@ -410,6 +412,7 @@ constructor GDBObjLWpolyline.init;
 begin
   inherited init(own,layeraddres,lw);
   closed:=c;
+  Plinegen:=false;
   Vertex2D_in_OCS_Array.init(4,c);
   SgmntsParams.init(4);
   Vertex3D_in_WCS_Array.init(4);
@@ -419,6 +422,8 @@ end;
 constructor GDBObjLWpolyline.initnul;
 begin
   inherited initnul(nil);
+  Closed:=false;
+  Plinegen:=false;
   Vertex2D_in_OCS_Array.init(4,False);
   SgmntsParams.init(4);
   Vertex3D_in_WCS_Array.init(4);
@@ -440,6 +445,7 @@ var
 begin
 
   Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
+  //exit;
 
   if dc.lod=LODCalculatedDetail then begin
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
@@ -526,7 +532,7 @@ procedure GDBObjLWpolyline.LoadFromDXF;
 var
   p:TzePoint2d;
   byt,i:integer;
-  hlGDBWord:longword;
+  hlGDBWord,flags:longword;
   numv:integer;
   widthload:boolean;
   globalwidth:double;
@@ -578,7 +584,11 @@ begin
           PSegmentParams(SgmntsParams.getDataMutable(hlGDBWord-1)).data.bulge:=rdr.ParseDouble;}
         end;
         43:globalwidth:=rdr.ParseDouble;
-        70:closed:=(rdr.ParseInteger and 1)=1;
+        70:begin
+          flags:=rdr.ParseInteger;
+          closed:=(flags and 1)<>0;
+          Plinegen:=(flags and 128)<>0;
+        end;
         210:Local.basis.oz.x:=rdr.ParseDouble;
         220:Local.basis.oz.y:=rdr.ParseDouble;
         230:Local.basis.oz.z:=rdr.ParseDouble;
@@ -603,16 +613,22 @@ end;
 
 procedure GDBObjLWpolyline.SaveToDXF;
 var
-  j:integer;
+  j,flags:integer;
   tv:TzePoint3d;
 begin
   SaveToDXFObjPrefix(outStream,'LWPOLYLINE','AcDbPolyline',IODXFContext);
   dxfStringWithoutEncodeOut(outStream,90,IntToStr(Vertex2D_in_OCS_Array.Count));
-  if closed then
-    dxfStringWithoutEncodeOut(outStream,70,'1')
-  else
-    dxfStringWithoutEncodeOut(outStream,70,'0');
 
+  if Closed then
+    flags:=1
+  else
+    flags:=0;
+
+  if Plinegen then
+    flags:=flags or 128;
+
+  if flags<>0 then
+    dxfIntegerout(outStream,70,flags);
 
   dxfDoubleout(outStream,38,local.p_insert.z);
 
@@ -698,13 +714,11 @@ begin
         if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
           Representation.CreateLWPolyLine(dc,self,vp,GetMatrix^,
           Vertex2D_in_OCS_Array.getPFirst[0..Vertex2D_in_OCS_Array.GetLastIndex],
-          SgmntsParams.getPFirst[0..SgmntsParams.GetLastIndex],
-          closed,{ltgen}false);
+          SgmntsParams.getPFirst[0..SgmntsParams.GetLastIndex],Closed,Plinegen);
       end else
         Representation.CreateLWPolyLine(dc,self,vp,GetMatrix^,
         Vertex2D_in_OCS_Array.getPFirst[0..Vertex2D_in_OCS_Array.GetLastIndex],
-        SgmntsParams.getPFirst[0..SgmntsParams.GetLastIndex],
-        closed,{ltgen}false);
+        SgmntsParams.getPFirst[0..SgmntsParams.GetLastIndex],Closed,Plinegen);
     end;
     Representation.Shrink;
     if assigned(EntExtensions) then

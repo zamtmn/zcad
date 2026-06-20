@@ -784,6 +784,7 @@ begin
     {LWPolyline}
     {--Misc}
     MultiPropertiesManager.RegisterPhysMultiproperty('Closed','Closed',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBLWPolylineID,nil,PtrInt(@plwdpoly^.Closed),PtrInt(@plwdpoly^.Closed),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('Linetype generation','Plinegen',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBLWPolylineID,nil,PtrInt(@plwdpoly^.Plinegen),PtrInt(@plwdpoly^.Plinegen),OneVarDataMIPD,OneVarDataEIPD);
 
 
     {3DPolyline uzegeometry}

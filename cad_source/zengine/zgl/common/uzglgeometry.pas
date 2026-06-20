@@ -750,7 +750,7 @@ begin
           //Segmentator.draw(DC,normalizedD-halfStroke,true);
           supressfirstdash:=false;
           dend:=normalizedD-halfStroke;
-          if dend>eps then
+          if lt^.LastStroke<>TODILine then
             case LT.FirstStroke of
               TODILine:Segmentator.draw(DC,dend,true,result);
               TODIPoint: begin

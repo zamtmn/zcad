@@ -44,10 +44,10 @@ type
   PTExtAttrib=^TExtAttrib;
 
   TExtAttrib=record
-    OwnerHandle:QWord;
-    MainFunctionHandle:QWord;
-    dwgHandle:QWord;
-    Handle:QWord;
+    OwnerHandle:TDWGHandle;
+    MainFunctionHandle:TDWGHandle;
+    dwgHandle:TDWGHandle;
+    Handle:TDWGHandle;
     Upgrade:TEntUpgradeInfo;
     ExtAttrib2:boolean;
   end;

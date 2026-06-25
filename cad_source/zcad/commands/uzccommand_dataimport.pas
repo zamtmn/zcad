@@ -141,6 +141,7 @@ begin
         if pvd<>nil then begin
           pvd.Data.PTD.SetValueFromString(pvd.Data.Addr.Instance,Value);
           pvisible.FormatEntity(drawing,DC);
+          //pvisible.YouChanged(drawing);
         end else if cancreatevar then begin
           pentvarext.entityunit.setvardesc(vd,vn,vun,vt);
           pentvarext.entityunit.InterfaceVariables.createvariable(vd.Name,vd);

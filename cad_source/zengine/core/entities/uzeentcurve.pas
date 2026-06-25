@@ -315,13 +315,18 @@ var
   ptv:PzePoint3d;
   tv:TzePoint3d;
   ir:itrec;
+  pmtx:PzeTypedMatrix4d;
 begin
   VertexArrayInWCS.Clear;
   VertexArrayInWCS.SetSize(VertexArrayInOCS.Count);
+  if bp.ListPos.owner=nil then
+    pmtx:=@OneMatrix
+  else
+    pmtx:=bp.ListPos.owner^.GetMatrix;
   ptv:=VertexArrayInOCS.beginiterate(ir);
   if ptv<>nil then
     repeat
-      tv:=VectorTransform3D(ptv^,bp.ListPos.owner^.GetMatrix^);
+      tv:=VectorTransform3D(ptv^,pmtx^);
       VertexArrayInWCS.PushBackData(tv);
       ptv:=vertexarrayinocs.iterate(ir);
     until ptv=nil;

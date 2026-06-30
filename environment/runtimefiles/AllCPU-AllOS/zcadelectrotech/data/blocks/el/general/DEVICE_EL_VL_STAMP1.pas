@@ -29,6 +29,23 @@ VL_Name4:String;(*'Фамилия 4'*)
 VL_Worker5:String;(*'Специалист 5'*)
 VL_Name5:String;(*'Фамилия 5'*)
 
+VL_Changes11:String;(*'Номер 1'*)
+VL_Changes12:String;(*'Лист 1'*)
+VL_Changes13:String;(*'Документ 1'*)
+VL_Changes14:String;(*'Дата 1'*)
+VL_Changes21:String;(*'Номер 2'*)
+VL_Changes22:String;(*'Лист 2'*)
+VL_Changes23:String;(*'Документ 2'*)
+VL_Changes24:String;(*'Дата 2'*)
+VL_Changes31:String;(*'Номер 3'*)
+VL_Changes32:String;(*'Лист 3'*)
+VL_Changes33:String;(*'Документ 3'*)
+VL_Changes34:String;(*'Дата 3'*)
+VL_Changes41:String;(*'Номер 4'*)
+VL_Changes42:String;(*'Лист 4'*)
+VL_Changes43:String;(*'Документ 4'*)
+VL_Changes44:String;(*'Дата 4'*)
+
 implementation
 
 begin
@@ -61,5 +78,22 @@ VL_Worker4:='??';
 VL_Name4:='??';
 VL_Worker5:='??';
 VL_Name5:='??';
+
+VL_Changes11:='??';
+VL_Changes12:='??';
+VL_Changes13:='??';
+VL_Changes14:='??';
+VL_Changes21:='??';
+VL_Changes22:='??';
+VL_Changes23:='??';
+VL_Changes24:='??';
+VL_Changes31:='??';
+VL_Changes32:='??';
+VL_Changes33:='??';
+VL_Changes34:='??';
+VL_Changes41:='??';
+VL_Changes42:='??';
+VL_Changes43:='??';
+VL_Changes44:='??';
 
 end.

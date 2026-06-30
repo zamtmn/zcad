@@ -221,7 +221,7 @@ begin
                     end;
                   006:
                     begin
-                      if onlyver=0 then
+                      if (onlyver=0)and(stackheap>=0) then
                         begin
                           x:=stack[stackheap,0];
                           y:=stack[stackheap,1];

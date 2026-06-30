@@ -30,22 +30,22 @@ uses
   uzcinterface,uzcutils,
   UGDBSelectedObjArray,uzeconsts,
   uzeentblockinsert,uzcentcable,uzcentnet,uzeentline,uzeEntHatch,uzcstrconsts,
-  uzegeometrytypes,uzegeometry,UGDBPolyLine2DArray,uzeentityfactory,uzCtnrVectorPBaseEntity;
+  uzegeometrytypes,uzegeometry,uzctnrVectorTzePoint2d,uzeentityfactory,uzCtnrVectorPBaseEntity;
 
 
 implementation
 
 //GDBPolyline2DArray
 
-function TryConvertGDBPolyline2DArrayToLine(var APolyLine:GDBPolyline2DArray;out p1,p2:TzePoint2d):boolean;
+function TryConvertGDBPolyline2DArrayToLine(var APolyLine:TZctnrVectorTzePoint2d;out p1,p2:TzePoint2d):boolean;
 var
   l01,l12:double;
   v01,v12:TzeVector2d;
 begin
   case APolyLine.Count of
-    4:if APolyLine.closed and (IsPoint2DEqual(APolyLine.getDataMutable(3)^,APolyLine.getDataMutable(0)^)) then
+    4:if {APolyLine.closed and} (IsPoint2DEqual(APolyLine.getDataMutable(3)^,APolyLine.getDataMutable(0)^)) then
       exit(false);
-    5:if (not APolyLine.closed) and (not IsPoint2DEqual(APolyLine.getDataMutable(4)^,APolyLine.getDataMutable(0)^)) then
+    5:if {(not APolyLine.closed) and} (not IsPoint2DEqual(APolyLine.getDataMutable(4)^,APolyLine.getDataMutable(0)^)) then
       exit(false);
     else
       exit(false);

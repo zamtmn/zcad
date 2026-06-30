@@ -26,7 +26,7 @@ uses
   gzctnrVectorTypes,uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
   uzegeometrytypes,uzeentity,UGDBPoint3DArray,uzctnrVectorBytesStream,
   uzeTypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
-  UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,uzeBoundaryPath,
+  uzctnrVectorTzePoint2d,uzglviewareadata,uzeTriangulator,uzeBoundaryPath,
   uzeStylesHatchPatterns,gvector,garrayutils,uzMVReader;
 
 type
@@ -242,7 +242,7 @@ procedure GDBObjHatch.ProcessLines(const p1,p2:TzePoint2d;
   var IV:TIntercept2dpropWithLICVector);
 var
   i,j:integer;
-  ppath:PGDBPolyline2DArray;
+  ppath:PTZctnrVectorTzePoint2d;
   FirstP,PrevP,CurrP:PzePoint2d;
 begin
   for i:=0 to Path.paths.Count-1 do begin
@@ -361,7 +361,7 @@ end;
 function GDBObjHatch.CheckPathsIntersect2(const p1,p2:TzePoint2d;const nextPath:integer):boolean;
 var
   i,j:integer;
-  ppath:PGDBPolyline2DArray;
+  ppath:PTZctnrVectorTzePoint2d;
   FirstP,PrevP,CurrP:PzePoint2d;
 begin
   result:=false;
@@ -389,7 +389,7 @@ end;
 function GDBObjHatch.CheckPathsIntersect:boolean;
 var
   i,j:integer;
-  ppath:PGDBPolyline2DArray;
+  ppath:PTZctnrVectorTzePoint2d;
   FirstP,PrevP,CurrP:PzePoint2d;
 begin
   result:=false;
@@ -656,7 +656,7 @@ var
   i,j,vc:integer;
   v:TzeVector4d;
   v3d:TzePoint3d;
-  ppolyarr:pGDBPolyline2DArray;
+  ppolyarr:pTZctnrVectorTzePoint2d;
 begin
   Vertex3D_in_WCS_Array.Clear;
   vc:=0;

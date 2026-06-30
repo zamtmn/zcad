@@ -22,7 +22,7 @@ unit uzeBoundaryPath;
 interface
 
 uses
-  Math,uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,uzctnrVectorBytesStream,
+  Math,uzegeometrytypes,uzctnrVectorTzePoint2d,gzctnrVector,uzctnrVectorBytesStream,
   gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader,uzeNURBSTypes,
   uzegluinterface,uzbLogIntf;
 
@@ -30,7 +30,7 @@ type
   PBoundaryPath=^TBoundaryPath;
 
   TBoundaryPath=object
-    paths:GZVector<GDBPolyline2DArray>;
+    paths:GZVector<TZctnrVectorTzePoint2d>;
     constructor init(m:TArrayIndex);
     destructor done;virtual;
     function LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var context:TIODXFLoadContext):boolean;
@@ -52,7 +52,7 @@ function TBoundaryPath.DummyCalcTrueInFrustum(pv1:PzePoint3d;
   const frustum:TzeFrustum):TInBoundingVolume;
 var
   i,j:integer;
-  ppla:PGDBPolyline2DArray;
+  ppla:PTZctnrVectorTzePoint2d;
   firstp,pv2:PzePoint3d;
   isAllFull,isAllEmpty:boolean;
 begin
@@ -85,7 +85,7 @@ end;
 procedure TBoundaryPath.transform(const t_matrix:TzeTypedMatrix4d);
 var
   i,j:integer;
-  ppla:PGDBPolyline2DArray;
+  ppla:PTZctnrVectorTzePoint2d;
   pv:PzePoint2d;
   tv:TzePoint3d;
 begin
@@ -106,7 +106,7 @@ end;
 function TBoundaryPath.getDataMutableByPlainIndex(index:TArrayIndex):PzePoint2d;
 var
   i,pln:integer;
-  ppla:PGDBPolyline2DArray;
+  ppla:PTZctnrVectorTzePoint2d;
 begin
   pln:=0;
   for i:=0 to paths.Count-1 do begin
@@ -126,7 +126,7 @@ end;
 destructor TBoundaryPath.done;
 var
   i:integer;
-  ppla:PGDBPolyline2DArray;
+  ppla:PTZctnrVectorTzePoint2d;
 begin
   for i:=0 to paths.Count-1 do begin
     ppla:=paths.getDataMutable(i);
@@ -152,7 +152,7 @@ var
 begin
   tv.x:=v^.x;
   tv.y:=v^.y;
-  PGDBPolyline2DArray(Data)^.PushBackData(tv);
+  PTZctnrVectorTzePoint2d(Data)^.PushBackData(tv);
 end;
 
 procedure NurbsErrorCallBack(const v:TGLUIntf_GLenum);
@@ -164,7 +164,7 @@ end;
 function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var context:TIODXFLoadContext):boolean;
 
   procedure DrawArc(constref p1,p2:TzePoint2d;
-  const bulge:double;var currpath:GDBPolyline2DArray;divcount:integer);//inline;
+  const bulge:double;var currpath:TZctnrVectorTzePoint2d;divcount:integer);//inline;
   var
     d,pc,pac,n:TzePoint2d;
     l,h,nextbulge:double;
@@ -197,21 +197,21 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   end;
 
   procedure DrawFullArc(constref p1,p2:TzePoint2d;
-    const bulge:double;var currpath:GDBPolyline2DArray);
+    const bulge:double;var currpath:TZctnrVectorTzePoint2d);
   begin
     DrawArc(p1,p2,bulge,currpath,-1);
     currpath.PushBackData(p2);
   end;
 
   procedure loadPolyWithBulges(var currDXFGroupCode:integer;
-    out currpath:GDBPolyline2DArray;const VertexCount:integer;
+    out currpath:TZctnrVectorTzePoint2d;const VertexCount:integer;
     const Closed:boolean);
   var
     p1,pcurr,pnext:TzePoint2d;
     j:integer;
     bulge,nextbulge:double;
   begin
-    currpath.init(vertexcount*10,True);
+    currpath.init(vertexcount*10{,True});
     pcurr:=dxfRequiredVertex2D(rdr,10,currDXFGroupCode);
     bulge:=0;
     if dxfLoadGroupCodeDouble(rdr,42,currDXFGroupCode,bulge) then
@@ -240,12 +240,12 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   end;
 
   procedure loadPoly(var currDXFGroupCode:integer;
-    out currpath:GDBPolyline2DArray;const VertexCount:integer);
+    out currpath:TZctnrVectorTzePoint2d;const VertexCount:integer);
   var
     p:TzePoint2d;
     j:integer;
   begin
-    currpath.init(vertexcount,True);
+    currpath.init(vertexcount);
     for j:=1 to VertexCount do begin
       p:=dxfRequiredVertex2D(rdr,10,currDXFGroupCode);
       currpath.PushBackData(p);
@@ -253,7 +253,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   end;
 
   procedure loadPolyBoundary(var currDXFGroupCode:integer;
-    out currpath:GDBPolyline2DArray);
+    out currpath:TZctnrVectorTzePoint2d);
   var
     hasBulge:integer=0;
     isClosed:integer=0;
@@ -271,7 +271,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   end;
 
   procedure loadSplineEdge(var currDXFGroupCode:integer;
-    var currpath:GDBPolyline2DArray);
+    var currpath:TZctnrVectorTzePoint2d);
   var
     vertexcount,k:integer;
     dummy:integer=0;
@@ -356,7 +356,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   end;
 
   procedure loadArcEdge(var currDXFGroupCode:integer;
-    var currpath:GDBPolyline2DArray);
+    var currpath:TZctnrVectorTzePoint2d);
   var
     k:integer;
     p,cp:TzePoint2d;
@@ -386,7 +386,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   end;
 
   procedure loadEllipseEdge(var currDXFGroupCode:integer;
-    var currpath:GDBPolyline2DArray);
+    var currpath:TZctnrVectorTzePoint2d);
   var
     p,axis:TzePoint2d;
     r,sa,ea,a:double;
@@ -403,7 +403,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   end;
 
   procedure loadLineEdge(var currDXFGroupCode:integer;
-  var currpath:GDBPolyline2DArray;EdgeNum,EdgesCount:integer);
+  var currpath:TZctnrVectorTzePoint2d;EdgeNum,EdgesCount:integer);
   var
     p:TzePoint2d;
   begin
@@ -438,7 +438,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   end;
 
 var
-  currpath:GDBPolyline2DArray;
+  currpath:TZctnrVectorTzePoint2d;
   pathscount:integer=0;
   i,EdgeNum,EdgesCount,currDXFGroupCode,EdgeType:integer;
   s:string='';
@@ -470,7 +470,7 @@ begin
           NotReadGroupValue:=true;
       end else begin
         EdgesCount:=dxfRequiredInteger(rdr,93,currDXFGroupCode);
-        currpath.init(EdgesCount,True);
+        currpath.init(EdgesCount);
         for EdgeNum:=1 to EdgesCount do begin
           if NotReadGroupValue then begin
             currDXFGroupCode:=rdr.ParseInteger;
@@ -524,7 +524,7 @@ end;
 procedure TBoundaryPath.CloneTo(var Dest:TBoundaryPath);
 var
   i,j:integer;
-  ppla:PGDBPolyline2DArray;
+  ppla:PTZctnrVectorTzePoint2d;
 begin
   Dest.paths.Clear;
   Dest.paths.SetSize(paths.GetCount);
@@ -532,7 +532,7 @@ begin
     Dest.paths.CreateArray;
   for i:=0 to paths.Count-1 do begin
     ppla:=Dest.paths.getDataMutable(i);
-    ppla^.init(paths.getData(i).GetCount,True);
+    ppla^.init(paths.getData(i).GetCount);
     Dest.paths.Count:=i+1;
     for j:=0 to paths.getData(i).Count-1 do
       ppla^.PushBackData(paths.getData(i).getData(j));

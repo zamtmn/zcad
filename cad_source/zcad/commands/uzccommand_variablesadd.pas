@@ -41,7 +41,7 @@ uses
   uzcenitiesvariablesextender,
   uzcLog,
   uzeentsubordinated,
-  uzsbVarmanDef,UBaseTypeDescriptor,uzeconsts,uzeentdevice,Masks;
+  uzsbVarmanDef,UBaseTypeDescriptor,uzeconsts,uzeentdevice,Masks,URecordDescriptor;
 
 type
   TEntsProcessedReport=record
@@ -148,6 +148,7 @@ var
   vn,vt,vv,vun:string;
   vd:vardesk;
   counter:TEntsProcessedReport;
+  &Type,TypeDescriptor:PUserTypeDescriptor;
 begin
   extractvarfromdxfstring(VariablesAddParams.NevVars,vn,vt,vv,vun);
   counter.init;
@@ -168,13 +169,19 @@ begin
           if accepted then begin
             counter.IncFiltred;
             if VarExt.entityunit.FindVariable(vn)=nil then begin
-              VarExt.entityunit.setvardesc(vd,vn,vun,vt);
-              VarExt.entityunit.InterfaceVariables.createvariable(vd.Name,vd);
-              PBaseTypeDescriptor(vd.Data.PTD)^.SetValueFromString(
-                vd.Data.Addr.Instance,vv);
-              counter.IncProcessed;
-              pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,
-                drawings.CurrentDWG^.DeSelector);
+              &Type:=VarExt.entityunit.TypeName2PTD(vt);
+              if &Type<>nil then begin
+                TypeDescriptor:=getRecTypeDescriptorOverrider(&Type);
+                VarExt.entityunit.setvardesc(vd,vn,vun,&Type);
+                VarExt.entityunit.InterfaceVariables.createvariable(vd.Name,vd);
+                if TypeDescriptor=nil then
+                  &Type^.SetValueFromString(vd.Data.Addr.Instance,vv)
+                else
+                  TypeDescriptor^.SetValueFromString(vd.Data.Addr.Instance,vv);
+                counter.IncProcessed;
+                pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,
+                  drawings.CurrentDWG^.DeSelector);
+              end;
             end;
           end;
         end;

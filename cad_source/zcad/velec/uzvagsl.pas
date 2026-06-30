@@ -146,7 +146,8 @@ uses
 dialogs,uzcinfoform,
  uzelongprocesssupport,//usimplegenerics,gzctnrSTL,
 
-  uzvtestdraw, uzccommand_drawsuperline;
+  uzvtestdraw, uzccommand_drawsuperline,
+   uzeTypes;
 
 
 type
@@ -597,20 +598,20 @@ implementation
         i:integer;
         pt:TzePoint3d;
         vertexLWObj:TzePoint2d; //для двух серной полилинии
-        widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
+        widthObj:TSegmentParams;      //переменная для добавления веса линии в начале и конце пути
     begin
 
        result:=GDBObjLWPolyline.CreateInstance;
        result^.Closed:=true;
        zcAddEntToCurrentDrawingConstructRoot(result);
-       widthObj.endw:=0.1;
-       widthObj.startw:=0.1;
+       widthObj.data.endw:=0.1;
+       widthObj.data.startw:=0.1;
        for i:=0 to contourRoom^.VertexArrayInOCS.GetRealCount-1 do begin
           pt:=contourRoom^.VertexArrayInOCS.getdata(i);
           vertexLWObj.x:=pt.x;
           vertexLWObj.y:=pt.y;
           result^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-          result^.Width2D_in_OCS_Array.PushBackData(widthObj);
+          result^.SgmntsParams.PushBackData(widthObj);
        end;
     end;
 
@@ -631,7 +632,7 @@ implementation
         polyLWObj:pgdbobjlwpolyline;
         pt:TzePoint3d;
         vertexLWObj:TzePoint2d; //для двух серной полилинии
-        widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
+        widthObj:TSegmentParams;      //переменная для добавления веса линии в начале и конце пути
 
         //drawing:PTSimpleDrawing; //для работы с чертежом
         NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
@@ -651,14 +652,14 @@ implementation
        polyLWObj:=GDBObjLWPolyline.CreateInstance;
        polyLWObj^.Closed:=true;
        zcAddEntToCurrentDrawingConstructRoot(polyLWObj);
-       widthObj.endw:=0.1;
-       widthObj.startw:=0.1;
+       widthObj.data.endw:=0.1;
+       widthObj.data.startw:=0.1;
        for i:=0 to contourRoom^.VertexArrayInOCS.GetRealCount-1 do begin
           pt:=contourRoom^.VertexArrayInOCS.getdata(i);
           vertexLWObj.x:=pt.x;
           vertexLWObj.y:=pt.y;
           polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-          polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+          polyLWObj^.SgmntsParams.PushBackData(widthObj);
        end;
        //***//
        num:=0;

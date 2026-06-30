@@ -30,7 +30,7 @@ uses
   Varman,
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,
-  uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
+  uzeentmtext,uzeentpolyline,uzeentlwpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzeEntSpline,
   uzeenthatch,
   uzegeometry,uzcoimultiproperties,uzcLog,
@@ -556,6 +556,7 @@ const
      ptext:PGDBObjText=nil;
      pmtext:PGDBObjMText=nil;
      p3dpoly:PGDBObjPolyline=nil;
+     plwdpoly:PGDBObjLWPolyline=nil;
      pspline:PGDBObjSpline=nil;
      phatch:PGDBObjHatch=nil;
      pelleader:PGDBObjElLeader=nil;
@@ -779,6 +780,12 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('Width','Width',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.width),PtrInt(@pmtext^.width),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('LinespaceFactor','Linespace factor',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.linespacef),PtrInt(@pmtext^.linespacef),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_TextsByStyles','Texts by styles',sysunit^.TypeName2PTD('TMSTextsStylesDetector'),MPCSummary,GDBMTextID,nil,PtrInt(@ptext^.TXTStyle),PtrInt(@ptext^.TXTStyle),TMainIterateProcsData.Create(@GetPointerCounterData,@FreePNamedObjectCounterData),TEntIterateProcsData.Create(nil,@PStyle2PStyleCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
+
+    {LWPolyline}
+    {--Misc}
+    MultiPropertiesManager.RegisterPhysMultiproperty('Closed','Closed',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBLWPolylineID,nil,PtrInt(@plwdpoly^.Closed),PtrInt(@plwdpoly^.Closed),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('Linetype generation','Plinegen',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBLWPolylineID,nil,PtrInt(@plwdpoly^.Plinegen),PtrInt(@plwdpoly^.Plinegen),OneVarDataMIPD,OneVarDataEIPD);
+
 
     {3DPolyline uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;

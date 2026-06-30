@@ -26,7 +26,7 @@ uses
   uzbLogIntf,uzeLogIntf;
 
 type
-  TExt2LoadProcMap<GFileProcessProc>=class
+  TExt2ProcMap<GFileProcessProc>=class
     private
       type
         PTFileFormatData=^TFileFormatData;
@@ -51,7 +51,7 @@ type
       procedure RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const DefaultForThisExt:boolean=false);
       function GetLoadProc(const _Wxt:String):GFileProcessProc;
       function GetDefaultFileFormatHandle(const _Wxt:String):TFileFormatHandle;
-      function GetCurrentFileFilter:String;
+      function GetCurrentFileFilter(const AWithAllFiles:boolean=true):String;
       //function GetDefaultFileFilterIndex:integer;
       property DefaultExt:String read fDefaultFileExt write fDefaultFileExt;
   end;
@@ -63,9 +63,13 @@ type
     procedure CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;constref ADC:TDrawContext);
   end;
   TFileLoadProcedure=procedure(const name: String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
-  TLoadFomats=TExt2LoadProcMap<TFileLoadProcedure>;
+  TFileSaveProcedure=procedure(const name: String);
+  TLoadFomats=TExt2ProcMap<TFileLoadProcedure>;
+  TSaveFomats=TExt2ProcMap<TFileSaveProcedure>;
+
 var
-    Ext2LoadProcMap:TLoadFomats;
+  Ext2LoadProcMap:TLoadFomats;
+  Ext2SaveProcMap:TSaveFomats;
 
 implementation
 
@@ -78,21 +82,21 @@ begin
 end;
 
 
-constructor TExt2LoadProcMap<GFileProcessProc>.Create;
+constructor TExt2ProcMap<GFileProcessProc>.Create;
 begin
   inherited;
   map:=TExt2LoadProcMapGen.Create;
   vec.Init;
 end;
 
-destructor TExt2LoadProcMap<GFileProcessProc>.Destroy;
+destructor TExt2ProcMap<GFileProcessProc>.Destroy;
 begin
   inherited;
   map.Free;
   vec.Done;
 end;
 
-function TExt2LoadProcMap<GFileProcessProc>.GetLoadProc(const _Wxt:String):GFileProcessProc;
+function TExt2ProcMap<GFileProcessProc>.GetLoadProc(const _Wxt:String):GFileProcessProc;
 var
   ExtHandle:TFileFormatHandle;
   //_key:String;
@@ -104,7 +108,7 @@ begin
     result:=nil;
 end;
 
-function TExt2LoadProcMap<GFileProcessProc>.GetDefaultFileFormatHandle(const _Wxt:String):TFileFormatHandle;
+function TExt2ProcMap<GFileProcessProc>.GetDefaultFileFormatHandle(const _Wxt:String):TFileFormatHandle;
 var
   _key:String;
 begin
@@ -117,7 +121,7 @@ begin
   end;
 end;
 
-procedure TExt2LoadProcMap<GFileProcessProc>.RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const DefaultForThisExt:boolean=false);
+procedure TExt2ProcMap<GFileProcessProc>.RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const DefaultForThisExt:boolean=false);
 var
   //FileFormatData:TFileFormatData;
   StandartizedName:string;
@@ -144,7 +148,7 @@ begin
   end;
 end;
 
-{function TExt2LoadProcMap<GFileProcessProc>.GetDefaultFileFilterIndex:integer;
+{function TExt2ProcMap<GFileProcessProc>.GetDefaultFileFilterIndex:integer;
 var
   pair:TExt2LoadProcMapGen.TDictionaryPair;
 begin
@@ -155,7 +159,7 @@ begin
     inc(result)
   end;
 end;}
-function TExt2LoadProcMap<GFileProcessProc>.GetCurrentFileFilter:String;
+function TExt2ProcMap<GFileProcessProc>.GetCurrentFileFilter(const AWithAllFiles:boolean=true):String;
 var
   ffd:TFileFormats.THandleData;
 begin
@@ -165,14 +169,17 @@ begin
       result:=result+'|'+ffd.d.FormatDesk+'|*.'+ffd.d.FormatExt
     else
       result:=ffd.d.FormatDesk+'|*.'+ffd.d.FormatExt;
-
-  if result<>'' then
-    result:=result+'|';
-  result:=result+'All files (*.*)|*.*'
+  if AWithAllFiles then begin
+    if result<>'' then
+      result:=result+'|';
+    result:=result+'All files (*.*)|*.*'
+  end;
 end;
 
 initialization
   Ext2LoadProcMap:=TLoadFomats.create;
+  Ext2SaveProcMap:=TSaveFomats.create;
+
 finalization
   zDebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   Ext2LoadProcMap.Destroy;

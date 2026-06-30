@@ -398,8 +398,11 @@ begin
     else
       pcaption:=nil;
     Do_BeforeShowModal(nil);
-    Result:=ID2TZCMsgCommonButton(application.MessageBox(ptext,pcaption,MB_YESNO));
-    Do_AfterShowModal(nil);
+    try
+      Result:=ID2TZCMsgCommonButton(application.MessageBox(ptext,pcaption,MB_YESNO));
+    finally
+      Do_AfterShowModal(nil);
+    end;
   end;
 end;
 
@@ -435,8 +438,11 @@ begin
       FTextQuestionFunc(Caption,MsgBoxPS,[zccbOK],ZCIcon)
     else begin
       Do_BeforeShowModal(nil);
-      application.MessageBox(MsgBoxPS,@Caption[1],MsgBoxFlags);
-      Do_AfterShowModal(nil);
+      try
+        application.MessageBox(MsgBoxPS,@Caption[1],MsgBoxFlags);
+      finally
+        Do_AfterShowModal(nil);
+      end;
     end;
   end else begin
     if TMWOWarning in opt then begin
@@ -769,7 +775,7 @@ function TZCUIManager.DoShowModal(MForm:TForm):integer;
 begin
   Do_BeforeShowModal(MForm);
   Result:=TLCLModalResult2TZCMsgModalResult.Convert(MForm.ShowModal);
-  Do_BeforeShowModal(MForm);
+  Do_AfterShowModal(MForm);
 end;
 
 function GetUndoStack:pointer;

@@ -66,7 +66,7 @@ type
     @param(Color Цвет)}
   procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const LW:TGDBLineWeight;const Color:TGDBPaletteColor);
 
-  procedure zeAddEntToRoot(const PEnt: PGDBObjEntity; var Root:GDBObjGenericSubEntry);
+  procedure zeAddEntToRoot(var PEnt: PGDBObjEntity; var Root:GDBObjGenericSubEntry);
 
   {**Процедура счетчик, если слой примитива PInstance равен PCounted, то Counter инкрементируется.
      используется для подсчета количества ссылок на слой в примитивах}
@@ -78,9 +78,9 @@ type
 implementation
 var
    EntPropSetters:TEntPropSetters;
-procedure zeAddEntToRoot(const PEnt: PGDBObjEntity; var Root:GDBObjGenericSubEntry);
+procedure zeAddEntToRoot(var PEnt: PGDBObjEntity; var Root:GDBObjGenericSubEntry);
 begin
-  Root.AddMi(@PEnt);
+  Root.AddMi(PEnt);
 end;
 function zeGetSelEntsDeskInRoot(var Root:GDBObjGenericSubEntry):TSelEntsDesk;
 var

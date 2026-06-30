@@ -5,7 +5,7 @@ uses
 
  uzeent3Dface,uzeentlwpolyline,uzeentpolyline,uzeenttext,uzeentline,
  uzeentcircle,uzeentarc,uzeentmtext,uzeentdimensiongeneric,uzeentdimaligned,
- uzeentdimrotated,uzeentsolid;
+ uzeentdimrotated,uzeentsolid,uzeTypes;
 
 var
   drawing:TSimpleDrawing;

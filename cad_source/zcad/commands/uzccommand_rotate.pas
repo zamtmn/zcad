@@ -13,180 +13,190 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{$MODE OBJFPC}{$H+}
-unit uzccommand_rotate;
+{$mode delphi}
+unit uzcCommand_Rotate;
+
 {$INCLUDE zengineconfig.inc}
 
 interface
 
 uses
-  Math,
-  gzctnrVectorTypes,
-  uzcdrawing,
-  uzgldrawcontext,
-  uzcdrawings,
-  uzeutils,
-  uzglviewareadata,
-  uzccommand_move,
-  uzccommandsabstract,uzsbVarmanDef,uzccommandsmanager,uzcinterface,
-  uzcstrconsts,uzegeometry,zcmultiobjectchangeundocommand,
-  uzegeometrytypes,uzeentity,uzcLog;
+  SysUtils,
+  uzbUnitsUtils,gzctnrVectorTypes,
+  uzcLog,
+  uzccommandsabstract,uzccommandsimpl,
+  uzcstrconsts,
+  uzegeometrytypes,
+  uzccommandsmanager,
+  uzeentline,uzeentity,uzeentityfactory,
+  uzcutils,
+  uzeparsercmdprompt,
+  uzegeometry,
+  uzcinterface,
+  uzcCommand_MoveEntsByMouse;
 
-type
-  TRotate_com=object(move_com)
-    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
-      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
-    function CreateRotmatr(AAngle:double):TzeTypedMatrix4d;virtual;
-    procedure CommandContinue(const Context:TZCADCommandContext);virtual;
-    procedure rotate(const rotmatr:TzeTypedMatrix4d;button:byte);
-    procedure showprompt(mklick:integer);virtual;
-  end;
-
-  TRotateX_com=object(TRotate_com)
-    function CreateRotmatr(AAngle:double):TzeTypedMatrix4d;virtual;
-  end;
-
-  TRotateY_com=object(TRotate_com)
-    function CreateRotmatr(AAngle:double):TzeTypedMatrix4d;virtual;
-  end;
-
-var
-  Rotate_com:TRotate_com;
-  RotateX_com:TRotateX_com;
-  RotateY_com:TRotateY_com;
+resourcestring
+  RSCLPRotateAngleCopyReference='Specify rotation angle or [${"&[C]opy",Keys[c,m],StrId[CLPIdCopy]}, ${"&[R]eference",Keys[r],StrId[CLPIdReference]}]';
+  RSCLPRotateAngleMoveReference='Specify rotation angle or [${"&[M]ove",Keys[m,c],StrId[CLPIdMove]}, ${"&[R]eference",Keys[r],StrId[CLPIdReference]}]';
+  RSCLPRotateWaitReferenceAngle='Specify reference angle:';
 
 implementation
 
-procedure TRotate_com.CommandContinue(const Context:TZCADCommandContext);
 var
-  v1:vardesk;
-  td:double;
-begin
-  if (commandmanager.GetValueHeap{-vs})>0 then begin
-    v1:=commandmanager.PopValue;
-    td:=DegToRad(PDouble(v1.Data.Addr.Instance)^);
-    rotate(CreateRotmatr(td),MZW_LBUTTON);
-  end;
-end;
+  clAngleCopyReference:CMDLinePromptParser.TGeneralParsedText=nil;
+  clAngleMoveReference:CMDLinePromptParser.TGeneralParsedText=nil;
 
-procedure TRotate_com.showprompt(mklick:integer);
-begin
-  case mklick of
-    0:inherited;
-    1:zcUI.TextMessage(rscmPickOrEnterAngle,TMWOHistoryOut);
-  end;
-end;
+  MoveMode:boolean;
+  Axis,RefV:TzeVector3d;
 
-procedure TRotate_com.rotate(const rotmatr:TzeTypedMatrix4d;button:byte);
+function Rotate_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+type
+   TRotateCmdMode=(RCMWaitBasePoint,RCMWaitAngleCopyReference,RCMWaitReference0,RCMWaitReference1);
 var
-  tmatr,dispmatr,tempmatr:TzeTypedMatrix4d;
+  p1:TzePoint3d;
+  BasePnt,R0Pnt,R1Pnt:TzePoint3d;
+  CmdMode:TRotateCmdMode;
+  gr:TzcInteractiveResult;
+  t_matrix:TzeTypedMatrix4d;
+  Angle:Double;
   ir:itrec;
-  pcd:PTCopyObjectDesc;
-  m:tmethod;
-  dc:TDrawContext;
-  tr:TzePoint3d;
-  RC:TDrawContext;
-  FrPos:TzePoint3d;
-begin
-  //rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
-  if (button and MZW_LBUTTON)=0 then begin
-    if (drawings.GetCurrentDWG^.GetPcamera^.notuseLCS) then
-      tr:=t3dp
-    else
-      tr:=t3dp+drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset;
+  p:PGDBObjEntity;
 
-    tempmatr:=uzegeometry.CreateTranslationMatrix(-t3dp);
-    tempmatr:=uzegeometry.MatrixMultiply(tempmatr,rotmatr);
-    FrPos.x:=t3dp.x+tempmatr.mtr.v[3].x;
-    FrPos.y:=t3dp.y+tempmatr.mtr.v[3].y;
-    FrPos.z:=t3dp.z+tempmatr.mtr.v[3].z;
-
-    dispmatr:=uzegeometry.CreateTranslationMatrix(-tr);
-    tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-    dispmatr:=uzegeometry.CreateTranslationMatrix(tr);
-    dispmatr:=uzegeometry.MatrixMultiply(tmatr,dispmatr);
-
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-    drawings.GetCurrentDWG^.ConstructObjRoot.FrustumPosition:=FrPos;
-
-    RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
-  end else begin
-    dispmatr:=uzegeometry.CreateTranslationMatrix(-t3dp);
-    tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-    dispmatr:=uzegeometry.CreateTranslationMatrix(t3dp);
-    dispmatr:=uzegeometry.MatrixMultiply(tmatr,dispmatr);
-    tempmatr:=dispmatr;
-    uzegeometry.MatrixInvert(tempmatr);
-    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Rotate');
-    with PushCreateTGMultiObjectChangeCommand(@PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,tempmatr,pcoa^.Count) do begin
-      pcd:=pcoa^.beginiterate(ir);
-      if pcd<>nil then
-        repeat
-          m:=TMethod(@pcd^.sourceEnt^.Transform);
-          AddMethod(m);
-          Dec(pcd^.sourceEnt^.vp.LastCameraPos);
-          pcd:=pcoa^.iterate(ir);
-        until pcd=nil;
-      comit;
+  procedure SetRotateCmdMode(ANewMode:TRotateCmdMode;const AForce:boolean=false);
+  begin
+    if not AForce then
+      if CmdMode=ANewMode then
+        exit;
+    case ANewMode of
+      RCMWaitBasePoint:begin
+        commandmanager.SetPrompt(rscmBasePoint);
+        commandmanager.ChangeInputMode([IPEmpty],[]);
+      end;
+      RCMWaitAngleCopyReference:begin
+        if MoveMode then begin
+          if clAngleCopyReference=nil then
+            clAngleCopyReference:=CMDLinePromptParser.GetTokens(RSCLPRotateAngleCopyReference);
+          commandmanager.SetPrompt(clAngleCopyReference);
+        end else begin
+          if clAngleMoveReference=nil then
+            clAngleMoveReference:=CMDLinePromptParser.GetTokens(RSCLPRotateAngleMoveReference);
+          commandmanager.SetPrompt(clAngleMoveReference);
+        end;
+        commandmanager.ChangeInputMode([IPEmpty],[]);
+      end;
+      RCMWaitReference0:begin
+        commandmanager.SetPrompt(RSCLPRotateWaitReferenceAngle);
+        commandmanager.ChangeInputMode([IPEmpty],[]);
+      end;
     end;
-    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
+    CmdMode:=ANewMode;
+  end;
 
-    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Free;
-    commandmanager.executecommandend;
+begin
+  RefV:=CreateVector(1,0,0);
+  Axis:=CreateVector(0,0,1);
+  if CloneEnts>0 then begin
+    SetRotateCmdMode(RCMWaitBasePoint,true);
+    repeat
+      case CmdMode of
+        RCMWaitReference0,RCMWaitBasePoint:
+          gr:=commandmanager.Get3DPoint('',p1);
+        RCMWaitReference1:
+          gr:=commandmanager.Get3DPointWithLineFromBase('',R0Pnt,p1);
+        RCMWaitAngleCopyReference:
+          gr:=commandmanager.Get3DAndRotateConstructRoot('',BasePnt,Axis,RefV,p1);
+      end;
+      case gr of
+        IRNormal:
+          case CmdMode of
+            RCMWaitBasePoint:begin
+              BasePnt:=p1;
+              SetRotateCmdMode(RCMWaitAngleCopyReference);
+            end;
+            RCMWaitReference0:begin
+              R0Pnt:=p1;
+              SetRotateCmdMode(RCMWaitReference1);
+            end;
+            RCMWaitReference1:begin
+              R1Pnt:=p1;
+              RefV:=(R1Pnt-R0Pnt).NormalizeVertex;
+              SetRotateCmdMode(RCMWaitAngleCopyReference);
+            end;
+            RCMWaitAngleCopyReference:begin
+              if MoveMode then begin
+                Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+                zcFreeEntsInCurrentDrawingConstructRoot;
+                t_matrix:=CreateTranslationMatrix(-BasePnt);
+                t_matrix:=MatrixMultiply(t_matrix,CreateAffineRotationMatrix(Axis,RefV,(p1-BasePnt).NormalizeVertex));
+                t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(BasePnt));
+                zcTransformSelectedEntsInDrawingWithUndo('Rotate',t_matrix);
+                Break;
+              end else begin
+                zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('Rotate[Copy]');
+                CloneEnts;
+                zcRedrawCurrentDrawing();
+              end
+            end;
+          end;
+        IRId:
+          case commandmanager.GetLastId of
+            CLPIdCopy:begin
+              MoveMode:=not MoveMode;
+              SetRotateCmdMode(CmdMode,true);
+            end;
+            CLPIdReference:
+              SetRotateCmdMode(RCMWaitReference0);
+          end;
+        IRInput:begin
+          case CmdMode of
+            RCMWaitAngleCopyReference:begin
+              if zeTryStringToAngle(commandmanager.GetLastInput,Angle,Context.PDWG^.GetUnitsFormat) then begin
+                t_matrix:=CreateTranslationMatrix(-BasePnt);
+                t_matrix:=MatrixMultiply(t_matrix,CreateAffineRotationMatrix(Axis,-Angle));
+                t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(BasePnt));
+                if MoveMode then begin
+                  Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+                  zcFreeEntsInCurrentDrawingConstructRoot;
+                  zcTransformSelectedEntsInDrawingWithUndo('Rotate',t_matrix);
+                  Break;
+                end else begin
+                  Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+                  p:=Context.PDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
+                  if p<>nil then
+                    repeat
+                      p^.transform(t_matrix);
+                      p:=Context.PDWG^.ConstructObjRoot.ObjArray.iterate(ir);
+                    until p=nil;
+
+                  zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('Rotate[Copy]');
+                  CloneEnts;
+                  zcRedrawCurrentDrawing();
+                end
+              end else
+                zcUI.TextMessage('Please enter angle?',TMWOShowError);
+            end else
+              zcUI.TextMessage('Try use mouse Luke?',TMWOShowError);
+          end;
+          end;
+      end;
+    until gr=IRCancel;
+  end else begin
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    Result:=cmd_ok;
   end;
 end;
-
-function TRotate_com.CreateRotmatr(AAngle:double):TzeTypedMatrix4d;
-begin
-  Result:=uzegeometry.CreateRotationMatrixZ(AAngle);
-end;
-
-function TRotate_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
-  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
-var
-  a:double;
-  v1,v2:TzePoint2d;
-begin
-  v2.x:=wc.x;
-  v2.y:=wc.y;
-  v1.x:=t3dp.x;
-  v1.y:=t3dp.y;
-  a:=uzegeometry.Vertexangle(v1,v2);
-
-  rotate(CreateRotmatr(a),button);
-
-  Result:=cmd_ok;
-end;
-
-function TRotateX_com.CreateRotmatr(AAngle:double):TzeTypedMatrix4d;
-begin
-  Result:=uzegeometry.CreateRotationMatrixX(AAngle);
-end;
-
-function TRotateY_com.CreateRotmatr(AAngle:double):TzeTypedMatrix4d;
-begin
-  Result:=uzegeometry.CreateRotationMatrixY(AAngle);
-end;
-
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
-  Rotate_com.init('Rotate',0,0);
-  Rotate_com.NotUseCommandLine:=False;
-
-  RotateX_com.init('RotateX',0,0);
-  RotateX_com.NotUseCommandLine:=False;
-
-  RotateY_com.init('RotateY',0,0);
-  RotateY_com.NotUseCommandLine:=False;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  MoveMode:=true;
+  RefV:=CreateVector(1,0,0);
+  Axis:=CreateVector(0,0,1);
+  CreateZCADCommand(@Rotate_com,'Rotate',CADWG,0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  clAngleCopyReference.Free;
+  clAngleMoveReference.Free;
 end.

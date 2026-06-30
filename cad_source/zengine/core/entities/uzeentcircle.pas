@@ -97,7 +97,10 @@ type
     class function CreateInstance:PGDBObjCircle;static;
     function GetObjType:TObjID;virtual;
     function IsStagedFormatEntity:boolean;virtual;
+
   end;
+
+function AllocAndInitCircle(owner:PGDBObjGenericWithSubordinated):PGDBObjCircle;
 
 implementation
 
@@ -269,7 +272,7 @@ begin
   if EFDraw in stage then begin
     Representation.Clear;
     if not (ESTemp in State)and(DCODrawable in DC.Options) then
-      Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,True,True);
+      Representation.CreatePolyLine(dc,self,vp,OneMatrix,Vertex3D_in_WCS_Array.getPFirst[0..Vertex3D_in_WCS_Array.GetLastIndex],True,True);
     if assigned(EntExtensions) then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
   end;

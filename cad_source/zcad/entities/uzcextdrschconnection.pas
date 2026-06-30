@@ -312,7 +312,7 @@ end;
 
 procedure TSCHConnectionExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
-   dxfStringout(outStream,1000,'SCHConnection=');
+   dxfStringWithoutEncodeOut(outStream,1000,'SCHConnection=');
 end;
 
 procedure drawArrow(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
@@ -339,14 +339,14 @@ begin
     m:=MatrixMultiply(rotmatr,m);
     p1:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
     p2:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,l2);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,l2);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p1,l2);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p2,l2);
   end;
 end;
 procedure drawCross(const p1:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 begin
-  pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_XY_zVertex,p1+_XY_zVertex);
-  pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_MinusXY_zVertex,p1+_MinusXY_zVertex);
+  pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p1-_XY_zVertex,p1+_XY_zVertex);
+  pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p1-_MinusXY_zVertex,p1+_MinusXY_zVertex);
 end;
 procedure drawFilledCircle(const p0:TzePoint3d;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
@@ -376,31 +376,31 @@ begin
     p11:=CreateVertex(cosine,sine,0)*r+p0;
     SinCos(-5*pi/6, sine, cosine);
     p12:=CreateVertex(cosine,sine,0)*r+p0;
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p3);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p3,p4);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p4,p5);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p5,p6);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p6,p7);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p7,p8);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p8,p9);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p9,p10);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p10,p11);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p11,p12);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p12,p1);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p1,p2);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p2,p3);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p3,p4);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p4,p5);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p5,p6);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p6,p7);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p7,p8);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p8,p9);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p9,p10);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p10,p11);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p11,p12);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p12,p1);
 
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p1);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p2);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p3);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p4);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p5);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p6);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p7);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p8);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p9);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p10);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p11);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p12);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p1);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p2);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p3);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p4);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p5);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p6);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p7);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p8);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p9);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p10);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p11);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p0,p12);
   end;
 end;
 
@@ -447,22 +447,22 @@ begin
     p1:=VectorTransform3D(uzegeometry.CreateVertex(-1,0,0),m);
     SinCos(5*pi/6, sine, cosine);
     p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p1,p2);
     SinCos(4*pi/6, sine, cosine);
     p1:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p1);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p2,p1);
     SinCos(3*pi/6, sine, cosine);
     p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p1,p2);
 
     SinCos(2*pi/6, sine, cosine);
     p1:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p1);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p2,p1);
     SinCos(1*pi/6, sine, cosine);
     p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p1,p2);
 
-    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,l2);
+    pThisEntity^.Representation.CreateLineWithoutLT(DC,pThisEntity^,p2,l2);
   end;
 end;
 
@@ -662,7 +662,7 @@ begin
       case knot.&Type of
         KTArc:begin
           P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
-          pThisEntity^.Representation.DrawLineWithLT(pThisEntity^,OneMatrix,DC,oldP,P,pThisEntity.vp);
+          pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,OneMatrix,oldP,P);
           oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
           P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           drawIntersectArc(P,oldP,pThisEntity,DC);
@@ -670,14 +670,14 @@ begin
         KTEmpty:begin
           if knot.t>bigeps then begin
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
-            pThisEntity^.Representation.DrawLineWithLT(pThisEntity^,OneMatrix,DC,oldP,P,pThisEntity.vp);
+            pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,OneMatrix,oldP,P);
           end;
           oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
         end;
         KTNormal:begin
           if knot.t>bigeps then begin
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
-            pThisEntity^.Representation.DrawLineWithLT(pThisEntity^,OneMatrix,DC,oldP,P,pThisEntity.vp);
+            pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,OneMatrix,oldP,P);
           end else
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           oldP:=p;
@@ -688,7 +688,7 @@ begin
       end;
     end;
     if IsDoubleNotEqual(knot.t,1,bigeps) then
-      pThisEntity^.Representation.DrawLineWithLT(pThisEntity^,OneMatrix,DC,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity.vp);
+      pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,OneMatrix,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
     result:=false;
   end;
   finally

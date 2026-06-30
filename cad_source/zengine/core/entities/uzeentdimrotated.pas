@@ -77,13 +77,13 @@ begin
     dxfIntegerout(outStream,70,0+128)
   else
     dxfIntegerout(outStream,70,0);
-  dxfStringout(outStream,3,PDimStyle^.Name);
-  dxfStringout(outStream,100,'AcDbAlignedDimension');
+  dxfStringout(outStream,3,PDimStyle^.Name,IODXFContext.Header);
+  dxfStringWithoutEncodeOut(outStream,100,'AcDbAlignedDimension');
   dxfvertexout(outStream,13,DimData.P13InWCS);
   dxfvertexout(outStream,14,DimData.P14InWCS);
   dxfDoubleout(outStream,50,vertexangle(createvertex2d(0,0),createvertex2d(
     vectorD.x,vectorD.y))*180/pi);
-  dxfStringout(outStream,100,'AcDbRotatedDimension');
+  dxfStringWithoutEncodeOut(outStream,100,'AcDbRotatedDimension');
 end;
 
 procedure GDBObjRotatedDimension.transform;

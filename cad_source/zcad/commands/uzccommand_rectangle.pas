@@ -32,6 +32,7 @@ uses
   uzccommandsmanager,
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcutils,
+  uzeTypes,
   uzccommand_polygon,
   URecordDescriptor,uzsbTypeDescriptors,Varman,uzsbVarmanDef;
 
@@ -62,7 +63,7 @@ var
   vertexLWObj:TzePoint2d;
   //переменная для добавления вершин в полилинию
   vertexObj:TzePoint3d;
-  widthObj:GLLWWidth;
+  widthObj:TSegmentParams;
   //переменная для добавления веса линии в начале и конце пути
   polyLWObj:PGDBObjLWPolyline;
   polyObj:PGDBObjPolyline;
@@ -102,8 +103,8 @@ begin
     //устанавливаем ему флаг ридонли
 
     //Создаем сразу 4-е точки прямоугольника, что бы в манипуляторе только управльть их координатами
-    widthObj.endw:=RectangParam.PolyWidth;
-    widthObj.startw:=RectangParam.PolyWidth;
+    widthObj.data.endw:=RectangParam.PolyWidth;
+    widthObj.data.startw:=RectangParam.PolyWidth;
     if RectangParam.ET=RET_LWPoly then begin
       polyLWObj:=GDBObjLWPolyline.CreateInstance;
       polyLWObj^.Closed:=True;
@@ -112,16 +113,16 @@ begin
       vertexLWObj.x:=pe.p1.x;
       vertexLWObj.y:=pe.p1.y;
       polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-      polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+      polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-      polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+      polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-      polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+      polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       polyLWObj^.Vertex2D_in_OCS_Array.PushBackData(vertexLWObj);
-      polyLWObj^.Width2D_in_OCS_Array.PushBackData(widthObj);
+      polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       InteractiveLWRectangleManipulator(polyLWObj,pe.p1,False,nil);
       if commandmanager.Get3DPointInteractive(APrompt2,pe.p2,
@@ -164,7 +165,7 @@ begin
   if CommandParamsShowed then
     zcHideCommandParams;
   if assigned(ESP) then
-    ESP(ESSCommandEnd,nil);
+    ESP(ESSCommandEnd,polyObj);
   Result:=cmd_ok;
 end;
 

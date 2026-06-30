@@ -576,22 +576,21 @@ begin
                                Application.CreateForm(TColorSelectForm, ColorSelectForm);
                                //ZCADMainWindow.ShowAllCursors(ColorSelectForm);
                                zcUI.Do_BeforeShowModal(nil);
-                               mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
-                               if mr=ZCmrOK then
-                                              begin
-                                              ColorIndex:=ColorSelectForm.ColorInfex;
-                                              if assigned(Sender)then
-                                              begin
-                                              AddToComboIfNeed(tcombobox(Sender),palette[ColorIndex].name,TObject(ColorIndex));
-                                              tcombobox(Sender).ItemIndex:=tcombobox(Sender).Items.Count-2;
-                                              end;
-                                              end
-                                          else
-                                              begin
-                                                   tcombobox(Sender).ItemIndex:=OldColor;
-                                                   ColorIndex:=-1;
-                                              end;
-                               zcUI.Do_AfterShowModal(nil);
+                               try
+                                 mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
+                                 if mr=ZCmrOK then begin
+                                   ColorIndex:=ColorSelectForm.ColorInfex;
+                                   if assigned(Sender)then begin
+                                     AddToComboIfNeed(tcombobox(Sender),palette[ColorIndex].name,TObject(ColorIndex));
+                                     tcombobox(Sender).ItemIndex:=tcombobox(Sender).Items.Count-2;
+                                   end;
+                                 end else begin
+                                   tcombobox(Sender).ItemIndex:=OldColor;
+                                   ColorIndex:=-1;
+                                 end;
+                               finally
+                                 zcUI.Do_AfterShowModal(nil);
+                               end;
                                //ZCADMainWindow.RestoreCursors(ColorSelectForm);
                                freeandnil(ColorSelectForm);
                            end;

@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzeenttable;
+unit uzeEntTable;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -25,7 +25,8 @@ uses
   uzctnrVectorBytesStream,uzestylestables,uzeentline,uzeentcomplex,SysUtils,
   gzctnrVectorPObjects,uzctnrvectorstrings,uzeentmtext,uzeentity,
   uzeTypes,uzeconsts,uzegeometry,gzctnrVectorTypes,uzegeometrytypes,
-  uzeentblockinsert,uzeffdxfsupport;
+  uzeentblockinsert,uzeffdxfsupport,uzeentityfactory,uzeobjectextender,uzsbVarmanDef,
+  Varman,uzeentsubordinated;
 
 type
 
@@ -42,21 +43,47 @@ type
   PGDBObjTable=^GDBObjTable;
 
   GDBObjTable=object(GDBObjComplex)
+  private
+    w,h:double;
+  public
     PTableStyle:PTGDBTableStyle;
     tbl:GDBTableArray;
-    w,h:double;
     scale:double;
     constructor initnul;
     destructor done;virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    function IsStagedFormatEntity:boolean;virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     procedure Build(var drawing:TDrawingDef);virtual;
-    procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;
-      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
+    procedure DXFOut(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure AdditionalPostProcess(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext;AData:PtrUInt);
+    procedure DXFLoadAddMi(var pobj:PGDBObjSubordinated);virtual;
+    function DXFLoadTryMi(ptu:PExtensionData;var pobj:PGDBObjSubordinated):DXFLoadTryMiResult;virtual;
+    function DXFDelayedBuildGeometry:boolean;virtual;
     procedure ReCalcFromObjMatrix;virtual;
     function GetObjType:TObjID;virtual;
+    procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
+
+    class function GetDXFIOFeatures:TDXFEntIODataManager;static;
+
+    property Width:double read w;
+    property Height:double read h;
   end;
 
 implementation
+
+type
+  TTblIterData=record
+    psa:PTZctnrVectorStrings;
+    pstr:pString;
+    ir1,ir2:itrec;
+  end;
+  PTTblIterData=^TTblIterData;
+
+var
+  GDBObjTableDXFFeatures:TDXFEntIODataManager;
 
 procedure GDBObjTable.ReCalcFromObjMatrix;
 begin
@@ -71,17 +98,107 @@ begin
   Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
 end;
 
+function GDBObjTable.DXFDelayedBuildGeometry:boolean;
+begin
+  Result:=true;
+end;
+
+procedure GDBObjTable.DXFLoadAddMi(var pobj:PGDBObjSubordinated);
+begin
+  pobj:=pobj;
+  //pobj:=nil;
+end;
+
+function GDBObjTable.DXFLoadTryMi(ptu:PExtensionData;var pobj:PGDBObjSubordinated):DXFLoadTryMiResult;
+var
+  row,col:integer;
+  &val:string;
+  pvd:pvardesk;
+  pvs:PTZctnrVectorStrings;
+begin
+  Result:=TR_NeedTrash;
+  if ptu<>nil then begin
+    pvd:=PTUnit(ptu).FindVariable('row');
+    if pvd<>nil then
+      row:=PInteger(pvd^.data.Addr.Instance)^
+    else
+      exit;
+    pvd:=PTUnit(ptu).FindVariable('col');
+    if pvd<>nil then
+      col:=PInteger(pvd^.data.Addr.Instance)^
+    else
+      exit;
+    pvd:=PTUnit(ptu).FindVariable('val');
+    if pvd<>nil then
+      &val:=pvd^.GetValueAsString
+    else
+      exit;
+    if tbl.Count-1<row then begin
+      while tbl.Count-1<row do begin
+        pvs:=tbl.CreateObject;
+        pvs.init(10);
+      end;
+    end else begin
+      pvs:=tbl.getDataMutable(row);
+    end;
+
+    while pvs.Count-1<col do
+      pvs^.PushBackData('');
+
+    pvs^.getDataMutable(col)^:=val;
+  end;
+
+end;
+
+
+procedure gotoNext(var tbl:GDBTableArray; var irstring:TTblIterData;next,notEmpty:boolean);
+begin
+  if next then begin
+    if irstring.psa<>nil then
+      irstring.pstr:=irstring.psa.iterate(irstring.ir2);
+    if irstring.pstr=nil then begin
+      irstring.psa:=tbl.iterate(irstring.ir1);
+      if irstring.psa<>nil then
+        irstring.pstr:=irstring.psa.beginiterate(irstring.ir2);
+    end;
+  end;
+  if notEmpty then
+    while (not((irstring.pstr<>nil) and (irstring.pstr^<>'')))and(irstring.psa<>nil) do begin
+    if irstring.psa<>nil then
+      irstring.pstr:=irstring.psa.iterate(irstring.ir2);
+    if irstring.pstr=nil then begin
+      irstring.psa:=tbl.iterate(irstring.ir1);
+      if irstring.psa<>nil then
+        irstring.pstr:=irstring.psa.beginiterate(irstring.ir2);
+    end;
+  end;
+end;
+
 procedure GDBObjTable.SaveToDXFFollow;
 var
   p:pointer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
+
+  irstring:TTblIterData;
+
   m4:TzeTypedMatrix4d;
   DC:TDrawContext;
+  first:boolean;
+  PBlockInsert:pointer;
 begin
   inherited;
+  first:=true;
+  PBlockInsert:=nil;
   m4:=getmatrix^;
   dc:=drawing.CreateDrawingRC;
+
+  irstring.psa:=tbl.beginiterate(irstring.ir1);
+  if irstring.psa<>nil then
+    irstring.pstr:=irstring.psa.beginiterate(irstring.ir2);
+  gotoNext(tbl,irstring,false,true);
+
+
   pv:=ConstObjArray.beginiterate(ir);
   if pv<>nil then
     repeat
@@ -102,10 +219,29 @@ begin
       pv.rtsave(pvc2);
       pvc.rtsave(pv);
       p:=pv^.bp.ListPos.Owner;
-      pv^.bp.ListPos.Owner:=@GDBTrash;
-      pv^.SaveToDXF(outStream,drawing,IODXFContext);
-      pv^.SaveToDXFPostProcess(outStream,IODXFContext);
-      pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+      if PBlockInsert=nil then
+        pv^.bp.ListPos.Owner:=@GDBTrash
+      else
+        pv^.bp.ListPos.Owner:=@self;
+
+      if first then begin
+        first:=false;
+        if (self.PTableStyle.HeadBlockName<>'')and(pv^.GetObjType=GDBBlockInsertID) then begin
+          pv^.SaveToDXF(outStream,drawing,IODXFContext);
+          PBlockInsert:=pv;
+          SaveToDXFPostProcess(outStream,IODXFContext);
+          pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+        end else begin
+          pv^.SaveToDXF(outStream,drawing,IODXFContext);
+          pv^.SaveToDXFPostProcess(outStream,IODXFContext,AdditionalPostProcess,PtrUInt(@irstring));
+          pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+        end;
+      end else begin
+        pv^.SaveToDXF(outStream,drawing,IODXFContext);
+        pv^.SaveToDXFPostProcess(outStream,IODXFContext,AdditionalPostProcess,PtrUInt(@irstring));
+        pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+      end;
+
       pvc2.rtsave(pv);
       pv^.bp.ListPos.Owner:=p;
 
@@ -119,12 +255,50 @@ begin
   objmatrix:=m4;
 end;
 
+procedure GDBObjTable.AdditionalPostProcess(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext;AData:PtrUInt);
+begin
+  AData:=AData;
+  if PTTblIterData(AData).pstr<>nil then
+    if PTTblIterData(AData).pstr^<>'' then begin
+      dxfStringWithoutEncodeOut(outStream,1000,'%999=row|integer|'+IntToStr(PTTblIterData(AData).ir1.itc)+'|');
+      dxfStringWithoutEncodeOut(outStream,1000,'%999=col|integer|'+IntToStr(PTTblIterData(AData).ir2.itc)+'|');
+      dxfStringWithoutEncodeOut(outStream,1000,'%999=val|string|'+PTTblIterData(AData).pstr^+'|');
+    end;
+  gotoNext(tbl,PTTblIterData(AData)^,true,true);
+end;
+
+procedure GDBObjTable.DXFOut;
+begin
+     SaveToDXF(outStream,drawing,IODXFContext);
+     //SaveToDXFPostProcess(outStream);
+     SaveToDXFFollow(outStream,drawing,IODXFContext);
+end;
+
+
+procedure GDBObjTable.SaveToDXFObjXData;
+begin
+  if PTableStyle<>nil then
+    dxfStringWithoutEncodeOut(outStream,1000,'%1=style|String|'+PTableStyle.Name+'|');
+  dxfStringWithoutEncodeOut(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+  dxfStringWithoutEncodeOut(outStream,1000,'_UPGRADE='+inttostr(UD_BlockInsertToTable));
+  GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
+  inherited;
+end;
+
+
 function GDBObjTable.Clone;
 var
   tvo:PGDBObjTable;
+  i:integer;
+  pvs:PTZctnrVectorStrings;
 begin
   Getmem(Pointer(tvo),sizeof(GDBObjTable));
   tvo^.initnul;
+  for i:=0 to tbl.Count-1 do begin
+    pvs:=tvo^.tbl.CreateObject;
+    pvs^.initnul;
+    tbl.getDataMutable(i).copyto(pvs^);
+  end;
   tvo^.PTableStyle:=PTableStyle;
   tvo^.w:=w;
   tvo^.h:=h;
@@ -137,6 +311,33 @@ begin
   Result:=tvo;
 end;
 
+procedure GDBObjTable.BuildGeometry(var drawing:TDrawingDef);
+begin
+  Build(drawing);
+end;
+
+function GDBObjTable.IsStagedFormatEntity:boolean;
+begin
+  Result:=True;
+end;
+
+procedure GDBObjTable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+begin
+  if EFCalcEntityCS in stage then begin
+    if assigned(EntExtensions) then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+    calcobjmatrix;
+    //ConstObjArray.FormatEntity(drawing,dc);
+    calcbb(dc);
+  end;
+  CalcActualVisible(dc.DrawingContext.VActuality);
+  if EFDraw in stage then begin
+    self.BuildGeometry(drawing);
+      if assigned(EntExtensions) then
+        EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
+end;
+
 procedure GDBObjTable.Build;
 var
   pl:pgdbobjline;
@@ -147,7 +348,7 @@ var
   psa:PTZctnrVectorStrings;
   pstr:pString;
   pcf:PTGDBTableItemFormat;
-  x,xw:double;
+  x,xw,tblwidth:double;
   xcount,xcurrcount,ycount,ycurrcount,ccount:integer;
   DC:TDrawContext;
 begin
@@ -157,11 +358,34 @@ begin
   xcount:=0;
   xw:=0;
   dc:=drawing.CreateDrawingRC;
+
+  if self.PTableStyle.HeadBlockName<>'' then begin
+    drawing.AddBlockFromDBIfNeed(PTableStyle.HeadBlockName);
+    pointer(pgdbins):=self.ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
+    pgdbins^.Name:=self.PTableStyle.HeadBlockName;
+    pgdbins^.scale.x:=scale;
+    pgdbins^.scale.y:=scale;
+    pgdbins^.scale.z:=scale;
+    CopyVPto(pgdbins^);
+    pgdbins^.BuildGeometry(drawing);
+    pgdbins^.FormatEntity(drawing,dc);
+  end;
+
   if psa<>nil then begin
     repeat
       x:=0;
       ycount:=0;
       xcurrcount:=0;
+      tblwidth:=0;
+      pcf:=PTableStyle^.tblformat.beginiterate(icf);
+      if pcf<>nil then begin
+        repeat
+          tblwidth:=tblwidth+pcf^.Width;
+        pcf:=PTableStyle^.tblformat.iterate(icf);
+        until pcf=nil;
+      end;
+      tblwidth:=tblwidth*scale;
+
       pcf:=PTableStyle^.tblformat.beginiterate(icf);
       pstr:=psa.beginiterate(ic);
       if pstr<>nil then begin
@@ -171,7 +395,7 @@ begin
           if pstr^<>'' then begin
             pointer(pgdbmtext):=
               self.ConstObjArray.CreateInitObj(GDBMtextID,@self);
-            pgdbmtext.Template:=UTF8ToString(Tria_AnsiToUtf8(pstr^));
+            pgdbmtext.Template:=UTF8ToString({Tria_AnsiToUtf8}(pstr^));
             pgdbmtext.textprop.size:=PTableStyle^.textheight*scale;
             pgdbmtext.linespacef:=1;
             pgdbmtext.linespacef:=
@@ -225,7 +449,10 @@ begin
     pointer(pl):=self.ConstObjArray.CreateInitObj(GDBLineID,@self);
     pl^.CoordInOCS.lBegin.x:=0;
     pl^.CoordInOCS.lBegin.y:=-i*PTableStyle^.rowheight*scale;
-    pl^.CoordInOCS.lEnd.x:=xw;
+    if xw>tblwidth then
+      pl^.CoordInOCS.lEnd.x:=xw
+    else
+      pl^.CoordInOCS.lEnd.x:=tblwidth;
     pl^.CoordInOCS.lEnd.y:=-i*PTableStyle^.rowheight*scale;
     CopyVPto(pl^);
     pl^.FormatEntity(drawing,dc);
@@ -263,17 +490,7 @@ begin
 
   h:=ccount*PTableStyle^.rowheight*scale;
   w:=x*scale;
-  if self.PTableStyle.HeadBlockName<>'' then begin
-    drawing.AddBlockFromDBIfNeed(PTableStyle.HeadBlockName);
-    pointer(pgdbins):=self.ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
-    pgdbins^.Name:=self.PTableStyle.HeadBlockName;
-    pgdbins^.scale.x:=scale;
-    pgdbins^.scale.y:=scale;
-    pgdbins^.scale.z:=scale;
-    CopyVPto(pgdbins^);
-    pgdbins^.BuildGeometry(drawing);
-  end;
-  BuildGeometry(drawing);
+  inherited BuildGeometry(drawing);
 end;
 
 constructor GDBObjTable.initnul;
@@ -294,5 +511,35 @@ begin
   tbl.done;
 end;
 
+class function GDBObjTable.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
+  result:=GDBObjTableDXFFeatures;
+end;
+
+function UpgradeBlockInsert2Table(ptu:PExtensionData;pent:PGDBObjBlockInsert;const drawing:TDrawingDef):PGDBObjTable;
+var
+  pvd:pvardesk;
+begin
+
+  Getmem(result,sizeof(GDBObjTable));
+  result^.initnul;
+  pent.CopyVPto(Result^);
+  Result^.Local:=pent^.local;
+  Result^.P_insert_in_WCS:=pent^.P_insert_in_WCS;
+
+  pvd:=PTUnit(ptu).FindVariable('style');
+  if pvd<>nil then begin
+    result^.PTableStyle:=drawing.GetTableStyleTable.AddStyle(pvd.GetValueAsString);
+    pvd^.GetValueAsString;
+  end;
+
+end;
+
+
+initialization
+  RegisterEntity(GDBTableID,'Table',nil,nil);
+  RegisterEntityUpgradeInfo(GDBBlockInsertID,UD_BlockInsertToTable,@UpgradeBlockInsert2Table);
+  GDBObjTableDXFFeatures:=TDXFEntIODataManager.create;
+finalization
+  GDBObjTableDXFFeatures.destroy;
 end.

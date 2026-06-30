@@ -69,6 +69,8 @@ type
     function GetObjType:TObjID;virtual;
   end;
 
+function AllocAndInitPoint(owner:PGDBObjGenericWithSubordinated):PGDBObjPoint;
+
 implementation
 
 procedure GDBObjPoint.TransformAt;

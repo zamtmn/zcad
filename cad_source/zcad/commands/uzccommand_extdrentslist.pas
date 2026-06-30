@@ -36,7 +36,7 @@ implementation
 function extdrEntsList_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 type
-  TExtCounter=TMyMapCounter<TMetaEntityExtender>;
+  TExtCounter=TMyMapCounter<TzeEntityExtenderClass>;
 var
   pv,pls:pGDBObjEntity;
   ir:itrec;

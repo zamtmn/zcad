@@ -47,9 +47,9 @@ type
     procedure SetRoot(pEntity:Pointer;pNewRoot:Pointer);virtual;
   end;
 
-  TMetaEntityExtender=class of TAbstractEntityExtender;
+  TzeEntityExtenderClass=class of TAbstractEntityExtender;
 
-  TEntityExtensions=class(specialize TExtensions<TAbstractEntityExtender,TMetaEntityExtender,Pointer>)
+  TEntityExtensions=class(specialize TExtensions<TAbstractEntityExtender,TzeEntityExtenderClass,Pointer>)
     generic function GetExtensionOf<GEntityExtenderType>:GEntityExtenderType;
     procedure CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
     procedure RunOnCloneProcedures(source,dest:pointer);
@@ -70,7 +70,7 @@ type
     procedure RunSetRoot(pEntity:Pointer;pNewRoot:Pointer);
   end;
 
-  TEntityExtendersMap=specialize GKey2DataMap<string,TMetaEntityExtender>;
+  TEntityExtendersMap=specialize GKey2DataMap<string,TzeEntityExtenderClass>;
 
 var
   EntityExtenders:TEntityExtendersMap;

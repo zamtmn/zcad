@@ -118,7 +118,7 @@ begin
           tv:=pobj^.Clone(@drawings.GetCurrentDWG^.ConstructObjRoot);
           if tv<>nil then begin
             tv^.State:=tv^.State+[ESConstructProxy];
-            drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@tv);
+            drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(tv);
             tcd.sourceEnt:=pobj;
             tcd.tmpProxy:=tv;
             tcd.copyEnt:=nil;

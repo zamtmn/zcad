@@ -74,7 +74,7 @@ type
 
 const
   jt:array[0..3,0..4] of TTextJustify=
-    ((jsbl,jsbc,jsbr,jsbl,jsmc),(jsbtl,jsbtc,jsbtr,jsbl,jsbl),
+    ((jsbl,jsbtc,jsbr,jsbl,jsmc),(jsbtl,jsbtc,jsbtr,jsbl,jsbl),
     (jsml,jsmc,jsmr,jsbl,jsbl),(jstl,jstc,jstr,jsbl,jsbl));
   j2b:array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
   b2j:array[1..12] of TTextJustify=
@@ -82,6 +82,8 @@ const
 
 var
   GDBObjTextDXFFeatures:TDXFEntIODataManager;
+
+function AllocAndInitText(owner:PGDBObjGenericWithSubordinated):PGDBObjText;
 
 implementation
 
@@ -145,6 +147,17 @@ begin
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
+    // Issue #1194: DWG-loaded TEXT entities (in particular inside anonymous
+    // block defs) can reach FormatEntity with TXTStyle=nil if their text
+    // style ref didn't resolve during BeginDWGImport. The DXF loader already
+    // has the same fallback in LoadFromDXF; mirror it here so any caller is
+    // protected against a nil dereference at uzeenttext.pas:247.
+    if TXTStyle=nil then
+      TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',False);
+    if (TXTStyle<>nil) and (TXTStyle^.pfont=nil) then
+      TXTStyle^.pfont:=pbasefont;
+    if (TXTStyle=nil) or (TXTStyle^.pfont=nil) or (TXTStyle^.pfont^.font=nil) then
+      Exit;
     if template='' then
       template:=content;
     content:=textformat(template,SPFSources.GetFull,@self);
@@ -220,7 +233,7 @@ begin
     calcobjmatrix;
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
       Representation.Clear;
-      Representation.DrawTextContent(dc.drawer,content,TXTStyle^.pfont,
+      Representation.CreateTextContent(dc.drawer,content,TXTStyle^.pfont,
         DrawMatrix,objmatrix,textprop.size,Outbound);
     end;
     calcbb(dc);
@@ -240,6 +253,12 @@ begin
   obj_height:=1;
   obj_width:=0;
   obj_y:=0;
+  // Issue #1194: bail out if the text style chain is incomplete. FormatEntity
+  // already resolves a Standard-style fallback, but CalcGabarit is virtual and
+  // can be reached from other paths (extensions, recovery, tests) before that
+  // fallback runs.
+  if (TXTStyle=nil) or (TXTStyle^.pfont=nil) or (TXTStyle^.pfont^.font=nil) then
+    Exit;
   i:=1;
   while i<=length(content) do begin
     sym:=getsymbol_fromGDBText(content,i,l,TXTStyle^.pfont^.font.IsUnicode);
@@ -397,7 +416,7 @@ begin
     bw:=bw+2;
   if bw<>0 then
     dxfIntegerout(outStream,71,bw);
-  dxfStringout(outStream,7,PGDBTextStyle(TXTStyle)^.Name);
+  dxfStringout(outStream,7,PGDBTextStyle(TXTStyle)^.Name,IODXFContext.Header);
 
   SaveToDXFObjPostfix(outStream);
 
@@ -418,7 +437,7 @@ begin
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
   dxfStringout(outStream,1,z2dxftext(s),IODXFContext.Header);
 
-  dxfStringout(outStream,100,'AcDbText');
+  dxfStringWithoutEncodeOut(outStream,100,'AcDbText');
   dxfIntegerout(outStream,73,vv);
 end;
 
@@ -453,7 +472,7 @@ begin
             else if dxfLoadGroupCodeDouble(rdr,51,byt,textprop.oblique) then
               textprop.oblique:=
                 textprop.oblique*pi/180
-            else if dxfLoadGroupCodeString(rdr,7,byt,style) then begin
+            else if dxfLoadGroupCodeString(rdr,7,byt,style,context.Header) then begin
               TXTStyle:=
                 drawing.GetTextStyleTable^.FindStyle(Style,False);
               if TXTStyle=nil then
@@ -483,8 +502,10 @@ begin
   OldVersTextReplace(tcontent);
   content:=utf8tostring(tcontent);
   textprop.justify:=jt[vv,gv];
-  if doublepoint then
+  if doublepoint then begin
     Local.p_Insert:=P_drawInOCS;
+    P_drawInOCS:=NulVertex;
+  end;
   if angleload then begin
     Local.basis.ox:=GetXfFromZ(Local.basis.oz);
     local.basis.OX:=VectorTransform3D(local.basis.OX,CreateAffineRotationMatrix(

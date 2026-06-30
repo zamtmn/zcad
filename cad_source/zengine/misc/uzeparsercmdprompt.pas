@@ -15,6 +15,9 @@ const
   CLPIdOptions=1001;
   CLPIdBack=1002;
   CLPIdFileDialog=1003;
+  CLPIdCopy=1004;
+  CLPIdMove=1005;
+  CLPIdReference=1006;
   CLPIdUser=10000;
   CLPIdUser1=10001;
   CLPIdUser2=10002;
@@ -323,6 +326,10 @@ initialization
   StrIds.add('CLPIdOptions',CLPIdOptions);
   StrIds.add('CLPIdBack',CLPIdBack);
   StrIds.add('CLPIdFileDialog',CLPIdFileDialog);
+  StrIds.add('CLPIdCopy',CLPIdCopy);
+  StrIds.add('CLPIdMove',CLPIdCopy);
+  StrIds.add('CLPIdReference',CLPIdReference);
+
   StrIds.add('CLPIdUser',CLPIdUser);
   StrIds.add('CLPIdUser1',CLPIdUser1);
   StrIds.add('CLPIdUser2',CLPIdUser2);

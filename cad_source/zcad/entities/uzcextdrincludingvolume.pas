@@ -222,7 +222,17 @@ begin
 end;
 
 procedure TIncludingVolumeExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
+var
+  pDestIncludingVolumeExtender:TIncludingVolumeExtender;
 begin
+  if PGDBObjEntity(pDestEntity)^.EntExtensions<>nil then
+    pDestIncludingVolumeExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TIncludingVolumeExtender>
+  else
+    pDestIncludingVolumeExtender:=nil;
+
+  if pDestIncludingVolumeExtender=nil then
+    pDestIncludingVolumeExtender:=AddVolumeExtenderToEntity(pDestEntity);
+
 end;
 procedure TIncludingVolumeExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
 begin
@@ -409,7 +419,7 @@ begin
       PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
     end;
   end;
-  InsideEnts.PushBackData(p);
+  InsideEnts.PushBackIfNotPresent(p);
 end;
 
 procedure TIncludingVolumeExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -417,6 +427,7 @@ begin
 end;
 procedure TIncludingVolumeExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
 begin
+  onEntityClone(pSourceEntity,pDestEntity);
 end;
 procedure TIncludingVolumeExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
 begin
@@ -444,7 +455,7 @@ end;
 
 procedure TIncludingVolumeExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
-   dxfStringout(outStream,1000,'INCLUDINGVOLUMEEXTENDER=');
+   dxfStringWithoutEncodeOut(outStream,1000,'INCLUDINGVOLUMEEXTENDER=');
 end;
 
 

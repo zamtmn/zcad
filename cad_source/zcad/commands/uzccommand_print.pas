@@ -127,8 +127,11 @@ procedure Print_com.SelectPrinter(pdata:PtrInt);
 begin
   zcUI.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
   zcUI.Do_BeforeShowModal(nil);
-  if PSD.Execute then;
-  zcUI.Do_AfterShowModal(nil);
+  try
+    if PSD.Execute then;
+  finally
+    zcUI.Do_AfterShowModal(nil);
+  end;
   dbg;
 end;
 
@@ -142,8 +145,11 @@ procedure Print_com.SelectPaper(pdata:PtrInt);
 begin
   zcUI.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
   zcUI.Do_BeforeShowModal(nil);
-  if Paged.Execute then;
-  zcUI.Do_AfterShowModal(nil);
+  try
+    if Paged.Execute then;
+  finally
+    zcUI.Do_AfterShowModal(nil);
+  end;
   dbg;
 end;
 

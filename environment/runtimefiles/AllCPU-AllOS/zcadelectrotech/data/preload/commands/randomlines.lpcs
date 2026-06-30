@@ -38,7 +38,7 @@ begin
 end;
 
 begin
-  if zcUITextQuestion('Вопрос','Выкльчить перерисовку после добавления каждой линии?')then
-    zeDecEbableRedrawCounter;
+  if zcUITextQuestion('Вопрос','Отключить перерисовку после добавления каждой линии?')then
+    zeDecEnableRedrawCounter;
   DoRandomLinesTest(10000,100,0);
 end.

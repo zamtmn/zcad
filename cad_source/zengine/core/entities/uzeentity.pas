@@ -33,6 +33,8 @@ type
   taddotrac=procedure(var posr:os_record;const axis:TzePoint3d) of object;
 
 type
+  TAdditionalPostProcess=procedure(var outStream:TZctnrVectorBytes;
+    var IODXFContext:TIODXFSaveContext;AData:PtrUInt)of object;
   PGDBObjEntity=^GDBObjEntity;
   TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;
     var SelectedObjCount:integer) of object;
@@ -42,10 +44,10 @@ type
   PTExtAttrib=^TExtAttrib;
 
   TExtAttrib=record
-    OwnerHandle:QWord;
-    MainFunctionHandle:QWord;
-    dwgHandle:QWord;
-    Handle:QWord;
+    OwnerHandle:TDWGHandle;
+    MainFunctionHandle:TDWGHandle;
+    dwgHandle:TDWGHandle;
+    Handle:TDWGHandle;
     Upgrade:TEntUpgradeInfo;
     ExtAttrib2:boolean;
   end;
@@ -90,7 +92,7 @@ type
     procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
-      var IODXFContext:TIODXFSaveContext);virtual;
+      var IODXFContext:TIODXFSaveContext;AAPS:TAdditionalPostProcess=nil;AAPSData:PtrUInt=0);virtual;
     procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;
       var IODXFContext:TIODXFSaveContext);virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -780,10 +782,12 @@ end;
 
 procedure GDBObjEntity.SaveToDXFPostProcess;
 begin
-  dxfStringout(outStream,1001,ZCADAppNameInDXF);
-  dxfStringout(outStream,1002,'{');
+  dxfStringWithoutEncodeout(outStream,1001,ZCADAppNameInDXF);
+  dxfStringWithoutEncodeout(outStream,1002,'{');
   self.SaveToDXFObjXData(outStream,IODXFContext);
-  dxfStringout(outStream,1002,'}');
+  if @AAPS<>nil then
+    AAPS(outStream,IODXFContext,AAPSData);
+  dxfStringWithoutEncodeout(outStream,1002,'}');
 end;
 
 function GDBObjEntity.CalcInFrustum;
@@ -1019,7 +1023,7 @@ procedure GDBObjEntity.SaveToDXFObjPrefix;
 var
   tmpHandle:TDWGHandle;
 begin
-  dxfStringout(outStream,0,entname);
+  dxfStringWithoutEncodeout(outStream,0,entname);
   //TODO: MyGetOrCreateValue можно желать не для всех примитивов, а только для главных функций
   //TODO: это чуток ускорит сохранение с ним 0.35сек, без 0.34~0.33 в тесте
   if notprocessHandle then begin
@@ -1035,17 +1039,17 @@ begin
       Inc(IODXFContext.handle);
     end;
   end;
-  dxfStringout(outStream,5,inttohex(tmpHandle,0));
-  dxfStringout(outStream,100,dxfName_AcDbEntity);
-  dxfStringout(outStream,8,dxfEnCodeString(vp.layer^.Name,IODXFContext.header));
+  dxfStringWithoutEncodeout(outStream,5,inttohex(tmpHandle,0));
+  dxfStringWithoutEncodeout(outStream,100,dxfName_AcDbEntity);
+  dxfStringout(outStream,8,vp.layer^.Name,IODXFContext.Header);
   if vp.color<>ClByLayer then
-    dxfStringout(outStream,62,IntToStr(vp.color));
+    dxfStringWithoutEncodeOut(outStream,62,IntToStr(vp.color));
   if vp.lineweight<>-1 then
     dxfIntegerout(outStream,370,vp.lineweight);
   if dbname<>'' then
-    dxfStringout(outStream,100,dbname);
+    dxfStringWithoutEncodeOut(outStream,100,dbname);
   if vp.LineType<>nil then
-    dxfStringout(outStream,6,dxfEnCodeString(vp.LineType^.Name,IODXFContext.header));
+    dxfStringout(outStream,6,vp.LineType^.Name,IODXFContext.header);
   if vp.LineTypeScale<>1 then
     dxfDoubleout(outStream,48,vp.LineTypeScale);
 end;

@@ -143,8 +143,8 @@ begin
     dxfIntegerout(outStream,70,1+128)
   else
     dxfIntegerout(outStream,70,1);
-  dxfStringout(outStream,3,PDimStyle^.Name);
-  dxfStringout(outStream,100,'AcDbAlignedDimension');
+  dxfStringout(outStream,3,PDimStyle^.Name,IODXFContext.Header);
+  dxfStringWithoutEncodeOut(outStream,100,'AcDbAlignedDimension');
   dxfvertexout(outStream,13,DimData.P13InWCS);
   dxfvertexout(outStream,14,DimData.P14InWCS);
 end;
@@ -409,10 +409,11 @@ begin
   tv:=VertexDmorph(DimData.P13InWCS,self.vectorN,l);
   DrawExtensionLine(DimData.P13InWCS,tv,0,drawing,dc,2);
   DimData.MidPoint:=(tv+DimData.P10InWCS)/2;
-  CalcTextParam(tv,DimData.P10InWCS);
+
+  CalcTextAngle;
   if not self.DimData.TextMoved then
-    CalcDefaultPlaceText(
-      tv,DimData.P10InWCS,drawing);
+    CalcDefaultPlaceText(tv,DimData.P10InWCS,drawing);
+  CalcTextParam(tv,DimData.P10InWCS);
 
   DrawDimensionText(DimData.P11InOCS,drawing,dc);
 

@@ -49,6 +49,9 @@ const {as_normal=0;
   GDBGenericDimensionID = 14;
   GDBBlockDefID = 15;
   GDBHatchID = 16;
+  GDBPolyFaceMeshID = 17;
+  GDBGenericPolylineID = 18;
+  GDBLeaderID = 19;
 
   GDBNetID = 100;
   GDBDeviceID = 101;
@@ -63,6 +66,9 @@ const {as_normal=0;
   GDBDiametricDimensionID = 107;
   GDBRadialDimensionID = 108;
   GDBSuperLineID = 109;
+  GDBAcadTableID = 111; {Сущность ACAD_TABLE (таблица AutoCAD из формата DXF)}
+  { Идентификатор прокси-объекта AutoCAD (ACAD_PROXY_ENTITY) }
+  GDBAcdProxyID = 110;
 
   PROJParallel = 1;
   PROJPerspective = 2;
@@ -157,6 +163,11 @@ const {as_normal=0;
   ObjN_GDBObjCable='GDBObjCable';
   ObjN_GDBObjElLeader='GDBObjElLeader';
   ObjN_GDBObjHatch='GDBObjHatch';
+  ObjN_GDBObjPolyFaceMesh='GDBObjPolyFaceMesh';
+  ObjN_GDBObjLeader='GDBObjLeader';
+  ObjN_GDBObjAcadTable='GDBObjAcadTable';
+  { Наименование типа для прокси-объекта AutoCAD }
+  ObjN_GDBObjAcdProxy='GDBObjAcdProxy';
 
   DevicePrefix='DEVICE_';
   DrawingDeviceBaseUnitName='drawingdevicebase';
@@ -175,7 +186,9 @@ const {as_normal=0;
   {Upgrade объектов DXF}
   UD_LineToLeader=1;
   UD_LineToNet=2;
+
   UD_LineToSuperLine=10;
+  UD_BlockInsertToTable=11;
 
   ClByBlock=0;
   ClByLayer=256;

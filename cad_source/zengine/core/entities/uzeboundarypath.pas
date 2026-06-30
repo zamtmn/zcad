@@ -33,7 +33,7 @@ type
     paths:GZVector<GDBPolyline2DArray>;
     constructor init(m:TArrayIndex);
     destructor done;virtual;
-    function LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
+    function LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var context:TIODXFLoadContext):boolean;
     {todo: вынести это нафиг из простых типов}
     procedure SaveToDXF(var outStream:TZctnrVectorBytes);
     procedure CloneTo(var Dest:TBoundaryPath);
@@ -161,7 +161,7 @@ begin
   zDebugLn('{E}'+GLUIntrf.ErrorString(v));
 end;
 
-function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
+function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var context:TIODXFLoadContext):boolean;
 
   procedure DrawArc(constref p1,p2:TzePoint2d;
   const bulge:double;var currpath:GDBPolyline2DArray;divcount:integer);//inline;
@@ -421,6 +421,22 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer):boolean;
       currpath.PushBackData(p);
   end;
 
+  function SkipBoundaryEnts(var currDXFGroupCode:integer):boolean;
+  var
+    BoundaryEntsCount,BoundaryEntsI:integer;
+    s:string;
+  begin
+    result:=false;
+    if dxfLoadGroupCodeInteger(rdr,97,currDXFGroupCode,BoundaryEntsCount) then begin
+      result:=true;
+      if BoundaryEntsCount<>0 then
+        for BoundaryEntsI:=1 to BoundaryEntsCount do begin
+          currDXFGroupCode:=rdr.ParseInteger;
+          dxfLoadGroupCodeString(rdr,330,currDXFGroupCode,s,context.Header);
+        end;
+    end;
+  end;
+
 var
   currpath:GDBPolyline2DArray;
   pathscount:integer=0;
@@ -428,6 +444,8 @@ var
   s:string='';
   isPolyLine:boolean;
   BoundaryPathTypeFlag:integer;
+  NotReadGroupValue:boolean;
+
 begin
   Result:=dxfLoadGroupCodeInteger(rdr,91,DXFCode,pathscount);
   if Result then begin
@@ -435,17 +453,29 @@ begin
     currDXFGroupCode:=rdr.ParseInteger;
     Clear;
     BoundaryPathTypeFlag:=0;
+    NotReadGroupValue:=false;
     for i:=1 to pathscount do begin
+      if NotReadGroupValue then begin
+        currDXFGroupCode:=rdr.ParseInteger;
+        NotReadGroupValue:=false;
+      end;
       while not dxfLoadGroupCodeInteger(rdr,92,currDXFGroupCode,BoundaryPathTypeFlag) do
         currDXFGroupCode:=rdr.ParseInteger;
       isPolyLine:=(BoundaryPathTypeFlag and 2)<>0;
       currDXFGroupCode:=rdr.ParseInteger;
-      if isPolyLine then
-        loadPolyBoundary(currDXFGroupCode,currpath)
-      else begin
+      if isPolyLine then begin
+        loadPolyBoundary(currDXFGroupCode,currpath);
+        //пропускаем ссылки на примитивы образующие контур
+        if SkipBoundaryEnts(currDXFGroupCode) then
+          NotReadGroupValue:=true;
+      end else begin
         EdgesCount:=dxfRequiredInteger(rdr,93,currDXFGroupCode);
         currpath.init(EdgesCount,True);
         for EdgeNum:=1 to EdgesCount do begin
+          if NotReadGroupValue then begin
+            currDXFGroupCode:=rdr.ParseInteger;
+            NotReadGroupValue:=false;
+          end;
           EdgeType:=dxfRequiredInteger(rdr,72,currDXFGroupCode);
           case EdgeType of
             1://NotPolyLine:=NPLE_Line;
@@ -460,15 +490,10 @@ begin
               raise EDXFReadException.CreateFmt(
                 'Wrong boundary edge type "1".."4" expected, but "%d" found',[EdgeType]);
           end;
+          //пропускаем ссылки на примитивы образующие контур
+          if SkipBoundaryEnts(currDXFGroupCode) then
+            NotReadGroupValue:=true;
         end;
-      end;
-      if dxfLoadGroupCodeInteger(rdr,97,currDXFGroupCode,EdgeType) then
-        if EdgeType<>0 then
-          currDXFGroupCode:=rdr.ParseInteger;
-      for EdgeNum:=1 to EdgeType do begin
-        if (dxfLoadGroupCodeString(rdr,330,currDXFGroupCode,s))and
-          (EdgeNum<>EdgeType) then
-          currDXFGroupCode:=rdr.ParseInteger;
       end;
       currpath.Shrink;
       paths.PushBackData(currpath);

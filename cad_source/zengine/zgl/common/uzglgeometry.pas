@@ -39,7 +39,7 @@ type
     ir:itrec;
     PGeom:PZGLGraphix;
     constructor InitFromLine(const startpoint,endpoint:TzePoint3d;out length:Double;PG:PZGLGraphix);
-    constructor InitFromPolyline(const points:GDBPoint3dArray;out length:Double;const closed:Boolean;PG:PZGLGraphix);
+    constructor InitFromPolyline({const points:GDBPoint3dArray}const pts:array of TzePoint3d;out length:Double;const closed:Boolean;PG:PZGLGraphix);
     procedure startdraw;
     procedure nextsegment;
     procedure normalize(l:Double);
@@ -50,16 +50,17 @@ type
     constructor init();
     destructor done;virtual;
     function DrawLineWithLT(var DC:TDrawContext;const startpoint,endpoint:TzePoint3d; const vp:GDBObjVisualProp;OnlyOne:Boolean=False):TLLDrawResult;virtual;
-    function DrawPolyLineWithLT(var DC:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;virtual;
+    function DrawPolyLineWithLT(var DC:TDrawContext;const pts:array of TzePoint3d; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;virtual;
 
 
-    procedure DrawPolyLineWithoutLT(var DC:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp;const closed:Boolean;var dr:TLLDrawResult);virtual;
+    procedure DrawPolyLineWithoutLT(var DC:TDrawContext;const pts:array of TzePoint3d; const vp:GDBObjVisualProp;const closed:Boolean;var dr:TLLDrawResult);virtual;
     procedure DrawLineWithoutLT(var DC:TDrawContext;const p1,p2:TzePoint3d;var dr:TLLDrawResult;OnlyOne:Boolean=False);virtual;
     procedure DrawPointWithoutLT(var DC:TDrawContext;const p:TzePoint3d;var dr:TLLDrawResult);virtual;
     {}
     procedure AddPolyLine(var DC:TDrawContext;const closed:boolean;const pts:array of TzePoint3d);
     procedure AddLine(var DC:TDrawContext;const p1,p2:TzePoint3d;OnlyOne:Boolean=False);
     procedure AddPoint(var DC:TDrawContext;const p:TzePoint3d);
+    procedure AddTriangleStrip(var DC:TDrawContext;const pts:array of TzePoint3d);
     {Patterns func}
     procedure PlaceNPatterns(var DC:TDrawContext;var Segmentator:ZSegmentator;const pli:TArrayIndex;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
     procedure PlaceOnePattern(var DC:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
@@ -309,6 +310,22 @@ begin
     GeomData.Vertex3S.AddGDBVertex(pts[i]);
 end;
 
+procedure ZGLGraphix.AddTriangleStrip(var DC:TDrawContext;const pts:array of TzePoint3d);
+var
+  tsi,i:integer;
+  ptris:PTLLTriangleStrip;
+begin
+  if DC.drawer<>nil then begin
+    tsi:=DC.drawer.GetLLPrimitivesCreator.CreateLLTriangleStrip(LLprimitives);
+    pointer(ptris):=LLprimitives.getDataMutable(tsi);
+    ptris^.P1IndexInIndexesArray:=GeomData.Indexes.Count{-1};
+    ptris^.IndexInIndexesArraySize:=Length(pts);
+
+    for i:=low(pts)to High(pts) do
+      GeomData.Indexes.PushBackData(GeomData.Vertex3S.AddGDBVertex(pts[i]));
+  end;
+end;
+
 function CalcSegment(const startpoint,endpoint:TzePoint3d;out segment:ZPolySegmentData;prevlength:Double):Double;
 begin
      segment.startpoint:=startpoint;
@@ -350,28 +367,36 @@ begin
                      sd.add(@segment);
                 end;
 end;}
-constructor ZSegmentator.InitFromPolyline(const points:GDBPoint3dArray;out length:Double;const closed:Boolean;PG:PZGLGraphix);
+constructor ZSegmentator.InitFromPolyline({const points:GDBPoint3dArray}const pts:array of TzePoint3d;out length:Double;const closed:Boolean;PG:PZGLGraphix);
 var
    segment:ZPolySegmentData;
    ptv,ptvprev,pfirstv: PzePoint3d;
    _ir:itrec;
+   i:integer;
 begin
      if closed then
-                   inherited init(points.Count)
+                   inherited init({points.Count}system.length(pts))
                else
-                   inherited init(points.Count+1);
+                   inherited init({points.Count}system.length(pts)+1);
     length:=0;
-    ptvprev:=points.beginiterate(_ir);
+    ptvprev:={points.beginiterate(_ir)}@pts[0];
     pfirstv:=ptvprev;
-    ptv:=points.iterate(_ir);
-    if ptv<>nil then
+    ptv:={points.iterate(_ir)}@pts[1];
+    for i:=1 to high(pts) do begin
+      length:=CalcSegment(ptvprev^,ptv^,segment,length);
+      PushBackData(segment);
+
+      ptvprev:=ptv;
+      ptv:={points.iterate(_ir)}@pts[i+1];
+    end;
+    {if ptv<>nil then
     repeat
           length:=CalcSegment(ptvprev^,ptv^,segment,length);
           PushBackData(segment);
 
           ptvprev:=ptv;
           ptv:=points.iterate(_ir);
-    until ptv=nil;
+    until ptv=nil;}
     if closed then
                   begin
                        length:=CalcSegment(ptvprev^,pfirstv^,segment,length);
@@ -429,19 +454,19 @@ begin
   inc(dr.LLPCount);
   self.AddLine(DC,p1,p2,OnlyOne);
 end;
-procedure ZGLGraphix.DrawPolyLineWithoutLT(var DC:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp;const closed:Boolean;var dr:TLLDrawResult);
+procedure ZGLGraphix.DrawPolyLineWithoutLT(var DC:TDrawContext;{const points:GDBPoint3dArray}const pts:array of TzePoint3d; const vp:GDBObjVisualProp;const closed:Boolean;var dr:TLLDrawResult);
 var
   i:integer;
 begin
   if dr.LLPCount=0 then begin
-    dr.BB:=CreateBBFrom2Point(points.getDataMutable(0)^,points.getDataMutable(1)^);
-    for i:=2 to points.Count-1 do
-      concatBBandPoint(dr.BB,points.getDataMutable(i)^);
+    dr.BB:=CreateBBFrom2Point(pts[0]{points.getDataMutable(0)^},{points.getDataMutable(1)^}pts[1]);
+    for i:=2 to {points.Count-1}high(pts) do
+      concatBBandPoint(dr.BB,{points.getDataMutable(i)^}pts[i]);
   end else
-    for i:=0 to points.Count-1 do
-      concatBBandPoint(dr.BB,points.getDataMutable(i)^);
+    for i:=0 to {points.Count-1}high(pts) do
+      concatBBandPoint(dr.BB,{points.getDataMutable(i)^}pts[i]);
   inc(dr.LLPCount);
-  AddPolyLine(DC,closed,GDBPoint3dArray.PTArr(points.getDataMutable(0))^[0..points.Count-1]);
+  AddPolyLine(DC,closed,{GDBPoint3dArray.PTArr(points.getDataMutable(0))^[0..points.Count-1]}pts);
 end;
 
 procedure ZGLGraphix.DrawPointWithoutLT(var DC:TDrawContext;const p:TzePoint3d;var dr:TLLDrawResult);
@@ -678,7 +703,7 @@ procedure FinishLLDrawResult(var LLPS:TLLPrimitivesArray;var dr:TLLDrawResult);
 begin
  dr.LLPEndi:=LLPS.Count;
 end;
-function ZGLGraphix.DrawPolyLineWithLT(var DC:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;
+function ZGLGraphix.DrawPolyLineWithLT(var DC:TDrawContext;const pts:array of TzePoint3d; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;
 var
     //ptv,ptvprev,ptvfisrt: PzePoint3d;
     //ir:itrec;
@@ -689,100 +714,70 @@ var
     ir3:itrec;
     minPatternsCount,NumberOfPatterns:integer;
     supressfirstdash:boolean;
-procedure SetPolyUnLTyped;
-begin
-  DrawPolyLineWithoutLT(dc,points,vp,closed,result);
-  {    ptv:=Points.beginiterate(ir);
-      ptvfisrt:=ptv;
-      if ptv<>nil then
-      repeat
-            ptvprev:=ptv;
-            ptv:=Points.iterate(ir);
-            if ptv<>nil then
-                            DrawLineWithoutLT(DC,ptv^,ptvprev^,result);
-      until ptv=nil;
-      if closed then
-                    DrawLineWithoutLT(DC,ptvprev^,ptvfisrt^,result);}
-end;
 begin
   result:=CreateLLDrawResult(LLprimitives);
-  if Points.Count>1 then
-  begin
-       LT:=getLTfromVP(vp);
-       if (LT=nil) or (LT.dasharray.Count=0) then
-       begin
-            SetPolyUnLTyped;
-       end
-       else
-       begin
-            //SetPolyUnLTyped;
-           polylength:=0;
-           Segmentator.InitFromPolyline(points,polylength,closed,@self);
-           TangentScale:={SysVar.dwg.DWG_LTScale^}DC.DrawingContext.GlobalLTScale*vp.LineTypeScale;
-           NormalScale:=TangentScale;
-           TrueNumberOfPatterns:=polylength/(TangentScale*LT.strokesarray.LengthFact);
-           if ltgen and closed then
-                        begin
-                        minPatternsCount:=2;
-                        NumberOfPatterns:=round(TrueNumberOfPatterns);
-                        if NumberOfPatterns=0 then
-                                                  TangentScale:=NormalScale
-                                              else
-                                                  TangentScale:=polyLength/(NumberOfPatterns*LT.strokesarray.LengthFact);
-                        end
-                    else
-                        begin
-                        minPatternsCount:=1;
-                        NumberOfPatterns:=trunc(TrueNumberOfPatterns);
-                        end;
-           if ((NumberOfPatterns<minPatternsCount)and(not LT^.WithoutLines))or(NumberOfPatterns>SysVarRDMaxLTPatternsInEntity) then
-                                                                                           SetPolyUnLTyped
-           else
-               begin
-                    Segmentator.startdraw;
-                    D:=(polyLength-(TangentScale*LT.strokesarray.LengthFact)*NumberOfPatterns)/2; //длинна добавки для выравнивания
-                    normalizedD:=D/polyLength;
+  if {Points.Count}length(pts)>1 then begin
+    LT:=getLTfromVP(vp);
+    if (LT=nil) or (LT.dasharray.Count=0) then
+      DrawPolyLineWithoutLT(dc,pts,vp,closed,result)
+    else begin
+      polylength:=0;
+      Segmentator.InitFromPolyline({points}pts,polylength,closed,@self);
+      TangentScale:={SysVar.dwg.DWG_LTScale^}DC.DrawingContext.GlobalLTScale*vp.LineTypeScale;
+      NormalScale:=TangentScale;
+      TrueNumberOfPatterns:=polylength/(TangentScale*LT.strokesarray.LengthFact);
+      if ltgen and closed then begin
+        minPatternsCount:=2;
+        NumberOfPatterns:=round(TrueNumberOfPatterns);
+        if NumberOfPatterns=0 then
+          TangentScale:=NormalScale
+        else
+          TangentScale:=polyLength/(NumberOfPatterns*LT.strokesarray.LengthFact);
+      end else begin
+        minPatternsCount:=1;
+        NumberOfPatterns:=trunc(TrueNumberOfPatterns);
+      end;
+      if ((NumberOfPatterns<minPatternsCount)and(not LT^.WithoutLines))or(NumberOfPatterns>SysVarRDMaxLTPatternsInEntity) then
+        DrawPolyLineWithoutLT(dc,pts,vp,closed,result)
+      else begin
+        Segmentator.startdraw;
+        D:=(polyLength-(TangentScale*LT.strokesarray.LengthFact)*NumberOfPatterns)/2; //длинна добавки для выравнивания
+        normalizedD:=D/polyLength;
 
-                    if (not closed)or(not ltgen) then
-                    begin
-                    PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
-                    halfStroke:=(TangentScale*abs(PStroke^/2))/polylength;//первый штрих
-                    //Segmentator.draw(DC,normalizedD-halfStroke,true);
-                    supressfirstdash:=false;
-                    dend:=normalizedD-halfStroke;
-                    if dend>eps then
-                    case LT.FirstStroke of
-                                 TODILine:Segmentator.draw(DC,dend,true,result);
-                                TODIPoint:
-                                          begin
-                                               DrawPointWithoutLT(DC,Segmentator.cp,result);
-                                               Segmentator.draw(DC,dend,false,result);
-                                               supressfirstdash:=true;
-                                          end;
-          TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
-                    end;
-                    end;
-
-
-                    PlaceNPatterns(DC,Segmentator,-1,NumberOfPatterns,LT,TangentScale,NormalScale,polylength,result,supressfirstdash);//рисуем TrueNumberOfPatterns паттернов
-                    dend:=1-Segmentator.cdp;
-                    if (dend>eps) or (LT.WithoutLines) then
-                                    begin
-                                    //Segmentator.draw(DC,dend,true);
-                                    //дорисовываем окончание если надо
-                                    case LT.FirstStroke of
-                                                 TODILine:Segmentator.draw(DC,dend,true,result);
-                                                TODIPoint:
-                                                          begin
-                                                               Segmentator.draw(DC,dend,false,result);
-                                                               DrawPointWithoutLT(DC,Segmentator.cp,result);
-                                                          end;
-                          TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
-                                    end;
-                                    end;
-               end;
-           Segmentator.done;
-       end;
+        if (not closed)or(not ltgen) then begin
+          PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
+          halfStroke:=(TangentScale*abs(PStroke^/2))/polylength;//первый штрих
+          //Segmentator.draw(DC,normalizedD-halfStroke,true);
+          supressfirstdash:=false;
+          dend:=normalizedD-halfStroke;
+          if lt^.LastStroke<>TODILine then
+            case LT.FirstStroke of
+              TODILine:Segmentator.draw(DC,dend,true,result);
+              TODIPoint: begin
+                DrawPointWithoutLT(DC,Segmentator.cp,result);
+                Segmentator.draw(DC,dend,false,result);
+                supressfirstdash:=true;
+              end;
+              TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
+            end;
+        end;
+        PlaceNPatterns(DC,Segmentator,-1,NumberOfPatterns,LT,TangentScale,NormalScale,polylength,result,supressfirstdash);//рисуем TrueNumberOfPatterns паттернов
+        dend:=1-Segmentator.cdp;
+        if (dend>eps) or (LT.WithoutLines) then begin
+          //Segmentator.draw(DC,dend,true);
+          //дорисовываем окончание если надо
+          case LT.FirstStroke of
+            TODILine:Segmentator.draw(DC,dend,true,result);
+            TODIPoint:begin
+              Segmentator.draw(DC,dend,false,result);
+              DrawPointWithoutLT(DC,Segmentator.cp,result);
+            end;
+            TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
+          end;
+        end;
+      end;
+      Segmentator.done;
+    end;
   end;
   Shrink;
   FinishLLDrawResult(LLprimitives,result);

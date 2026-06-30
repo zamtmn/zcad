@@ -1472,7 +1472,7 @@ var
         //polyLWObj:pgdbobjlwpolyline;
         //pt:TzePoint3d;
         //vertexLWObj:GDBvertex2D; //для двух серной полилинии
-        //widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
+        //widthObj:TSegmentParams;      //переменная для добавления веса линии в начале и конце пути
         //
         //drawing:PTSimpleDrawing; //для работы с чертежом
         NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой

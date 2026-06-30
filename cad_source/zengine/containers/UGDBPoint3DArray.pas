@@ -21,11 +21,11 @@ unit UGDBPoint3DArray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,gzctnrVector,sysutils,math,
-     gzctnrVectorTypes,{uzgloglstatemanager,}uzegeometry;
+     gzctnrVectorTypes,uzctnrVectorTzePoint3d,uzegeometry;
 type
 
 PGDBPoint3dArray=^GDBPoint3dArray;
-GDBPoint3dArray= object(GZVector<TzePoint3d>)
+GDBPoint3dArray= object(TZctnrVectorTzePoint3d)
                 function onpoint(const p:TzePoint3d;closed:Boolean):Boolean;
                 function onmouse(const mf:TzeFrustum;const closed:Boolean):Boolean;virtual;
                 function CalcTrueInFrustum(const frustum:TzeFrustum; const closed:boolean):TInBoundingVolume;virtual;

@@ -42,7 +42,7 @@ const
 function extdrAdd_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
-  extdr:TMetaEntityExtender;
+  extdr:TzeEntityExtenderClass;
   pEntity{,pLastSelectedEntity}:PGDBObjEntity;
   ir:itrec;
   Count:integer;

@@ -475,9 +475,9 @@ begin
   dxfStringout(outStream,1000,'SCHConnectorRadius=',FloatToStr(FConnectorRadius));
   if FConnectorType<>DefaultConnectorType then
     case FConnectorType of
-      CTInfo:dxfStringout(outStream,1000,'SCHConnectorType=CTInfo');
-      CTPin:dxfStringout(outStream,1000,'SCHConnectorType=CTPin');
-      CTSetter:dxfStringout(outStream,1000,'SCHConnectorType=CTSetter');
+      CTInfo:dxfStringWithoutEncodeOut(outStream,1000,'SCHConnectorType=CTInfo');
+      CTPin:dxfStringWithoutEncodeOut(outStream,1000,'SCHConnectorType=CTPin');
+      CTSetter:dxfStringWithoutEncodeOut(outStream,1000,'SCHConnectorType=CTSetter');
   end;
 end;
 

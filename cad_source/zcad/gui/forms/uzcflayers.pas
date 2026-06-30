@@ -284,8 +284,11 @@ begin
   if not assigned(ColorSelectForm)then
     Application.CreateForm(TColorSelectForm, ColorSelectForm);
   zcUI.Do_BeforeShowModal(ColorSelectForm);
-  mr:=ColorSelectForm.run(PGDBLayerProp(Item.Data)^.color,false);
-  zcUI.Do_AfterShowModal(ColorSelectForm);
+  try
+    mr:=ColorSelectForm.run(PGDBLayerProp(Item.Data)^.color,false);
+  finally
+    zcUI.Do_AfterShowModal(ColorSelectForm);
+  end;
   if mr=ZCmrOK then
     begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
@@ -354,8 +357,11 @@ begin
   Application.CreateForm(TSelectorForm, SelectorForm);
   FillSelector(SelectorForm);
   zcUI.Do_BeforeShowModal(SelectorForm);
-  mr:=SelectorForm.run;
-  zcUI.Do_AfterShowModal(SelectorForm);
+  try
+    mr:=SelectorForm.run;
+  finally
+    zcUI.Do_AfterShowModal(SelectorForm);
+  end;
   if mr=ZCmrOk then
                  begin
                       PGDBLayerProp(Item.Data)^.LT:=SelectorForm.data;
@@ -394,8 +400,11 @@ begin
   if not assigned(LineWeightSelectForm)then
   Application.CreateForm(TLineWeightSelectForm, LineWeightSelectForm);
   zcUI.Do_BeforeShowModal(LineWeightSelectForm);
-  mr:=LineWeightSelectForm.run(PGDBLayerProp(Item.Data)^.lineweight,false);
-  zcUI.Do_AfterShowModal(LineWeightSelectForm);
+  try
+    mr:=LineWeightSelectForm.run(PGDBLayerProp(Item.Data)^.lineweight,false);
+  finally
+    zcUI.Do_AfterShowModal(LineWeightSelectForm);
+  end;
   if mr=ZCmrOk then
                  begin
                       PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectForm.SelectedLW;

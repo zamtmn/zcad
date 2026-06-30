@@ -26,6 +26,7 @@ uses
   uzestyleslayers,uzestylestexts,                                            //layers and text steles support
   uzeentitiestree,                                                                  //entities spatial binary tree
   uzedrawingsimple,                                                            //drawing
+  uzeTypes,
   gzctnrVectorTypes,uzeconsts;                                                           //some consts
 
 type
@@ -209,7 +210,7 @@ function CreateRandomDouble(len:Double):Double;inline;//create random double in 
 begin
      result:=random*len;
 end;
-function CreateRandomVertex(len,hanflen:Double;_3d:boolean):GDBVertex;//create random 3DVertex in [-hanflen..hanflen] interval
+function CreateRandomVertex(len,hanflen:Double;_3d:boolean):TzePoint3d;//create random 3DVertex in [-hanflen..hanflen] interval
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
      result.y:=CreateRandomDouble(len)-hanflen;
@@ -222,7 +223,7 @@ procedure SetEntityLayer(pobj:PGDBObjEntity;CurrentDrawing:PTSimpleDrawing);//se
 begin
      pobj^.vp.Layer:=CurrentDrawing^.LayerTable.getDataMutable(random(CurrentDrawing^.LayerTable.Count));
 end;
-function CreateRandomVertex2D(len,hanflen:Double):GDBVertex2D;//create random 2DVertex in [-hanflen..hanflen] interval
+function CreateRandomVertex2D(len,hanflen:Double):TzePoint2d;//create random 2DVertex in [-hanflen..hanflen] interval
 begin
      result.x:=CreateRandomDouble(len)-hanflen;
      result.y:=CreateRandomDouble(len)-hanflen;
@@ -232,7 +233,7 @@ procedure TForm1.BtnAddLinesClick(Sender: TObject);         //Add lines to drawi
 var
    i:integer;
    PLineEnt:PGDBObjLine;                                    //pointer to created line
-   v1,v2:gdbvertex;
+   v1,v2:TzePoint3d;
    dc:TDrawContext;                                         //drawing context
    CurrentDrawing:PTSimpleDrawing;                          //pointer to current drawing
    _3d:boolean;
@@ -251,7 +252,7 @@ begin
     PLineEnt^.CoordInOCS.lBegin:=v1;                        //setup coord
     PLineEnt^.CoordInOCS.lEnd:=v2;                          //setup coord
     SetEntityLayer(PLineEnt,CurrentDrawing);                //Setup line propertues
-    CurrentDrawing^.GetCurrentRoot^.AddMi(@PLineEnt);       //add line to drawing
+    CurrentDrawing^.GetCurrentRoot^.AddMi(PLineEnt);       //add line to drawing
 
     PLineEnt^.BuildGeometry(CurrentDrawing^);               //internal entity proc for create subentities,
                                                             //for line entity this unneed, but for complex entities
@@ -268,7 +269,7 @@ procedure TForm1.BtnAddLWPolylines1Click(Sender: TObject);         //Add lwpolyl
 var
    i,j,vcount:integer;
    PLWPolyLineEnt:PGDBObjLWPolyline;                               //pointer to created lwpolyline
-   v1:gdbvertex2d;                                                 //lwpolyline vertex
+   v1:TzePoint2d;                                                 //lwpolyline vertex
    lw:GLLWWidth;                                                   //lwpolyline vertex width props
    dc:TDrawContext;                                                //drawing context
    CurrentDrawing:PTSimpleDrawing;                                 //pointer to current drawing
@@ -295,7 +296,7 @@ begin
     if vcount>2 then
                     PLWPolyLineEnt^.closed:=random(10)>5;          //random close lwpolyline
 
-    CurrentDrawing^.GetCurrentRoot^.AddMi(@PLWPolyLineEnt);        //add lwpolyline to drawing
+    CurrentDrawing^.GetCurrentRoot^.AddMi(PLWPolyLineEnt);        //add lwpolyline to drawing
     SetEntityLayer(PLWPolyLineEnt,GetCurrentDrawing);              //Setup line propertues
     PLWPolyLineEnt^.BuildGeometry(CurrentDrawing^);                //internal entity proc for create subentities,
                                                                    //for line entity this unneed, but for complex entities
@@ -312,7 +313,7 @@ procedure TForm1.BtnAddSplines1Click(Sender: TObject);
 var
    i,j:integer;
    pobj:PGDBObjSpline;
-   v1:gdbvertex;
+   v1:TzePoint3d;
    dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add splines');
@@ -336,7 +337,7 @@ begin
     pobj^.Knots.PushBackData(2);
     pobj^.Knots.PushBackData(2);
     pobj^.Degree:=3;
-    GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
+    GetCurrentDrawing^.GetCurrentRoot^.AddMi(pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
@@ -351,7 +352,7 @@ var
    i,j:integer;
    istriangle:boolean;
    pobj:PGDBObj3DFace;
-   v1:gdbvertex;
+   v1:TzePoint3d;
    dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add 3dfaces');
@@ -370,7 +371,7 @@ begin
                       pobj^.PInOCS[3]:=pobj^.PInOCS[2]
                   else
                       pobj^.PInOCS[3]:=v1;
-    GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
+    GetCurrentDrawing^.GetCurrentRoot^.AddMi(pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
@@ -417,7 +418,7 @@ procedure TForm1.BtnAddCirclesClick(Sender: TObject);
 var
    i:integer;
    pobj:PGDBObjCircle;
-   v1:gdbvertex;
+   v1:TzePoint3d;
    dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add circles');
@@ -428,7 +429,7 @@ begin
     v1:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
     pobj^.Local.P_insert:=v1;
     pobj^.Radius:=CreateRandomDouble(9.9)+0.1;
-    GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
+    GetCurrentDrawing^.GetCurrentRoot^.AddMi(pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
@@ -442,7 +443,7 @@ procedure TForm1.BtnAdd3DpolyLinesClick(Sender: TObject);
 var
    i,j,vcount:integer;
    pobj:PGDBObjPolyline;
-   v1:gdbvertex;
+   v1:TzePoint3d;
    dc:TDrawContext;
 begin
   _StartLongProcess(0,'Add 3dpolylines');
@@ -459,7 +460,7 @@ begin
     end;
     if vcount>2 then
                     pobj^.closed:=random(10)>5;
-    GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
+    GetCurrentDrawing^.GetCurrentRoot^.AddMi(pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
@@ -484,7 +485,7 @@ begin
     pobj^.R:=CreateRandomDouble(10)+0.1;
     pobj^.StartAngle:=CreateRandomDouble(2*pi);
     pobj^.EndAngle:=CreateRandomDouble(2*pi);
-    GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
+    GetCurrentDrawing^.GetCurrentRoot^.AddMi(pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
@@ -538,7 +539,7 @@ procedure TForm1.BtnAddTextsClick(Sender: TObject);
 var
    i:integer;
    pobj:PGDBObjText;
-   v1:gdbvertex;
+   v1:TzePoint3d;
    tp:GDBTextStyleProp;
    angl:double;
    ts:PGDBTextStyle;
@@ -558,7 +559,7 @@ begin
     pobj:=GDBObjText.CreateInstance;
     v1:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
     pobj^.Local.P_insert:=v1;
-    pobj^.TXTStyleIndex:=ts;
+    pobj^.TXTStyle:=ts;
     pobj^.Template:='Hello word!';
     pobj^.textprop.size:=1+random(10);
     pobj^.textprop.justify:=b2j[1+random(11)];
@@ -567,7 +568,7 @@ begin
     angl:=pi*random;
     //pobj^.textprop.angle:=angl;
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));
-    GetCurrentDrawing^.GetCurrentRoot^.AddMi(@pobj);
+    GetCurrentDrawing^.GetCurrentRoot^.AddMi(pobj);
     SetEntityLayer(pobj,GetCurrentDrawing);
     pobj^.BuildGeometry(GetCurrentDrawing^);
     pobj^.formatEntity(GetCurrentDrawing^,dc);
@@ -602,7 +603,7 @@ procedure TForm1.BtnSaveDXFClick(Sender: TObject);
 begin
   {$ifdef dxfio}
   if SaveDialog1.Execute then
-    savedxf2000(SaveDialog1.FileName,extractfilepath(paramstr(0))+'components/empty.dxf',GetCurrentDrawing^);
+    savedxf2000(SaveDialog1.FileName,extractfilepath(paramstr(0))+'components/empty.dxf',GetCurrentDrawing^,1252);
   {$endif}
 end;
 

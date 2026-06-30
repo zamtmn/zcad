@@ -69,7 +69,7 @@ type
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;
       var IODXFContext:TIODXFSaveContext);virtual;
-    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
+    procedure AddMi(var pobj:PGDBObjSubordinated);virtual;
     procedure SetInFrustumFromTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
@@ -203,10 +203,10 @@ end;
 
 procedure GDBObjDevice.AddMi;
 begin
-  VarObjArray.AddPEntity(pGDBObjEntity(ppointer(pobj)^)^);
-  pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
-  if assigned(pGDBObjEntity(ppointer(pobj)^).EntExtensions) then
-    pGDBObjEntity(ppointer(pobj)^).EntExtensions.RunSetRoot(
+  VarObjArray.AddPEntity(pGDBObjEntity(pobj)^);
+  pGDBObjEntity(pobj)^.bp.ListPos.Owner:=@self;
+  if assigned(pGDBObjEntity(pobj)^.EntExtensions) then
+    pGDBObjEntity(pobj)^.EntExtensions.RunSetRoot(
       pobj,GetMainOwner{ @self});
 end;
 
@@ -278,9 +278,11 @@ begin
         pv^.FormatEntity(drawing,dc,EFAllStages-[EFDraw]);
       end;
       IODXFContext.LocalEntityFlags:=DefaultLocalEntityFlags;
-      pv^.SaveToDXF(outStream,drawing,IODXFContext);
-      pv^.SaveToDXFPostProcess(outStream,IODXFContext);
-      pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
+
+      pv^.DXFOut(outStream,drawing,IODXFContext);
+      //pv^.SaveToDXF(outStream,drawing,IODXFContext);
+      //pv^.SaveToDXFPostProcess(outStream,IODXFContext);
+      //pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
       pvc2.rtsave(pv);
 
       pvc2.rtsave(pv);
@@ -303,8 +305,8 @@ procedure GDBObjDevice.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;
   var IODXFContext:TIODXFSaveContext);
 begin
   inherited;
-  dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
-  dxfStringout(outStream,1000,'_UPGRADE=1');
+  dxfStringWithoutEncodeOut(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+  dxfStringWithoutEncodeOut(outStream,1000,'_UPGRADE=1');
 end;
 
 function GDBObjDevice.GetObjTypeName;
@@ -651,9 +653,6 @@ begin
     Result^.scale:=pent^.scale;
     Result^.rotate:=pent^.rotate;
     Result^.P_insert_in_WCS:=pent^.P_insert_in_WCS;
-    {БЛЯДЬ так делать нельзя!!!!}
-    if pent^.PExtAttrib<>nil then
-      Result^.PExtAttrib:=pent^.CopyExtAttrib;
     Result^.Name:=copy(Result^.Name,8,length(Result^.Name)-7);
     Result^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(
       Result^.Name);

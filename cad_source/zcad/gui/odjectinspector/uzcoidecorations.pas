@@ -25,13 +25,13 @@ uses
   SysUtils,Graphics,LCLType,Themes,Forms,ColorBox,
   uzOIUI,uzOIDecorations,uzccommandsabstract,uzepalette,
   uzOIEditors,UEnumDescriptor,uzObjectInspector,uzcinfoform,
-  uzestyleslinetypes,uzctreenode,uzcfsnapeditor,
+  uzestyleslinetypes,uzestylesdim,uzctreenode,uzcfsnapeditor,
   uzeconsts,UGDBNamedObjectsArray,uzctnrvectorstrings,
   uzsbVarmanDef,Varman,uzcfcolors,uzestyleslayers,uzeTypes,uzcflineweights,
   usupportgui,uzccommandsmanager,
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzcsysvars,
   uzcsysparams,gzctnrVectorTypes,uzcinterface,uzcoimultiobjects,
-  uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
+  uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,uzcgui2arrows,
   uzccommand_layer,uzcuitypes,uzeNamedObject,uzccommandsimpl,
   uzcOI,uzcdrawing,uzbUnits,uzeBaseUtils,uzcTypes,uzObjectInspectorManager;
 type
@@ -177,6 +177,11 @@ function DimStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pins
 begin
      result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.DimStyleTable,f);
 end;
+{Создание редактора для выбора стиля таблицы в инспекторе}
+function TableStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
+begin
+     result:=NamedObjectsDecoratorCreateEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,PTD,@drawings.GetCurrentDWG.TableStyleTable,f);
+end;
 procedure _3SBooleanDrawFastEditor(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 var
   Details: TThemedElementDetails;
@@ -251,12 +256,14 @@ begin
      Application.CreateForm(TColorSelectForm, ColorSelectForm);
      SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
      zcUI.Do_BeforeShowModal(ColorSelectForm);
-     mr:=ColorSelectForm.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
-     if mr=ZCmrOk then
-                    begin
-                    PTGDBPaletteColor(PInstance)^:=ColorSelectForm.ColorInfex;
-                    end;
-     zcUI.Do_AfterShowModal(ColorSelectForm);
+     try
+       mr:=ColorSelectForm.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
+       if mr=ZCmrOk then begin
+         PTGDBPaletteColor(PInstance)^:=ColorSelectForm.ColorInfex;
+       end;
+     finally
+       zcUI.Do_AfterShowModal(ColorSelectForm);
+     end;
      freeandnil(ColorSelectForm);
 end;
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
@@ -356,6 +363,10 @@ function TGetterSetterTColorDecorator(PInstance:Pointer):String;
 begin
      result:=ColorToString(PTGetterSetterTColor(pinstance)^.Getter);
 end;
+function ArrowStyleDecorator(PInstance:Pointer):String;
+begin
+     result:=GetArrowStyleName(PTArrowStyle(PInstance)^);
+end;
 
 procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 var
@@ -376,6 +387,88 @@ begin
 
          ARect.Left:=ARect.Left+2;
          drawLT(canvas,ARect,s,plt);
+end;
+procedure drawArrowStyleProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
+var
+   arrowStyle:TArrowStyle;
+   s:String;
+begin
+     arrowStyle:=PTArrowStyle(PInstance)^;
+     s:=GetArrowStyleName(arrowStyle);
+     ARect.Left:=ARect.Left+2;
+     drawArrow(canvas,ARect,s,arrowStyle);
+end;
+function ArrowStyleDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
+var
+   cbedit:TComboBox;
+   selected:integer;
+begin
+     CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit,f);
+     result.editor.byObjects:=false;
+     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
+     TSupportArrowStyleCombo.FillItems(cbedit,nil);
+     TSupportArrowStyleCombo.Setup(cbedit);
+
+     selected:=ord(PTArrowStyle(pinstance)^);
+     if (selected>=0)and(selected<cbedit.Items.Count) then
+       cbedit.ItemIndex:=selected
+     else
+       cbedit.ItemIndex:=0;
+     result.mode:=TEM_Integrate;
+end;
+function IsArrowStyleDataIndex(index:integer):boolean;
+begin
+     result:=(index>=ord(low(TArrowStyle)))and(index<=ord(high(TArrowStyle)));
+end;
+function GetArrowStyleDataName(PInstance:Pointer;index:integer):String;
+var
+   enumdata:PTEnumData;
+begin
+     enumdata:=PTEnumData(PInstance);
+     if (enumdata<>nil)and(index>=0)and(index<enumdata^.Enums.Count) then
+       result:=pstring(enumdata^.Enums.getDataMutable(index))^
+     else
+       if IsArrowStyleDataIndex(index) then
+         result:=GetArrowStyleName(TArrowStyle(index))
+       else
+         result:='';
+end;
+function ArrowStyleDataDecorator(PInstance:Pointer):String;
+begin
+     result:=GetArrowStyleDataName(PInstance,PTEnumData(PInstance)^.Selected);
+end;
+procedure drawArrowStyleDataProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
+var
+   index:integer;
+   s:String;
+begin
+     index:=PTEnumData(PInstance)^.Selected;
+     if not IsArrowStyleDataIndex(index) then
+       exit;
+     s:=GetArrowStyleDataName(PInstance,index);
+     ARect.Left:=ARect.Left+2;
+     drawArrow(canvas,ARect,s,TArrowStyle(index));
+end;
+function ArrowStyleDataDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
+var
+   cbedit:TComboBox;
+   arrowStyle:TArrowStyle;
+   selected:integer;
+begin
+     CreateComboPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit,f);
+     result.editor.byObjects:=false;
+     SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
+     TSupportArrowStyleCombo.Setup(cbedit);
+
+     for arrowStyle:=low(TArrowStyle) to high(TArrowStyle) do
+       cbedit.Items.Add(GetArrowStyleDataName(pinstance,ord(arrowStyle)));
+
+     selected:=PTEnumData(pinstance)^.Selected;
+     if (selected>=0)and(selected<cbedit.Items.Count) then
+       cbedit.ItemIndex:=selected
+     else
+       cbedit.ItemIndex:=0;
+     result.mode:=TEM_Integrate;
 end;
 procedure RunStringEditor(PInstance:Pointer);
 var
@@ -672,7 +765,10 @@ begin
     DecorateType(SysUnit.TypeName2PTD('PGDBLtypePropObjInsp'),NamedObjectsDecorator,LTypeDecoratorCreateEditor,drawLTProp);
     DecorateType(SysUnit.TypeName2PTD('PGDBTextStyleObjInsp'),NamedObjectsDecorator,TextStyleDecoratorCreateEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('PGDBDimStyleObjInsp'),NamedObjectsDecorator,DimStyleDecoratorCreateEditor,nil);
+    DecorateType(SysUnit.TypeName2PTD('PGDBTableStyleObjInsp'),NamedObjectsDecorator,TableStyleDecoratorCreateEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('TGDBPaletteColor'),PaletteColorDecorator,ColorDecoratorCreateEditor,drawIndexColorProp);
+    DecorateType(SysUnit.TypeName2PTD('TArrowStyle'),ArrowStyleDecorator,ArrowStyleDecoratorCreateEditor,drawArrowStyleProp);
+    DecorateType(SysUnit.TypeName2PTD('TArrowStyleData'),ArrowStyleDataDecorator,ArrowStyleDataDecoratorCreateEditor,drawArrowStyleDataProp);
     DecorateType(SysUnit.TypeName2PTD('TGDBOSMode'),nil,CreateEmptyEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('TColor'),TColorDecorator,TColorDecoratorCreateEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('TFString'),TFStringDecorator,nil,nil);

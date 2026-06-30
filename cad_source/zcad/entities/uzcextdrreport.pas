@@ -26,13 +26,13 @@ uses
   uzeentdevice,uzctnrVectorBytesStream,
   uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
   uzsbVarmanDef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-  {uzeentitiestree,}usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-  {gzctnrVectorTypes,}uzeBaseExtender,{uzeconsts,}uzgldrawcontext,
-  lptypes,lpvartypes,lpparser,lpcompiler,//lputils,
-  lpeval,//lpinterpreter,lpmessages,
-  {gzctnrSTL,}uzcsysvars,
+  usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
+  uzeBaseExtender,uzgldrawcontext,
+  lptypes,lpvartypes,lpparser,lpcompiler,
+  lpeval,
+  uzcsysvars,
   LazUTF8,
-  {uzbLogTypes,}uzcLog,
+  uzcLog,
   uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcLapeScriptsImplDrawing,
   uzccommandsabstract;
 
@@ -151,9 +151,9 @@ end;
 
 procedure TReportExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
-  dxfStringout(outStream,1000,'REPORTEXTENDER=');
+  dxfStringWithoutEncodeOut(outStream,1000,'REPORTEXTENDER=');
   if fScriptName<>'' then
-    dxfStringout(outStream,1000,'RPRTEcriptName='+fScriptName);
+    dxfStringout(outStream,1000,'RPRTEcriptName='+fScriptName,IODXFContext.Header);
 end;
 
 class function TReportExtender.EntIOLoadScriptName(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -195,7 +195,8 @@ initialization
   ReportScriptsManager:=STManager.CreateType('lpr','Script test',
     TEntityExtentionContext,LSCMCreateOnce,[TLapeDwg.zeGeom2cplr,
     TLapeDwg.ze2cplr,TLapeDwg.zeStyles2cplr,TLapeDwg.zeEnt2cplr,
-    TLapeDwg.zeEntsArrays2cplr,
+    TLapeDwg.zeEntsArrays2cplr,TLapeDwg.zeEntsExtenders2cplr,
+    TLapeDwg.zc2cplr,TLapeDwg.zcReport2cplr,
     TLapeDwg.ctxSetup,TLapeEntityExtention.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);

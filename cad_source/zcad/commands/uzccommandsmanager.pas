@@ -32,7 +32,7 @@ uses
   uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
   uzeentity,uzgldrawcontext,Classes,
   uzglviewareageneral,uzcdrawing,uzeentgenericsubentry,
-  MacroDefIntf,uzmacros;
+  MacroDefIntf,uzmacros,uzccominteractivemanipulators;
 
 const
   tm:tmethod=(Code:nil;Data:nil);
@@ -136,8 +136,8 @@ type
     function Get3DPointInteractive(prompt:string;
       out p:TzePoint3d;const InteractiveProc:TInteractiveProcObjBuild;
       const PInteractiveData:Pointer;ESP:TEntitySetupProc=nil):TzcInteractiveResult;
-    function Get3DAndMoveConstructRootTo(prompt:string;
-      out p:TzePoint3d):TzcInteractiveResult;
+    function Get3DAndMoveConstructRootTo(prompt:string;out p:TzePoint3d):TzcInteractiveResult;
+    function Get3DAndRotateConstructRoot(APrompt:string;const ABase:TzePoint3d;const AAxis,Arefv:TzeVector3d;out Apt:TzePoint3d):TzcInteractiveResult;
     function MoveConstructRootTo(prompt:string):TzcInteractiveResult;
     function GetInput(Prompt:string;out Input:string):TzcInteractiveResult;
 
@@ -442,46 +442,26 @@ begin
   //восстанавливаем сохраненный режим редактора
 end;
 
-procedure InteractiveConstructRootManipulator(
-  const PInteractiveData:Pointer {must be nil, no additional data needed};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
-var
-  ir:itrec;
-  p:PGDBObjEntity;
-  t_matrix:TzeTypedMatrix4d;
-  RC:TDrawContext;
+function GDBcommandmanager.Get3DAndMoveConstructRootTo(prompt:string;out p:TzePoint3d):TzcInteractiveResult;
 begin
-  if click then begin
-    t_matrix:=CreateTranslationMatrix(Point);
-    drawings.GetCurrentDWG^.ConstructObjRoot.transform(t_matrix);
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
-    p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
-    if p<>nil then
-      repeat
-        p^.transform(t_matrix);
-        p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
-      until p=nil;
-  end else begin
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=CreateTranslationMatrix(Point);
-    RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
-  end;
+  Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootToPtManipulator,nil,nil);
 end;
 
-function GDBcommandmanager.Get3DAndMoveConstructRootTo(prompt:string;
-  out p:TzePoint3d):TzcInteractiveResult;
+function GDBcommandmanager.Get3DAndRotateConstructRoot(APrompt:string;const ABase:TzePoint3d;const AAxis,Arefv:TzeVector3d;out Apt:TzePoint3d):TzcInteractiveResult;
+var
+  rmd:TRotateManipulatorData;
 begin
-  Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil,nil);
+  rmd.Base:=ABase;
+  rmd.Axis:=AAxis;
+  rmd.Arefv:=Arefv;
+  Result:=Get3DPointInteractive(APrompt,Apt,@InteractiveConstructRootRotateManipulator,@rmd,nil);
 end;
 
 function GDBcommandmanager.MoveConstructRootTo(prompt:string):TzcInteractiveResult;
 var
   p:TzePoint3d;
 begin
-  Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil,nil);
+  Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootToPtManipulator,nil,nil);
 end;
 
 function GDBcommandmanager.GetLastId:TTag;

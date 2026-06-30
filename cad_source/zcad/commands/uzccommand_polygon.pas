@@ -33,6 +33,7 @@ uses
   uzeentlwpolyline,uzeentpolyline,uzeentityfactory,
   uzcutils,
   //
+  uzeTypes,
   uzegeometry,
   URecordDescriptor,uzsbTypeDescriptors,Varman,uzsbVarmanDef;
 
@@ -70,7 +71,7 @@ var
   vertexLWObj:TzePoint2d;
   //переменная для добавления вершин в полилинию
   vertexObj:TzePoint3d;
-  widthObj:GLLWWidth;
+  widthObj:TSegmentParams;
   //переменная для добавления веса линии в начале и конце пути
   //polyLWObj:PGDBObjLWPolyline;
   //polyObj:PGDBObjPolyline;
@@ -132,8 +133,8 @@ begin
       polygonDrawModePentity.plwentity:=GDBObjLWPolyline.CreateInstance;
       polygonDrawModePentity.plwentity^.Closed:=True;
 
-      widthObj.endw:=PolygonParam.PolyWidth;
-      widthObj.startw:=PolygonParam.PolyWidth;
+      widthObj.data.endw:=PolygonParam.PolyWidth;
+      widthObj.data.startw:=PolygonParam.PolyWidth;
 
       ////drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polygonDrawModePentity.plwentity);//было, теперь стало, не @указатель, а просто указатель
       zcAddEntToCurrentDrawingConstructRoot(polygonDrawModePentity.plwentity);
@@ -142,7 +143,7 @@ begin
       for i:=0 to PolygonParam.VNum-1 do begin
         polygonDrawModePentity.plwentity^.Vertex2D_in_OCS_Array.PushBackData(
           vertexLWObj);
-        polygonDrawModePentity.plwentity^.Width2D_in_OCS_Array.PushBackData(
+        polygonDrawModePentity.plwentity^.SgmntsParams.PushBackData(
           widthObj);
       end;
 

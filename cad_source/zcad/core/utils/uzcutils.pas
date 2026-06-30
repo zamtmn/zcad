@@ -46,7 +46,7 @@ uses
     @param(PEnt Указатель на добавляемый примитив)}
   procedure zcAddEntToCurrentDrawingWithUndo(const PEnt:PGDBObjEntity);
 
-  procedure zcAddEntToCurrentDrawingConstructRoot(const PEnt: PGDBObjEntity);
+  procedure zcAddEntToCurrentDrawingConstructRoot(var PEnt: PGDBObjEntity);
 
   procedure zcClearCurrentDrawingConstructRoot;
   procedure zcFreeEntsInCurrentDrawingConstructRoot;
@@ -239,7 +239,7 @@ procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);
 begin
   zcStartUndoCommand(PTZCADDrawing(drawings.GetCurrentDWG)^,CommandName,PushStone);
 end;
-procedure zcAddEntToCurrentDrawingConstructRoot(const PEnt: PGDBObjEntity);
+procedure zcAddEntToCurrentDrawingConstructRoot(var PEnt: PGDBObjEntity);
 begin
   zeAddEntToRoot(PEnt,drawings.GetCurrentDWG^.ConstructObjRoot);
 end;

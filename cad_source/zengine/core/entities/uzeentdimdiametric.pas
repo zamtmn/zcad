@@ -82,8 +82,8 @@ begin
   dxfIntegerout(outStream,70,3+128)
                        {else
                            dxfIntegerout(outStream,70,3);};
-  dxfStringout(outStream,3,PDimStyle^.Name);
-  dxfStringout(outStream,100,'AcDbDiametricDimension');
+  dxfStringout(outStream,3,PDimStyle^.Name,IODXFContext.Header);
+  dxfStringWithoutEncodeOut(outStream,100,'AcDbDiametricDimension');
   dxfvertexout(outStream,15,DimData.P15InWCS);
 end;
 

@@ -40,7 +40,8 @@ uses
   uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
   uzelongprocesssupport,uzeparser,uzcoimultiproperties,
   uzcoimultipropertiesutil,uzsbVarmanDef,uzcvariablesutils,Masks,uzcregother,
-  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzbUnits;
+  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzbUnits,
+  uzcEnitiesVariablesExtender;
 
 resourcestring
   RSCLPDataExportWaitFile=
@@ -469,12 +470,14 @@ var
   gr:TzcInteractiveResult;
   CmdMode:TCmdMode;
   filename:string;
+  VarsExtdr:TVariablesExtender;
 
-  procedure SetCmdMode(Mode:TCmdMode);
+  procedure SetCmdMode(const ANewMode:TCmdMode;const AForce:boolean=false);
   begin
-    if CmdMode=Mode then
-      exit;
-    case Mode of
+    if not AForce then
+      if CmdMode=ANewMode then
+        exit;
+    case ANewMode of
       CMWaitFile:begin
         if clFilePrompt=nil then
           clFilePrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportWaitFile);
@@ -517,12 +520,12 @@ var
       end;
       CMExport:;//заглушка на варнинг
     end;
-    CmdMode:=Mode;
+    CmdMode:=ANewMode;
   end;
 
 begin
   zcShowCommandParams(SysUnit^.TypeName2PTD('TDataExportParam'),@DataExportParam);
-  SetCmdMode(CMWaitFile);
+  SetCmdMode(CMWaitFile,true);
   repeat
     gr:=commandmanager.GetInput('',inpt);
     case gr of
@@ -605,20 +608,24 @@ begin
       pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
       if pv<>nil then
         repeat
-          if EntsTypeFilter.IsEntytyAccepted(pv) then begin
-            if assigned(EntityIncluder) then begin
-              propdata.CurrentEntity:=pv;
-              propdata.IncludeEntity:=T3SB_Default;
-              EntityIncluder.Doit(PropData);
-            end else
-              propdata.IncludeEntity:=T3SB_True;
+          {TODO: сделать настройку в скрипте экспорта для экспорта из главных функций\делегатов}
+          {TODO: убрать хардкод}
+          VarsExtdr:=pv^.GetExtension<TVariablesExtender>;
+          if (VarsExtdr<>nil)and(VarsExtdr.isMainFunction)then
+            if EntsTypeFilter.IsEntytyAccepted(pv) then begin
+              if assigned(EntityIncluder) then begin
+                propdata.CurrentEntity:=pv;
+                propdata.IncludeEntity:=T3SB_Default;
+                EntityIncluder.Doit(PropData);
+              end else
+                propdata.IncludeEntity:=T3SB_True;
 
-            if propdata.IncludeEntity=T3SB_True then begin
-              Data.CurrentEntity:=pv;
-              if assigned(pet) then
-                pet.Doit(Data);
+              if propdata.IncludeEntity=T3SB_True then begin
+                Data.CurrentEntity:=pv;
+                if assigned(pet) then
+                  pet.Doit(Data);
+              end;
             end;
-          end;
 
           pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
           LPS.ProgressLongProcess(lpsh,ir.itc);
@@ -718,8 +725,6 @@ finalization
     LM_Info,UnitsFinalizeLMId);
   ExporterParser.Free;
   VU.done;
-  if clFilePrompt<>nil then
-    clFilePrompt.Free;
-  if clOptionsPrompt<>nil then
-    clOptionsPrompt.Free;
+  clFilePrompt.Free;
+  clOptionsPrompt.Free;
 end.

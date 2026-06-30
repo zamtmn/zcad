@@ -766,16 +766,9 @@ var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
     cs:TGDBTableCellStyle;
 begin
-  DXFCodePage:=TZCCodePage.ZCCPINVALID;
+  inherited init;
+
   LastActl.CreateDef;
-  LWDisplay:=false;
-  SnapGrid:=false;
-  GridSpacing.x:=0.5;
-  GridSpacing.y:=0.5;
-  snap.Base.x:=0;
-  snap.Base.y:=0;
-  snap.Spacing.x:=0.5;
-  snap.Spacing.y:=0.5;
   pcamera:=pcam;
   internalcamera:=false;
   if pcamera=nil then
@@ -992,6 +985,33 @@ begin
      ts.tblformat.PushBackData(cs);
 
 
+
+     ts:=TableStyleTable.AddStyle('PE');
+
+        ts.rowheight:=8;
+        ts.textheight:=3.5;
+
+        ts.HeadBlockName:='TBL_PE_HEAD';
+
+        cs.Width:=20;
+        cs.TextWidth:=cs.Width-2;
+        cs.cf:=jcc;
+        ts.tblformat.PushBackData(cs);
+
+        cs.Width:=110;
+        cs.TextWidth:=cs.Width-2;
+        cs.cf:=jcl;
+        ts.tblformat.PushBackData(cs);
+
+        cs.Width:=10;
+        cs.TextWidth:=cs.Width-2;
+        cs.cf:=jcc;
+        ts.tblformat.PushBackData(cs);
+
+        cs.Width:=45;
+        cs.TextWidth:=cs.Width-2;
+        cs.cf:=jcl;
+        ts.tblformat.PushBackData(cs);
 
 
   ts:=TableStyleTable.AddStyle('KZ');

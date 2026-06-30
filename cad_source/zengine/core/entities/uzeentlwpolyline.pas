@@ -16,6 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzeentlwpolyline;
+{$PointerMath ON}
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
@@ -29,76 +30,71 @@ uses
   gzctnrVectorTypes,uzegeometrytypes,uzeffdxfsupport,SysUtils,
   UGDBSelectedObjArray,uzMVReader,uzCtnrVectorpBaseEntity;
 
+const
+  CDefaultPolySegmentWidth:TGenSegmentParams=(
+  startw:0;
+  endw:0;
+  hw:false;
+  bulge:0;
+  );
+
 type
 
-  PGLLWWidth=^GLLWWidth;
+  TSegmentsParams=GZVector<TSegmentParams>;
+  TWidth3D_in_WCS_Vector=GZVector<GDBQuad3d>;
 
-  GLLWWidth=record
-    startw:double;
-    endw:double;
-    hw:boolean;
-    quad:GDBQuad2d;
-  end;
-
-  GDBLineWidthArray=object(GZVector<GLLWWidth>)
-  end;
-
-  TWidth3D_in_WCS_Vector=object(GZVector<GDBQuad3d>)
-  end;
   PGDBObjLWPolyline=^GDBObjLWpolyline;
 
   GDBObjLWPolyline=object(GDBObjWithLocalCS)
-    Closed:boolean;
     Vertex2D_in_OCS_Array:GDBpolyline2DArray;
-    Vertex3D_in_WCS_Array:GDBPoint3dArray;
-    Width2D_in_OCS_Array:GDBLineWidthArray;
-    Width3D_in_WCS_Array:TWidth3D_in_WCS_Vector;
-    Square:double;
-    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;c:boolean);
-    constructor initnul;
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
-      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+    SgmntsParams:TSegmentsParams;
 
-    procedure SaveToDXF(var outStream:TZctnrVectorBytes;
-      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-    procedure DrawGeometry(lw:integer;var DC:TDrawContext;
-      const inFrustumState:TInBoundingVolume);virtual;
-    procedure FormatEntity(var drawing:TDrawingDef;
-      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    Vertex3D_in_WCS_Array:GDBPoint3dArray;
+    Width3D_in_WCS_Array:TWidth3D_in_WCS_Vector;
+    Closed:boolean;
+    Plinegen:boolean;
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint;c:boolean);
+    constructor initnul;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;
+      var context:TIODXFLoadContext);virtual;
+
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;
+      var IODXFContext:TIODXFSaveContext);virtual;
+    procedure DrawGeometry(lw:integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+    function IsStagedFormatEntity:boolean;virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     function CalcSquare:double;virtual;
     //**попадаетли данная координата внутрь контура
     function isPointInside(const point:TzePoint3d):boolean;virtual;
     procedure createpoint;virtual;
-    procedure CalcWidthSegment;virtual;
+    procedure CalcWidthSegments;virtual;
+    procedure CalcWidthSegment(var p1,p2:TzePoint2d;var plw:TSegmentParams);
     destructor done;virtual;
     function GetObjTypeName:string;virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
-    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
-      ProjectProc:GDBProjectProc);virtual;
+    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     procedure rtsave(refp:Pointer);virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
-    function CalcTrueInFrustum(
-      const frustum:TzeFrustum):TInBoundingVolume;virtual;
-    function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
-    function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:TzePoint3d):boolean;virtual;
-    function getsnap(var osp:os_record;var pdata:Pointer;
-      const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
+    function CalcTrueInFrustum(const frustum:TzeFrustum):TInBoundingVolume;virtual;
+    function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
+    function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:TzePoint3d):boolean;virtual;
+    function getsnap(var osp:os_record;var pdata:Pointer;const param:OGLWndtype;
+      ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
     procedure startsnap(out osp:os_record;out pdata:Pointer);virtual;
     procedure endsnap(out osp:os_record;var pdata:Pointer);virtual;
-    procedure AddOnTrackAxis(var posr:os_record;
-      const processaxis:taddotrac);virtual;
+    procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
     procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
     procedure higlight(var DC:TDrawContext);virtual;
     class function CreateInstance:PGDBObjLWPolyline;static;
     function GetObjType:TObjID;virtual;
+    property Square:double read CalcSquare;
   end;
+
+function AllocAndInitLWpolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjLWPolyline;
 
 implementation
 
@@ -387,13 +383,14 @@ var
 begin
   Getmem(Pointer(tpo),sizeof(GDBObjLWPolyline));
   tpo^.init(own,vp.Layer,vp.LineWeight,closed);
+  tpo^.Plinegen:=Plinegen;
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
   tpo^.Local:=local;
   tpo^.Vertex2D_in_OCS_Array.SetSize(Vertex2D_in_OCS_Array.Count);
   Vertex2D_in_OCS_Array.copyto(tpo^.Vertex2D_in_OCS_Array);
-  tpo^.Width2D_in_OCS_Array.SetSize(Width2D_in_OCS_Array.Count);
-  Width2D_in_OCS_Array.copyto(tpo^.Width2D_in_OCS_Array);
+  tpo^.SgmntsParams.SetSize(SgmntsParams.Count);
+  SgmntsParams.copyto(tpo^.SgmntsParams);
   Result:=tpo;
 end;
 
@@ -405,7 +402,7 @@ end;
 destructor GDBObjLWpolyline.done;
 begin
   Vertex2D_in_OCS_Array.done;
-  Width2D_in_OCS_Array.done;
+  SgmntsParams.done;
   Vertex3D_in_WCS_Array.done;
   Width3D_in_WCS_Array.done;
   inherited done;
@@ -415,8 +412,9 @@ constructor GDBObjLWpolyline.init;
 begin
   inherited init(own,layeraddres,lw);
   closed:=c;
+  Plinegen:=false;
   Vertex2D_in_OCS_Array.init(4,c);
-  Width2D_in_OCS_Array.init(4);
+  SgmntsParams.init(4);
   Vertex3D_in_WCS_Array.init(4);
   Width3D_in_WCS_Array.init(4);
 end;
@@ -424,8 +422,10 @@ end;
 constructor GDBObjLWpolyline.initnul;
 begin
   inherited initnul(nil);
+  Closed:=false;
+  Plinegen:=false;
   Vertex2D_in_OCS_Array.init(4,False);
-  Width2D_in_OCS_Array.init(4);
+  SgmntsParams.init(4);
   Vertex3D_in_WCS_Array.init(4);
   Width3D_in_WCS_Array.init(4);
 end;
@@ -439,10 +439,13 @@ procedure GDBObjLWpolyline.DrawGeometry;
 var
   i,ie:integer;
   q3d:PGDBQuad3d;
-  plw:PGLlwwidth;
+  plw:PSegmentParams;
   v:TzePoint3d;
   simplydraw:boolean;
 begin
+
+  Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
+  //exit;
 
   if dc.lod=LODCalculatedDetail then begin
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
@@ -478,10 +481,10 @@ begin
   else
     ie:=Width3D_in_WCS_Array.Count-2;
   q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-  plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
+  plw:=SgmntsParams.GetParrayAsPointer;
   for i:=0 to ie do begin
     begin
-      if plw^.hw then
+      if plw^.data.hw then
         dc.drawer.DrawQuad3DInModelSpace(q3d^[0],q3d^[1],q3d^[2],
           q3d^[3],dc.DrawingContext.matrixs);
       Inc(plw);
@@ -489,11 +492,11 @@ begin
     end;
   end;
   q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-  plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
+  plw:=SgmntsParams.GetParrayAsPointer;
   for i:=0 to ie do begin
     begin
       dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
-      if plw^.hw then begin
+      if plw^.data.hw then begin
         dc.drawer.DrawLine3DInModelSpace(q3d^[1],q3d^[2],dc.DrawingContext.matrixs);
         dc.drawer.DrawLine3DInModelSpace(q3d^[2],q3d^[3],dc.DrawingContext.matrixs);
         dc.drawer.DrawLine3DInModelSpace(q3d^[3],q3d^[0],dc.DrawingContext.matrixs);
@@ -505,11 +508,31 @@ begin
   inherited;
 end;
 
+function EnsureWidthInicialized(var AWidths:TSegmentsParams;AIdx:Integer):PSegmentParams;
+var
+  c:Integer;
+begin
+  if AWidths.Count<=AIdx then begin
+    c:=AWidths.Count;
+    AWidths.SetCount(AIdx+1);
+    Result:=AWidths.getDataMutable(c);
+    Result^.data:=CDefaultPolySegmentWidth;
+    while c<AIdx do begin
+      inc(c);
+      Inc(Result);
+      Result^.data:=CDefaultPolySegmentWidth;
+    end;
+    {Result:=AWidths.getDataMutable(AIdx);
+    Result^.data:=CDefaultPolySegmentWidth;}
+  end else
+    Result:=AWidths.getDataMutable(AIdx);
+end;
+
 procedure GDBObjLWpolyline.LoadFromDXF;
 var
   p:TzePoint2d;
   byt,i:integer;
-  hlGDBWord:longword;
+  hlGDBWord,flags:longword;
   numv:integer;
   widthload:boolean;
   globalwidth:double;
@@ -532,30 +555,40 @@ begin
         62:vp.color:=rdr.ParseInteger;
         90:begin
           numv:=rdr.ParseInteger;
-          Width2D_in_OCS_Array.SetSize(numv);
+          SgmntsParams.SetSize(numv);
           hlGDBWord:=0;
         end;
         10:p.x:=rdr.ParseDouble;
         20:begin
           p.y:=rdr.ParseDouble;
           lwtv.PushBackData(p);
+          EnsureWidthInicialized(SgmntsParams,hlGDBWord);
           Inc(hlGDBWord);
         end;
         38:local.p_insert.z:=rdr.ParseDouble;
         40:begin
-          Width2D_in_OCS_Array.SetCount(numv);
-          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw:=
-            rdr.ParseDouble;
+          EnsureWidthInicialized(SgmntsParams,hlGDBWord-1)^.data.startw:=rdr.ParseDouble;
+          {SgmntsParams.SetCount(numv);
+          PSegmentParams(SgmntsParams.getDataMutable(hlGDBWord-1)).data.startw:=rdr.ParseDouble;}
           widthload:=True;
         end;
         41:begin
-          Width2D_in_OCS_Array.SetCount(numv);
-          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).endw:=
-            rdr.ParseDouble;
+          EnsureWidthInicialized(SgmntsParams,hlGDBWord-1)^.data.endw:=rdr.ParseDouble;
+          {SgmntsParams.SetCount(numv);
+          PSegmentParams(SgmntsParams.getDataMutable(hlGDBWord-1)).data.endw:=rdr.ParseDouble;}
           widthload:=True;
         end;
+        42:begin
+          EnsureWidthInicialized(SgmntsParams,hlGDBWord-1)^.data.bulge:=rdr.ParseDouble;
+          {SgmntsParams.SetCount(numv);
+          PSegmentParams(SgmntsParams.getDataMutable(hlGDBWord-1)).data.bulge:=rdr.ParseDouble;}
+        end;
         43:globalwidth:=rdr.ParseDouble;
-        70:closed:=(rdr.ParseInteger and 1)=1;
+        70:begin
+          flags:=rdr.ParseInteger;
+          closed:=(flags and 1)<>0;
+          Plinegen:=(flags and 128)<>0;
+        end;
         210:Local.basis.oz.x:=rdr.ParseDouble;
         220:Local.basis.oz.y:=rdr.ParseDouble;
         230:Local.basis.oz.z:=rdr.ParseDouble;
@@ -566,30 +599,36 @@ begin
     byt:=rdr.ParseInteger;
   end;
   if not widthload then begin
-    Width2D_in_OCS_Array.SetCount(numv);
+    SgmntsParams.SetCount(numv);
     for i:=0 to numv-1 do begin
-      PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).endw:=globalwidth;
-      PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).startw:=globalwidth;
+      PSegmentParams(SgmntsParams.getDataMutable(i)).data.endw:=globalwidth;
+      PSegmentParams(SgmntsParams.getDataMutable(i)).data.startw:=globalwidth;
     end;
   end;
   Vertex2D_in_OCS_Array.SetSize(lwtv.Count);
   lwtv.copyto(Vertex2D_in_OCS_Array);
   lwtv.Clear;
-  Width2D_in_OCS_Array.Shrink;
+  SgmntsParams.Shrink;
 end;
 
 procedure GDBObjLWpolyline.SaveToDXF;
 var
-  j:integer;
+  j,flags:integer;
   tv:TzePoint3d;
 begin
   SaveToDXFObjPrefix(outStream,'LWPOLYLINE','AcDbPolyline',IODXFContext);
-  dxfStringout(outStream,90,IntToStr(Vertex2D_in_OCS_Array.Count));
-  if closed then
-    dxfStringout(outStream,70,'1')
-  else
-    dxfStringout(outStream,70,'0');
+  dxfStringWithoutEncodeOut(outStream,90,IntToStr(Vertex2D_in_OCS_Array.Count));
 
+  if Closed then
+    flags:=1
+  else
+    flags:=0;
+
+  if Plinegen then
+    flags:=flags or 128;
+
+  if flags<>0 then
+    dxfIntegerout(outStream,70,flags);
 
   dxfDoubleout(outStream,38,local.p_insert.z);
 
@@ -602,8 +641,9 @@ begin
     tv.y:=GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.PArray)^[j].y;
     tv.z:=0;
     dxfvertex2dout(outStream,10,PzePoint2d(@tv)^);
-    dxfDoubleout(outStream,40,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).startw);
-    dxfDoubleout(outStream,41,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).endw);
+    dxfDoubleout(outStream,40,PSegmentParams(SgmntsParams.getDataMutable(j)).data.startw);
+    dxfDoubleout(outStream,41,PSegmentParams(SgmntsParams.getDataMutable(j)).data.endw);
+    dxfDoubleout(outStream,42,PSegmentParams(SgmntsParams.getDataMutable(j)).data.bulge);
   end;
   SaveToDXFObjPostfix(outStream);
 end;
@@ -645,20 +685,45 @@ begin
   Result:=Result/2;
 end;
 
-procedure GDBObjLWpolyline.FormatEntity(var drawing:TDrawingDef;
-  var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+function GDBObjLWpolyline.IsStagedFormatEntity:boolean;
 begin
-  if assigned(EntExtensions) then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
-  Vertex2D_in_OCS_Array.Shrink;
-  Width2D_in_OCS_Array.Shrink;
-  inherited FormatEntity(drawing,dc);
-  createpoint;
-  CalcWidthSegment;
-  Square:=CalcSquare;
-  calcbb(dc);
-  if assigned(EntExtensions) then
-    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  Result:=True;
+end;
+
+
+procedure GDBObjLWpolyline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;
+                                        Stage:TEFStages=EFAllStages);
+begin
+  if EFCalcEntityCS in stage then begin
+    if assigned(EntExtensions) then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+    inherited FormatEntity(drawing,dc);
+    createpoint;
+    calcbb(dc);
+    Vertex2D_in_OCS_Array.Shrink;
+    SgmntsParams.Shrink;
+  end;
+
+  CalcActualVisible(dc.DrawingContext.VActuality);
+
+  if EFDraw in stage then begin
+    if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+      Representation.Clear;
+      CalcWidthSegments;
+      if assigned(EntExtensions) then begin
+        if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
+          Representation.CreateLWPolyLine(dc,self,vp,GetMatrix^,
+          Vertex2D_in_OCS_Array.getPFirst[0..Vertex2D_in_OCS_Array.GetLastIndex],
+          SgmntsParams.getPFirst[0..SgmntsParams.GetLastIndex],Closed,Plinegen);
+      end else
+        Representation.CreateLWPolyLine(dc,self,vp,GetMatrix^,
+        Vertex2D_in_OCS_Array.getPFirst[0..Vertex2D_in_OCS_Array.GetLastIndex],
+        SgmntsParams.getPFirst[0..SgmntsParams.GetLastIndex],Closed,Plinegen);
+    end;
+    Representation.Shrink;
+    if assigned(EntExtensions) then
+      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
 
 procedure GDBObjLWpolyline.createpoint;
@@ -682,16 +747,50 @@ begin
   end;
   Vertex3D_in_WCS_Array.Shrink;
 end;
+procedure GDBObjLWpolyline.CalcWidthSegment(var p1,p2:TzePoint2d;var plw:TSegmentParams);
+var
+  k:integer;
+  vtangent,vnormal,vtemp:TzePoint2d;
+  q3d:GDBQuad3d;
+  v:TzeVector4d;
+begin
+  vtangent:=p2-p1;
+  vnormal.x:=-vtangent.y;
+  vnormal.y:=vtangent.x;
+  vnormal:=vnormal.NormalizeVertex;
 
-procedure GDBObjLWpolyline.CalcWidthSegment;
+  if (plw.data.startw=0) and (plw.data.endw=0) then
+    plw.data.hw:=False
+  else begin
+    plw.data.hw:=True;
+  end;
+
+  vtemp:=vnormal*plw.data.startw/2;
+  plw.quad[0]:=p1+vtemp;
+  plw.quad[3]:=p1-vtemp;
+  vtemp:=vnormal*plw.data.endw/2;
+  plw.quad[1]:=p2+vtemp;
+  plw.quad[2]:=p2-vtemp;
+
+  for k:=0 to 3 do begin
+    v.x:=plw.quad[k].x;
+    v.y:=plw.quad[k].y;
+    v.z:=0;
+    v.w:=1;
+    v:=VectorTransform(v,objMatrix);
+    q3d[k]:=PzePoint3d(@v)^;
+  end;
+
+  Width3D_in_WCS_Array.PushBackData(q3d);
+end;
+
+procedure GDBObjLWpolyline.CalcWidthSegments;
 var
   i,j,k:integer;
-  dx,dy,nx,ny,l:double;
-  v2di,v2dj:PzePoint2d;
-  plw,plw2:PGLlwwidth;
-  q3d:GDBQuad3d;
+  l:double;
+  pv1,pv2:PzePoint2d;
+  plw,plw2:PSegmentParams;
   pq3d,pq3dnext:pGDBQuad3d;
-  v:TzeVector4d;
   v2:PzePoint3d;
   ip,ip2:Intercept3DProp;
 begin
@@ -701,50 +800,13 @@ begin
       j:=i+1
     else
       j:=0;
-    v2dj:=Vertex2D_in_OCS_Array.getDataMutable(j);
-    v2di:=Vertex2D_in_OCS_Array.getDataMutable(i);
-    dx:=v2dj^.x-v2di^.x;
-    dy:=v2dj^.y-v2di^.y;
-    nx:=-dy;
-    ny:=dx;
-    l:=sqrt(nx*nx+ny*ny);
-    if abs(l)>eps then begin
-      nx:=nx/l;
-      ny:=ny/l;
-    end else begin
-      nx:=0;
-      ny:=0;
-    end;
+    pv2:=Vertex2D_in_OCS_Array.getDataMutable(j);
+    pv1:=Vertex2D_in_OCS_Array.getDataMutable(i);
+    plw:=PSegmentParams(SgmntsParams.getDataMutable(i));
+    CalcWidthSegment(pv1^,pv2^,plw^);
 
-    plw:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(i));
-
-    if (plw^.startw=0) and (plw^.endw=0) then
-      plw^.hw:=False
-    else
-      plw^.hw:=True;
-    plw^.quad[0].x:=v2di^.x+nx*plw^.startw/2;
-    plw^.quad[0].y:=v2di^.y+ny*plw^.startw/2;
-
-    plw^.quad[1].x:=v2dj^.x+nx*plw^.endw/2;
-    plw^.quad[1].y:=v2dj^.y+ny*plw^.endw/2;
-
-    plw^.quad[2].x:=v2dj^.x-nx*plw^.endw/2;
-    plw^.quad[2].y:=v2dj^.y-ny*plw^.endw/2;
-
-    plw^.quad[3].x:=v2di^.x-nx*plw^.startw/2;
-    plw^.quad[3].y:=v2di^.y-ny*plw^.startw/2;
-
-    for k:=0 to 3 do begin
-      v.x:=plw^.quad[k].x;
-      v.y:=plw^.quad[k].y;
-      v.z:=0;
-      v.w:=1;
-      v:=VectorTransform(v,objMatrix);
-      q3d[k]:=PzePoint3d(@v)^;
-    end;
-    Width3D_in_WCS_Array.PushBackData(q3d);
   end;
-  Width2D_in_OCS_Array.Shrink;
+  SgmntsParams.Shrink;
   Width3D_in_WCS_Array.Shrink;
 
   if closed then
@@ -757,13 +819,13 @@ begin
         j:=i+1
       else
         j:=0;
-      plw:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(i));
-      plw2:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(j));
-      if plw.hw and plw2.hw then begin
-        if plw.endw>plw2.startw then
-          l:=plw.endw
+      plw:=PSegmentParams(SgmntsParams.getDataMutable(i));
+      plw2:=PSegmentParams(SgmntsParams.getDataMutable(j));
+      if plw.data.hw and plw2.data.hw then begin
+        if plw.data.endw>plw2.data.startw then
+          l:=plw.data.endw
         else
-          l:=plw2.startw;
+          l:=plw2.data.startw;
         l:=4*l*l;
         pq3d:=Width3D_in_WCS_Array.getDataMutable(i);
         pq3dnext:=Width3D_in_WCS_Array.getDataMutable(j);
@@ -809,7 +871,7 @@ procedure SetLWpolylineGeomProps(ALWpolyLine:PGDBObjLWpolyline;
 var
   counter:integer;
   i,c:integer;
-  pw:PGLLWWidth;
+  pw:PSegmentParams;
   pp:PzePoint2d;
 begin
   counter:=low(args);
@@ -818,19 +880,19 @@ begin
   if ((high(args)-low(args))mod 5)>1 then
     Inc(c);
   if ALWpolyLine.Closed then
-    ALWpolyLine.Width2D_in_OCS_Array.SetCount(c)
+    ALWpolyLine.SgmntsParams.SetCount(c)
   else
-    ALWpolyLine.Width2D_in_OCS_Array.SetCount(c{-1});
+    ALWpolyLine.SgmntsParams.SetCount(c{-1});
   ALWpolyLine.Vertex2D_in_OCS_Array.SetCount(c);
   for i:=0 to c-1 do begin
     pp:=ALWpolyLine.Vertex2D_in_OCS_Array.getDataMutable(i);
     pp^:=CreateVertex2DFromArray(counter,args);
     if (ALWpolyLine.Closed)or(i<(c-1)) then begin
       CreateDoubleFromArray(counter,args);
-      pw:=ALWpolyLine.Width2D_in_OCS_Array.getDataMutable(i);
-      pw.startw:=CreateDoubleFromArray(counter,args);
-      pw.endw:=CreateDoubleFromArray(counter,args);
-      pw.hw:=IsDoubleNotEqual(pw.startw,0) or IsDoubleNotEqual(pw.endw,0);
+      pw:=ALWpolyLine.SgmntsParams.getDataMutable(i);
+      pw.data.startw:=CreateDoubleFromArray(counter,args);
+      pw.data.endw:=CreateDoubleFromArray(counter,args);
+      pw.data.hw:=IsDoubleNotEqual(pw.data.startw,0) or IsDoubleNotEqual(pw.data.endw,0);
     end;
   end;
 end;

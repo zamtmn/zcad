@@ -78,6 +78,9 @@ type
     function GetObjType:TObjID;virtual;
   end;
 
+function AllocSpline:PGDBObjSpline;
+function AllocAndInitSpline(owner:PGDBObjGenericWithSubordinated):PGDBObjSpline;
+
 implementation
 
 type
@@ -217,10 +220,10 @@ begin
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
     Representation.Clear;
     if SOLinear in Opts then
-      Representation.DrawLineWithLT(self,getmatrix^,dc,VertexArrayInOCS.getFirst,
-        VertexArrayInOCS.getLast,vp)
+      Representation.CreateLine(dc,self,vp,getmatrix^,VertexArrayInOCS.getFirst,
+        VertexArrayInOCS.getLast)
     else
-      Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,False,False);
+      Representation.CreatePolyLine(dc,self,vp,OneMatrix,AproxPointInWCS.getPFirst[0..AproxPointInWCS.GetLastIndex],False,False);
   end;
   calcbb(dc);
   if assigned(EntExtensions) then

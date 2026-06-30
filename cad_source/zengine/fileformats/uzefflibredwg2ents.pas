@@ -13,98 +13,84 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
+
+{ Refactor R5/R6 (TZ_DWG_LOAD_TO_ZCAD_AUDIT §3.5/§3.6, §6.4):
+  This unit used to host the entire DWG load context, all object/entity
+  mappers and the global parser singleton (717 lines). After the split it
+  is a thin compatibility facade that:
+
+    * re-exports BeginDWGImport / EndDWGImport from uzedwgimport so existing
+      callers (uzefflibredwg.pas, fpdwg_tests) keep their imports unchanged;
+    * pulls every per-entity / per-table / per-block mapper unit into the
+      build via the implementation-uses clause so each unit's initialization
+      section runs (registering its handler against the registry).
+
+  No new code lives here. New mappers go into dwg/entities/uzedwgent*.pas
+  (entities) or dwg/uzedwg*.pas (tables, blocks, lifecycle). }
 
 unit uzeffLibreDWG2Ents;
 {$Include zengineconfig.inc}
 {$Mode delphi}{$H+}
 {$ModeSwitch advancedrecords}
 interface
+
 uses
-  uzbLogIntf,
-  SysUtils,
-  dwg,dwgproc,
-  uzeentgenericsubentry,uzedrawingsimple,
-  uzbstrproc,
-  uzestyleslayers,
-  uzeentline,uzeentity,//uzgldrawcontext,
-  uzeffLibreDWG,
-  uzeffmanager;
+  dwg,
+  uzedrawingsimple,
+  uzeffmanager,
+  uzedwgimport;
+
+procedure BeginDWGImport(var ZContext: TZDrawingContext;
+  const ASourcePath: String = '');
+procedure ScanDWGImport(var Raw: Dwg_Data);
+procedure EndDWGImport(var ZContext: TZDrawingContext);
+
 implementation
-//type
-  //PDwg_Entity_LINE=^Dwg_Entity_LINE;
-  //PDwg_Object_LAYER=^Dwg_Object_LAYER;
 
-procedure AddLayer(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGLayer:PDwg_Object_LAYER);
-var
-  player:PGDBLayerProp;
-  name:string;
+uses
+  // Pulling these mapper units into the build makes their initialization
+  // sections run, which is how every handler ends up registered against the
+  // shared TZCADDWGParser singleton in uzedwgentityregistry. The unit list
+  // is the only place where mapper coverage is enumerated; adding a new
+  // entity is a one-line edit here plus the new unit itself.
+  uzedwgtables,
+  uzedwgblocks,
+  uzedwgcontrolobjects,
+  uzedwgentline,
+  uzedwgentcircle,
+  uzedwgentarc,
+  uzedwgentpoint,
+  uzedwgentlwpolyline,
+  uzedwgenttext,
+  uzedwgentmtext,
+  uzedwgentinsert,
+  uzedwgentattrib,
+  uzedwgentdimension,
+  uzedwgent3dface,
+  uzedwgentsolid,
+  uzedwgentellipse,
+  uzedwgentspline,
+  uzedwgenthatch,
+  uzedwgentpolyline,
+  uzedwgentleader,
+  uzedwgentproxy;
+
+procedure BeginDWGImport(var ZContext: TZDrawingContext;
+  const ASourcePath: String = '');
 begin
-  BITCODE_T2Text(PDWGLayer^.name,DWGContext,name);
-  zDebugLn(['{WH}Layer: ',name]);
-  if DWGContext.DWGVer>R_2006 then
-    name:=Tria_Utf8ToAnsi(name);
-  player:=ZContext.PDrawing^.LayerTable.MergeItem(name,ZContext.LoadMode);
-  if player<>nil then begin
-    player^.init(name);
-    player^.color:=PDWGLayer^.color.index;
-    player^.lineweight:=PDWGLayer^.linewt;
-    //LT:Pointer;
-    player^._on:=(PDWGLayer^.&on<>0);
-    player^._lock:=(PDWGLayer^.locked<>0);
-    player^._print:=(PDWGLayer^.plotflag<>0);
-    //desk:AnsiString;
-  end;
+  uzedwgimport.BeginDWGImport(ZContext, ASourcePath);
 end;
 
-procedure AddLineType(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGLType:PDwg_Object_LTYPE);
-var
-  //player:PGDBLayerProp;
-  name:string;
+procedure ScanDWGImport(var Raw: Dwg_Data);
 begin
-  BITCODE_T2Text(PDWGLType^.name,DWGContext,name);
-  zDebugLn(['{WH}LineType: ',name]);
+  uzedwgimport.ScanDWGImport(Raw);
 end;
 
-procedure AddBlockHeader(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGBlock_Header:PDwg_Object_BLOCK_HEADER);
-var
-  name:string;
+procedure EndDWGImport(var ZContext: TZDrawingContext);
 begin
-  BITCODE_T2Text(PDWGBlock_Header^.name,DWGContext,name);
-  zDebugLn(['{WH}BlockHeader: ',name]);
+  uzedwgimport.EndDWGImport(ZContext);
 end;
 
-procedure AddBlock(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGBlock_Header:PDwg_Object_BLOCK_HEADER);
-var
-  name:string;
-begin
-  BITCODE_T2Text(PDWGBlock_Header^.name,DWGContext,name);
-  zDebugLn(['{WH}Block: ',name]);
-end;
-
-procedure AddLineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PLine:PDwg_Entity_LINE);
-var
-  pobj:PGDBObjEntity;
-begin
-  pobj := AllocAndInitLine(ZContext.PDrawing^.pObjRoot);
-  PGDBObjLine(pobj)^.CoordInOCS.lBegin.x:=PLine^.start.x;
-  PGDBObjLine(pobj)^.CoordInOCS.lBegin.y:=PLine^.start.y;
-  PGDBObjLine(pobj)^.CoordInOCS.lBegin.z:=PLine^.start.x;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.x:=PLine^.&end.x;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.y:=PLine^.&end.y;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=PLine^.&end.x;
-  ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
-  //PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-  //PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
-end;
-
-initialization
-  ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_LAYER,@AddLayer);
-  ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_LTYPE,@AddLineType);
-  ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_BLOCK_HEADER,@AddBlockHeader);
-
-  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LINE,@AddLineEntity);
-  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_BLOCK,@AddBlock);
-finalization
 end.

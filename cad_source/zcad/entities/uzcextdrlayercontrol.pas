@@ -85,7 +85,11 @@ procedure TLayerControlExtender.onEntityClone(pSourceEntity,pDestEntity:pointer)
 var
     pDestLayerControlExtender:TLayerControlExtender;
 begin
-     pDestLayerControlExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TLayerControlExtender>;
+  if PGDBObjEntity(pDestEntity)^.EntExtensions<>nil then
+    pDestLayerControlExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TLayerControlExtender>
+  else
+    pDestLayerControlExtender:=nil;
+
      if pDestLayerControlExtender=nil then
                        pDestLayerControlExtender:=AddLayerControlExtenderToEntity(pDestEntity);
      pDestLayerControlExtender.Assign(self);
@@ -297,9 +301,9 @@ end;
 
 procedure TLayerControlExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;pEntity:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
-  dxfStringout(outStream,1000,'LCGoodLayer='+GoodLayer);
-  dxfStringout(outStream,1000,'LCBadLayer='+BadLayer);
-  dxfStringout(outStream,1000,'LCExpression='+FExpression);
+  dxfStringWithoutEncodeOut(outStream,1000,'LCGoodLayer='+GoodLayer);
+  dxfStringWithoutEncodeOut(outStream,1000,'LCBadLayer='+BadLayer);
+  dxfStringWithoutEncodeOut(outStream,1000,'LCExpression='+FExpression);
 end;
 
 procedure TLayerControlExtender.PostLoad(var context:TIODXFLoadContext);

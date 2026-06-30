@@ -35,8 +35,8 @@ type
     Closed:boolean;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
       LW:smallint;c:boolean);
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
-      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+    {procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
+      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;}
 
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -80,7 +80,7 @@ var
   ptpv0,ptpv1:PzePoint3d;
 begin
   Result:=inherited;
-  if closed then begin
+  if closed and (VertexArrayInWCS.Count>0) then begin
     ptpv0:=VertexArrayInWCS.GetParrayAsPointer;
     ptpv1:=VertexArrayInWCS.getDataMutable(VertexArrayInWCS.Count-1);
     Result:=Result+uzegeometry.Vertexlength(ptpv0^,ptpv1^);
@@ -136,7 +136,7 @@ begin
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then
     Representation.Clear;
     if VertexArrayInWCS.Count>1 then
-      Representation.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,False);
+      Representation.CreatePolyLine(dc,self,vp,OneMatrix,VertexArrayInWCS.getPFirst[0..VertexArrayInWCS.GetLastIndex],closed,False);
 
 
   if assigned(EntExtensions) then
@@ -189,7 +189,7 @@ begin
     dxfIntegerout(outStream,70,8);
 end;
 
-procedure GDBObjPolyline.LoadFromDXF;
+{procedure GDBObjPolyline.LoadFromDXF;
 var
   s:string;
   byt:integer;
@@ -214,7 +214,7 @@ begin
         if (hlGDBWord and 1)=1 then
           closed:=True;
       end
-      else if dxfLoadGroupCodeString(rdr,0,byt,s) then begin
+      else if dxfLoadGroupCodeString(rdr,0,byt,s,context.Header) then begin
         if s='VERTEX' then
           vertexgo:=True;
         if s='SEQEND' then
@@ -227,7 +227,7 @@ begin
   vertexarrayinocs.SetSize(context.GDBVertexLoadCache.Count);
   context.GDBVertexLoadCache.copyto(vertexarrayinocs);
   context.GDBVertexLoadCache.Clear;
-end;
+end;}
 
 function AllocPolyline:PGDBObjPolyline;
 begin
@@ -344,5 +344,6 @@ begin
 end;
 
 begin
-  RegisterDXFEntity(GDBPolylineID,'POLYLINE','3DPolyLine',@AllocPolyline,@AllocAndInitPolyline);
+  // Регистрация только для создания через GenericPolyline
+  RegisterEntity(GDBPolylineID,'3DPolyLine',@AllocPolyline,@AllocAndInitPolyline);
 end.

@@ -150,6 +150,8 @@
       <Action Name="ACN_BInsert"/>
 	  <Separator/>
       <Action Name="ACN_TEXT"/>
+	  <Separator/>
+      <Action Name="ACN_ALEADER"/>	  
     </Menu>
     <Menu Name="Dimension">
       <Action Name="ACN_DIMALIGNED"/>
@@ -168,8 +170,10 @@
 	  <Separator/>
 	  <Action Name="ACN_BEDIT"/>
       <SubMenu Name="Block/Device">
+	    <Action Name="ACN_CreateBlockInsert"/>
         <Action Name="ACN_ADDTOOWNER"/>
         <Action Name="ACN_COPYFROMOWNER"/>
+		<Action Name="ACN_ExplodeBlockInsert"/>
         <Separator/>
         <Action Name="ACN_BREPLACE"/>
         <Action Name="ACN_BSCALE"/>
@@ -188,6 +192,7 @@
       <Action Name="ACN_MIRROR"/>
 	  <Separator/>
       <Action Name="ACN_STRETCH"/>	  
+	  <Action Name="ACN_ALIGN"/>	
     </Menu>
     <Menu Name="Window">
       <Action Name="ACN_CLOSE"/>

@@ -27,6 +27,8 @@ const
   CFScomponentsDir='components';
   CFSdefaultlayoutxmlFile='defaultlayout.xml';
   CFSemptydxfFile='empty.dxf';
+  CFSDxf2000TemplateFile='savetemplate2000.dxf';
+  CFSDxf2007TemplateFile='savetemplate2007.dxf';
   CFSsuppressedshortcutsxmlFile='suppressedshortcuts.xml';
   CFSlogopngFile='logo.png';
 

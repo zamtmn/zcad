@@ -445,7 +445,7 @@ var
 begin
 
   Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
-  //exit;
+  exit;
 
   if dc.lod=LODCalculatedDetail then begin
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);

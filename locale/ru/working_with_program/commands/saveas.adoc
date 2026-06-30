@@ -1,0 +1,14 @@
+
+#### SaveAs
+
+:cmdcommand: SaveAs
+:cmdicon: ../../../../images/actions/saveas.png
+:cmdshortcuts: kbd:[Shift+Ctrl+S]
+:cmdmenu: Файл > Сохранить как ...
+
+include::../../_elements/commandsummary.adoc[]
+
+Сохранить текущий чертеж под новым именем. Будет открыто окно выбора файла, после чего произойдет сохранение. Имя чертежа
+будет изменено, дальнейшие команды [.command]#QSave# будут сохранять файл под новым именем
+
+include::commandsummaryfree.adoc[]

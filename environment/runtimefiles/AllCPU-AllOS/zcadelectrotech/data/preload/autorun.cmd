@@ -17,14 +17,14 @@ MergeBlocks(_OPS.dxf)
 ;MergeBlocks(_KIP.dxf);убран в preload
 MergeBlocks(_ss.dxf)
 MergeBlocks(_spds.dxf)
-MergeBlocks(_vl_diagram.dxf)
-MergeBlocks(_vl_el.dxf)
-MergeBlocks(_vl_line.dxf)
-MergeBlocks(_vl_ops.dxf)
-MergeBlocks(_vl_table.dxf)
-MergeBlocks(_vl_unit.dxf)
-MergeBlocks(_vl_high_voltage.dxf)
-MergeBlocks(_vl_plans.dxf)
+;MergeBlocks(_vl_diagram.dxf);убран в preload
+;MergeBlocks(_vl_el.dxf);убран в preload
+;MergeBlocks(_vl_line.dxf);убран в preload
+;MergeBlocks(_vl_ops.dxf);убран в preload
+;MergeBlocks(_vl_table.dxf);убран в preload
+;MergeBlocks(_vl_unit.dxf);убран в preload
+;MergeBlocks(_vl_high_voltage.dxf);убран в preload
+;MergeBlocks(_vl_plans.dxf);убран в preload
 
 
 ;------------------------

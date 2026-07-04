@@ -1,4 +1,4 @@
-﻿unit DEVICE_EL_VL_SCHEMA4_1;
+﻿unit DEVICE_EL_VL_SCHEMA_A1_INPUT;
 
 interface
 
@@ -41,6 +41,7 @@ VL_Cable2:Boolean;(*'Кабель 2'*)
 VL_View1:Integer;(*'Аппарат 1'*)
 VL_View2:Integer;(*'Аппарат 2'*)
 VL_View3:Integer;(*'Аппарат 3'*)
+
 implementation
 
 begin

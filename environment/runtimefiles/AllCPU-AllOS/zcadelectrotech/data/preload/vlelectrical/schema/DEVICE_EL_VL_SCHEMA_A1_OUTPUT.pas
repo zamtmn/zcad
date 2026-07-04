@@ -1,4 +1,4 @@
-﻿unit DEVICE_EL_VL_SCHEMA3_2;
+﻿unit DEVICE_EL_VL_SCHEMA_A1_OUTPUT;
 
 interface
 
@@ -29,6 +29,22 @@ VL_Floor18:Boolean;(*'17 этаж'*)
 VL_Floor19:Boolean;(*'18 этаж'*)
 VL_Floor20:Boolean;(*'19 этаж'*)
 VL_Floor21:Boolean;(*'20 этаж'*)
+VL_Floor22:Boolean;(*'21 этаж'*)
+VL_Floor23:Boolean;(*'22 этаж'*)
+VL_Floor24:Boolean;(*'23 этаж'*)
+VL_Floor25:Boolean;(*'24 этаж'*)
+VL_Floor26:Boolean;(*'25 этаж'*)
+VL_Floor27:Boolean;(*'26 этаж'*)
+VL_Floor28:Boolean;(*'27 этаж'*)
+VL_Floor29:Boolean;(*'28 этаж'*)
+VL_Floor30:Boolean;(*'29 этаж'*)
+VL_Floor31:Boolean;(*'30 этаж'*)
+VL_Floor32:Boolean;(*'31 этаж'*)
+VL_Floor33:Boolean;(*'32 этаж'*)
+VL_Floor34:Boolean;(*'33 этаж'*)
+VL_Floor35:Boolean;(*'34 этаж'*)
+VL_Floor36:Boolean;(*'35 этаж'*)
+VL_Floor37:Boolean;(*'36 этаж'*)
 
 VL_Shield:Integer;(*'Щит'*)
 
@@ -65,6 +81,22 @@ VL_Floor18:=False;
 VL_Floor19:=False;
 VL_Floor20:=False;
 VL_Floor21:=False;
+VL_Floor22:=False;
+VL_Floor23:=False;
+VL_Floor24:=False;
+VL_Floor25:=False;
+VL_Floor26:=False;
+VL_Floor27:=False;
+VL_Floor28:=False;
+VL_Floor29:=False;
+VL_Floor30:=False;
+VL_Floor31:=False;
+VL_Floor32:=False;
+VL_Floor33:=False;
+VL_Floor34:=False;
+VL_Floor35:=False;
+VL_Floor36:=False;
+VL_Floor37:=False;
 
 VL_Shield:=1;
 

@@ -1,4 +1,4 @@
-﻿unit DEVICE_EL_VL_SCHEMA1_1;
+﻿unit DEVICE_EL_VL_SCHEMA_CHV_OUTPUT;
 
 interface
 

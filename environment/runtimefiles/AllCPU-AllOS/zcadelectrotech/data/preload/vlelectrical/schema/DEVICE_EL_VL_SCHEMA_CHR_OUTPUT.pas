@@ -1,4 +1,4 @@
-﻿unit DEVICE_EL_VL_SCHEMA3_1;
+﻿unit DEVICE_EL_VL_SCHEMA_CHR_OUTPUT;
 
 interface
 

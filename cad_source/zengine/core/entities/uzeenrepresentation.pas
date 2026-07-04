@@ -40,6 +40,8 @@ type
     procedure CreateBulgedPolyLine2D      (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean;BulgedSegmentsCount:integer=-1);
 
     procedure CreateBulgedLWPolyLineWdh   (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean);
+    procedure CreateBulgedLWPolyLineVariableWdh
+                                          (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean);
     procedure CreateLWPolyLineWdh         (var DC:TDrawContext;var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean);
 
   public
@@ -383,6 +385,13 @@ begin
   //CreateLWPolyLineWdh(DC,Ent,vp,Mtx,pts,Segments,closed,ltgen);
 end;
 
+procedure TZEntityRepresentation.CreateBulgedLWPolyLineVariableWdh(var DC:TDrawContext;
+  var Ent:GDBObjDrawable;const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;
+  const pts:array of TzePoint2d;const Segments:array of TSegmentParams;const closed,ltgen:boolean);
+begin
+
+end;
+
 
 procedure TZEntityRepresentation.CreateLWPolyLineWdh(var DC:TDrawContext;var Ent:GDBObjDrawable;
   const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;
@@ -566,45 +575,12 @@ begin
     DrawLWPLLinearSegments(qtype,quads[thisqtypestart..high(Segments)])
 end;
 
-procedure DrawArc(constref p1,p2:TzePoint2d;const bulge:double;var currpath:TZctnrVectorTzePoint2d;divcount:integer);//inline;  dg
-var
-  d,pc,pac,n:TzePoint2d;
-  l,h,nextbulge:double;
-begin
-  d:=p2-p1;
-  l:=d.Length;
-  h:=l*bulge/2;
-  pc:=(p1+p2)/2;
-  n.x:=-d.y;
-  n.y:=d.x;
-  n:=n.NormalizeVertex;
-  pac:=pc-n*h;
-  if divcount=-1 then begin
-    //пытаемся сделать лод. вариантов не много
-    divcount:=min(max(2,abs(round(bulge*2))),5);
-    {if abs(h)*2>l then
-      divcount:=3
-    else
-      divcount:=2}
-  end;
-  if divcount=0 then begin
-    currpath.PushBackData(p1);
-    currpath.PushBackData(pac);
-  end else begin
-    Dec(divcount);
-    nextbulge:=bulge/(1+sqrt(1+bulge*bulge));
-    DrawArc(p1,pac,nextbulge,currpath,divcount);
-    DrawArc(pac,p2,nextbulge,currpath,divcount);
-  end;
-end;
-
-
 procedure TZEntityRepresentation.CreateBulgedPolyLine2d(var DC:TDrawContext;var Ent:GDBObjDrawable;
   const vp:GDBObjVisualProp;const Mtx:TzeTypedMatrix4d;const pts:array of TzePoint2d;
   const Segments:array of TSegmentParams;const closed,ltgen:boolean;BulgedSegmentsCount:integer=-1);
 
 const
-  MaxArcDiv=4;
+  MaxArcDiv=5;
 
   function NextIdx(CurrIdx:integer):integer;inline;
   begin
@@ -628,6 +604,7 @@ var
   i,j,StartLineSegmentIndex:integer;
   LastLineSegment:TLastSegType;
   currpath:TZctnrVectorTzePoint2d;
+  pathpointsize,ActualArcDiv:integer;
 begin
   StartLineSegmentIndex:=low(Segments);
   LastLineSegment:=LSTUnknown;
@@ -641,15 +618,19 @@ begin
       for i:=low(Segments)+1 to high(segments) do begin
         if abs(Segments[i].data.bulge)>eps then begin
           j:=NextIdx(i);
-          DrawArc(pts[i],pts[j],Segments[i].data.bulge,currpath,MaxArcDiv);
-          currpath.PushBackData(pts[j]);
+          pathpointsize:=PreCalcBulgeToArcSegment(pts[i],pts[j],Segments[i].data.bulge,MaxArcDiv,ActualArcDiv);
+          currpath.AllocData(pathpointsize);
+          CalcBulgeToArcSegment(pts[i],pts[j],Segments[i].data.bulge,currpath.getPFirst[currpath.count-pathpointsize..currpath.count-1],ActualArcDiv);
+          currpath.getPLast^:=pts[j];
         end else begin
           currpath.PushBackData(pts[i]);
         end;
       end;
       if abs(Segments[0].data.bulge)>eps then begin
-        DrawArc(pts[0],pts[1],Segments[0].data.bulge,currpath,MaxArcDiv);
-        currpath.PushBackData(pts[1]);
+        pathpointsize:=PreCalcBulgeToArcSegment(pts[0],pts[1],Segments[0].data.bulge,MaxArcDiv,ActualArcDiv);
+        currpath.AllocData(pathpointsize);
+        CalcBulgeToArcSegment(pts[0],pts[1],Segments[0].data.bulge,currpath.getPFirst[currpath.count-pathpointsize..currpath.count-1],ActualArcDiv);
+        currpath.getPLast^:=pts[1];
       end else begin
         currpath.PushBackData(pts[0]);
       end;
@@ -658,10 +639,13 @@ begin
       for i:=low(Segments)to high(segments) do begin
         if abs(Segments[i].data.bulge)>eps then begin
           j:=NextIdx(i);
-          DrawArc(pts[i],pts[j],Segments[i].data.bulge,currpath,MaxArcDiv);
-          currpath.PushBackData(pts[j]);
+          pathpointsize:=PreCalcBulgeToArcSegment(pts[i],pts[j],Segments[i].data.bulge,MaxArcDiv,ActualArcDiv);
+          currpath.AllocData(pathpointsize);
+          CalcBulgeToArcSegment(pts[i],pts[j],Segments[i].data.bulge,currpath.getPFirst[currpath.count-pathpointsize..currpath.count-1],ActualArcDiv);
+          currpath.getPLast^:=pts[j];
         end else begin
-          currpath.PushBackData(pts[i]);
+          j:=NextIdx(i);
+          currpath.PushBackData(pts[j]);
         end;
       end;
 
@@ -677,8 +661,10 @@ begin
         end;
         LastLineSegment:=LSTArc;
         j:=NextIdx(i);
-        DrawArc(pts[i],pts[j],Segments[i].data.bulge,currpath,MaxArcDiv);
-        currpath.PushBackData(pts[j]);
+        pathpointsize:=PreCalcBulgeToArcSegment(pts[i],pts[j],Segments[i].data.bulge,MaxArcDiv,ActualArcDiv);
+        currpath.AllocData(pathpointsize);
+        CalcBulgeToArcSegment(pts[i],pts[j],Segments[i].data.bulge,currpath.getPFirst[currpath.count-pathpointsize..currpath.count-1],ActualArcDiv);
+        currpath.getPLast^:=pts[j];
         _CreateTransformedPolyLine2D(DC,Ent,vp,Mtx,currpath.getPFirst[0..currpath.GetLastIndex],false,false);
         currpath.Clear;
       end else begin
@@ -728,7 +714,6 @@ begin
       end;
     end;
   end;
-  ltgen:=ltgen and (VariableWidthSegmentsCount=0);
   if WidthSegmentsCount=0 then begin
     //тонкая полилиния
     if BulgedSegmentsCount=0 then
@@ -737,12 +722,17 @@ begin
     else
       //тонкая полилиния с дугами
       CreateBulgedPolyLine2d(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen,BulgedSegmentsCount);
-  end {дальше идут неработающие варианты} else if BulgedSegmentsCount=0 then begin
+  end {дальше идут неработающие варианты с толщиной} else if BulgedSegmentsCount=0 then begin
     //толстая полилиния без дуг, отправляем Segments уже с учетом closed
     CreateLWPolyLineWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen);
   end else begin
+    //автокад не делает генерацию типа линии на полилиниях с переменной толщиной сегмента
+    ltgen:=ltgen and (VariableWidthSegmentsCount=0);
     //толстая полилиния с дугами
-    CreateBulgedLWPolyLineWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen);
+    if VariableWidthSegmentsCount=0 then
+      CreateBulgedLWPolyLineWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen)
+    else
+      CreateBulgedLWPolyLineVariableWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen)
   end
 end;
 

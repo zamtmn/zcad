@@ -8,7 +8,7 @@ uses
   SysUtils,TypInfo,
   fpcunit,
   uzeBoundaryPath in '../core/entities/uzeboundarypath',
-  UGDBPolyLine2DArray,uzegeometrytypes,
+  uzctnrVectorTzePoint2d,uzegeometrytypes,
   testregistry,
   math;
 
@@ -30,14 +30,14 @@ implementation
 procedure FillPath(var Path:TBoundaryPath);
 var
   i,j:integer;
-  ppl:PGDBPolyline2DArray;
+  ppl:PTZctnrVectorTzePoint2d;
   v:TzePoint2d;
   sine,cosine:double;
 begin
   Path.paths.AllocData(1);
   for i:=0 to 0 do begin
     ppl:=path.paths.getDataMutable(i);
-    ppl^.init(10,true);
+    ppl^.init(10);
     for j:=0 to 0 do begin
       SinCos(10*2*pi/(j+1),sine,cosine);
       v.x:=100*cosine/(i+1);

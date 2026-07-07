@@ -64,6 +64,9 @@ begin
       pw^.data.startw := Props.Vertices[i].StartWidth;
       pw^.data.endw := Props.Vertices[i].EndWidth;
       pw^.data.hw := (pw^.data.startw <> 0) or (pw^.data.endw <> 0);
+      // Arc segments: LWPOLYLINE stores a bulge per vertex. Without copying it
+      // the polyline degenerates into straight segments (DWG issue #1385).
+      pw^.data.bulge := Props.Vertices[i].Bulge;
     end;
   end;
   if GetLoadCtx <> nil then

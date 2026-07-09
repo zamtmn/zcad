@@ -730,9 +730,11 @@ begin
     ltgen:=ltgen and (VariableWidthSegmentsCount=0);
     //толстая полилиния с дугами
     if VariableWidthSegmentsCount=0 then
-      CreateBulgedLWPolyLineWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen)
+      //CreateBulgedLWPolyLineWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen)
+      CreateBulgedPolyLine2d(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen,BulgedSegmentsCount)
     else
-      CreateBulgedLWPolyLineVariableWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen)
+      //CreateBulgedLWPolyLineVariableWdh(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen)
+      CreateBulgedPolyLine2d(DC,Ent,vp,Mtx,pts,Segments[0..c],closed,ltgen,BulgedSegmentsCount);
   end
 end;
 

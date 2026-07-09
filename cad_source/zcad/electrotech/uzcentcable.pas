@@ -231,83 +231,83 @@ begin
 
     objects.init(100);
     if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInVolume(Self.vp.BoundingBox,Objects) then begin
-    CurrentObj:=objects.beginiterate(ir_inGDB);
-    if (CurrentObj<>nil) then
-      repeat
-        if (CurrentObj<>@self)and(CurrentObj^.GetObjType=GDBDeviceID) then begin
-            CurrentSubObj:=CurrentObj^.VarObjArray.beginiterate(ir_inDevice);
-            if (CurrentSubObj<>nil) then
-              repeat
-                if (CurrentSubObj^.GetObjType=GDBDeviceID) then begin
-                  if CurrentSubObj^.BlockDesc.BType=BT_Connector then begin
-                    devpoint:=CurrentSubObj^.P_insert_in_WCS;
-                    ptv:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
-                    ptvpred:=nil;
-                    ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
-                    ptn:=NodePropArray.beginiterate(ir_inNodeArray);
-                    if ptv<>nil then begin
-                      repeat
-                        if SqrVertexlength(ptv^,devpoint)<sqreps then begin
-                          ptn^.DevLink:=CurrentSubObj;
-                          if
-                          CurrentSubObj.BlockDesc.BBorder<>BB_Empty then begin
-                            I3DPPrev.t1:=Infinity;
-                            I3DPPrev.isintercept:=False;
-                            I3DPNext.t1:=NegInfinity;
-                            I3DPNext.isintercept:=False;
-                            ptd:=CurrentSubObj;
-                            if CurrentSubObj.BlockDesc.BBorder=BB_owner then
-                              CurrentSubObj:=pointer(CurrentSubObj^.bp.ListPos.Owner);
-                            CurrentSubObj2:=CurrentSubObj^.VarObjArray.beginiterate(ir_inDevice2);
-                            if(CurrentSubObj2<>nil) then
-                              repeat
-                                begin
-                                  if CurrentSubObj2^.GetLayer=psldb then
-                                    if ptn<>nil then begin
-                                      if ptvpred<>nil then begin
-                                        I3DP:=CurrentSubObj2^.IsIntersect_Line(ptvpred^,ptv^);
-                                        if I3DP.isintercept then begin
-                                          if (I3DP.t1>0-bigeps)and(I3DP.t1<I3DPPrev.t1) then begin
-                                            I3DPPrev:=I3DP;
-                                            ptn.PrevP:=I3DP.interceptcoord;
+      CurrentObj:=objects.beginiterate(ir_inGDB);
+      if (CurrentObj<>nil) then
+        repeat
+          if (CurrentObj<>@self)and(CurrentObj^.GetObjType=GDBDeviceID) then begin
+              CurrentSubObj:=CurrentObj^.VarObjArray.beginiterate(ir_inDevice);
+              if (CurrentSubObj<>nil) then
+                repeat
+                  if (CurrentSubObj^.GetObjType=GDBDeviceID) then begin
+                    if CurrentSubObj^.BlockDesc.BType=BT_Connector then begin
+                      devpoint:=CurrentSubObj^.P_insert_in_WCS;
+                      ptv:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
+                      ptvpred:=nil;
+                      ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
+                      ptn:=NodePropArray.beginiterate(ir_inNodeArray);
+                      if ptv<>nil then begin
+                        repeat
+                          if SqrVertexlength(ptv^,devpoint)<sqreps then begin
+                            ptn^.DevLink:=CurrentSubObj;
+                            if
+                            CurrentSubObj.BlockDesc.BBorder<>BB_Empty then begin
+                              I3DPPrev.t1:=Infinity;
+                              I3DPPrev.isintercept:=False;
+                              I3DPNext.t1:=NegInfinity;
+                              I3DPNext.isintercept:=False;
+                              ptd:=CurrentSubObj;
+                              if CurrentSubObj.BlockDesc.BBorder=BB_owner then
+                                CurrentSubObj:=pointer(CurrentSubObj^.bp.ListPos.Owner);
+                              CurrentSubObj2:=CurrentSubObj^.VarObjArray.beginiterate(ir_inDevice2);
+                              if(CurrentSubObj2<>nil) then
+                                repeat
+                                  begin
+                                    if CurrentSubObj2^.GetLayer=psldb then
+                                      if ptn<>nil then begin
+                                        if ptvpred<>nil then begin
+                                          I3DP:=CurrentSubObj2^.IsIntersect_Line(ptvpred^,ptv^);
+                                          if I3DP.isintercept then begin
+                                            if (I3DP.t1>0-bigeps)and(I3DP.t1<I3DPPrev.t1) then begin
+                                              I3DPPrev:=I3DP;
+                                              ptn.PrevP:=I3DP.interceptcoord;
+                                            end;
+                                          end;
+                                        end;
+                                        if ptvnext<>nil then begin
+                                          I3DP:=CurrentSubObj2^.IsIntersect_Line(ptv^,ptvnext^);
+                                          if I3DP.isintercept then begin
+                                            if (I3DP.t1<1+bigeps)and(I3DP.t1>I3DPNext.t1) then begin
+                                              I3DPNext:=I3DP;
+                                              ptn.NextP:=I3DP.interceptcoord;
+                                            end;
                                           end;
                                         end;
                                       end;
-                                      if ptvnext<>nil then begin
-                                        I3DP:=CurrentSubObj2^.IsIntersect_Line(ptv^,ptvnext^);
-                                        if I3DP.isintercept then begin
-                                          if (I3DP.t1<1+bigeps)and(I3DP.t1>I3DPNext.t1) then begin
-                                            I3DPNext:=I3DP;
-                                            ptn.NextP:=I3DP.interceptcoord;
-                                          end;
-                                        end;
-                                      end;
-                                    end;
-                                end;
-                                CurrentSubObj2:=CurrentSubObj^.VarObjArray.iterate(ir_inDevice2);
-                              until
-                                CurrentSubObj2=nil;
-                            CurrentSubObj:=ptd;
+                                  end;
+                                  CurrentSubObj2:=CurrentSubObj^.VarObjArray.iterate(ir_inDevice2);
+                                until
+                                  CurrentSubObj2=nil;
+                              CurrentSubObj:=ptd;
+                            end;
                           end;
-                        end;
 
 
-                        ptvpred:=ptv;
-                        ptv:=ptvnext;
-                        ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
-                        ptn:=NodePropArray.iterate(ir_inNodeArray);
-                      until ptv=nil;
+                          ptvpred:=ptv;
+                          ptv:=ptvnext;
+                          ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
+                          ptn:=NodePropArray.iterate(ir_inNodeArray);
+                        until ptv=nil;
+                      end;
                     end;
                   end;
-                end;
-                CurrentSubObj:=CurrentObj^.VarObjArray.iterate(ir_inDevice);
-              until CurrentSubObj=nil;
+                  CurrentSubObj:=CurrentObj^.VarObjArray.iterate(ir_inDevice);
+                until CurrentSubObj=nil;
 
 
 
-        end;
-        CurrentObj:=objects.iterate(ir_inGDB);
-      until CurrentObj=nil;
+          end;
+          CurrentObj:=objects.iterate(ir_inGDB);
+        until CurrentObj=nil;
     end;
     objects.Clear;
     objects.Done;

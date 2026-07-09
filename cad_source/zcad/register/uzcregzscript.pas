@@ -379,12 +379,22 @@ begin
   ptsu^.RegisterType(TypeInfo(TColor),'PColor');
 
 
-  ptsu^.RegisterType(TypeInfo(TGetterSetterInteger),'TGetterSetterInteger');
-  ptsu^.RegisterType(TypeInfo(TGetterSetterBoolean),'TGetterSetterBoolean');
-  ptsu^.RegisterType(TypeInfo(TGetterSetterTColor),'TGetterSetterTColor');
-  ptsu^.RegisterType(TypeInfo(TGetterSetterTUsableInteger),
-                             'TGetterSetterTUsableInteger');
-
+  utd:=ptsu^.RegisterType(TypeInfo(TGetterSetterInteger),'TGetterSetterInteger');
+  if utd<>nil then begin
+    utd.pSuperTypeDeskriptor:=@GetterSetterIntegerDescriptor;
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(TGetterSetterBoolean),'TGetterSetterBoolean');
+  if utd<>nil then begin
+    utd.pSuperTypeDeskriptor:=@GetterSetterBooleanDescriptor;
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(TGetterSetterTColor),'TGetterSetterTColor');
+  if utd<>nil then begin
+    utd.pSuperTypeDeskriptor:=@GetterSetterTColorDescriptor;
+  end;
+  utd:=ptsu^.RegisterType(TypeInfo(TGetterSetterTUsableInteger),'TGetterSetterTUsableInteger');
+  if utd<>nil then begin
+    utd.pSuperTypeDeskriptor:=@GetterSetterTUsableIntegerDescriptor;
+  end;
   //ptsu^.RegisterType(TypeInfo(TFaceTypedData),'TFaceTypedData');
   //ptsu^.RegisterType(TypeInfo(PTFaceTypedData),'PTFaceTypedData');
 

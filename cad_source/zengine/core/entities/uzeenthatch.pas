@@ -70,7 +70,7 @@ type
     function CheckPathsIntersect2(const p1,p2:TzePoint2d;const nextPath:integer):boolean;
     function CheckPathsIntersect:boolean;
     procedure ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
-    procedure DrawStrokes(var Strokes:TPatStrokesArray;var st:double;const p1,p2:TzePoint2d;var DC:TDrawContext);
+    procedure DrawStrokes(var Strokes:TPatStrokesArray;const st:double;const p1,p2:TzePoint2d;var DC:TDrawContext);
     procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
     procedure DrawGeometry(lw:integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
     function ObjToString(const prefix,sufix:string):string;virtual;
@@ -294,7 +294,7 @@ end;
 
 
 procedure GDBObjHatch.DrawStrokes(var Strokes:TPatStrokesArray;
-  var st:double;const p1,p2:TzePoint2d;var DC:TDrawContext);
+  const st:double;const p1,p2:TzePoint2d;var DC:TDrawContext);
 var
   t,l,cl,d,drawedlen:double;
   c:integer;

@@ -138,11 +138,11 @@ begin
         PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
         PLLSymbolLine^.SymbolsParam.FirstSymMatr:=uzegeometry.MatrixMultiply(matr,objmatrix);
         PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].v[0],PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].v[1]));
-        PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0])^)/oneVertexlength(PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1])^);
-        true0Y:=VectorDot(PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[2])^,PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0])^);
+        PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].Slice)/oneVertexlength(PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1])^);
+        true0Y:=VectorDot(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[2].Slice,PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0])^);
         if not IsVectorNul(true0Y) then
           true0Y:=NormalizeVertex(true0Y);
-        fact0y:=PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1])^;
+        fact0y:=PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1].Slice;
         if not IsVectorNul(fact0y) then
           fact0y:=NormalizeVertex(fact0y);
         PLLSymbolLine^.SymbolsParam.Oblique:=arccos(scalardot(true0Y,fact0y));

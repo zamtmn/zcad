@@ -95,7 +95,7 @@ var
 begin
   tv:=CreateVertex(Width,0,0);
   m:=t_matrix;
-  PzePoint3d(@m.mtr.v[3])^:=NulVertex;
+  m.mtr.v[3].Slice:=NulVertex;
   tv:=VectorTransform3d(tv,m);
   Width:=oneVertexlength(tv);
   inherited;
@@ -593,7 +593,7 @@ begin
 
       i:=1;
       if ispl then begin
-        lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
+        lp:=matr.mtr.v[3]{.v[0]}.Slice;
         lp.y:=lp.y-0.2*textprop.size;
         lp:=VectorTransform3d(lp,objmatrix);
         pl.PushBackData(lp);
@@ -605,12 +605,12 @@ begin
         if sym=1 then begin
           ispl:=not(ispl);
           if ispl then begin
-            lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
+            lp:=matr.mtr.v[3]{.v[0]}.Slice;
             lp.y:=lp.y-0.2*textprop.size;
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
           end else begin
-            lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
+            lp:=matr.mtr.v[3]{.v[0]}.Slice;
             lp.y:=lp.y-0.2*textprop.size;
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
@@ -626,7 +626,7 @@ begin
       end;
 
       if ispl then begin
-        lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
+        lp:=matr.mtr.v[3]{.v[0]}.Slice;
         lp.y:=lp.y-0.2*textprop.size;
         lp:=VectorTransform3d(lp,objmatrix);
         pl.PushBackData(lp);
@@ -648,25 +648,25 @@ begin
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[0]:=PzePoint3d(@v)^;
+  outbound[0]:=v.Slice;
   v.x:=Bound.RT.x;
   v.y:=Bound.RT.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[1]:=PzePoint3d(@v)^;
+  outbound[1]:=v.Slice;
   v.x:=Bound.RT.x;
   v.y:=Bound.LB.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[2]:=PzePoint3d(@v)^;
+  outbound[2]:=v.Slice;
   v.x:=Bound.LB.x;
   v.y:=Bound.LB.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[3]:=PzePoint3d(@v)^;
+  outbound[3]:=v.Slice;
 
   pl.done;
   Representation.Shrink;

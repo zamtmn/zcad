@@ -684,15 +684,15 @@ procedure GDBObjLine.transform;
 var
   tv:TzeVector4d;
 begin
-  PzePoint3d(@tv)^:=CoordInOCS.lbegin;
-  tv.w:=1;
+  tv.Slice:=CoordInOCS.lbegin;
+  tv.CutOff:=1;
   tv:=vectortransform(tv,t_matrix);
-  CoordInOCS.lbegin:=PzePoint3d(@tv)^;
+  CoordInOCS.lbegin:=tv.Slice;
 
-  PzePoint3d(@tv)^:=CoordInOCS.lend;
-  tv.w:=1;
+  tv.Slice:=CoordInOCS.lend;
+  tv.CutOff:=1;
   tv:=vectortransform(tv,t_matrix);
-  CoordInOCS.lend:=PzePoint3d(@tv)^;
+  CoordInOCS.lend:=tv.Slice;
 end;
 
 function AllocLine:PGDBObjLine;

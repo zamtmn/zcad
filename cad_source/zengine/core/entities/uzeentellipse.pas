@@ -95,30 +95,28 @@ var
   tv:TzeVector4d;
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
-
-  tv:=PzeVector4d(@t_matrix.mtr.v[3])^;
-  PzeVector4d(@t_matrix.mtr.v[3])^:=NulVertex4D;
+  tv:=t_matrix.mtr.v[3];
+  t_matrix.mtr.v[3]:=NulVertex4D;
   MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
-  PzeVector4d(@t_matrix.mtr.v[3])^:=tv;
+  t_matrix.mtr.v[3]:=tv;
   ReCalcFromObjMatrix;
 end;
 
 procedure GDBObjEllipse.transform;
 var
-  tv2:TzeVector4d;
+  mtr:TzeTypedMatrix4d;
 begin
   inherited;
-  tv2:=PzeVector4d(@t_matrix.mtr.v[3])^;
-  PzeVector4d(@t_matrix.mtr.v[3])^:=NulVertex4D;
-  MajorAxis:=VectorTransform3D(MajorAxis,t_matrix);
-  PzeVector4d(@t_matrix.mtr.v[3])^:=tv2;
+  mtr:=t_matrix;
+  mtr.mtr.v[3]:=NulVertex4D;
+  MajorAxis:=VectorTransform3D(MajorAxis,mtr);
   ReCalcFromObjMatrix;
 end;
 
 procedure GDBObjEllipse.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
+  Local.P_insert:=objmatrix.mtr.v[3].Slice;
 end;
 
 function GDBObjEllipse.CalcObjMatrixWithoutOwner;
@@ -217,7 +215,7 @@ begin
   l:=onevertexlength(majoraxis);
   m1:=CreateScaleMatrix(l,ratio*l,1);
   objmatrix:=matrixmultiply(m1,objmatrix);
-  PzePoint3d(@v)^:=local.p_insert;
+  v.Slice.Slice:=local.p_insert.Slice;
   v.z:=0;
   v.w:=1;
   m1:=objMatrix;
@@ -248,17 +246,17 @@ begin
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q0:=PzePoint3d(@v)^;
+  q0:=v.Slice;
   SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q1:=PzePoint3d(@v)^;
+  q1:=v.Slice;
   SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q2:=PzePoint3d(@v)^;
+  q2:=v.Slice;
 
   calcbb(dc);
   createpoint;

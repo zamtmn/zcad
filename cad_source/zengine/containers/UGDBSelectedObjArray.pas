@@ -296,8 +296,8 @@ begin
   pobj^.Transform(minusd);
 
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  P_insert_in_OCS:=PzePoint3d(@m.mtr.v[3])^;
-  PzePoint3d(@m.mtr.v[3])^:=nulvertex;
+  P_insert_in_OCS:=m.mtr.v[3].Slice;
+  m.mtr.v[3].Slice:=nulvertex;
   matrixinvert(m);
   P_insert_in_WCS:=VectorTransform3D(P_insert_in_OCS,m);
   //m:=onematrix;

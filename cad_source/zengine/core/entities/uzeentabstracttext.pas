@@ -96,7 +96,7 @@ var
 begin
   tv:=CreateVertex(0,textprop.size,0);
   m:=t_matrix;
-  PzePoint3d(@m.mtr.v[3])^:=NulVertex;
+  m.mtr.v[3].Slice:=NulVertex;
 
   tv:=VectorTransform3d(tv,m);
   textprop.size:=oneVertexlength(tv);
@@ -115,14 +115,14 @@ end;
 procedure GDBObjAbstractText.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.basis.ox:=PzePoint3d(@objmatrix.mtr.v[0])^;
-  Local.basis.oy:=PzePoint3d(@objmatrix.mtr.v[1])^;
+  Local.basis.ox:=objmatrix.mtr.v[0].slice;
+  Local.basis.oy:=objmatrix.mtr.v[1].slice;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
+  Local.P_insert:=objmatrix.mtr.v[3].slice;
 end;
 
 function GDBObjAbstractText.CalcRotate:double;
@@ -132,7 +132,7 @@ var
 begin
 
   if bp.ListPos.owner<>nil then begin
-    V1:=PzePoint3d(@bp.ListPos.owner^.GetMatrix^.mtr.v[0])^;
+    V1:=bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice;
     l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
     l0:=arccos(l0);
     if v1.y<-eps then
@@ -232,14 +232,16 @@ var
 begin
   inherited CalcObjMatrix;
   if textprop.upsidedown then begin
-    PzePoint3d(@objmatrix.mtr.v[1])^.x:=-Local.basis.oy.x;
-    PzePoint3d(@objmatrix.mtr.v[1])^.y:=-Local.basis.oy.y;
-    PzePoint3d(@objmatrix.mtr.v[1])^.z:=-Local.basis.oy.z;
+    fObjMatrix.mtr.v[1].Slice:=-Local.basis.oy;
+    //PzePoint3d(@objmatrix.mtr.v[1])^.x:=-Local.basis.oy.x;
+    //PzePoint3d(@objmatrix.mtr.v[1])^.y:=-Local.basis.oy.y;
+    //PzePoint3d(@objmatrix.mtr.v[1])^.z:=-Local.basis.oy.z;
   end;
   if textprop.backward then begin
-    PzePoint3d(@objmatrix.mtr.v[0])^.x:=-Local.basis.ox.x;
+    fObjMatrix.mtr.v[0].Slice:=-Local.basis.ox;
+    {PzePoint3d(@objmatrix.mtr.v[0])^.x:=-Local.basis.ox.x;
     PzePoint3d(@objmatrix.mtr.v[0])^.y:=-Local.basis.ox.y;
-    PzePoint3d(@objmatrix.mtr.v[0])^.z:=-Local.basis.ox.z;
+    PzePoint3d(@objmatrix.mtr.v[0])^.z:=-Local.basis.ox.z;}
   end;
   m1:=OneMatrix;
   objMatrix:=MatrixMultiply(m1,objMatrix);

@@ -86,9 +86,9 @@ end;
 
 procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
 begin
-  Local.basis.ox:=PzePoint3d(@objmatrix.mtr.v[0])^;
-  Local.basis.oy:=PzePoint3d(@objmatrix.mtr.v[1])^;
-  Local.basis.oz:=PzePoint3d(@objmatrix.mtr.v[2])^;
+  Local.basis.ox:=objmatrix.mtr.v[0].Slice;
+  Local.basis.oy:=objmatrix.mtr.v[1].Slice;
+  Local.basis.oz:=objmatrix.mtr.v[2].Slice;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
@@ -143,9 +143,9 @@ begin
   inherited init(own,layeraddres,LW);
   powner:=bp.ListPos.owner;
   if powner<>nil then begin
-    Local.basis.ox:=PzePoint3d(@powner^.GetMatrix^.mtr.v[0])^;
-    Local.basis.oy:=PzePoint3d(@powner^.GetMatrix^.mtr.v[1])^;
-    Local.basis.oz:=PzePoint3d(@powner^.GetMatrix^.mtr.v[2])^;
+    Local.basis.ox:=powner^.GetMatrix^.mtr.v[0].Slice;
+    Local.basis.oy:=powner^.GetMatrix^.mtr.v[1].Slice;
+    Local.basis.oz:=powner^.GetMatrix^.mtr.v[2].Slice;
   end else begin
     Local.basis.ox:=XWCS;
     Local.basis.oy:=YWCS;

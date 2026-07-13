@@ -673,7 +673,7 @@ begin
       v.z:=0;
       v.w:=1;
       v:=VectorTransform(v,objMatrix);
-      v3d:=PzePoint3d(@v)^;
+      v3d:=v.Slice;
       Vertex3D_in_WCS_Array.PushBackData(v3d);
     end;
   end;

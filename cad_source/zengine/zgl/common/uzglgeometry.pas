@@ -211,14 +211,14 @@ begin
     begin
          ispl:=not(ispl);
          if ispl then begin
-                             lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
+                             lp:=matr.mtr.v[3]{.v[0]}.Slice;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.PushBackData(lp);
                         end
                    else begin
-                             lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
+                             lp:=matr.mtr.v[3]{.v[0]}.Slice;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
@@ -241,7 +241,7 @@ begin
                        if ispl then
 
                      begin
-                             lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
+                             lp:=matr.mtr.v[3]{.v[0]}.Slice;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);

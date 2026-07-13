@@ -109,12 +109,12 @@ begin
   m:=onematrix;
   if rtmod.point.pointtype=os_point then begin
     if rtmod.point.PDrawable=nil then
-      Local:=GetPointInOCSByBasis(PzePoint3d(@objmatrix.mtr.v[0])^,
-        PzePoint3d(@objmatrix.mtr.v[1])^,PzePoint3d(@objmatrix.mtr.v[2])^,VertexAdd(
+      Local:=GetPointInOCSByBasis(objmatrix.mtr.v[0].Slice,
+        objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,VertexAdd(
         rtmod.point.worldcoord,rtmod.dist),scl)
     else
-      Local:=GetPointInOCSByBasis(PzePoint3d(@objmatrix.mtr.v[0])^,
-        PzePoint3d(@objmatrix.mtr.v[1])^,PzePoint3d(@objmatrix.mtr.v[2])^,VertexSub(
+      Local:=GetPointInOCSByBasis(objmatrix.mtr.v[0].Slice,
+        objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,VertexSub(
         VertexAdd(rtmod.point.worldcoord,rtmod.dist),rtmod.point.dcoord),scl);
   end;
 end;
@@ -130,10 +130,10 @@ begin
   end else
     Mtr:=objMatrix;
 
-  BX:=PzePoint3d(@Mtr.mtr.v[0])^;
-  BY:=PzePoint3d(@Mtr.mtr.v[1])^;
-  BZ:=PzePoint3d(@Mtr.mtr.v[2])^;
-  T:=PzePoint3d(@Mtr.mtr.v[3])^;
+  BX:=Mtr.mtr.v[0].Slice;
+  BY:=Mtr.mtr.v[1].Slice;
+  BZ:=Mtr.mtr.v[2].Slice;
+  T:=Mtr.mtr.v[3].Slice;
   Local:=GetPointInOCSByBasis(BX,BY,BZ,T,scale);
 end;
 
@@ -165,8 +165,7 @@ end;
 
 function GDBObjBlockInsert.getrot:double;
 begin
-  Result:=arccos((objmatrix.mtr.v[0].v[0])/oneVertexlength(
-    PzePoint3d(@objmatrix.mtr.v[0])^));
+  Result:=arccos((objmatrix.mtr.v[0].v[0])/oneVertexlength(objmatrix.mtr.v[0].Slice));
 end;
 
 procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;

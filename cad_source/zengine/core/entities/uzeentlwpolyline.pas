@@ -543,7 +543,7 @@ begin
   widthload:=False;
   closed:=False;
   if bp.ListPos.owner<>nil then
-    local.p_insert:=PzePoint3d(@bp.ListPos.owner^.GetMatrix^.mtr.v[3])^
+    local.p_insert:=bp.ListPos.owner^.GetMatrix^.mtr.v[3].Slice
   else
     local.P_insert:=nulvertex;
 
@@ -736,12 +736,15 @@ begin
   Vertex3D_in_WCS_Array.Clear;
   pv:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
   for i:=0 to Vertex2D_in_OCS_Array.Count-1 do begin
-    v.x:=pv.x;
-    v.y:=pv.y;
-    v.z:=0;
-    v.w:=1;
+    v.Slice.Slice:=pv^;
+    {v.x:=pv.x;
+    v.y:=pv.y;}
+    v.Slice.CutOff:=0;
+    //v.z:=0;
+    v.CutOff:=0;
+    //v.w:=1;
     v:=VectorTransform(v,objMatrix);
-    v3d:=PzePoint3d(@v)^;
+    v3d:=v.Slice;
     Vertex3D_in_WCS_Array.PushBackData(v3d);
     Inc(pv);
   end;
@@ -773,12 +776,15 @@ begin
   plw.quad[2]:=p2-vtemp;
 
   for k:=0 to 3 do begin
-    v.x:=plw.quad[k].x;
-    v.y:=plw.quad[k].y;
-    v.z:=0;
-    v.w:=1;
+    v.Slice.Slice:=plw.quad[k];
+    //v.x:=plw.quad[k].x;
+    //v.y:=plw.quad[k].y;
+    v.Slice.CutOff:=0;
+    //v.z:=0;
+    v.CutOff:=1;
+    //v.w:=1;
     v:=VectorTransform(v,objMatrix);
-    q3d[k]:=PzePoint3d(@v)^;
+    q3d[k]:=v.Slice;
   end;
 
   Width3D_in_WCS_Array.PushBackData(q3d);
@@ -835,7 +841,7 @@ begin
         if ip.isintercept and ip2.isintercept then
           if (ip.t1>0) and (ip.t2>0) then
             if (ip2.t1>0) and (ip2.t2>0) then begin
-              v2:=PzePoint3d(Vertex3D_in_WCS_Array.getDataMutable(j));
+              v2:=Vertex3D_in_WCS_Array.getDataMutable(j);
               if SqrVertexlength(v2^,ip.interceptcoord)<l then
                 if SqrVertexlength(v2^,ip2.interceptcoord)<l then begin
                   pq3d^[1]:=ip.interceptcoord;

@@ -88,14 +88,14 @@ var
 procedure GDBObjTable.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.basis.ox:=PzePoint3d(@objmatrix.mtr.v[0])^;
-  Local.basis.oy:=PzePoint3d(@objmatrix.mtr.v[1])^;
+  Local.basis.ox:=objmatrix.mtr.v[0].Slice;
+  Local.basis.oy:=objmatrix.mtr.v[1].Slice;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
+  Local.P_insert:=objmatrix.mtr.v[3].Slice;
 end;
 
 function GDBObjTable.DXFDelayedBuildGeometry:boolean;

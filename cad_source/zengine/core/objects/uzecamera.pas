@@ -101,9 +101,9 @@ begin
   rotmatr:=MatrixMultiply(CreateRotationMatrixY(uy),CreateRotationMatrixX(ux));
   tempmatr:=MatrixMultiply(rotmatr,tempmatr);
 
-  prop.xdir:=PzePoint3d(@tempmatr.mtr.v[0])^;
-  prop.ydir:=PzePoint3d(@tempmatr.mtr.v[1])^;
-  prop.look:=PzePoint3d(@tempmatr.mtr.v[2])^;
+  prop.xdir:=tempmatr.mtr.v[0].Slice;
+  prop.ydir:=tempmatr.mtr.v[1].Slice;
+  prop.look:=tempmatr.mtr.v[2].Slice;
 
   prop.look:=NormalizeVertex(prop.look);
   prop.xdir := VectorDot(prop.ydir,prop.look);
@@ -134,10 +134,10 @@ begin
     tempmatr:=rotmatr;
     tv:=vectortransform(tv,tempmatr);
     tv.x:=tv.x;
-    PzePoint3d(@rotmatr.mtr.v[3])^:=prop.point;
-    tempmatr:=CreateTranslationMatrix(PzePoint3d(@tv)^);
+    rotmatr.mtr.v[3].Slice:=prop.point;
+    tempmatr:=CreateTranslationMatrix(tv.Slice);
     tempmatr:=MatrixMultiply(rotmatr,tempmatr);
-    prop.point:=PzePoint3d(@tempmatr.mtr.v[3])^;
+    prop.point:=tempmatr.mtr.v[3].Slice;
   end;
   end else
     zDebugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);

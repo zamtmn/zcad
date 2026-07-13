@@ -141,15 +141,15 @@ end;
 procedure GDBObjElLeader.transform;
 var tv:TzeVector4d;
 begin
-  PzePoint3d(@tv)^:=MainLine.CoordInOCS.lbegin;
-  tv.w:=1;
+  tv.Slice:=MainLine.CoordInOCS.lbegin;
+  tv.CutOff:=1;
   tv:=vectortransform(tv,t_matrix);
-  MainLine.CoordInOCS.lbegin:=PzePoint3d(@tv)^;
+  MainLine.CoordInOCS.lbegin:=tv.Slice;
 
-  PzePoint3d(@tv)^:=MainLine.CoordInOCS.lend;
-  tv.w:=1;
+  tv.Slice:=MainLine.CoordInOCS.lend;
+  tv.CutOff:=1;
   tv:=vectortransform(tv,t_matrix);
-  MainLine.CoordInOCS.lend:=PzePoint3d(@tv)^;
+  MainLine.CoordInOCS.lend:=tv.Slice;
 end;
 {function GDBObjElLeader.InRect;
 var

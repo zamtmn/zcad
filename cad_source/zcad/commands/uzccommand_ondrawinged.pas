@@ -182,7 +182,7 @@ begin
 
           //drawings.GetCurrentDWG^.SelObjArray.TransformObj(dispmatr);
           drawings.GetCurrentDWG^.SelObjArray.SetRotateObj(
-            dispmatr,dispmatr2,rotmatr,PzePoint3d(@rotmatr.mtr.v[0])^,PzePoint3d(@rotmatr.mtr.v[1])^,PzePoint3d(@rotmatr.mtr.v[2])^);
+            dispmatr,dispmatr2,rotmatr,rotmatr.mtr.v[0].Slice,rotmatr.mtr.v[1].Slice,rotmatr.mtr.v[2].Slice);
         end;
 
         fixentities:=True;
@@ -237,13 +237,13 @@ begin
            PzePoint3d(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ;}
 
           //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-          dispmatr2:=uzegeometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
+          dispmatr2:=uzegeometry.CreateTranslationMatrix(tv{ createvertex(tv.x,tv.y,tv.z)});
           //dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr2);
 
 
           //drawings.GetCurrentDWG^.SelObjArray.Transform(dispmatr);
           drawings.GetCurrentDWG^.SelObjArray.SetRotate(
-            dispmatr,dispmatr2,rotmatr,PzePoint3d(@rotmatr.mtr.v[0])^,PzePoint3d(@rotmatr.mtr.v[1])^,PzePoint3d(@rotmatr.mtr.v[2])^);
+            dispmatr,dispmatr2,rotmatr,rotmatr.mtr.v[0].Slice,rotmatr.mtr.v[1].Slice,rotmatr.mtr.v[2].Slice);
 
           fixentities:=True;
         end;

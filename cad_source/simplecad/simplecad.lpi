@@ -58,11 +58,11 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="334">
+    <Units Count="339">
       <Unit0>
         <Filename Value="simplecad.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="7"/>
         <CursorPos X="7" Y="11"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -74,8 +74,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="663"/>
-        <CursorPos X="113" Y="678"/>
+        <TopLine Value="287"/>
+        <CursorPos X="21" Y="293"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -2164,7 +2164,7 @@
       </Unit309>
       <Unit310>
         <Filename Value="..\zengine\fonts\uzefontmanager.pas"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="13"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit310>
@@ -2177,7 +2177,7 @@
       </Unit311>
       <Unit312>
         <Filename Value="..\zengine\core\drawings\uzedrawingdef.pas"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="9"/>
         <CursorPos Y="24"/>
         <UsageCount Value="10"/>
@@ -2185,7 +2185,7 @@
       </Unit312>
       <Unit313>
         <Filename Value="..\zengine\core\uzeentitiesmanager.pas"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="25"/>
         <TopLine Value="5"/>
         <CursorPos X="6" Y="25"/>
         <UsageCount Value="10"/>
@@ -2200,9 +2200,9 @@
       </Unit314>
       <Unit315>
         <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
-        <EditorIndex Value="16"/>
-        <TopLine Value="45"/>
-        <CursorPos X="10" Y="60"/>
+        <EditorIndex Value="19"/>
+        <TopLine Value="83"/>
+        <CursorPos Y="93"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit315>
@@ -2215,7 +2215,7 @@
       </Unit316>
       <Unit317>
         <Filename Value="..\zengine\core\entities\uzeent3dface.pas"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="18"/>
         <TopLine Value="10"/>
         <CursorPos X="18" Y="18"/>
         <UsageCount Value="10"/>
@@ -2224,7 +2224,7 @@
       <Unit318>
         <Filename Value="..\zengine\core\entities\uzeentspline.pas"/>
         <UnitName Value="uzeEntSpline"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="15"/>
         <TopLine Value="15"/>
         <CursorPos X="18" Y="39"/>
         <UsageCount Value="10"/>
@@ -2240,7 +2240,7 @@
       </Unit319>
       <Unit320>
         <Filename Value="..\zengine\containers\UGDBPoint3DArray.pas"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="17"/>
         <TopLine Value="8"/>
         <CursorPos Y="28"/>
         <UsageCount Value="10"/>
@@ -2248,7 +2248,7 @@
       </Unit320>
       <Unit321>
         <Filename Value="..\zengine\core\entities\uzeentcurve.pas"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="16"/>
         <TopLine Value="13"/>
         <CursorPos X="18" Y="33"/>
         <UsageCount Value="10"/>
@@ -2256,7 +2256,7 @@
       </Unit321>
       <Unit322>
         <Filename Value="..\zengine\misc\uzeparser.pas"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="10"/>
         <CursorPos X="15" Y="30"/>
         <UsageCount Value="10"/>
@@ -2270,7 +2270,7 @@
       </Unit323>
       <Unit324>
         <Filename Value="..\zengine\fileformats\uzeffmanager.pas"/>
-        <EditorIndex Value="19"/>
+        <EditorIndex Value="24"/>
         <TopLine Value="35"/>
         <CursorPos X="19" Y="57"/>
         <UsageCount Value="10"/>
@@ -2278,7 +2278,7 @@
       </Unit324>
       <Unit325>
         <Filename Value="..\zengine\fileformats\uzeffdxfsupport.pas"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="11"/>
         <TopLine Value="284"/>
         <CursorPos X="26" Y="294"/>
         <UsageCount Value="10"/>
@@ -2286,7 +2286,7 @@
       </Unit325>
       <Unit326>
         <Filename Value="..\zengine\core\entities\uzeenttext.pas"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="10"/>
         <TopLine Value="43"/>
         <CursorPos Y="247"/>
         <UsageCount Value="10"/>
@@ -2294,21 +2294,21 @@
       </Unit326>
       <Unit327>
         <Filename Value="..\zengine\fonts\uzefontshx.pas"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="8"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit327>
       <Unit328>
         <Filename Value="..\zengine\fonts\uzefontfileformatshx.pas"/>
         <UnitName Value="uzeFontFileFormatSHX"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="9"/>
         <CursorPos X="26" Y="19"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit328>
       <Unit329>
         <Filename Value="..\zengine\core\drawings\uzedrawingsimple.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="13"/>
         <CursorPos X="26" Y="28"/>
         <UsageCount Value="10"/>
@@ -2317,7 +2317,7 @@
       <Unit330>
         <Filename Value="..\components\zunits\src\uzbunits.pas"/>
         <UnitName Value="uzbUnits"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="5"/>
         <CursorPos X="6" Y="19"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
@@ -2325,149 +2325,193 @@
       <Unit331>
         <Filename Value="..\zcad\commands\uzccommand_copyclip.pas"/>
         <UnitName Value="uzcCommand_CopyClip"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="23"/>
         <TopLine Value="49"/>
-        <CursorPos X="60" Y="65"/>
+        <CursorPos X="14" Y="65"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit331>
       <Unit332>
         <Filename Value="..\zcad\commands\uzccommand_saveas.pas"/>
-        <EditorIndex Value="17"/>
-        <TopLine Value="39"/>
-        <CursorPos X="26" Y="55"/>
+        <EditorIndex Value="21"/>
+        <TopLine Value="54"/>
+        <CursorPos X="16" Y="65"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit332>
       <Unit333>
         <Filename Value="Y:\ppsrc\rtl\inc\systemh.inc"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="671"/>
         <CursorPos X="3" Y="686"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit333>
+      <Unit334>
+        <Filename Value="..\components\zbaseutils\src\uzblogintf.pas"/>
+        <UnitName Value="uzbLogIntf"/>
+        <EditorIndex Value="20"/>
+        <TopLine Value="23"/>
+        <CursorPos Y="35"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit334>
+      <Unit335>
+        <Filename Value="..\zengine\core\entities\uzeentlwpolyline.pas"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="40"/>
+        <CursorPos X="39" Y="44"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit335>
+      <Unit336>
+        <Filename Value="..\zengine\uzetypes.pas"/>
+        <UnitName Value="uzeTypes"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="96"/>
+        <CursorPos X="47" Y="107"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit336>
+      <Unit337>
+        <Filename Value="..\zengine\fileformats\uzeffdxfout.pas"/>
+        <UnitName Value="uzeffDxfOut"/>
+        <EditorIndex Value="22"/>
+        <TopLine Value="32"/>
+        <CursorPos X="10" Y="43"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit337>
+      <Unit338>
+        <Filename Value="..\zengine\fonts\uzefontfileformatttfbackendfttest.pas"/>
+        <UnitName Value="uzeFontFileFormatTTFBackendFTTest"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="28"/>
+        <CursorPos X="24" Y="34"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit338>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="189" Column="60" TopLine="169"/>
+        <Filename Value="..\components\zbaseutils\src\uzblogintf.pas"/>
+        <Caret Line="35" TopLine="23"/>
       </Position1>
       <Position2>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="31" Column="12" TopLine="8"/>
+        <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
+        <Caret Line="92" Column="13" TopLine="83"/>
       </Position2>
       <Position3>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="233" Column="50" TopLine="24"/>
+        <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
+        <Caret Line="274" Column="57" TopLine="257"/>
       </Position3>
       <Position4>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="229" Column="61" TopLine="214"/>
+        <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
+        <Caret Line="93" TopLine="83"/>
       </Position4>
       <Position5>
         <Filename Value="umainform.pas"/>
-        <Caret Line="242" Column="61" TopLine="227"/>
+        <Caret Line="314" Column="19" TopLine="298"/>
       </Position5>
       <Position6>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="229" Column="71" TopLine="227"/>
+        <Filename Value="..\zengine\core\entities\uzeentlwpolyline.pas"/>
+        <Caret Line="572" Column="33" TopLine="560"/>
       </Position6>
       <Position7>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="252" Column="20" TopLine="237"/>
+        <Filename Value="..\zengine\uzetypes.pas"/>
+        <Caret Line="204" Column="20" TopLine="195"/>
       </Position7>
       <Position8>
         <Filename Value="umainform.pas"/>
-        <Caret Line="275" Column="43" TopLine="261"/>
+        <Caret Line="293" Column="65" TopLine="283"/>
       </Position8>
       <Position9>
         <Filename Value="umainform.pas"/>
-        <Caret Line="292" Column="16" TopLine="277"/>
+        <Caret Line="317" Column="27" TopLine="304"/>
       </Position9>
       <Position10>
         <Filename Value="umainform.pas"/>
-        <Caret Line="321" Column="43" TopLine="306"/>
+        <Caret Line="291" Column="4" TopLine="280"/>
       </Position10>
       <Position11>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="340" Column="17" TopLine="325"/>
+        <Filename Value="..\zengine\core\entities\uzeentlwpolyline.pas"/>
+        <Caret Line="46" Column="3" TopLine="34"/>
       </Position11>
       <Position12>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="366" Column="46" TopLine="352"/>
+        <Filename Value="..\zengine\core\entities\uzeentlwpolyline.pas"/>
+        <Caret Line="50" Column="17" TopLine="34"/>
       </Position12>
       <Position13>
         <Filename Value="umainform.pas"/>
-        <Caret Line="396" Column="17" TopLine="380"/>
+        <Caret Line="315" Column="54" TopLine="305"/>
       </Position13>
       <Position14>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="417" Column="46" TopLine="403"/>
+        <Filename Value="..\zengine\core\entities\uzeentlwpolyline.pas"/>
+        <Caret Line="50" Column="5" TopLine="40"/>
       </Position14>
       <Position15>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="481" Column="17" TopLine="466"/>
+        <Filename Value="..\zengine\core\entities\uzeentlwpolyline.pas"/>
+        <Caret Line="44" Column="39" TopLine="40"/>
       </Position15>
       <Position16>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="494" Column="46" TopLine="480"/>
+        <Filename Value="..\zengine\uzetypes.pas"/>
+        <Caret Line="211" Column="17" TopLine="200"/>
       </Position16>
       <Position17>
         <Filename Value="umainform.pas"/>
-        <Caret Line="510" Column="17" TopLine="495"/>
+        <Caret Line="293" Column="21" TopLine="286"/>
       </Position17>
       <Position18>
         <Filename Value="umainform.pas"/>
-        <Caret Line="529" Column="46" TopLine="515"/>
+        <Caret Line="314" Column="17" TopLine="302"/>
       </Position18>
       <Position19>
         <Filename Value="umainform.pas"/>
-        <Caret Line="558" Column="46" TopLine="544"/>
+        <Caret Line="678" Column="12" TopLine="667"/>
       </Position19>
       <Position20>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="614" Column="17" TopLine="599"/>
+        <Filename Value="..\zcad\commands\uzccommand_copyclip.pas"/>
+        <Caret Line="65" Column="14" TopLine="49"/>
       </Position20>
       <Position21>
         <Filename Value="umainform.pas"/>
-        <Caret Line="643" Column="46" TopLine="628"/>
+        <Caret Line="678" Column="5" TopLine="667"/>
       </Position21>
       <Position22>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="678" Column="5" TopLine="663"/>
+        <Filename Value="..\zcad\commands\uzccommand_saveas.pas"/>
+        <Caret Line="65" Column="16" TopLine="54"/>
       </Position22>
       <Position23>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="679" Column="32" TopLine="663"/>
+        <Filename Value="..\zengine\fileformats\uzeffdxfout.pas"/>
+        <Caret Line="43" Column="16" TopLine="35"/>
       </Position23>
       <Position24>
-        <Filename Value="umainform.pas"/>
-        <Caret Line="678" Column="110" TopLine="663"/>
+        <Filename Value="..\zengine\fileformats\uzeffdxfout.pas"/>
+        <Caret Line="18" Column="17"/>
       </Position24>
       <Position25>
-        <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
-        <Caret Line="60" Column="21" TopLine="45"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="22" Column="24" TopLine="9"/>
       </Position25>
       <Position26>
-        <Filename Value="..\zcad\commands\uzccommand_copyclip.pas"/>
-        <Caret Line="65" Column="60" TopLine="49"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="678" Column="113" TopLine="667"/>
       </Position26>
       <Position27>
-        <Filename Value="..\zengine\fileformats\uzeffdxf.pas"/>
-        <Caret Line="60" Column="10" TopLine="45"/>
+        <Filename Value="..\zengine\fileformats\uzeffdxfout.pas"/>
+        <Caret Line="43" Column="10" TopLine="32"/>
       </Position27>
       <Position28>
-        <Filename Value="..\zcad\commands\uzccommand_saveas.pas"/>
-        <Caret Line="55" Column="26" TopLine="39"/>
+        <Filename Value="..\zengine\uzetypes.pas"/>
+        <Caret Line="107" Column="47" TopLine="96"/>
       </Position28>
       <Position29>
-        <Filename Value="..\zengine\fileformats\uzeffdxfsupport.pas"/>
-        <Caret Line="171" Column="20" TopLine="156"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="678" Column="109" TopLine="667"/>
       </Position29>
       <Position30>
-        <Filename Value="..\zengine\fileformats\uzeffdxfsupport.pas"/>
-        <Caret Line="294" Column="26" TopLine="284"/>
+        <Filename Value="umainform.pas"/>
+        <Caret Line="80" Column="38" TopLine="70"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

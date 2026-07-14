@@ -75,8 +75,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="umainformGDI"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="548"/>
-        <CursorPos X="19" Y="562"/>
+        <TopLine Value="8"/>
+        <CursorPos X="24" Y="22"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -2316,7 +2316,7 @@
         <Loaded Value="True"/>
       </Unit329>
     </Units>
-    <JumpHistory Count="25" HistoryIndex="24">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="..\zcad\electrotech\uzcentelleader.pas"/>
         <Caret Line="43" Column="26" TopLine="12"/>
@@ -2403,20 +2403,40 @@
       </Position21>
       <Position22>
         <Filename Value="umainformgdi.pas"/>
-        <Caret Line="488" Column="46" TopLine="502"/>
+        <Caret Line="606" Column="111" TopLine="589"/>
       </Position22>
       <Position23>
         <Filename Value="umainformgdi.pas"/>
-        <Caret Line="606" Column="111" TopLine="589"/>
+        <Caret Line="562" Column="12" TopLine="548"/>
       </Position23>
       <Position24>
         <Filename Value="umainformgdi.pas"/>
-        <Caret Line="562" Column="12" TopLine="548"/>
+        <Caret Line="545" Column="4" TopLine="529"/>
       </Position24>
       <Position25>
         <Filename Value="umainformgdi.pas"/>
-        <Caret Line="545" Column="4" TopLine="529"/>
+        <Caret Line="562" Column="19" TopLine="549"/>
       </Position25>
+      <Position26>
+        <Filename Value="umainformgdi.pas"/>
+        <Caret Line="18" Column="19" TopLine="8"/>
+      </Position26>
+      <Position27>
+        <Filename Value="umainformgdi.pas"/>
+        <Caret Line="273" Column="21" TopLine="262"/>
+      </Position27>
+      <Position28>
+        <Filename Value="umainformgdi.pas"/>
+        <Caret Line="292" Column="17" TopLine="280"/>
+      </Position28>
+      <Position29>
+        <Filename Value="umainformgdi.pas"/>
+        <Caret Line="293" Column="38" TopLine="284"/>
+      </Position29>
+      <Position30>
+        <Filename Value="umainformgdi.pas"/>
+        <Caret Line="607" TopLine="596"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -2427,7 +2447,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);..\zengine"/>
-      <OtherUnitFiles Value="..\zengine\containers;..\zengine;..\zengine\core;..\zengine\core\utils;..\zengine\core\objects;..\zengine\core\entities;..\zengine\zgl;..\zengine\geomlib;..\zengine\styles;..\zengine\zgl\common;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings"/>
+      <OtherUnitFiles Value="..\zengine\containers;..\zengine;..\zengine\core;..\zengine\core\utils;..\zengine\core\objects;..\zengine\core\entities;..\zengine\zgl;..\zengine\geomlib;..\zengine\styles;..\zengine\zgl\common;..\zengine\zgl\opengl;..\zengine\zgl\gdi;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

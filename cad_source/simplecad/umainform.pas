@@ -19,7 +19,7 @@ uses
   uzeentity,                                                                    //generic entitys objects parent
   uzeent3Dface,uzeentlwpolyline,uzeentpolyline,uzeenttext,uzeentline,uzeentcircle,uzeentarc,         //entitys created by program
   {$ifdef dxfio}
-  uzeffdxf,                                                                        //dxf fileformat support
+  uzeffdxf,uzeffDxfOut,                                                                        //dxf fileformat support
   uzeffmanager,
   uzeentmtext,uzeentdimensiongeneric,uzeentdimaligned,uzeentdimrotated,uzeentsolid,//some other entitys can be found in loaded files
   uzeentspline,
@@ -264,7 +264,7 @@ begin
   for i:=1 to SpinEdit1.Value do
   begin
     v1:=CreateRandomVertex(1000,500,_3d);                       //line coord
-    v2:=uzegeometry.VertexAdd(v1,CreateRandomVertex(1000,500,_3d));//line coord
+    v2:=v1+CreateRandomVertex(1000,500,_3d);//line coord
 
     PLineEnt:=GDBObjLine.CreateInstance;                    //create line
     PLineEnt^.CoordInOCS.lBegin:=v1;                        //setup coord
@@ -290,7 +290,7 @@ var
    i,j,vcount:integer;
    PLWPolyLineEnt:PGDBObjLWPolyline;                               //pointer to created lwpolyline
    v1:TzePoint2d;                                                 //lwpolyline vertex
-   lw:GLLWWidth;                                                   //lwpolyline vertex width props
+   lw:TSegmentParams;                                           //lwpolyline vertex width props
    dc:TDrawContext;                                                //drawing context
    CurrentDrawing:PTSimpleDrawing;                                 //pointer to current drawing
    plt:PGDBLtypeProp;
@@ -310,10 +310,10 @@ begin
     for j:=1 to vcount do
     begin
          PLWPolyLineEnt^.Vertex2D_in_OCS_Array.PushBackData(v1);
-         lw.endw:=CreateRandomDouble(10);
-         lw.startw:=CreateRandomDouble(10);
-         PLWPolyLineEnt^.Width2D_in_OCS_Array.PushBackData(lw);
-         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex2D(100,50));
+         lw.data.endw:=CreateRandomDouble(10);
+         lw.data.startw:=CreateRandomDouble(10);
+         PLWPolyLineEnt^.SgmntsParams.PushBackData(lw);
+         v1:=v1+CreateRandomVertex2D(100,50);
     end;
     if vcount>2 then
                     PLWPolyLineEnt^.closed:=random(10)>5;          //random close lwpolyline
@@ -351,7 +351,7 @@ begin
     for j:=0 to 4 do
     begin
          pobj^.VertexArrayInOCS.PushBackData(v1);
-         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+         v1:=v1+CreateRandomVertex(100,50,Form1.ChkBox3D.Checked);
     end;
     pobj^.Knots.PushBackData(0);
     pobj^.Knots.PushBackData(0);
@@ -408,7 +408,7 @@ begin
     for j:=0 to 2 do
     begin
          pobj^.PInOCS[j]:=v1;
-         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+         v1:=v1+CreateRandomVertex(100,50,Form1.ChkBox3D.Checked);
     end;
     if istriangle then
                       pobj^.PInOCS[3]:=pobj^.PInOCS[2]
@@ -439,14 +439,14 @@ begin
         GDBLineID:begin
                        l:=Vertexlength(PGDBObjLine(pv)^.CoordInWCS.lbegin,PGDBObjLine(pv)^.CoordInWCS.lend)/10;
                        hl:=l/2;
-                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=uzegeometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
-                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=uzegeometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
+                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=PGDBObjLine(pv)^.CoordInOCS.lBegin+CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked);
+                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=PGDBObjLine(pv)^.CoordInOCS.lEnd+CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked);
                        pv^.YouChanged(GetCurrentDrawing^);
                   end;
         GDBCircleID:begin
                        l:=PGDBObjCircle(pv)^.Radius;
                        hl:=l/2;
-                       PGDBObjCircle(pv)^.Local.P_insert:=uzegeometry.VertexAdd(PGDBObjCircle(pv)^.Local.P_insert,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
+                       PGDBObjCircle(pv)^.Local.P_insert:=PGDBObjCircle(pv)^.Local.P_insert+CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked);
                        PGDBObjCircle(pv)^.Radius:=PGDBObjCircle(pv)^.Radius+CreateRandomDouble(l)-hl;
                        if PGDBObjCircle(pv)^.Radius<=0 then PGDBObjCircle(pv)^.Radius:=CreateRandomDouble(9)+1;
                        pv^.YouChanged(GetCurrentDrawing^);
@@ -522,7 +522,7 @@ begin
     for j:=1 to vcount do
     begin
          pobj^.AddVertex(v1);
-         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+         v1:=v1+CreateRandomVertex(100,50,Form1.ChkBox3D.Checked);
     end;
     if vcount>2 then
                     pobj^.closed:=random(10)>5;
@@ -675,7 +675,7 @@ procedure TForm1.BtnSaveDXFClick(Sender: TObject);
 begin
   {$ifdef dxfio}
   if SaveDialog1.Execute then
-    savedxf2000(SaveDialog1.FileName,extractfilepath(paramstr(0))+'components/empty.dxf',GetCurrentDrawing^,1252);
+    savedxf20XX(SaveDialog1.FileName,extractfilepath(paramstr(0))+'components/empty.dxf',GetCurrentDrawing^,ZCDxf2000);
   {$endif}
 end;
 

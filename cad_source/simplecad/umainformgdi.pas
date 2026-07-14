@@ -15,11 +15,11 @@ uses
   uzegeometry,                                                                     //some mathematical and geometrical support
   uzefontmanager,uzeFontFileFormatSHX,                                                        //fonts manager and SHX fileformat support
   uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support
-  uzglviewareaogl,uzglviewareagdi,                                           //gdi and opengl wiewareas
+  uzglviewareagdi,                                           //gdi and opengl wiewareas
   uzeentity,                                                                    //generic entitys objects parent
   uzeent3Dface,uzeentlwpolyline,uzeentpolyline,uzeenttext,uzeentline,uzeentcircle,uzeentarc,         //entitys created by program
   {$ifdef dxfio}
-  uzeffdxf,                                                                        //dxf fileformat support
+  uzeffdxf,uzeffDxfOut,                                                                        //dxf fileformat support
   uzeentmtext,uzeentdimensiongeneric,uzeentdimaligned,uzeentdimrotated,uzeentsolid,//some other entitys can be found in loaded files
   uzeentspline,
   {$endif}
@@ -270,7 +270,7 @@ var
    i,j,vcount:integer;
    PLWPolyLineEnt:PGDBObjLWPolyline;                               //pointer to created lwpolyline
    v1:TzePoint2d;                                                 //lwpolyline vertex
-   lw:GLLWWidth;                                                   //lwpolyline vertex width props
+   lw:TSegmentParams;                                                   //lwpolyline vertex width props
    dc:TDrawContext;                                                //drawing context
    CurrentDrawing:PTSimpleDrawing;                                 //pointer to current drawing
 begin
@@ -288,9 +288,9 @@ begin
     for j:=1 to vcount do
     begin
          PLWPolyLineEnt^.Vertex2D_in_OCS_Array.PushBackData(v1);
-         lw.endw:=CreateRandomDouble(10);
-         lw.startw:=CreateRandomDouble(10);
-         PLWPolyLineEnt^.Width2D_in_OCS_Array.PushBackData(lw);
+         lw.data.endw:=CreateRandomDouble(10);
+         lw.data.startw:=CreateRandomDouble(10);
+         PLWPolyLineEnt^.SgmntsParams.PushBackData(lw);
          v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex2D(100,50));
     end;
     if vcount>2 then
@@ -603,7 +603,7 @@ procedure TForm1.BtnSaveDXFClick(Sender: TObject);
 begin
   {$ifdef dxfio}
   if SaveDialog1.Execute then
-    savedxf2000(SaveDialog1.FileName,extractfilepath(paramstr(0))+'components/empty.dxf',GetCurrentDrawing^,1252);
+    savedxf20XX(SaveDialog1.FileName,extractfilepath(paramstr(0))+'components/empty.dxf',GetCurrentDrawing^,ZCDxf2000);
   {$endif}
 end;
 

@@ -53,7 +53,7 @@ begin
   arc^.BuildGeometry(drawing);
   // Форматирование сущности
   arc^.formatEntity(drawing,dc);
-  arc^.transform(CreateReflectionMatrix(PlaneFrom3Pont(NulVertex,x_Y_zVertex,xy_Z_Vertex)));
+  arc^.transform(CreateReflectionMatrix(PlaneFrom3Pont(NulPoint,x_Y_zVertex,xy_Z_Vertex)));
   arc^.formatEntity(drawing,dc);
 
   verror:='';

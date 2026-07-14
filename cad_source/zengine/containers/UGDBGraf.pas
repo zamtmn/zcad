@@ -246,7 +246,7 @@ begin
 end;
 constructor grafelement.initnul;
 begin
-     point:=nulvertex;
+     point:=NulPoint;
      link.init(100);
      linkcount:=0;
      connected:=0;

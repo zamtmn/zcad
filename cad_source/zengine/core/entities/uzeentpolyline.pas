@@ -182,7 +182,7 @@ procedure GDBObjPolyline.SaveToDXF;
 begin
   SaveToDXFObjPrefix(outStream,'POLYLINE','AcDb3dPolyline',IODXFContext);
   dxfIntegerout(outStream,66,1);
-  dxfvertexout(outStream,10,uzegeometry.NulVertex);
+  dxfvertexout(outStream,10,uzegeometry.NulPoint);
   if closed then
     dxfIntegerout(outStream,70,9)
   else
@@ -309,11 +309,11 @@ begin
     halfVector:=uzegeometry.VertexMulOnSc(halfVector,0.5);
 
     // Calculate new center position
-    newCenter:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+    newCenter:=rtmod.point.worldcoord+rtmod.dist;
 
     // Set both vertices relative to new center
     v1^:=VertexSub(newCenter,halfVector);
-    v2^:=VertexAdd(newCenter,halfVector);
+    v2^:=newCenter+halfVector;
     //offset:=rtmod.dist;
     //v1^:=VertexAdd(v1^,offset);
     //v2^:=VertexAdd(v2^,offset);

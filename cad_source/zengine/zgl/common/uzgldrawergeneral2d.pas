@@ -630,8 +630,8 @@ begin
   matrixs.pmodelMatrix^:=matrWithLCS;
   matrixs.pprojMatrix^:=ProjMatrWithLCS;
   LCS.notuseLCS:=true;
-  LCS.CurrentCamCSOffset:=NulVertex;
-  LCS.CurrentCamCSOffsetS:=NulVertex3S;
+  LCS.CurrentCamCSOffset:=NulPoint;
+  LCS.CurrentCamCSOffsetS:=NulPoint3S;
 end;
 procedure TZGLGeneral2DDrawer.EnableLCS(var matrixs:tmatrixs);
 //var

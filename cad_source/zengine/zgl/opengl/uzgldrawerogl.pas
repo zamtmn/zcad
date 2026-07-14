@@ -149,8 +149,8 @@ end;
 procedure TZGLOpenGLDrawer.DisableLCS(var matrixs:tmatrixs);
 begin
   LCS.notuseLCS:=true;
-  LCS.CurrentCamCSOffset:=NulVertex;
-  LCS.CurrentCamCSOffsetS:=NulVertex3S;
+  LCS.CurrentCamCSOffset:=NulPoint;
+  LCS.CurrentCamCSOffsetS:=NulPoint3S;
 end;
 procedure TZGLOpenGLDrawer.EnableLCS(var matrixs:tmatrixs);
 begin

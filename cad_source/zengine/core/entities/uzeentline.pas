@@ -97,17 +97,17 @@ implementation
 
 function GDBObjLine.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 begin
-  Result:=normalizevertex(VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin));
+  Result:={normalizevertex}({VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin).NormalizeVertex);
 end;
 
 procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var
-  tv,dir:TzePoint3d;
+  tv,dir:TzeVector3d;
 begin
-  dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
-  processaxis(posr,dir);
+  dir:={VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin).asVector3d;
+  processaxis(posr,dir.asPoint3d);
   tv:=uzegeometry.vectordot(dir,zwcs);
-  processaxis(posr,tv);
+  processaxis(posr,tv.asPoint3d);
 end;
 
 function GDBObjLine.IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
@@ -132,13 +132,13 @@ end;
 
 function GDBObjLine.jointoline(pl:pgdbobjline;var drawing:TDrawingDef):boolean;
 
-  function online(w,u:TzePoint3d):boolean;
+  function online(w,u:TzeVector3d):boolean;
   var
     ww:double;
     l:double;
   begin
     ww:=scalardot(w,u);
-    l:=SqrOneVertexlength(VertexSub(w,VertexMulOnSc(u,ww)));
+    l:=SqrOneVertexlength({VertexSub}(w-{VertexMulOnSc}(u*ww)));
     if eps>l then
       Result:=True
     else
@@ -148,7 +148,7 @@ function GDBObjLine.jointoline(pl:pgdbobjline;var drawing:TDrawingDef):boolean;
 var
   t1,t2,a1,a2:double;
   q:boolean;
-  w,u,dir:TzePoint3d;
+  w,u,dir:TzeVector3d;
   dc:TDrawContext;
 begin
   Result:=False;
@@ -157,12 +157,12 @@ begin
     Result:=pl^.jointoline(@self,drawing);
     exit;
   end;
-  dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
+  dir:={VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin).asVector3d;
   u:=NormalizeVertex(dir);
-  w:=VertexSub(pl.CoordInWCS.lbegin,CoordInWCS.lbegin);
+  w:={VertexSub}(pl.CoordInWCS.lbegin-CoordInWCS.lbegin).asVector3d;
   t1:=(scalardot(w,dir))/SqrOneVertexlength(dir);
   q:=online(w,u);
-  w:=VertexSub(pl.CoordInWCS.lend,CoordInWCS.lbegin);
+  w:={VertexSub}(pl.CoordInWCS.lend-CoordInWCS.lbegin).asVector3d;
   t2:=(scalardot(w,dir))/SqrOneVertexlength(dir);
   q:=q and online(w,u);
   if not q then
@@ -177,8 +177,8 @@ begin
     a2:=t1;
   if t2>a2 then
     a2:=t2;
-  self.CoordInOCS.lend:=VertexDmorph(self.CoordInOCS.lbegin,dir,a2);
-  self.CoordInOCS.lbegin:=VertexDmorph(self.CoordInOCS.lbegin,dir,a1);
+  self.CoordInOCS.lend:=VertexDmorph(self.CoordInOCS.lbegin,dir.asPoint3d,a2);
+  self.CoordInOCS.lbegin:=VertexDmorph(self.CoordInOCS.lbegin,dir.asPoint3d,a1);
   dc:=drawing.CreateDrawingRC;
   FormatEntity(drawing,dc);
   pl^.YouDeleted(drawing);
@@ -194,8 +194,8 @@ constructor GDBObjLine.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  CoordInOCS.lBegin:=NulVertex;
-  CoordInOCS.lEnd:=NulVertex;
+  CoordInOCS.lBegin:=NulPoint;
+  CoordInOCS.lEnd:=NulPoint;
 end;
 
 constructor GDBObjLine.init;
@@ -354,14 +354,15 @@ end;
 function GDBObjLine.getsnap;
 var
   t,d,e:double;
-  tv,n,v,dir:TzePoint3d;
+  tv:TzePoint3d;
+  n,v,dir:TzeVector3d;
 begin
   if onlygetsnapcount=9 then begin
     Result:=False;
     exit;
   end;
   Result:=True;
-  dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
+  dir:={VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin).asVector3d;
   case onlygetsnapcount of
     0:begin
       if (SnapMode and osm_endpoint)<>0 then begin
@@ -421,7 +422,7 @@ begin
     end;
     7:begin
       if (SnapMode and osm_perpendicular)<>0 then begin
-        tv:=vectordot(dir,param.md.mouseray.dir);
+        tv:=vectordot(dir,param.md.mouseray.dir).asPoint3d;
         t:=-((CoordInWCS.lbegin.x-param.lastpoint.x)*dir.x+
           (CoordInWCS.lbegin.y-param.lastpoint.y)*dir.y+
           (CoordInWCS.lbegin.z-param.lastpoint.z)*dir.z)/
@@ -440,8 +441,8 @@ begin
     end;
     8:begin
       if (SnapMode and osm_nearest)<>0 then begin
-        tv:=vectordot(dir,param.md.mouseray.dir);
-        n:=vectordot(param.md.mouseray.dir,tv);
+        tv:=vectordot(dir,param.md.mouseray.dir).asPoint3d;
+        n:=vectordot(param.md.mouseray.dir,tv.asVector3d);
         n:=NormalizeVertex(n);
         v.x:=param.md.mouseray.lbegin.x-CoordInWCS.lbegin.x;
         v.y:=param.md.mouseray.lbegin.y-CoordInWCS.lbegin.y;
@@ -623,15 +624,15 @@ var
   tv,tv2:TzePoint3d;
 begin
   if rtmod.point.pointtype=os_begin then begin
-    CoordInOCS.lbegin:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+    CoordInOCS.lbegin:=rtmod.point.worldcoord+rtmod.dist;
   end else if rtmod.point.pointtype=os_end then begin
-    CoordInOCS.lend:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+    CoordInOCS.lend:=rtmod.point.worldcoord+rtmod.dist;
   end else if rtmod.point.pointtype=os_midle then begin
     tv:=uzegeometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
     tv:=uzegeometry.VertexMulOnSc(tv,0.5);
-    tv2:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+    tv2:=rtmod.point.worldcoord+rtmod.dist;
     CoordInOCS.lbegin:=VertexSub(tv2,tv);
-    CoordInOCS.lend:=VertexAdd(tv2,tv);
+    CoordInOCS.lend:=tv2+tv;
   end;
 end;
 
@@ -684,15 +685,15 @@ procedure GDBObjLine.transform;
 var
   tv:TzeVector4d;
 begin
-  tv.Slice:=CoordInOCS.lbegin;
+  tv.Slice:=CoordInOCS.lbegin.asVector3d;
   tv.CutOff:=1;
   tv:=vectortransform(tv,t_matrix);
-  CoordInOCS.lbegin:=tv.Slice;
+  CoordInOCS.lbegin:=tv.Slice.asPoint3d;
 
-  tv.Slice:=CoordInOCS.lend;
+  tv.Slice:=CoordInOCS.lend.asVector3d;
   tv.CutOff:=1;
   tv:=vectortransform(tv,t_matrix);
-  CoordInOCS.lend:=tv.Slice;
+  CoordInOCS.lend:=tv.Slice.asPoint3d;
 end;
 
 function AllocLine:PGDBObjLine;

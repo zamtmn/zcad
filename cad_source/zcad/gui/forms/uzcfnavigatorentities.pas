@@ -149,8 +149,8 @@ begin
     if pnd^.Ident.pent<>nil then
     begin
       pc:=Vertexmorph(pnd^.Ident.pent^.vp.BoundingBox.LBN,pnd^.Ident.pent^.vp.BoundingBox.RTF,0.5);
-      bb.LBN:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.Ident.pent^.vp.BoundingBox.LBN),scale));
-      bb.RTF:=VertexAdd(pc,VertexMulOnSc(VertexSub(pc,pnd^.Ident.pent^.vp.BoundingBox.RTF),scale));
+      bb.LBN:=pc+VertexMulOnSc(VertexSub(pc,pnd^.Ident.pent^.vp.BoundingBox.LBN),scale);
+      bb.RTF:=pc+VertexMulOnSc(VertexSub(pc,pnd^.Ident.pent^.vp.BoundingBox.RTF),scale);
       drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
     end;
   end;

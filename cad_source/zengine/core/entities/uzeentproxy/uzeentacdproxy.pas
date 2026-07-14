@@ -314,7 +314,7 @@ begin
   inherited init(own, layeraddres, LW);
   FSubEntitiesBuilt := False;
   FProxyBBoxLoaded := False;
-  FProxyGripOffset := NulVertex;
+  FProxyGripOffset := NulPoint;
   FProxyClassID := 498;
   FAppClassID := 499;
   FEntityDataSize := 0;
@@ -333,7 +333,7 @@ begin
   bp.ListPos.Owner := owner;
   FSubEntitiesBuilt := False;
   FProxyBBoxLoaded := False;
-  FProxyGripOffset := NulVertex;
+  FProxyGripOffset := NulPoint;
   FProxyClassID := 498;
   FAppClassID := 499;
   FEntityDataSize := 0;
@@ -430,7 +430,7 @@ begin
   FDXFFileVersion := ADXFFileVersion;
   FSubEntitiesBuilt := False;
   FProxyBBoxLoaded := False;
-  FProxyGripOffset := NulVertex;
+  FProxyGripOffset := NulPoint;
   FConvertedBlockName := '';
 end;
 
@@ -555,7 +555,7 @@ begin
       FProxyBBoxLoaded := True;
       FProxyGripOffset := Vertexmorph(
         FProxyBBoxMin, FProxyBBoxMax, 0.5);
-      if IsVectorNul(Local.P_insert) then
+      if IsVectorNul(Local.P_insert.asVector3d) then
         Local.P_insert := FProxyGripOffset;
       vp.BoundingBox.LBN := FProxyBBoxMin;
       vp.BoundingBox.RTF := FProxyBBoxMax;
@@ -705,7 +705,7 @@ begin
     objMatrix := MatrixMultiply(m1, objMatrix);
   end;
 
-  P_insert_in_WCS := VectorTransform3D(NulVertex, objMatrix);
+  P_insert_in_WCS := VectorTransform3D(NulPoint, objMatrix);
 end;
 
 { Декомпозиция objMatrix в Local.p_insert/basis/scale/rotate, чтобы после
@@ -713,22 +713,23 @@ end;
   CalcObjMatrix. По образцу GDBObjBlockInsert.ReCalcFromObjMatrix. }
 procedure GDBObjAcdProxy.ReCalcFromObjMatrix;
 var
-  ox, tv: TzePoint3d;
+  ox: TzeVector3d;
+  tv: TzePoint3d;
 begin
   inherited ReCalcFromObjMatrix;
   Local := GetPInsertInOCSBymatrix(objMatrix, scale);
 
   ox := GetXfFromZ(Local.basis.oz);
-  tv := Local.basis.ox;
+  tv := Local.basis.ox.asPoint3d;
   if scale.x < -eps then
     tv := VertexMulOnSc(tv, -1);
-  rotate := scalardot(tv, ox);
+  rotate := scalardot(tv.asVector3d, ox);
   if rotate > 1.0 then
     rotate := 1.0
   else if rotate < -1.0 then
     rotate := -1.0;
   rotate := arccos(rotate);
-  if scalardot(tv, VectorDot(Local.basis.oz,
+  if scalardot(tv.asVector3d, VectorDot(Local.basis.oz,
     GetXfFromZ(Local.basis.oz))) < -eps then
     rotate := 2 * pi - rotate;
 end;
@@ -927,7 +928,7 @@ begin
 
   BlockArr := PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple);
   BlockDef := BlockArr^.create(FConvertedBlockName);
-  BlockDef^.Base := NulVertex;
+  BlockDef^.Base := NulPoint;
 
   { Копируем подпримитивы из ConstObjArray в ObjArray блока.
     Каждый подпримитив клонируется — владелец клона теперь BlockDef. }

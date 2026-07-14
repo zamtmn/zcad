@@ -93,23 +93,21 @@ var
     srcVec — нормализованный исходный вектор
     dstVec — нормализованный целевой вектор
 }
-function Calc3DRotationMatrix(
-  const srcVec, dstVec: TzePoint3d
-): TzeTypedMatrix4d;
+function Calc3DRotationMatrix(const srcVec,dstVec:TzeVector3d): TzeTypedMatrix4d;
 var
   // Скалярное произведение (косинус угла между векторами)
   cosAngle: double;
   // Синус угла через длину векторного произведения
   sinAngle: double;
   // Ось вращения = нормализованное векторное произведение srcVec × dstVec
-  rotAxis: TzePoint3d;
+  rotAxis: TzeVector3d;
   axisLen: double;
   // Компоненты оси вращения
   kx, ky, kz: double;
   // Вспомогательные переменные для формулы Родригеса
   c1: double;
   // Перпендикулярная ось для случая антипараллельных векторов
-  perpAxis: TzePoint3d;
+  perpAxis: TzeVector3d;
   m: TzeTypedMatrix4d;
 begin
   // Вычисляем скалярное произведение вручную (cos угла между нормализованными векторами)
@@ -134,9 +132,9 @@ begin
     // Угол ≈ 180°: выбираем произвольную перпендикулярную ось
     // Выбираем ось, наименее параллельную srcVec
     if Abs(srcVec.x) <= Abs(srcVec.y) then
-      perpAxis := uzegeometry.CreateVertex(1, 0, 0)
+      perpAxis:=CreateVector(1,0,0)
     else
-      perpAxis := uzegeometry.CreateVertex(0, 1, 0);
+      perpAxis:=CreateVector(0,1,0);
     // Ось = normalize(srcVec × perpAxis)
     rotAxis := uzegeometry.VectorDot(srcVec, perpAxis);
     axisLen := Sqrt(rotAxis.x * rotAxis.x + rotAxis.y * rotAxis.y + rotAxis.z * rotAxis.z);
@@ -216,7 +214,7 @@ function CalcAlignMatrix(
 ): TzeTypedMatrix4d;
 var
   srcLen, dstLen, scaleValue: double;
-  srcVec, dstVec: TzePoint3d;
+  srcVec, dstVec: TzeVector3d;
   rotationMatrix, scaleMatrix: TzeTypedMatrix4d;
   resultMatrix: TzeTypedMatrix4d;
 begin
@@ -313,7 +311,7 @@ var
   // Проекции вдоль оси (скалярные)
   projSrc, projDst: double;
   // Перпендикулярные компоненты
-  perpSrc, perpDst: TzePoint3d;
+  perpSrc, perpDst: TzeVector3d;
   perpSrcLen, perpDstLen: double;
   // Матрица «крена» вокруг оси dst1→dst2
   rollMatrix: TzeTypedMatrix4d;

@@ -123,7 +123,7 @@ begin
      Pointer(VarFromFile):=nil;
      Formated:=false;
      ObjArray.initnul;
-     Base:=nulvertex;
+     Base:=NulPoint;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 constructor GDBObjBlockdef.init;
@@ -134,7 +134,7 @@ begin
      Formated:=false;
      //ObjArray.init(10000);
      Name:=_name;
-     Base:=nulvertex;
+     Base:=NulPoint;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 class function GDBObjBlockdef.GetDXFIOFeatures:TDXFEntIODataManager;

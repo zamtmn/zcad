@@ -351,7 +351,7 @@ end;
 
 function GDBObjEntity.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 begin
-  Result:=nulvertex;
+  Result:=NulPoint;
 end;
 
 function GDBObjEntity.IsHaveLCS:boolean;
@@ -433,7 +433,7 @@ end;
 
 function GDBObjEntity.GetCenterPoint;
 begin
-  Result:=nulvertex;
+  Result:=NulPoint;
 end;
 
 procedure GDBObjEntity.FromDXFPostProcessAfterAdd;
@@ -854,7 +854,7 @@ begin
     d:=GetLTCorrectH(dc.DrawingContext.globalltscale);
     cv:=createvertex(d,d,d);
     vp.BoundingBox.LBN:=VertexSUB(vp.BoundingBox.LBN,cv);
-    vp.BoundingBox.RTF:=VertexAdd(vp.BoundingBox.RTF,cv);
+    vp.BoundingBox.RTF:=vp.BoundingBox.RTF+cv;
   end;
 end;
 

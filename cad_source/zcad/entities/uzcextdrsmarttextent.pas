@@ -319,12 +319,12 @@ end;
 
 function TSmartTextEntExtender.getTextTangent(pEntity:Pointer):TzePoint3d;
 begin
-  Result:=PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[0].Slice.NormalizeVertex;
+  Result:=PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[0].Slice.NormalizeVertex.asPoint3d;
 end;
 
 function TSmartTextEntExtender.getTextNormal(pEntity:Pointer):TzePoint3d;
 begin
-  Result:=PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[1].Slice.NormalizeVertex;
+  Result:=PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[1].Slice.NormalizeVertex.asPoint3d;
 end;
 
 function TSmartTextEntExtender.getTextHeight(pEntity:Pointer):Double;
@@ -372,14 +372,14 @@ begin
             else
               dx:=dx+2*offs.x;
             dir:=getTextTangent(pEntity)*dx;
-            tdd(IODXFContext,outStream,pEntity,p,VertexAdd(p,{CreateVertex(dx,0,0)}dir),drawing,DC);
+            tdd(IODXFContext,outStream,pEntity,p,p+dir,drawing,DC);
             if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjMText) then
               if PGDBObjMText(pEntity).text.Count>2 then begin
                 normal:=getTextNormal(pEntity)*pGDBObjMText(pEntity).linespace*getOwnerScale(pEntity);
                 for i:=2 to PGDBObjMText(pEntity).text.Count do begin
-                  pnew:=VertexAdd(p,normal);
+                  pnew:=p+normal;
                   tdd(IODXFContext,outStream,pEntity,p,pnew,drawing,DC);
-                  tdd(IODXFContext,outStream,pEntity,pnew,VertexAdd(pnew,dir),drawing,DC);
+                  tdd(IODXFContext,outStream,pEntity,pnew,pnew+dir,drawing,DC);
                   p:=pnew;
                 end;
               end;
@@ -413,10 +413,10 @@ begin
       if PGDBObjEntity(pEntity)^.bp.ListPos.owner<>nil then begin
 
         if PGDBObjEntity(pEntity)^.bp.ListPos.owner<>nil then begin
-          V1:=PGDBObjEntity(pEntity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice;
+          V1:=PGDBObjEntity(pEntity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice.asPoint3d;
           a:=FRotateOverrideValue*pi/180;
           SinCos(a,sine,cosine);
-          l0:=scalardot(NormalizeVertex(V1),createvertex(cosine,sine,0));
+          l0:=scalardot(V1.NormalizeVertex.asVector3d,CreateVector(cosine,sine,0));
           l0:=arccos(l0);
           if v1.y<-eps then l0:=2*pi-l0;
         end else

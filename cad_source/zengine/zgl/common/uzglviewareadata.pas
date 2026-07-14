@@ -203,11 +203,11 @@ begin
   ShowDebugFrustum:=false;
   CSIcon.AxisLen:=0;
 
-  CSIcon.CSIconCoord:=nulvertex;
-  CSIcon.CSIconX:=nulvertex;
-  CSIcon.CSIconY:=nulvertex;
+  CSIcon.CSIconCoord:=NulPoint;
+  CSIcon.CSIconX:=NulPoint;
+  CSIcon.CSIconY:=NulPoint;
 
-  CSIcon.CSIconZ:=nulvertex;
+  CSIcon.CSIconZ:=NulPoint;
 
   ontrackarray.otrackarray[0].arrayworldaxis.init(10);
   ontrackarray.otrackarray[0].arraydispaxis.init(10);

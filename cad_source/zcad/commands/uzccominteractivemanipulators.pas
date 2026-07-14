@@ -167,7 +167,7 @@ procedure InteractiveConstructRootRotateManipulator(const PInteractiveData:PRota
 
 begin
 
-  v:=(Point-PInteractiveData^.Base).NormalizeVertex;
+  v:=(Point-PInteractiveData^.Base).NormalizeVertex.asVector3d;
   rotmatr:=CreateAffineRotationMatrix(PInteractiveData^.Axis,PInteractiveData^.ARefV,v);
 
   if click then begin
@@ -441,7 +441,7 @@ begin
         TCDM_2P,TCDM_3P:begin
           PGDBObjCircle(PT3PointCircleModePentity(
             PInteractiveData)^.pentity)^.Local.p_insert:=
-            VertexMulOnSc(VertexAdd(PT3PointCircleModePentity(PInteractiveData)^.p1,point),0.5);
+            VertexMulOnSc(PT3PointCircleModePentity(PInteractiveData)^.p1+point,0.5);
           PGDBObjCircle(PT3PointCircleModePentity(
             PInteractiveData)^.pentity)^.Radius:=
             uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;

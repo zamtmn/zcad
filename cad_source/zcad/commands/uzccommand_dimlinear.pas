@@ -73,8 +73,8 @@ begin
       rscmSpecifyThirdPoint,p3,
       @InteractiveRDimManipulator,
       pd)=IRNormal then begin
-      vd:=pd^.vectorD;
-      vn:=pd^.vectorN;
+      vd:=pd^.vectorD.asPoint3d;
+      vn:=pd^.vectorN.asPoint3d;
       drawings.GetCurrentDWG^.FreeConstructionObjects;
       pd:=AllocEnt(GDBRotatedDimensionID);
       pd^.initnul(drawings.GetCurrentROOT);
@@ -85,8 +85,8 @@ begin
       pd^.DimData.P14InWCS:=p2;
       pd^.DimData.P10InWCS:=p3;
 
-      pd^.vectorD:=vd;
-      pd^.vectorN:=vn;
+      pd^.vectorD:=vd.asVector3d;
+      pd^.vectorN:=vn.asVector3d;
       InteractiveRDimManipulator(pd,p3,False);
 
       pd^.FormatEntity(drawings.GetCurrentDWG^,dc);

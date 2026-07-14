@@ -114,11 +114,10 @@ begin
   m:=onematrix;
   if rtmod.point.pointtype=os_point then begin
     if rtmod.point.PDrawable=nil then
-      Local.p_insert:=vectortransform3d(VertexAdd(rtmod.point.worldcoord,
-        rtmod.dist),m)
+      Local.p_insert:=vectortransform3d(rtmod.point.worldcoord+rtmod.dist,m)
     else
       Local.p_insert:=vectortransform3d(
-        VertexSub(VertexAdd(rtmod.point.worldcoord,rtmod.dist),rtmod.point.dcoord),m);
+        VertexSub(rtmod.point.worldcoord+rtmod.dist,rtmod.point.dcoord),m);
   end;
 end;
 

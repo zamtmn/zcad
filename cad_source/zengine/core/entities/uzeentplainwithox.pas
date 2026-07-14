@@ -54,7 +54,7 @@ begin
   else
     objmatrix:=MatrixMultiply(objmatrix,onematrix);
 
-  P_insert_in_WCS:=VectorTransform3D(nulvertex,objmatrix);
+  P_insert_in_WCS:=VectorTransform3D(NulPoint,objmatrix);
 end;
 
 begin

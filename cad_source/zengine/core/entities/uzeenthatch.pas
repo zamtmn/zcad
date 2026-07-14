@@ -124,10 +124,10 @@ end;
 procedure GDBObjHatch.createfield;
 begin
   inherited;
-  Outbound[0]:=nulvertex;
-  Outbound[1]:=nulvertex;
-  Outbound[2]:=nulvertex;
-  Outbound[3]:=nulvertex;
+  Outbound[0]:=NulPoint;
+  Outbound[1]:=NulPoint;
+  Outbound[2]:=NulPoint;
+  Outbound[3]:=NulPoint;
 end;
 
 function GDBObjHatch.GetObjTypeName;
@@ -161,7 +161,7 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
-  Origin:=NulVertex;
+  Origin:=NulPoint;
 end;
 
 constructor GDBObjHatch.init;
@@ -177,7 +177,7 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
-  Origin:=NulVertex;
+  Origin:=NulPoint;
 end;
 
 function GDBObjHatch.GetObjType;
@@ -189,7 +189,7 @@ procedure GDBObjHatch.SaveToDXF;
 begin
   SaveToDXFObjPrefix(outStream,'HATCH','AcDbHatch',IODXFContext);
   dxfvertexout(outStream,10,Local.p_insert);
-  dxfvertexout(outStream,210,local.basis.oz);
+  dxfvertexout(outStream,210,local.basis.oz.asPoint3d);
   dxfStringout(outStream,2,PatternName,IODXFContext.Header);
   if PPattern=nil then
     dxfIntegerout(outStream,70,1)
@@ -221,7 +221,7 @@ procedure GDBObjHatch.SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
   var IODXFContext:TIODXFSaveContext;AAPS:TAdditionalPostProcess=nil;AAPSData:PtrUInt=0);
 begin
   inherited;
-  if not IsVectorNul(Origin) then
+  if not IsVectorNul(Origin.asVector3d) then
     dxfvertexout(outStream,1010,Origin);
 end;
 
@@ -572,12 +572,12 @@ begin
   //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
 
   if IsValidRange(offs.x,dirx.x) and IsValidRange(offs.y,dirx.y)then begin
-    offs2:=VertexAdd(offs,dirx);
+    offs2:=offs+dirx;
     First:=True;
     for i:=0 to Path.paths.Count-1 do
       for j:=0 to Path.paths.getDataMutable(i)^.Count-1 do begin
         pp:=Path.paths.getDataMutable(i)^.getDataMutable(j);
-        p2:=VertexAdd(pp^,diry);
+        p2:=pp^+diry;
         iprop:=intercept2dmy(offs,offs2,pp^,p2);
         if iprop.isintercept then
           if First then begin
@@ -594,12 +594,12 @@ begin
     if not First then begin
       tmin:=int(tmin{+0.5});
       tmax:=int(tmax);
-      ls:=VertexAdd(offs,Vertex2dMulOnSc(dirx,tmin));
+      ls:=offs+Vertex2dMulOnSc(dirx,tmin);
       while tmin<=tmax do begin
         IV.Clear;
-        ProcessLines(ls,VertexAdd(ls,diry),IV);
+        ProcessLines(ls,ls+diry,IV);
         ProcessStroke(Strokes,IV,DC);
-        ls:=VertexAdd(ls,dirx);
+        ls:=ls+dirx;
         tmin:=tmin+1;
       end;
     end;
@@ -673,7 +673,7 @@ begin
       v.z:=0;
       v.w:=1;
       v:=VectorTransform(v,objMatrix);
-      v3d:=v.Slice;
+      v3d:=v.Slice.asPoint3d;
       Vertex3D_in_WCS_Array.PushBackData(v3d);
     end;
   end;
@@ -840,7 +840,7 @@ begin
 
   tv:=rtmod.dist;
   wwc:=rtmod.point.worldcoord;
-  wwc:=VertexAdd(wwc,tv);
+  wwc:=wwc+tv;
   wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
   pv:=Path.getDataMutableByPlainIndex(vertexnumber);

@@ -374,7 +374,7 @@ var
   i:integer;
 begin
   Closed:=False;
-  tmpVertex:=NulVertex;
+  tmpVertex:=NulPoint;
   tmpKnot:=0;
   tmpFlag:=0;
   pt:=TPointsType.PTControl;

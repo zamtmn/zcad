@@ -128,7 +128,7 @@ begin
 
   if Count = 0 then
   begin
-    Result := NulVertex;
+    Result := NulPoint;
     Exit;
   end;
 
@@ -175,7 +175,7 @@ function CalculateEntityCenter(
 var
   ObjType: Integer;
 begin
-  Result := NulVertex;
+  Result := NulPoint;
 
   if Entity = nil then
     Exit;

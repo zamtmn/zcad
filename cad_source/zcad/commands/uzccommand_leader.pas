@@ -190,8 +190,7 @@ procedure RefreshLeaderPreview(var interactiveData:TLeaderInteractiveData);
 begin
   if interactiveData.PLeader=nil then
     exit;
-  RebuildLeaderVertices(interactiveData.PLeader,
-    interactiveData.UserPoints,False,NulVertex);
+  RebuildLeaderVertices(interactiveData.PLeader,interactiveData.UserPoints,False,NulPoint);
   zcSetEntPropFromCurrentDrawingProp(interactiveData.PLeader);
   interactiveData.PLeader^.YouChanged(drawings.GetCurrentDWG^);
   zcRedrawCurrentDrawing;
@@ -247,8 +246,7 @@ begin
       interactiveData.PLeader^.init(nil,nil,LnWtByLayer);
       interactiveData.UserPoints.PushBackData(p1);
       interactiveData.UserPoints.PushBackData(p2);
-      RebuildLeaderVertices(interactiveData.PLeader,interactiveData.UserPoints,
-        False,NulVertex);
+      RebuildLeaderVertices(interactiveData.PLeader,interactiveData.UserPoints,False,NulPoint);
 
       pe:=PGDBObjEntity(interactiveData.PLeader);
       zcAddEntToCurrentDrawingConstructRoot(pe);
@@ -349,8 +347,7 @@ begin
         zcRedrawCurrentDrawing;
       end else begin
         // Завершение: фиксируем выноску из накопленных точек (без preview-точки)
-        RebuildLeaderVertices(interactiveData.PLeader,
-          interactiveData.UserPoints,False,NulVertex);
+        RebuildLeaderVertices(interactiveData.PLeader,interactiveData.UserPoints,False,NulPoint);
         zcSetEntPropFromCurrentDrawingProp(interactiveData.PLeader);
         zcAddEntToCurrentDrawingWithUndo(interactiveData.PLeader);
         zcClearCurrentDrawingConstructRoot;

@@ -116,8 +116,8 @@ end;
 procedure GDBObjWithLocalCS.createfield;
 begin
   inherited;
-  Local.P_insert:=nulvertex;
-  P_insert_in_WCS:=nulvertex;
+  Local.P_insert:=NulPoint;
+  P_insert_in_WCS:=NulPoint;
   lod:=0;
 end;
 
@@ -132,7 +132,7 @@ begin
   Local.basis.ox:=XWCS;
   Local.basis.oy:=YWCS;
   Local.basis.oz:=ZWCS;
-  local.p_insert:=nulvertex;
+  local.p_insert:=NulPoint;
   inherited initnul(owner);
 end;
 
@@ -195,7 +195,7 @@ begin
     objmatrix:=CalcObjMatrixWithoutOwner;
 
 
-  P_insert_in_WCS:=VectorTransform3D(nulvertex,objmatrix);
+  P_insert_in_WCS:=VectorTransform3D(NulPoint,objmatrix);
 end;
 
 procedure GDBObjWithLocalCS.transform;
@@ -208,7 +208,7 @@ procedure GDBObjWithLocalCS.SaveToDXFObjPostfix;
 begin
   if (abs(local.basis.oz.x)>eps)or(abs(local.basis.oz.y)>eps)or
     (abs(local.basis.oz.z-1)>eps) then
-    dxfvertexout(outStream,210,local.basis.oz);
+    dxfvertexout(outStream,210,local.basis.oz.asPoint3d);
 end;
 
 function GDBObjWithLocalCS.LoadFromDXFObjShared;

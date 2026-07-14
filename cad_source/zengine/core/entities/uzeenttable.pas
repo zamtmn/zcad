@@ -95,7 +95,7 @@ begin
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  Local.P_insert:=objmatrix.mtr.v[3].Slice;
+  Local.P_insert:=objmatrix.mtr.v[3].Slice.asPoint3d;
 end;
 
 function GDBObjTable.DXFDelayedBuildGeometry:boolean;

@@ -211,14 +211,14 @@ begin
     begin
          ispl:=not(ispl);
          if ispl then begin
-                             lp:=matr.mtr.v[3]{.v[0]}.Slice;
+                             lp:=matr.mtr.v[3]{.v[0]}.Slice.asPoint3d;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.PushBackData(lp);
                         end
                    else begin
-                             lp:=matr.mtr.v[3]{.v[0]}.Slice;
+                             lp:=matr.mtr.v[3]{.v[0]}.Slice.asPoint3d;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
@@ -241,7 +241,7 @@ begin
                        if ispl then
 
                      begin
-                             lp:=matr.mtr.v[3]{.v[0]}.Slice;
+                             lp:=matr.mtr.v[3]{.v[0]}.Slice.asPoint3d;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
@@ -676,7 +676,7 @@ begin
       if tcdp<=(pcurrsegment.naccumlength+eps) then begin
         oldcp:=cp;
         tv:=VertexMulOnSc(dir,length/pcurrsegment.nlength);
-        cp:=vertexadd(cp,tv);
+        cp:=cp+tv;
         if paint then
           self.PGeom.DrawLineWithoutLT(rc,oldcp,cp,dr);
         cdp:=tcdp;

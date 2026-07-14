@@ -20,7 +20,7 @@ uses
   SysUtils,
   dwg, dwgproc, uzedwghandle, uzedwgtext,
   uzedrawingsimple,
-  uzegeometry,
+  uzegeometry,uzegeometrytypes,
   uzeenttext, uzeentabstracttext, uzeentity,
   uzeentsubordinated,
   uzedwgloadcontext,
@@ -44,8 +44,8 @@ begin
   if Rotation = 0 then
     Exit;
   PObj^.Local.basis.ox := GetXfFromZ(PObj^.Local.basis.oz);
-  PObj^.Local.basis.ox := VectorTransform3D(PObj^.Local.basis.ox,
-    CreateAffineRotationMatrix(PObj^.Local.basis.oz, -Rotation));
+  PObj^.Local.basis.ox := VectorTransform3D(PObj^.Local.basis.ox.asPoint3d,
+    CreateAffineRotationMatrix(PObj^.Local.basis.oz, -Rotation)).asVector3d;
 end;
 
 procedure AddTextEntity(var ZContext: TZDrawingContext;
@@ -61,7 +61,7 @@ begin
   pobj^.Local.p_insert.x := TextX;
   pobj^.Local.p_insert.y := TextY;
   pobj^.Local.p_insert.z := TextZ;
-  pobj^.P_drawInOCS := NulVertex;
+  pobj^.P_drawInOCS := NulPoint;
   pobj^.textprop.size := Props.Height;
   if Props.WidthFactor <> 0 then
     pobj^.textprop.wfactor := Props.WidthFactor

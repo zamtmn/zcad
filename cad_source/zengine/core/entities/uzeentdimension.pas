@@ -49,7 +49,7 @@ type
   GDBObjDimension=object(GDBObjComplex)
     DimData:TDXFDimData;
     PDimStyle:PGDBDimStyle;
-    vectorD,vectorN,vectorT:TzePoint3d;
+    vectorD,vectorN,vectorT:TzeVector3d;
     TextTParam,TextAngle,DimAngle:double;
     TextInside:boolean;
     TextOffset:TzePoint3d;
@@ -222,11 +222,11 @@ begin
       DTMCreateLeader:
       begin
         if self.DimData.TextMoved then begin
-          pl:=DrawDimensionLineLinePart(VertexMulOnSc(vertexadd(p1,p2),0.5),
+          pl:=DrawDimensionLineLinePart(VertexMulOnSc(p1+p2,0.5),
             DimData.P11InOCS,drawing);
           pl.FormatEntity(drawing,dc);
           pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(
-            DimData.P11InOCS,VectorT,getpsize),drawing);
+            DimData.P11InOCS,VectorT.asPoint3d,getpsize),drawing);
           pl.FormatEntity(drawing,dc);
         end;
       end;
@@ -249,11 +249,11 @@ begin
   CalcTextAngle;
 
   ip:=uzegeometry.intercept3dmy2(dlStart,dlEnd,DimData.P11InOCS,
-    vertexadd(DimData.P11InOCS,self.vectorN));
+    DimData.P11InOCS+vectorN.asPoint3d);
   TextTParam:=ip.t1;
   CalcTextInside;
   ip:=uzegeometry.intercept3dmy2(dlStart,dlEnd,DimData.P11InOCS,
-    vertexadd(DimData.P11InOCS,self.vectorN));
+    DimData.P11InOCS+vectorN.asPoint3d);
   if TextInside then begin
     if PDimStyle.Text.DIMTIH then
       TextAngle:=0;
@@ -321,9 +321,9 @@ begin
   txtlines.done;
   if GetCSDirFrom0x0y2D(vectorD,vectorN)=TCSDLeft then
     dimdir:=
-      uzegeometry.VertexMulOnSc(vectorN,-1)
+      uzegeometry.VertexMulOnSc(vectorN.asPoint3d,-1)
   else
-    dimdir:=self.vectorN;
+    dimdir:=vectorN.asPoint3d;
   if PDimStyle.Text.DIMTAD<>DTVPBellov then begin
     if dimdir.x>0 then
       dimdir:=uzegeometry.VertexMulOnSc(dimdir,-1);
@@ -341,13 +341,13 @@ begin
     if not DimData.TextMoved then
       l:=l+dimtexth/2;
     case PDimStyle.Text.DIMTAD of
-      DTVPCenters:dimdir:=nulvertex;
+      DTVPCenters:dimdir:=NulPoint;
       DTVPAbove:begin
         if dimdir.y<-eps then
           dimdir:=
             uzegeometry.VertexMulOnSc(dimdir,-1);
       end;
-      DTVPJIS:dimdir:=nulvertex;
+      DTVPJIS:dimdir:=NulPoint;
       DTVPBellov:begin
         if dimdir.y>eps then
           dimdir:=
@@ -357,7 +357,7 @@ begin
     end;
     Result:=uzegeometry.VertexMulOnSc(dimdir,l);
   end else
-    Result:=nulvertex;
+    Result:=NulPoint;
 end;
 
 function GDBObjDimension.GetDIMTMOVE:TDimTextMove;
@@ -393,12 +393,12 @@ begin
 
   DimData.NeedTextLeader:=False;
   if (self.DimData.textmoved)or TextAlwaysMoved then begin
-    if (abs(scalardot(p-DimData.MidPoint,vectorN))>2*textsize)or TextAlwaysMoved then
+    if (abs(scalardot((p-DimData.MidPoint).asVector3d,vectorN))>2*textsize)or TextAlwaysMoved then
       if GetDIMTMOVE=DTMCreateLeader then begin
-        p:=VertexDmorph(p,VectorT,GetPSize/2);
+        p:=VertexDmorph(p,VectorT.asPoint3d,GetPSize/2);
         DimData.NeedTextLeader:=True;
       end;
-    p:=vertexadd(p,TextOffset);
+    p:=p+TextOffset;
   end;
   ptext.Local.P_insert:=p;
   ptext.linespacef:=1;
@@ -411,19 +411,19 @@ begin
   ptext.FormatEntity(drawing,dc);
 
   if PDimStyle.Text.DIMGAP<0 then begin
-    p:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw/2);
-    p:=uzegeometry.VertexDmorph(p,ptext.Local.basis.oy,dimtexth/2);
+    p:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox.asPoint3d,-dimtextw/2);
+    p:=uzegeometry.VertexDmorph(p,ptext.Local.basis.oy.asPoint3d,dimtexth/2);
 
-    p2:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox,dimtextw);
+    p2:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox.asPoint3d,dimtextw);
     DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing,dc);
 
-    p:=uzegeometry.VertexDmorph(p2,ptext.Local.basis.oy,-dimtexth);
+    p:=uzegeometry.VertexDmorph(p2,ptext.Local.basis.oy.asPoint3d,-dimtexth);
     DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing,dc);
 
-    p2:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox,-dimtextw);
+    p2:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox.asPoint3d,-dimtextw);
     DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing,dc);
 
-    p:=uzegeometry.VertexDmorph(p2,ptext.Local.basis.oy,dimtexth);
+    p:=uzegeometry.VertexDmorph(p2,ptext.Local.basis.oy.asPoint3d,dimtexth);
     DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing,dc);
   end;
 
@@ -489,19 +489,19 @@ end;
 procedure GDBObjDimension.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
   if rtmod.point.pointtype=os_p10 then begin
-    DimData.P10InWCS:=P10ChangeTo(VertexAdd(rtmod.point.worldcoord,rtmod.dist));
+    DimData.P10InWCS:=P10ChangeTo(rtmod.point.worldcoord+rtmod.dist);
   end else if rtmod.point.pointtype=os_p11 then begin
-    DimData.P11InOCS:=P11ChangeTo(VertexAdd(rtmod.point.worldcoord,rtmod.dist));
+    DimData.P11InOCS:=P11ChangeTo(rtmod.point.worldcoord+rtmod.dist);
   end else if rtmod.point.pointtype=os_p12 then begin
-    DimData.P12InOCS:=P12ChangeTo(VertexAdd(rtmod.point.worldcoord,rtmod.dist));
+    DimData.P12InOCS:=P12ChangeTo(rtmod.point.worldcoord+rtmod.dist);
   end else if rtmod.point.pointtype=os_p13 then begin
-    DimData.P13InWCS:=P13ChangeTo(VertexAdd(rtmod.point.worldcoord,rtmod.dist));
+    DimData.P13InWCS:=P13ChangeTo(rtmod.point.worldcoord+rtmod.dist);
   end else if rtmod.point.pointtype=os_p14 then begin
-    DimData.P14InWCS:=P14ChangeTo(VertexAdd(rtmod.point.worldcoord,rtmod.dist));
+    DimData.P14InWCS:=P14ChangeTo(rtmod.point.worldcoord+rtmod.dist);
   end else if rtmod.point.pointtype=os_p15 then begin
-    DimData.P15InWCS:=P15ChangeTo(VertexAdd(rtmod.point.worldcoord,rtmod.dist));
+    DimData.P15InWCS:=P15ChangeTo(rtmod.point.worldcoord+rtmod.dist);
   end else if rtmod.point.pointtype=os_p16 then begin
-    DimData.P16InOCS:=P16ChangeTo(VertexAdd(rtmod.point.worldcoord,rtmod.dist));
+    DimData.P16InOCS:=P16ChangeTo(rtmod.point.worldcoord+rtmod.dist);
   end;
 end;
 

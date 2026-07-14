@@ -116,14 +116,14 @@ end;
 procedure GDBObjEllipse.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.P_insert:=objmatrix.mtr.v[3].Slice;
+  Local.P_insert:=objmatrix.mtr.v[3].Slice.asPoint3d;
 end;
 
 function GDBObjEllipse.CalcObjMatrixWithoutOwner;
 var
   rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
-  Local.basis.ox:=MajorAxis;
+  Local.basis.ox:=MajorAxis.asVector3d;
   Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
 
   Local.basis.ox:=NormalizeVertex(Local.basis.ox);
@@ -212,10 +212,10 @@ var
   l:double;
 begin
   inherited CalcObjMatrix;
-  l:=onevertexlength(majoraxis);
+  l:=onevertexlength(majoraxis.asVector3d);
   m1:=CreateScaleMatrix(l,ratio*l,1);
   objmatrix:=matrixmultiply(m1,objmatrix);
-  v.Slice.Slice:=local.p_insert.Slice;
+  v.Slice.Slice:=local.p_insert.Slice.asVector2d;
   v.z:=0;
   v.w:=1;
   m1:=objMatrix;
@@ -232,9 +232,9 @@ begin
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   if self.Ratio<=1 then
-    rr:=uzegeometry.oneVertexlength(majoraxis)
+    rr:=uzegeometry.oneVertexlength(majoraxis.asVector3d)
   else
-    rr:=uzegeometry.oneVertexlength(majoraxis)*ratio;
+    rr:=uzegeometry.oneVertexlength(majoraxis.asVector3d)*ratio;
 
   calcObjMatrix;
   angle:=endangle-startangle;
@@ -246,17 +246,17 @@ begin
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q0:=v.Slice;
+  q0:=v.Slice.asPoint3d;
   SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q1:=v.Slice;
+  q1:=v.Slice.asPoint3d;
   SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q2:=v.Slice;
+  q2:=v.Slice.asPoint3d;
 
   calcbb(dc);
   createpoint;

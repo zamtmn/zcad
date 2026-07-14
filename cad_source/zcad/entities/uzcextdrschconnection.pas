@@ -317,11 +317,12 @@ end;
 
 procedure drawArrow(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
-  onel,p1,p2:TzePoint3d;
-  tp2,tp3:TzePoint3d;
+  onel:TzeVector3d;
+  p1,p2:TzePoint3d;
+  tp2,tp3:TzeVector3d;
   m,rotmatr:TzeTypedMatrix4d;
 begin
-  onel:=l2-l1;
+  onel:=(l2-l1).asVector3d;
   if onel.SqrLength>sqreps then begin
     onel:=onel.NormalizeVertex;
     tp2:=GetXfFromZ(onel);
@@ -406,8 +407,8 @@ end;
 
 procedure drawIntersectArc(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
-  v,onel,p1,p2:TzePoint3d;
-  tp2,tp3:TzePoint3d;
+  v,p1,p2:TzePoint3d;
+  onel,tp2,tp3:TzeVector3d;
   m,rotmatr:TzeTypedMatrix4d;
   l{,x,y,z}:double;
   sine,cosine:Double;
@@ -430,7 +431,7 @@ begin
   end;
   l:=v.Length;
   if l>bigeps then begin
-    onel:=v;
+    onel:=v.asVector3d;
     tp2:=GetXfFromZ(onel);
     tp3:=VectorDot(tp2,onel);
     tp3:=NormalizeVertex(tp3);
@@ -441,7 +442,7 @@ begin
     //PzePoint3d(@rotmatr.mtr[2])^:=tp3*l;
     rotmatr:=CreateMatrixFromBasis(onel,tp2*l,tp3*l);
     m:=onematrix;
-    m.mtr.v[3].Slice:=l1;
+    m.mtr.v[3].Slice:=l1.asVector3d;
     m:=MatrixMultiply(rotmatr,m);
 
     p1:=VectorTransform3D(uzegeometry.CreateVertex(-1,0,0),m);

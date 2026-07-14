@@ -94,7 +94,7 @@ end;
 
 procedure GDBObjDiametricDimension.CalcDNVectors;
 begin
-  vectorD:=vertexsub(DimData.P15InWCS,DimData.P10InWCS);
+  vectorD:=(DimData.P15InWCS-DimData.P10InWCS).asVector3d;
   vectorD:=normalizevertex(vectorD);
   vectorN.x:=-vectorD.y;
   vectorN.y:=vectorD.x;
@@ -110,18 +110,18 @@ begin
   if PDimStyle.Lines.DIMCEN<>0 then begin
     ls:=abs(PDimStyle.Lines.DIMCEN);
     DrawExtensionLineLinePart(VertexSub(cp,createvertex(ls,0,0)),
-      VertexAdd(cp,createvertex(ls,0,0)),drawing,0).FormatEntity(drawing,dc);
+      cp+createvertex(ls,0,0),drawing,0).FormatEntity(drawing,dc);
     DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,ls,0)),
-      VertexAdd(cp,createvertex(0,ls,0)),drawing,0).FormatEntity(drawing,dc);
+      cp+createvertex(0,ls,0),drawing,0).FormatEntity(drawing,dc);
     if PDimStyle.Lines.DIMCEN<0 then begin
       DrawExtensionLineLinePart(VertexSub(cp,createvertex(2*ls,0,0)),
         VertexSub(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing,dc);
       DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,2*ls,0)),
         VertexSub(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing,dc);
-      DrawExtensionLineLinePart(VertexAdd(cp,createvertex(2*ls,0,0)),
-        VertexAdd(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing,dc);
-      DrawExtensionLineLinePart(VertexAdd(cp,createvertex(0,2*ls,0)),
-        VertexAdd(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing,dc);
+      DrawExtensionLineLinePart(cp+createvertex(2*ls,0,0),
+        cp+createvertex(r+ls,0,0),drawing,0).FormatEntity(drawing,dc);
+      DrawExtensionLineLinePart(cp+createvertex(0,2*ls,0),
+        cp+createvertex(0,r+ls,0),drawing,0).FormatEntity(drawing,dc);
     end;
   end;
 end;
@@ -131,10 +131,10 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
+  center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
   d:=Vertexlength(center,tv);
   dirv:=vertexsub(tv,center);
-  dirv:=normalizevertex(dirv);
+  dirv:={normalizevertex}(dirv).NormalizeVertex;
 
   Result:=VertexDmorph(center,dirv,d);
   DimData.P15InWCS:=VertexDmorph(center,dirv,-d);
@@ -147,10 +147,10 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
+  center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
   d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
-  dirv:=normalizevertex(dirv);
+  dirv:={normalizevertex}(dirv).NormalizeVertex;
 
   Result:=VertexDmorph(center,dirv,d);
   DimData.P10InWCS:=VertexDmorph(center,dirv,-d);
@@ -163,10 +163,10 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
+  center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
   d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
-  dirv:=normalizevertex(dirv);
+  dirv:={normalizevertex}(dirv).NormalizeVertex;
   DimData.P10InWCS:=VertexDmorph(center,dirv,-d);
   DimData.P15InWCS:=VertexDmorph(center,dirv,d);
   Result:=tv;
@@ -220,7 +220,7 @@ end;
 
 function GDBObjDiametricDimension.GetCenterPoint:TzePoint3d;
 begin
-  Result:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
+  Result:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
 end;
 
 function GDBObjDiametricDimension.GetRadius:double;
@@ -250,11 +250,11 @@ begin
       DimData.P11InOCS,DimData.P15InWCS,True,False,False,drawing,dc);
     pl:=
       DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(
-      DimData.P11InOCS,VectorT,getpsize),drawing);
+      DimData.P11InOCS,VectorT.asPoint3d,getpsize),drawing);
     pl.FormatEntity(drawing,dc);
   end else begin
     DrawDimensionLine(
-      uzegeometry.VertexDmorph(DimData.P11InOCS,vectord,Self.dimtextw),
+      uzegeometry.VertexDmorph(DimData.P11InOCS,vectord.asPoint3d,Self.dimtextw),
       DimData.P15InWCS,True,False,False,drawing,dc);
   end;
   inherited;

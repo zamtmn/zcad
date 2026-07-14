@@ -140,7 +140,8 @@ procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:Strin
 
 function dxfEnCodeString(const v:String; const FileHdrInfo:TDXFHeaderInfo):string;
 
-function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzePoint3d):Boolean;
+function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzePoint3d):Boolean;overload;
+function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzeVector3d):Boolean;overload;
 function dxfLoadGroupCodeVertex1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzePoint3d):Boolean;
 function dxfLoadGroupCodeDouble(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
 function dxfLoadGroupCodeFloat(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
@@ -502,6 +503,11 @@ begin
 else if CurrentDXFCode=DXFCode+10 then begin v.y:=rdr.ParseDouble; result:=true end
 else if CurrentDXFCode=DXFCode+20 then begin v.z:=rdr.ParseDouble; result:=true end;
 end;
+function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzeVector3d):Boolean;
+begin
+  result:=dxfLoadGroupCodeVertex(rdr,DXFCode,CurrentDXFCode,TzePoint3d(v));
+end;
+
 function dxfRequiredVertex2d(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):TzePoint2d;
 begin
   if CurrentDXFGroupCode=RequiredDXFGroupCode then begin

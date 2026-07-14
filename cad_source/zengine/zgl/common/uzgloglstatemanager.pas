@@ -326,7 +326,7 @@ end;
 
 procedure TOGLStateManager.startrender;
 begin
-     middlepoint:=nulvertex;
+     middlepoint:=NulPoint;
      pointcount:=0;
      primcount:=0;
      bathcount:=0;

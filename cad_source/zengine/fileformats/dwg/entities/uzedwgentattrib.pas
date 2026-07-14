@@ -20,7 +20,7 @@ uses
   SysUtils,
   dwg, dwgproc, uzedwghandle, uzedwgtext,
   uzedrawingsimple,
-  uzegeometry,
+  uzegeometry,uzegeometrytypes,
   uzeenttext, uzeentabstracttext, uzeentity,
   uzeentsubordinated,
   uzedwgentityregistry,
@@ -47,8 +47,8 @@ begin
   if Rotation = 0 then
     Exit;
   PObj^.Local.basis.ox := GetXfFromZ(PObj^.Local.basis.oz);
-  PObj^.Local.basis.ox := VectorTransform3D(PObj^.Local.basis.ox,
-    CreateAffineRotationMatrix(PObj^.Local.basis.oz, -Rotation));
+  PObj^.Local.basis.ox := VectorTransform3D(PObj^.Local.basis.ox.asPoint3d,
+    CreateAffineRotationMatrix(PObj^.Local.basis.oz, -Rotation)).asVector3d;
 end;
 
 procedure ApplyAttribText(PObj: PGDBObjText; var DWGContext: TDWGCtx;
@@ -66,7 +66,7 @@ begin
     PObj^.Local.p_insert.y := InsertPoint.y;
   end;
   PObj^.Local.p_insert.z := Elevation;
-  PObj^.P_drawInOCS := NulVertex;
+  PObj^.P_drawInOCS := NulPoint;
   PObj^.textprop.size := Height;
   if WidthFactor <> 0 then
     PObj^.textprop.wfactor := WidthFactor

@@ -177,7 +177,7 @@ class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<
 const
   MaxLODDeepDrtaw=2;
 var
-  v:TzePoint3d;
+  v:TzeVector3d;
   LODSave:TLOD;
 begin
   if (Node.NodeData.infrustum=dc.DrawingContext.VActuality.InfrustumActualy) then begin
@@ -185,7 +185,7 @@ begin
     LODSave:=DC.LOD;
     if DC.LOD=LODCalculatedDetail then begin
       if LODDeep=0 then begin
-        v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
+        v:=(Node.BoundingBox.RTF-Node.BoundingBox.LBN).asVector3d;
         if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),300) then begin
           DC.LOD:=LODLowDetail;
           inc(LODDeep);
@@ -239,13 +239,13 @@ class procedure TZEntsManipulator.FirstStageCalcSeparatirs(var NodeBB:TBoundingB
 begin
    case TSM of
        TSMStart:begin
-                   FirstStageData.midlepoint:=NulVertex;
+                   FirstStageData.midlepoint:=NulPoint;
                    FirstStageData.counter:=0;
                    PFirstStageData:=@FirstStageData;
                 end;
 TSMAccumulation:begin
-                   FirstStageData.midlepoint:=vertexadd(Entity.vp.BoundingBox.LBN,FirstStageData.midlepoint);
-                   FirstStageData.midlepoint:=vertexadd(Entity.vp.BoundingBox.RTF,FirstStageData.midlepoint);
+                   FirstStageData.midlepoint:=Entity.vp.BoundingBox.LBN+FirstStageData.midlepoint;
+                   FirstStageData.midlepoint:=Entity.vp.BoundingBox.RTF+FirstStageData.midlepoint;
                    inc(FirstStageData.counter,2);
                 end;
         TSMCalc:begin
@@ -261,16 +261,16 @@ class procedure TZEntsManipulator.CreateSeparator(var NodeBB:TBoundingBox;var Te
 begin
 case NodeNum of
       0:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
-                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(x_Y_zVertex,FirstStageData.d)),
-                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(xy_Z_Vertex,FirstStageData.d))
+                                          FirstStageData.midlepoint+VertexMulOnSc(x_Y_zVertex,FirstStageData.d),
+                                          FirstStageData.midlepoint+VertexMulOnSc(xy_Z_Vertex,FirstStageData.d)
                                           );
       1:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
-                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(_X_yzVertex,FirstStageData.d)),
-                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(xy_Z_Vertex,FirstStageData.d))
+                                          FirstStageData.midlepoint+VertexMulOnSc(_X_yzVertex,FirstStageData.d),
+                                          FirstStageData.midlepoint+VertexMulOnSc(xy_Z_Vertex,FirstStageData.d)
                                           );
       2:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
-                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(_X_yzVertex,FirstStageData.d)),
-                                          vertexadd(FirstStageData.midlepoint,VertexMulOnSc(x_Y_ZVertex,FirstStageData.d))
+                                          FirstStageData.midlepoint+VertexMulOnSc(_X_yzVertex,FirstStageData.d),
+                                          FirstStageData.midlepoint+VertexMulOnSc(x_Y_ZVertex,FirstStageData.d)
                                           );
 end;
 end;

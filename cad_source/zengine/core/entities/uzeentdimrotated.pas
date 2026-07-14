@@ -92,8 +92,8 @@ var
 begin
   tm:=t_matrix;
   tm.mtr.v[3]:=NulVector4D2;
-  vectorD:=VectorTransform3D(vectorD,tm);
-  vectorN:=VectorTransform3D(vectorN,tm);
+  vectorD:=VectorTransform3D(vectorD.asPoint3d,tm).asVector3d;
+  vectorN:=VectorTransform3D(vectorN.asPoint3d,tm).asVector3d;
   vectorD:=normalizevertex(vectorD);
   vectorN:=normalizevertex(vectorN);
   inherited;
@@ -105,8 +105,8 @@ var
 begin
   tm:=t_matrix^;
   tm.mtr.v[3]:=NulVector4D2;
-  vectorD:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorD,tm);
-  vectorN:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorN,tm);
+  vectorD:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorD.asPoint3d,tm).asVector3d;
+  vectorN:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorN.asPoint3d,tm).asVector3d;
   vectorD:=normalizevertex(vectorD);
   vectorN:=normalizevertex(vectorN);
   inherited;
@@ -122,8 +122,8 @@ var
   tl:double;
 begin
   Result:=tv;
-  tl:=GetTFromDirNormalizedPoint(DimData.P10InWCS,tv,vectorN);
-  DimData.P10InWCS:=VertexDmorph(tv,vectorN,tl);
+  tl:=GetTFromDirNormalizedPoint(DimData.P10InWCS,tv,vectorN.asPoint3d);
+  DimData.P10InWCS:=VertexDmorph(tv,vectorN.asPoint3d,tl);
 end;
 
 procedure GDBObjRotatedDimension.CalcDNVectors;

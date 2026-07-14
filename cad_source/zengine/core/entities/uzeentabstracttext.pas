@@ -99,7 +99,7 @@ begin
   m.mtr.v[3].Slice:=NulVertex;
 
   tv:=VectorTransform3d(tv,m);
-  textprop.size:=oneVertexlength(tv);
+  textprop.size:=oneVertexlength(tv.asVector3d);
   inherited;
 end;
 
@@ -122,7 +122,7 @@ begin
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  Local.P_insert:=objmatrix.mtr.v[3].slice;
+  Local.P_insert:=objmatrix.mtr.v[3].slice.asPoint3d;
 end;
 
 function GDBObjAbstractText.CalcRotate:double;
@@ -132,17 +132,17 @@ var
 begin
 
   if bp.ListPos.owner<>nil then begin
-    V1:=bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice;
-    l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
+    V1:=bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice.asPoint3d;
+    l0:=scalardot(NormalizeVertex(V1.asVector3d),_X_yzVertex.asVector3d);
     l0:=arccos(l0);
     if v1.y<-eps then
       l0:=2*pi-l0;
   end else
     l0:=0;
 
-  V1:=Local.basis.ox;
-  V2:=GetXfFromZ(Local.basis.oz);
-  l1:=scalardot(v1,v2);
+  V1:=Local.basis.ox.asPoint3d;
+  V2:=GetXfFromZ(Local.basis.oz).asPoint3d;
+  l1:=scalardot(v1.asVector3d,v2.asVector3d);
   l1:=arccos(l1);
   if v1.y<-eps then
     l1:=2*pi-l1;

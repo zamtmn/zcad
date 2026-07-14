@@ -149,7 +149,7 @@ begin
   begin
        comit;
        rtmod.wc:=rtmod.point.worldcoord;
-       rtmod.dist:=nulvertex;
+       rtmod.dist:=nulpoint;
        StoreUndoData(rtmod);
   end;
 end;

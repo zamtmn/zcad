@@ -118,7 +118,7 @@ begin
 
 
   //рисование и перенос из конструкторской обласи в область чертежа
-  {pt:=}drawMText(NulVertex,2,0);
+  {pt:=}drawMText(NulPoint,2,0);
   //Рисуем текст, и полилинию
   {pp:=}drawPolyline(uzegeometry.CreateVertex(-20,+5,0),
     uzegeometry.CreateVertex(+20,-5,0),3);

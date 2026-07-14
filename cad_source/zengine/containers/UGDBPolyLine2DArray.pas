@@ -146,7 +146,7 @@ begin
        v2.y:=pvnext.y-pv.y;
        v2.z:=0;
 
-       if IsVectorNul(vectordot(v1,v2))then
+       if IsVectorNul(vectordot(v1.asVector3d,v2.asVector3d))then
        begin
             result:=true;
             self.deleteelement(i);

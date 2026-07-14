@@ -41,15 +41,15 @@ begin
   if DC.SystmGeometryDraw then begin
     dc.drawer.SetColor(255,0,0,0);
 
-    p:=VertexAdd(Local.P_insert,Local.Basis.ox);
+    p:=Local.P_insert+Local.Basis.ox.asPoint3d;
     dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
 
     dc.drawer.SetColor(0,255,0,0);
-    p:=VertexAdd(Local.P_insert,Local.Basis.oy);
+    p:=Local.P_insert+Local.Basis.oy.asPoint3d;
     dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
 
     dc.drawer.SetColor(0,0,255,0);
-    p:=VertexAdd(Local.P_insert,Local.Basis.oz);
+    p:=Local.P_insert+Local.Basis.oz.asPoint3d;
     dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
   end;
   inherited;

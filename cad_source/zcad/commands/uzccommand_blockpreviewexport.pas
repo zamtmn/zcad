@@ -96,7 +96,7 @@ begin
     pb^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=BlockName;
     zcSetEntPropFromCurrentDrawingProp(pb);
-    pb^.Local.p_insert:=NulVertex;
+    pb^.Local.p_insert:=NulPoint;
     pb^.scale:=ScaleOne;
     pb^.CalcObjMatrix;
     pb^.setrot(0);
@@ -150,7 +150,7 @@ begin
       end;}
       tv:=VertexSub(bb.RTF,bb.LBN);
       tv:=VertexMulOnSc(tv,0.15);
-      rasterize(cdwg,bmpw,bmpw,VertexSub(bb.LBN,tv),VertexAdd(bb.RTF,tv),
+      rasterize(cdwg,bmpw,bmpw,VertexSub(bb.LBN,tv),bb.RTF+tv,
         PrintParam,bmp.Canvas,PrinterDrawer);
 
       //PNG.Canvas.StretchDraw(Rect(0,0,bmpw,bmpw),bmp);

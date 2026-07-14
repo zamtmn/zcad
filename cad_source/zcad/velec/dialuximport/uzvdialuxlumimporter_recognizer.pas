@@ -98,7 +98,7 @@ var
   TextPtr: PGDBObjText;
   MTextPtr: PGDBObjMText;
 begin
-  Result := NulVertex;
+  Result := NulPoint;
 
   if TextEntity = nil then
     Exit;
@@ -320,7 +320,7 @@ var
   SumX, SumY: Double;
   Count: Integer;
 begin
-  Result := NulVertex;
+  Result := NulPoint;
 
   if (Entities = nil) or (Entities.Count = 0) then
     Exit;

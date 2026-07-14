@@ -60,9 +60,9 @@ var
   plane:TzeVector4d;
 begin
   dist:=uzegeometry.VertexSub(p2,p1);
-  d:=uzegeometry.oneVertexlength(dist);
-  p3:=uzegeometry.VertexMulOnSc(ZWCS,d);
-  p3:=uzegeometry.VertexAdd(p3,t3dp);
+  d:=dist.Length;
+  p3:=uzegeometry.VertexMulOnSc(ZWCS.asPoint3d,d);
+  p3:=p3+t3dp;
 
   plane:=PlaneFrom3Pont(p1,p2,p3);
   normalizeplane(plane);

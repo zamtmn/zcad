@@ -125,11 +125,11 @@ end;
 procedure TZEntityRepresentation.DrawGeometry(var rc:TDrawContext;
   const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);
 var
-  v:TzePoint3d;
+  v:TzeVector3d;
   simplydraw:boolean;
 begin
   if rc.lod=LODCalculatedDetail then begin
-    v:=uzegeometry.VertexSub(aabb.RTF,aabb.LBN);
+    v:={uzegeometry.VertexSub}(aabb.RTF-aabb.LBN).asVector3d;
     simplydraw:=not SqrCanSimplyDrawInWCS(rc,uzegeometry.SqrOneVertexlength(v),49);
   end else
     simplydraw:=rc.lod=LODLowDetail;

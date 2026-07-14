@@ -133,14 +133,13 @@ var
 begin
   dir:=VertexSub(P_insert_in_WCS,posr.worldcoord);
   processaxis(posr,dir);
-  tv:=uzegeometry.vectordot(dir,zwcs);
+  tv:=vectordot(dir.asVector3d,zwcs).asPoint3d;
   processaxis(posr,tv);
 end;
 
 function GDBObjCircle.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 begin
-  Result:=normalizevertex(uzegeometry.vectordot(
-    uzegeometry.VertexSub(self.P_insert_in_WCS,point),self.Local.basis.oz));
+  Result:=vectordot((P_insert_in_WCS-point).asVector3d,self.Local.basis.oz).NormalizeVertex.asPoint3d;
 end;
 
 procedure GDBObjCircle.ReCalcFromObjMatrix;
@@ -197,14 +196,14 @@ procedure GDBObjCircle.createfield;
 begin
   inherited;
   Radius:=1;
-  q0:=nulvertex;
-  q1:=nulvertex;
-  q2:=nulvertex;
-  q3:=nulvertex;
-  Outbound[0]:=nulvertex;
-  Outbound[1]:=nulvertex;
-  Outbound[2]:=nulvertex;
-  Outbound[3]:=nulvertex;
+  q0:=NulPoint;
+  q1:=NulPoint;
+  q2:=NulPoint;
+  q3:=NulPoint;
+  Outbound[0]:=NulPoint;
+  Outbound[1]:=NulPoint;
+  Outbound[2]:=NulPoint;
+  Outbound[3]:=NulPoint;
 end;
 
 function GDBObjCircle.GetObjTypeName;
@@ -496,12 +495,12 @@ begin
         plane:=PlaneFrom3Pont(q0,q1,q2);
         Normalizeplane(plane);
         if PointOfRayPlaneIntersect(param.md.mouseraywithoutOS.lbegin,
-          param.md.mouseraywithoutOS.dir,plane,tv)
+          param.md.mouseraywithoutOS.dir.asPoint3d,plane,tv)
         then begin
-          n:=uzegeometry.VertexSub(tv,P_insert_in_WCS);
-          n:=uzegeometry.NormalizeVertex(n);
+          n:={VertexSub}(tv-P_insert_in_WCS);
+          n:={uzegeometry.NormalizeVertex}(n).NormalizeVertex;
           n:=uzegeometry.VertexMulOnSc(n,radius);
-          osp.worldcoord:=uzegeometry.VertexAdd(P_insert_in_WCS,n);
+          osp.worldcoord:=P_insert_in_WCS+n;
           ProjectProc(osp.worldcoord,tv);
           osp.dispcoord:=tv;
           osp.ostype:=os_nearest;

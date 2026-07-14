@@ -21,7 +21,7 @@ uses
   dwg, dwgproc, uzedwghandle, uzedwgtext,
   uzedrawingsimple,
   uzeentmtext, uzeentabstracttext, uzeentity,
-  uzegeometry,
+  uzegeometry,uzegeometrytypes,
   uzeentsubordinated,
   uzedwgloadcontext,
   uzedwgentityregistry,
@@ -45,8 +45,8 @@ begin
   if Rotation = 0 then
     Exit;
   PObj^.Local.basis.ox := GetXfFromZ(PObj^.Local.basis.oz);
-  PObj^.Local.basis.ox := VectorTransform3D(PObj^.Local.basis.ox,
-    CreateAffineRotationMatrix(PObj^.Local.basis.oz, -Rotation));
+  PObj^.Local.basis.ox := VectorTransform3D(PObj^.Local.basis.ox.asPoint3d,
+    CreateAffineRotationMatrix(PObj^.Local.basis.oz, -Rotation)).asVector3d;
 end;
 
 procedure AddMTextEntity(var ZContext: TZDrawingContext;

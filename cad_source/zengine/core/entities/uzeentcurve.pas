@@ -137,7 +137,7 @@ begin
       end;
       if found>0 then begin
         Result:=vertexsub(ptv^,ppredtv^);
-        Result:=uzegeometry.NormalizeVertex(Result);
+        Result:={uzegeometry.NormalizeVertex}(Result).NormalizeVertex;
         exit;
         Dec(found);
       end;
@@ -179,9 +179,9 @@ begin
 
       if found>0 then begin
         tv:=vertexsub(ptv^,ppredtv^);
-        tv:=uzegeometry.NormalizeVertex(tv);
+        tv:={uzegeometry.NormalizeVertex}(tv).NormalizeVertex;
         processaxis(posr,tv);
-        tv:=uzegeometry.VectorDot(tv,zwcs);
+        tv:=VectorDot(tv.asVector3d,zwcs).asPoint3d;
         processaxis(posr,tv);
         Dec(found);
       end;
@@ -427,8 +427,7 @@ var
   vertexnumber:integer;
 begin
   vertexnumber:=rtmod.point.vertexnum;
-  GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=
-    VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+  GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=rtmod.point.worldcoord+rtmod.dist;
 end;
 
 procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc;
@@ -542,7 +541,7 @@ begin
             pv2:=VertexArrayInWCS.getDataMutable(0);
           end;
           dir:=uzegeometry.VertexSub(pv2^,pv1^);
-          tv:=vectordot(dir,param.md.mouseray.dir);
+          tv:=vectordot(dir.asVector3d,param.md.mouseray.dir).asPoint3d;
           t:=-((pv1.x-param.lastpoint.x)*dir.x+
             (pv1.y-param.lastpoint.y)*dir.y+(pv1.z-param.lastpoint.z)*dir.z)/
             (SqrVertexlength(pv2^,pv1^));
@@ -570,14 +569,14 @@ begin
             pv2:=VertexArrayInWCS.getDataMutable(0);
           end;
           dir:=uzegeometry.VertexSub(pv2^,pv1^);
-          tv:=vectordot(dir,param.md.mouseray.dir);
-          n:=vectordot(param.md.mouseray.dir,tv);
-          n:=NormalizeVertex(n);
+          tv:=vectordot(dir.asVector3d,param.md.mouseray.dir).asPoint3d;
+          n:=vectordot(param.md.mouseray.dir,tv.asVector3d).asPoint3d;
+          n:={NormalizeVertex}(n).NormalizeVertex;
           v.x:=param.md.mouseray.lbegin.x-pv1^.x;
           v.y:=param.md.mouseray.lbegin.y-pv1^.y;
           v.z:=param.md.mouseray.lbegin.z-pv1^.z;
-          d:=scalardot(n,v);
-          e:=scalardot(n,dir);
+          d:=scalardot(n.asVector3d,v.asVector3d);
+          e:=scalardot(n.asVector3d,dir.asVector3d);
           if e<eps then
             osp.ostype:=os_none
           else begin

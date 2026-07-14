@@ -63,7 +63,7 @@ TAbstractDrawing= object(TDrawingDef)
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;abstract;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
                        procedure RotateCameraInLocalCSXY(ux,uy:Double);virtual;abstract;
-                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:TzePoint3d);virtual;abstract;
+                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:TzeVector3d);virtual;abstract;
                        procedure SetCurrentDWG;virtual;abstract;
                        function GetChangeStampt:Boolean;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;

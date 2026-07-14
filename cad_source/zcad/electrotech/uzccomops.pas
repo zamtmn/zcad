@@ -335,7 +335,7 @@ begin
                                TOPSMDC_1_4,TOPSMDC_1_2:;//заглушка на варнинг
                              end;
                          end;
-  SecondLineLength:=oneVertexlength(dir);
+  SecondLineLength:={oneVertexlength}(dir).Length;
   FirstLineLength:=Vertexlength(FirstLine.lbegin, FirstLine.lend);
 
   d:=GetPlaceParam(FirstCount,FirstLineLength,ShortSD,ShortDD,TOPSMDC_1_2,ps);
@@ -997,7 +997,7 @@ begin
 
          drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
-  coord:=uzegeometry.NulVertex;
+  coord:=NulPoint;
   coord.y:=0;
   coord.x:=0;
   prevname:='';

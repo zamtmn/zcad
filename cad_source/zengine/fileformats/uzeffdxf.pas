@@ -28,7 +28,7 @@ uses
   uzegeometrytypes,sysutils,uzeconsts,UGDBObjBlockdefArray,
   uzctnrVectorBytesStream,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
   uzeffmanager,uzbLogIntf,uzeLogIntf,
-  uzMVSMemoryMappedFile,uzMVReader,uzbBaseUtils,uzclog;
+  uzMVSMemoryMappedFile,uzMVReader,uzbBaseUtils{,uzclog};
 
 resourcestring
   rsLoadDXFFile='Load DXF file';
@@ -89,8 +89,7 @@ begin
   end;
   { Кастомная неизвестная сущность: загружаем как proxy-объект }
   if ObjID2EntInfoData.MyGetValue(GDBAcdProxyID, EntInfoData) then begin
-    programlog.LogOutFormatStr(
-      'uzeffdxf: unknown entity "%s" treated as proxy', [name], LM_Info);
+    zDebugLn('{I}uzeffdxf: unknown entity "%s" treated as proxy',[name]);
     Result := True;
   end else
     Result := False;

@@ -523,7 +523,7 @@ begin
       ScaledVec := VectorTransform3D(
         CreateVertex(0, HandlerResult.TextItem.Height, 0),
         LinearMatrix);
-      NewHeight := oneVertexlength(ScaledVec);
+      NewHeight := (ScaledVec).Length;
       if NewHeight > 0 then
         HandlerResult.TextItem.Height := NewHeight;
     end;

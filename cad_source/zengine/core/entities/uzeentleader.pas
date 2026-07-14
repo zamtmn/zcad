@@ -138,8 +138,8 @@ begin
   Leader.AnnotationHandle:=0;
   Leader.NormalVector:=CreateVertex(0,0,1);
   Leader.HorizontalDirection:=CreateVertex(1,0,0);
-  Leader.BlockOffset:=NulVertex;
-  Leader.AnnotationOffset:=NulVertex;
+  Leader.BlockOffset:=NulPoint;
+  Leader.AnnotationOffset:=NulPoint;
   Leader.ArrowStyleIndex:=LeaderArrowStyleInherit;
   Leader.ArrowSize:=LeaderArrowSizeInherit;
   Leader.DimLineWeight:=LeaderLineWeightInherit;
@@ -263,12 +263,10 @@ end;
 function LeaderArrowAngleFromDirection(const Direction,FallbackStart,
   FallbackEnd:TzePoint3d):double;
 begin
-  if uzegeometry.oneVertexlength(Direction)>LeaderGeometryEpsilon then
-    Result:=VertexAngle(CreateVertex2D(0,0),
-      CreateVertex2D(Direction.x,Direction.y))-pi
+  if Direction.Length>LeaderGeometryEpsilon then
+    Result:=VertexAngle(CreateVertex2D(0,0),CreateVertex2D(Direction.x,Direction.y))-pi
   else
-    Result:=VertexAngle(CreateVertex2D(FallbackStart.x,FallbackStart.y),
-      CreateVertex2D(FallbackEnd.x,FallbackEnd.y))-pi;
+    Result:=VertexAngle(CreateVertex2D(FallbackStart.x,FallbackStart.y),CreateVertex2D(FallbackEnd.x,FallbackEnd.y))-pi;
 end;
 
 function LeaderSplineStartDirection(Spline:PGDBObjSpline;
@@ -285,7 +283,7 @@ begin
   for i:=1 to Spline^.VertexArrayInOCS.Count-1 do begin
     pNext:=Spline^.VertexArrayInOCS.getDataMutable(i);
     Result:=VertexSub(pNext^,pFirst^);
-    if uzegeometry.oneVertexlength(Result)>LeaderGeometryEpsilon then
+    if Result.Length>LeaderGeometryEpsilon then
       exit;
   end;
 
@@ -501,14 +499,14 @@ var
   begin
     if HasCurrentVertex then begin
       VertexArrayInOCS.PushBackData(CurrentVertex);
-      CurrentVertex:=NulVertex;
+      CurrentVertex:=NulPoint;
       HasCurrentVertex:=False;
     end;
   end;
 
 begin
   VertexArrayInOCS.Clear;
-  CurrentVertex:=NulVertex;
+  CurrentVertex:=NulPoint;
   HasCurrentVertex:=False;
   VertexCount:=0;
 
@@ -532,7 +530,7 @@ begin
         case DXFGroupCode of
           10:begin
             PushCurrentVertex;
-            CurrentVertex:=NulVertex;
+            CurrentVertex:=NulPoint;
             CurrentVertex.x:=rdr.ParseDouble;
             HasCurrentVertex:=True;
           end;
@@ -838,7 +836,7 @@ var
 begin
   VertexNumber:=rtmod.point.vertexnum;
   GDBPoint3dArray.PTArr(VertexArrayInOCS.parray)^[VertexNumber]:=
-    VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+    rtmod.point.worldcoord+rtmod.dist;
 end;
 
 procedure GDBObjLeader.remaponecontrolpoint(pdesc:pcontrolpointdesc;

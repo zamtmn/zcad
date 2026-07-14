@@ -121,7 +121,7 @@ begin
             end;
             RCMWaitReference1:begin
               R1Pnt:=p1;
-              RefV:=(R1Pnt-R0Pnt).NormalizeVertex;
+              RefV:=(R1Pnt-R0Pnt).NormalizeVertex.asVector3d;
               SetRotateCmdMode(RCMWaitAngleCopyReference);
             end;
             RCMWaitAngleCopyReference:begin
@@ -129,7 +129,7 @@ begin
                 Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
                 zcFreeEntsInCurrentDrawingConstructRoot;
                 t_matrix:=CreateTranslationMatrix(-BasePnt);
-                t_matrix:=MatrixMultiply(t_matrix,CreateAffineRotationMatrix(Axis,RefV,(p1-BasePnt).NormalizeVertex));
+                t_matrix:=MatrixMultiply(t_matrix,CreateAffineRotationMatrix(Axis,RefV,(p1-BasePnt).NormalizeVertex.asVector3d));
                 t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(BasePnt));
                 zcTransformSelectedEntsInDrawingWithUndo('Rotate',t_matrix);
                 Break;

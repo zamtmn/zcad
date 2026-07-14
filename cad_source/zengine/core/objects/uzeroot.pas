@@ -163,8 +163,8 @@ begin
 end;
 procedure GDBObjRoot.getoutbound;
 begin
-  vp.BoundingBox.LBN:=NulVertex;
-  vp.BoundingBox.RTF:=NulVertex;
+  vp.BoundingBox.LBN:=NulPoint;
+  vp.BoundingBox.RTF:=NulPoint;
   inherited;
 end;
 function GDBObjRoot.getowner;

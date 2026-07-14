@@ -144,7 +144,7 @@ begin
 
   SaveToDXFObjPrefix(outStream,'POLYLINE','AcDb3dPolyline',IODXFContext);
   dxfIntegerout(outStream,66,1);
-  dxfvertexout(outStream,10,uzegeometry.NulVertex);
+  dxfvertexout(outStream,10,uzegeometry.NulPoint);
   dxfIntegerout(outStream,70,8);
 
   vp.Layer:=pl;
@@ -194,7 +194,8 @@ procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;S
 var
   ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
   currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
-  devpoint,tp,tp2,tp3,_YWCS,_ZWCS:TzePoint3d;
+  devpoint,tp,tp2,tp3:TzePoint3d;
+  _YWCS,_ZWCS:TzeVector3d;
   ptv,ptvpred,ptvnext,ptlast,ptpred:PzePoint3d;
   ptn,ptnlastCutted,ptnlast2Cutted:PTNodeProp;
   tn:TNodeProp;
@@ -387,25 +388,25 @@ begin
       ptpred:=VertexArrayInWCS.getDataMutable(vertexarrayInWCS.Count-2);
 
       tp:=vertexsub(ptlast^,ptpred^);
-      if uzegeometry.SqrOneVertexlength(tp)>sqreps then begin
+      if uzegeometry.SqrOneVertexlength(tp.asVector3d)>sqreps then begin
         _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
         _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;
 
         if (abs(tp.x)<1/64) and (abs(tp.y)<1/64) then
-          tp2:=VectorDot(_YWCS,tp)
+          tp2:=VectorDot(_YWCS,tp.asVector3d).asPoint3d
         else
-          tp2:=VectorDot(_ZWCS,tp);
-        tp3:=VectorDot(tp2,tp);
+          tp2:=VectorDot(_ZWCS,tp.asVector3d).asPoint3d;
+        tp3:=VectorDot(tp2.asVector3d,tp.asVector3d).asPoint3d;
         //tp3:=uzegeometry.VertexMulOnSc(tp3,-1);
-        tp3:=NormalizeVertex(tp3);
-        tp2:=NormalizeVertex(tp2);
-        tp:=NormalizeVertex(tp);
+        tp3:=(tp3).NormalizeVertex;
+        tp2:=(tp2).NormalizeVertex;
+        tp:=(tp).NormalizeVertex;
 
         //rotmatr:=onematrix;
         //PzePoint3d(@rotmatr.mtr[0])^:=tp;
         //PzePoint3d(@rotmatr.mtr[1])^:=tp2;
         //PzePoint3d(@rotmatr.mtr[2])^:=tp3;
-        rotmatr:=CreateMatrixFromBasis(tp,tp2,tp3);
+        rotmatr:=CreateMatrixFromBasis(tp.asVector3d,tp2.asVector3d,tp3.asVector3d);
 
         //m:=onematrix;
         //PzePoint3d(@m.mtr[3])^:=ptnlastCutted.PrevP;

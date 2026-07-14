@@ -134,7 +134,7 @@ begin
 
       if found>0 then begin
         Result:=vertexsub(ptv^,ppredtv^);
-        Result:=uzegeometry.NormalizeVertex(Result);
+        Result:={uzegeometry.NormalizeVertex}(Result).NormalizeVertex;
         exit;
         Dec(found);
       end;
@@ -336,7 +336,7 @@ begin
 
   tv:=rtmod.dist;
   wwc:=rtmod.point.worldcoord;
-  wwc:=VertexAdd(wwc,tv);
+  wwc:=wwc+tv;
   wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
 
@@ -449,7 +449,7 @@ begin
 
   if dc.lod=LODCalculatedDetail then begin
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
-    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49);
+    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v.asVector3d),49);
   end else
     simplydraw:=dc.lod=LODLowDetail;
 
@@ -543,9 +543,9 @@ begin
   widthload:=False;
   closed:=False;
   if bp.ListPos.owner<>nil then
-    local.p_insert:=bp.ListPos.owner^.GetMatrix^.mtr.v[3].Slice
+    local.p_insert:=bp.ListPos.owner^.GetMatrix^.mtr.v[3].Slice.asPoint3d
   else
-    local.P_insert:=nulvertex;
+    local.P_insert:=NulPoint;
 
   byt:=rdr.ParseInteger;
   while byt<>0 do begin
@@ -730,8 +730,8 @@ procedure GDBObjLWpolyline.createpoint;
 var
   i:integer;
   v:TzeVector4d;
-  v3d:TzePoint3d;
-  pv:PzePoint2d;
+  v3d:TzeVector3d;
+  pv:PzeVector2d;
 begin
   Vertex3D_in_WCS_Array.Clear;
   pv:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
@@ -745,7 +745,7 @@ begin
     //v.w:=1;
     v:=VectorTransform(v,objMatrix);
     v3d:=v.Slice;
-    Vertex3D_in_WCS_Array.PushBackData(v3d);
+    Vertex3D_in_WCS_Array.PushBackData(v3d.asPoint3d);
     Inc(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;
@@ -776,7 +776,7 @@ begin
   plw.quad[2]:=p2-vtemp;
 
   for k:=0 to 3 do begin
-    v.Slice.Slice:=plw.quad[k];
+    v.Slice.Slice:=plw.quad[k].asVector2d;
     //v.x:=plw.quad[k].x;
     //v.y:=plw.quad[k].y;
     v.Slice.CutOff:=0;
@@ -784,7 +784,7 @@ begin
     v.CutOff:=1;
     //v.w:=1;
     v:=VectorTransform(v,objMatrix);
-    q3d[k]:=v.Slice;
+    q3d[k]:=v.Slice.asPoint3d;
   end;
 
   Width3D_in_WCS_Array.PushBackData(q3d);

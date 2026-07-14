@@ -28,7 +28,7 @@ type
     trace:Boolean;
     tmouse: Double;
     dmouse: Integer;
-    dir: TzePoint3d;
+    dir: TzeVector3d;
     dispraycoord: TzePoint3d;
     worldraycoord: TzePoint3d;
   end;

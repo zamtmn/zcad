@@ -485,7 +485,7 @@ begin
   if CurrCmd.pcommandrunning<>nil then
     Result:=CurrCmd.pcommandrunning^.IData.GetPointValue
   else
-    Result:=NulVertex;
+    Result:=NulPoint;
 end;
 
 function GDBcommandmanager.ChangeInputMode(incl,excl:TGetInputMode):TGetInputMode;

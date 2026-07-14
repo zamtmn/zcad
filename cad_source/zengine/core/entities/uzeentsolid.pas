@@ -107,11 +107,9 @@ begin
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   calcObjMatrix;
   createpoint;
-  normal:=normalizevertex(vectordot(
-    uzegeometry.VertexSub(PInWCS[0],PInWCS[1])
-    ,
-    uzegeometry.VertexSub(
-    PInWCS[2],PInWCS[1])));
+  normal:=(vectordot(
+    VertexSub(PInWCS[0],PInWCS[1]).asVector3d,
+    VertexSub(PInWCS[2],PInWCS[1]).asVector3d)).NormalizeVertex.asPoint3d;
   if uzegeometry.IsPointEqual(PInOCS[2],PInOCS[3],sqreps) then
     triangle:=True
   else
@@ -145,7 +143,7 @@ constructor GDBObjSolid.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  PInOCS[1]:=NulVertex;
+  PInOCS[1]:=NulPoint;
 end;
 
 function GDBObjSolid.GetObjType;
@@ -275,7 +273,7 @@ begin
   tv:=rtmod.dist;
   wwc:=rtmod.point.worldcoord;
 
-  wwc:=VertexAdd(wwc,tv);
+  wwc:=wwc+tv;
   wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
   PInOCS[vertexnumber]:=wwc;
@@ -286,7 +284,7 @@ var
   tvo:PGDBObjSolid;
 begin
   Getmem(Pointer(tvo),sizeof(GDBObjSolid));
-  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight,nulvertex);
+  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight,NulPoint);
   tvo^.Local:=local;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

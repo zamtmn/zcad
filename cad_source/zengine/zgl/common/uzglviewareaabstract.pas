@@ -99,7 +99,7 @@ type
                            procedure ZoomAll;virtual;abstract;
                            procedure ZoomSel;virtual;abstract;
                            function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;virtual;abstract;
-                           procedure RotTo(x0,y0,z0:TzePoint3d);virtual;abstract;
+                           procedure RotTo(x0,y0,z0:TzeVector3d);virtual;abstract;
                            procedure PanScreen(oldX,oldY,X,Y:Integer);virtual;abstract;
                            procedure RestoreMouse;virtual;abstract;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);virtual;abstract;

@@ -97,7 +97,7 @@ begin
   m:=t_matrix;
   m.mtr.v[3].Slice:=NulVertex;
   tv:=VectorTransform3d(tv,m);
-  Width:=oneVertexlength(tv);
+  Width:={oneVertexlength}(tv.Length);
   inherited;
 end;
 
@@ -136,8 +136,7 @@ begin
   {TODO: тут расчет AAA ненужен}
   Local.basis.ox:=GetXfFromZ(Local.basis.oz);
 
-  local.basis.OX:=VectorTransform3D(
-    local.basis.OX,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,-a));
+  local.basis.OX:=VectorTransform3D(local.basis.OX.asPoint3d,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,-a)).asVector3d;
   Text.init(10);
 end;
 
@@ -327,7 +326,7 @@ begin
   Text.Free;
   lod:=0;
 
-  P_drawInOCS:=NulVertex;
+  P_drawInOCS:=NulPoint;
 
   //обрезание перевода строки в конце строки
   //странно что в автокаде он обрезается только один
@@ -344,7 +343,7 @@ begin
 
   h:=GetLinesH(linespace,textprop.size,Text);
 
-  P_drawInOCS:=NulVertex;
+  P_drawInOCS:=NulPoint;
   angle:=0;
 
   if textprop.justify=jsbtl then
@@ -593,7 +592,7 @@ begin
 
       i:=1;
       if ispl then begin
-        lp:=matr.mtr.v[3]{.v[0]}.Slice;
+        lp:=matr.mtr.v[3]{.v[0]}.Slice.asPoint3d;
         lp.y:=lp.y-0.2*textprop.size;
         lp:=VectorTransform3d(lp,objmatrix);
         pl.PushBackData(lp);
@@ -605,12 +604,12 @@ begin
         if sym=1 then begin
           ispl:=not(ispl);
           if ispl then begin
-            lp:=matr.mtr.v[3]{.v[0]}.Slice;
+            lp:=matr.mtr.v[3]{.v[0]}.Slice.asPoint3d;
             lp.y:=lp.y-0.2*textprop.size;
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
           end else begin
-            lp:=matr.mtr.v[3]{.v[0]}.Slice;
+            lp:=matr.mtr.v[3]{.v[0]}.Slice.asPoint3d;
             lp.y:=lp.y-0.2*textprop.size;
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
@@ -626,7 +625,7 @@ begin
       end;
 
       if ispl then begin
-        lp:=matr.mtr.v[3]{.v[0]}.Slice;
+        lp:=matr.mtr.v[3]{.v[0]}.Slice.asPoint3d;
         lp.y:=lp.y-0.2*textprop.size;
         lp:=VectorTransform3d(lp,objmatrix);
         pl.PushBackData(lp);
@@ -648,25 +647,25 @@ begin
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[0]:=v.Slice;
+  outbound[0]:=v.Slice.asPoint3d;
   v.x:=Bound.RT.x;
   v.y:=Bound.RT.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[1]:=v.Slice;
+  outbound[1]:=v.Slice.asPoint3d;
   v.x:=Bound.RT.x;
   v.y:=Bound.LB.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[2]:=v.Slice;
+  outbound[2]:=v.Slice.asPoint3d;
   v.x:=Bound.LB.x;
   v.y:=Bound.LB.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[3]:=v.Slice;
+  outbound[3]:=v.Slice.asPoint3d;
 
   pl.done;
   Representation.Shrink;
@@ -736,7 +735,7 @@ begin
   Content:=utf8tostring(ttemplate);
   textprop.justify:=b2j[j];
   P_drawInOCS:=Local.p_insert;
-  Local.basis.ox:=ux;
+  Local.basis.ox:=ux.asVector3d;
 end;
 
 function z2dxfmtext(s:string;var ul:boolean):string;
@@ -802,7 +801,7 @@ begin
   end;
   dxfStringout(outStream,7,TXTStyle^.Name,IODXFContext.Header);
   SaveToDXFObjPostfix(outStream);
-  dxfvertexout(outStream,11,Local.basis.ox);
+  dxfvertexout(outStream,11,Local.basis.ox.asPoint3d);
   dxfIntegerout(outStream,73,2);
   dxfDoubleout(outStream,44,3*linespace/(5*textprop.size));
 end;

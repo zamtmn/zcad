@@ -55,7 +55,8 @@ end;
 
 procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:TzeTypedMatrix4d;matr:TzeTypedMatrix4d;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
-  v,v0,true0Y,fact0y:TzePoint3d;
+  v,v0:TzePoint3d;
+  true0Y,fact0y:TzeVector3d;
   sqrsymh:Double;
   psyminfo:PGDBsymdolinfo;
   LLSymbolIndex:TArrayIndex;
@@ -118,7 +119,7 @@ begin
     v:=VectorTransform3d(v,matr);
     v:=VectorTransform3d(v,objmatrix);
     geom.GeomData.Vertex3S.AddGDBVertex(v);
-    sqrsymh:=SqrOneVertexlength(vertexsub(v,v0));
+    sqrsymh:=SqrOneVertexlength(vertexsub(v,v0).asVector3d);
     v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMaxy,0);
     v:=VectorTransform3d(v,matr);
     v:=VectorTransform3d(v,objmatrix);
@@ -138,8 +139,8 @@ begin
         PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
         PLLSymbolLine^.SymbolsParam.FirstSymMatr:=uzegeometry.MatrixMultiply(matr,objmatrix);
         PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].v[0],PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].v[1]));
-        PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].Slice)/oneVertexlength(PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1])^);
-        true0Y:=VectorDot(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[2].Slice,PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0])^);
+        PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].Slice)/oneVertexlength(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1].slice);
+        true0Y:=VectorDot(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[2].Slice,PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].Slice);
         if not IsVectorNul(true0Y) then
           true0Y:=NormalizeVertex(true0Y);
         fact0y:=PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1].Slice;

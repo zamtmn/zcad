@@ -67,7 +67,7 @@ end;
 function VertexFrom2D(PVertex: PDwg_Entity_VERTEX_2D;
   Elevation: Double): TzePoint3d;
 begin
-  Result := NulVertex;
+  Result := NulPoint;
   if PVertex = nil then
     Exit;
   Result.x := PVertex^.point.x;

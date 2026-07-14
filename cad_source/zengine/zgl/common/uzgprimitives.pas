@@ -1005,7 +1005,7 @@ begin
                  +m.mtr.v[0].v[0]*m.mtr.v[1].v[1]*m.mtr.v[3].v[2])
                /t);
   end else
-    Result:=NulVertex;
+    Result:=NulPoint;
 end;
 
 function CorrectLCS(const m:TzeTypedMatrix4d;LCS:TzePoint3d):TzePoint3d;
@@ -1052,7 +1052,7 @@ begin
                  -lcs.x*m.mtr.v[0].v[1]*m.mtr.v[1].v[2])
               /t);
   end else
-    Result:=NulVertex;
+    Result:=NulPoint;
 end;
 
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);

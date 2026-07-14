@@ -111,12 +111,11 @@ begin
     PInWCS[I]:=VectorTransform3D(
       PInOCS[I],bp.ListPos.owner^.GetMatrix^);
   end;
-  v:=vectordot(VertexSub(PInWCS[0],PInWCS[1])
-    ,VertexSub(PInWCS[2],PInWCS[1]));
-  if IsVectorNul(v) then
+  v:=vectordot(VertexSub(PInWCS[0],PInWCS[1]).asVector3d,VertexSub(PInWCS[2],PInWCS[1]).asVector3d).asPoint3d;
+  if IsVectorNul(v.asVector3d) then
     normal:=xy_Z_Vertex
   else
-    normal:=normalizevertex(v);
+    normal:=(v).normalizevertex;
   if IsPointEqual(PInOCS[2],PInOCS[3],sqreps) then
     triangle:=True
   else
@@ -157,7 +156,7 @@ constructor GDBObj3DFace.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  PInOCS[1]:=NulVertex;
+  PInOCS[1]:=NulPoint;
 end;
 
 function GDBObj3DFace.GetObjType;
@@ -329,7 +328,7 @@ var
   vertexnumber:integer;
 begin
   vertexnumber:=rtmod.point.vertexnum;
-  PInOCS[vertexnumber]:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+  PInOCS[vertexnumber]:=rtmod.point.worldcoord+rtmod.dist;
 end;
 
 function GDBObj3DFace.Clone;
@@ -337,7 +336,7 @@ var
   tvo:PGDBObj3DFace;
 begin
   Getmem(Pointer(tvo),sizeof(GDBObj3DFace));
-  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight,nulvertex);
+  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight,NulPoint);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
   tvo^.bp.ListPos.Owner:=own;

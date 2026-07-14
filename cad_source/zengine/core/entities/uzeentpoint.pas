@@ -118,7 +118,7 @@ constructor GDBObjPoint.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  P_insertInOCS:=NulVertex;
+  P_insertInOCS:=NulPoint;
 end;
 
 function GDBObjPoint.GetObjType;
@@ -136,7 +136,7 @@ procedure GDBObjPoint.LoadFromDXF;
 var
   byt:integer;
 begin
-  P_insertInOCS:=NulVertex;
+  P_insertInOCS:=NulPoint;
   byt:=rdr.ParseInteger;
   while byt<>0 do begin
     case byt of
@@ -253,7 +253,7 @@ end;
 procedure GDBObjPoint.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
   if rtmod.point.pointtype=os_point then begin
-    P_insertInOCS:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+    P_insertInOCS:=rtmod.point.worldcoord+rtmod.dist;
   end;
 end;
 

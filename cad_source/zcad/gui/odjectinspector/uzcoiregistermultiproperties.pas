@@ -96,8 +96,8 @@ begin
      inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
      V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
      v1:=VertexSub(v2,v1);
-     v1:=NormalizeVertex(v1);
-     l1:=scalardot(v1,_X_yzVertex);
+     v1:=v1.NormalizeVertex;
+     l1:=scalardot(v1.asVector3d,_X_yzVertex.asVector3d);
      l1:=arccos(l1){*180/pi};
      if v1.y<-eps then l1:={360}2*pi-l1;
      ChangedData.PGetDataInEtity:=@l1;
@@ -106,7 +106,7 @@ end;
 
 procedure DoubleAngleTextIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-    v1,v2:TzePoint3d;
+    v1,v2:TzeVector3d;
     l1:Double;
 begin
      V1:=PGDBObjWithLocalCS(ChangedData.PGetDataInEtity)^.Local.basis.ox;
@@ -120,14 +120,14 @@ end;
 
 procedure DoubleWCSAngleTextIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-    v1,v2:TzePoint3d;
+    v1,v2:TzeVector3d;
     l1,l0:Double;
     //a0,a1,a:double;
 begin
 
      if PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner<>nil then begin
        V1:=PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice;
-       l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
+       l0:=scalardot(NormalizeVertex(V1),_X_yzVertex.asVector3d);
        l0:=arccos(l0);
        if v1.y<-eps then l0:=2*pi-l0;
        //a0:=l0*180/pi
@@ -338,7 +338,7 @@ begin
   V2:=PzePoint3d(ChangedData.PSetDataInEtity)^;
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   V2:=VertexSub(V2,V1);
-  V2:=normalizevertex(V2);
+  V2:=V2.normalizevertex;
   V2:=VertexMulOnSc(V2,l1);
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 
@@ -348,7 +348,7 @@ begin
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-  PzePoint3d(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
+  PzePoint3d(ChangedData.PSetDataInEtity)^:=v1+v2;
 end;
 procedure DoubleAngleEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
@@ -373,7 +373,7 @@ begin
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-  PzePoint3d(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
+  PzePoint3d(ChangedData.PSetDataInEtity)^:=v1+v2;
 end;
 procedure CurrentAngleFormat2DegEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var

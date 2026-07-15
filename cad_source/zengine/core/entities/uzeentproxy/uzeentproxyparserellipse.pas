@@ -103,15 +103,15 @@ const
 var
   ZAxis, XAxis, YAxis: TzePoint3d;
 begin
-  ZAxis := (Normal).NormalizeVertex;
+  ZAxis := (Normal).Normalize;
 
   { Выбираем вспомогательную ось для построения OCS }
   if Abs(ZAxis.x) < ELLIPSE_AXIS_THRESHOLD then
-    XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).NormalizeVertex
+    XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).Normalize
   else
-    XAxis := (AuxY * ZAxis.z - ZAxis * AuxY.z).NormalizeVertex;
+    XAxis := (AuxY * ZAxis.z - ZAxis * AuxY.z).Normalize;
 
-  YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).NormalizeVertex;
+  YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalize;
 
   { Проекция точки на оси OCS }
   Result.x := scalarDot(Point.asVector3d, XAxis.asVector3d);
@@ -252,7 +252,7 @@ begin
 
   { Вычисляем вектор малой полуоси через перпендикуляр к Normal × MajorAxisVector }
   PerpendicularAxis := (Normal * MajorAxisVector.x
-    - MajorAxisVector * Normal.x).NormalizeVertex;
+    - MajorAxisVector * Normal.x).Normalize;
 
   MinorAxis.x := PerpendicularAxis.x * MajorRadius * MinorAxisRatio;
   MinorAxis.y := PerpendicularAxis.y * MajorRadius * MinorAxisRatio;

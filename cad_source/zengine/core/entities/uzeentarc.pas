@@ -208,8 +208,8 @@ begin
   newCenter := Local.P_insert;
 
   // Шаг 7. Вычисляем нормализованные направления от нового центра к точкам дуги
-  dirToStart := VertexSub(newStartPoint, newCenter).NormalizeVertex;
-  dirToEnd   := VertexSub(newEndPoint, newCenter).NormalizeVertex;
+  dirToStart := VertexSub(newStartPoint, newCenter).Normalize;
+  dirToEnd   := VertexSub(newEndPoint, newCenter).Normalize;
 
   // Шаг 8. Проецируем направления на оси локальной СК и вычисляем новые углы.
   // scalardot — скалярное произведение; оно даёт косинус и синус угла в плоскости дуги

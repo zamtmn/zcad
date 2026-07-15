@@ -167,7 +167,7 @@ procedure InteractiveConstructRootRotateManipulator(const PInteractiveData:PRota
 
 begin
 
-  v:=(Point-PInteractiveData^.Base).NormalizeVertex.asVector3d;
+  v:=(Point-PInteractiveData^.Base).Normalize.asVector3d;
   rotmatr:=CreateAffineRotationMatrix(PInteractiveData^.Axis,PInteractiveData^.ARefV,v);
 
   if click then begin
@@ -204,7 +204,7 @@ begin
     drawings.GetCurrentDWG^.ConstructObjRoot.FrustumPosition:=FrPos;
 
     {m:=CreateTranslationMatrix(-PInteractiveData^.Base);
-    a:=TwoVectorAngle(PInteractiveData^.Arefv,(Point-PInteractiveData^.Base).NormalizeVertex);
+    a:=TwoVectorAngle(PInteractiveData^.Arefv,(Point-PInteractiveData^.Base).Normalize);
     m:=MatrixMultiply(m,CreateAffineRotationMatrix(PInteractiveData^.Axis,a));
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=MatrixMultiply(m,CreateTranslationMatrix(PInteractiveData^.Base));}
     RC:=drawings.GetCurrentDWG^.CreateDrawingRC;

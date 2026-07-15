@@ -281,7 +281,7 @@ begin
   for i:=0 to mpd.Size-1 do
     with dcwa.Mutable[i]^ do begin
       DevCoord:=mpd[i];
-      sav:=(DevCoord.coord-CenterPoint).NormalizeVertex;
+      sav:=(DevCoord.coord-CenterPoint).Normalize;
       a:=uzegeometry.TwoVectorAngle(_X_yzVertex.asVector3d,sav.asVector3d);
       if sav.y<-eps then
         a:=2*pi-a;

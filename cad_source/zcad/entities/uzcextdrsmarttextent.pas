@@ -298,7 +298,7 @@ begin
     p2:=getTextInsertPoint(pEntity);
   scl:=FExtensionLineStartShift*abs(getOwnerScale(pEntity));
   if FExtensionLineStartShift>0 then
-    result:=p1+(p2-p1).NormalizeVertex*scl
+    result:=p1+(p2-p1).Normalize*scl
   else begin
     result:=p2-p1;
     if abs(result.x)>abs(result.y)then begin
@@ -319,12 +319,12 @@ end;
 
 function TSmartTextEntExtender.getTextTangent(pEntity:Pointer):TzePoint3d;
 begin
-  Result:=PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[0].Slice.NormalizeVertex.asPoint3d;
+  Result:=PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[0].Slice.Normalize.asPoint3d;
 end;
 
 function TSmartTextEntExtender.getTextNormal(pEntity:Pointer):TzePoint3d;
 begin
-  Result:=PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[1].Slice.NormalizeVertex.asPoint3d;
+  Result:=PGDBObjMText(pEntity)^.ObjMatrix.mtr.v[1].Slice.Normalize.asPoint3d;
 end;
 
 function TSmartTextEntExtender.getTextHeight(pEntity:Pointer):Double;
@@ -416,7 +416,7 @@ begin
           V1:=PGDBObjEntity(pEntity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice.asPoint3d;
           a:=FRotateOverrideValue*pi/180;
           SinCos(a,sine,cosine);
-          l0:=scalardot(V1.NormalizeVertex.asVector3d,CreateVector(cosine,sine,0));
+          l0:=scalardot(V1.Normalize.asVector3d,CreateVector(cosine,sine,0));
           l0:=arccos(l0);
           if v1.y<-eps then l0:=2*pi-l0;
         end else

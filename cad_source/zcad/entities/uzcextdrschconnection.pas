@@ -324,7 +324,7 @@ var
 begin
   onel:=(l2-l1).asVector3d;
   if onel.SqrLength>sqreps then begin
-    onel:=onel.NormalizeVertex;
+    onel:=onel.Normalize;
     tp2:=GetXfFromZ(onel);
     tp3:=VectorDot(tp2,onel);
     tp3:=NormalizeVertex(tp3);

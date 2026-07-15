@@ -59,7 +59,7 @@ var
   d:double;
   plane:TzeVector4d;
 begin
-  dist:=uzegeometry.VertexSub(p2,p1);
+  dist:=p2-p1;
   d:=dist.Length;
   p3:=uzegeometry.VertexMulOnSc(ZWCS.asPoint3d,d);
   p3:=p3+t3dp;

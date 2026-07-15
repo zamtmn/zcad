@@ -522,7 +522,7 @@ begin
   begin
        tp1:=axisarray[i].p1;
        tp2:=axisarray[i].p2;
-       pdit:=distance2ray(Vertex0,coord,coord+vertexsub(tp2,tp1));
+       pdit:=distance2ray(Vertex0,coord,coord+(tp2-tp1));
        dit:=distance2ray(coord,tp1,tp2);
        if (dit.t>=0)and(dit.t<=1)then
        begin
@@ -633,7 +633,7 @@ begin
                              T3SB_Fale:isVertical:=false;
                              T3SB_True:isVertical:=true;
                           T3SB_Default:begin
-                                         dv:=uzegeometry.VertexSub(paxisline^.CoordInWCS.lEnd,paxisline^.CoordInWCS.lBegin);
+                                         dv:=paxisline^.CoordInWCS.lEnd-paxisline^.CoordInWCS.lBegin;
                                          isVertical:=abs(dv.x)<abs(dv.y);
                                        end;
                   end;

@@ -148,9 +148,9 @@ begin
         if bb2.RTF.x>=bb2.LBN.x then
           ConcatBB(bb,bb2);
       end;}
-      tv:=VertexSub(bb.RTF,bb.LBN);
+      tv:=bb.RTF-bb.LBN;
       tv:=VertexMulOnSc(tv,0.15);
-      rasterize(cdwg,bmpw,bmpw,VertexSub(bb.LBN,tv),bb.RTF+tv,
+      rasterize(cdwg,bmpw,bmpw,bb.LBN-tv,bb.RTF+tv,
         PrintParam,bmp.Canvas,PrinterDrawer);
 
       //PNG.Canvas.StretchDraw(Rect(0,0,bmpw,bmpw),bmp);

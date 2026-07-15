@@ -387,7 +387,7 @@ begin
       ptlast:=VertexArrayInWCS.getDataMutable(vertexarrayInWCS.Count-1);
       ptpred:=VertexArrayInWCS.getDataMutable(vertexarrayInWCS.Count-2);
 
-      tp:=vertexsub(ptlast^,ptpred^);
+      tp:=ptlast^-ptpred^;
       if uzegeometry.SqrOneVertexlength(tp.asVector3d)>sqreps then begin
         _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
         _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;
@@ -398,9 +398,9 @@ begin
           tp2:=VectorDot(_ZWCS,tp.asVector3d).asPoint3d;
         tp3:=VectorDot(tp2.asVector3d,tp.asVector3d).asPoint3d;
         //tp3:=uzegeometry.VertexMulOnSc(tp3,-1);
-        tp3:=(tp3).NormalizeVertex;
-        tp2:=(tp2).NormalizeVertex;
-        tp:=(tp).NormalizeVertex;
+        tp3:=(tp3).Normalize;
+        tp2:=(tp2).Normalize;
+        tp:=(tp).Normalize;
 
         //rotmatr:=onematrix;
         //PzePoint3d(@rotmatr.mtr[0])^:=tp;

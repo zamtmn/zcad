@@ -175,7 +175,7 @@ function Move_com.CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;
 var
   dist:TzePoint3d;
 begin
-  dist:=uzegeometry.VertexSub(p2,p1);
+  dist:=p2-p1;
   Result:=uzegeometry.CreateTranslationMatrix(dist);
 end;
 

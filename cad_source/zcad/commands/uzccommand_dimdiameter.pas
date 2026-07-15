@@ -83,8 +83,8 @@ begin
         GDBArcID:begin
           p1:=pcircle^.Local.P_insert;
           p2:=PGDBObjArc(pcircle)^.q1;
-          p3:=VertexSub(p2,p1);
-          p1:=VertexSub(p1,p3);
+          p3:=p2-p1;
+          p1:=p1-p3;
           FinalCreateDDim;
         end;
         else

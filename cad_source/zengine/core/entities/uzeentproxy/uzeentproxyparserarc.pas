@@ -100,15 +100,15 @@ const
 var
   ZAxis, XAxis, YAxis: TzePoint3d;
 begin
-  ZAxis := (Normal).NormalizeVertex;
+  ZAxis := (Normal).Normalize;
 
   { Выбираем вспомогательную ось для построения OCS }
   if Abs(ZAxis.x) < ARC_AXIS_THRESHOLD then
-    XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).NormalizeVertex
+    XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).Normalize
   else
-    XAxis := (AuxY * ZAxis.z - ZAxis * AuxY.z).NormalizeVertex;
+    XAxis := (AuxY * ZAxis.z - ZAxis * AuxY.z).Normalize;
 
-  YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).NormalizeVertex;
+  YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalize;
 
   { Проекция точки на оси OCS }
   Result.x := scalarDot(Point.asVector3d, XAxis.asVector3d);
@@ -255,7 +255,7 @@ begin
   pArc^.EndAngle := HandlerResult.ArcItem.EndAngle;
   { Нормаль (ось Z локальной СК) — из примитива; ox/oy восстановит
     CalcObjMatrixWithoutOwner через алгоритм Arbitrary Axis. }
-  pArc^.Local.basis.oz := (HandlerResult.ArcItem.Normal).NormalizeVertex.asVector3d;
+  pArc^.Local.basis.oz := (HandlerResult.ArcItem.Normal).Normalize.asVector3d;
 
   ActualLW := ResolveLineWeight(Context, Context.PrimitiveLineWeight);
 

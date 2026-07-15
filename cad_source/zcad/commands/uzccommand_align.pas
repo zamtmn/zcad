@@ -219,9 +219,7 @@ var
   resultMatrix: TzeTypedMatrix4d;
 begin
   // Шаг 1: Трансляция — смещаем srcPoint1 в dstPoint1
-  resultMatrix := uzegeometry.CreateTranslationMatrix(
-    uzegeometry.VertexSub(dstPoint1, srcPoint1)
-  );
+  resultMatrix := uzegeometry.CreateTranslationMatrix(dstPoint1-srcPoint1);
 
   // Шаг 2: Поворот — применяем только при ненулевых расстояниях
   srcLen := uzegeometry.Vertexlength(srcPoint1, srcPoint2);

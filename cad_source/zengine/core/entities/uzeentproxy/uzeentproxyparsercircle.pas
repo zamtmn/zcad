@@ -109,15 +109,15 @@ const
 var
   ZAxis, XAxis, YAxis: TzePoint3d;
 begin
-  ZAxis := {NormalizeVertex}(Normal).NormalizeVertex;
+  ZAxis := {NormalizeVertex}(Normal).Normalize;
 
   { Выбираем вспомогательную ось для построения OCS }
   if Abs(ZAxis.x) < CIRCLE_AXIS_THRESHOLD then
-    XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).NormalizeVertex
+    XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).Normalize
   else
-    XAxis := (AuxY * ZAxis.z - ZAxis * AuxY.z).NormalizeVertex;
+    XAxis := (AuxY * ZAxis.z - ZAxis * AuxY.z).Normalize;
 
-  YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).NormalizeVertex;
+  YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalize;
 
   { Проекция точки на оси OCS }
   Result.x := scalarDot(Point.asVector3d, XAxis.asVector3d);
@@ -223,7 +223,7 @@ begin
   pCircle^.Radius := HandlerResult.CircleItem.Radius;
   { Нормаль (ось Z локальной СК) — из примитива; ox/oy восстановит
     CalcObjMatrixWithoutOwner через алгоритм Arbitrary Axis. }
-  pCircle^.Local.basis.oz := (HandlerResult.CircleItem.Normal).NormalizeVertex.asVector3d;
+  pCircle^.Local.basis.oz := (HandlerResult.CircleItem.Normal).Normalize.asVector3d;
 
   ActualLW := ResolveLineWeight(Context, Context.PrimitiveLineWeight);
 

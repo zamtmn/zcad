@@ -134,7 +134,7 @@ begin
   center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
   d:=Vertexlength(center,tv);
   dirv:=vertexsub(tv,center);
-  dirv:={normalizevertex}(dirv).NormalizeVertex;
+  dirv:={normalizevertex}(dirv).Normalize;
 
   Result:=VertexDmorph(center,dirv,d);
   DimData.P15InWCS:=VertexDmorph(center,dirv,-d);
@@ -150,7 +150,7 @@ begin
   center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
   d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
-  dirv:={normalizevertex}(dirv).NormalizeVertex;
+  dirv:={normalizevertex}(dirv).Normalize;
 
   Result:=VertexDmorph(center,dirv,d);
   DimData.P10InWCS:=VertexDmorph(center,dirv,-d);
@@ -166,7 +166,7 @@ begin
   center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
   d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
-  dirv:={normalizevertex}(dirv).NormalizeVertex;
+  dirv:={normalizevertex}(dirv).Normalize;
   DimData.P10InWCS:=VertexDmorph(center,dirv,-d);
   DimData.P15InWCS:=VertexDmorph(center,dirv,d);
   Result:=tv;

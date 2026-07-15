@@ -137,7 +137,7 @@ begin
       end;
       if found>0 then begin
         Result:=vertexsub(ptv^,ppredtv^);
-        Result:={uzegeometry.NormalizeVertex}(Result).NormalizeVertex;
+        Result:={uzegeometry.Normalize}(Result).Normalize;
         exit;
         Dec(found);
       end;
@@ -179,7 +179,7 @@ begin
 
       if found>0 then begin
         tv:=vertexsub(ptv^,ppredtv^);
-        tv:={uzegeometry.NormalizeVertex}(tv).NormalizeVertex;
+        tv:={uzegeometry.Normalize}(tv).Normalize;
         processaxis(posr,tv);
         tv:=VectorDot(tv.asVector3d,zwcs).asPoint3d;
         processaxis(posr,tv);
@@ -571,7 +571,7 @@ begin
           dir:=uzegeometry.VertexSub(pv2^,pv1^);
           tv:=vectordot(dir.asVector3d,param.md.mouseray.dir).asPoint3d;
           n:=vectordot(param.md.mouseray.dir,tv.asVector3d).asPoint3d;
-          n:={NormalizeVertex}(n).NormalizeVertex;
+          n:={NormalizeVertex}(n).Normalize;
           v.x:=param.md.mouseray.lbegin.x-pv1^.x;
           v.y:=param.md.mouseray.lbegin.y-pv1^.y;
           v.z:=param.md.mouseray.lbegin.z-pv1^.z;

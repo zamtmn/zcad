@@ -148,14 +148,8 @@ end;
 function scale_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
   mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
-  //dispmatr,im,rotmatr:TzeTypedMatrix4d;
-  //ir:itrec;
-  //pcd:PTCopyObjectDesc;
   a:double;
-  //v:TzePoint3d;
-  //m:tmethod;
 begin
-  //v:=uzegeometry.VertexSub(t3dp,wc);
   a:=uzegeometry.Vertexlength(t3dp,wc);
   scale(a,button);
   Result:=cmd_ok;

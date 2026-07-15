@@ -508,14 +508,20 @@ begin
 
   stPoint:=TzePoint3d(polyObj^.VertexArrayInOCS.getDataMutable(0)^);
 
-  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(1))^.x:=Point.x;
-  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(1))^.y:=stPoint.y;
+  with polyObj^.VertexArrayInOCS.getDataMutable(1)^ do begin
+    x:=Point.x;
+    y:=stPoint.y;
+  end;
 
-  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(2))^.x:=Point.x;
-  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(2))^.y:=Point.y;
+  with polyObj^.VertexArrayInOCS.getDataMutable(2)^ do begin
+    x:=Point.x;
+    y:=Point.y;
+  end;
 
-  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(3))^.x:=stPoint.x;
-  PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(3))^.y:=Point.y;
+  with polyObj^.VertexArrayInOCS.getDataMutable(3)^ do begin
+    x:=stPoint.x;
+    y:=Point.y;
+  end;
 
   if ESP<>nil then
     ESP(ESSSetConstructEntity,polyObj);

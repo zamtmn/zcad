@@ -498,7 +498,7 @@ begin
           param.md.mouseraywithoutOS.dir.asPoint3d,plane,tv)
         then begin
           n:=tv-P_insert_in_WCS;
-          n:=n.Normalized;
+          n.Normalize;
           n:=uzegeometry.VertexMulOnSc(n,radius);
           osp.worldcoord:=P_insert_in_WCS+n;
           ProjectProc(osp.worldcoord,tv);

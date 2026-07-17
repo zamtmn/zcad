@@ -267,7 +267,7 @@ begin
      if pcabledesk<>nil then
      begin
           v:=(p1-p2).asVector3d;
-          v:=v.Normalized;
+          v.Normalize;
           if (abs (v.x) < 1/64) and (abs (v.y) < 1/64) then
                                                                     v:=VectorDot(YWCS,v)
                                                                 else

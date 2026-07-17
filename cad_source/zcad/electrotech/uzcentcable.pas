@@ -398,9 +398,9 @@ begin
           tp2:=VectorDot(_ZWCS,tp.asVector3d).asPoint3d;
         tp3:=VectorDot(tp2.asVector3d,tp.asVector3d).asPoint3d;
         //tp3:=uzegeometry.VertexMulOnSc(tp3,-1);
-        tp3:=(tp3).Normalized;
-        tp2:=(tp2).Normalized;
-        tp:=(tp).Normalized;
+        tp3.Normalize;
+        tp2.Normalize;
+        tp.Normalize;
 
         //rotmatr:=onematrix;
         //PzePoint3d(@rotmatr.mtr[0])^:=tp;

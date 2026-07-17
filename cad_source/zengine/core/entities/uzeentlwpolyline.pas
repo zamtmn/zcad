@@ -134,7 +134,7 @@ begin
 
       if found>0 then begin
         Result:=vertexsub(ptv^,ppredtv^);
-        Result:=Result.Normalized;
+        Result.Normalize;
         exit;
         Dec(found);
       end;
@@ -760,7 +760,7 @@ begin
   vtangent:=p2-p1;
   vnormal.x:=-vtangent.y;
   vnormal.y:=vtangent.x;
-  vnormal:=vnormal.Normalized;
+  vnormal.Normalize;
 
   if (plw.data.startw=0) and (plw.data.endw=0) then
     plw.data.hw:=False

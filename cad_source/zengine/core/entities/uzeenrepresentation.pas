@@ -404,7 +404,7 @@ procedure TZEntityRepresentation.CreateLWPolyLineWdh(var DC:TDrawContext;var Ent
     vtangent:=p2-p1;
     vnormal.x:=-vtangent.y;
     vnormal.y:=vtangent.x;
-    vnormal:=vnormal.Normalized;
+    vnormal.Normalize;
 
     quad.hasStartWidth:=abs(plw.data.startw)>eps;
     quad.hasEndWidth:=abs(plw.data.endw)>eps;

@@ -552,7 +552,7 @@ begin
   end;
 
   if {(pdev=nil)and}(pcable<>nil) then begin
-    tv:=uzegeometry.vectordot((mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin).asVector3d,Local.basis.OZ).asPoint3d;
+    tv:=uzegeometry.vectordot(mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin,Local.basis.OZ).asPoint3d;
     tv.Normalize;
     tv:=uzegeometry.VertexMulOnSc(tv,scale);
 
@@ -560,8 +560,7 @@ begin
       tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,
         mainline.CoordInWCS.lBegin,False);
       //tv3:=uzegeometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
-      if {tv3.z}scalardot(
-        tv2.asVector3d,(mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin).asVector3d)>0 then
+      if {tv3.z}scalardot(tv2.asVector3d,mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin)>0 then
         tv2:=uzegeometry.vectordot(tv2.asVector3d,Local.basis.OZ).asPoint3d
       else
         tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2.asVector3d).asPoint3d;
@@ -583,7 +582,7 @@ begin
   CopyVPto(MarkLine);
   //MarkLine.vp.Layer:=vp.Layer;
   //MarkLine.vp.LineWeight:=vp.LineWeight;
-  MarkLine.CoordInOCS.lBegin:=MainLine.CoordInOCS.lBegin-tv;
+  MarkLine.CoordInOCS.lBegin:=(MainLine.CoordInOCS.lBegin-tv).asPoint3d;
   MarkLine.CoordInOCS.lEnd:=MainLine.CoordInOCS.lBegin+tv;
 
   MarkLine.FormatEntity(drawing,dc);
@@ -901,10 +900,10 @@ begin
      //vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,uzegeometry.VertexMulOnSc(onevertex,-10),NulPoint);
      //MainLine.Format;
-     tv:=vectordot((mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin).asVector3d,Local.basis.OZ).asPoint3d;
+     tv:=vectordot(mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin,Local.basis.OZ).asPoint3d;
      if not IsVectorNul(tv.asVector3d) then
        tv.Normalize;
-     MarkLine.init(@self,vp.Layer,vp.LineWeight,MainLine.CoordInOCS.lBegin-tv,MainLine.CoordInOCS.lBegin+tv);
+     MarkLine.init(@self,vp.Layer,vp.LineWeight,(MainLine.CoordInOCS.lBegin-tv).asPoint3d,MainLine.CoordInOCS.lBegin+tv);
      //MarkLine.Format;
 
      tbl.initnul;

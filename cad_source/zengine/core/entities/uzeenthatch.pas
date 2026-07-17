@@ -298,7 +298,7 @@ procedure GDBObjHatch.DrawStrokes(var Strokes:TPatStrokesArray;
 var
   t,l,cl,d,drawedlen:double;
   c:integer;
-  dir:TzePoint2d;
+  dir:TzeVector2d;
   p,pp:TzePoint2d;
   First:boolean;
   newdrawlen:double;

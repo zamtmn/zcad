@@ -139,7 +139,7 @@ end;
 
 function GDBObjCircle.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 begin
-  Result:=vectordot((P_insert_in_WCS-point).asVector3d,self.Local.basis.oz).Normalized.asPoint3d;
+  Result:=vectordot(P_insert_in_WCS-point,self.Local.basis.oz).Normalized.asPoint3d;
 end;
 
 procedure GDBObjCircle.ReCalcFromObjMatrix;
@@ -441,7 +441,8 @@ end;
 
 function GDBObjCircle.getsnap;
 var
-  tv,n:TzePoint3d;
+  tv:TzePoint3d;
+  n:TzeVector3d;
   plane:TzeVector4d;
 begin
   if onlygetsnapcount=6 then begin
@@ -499,7 +500,7 @@ begin
         then begin
           n:=tv-P_insert_in_WCS;
           n.Normalize;
-          n:=uzegeometry.VertexMulOnSc(n,radius);
+          n:=VertexMulOnSc(n.asPoint3d,radius).asVector3d;
           osp.worldcoord:=P_insert_in_WCS+n;
           ProjectProc(osp.worldcoord,tv);
           osp.dispcoord:=tv;

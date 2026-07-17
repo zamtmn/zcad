@@ -263,11 +263,11 @@ begin
    pt1:=uzegeometry.CreateVertex((stNumColumn*zonaWidthColumn)+(zonaWidthColumn/2)-1,-zonaHeightHead-zonaHeightConnect-zonaHeightDev,0);
    pt2:=uzegeometry.CreateVertex((stNumColumn*zonaWidthColumn)+(zonaWidthColumn/4)-1,-zonaHeightHead-zonaHeightConnect-zonaHeightDev+5,0);
    numWay:=lColumnSchemaOneLevel[stNumColumn].countCablesGone-lColumnSchemaOneLevel[stNumColumn].usedCablesGone;
-   newPt:=((pt1-pt2).Normalized)*stDev.ChildCount/numWay;
+   newPt:=((pt1-pt2).Normalized.asPoint3d)*stDev.ChildCount/numWay;
    result.pushback(uzegeometry.CreateVertex(pt1.x-newPt.x,pt1.y+newPt.y,0));
    pt1:=uzegeometry.CreateVertex(10,10,0);
    pt2:=uzegeometry.CreateVertex(20,20,0);
-   newPt:=((pt1-pt2).Normalized)/2;
+   newPt:=((pt1-pt2).Normalized.asPoint3d)/2;
    zcUI.TextMessage('newPt.x = ' + floattostr(newPt.x) + '  newPt.y = ' + floattostr(newPt.y),TMWOHistoryOut);
 
 end;

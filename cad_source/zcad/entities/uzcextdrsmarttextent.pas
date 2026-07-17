@@ -257,8 +257,8 @@ begin
   t:=getTextTangent(pEntity);
   if PGDBObjMText(pEntity).textprop.justify in [jsbc,jsmc,jstc] then begin
     dx:=PGDBObjText(pEntity).obj_width*getTextHeight(pEntity)*getTextWFactor(pEntity)*getOwnerScale(pEntity)/2;
-    if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))*getTextTangent(pEntity))<0 then begin
-      result:=result-t*dx;
+    if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity)).asPoint3d*getTextTangent(pEntity))<0 then begin
+      result:=(result-t*dx).asPoint3d;
     end else begin
       result:=result+t*dx;
       t:=-t;
@@ -268,8 +268,8 @@ begin
     if PGDBObjMText(pEntity).textprop.justify in [jsbr,jsmr,jstr] then
       result:=result+t*x
     else
-      result:=result-t*x;
-    result:=result-getTextNormal(pEntity)*y;
+      result:=(result-t*x).asPoint3d;
+    result:=(result-getTextNormal(pEntity)*y).asPoint3d;
   end;
 end;
 
@@ -300,7 +300,7 @@ begin
   if FExtensionLineStartShift>0 then
     result:=p1+(p2-p1).Normalized*scl
   else begin
-    result:=p2-p1;
+    result:=(p2-p1).asPoint3d;
     if abs(result.x)>abs(result.y)then begin
       result.y:=-result.y*(scl/abs(result.x));
       result.x:=-result.x*(scl/abs(result.x));
@@ -363,7 +363,7 @@ begin
             dx:=PGDBObjText(pEntity).obj_width*getTextHeight(pEntity)*getTextWFactor(pEntity)*getOwnerScale(pEntity);
             offs:=getBaseLineOffset(pEntity);
             if PGDBObjMText(pEntity).textprop.justify in [jsmc] then begin
-              if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity))*getTextTangent(pEntity))<0 then
+              if -sign((PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity)).asPoint3d*getTextTangent(pEntity))<0 then
                 dx:=dx+2*offs.x
               else
                 dx:=-dx-2*offs.x;
@@ -433,7 +433,7 @@ begin
     if FHJOverride or FVJOverride then begin
       currXDir:=j2hdir[PGDBObjMText(pEntity).textprop.justify];
       currYDir:=j2vdir[PGDBObjMText(pEntity).textprop.justify];
-      v1:=PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity);
+      v1:=(PGDBObjText(pEntity).P_insert_in_WCS-getOwnerInsertPoint(pEntity)).asPoint3d;
       newXDir:=-sign(v1*getTextTangent(pEntity));//getXsign({PGDBObjText(pEntity).Local.P_insert}v1);
       newYDir:=-sign(v1*getTextNormal(pEntity));//getYsign({PGDBObjText(pEntity).Local.P_insert}v1);
       if isNeedLeadert(pEntity) then begin

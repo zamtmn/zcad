@@ -173,10 +173,10 @@ end;
 
 function Move_com.CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;
 var
-  dist:TzePoint3d;
+  dist:TzeVector3d;
 begin
   dist:=p2-p1;
-  Result:=uzegeometry.CreateTranslationMatrix(dist);
+  Result:=CreateTranslationMatrix(dist.asPoint3d);
 end;
 
 function Move_com.Move(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;

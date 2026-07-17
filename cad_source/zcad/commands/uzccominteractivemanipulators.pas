@@ -167,7 +167,7 @@ procedure InteractiveConstructRootRotateManipulator(const PInteractiveData:PRota
 
 begin
 
-  v:=(Point-PInteractiveData^.Base).Normalized.asVector3d;
+  v:=(Point-PInteractiveData^.Base).Normalized;
   rotmatr:=CreateAffineRotationMatrix(PInteractiveData^.Axis,PInteractiveData^.ARefV,v);
 
   if click then begin

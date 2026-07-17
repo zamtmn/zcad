@@ -166,15 +166,17 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   procedure DrawArc(constref p1,p2:TzePoint2d;
   const bulge:double;var currpath:TZctnrVectorTzePoint2d;divcount:integer);//inline;
   var
-    d,pc,pac,n:TzePoint2d;
+    d,n:TzeVector2d;
+    pc,pac:TzePoint2d;
     l,h,nextbulge:double;
   begin
     d:=p2-p1;
     l:=d.Length;
     h:=l*bulge/2;
     pc:=(p1+p2)/2;
-    n.x:=-d.y;
-    n.y:=d.x;
+    n:=d.Turned90L;
+    {n.x:=-d.y;
+    n.y:=d.x;}
     n.Normalize;
     pac:=pc-n*h;
     if divcount=-1 then begin

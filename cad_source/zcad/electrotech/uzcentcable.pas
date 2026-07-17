@@ -387,7 +387,7 @@ begin
       ptlast:=VertexArrayInWCS.getDataMutable(vertexarrayInWCS.Count-1);
       ptpred:=VertexArrayInWCS.getDataMutable(vertexarrayInWCS.Count-2);
 
-      tp:=ptlast^-ptpred^;
+      tp:=(ptlast^-ptpred^).asPoint3d;
       if uzegeometry.SqrOneVertexlength(tp.asVector3d)>sqreps then begin
         _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
         _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;

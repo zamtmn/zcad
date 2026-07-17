@@ -579,7 +579,7 @@ var
    ALLayer:pointer;
    pdevvarext:TVariablesExtender;
    pvd,pvdv:pvardesk;
-   dv:TzePoint3d;
+   dv:TzeVector3d;
    axisdesc:taxisdesc;
    psd:PSelectedObjDesc;
    hi,hi2,vi,vi2,{ti,}i:integer;

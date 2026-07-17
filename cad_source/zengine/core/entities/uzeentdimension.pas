@@ -393,7 +393,7 @@ begin
 
   DimData.NeedTextLeader:=False;
   if (self.DimData.textmoved)or TextAlwaysMoved then begin
-    if (abs(scalardot((p-DimData.MidPoint).asVector3d,vectorN))>2*textsize)or TextAlwaysMoved then
+    if (abs(scalardot(p-DimData.MidPoint,vectorN))>2*textsize)or TextAlwaysMoved then
       if GetDIMTMOVE=DTMCreateLeader then begin
         p:=VertexDmorph(p,VectorT.asPoint3d,GetPSize/2);
         DimData.NeedTextLeader:=True;

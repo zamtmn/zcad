@@ -50,7 +50,7 @@ type
     DRAWCOUNT:TActuality;
     POSCOUNT:TActuality;
     VISCOUNT:TActuality;
-    CamCSOffset:TzePoint3d;
+    CamCSOffset:TzeVector3d;
     procedure NextPosition;virtual;abstract;
   end;
   PGDBBaseCamera=^GDBBaseCamera;

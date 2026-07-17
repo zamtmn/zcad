@@ -733,7 +733,7 @@ end;
 procedure TSimpleDrawing.myGluUnProject(const win:TzePoint3d;out obj:TzePoint3d);
 begin
      _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
-     OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);
+     OBJ:=OBJ-pcamera^.CamCSOffset;
 end;
 destructor TSimpleDrawing.done;
 begin

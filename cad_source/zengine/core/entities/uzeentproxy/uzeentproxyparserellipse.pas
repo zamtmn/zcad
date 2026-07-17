@@ -98,12 +98,12 @@ end;
   Использует алгоритм произвольной оси AutoCAD. }
 function TransformPointToOCS(const Point, Normal: TzePoint3d): TzePoint3d;
 const
-  AuxX: TzePoint3d = (x: 1.0; y: 0.0; z: 0.0);
-  AuxY: TzePoint3d = (x: 0.0; y: 1.0; z: 0.0);
+  AuxX: TzeVector3d = (x: 1.0; y: 0.0; z: 0.0);
+  AuxY: TzeVector3d = (x: 0.0; y: 1.0; z: 0.0);
 var
-  ZAxis, XAxis, YAxis: TzePoint3d;
+  ZAxis, XAxis, YAxis: TzeVector3d;
 begin
-  ZAxis := (Normal).Normalized;
+  ZAxis := (Normal).Normalized.asVector3d;
 
   { Выбираем вспомогательную ось для построения OCS }
   if Abs(ZAxis.x) < ELLIPSE_AXIS_THRESHOLD then
@@ -114,9 +114,9 @@ begin
   YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalized;
 
   { Проекция точки на оси OCS }
-  Result.x := scalarDot(Point.asVector3d, XAxis.asVector3d);
-  Result.y := scalarDot(Point.asVector3d, YAxis.asVector3d);
-  Result.z := scalarDot(Point.asVector3d, ZAxis.asVector3d);
+  Result.x := scalarDot(Point.asVector3d, XAxis);
+  Result.y := scalarDot(Point.asVector3d, YAxis);
+  Result.z := scalarDot(Point.asVector3d, ZAxis);
 end;
 
 { Вычисляет количество отрезков тесселяции пропорционально параметрическому
@@ -252,7 +252,7 @@ begin
 
   { Вычисляем вектор малой полуоси через перпендикуляр к Normal × MajorAxisVector }
   PerpendicularAxis := (Normal * MajorAxisVector.x
-    - MajorAxisVector * Normal.x).Normalized;
+    - MajorAxisVector * Normal.x).Normalized.asPoint3d;
 
   MinorAxis.x := PerpendicularAxis.x * MajorRadius * MinorAxisRatio;
   MinorAxis.y := PerpendicularAxis.y * MajorRadius * MinorAxisRatio;

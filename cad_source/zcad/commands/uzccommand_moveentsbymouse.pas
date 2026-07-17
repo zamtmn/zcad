@@ -116,7 +116,7 @@ begin
         if (GetKeyState(VK_CONTROL) and $8000<>0) then
           zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('MoveEntsByMouse[Copy]')
         else begin
-          p1:=commandmanager.GetLastPoint-p1;
+          p1:=(commandmanager.GetLastPoint-p1).asPoint3d;
           zcTransformSelectedEntsInDrawingWithUndo(
             'MoveEntsByMouse',CreateTranslationMatrix(p1));
           zcFreeEntsInCurrentDrawingConstructRoot;

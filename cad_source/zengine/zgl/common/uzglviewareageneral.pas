@@ -657,7 +657,7 @@ begin
     LODSave:=DC.LOD;
     if DC.LOD=LODCalculatedDetail then begin
       if LODDeep=0 then begin
-        v:=(Node.BoundingBox.RTF-Node.BoundingBox.LBN).asVector3d;
+        v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
         if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),300) then begin
           DC.LOD:=LODLowDetail;
           inc(LODDeep);
@@ -2480,7 +2480,7 @@ begin
 
 
 
-  pcamera^.CamCSOffset:=NulPoint;
+  pcamera^.CamCSOffset:=NulVertex;
   pcamera^.CamCSOffset.z:=(pcamera^.zmax+pcamera^.zmin)/2;
   pcamera^.CamCSOffset.z:=(pcamera^.zmin);
 
@@ -2602,7 +2602,7 @@ begin
                                       begin
                                            //if uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
-                                                LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset;
+                                                LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset.asPoint3d;
                                                 LCS.CurrentCamCSOffsetS:=VertexD2S(LCS.CurrentCamCSOffset);
                                                 LCS.notuseLCS:=pcamera^.notuseLCS;
                                            end
@@ -2617,7 +2617,7 @@ begin
         pcamera^.projMatrixLCS:=pcamera^.projMatrix;
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
-        pcamera^.CamCSOffset:=NulPoint;
+        pcamera^.CamCSOffset:=NulVertex;
         LCS.CurrentCamCSOffset:=NulPoint;
   end;
 

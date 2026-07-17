@@ -322,7 +322,7 @@ var
   tp2,tp3:TzeVector3d;
   m,rotmatr:TzeTypedMatrix4d;
 begin
-  onel:=(l2-l1).asVector3d;
+  onel:=l2-l1;
   if onel.SqrLength>sqreps then begin
     onel.Normalize;
     tp2:=GetXfFromZ(onel);
@@ -346,8 +346,8 @@ begin
 end;
 procedure drawCross(const p1:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 begin
-  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1-_XY_zVertex,p1+_XY_zVertex);
-  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1-_MinusXY_zVertex,p1+_MinusXY_zVertex);
+  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,(p1-_XY_zVertex).asPoint3d,p1+_XY_zVertex);
+  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,(p1-_MinusXY_zVertex).asPoint3d,p1+_MinusXY_zVertex);
 end;
 procedure drawFilledCircle(const p0:TzePoint3d;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
@@ -407,7 +407,8 @@ end;
 
 procedure drawIntersectArc(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
-  v,p1,p2:TzePoint3d;
+  v:TzeVector3d;
+  p1,p2:TzePoint3d;
   onel,tp2,tp3:TzeVector3d;
   m,rotmatr:TzeTypedMatrix4d;
   l{,x,y,z}:double;
@@ -431,7 +432,7 @@ begin
   end;
   l:=v.Length;
   if l>bigeps then begin
-    onel:=v.asVector3d;
+    onel:=v;
     tp2:=GetXfFromZ(onel);
     tp3:=VectorDot(tp2,onel);
     tp3:=NormalizeVertex(tp3);

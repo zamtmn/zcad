@@ -94,11 +94,13 @@ end;
 
 procedure GDBObjDiametricDimension.CalcDNVectors;
 begin
-  vectorD:=(DimData.P15InWCS-DimData.P10InWCS).asVector3d;
+  vectorD:=DimData.P15InWCS-DimData.P10InWCS;
   vectorD:=normalizevertex(vectorD);
-  vectorN.x:=-vectorD.y;
+  vectorN.Slice:=vectorD.Slice.Turned90L;
+  vectorN.CutOff:=0;
+  {vectorN.x:=-vectorD.y;
   vectorN.y:=vectorD.x;
-  vectorN.z:=0;
+  vectorN.z:=0;}
   vectorN:=normalizevertex(vectorN);
 end;
 

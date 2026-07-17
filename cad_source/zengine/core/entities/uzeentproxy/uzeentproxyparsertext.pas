@@ -141,12 +141,12 @@ end;
 { Переводит точку из WCS в OCS по нормали Normal }
 function TransformPointToOCS(const Point, Normal: TzePoint3d): TzePoint3d;
 const
-  AuxX: TzePoint3d = (x: 1.0; y: 0.0; z: 0.0);
-  AuxY: TzePoint3d = (x: 0.0; y: 1.0; z: 0.0);
+  AuxX: TzeVector3d = (x: 1.0; y: 0.0; z: 0.0);
+  AuxY: TzeVector3d = (x: 0.0; y: 1.0; z: 0.0);
 var
-  ZAxis, XAxis, YAxis: TzePoint3d;
+  ZAxis, XAxis, YAxis: TzeVector3d;
 begin
-  ZAxis := (Normal).Normalized;
+  ZAxis := (Normal).Normalized.asVector3d;
 
   if Abs(ZAxis.x) < TEXT_AXIS_THRESHOLD then
     XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).Normalized
@@ -155,9 +155,9 @@ begin
 
   YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalized;
 
-  Result.x := scalarDot(Point.asVector3d, XAxis.asVector3d);
-  Result.y := scalarDot(Point.asVector3d, YAxis.asVector3d);
-  Result.z := scalarDot(Point.asVector3d, ZAxis.asVector3d);
+  Result.x := scalarDot(Point.asVector3d, XAxis);
+  Result.y := scalarDot(Point.asVector3d, YAxis);
+  Result.z := scalarDot(Point.asVector3d, ZAxis);
 end;
 
 { Вычисляет аппроксимационный BBox текста.

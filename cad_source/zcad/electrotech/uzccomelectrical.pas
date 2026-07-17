@@ -266,7 +266,7 @@ begin
      pl^.Formatentity(drawings.GetCurrentDWG^,dc);
      if pcabledesk<>nil then
      begin
-          v:=(p1-p2).asVector3d;
+          v:=p1-p2;
           v.Normalize;
           if (abs (v.x) < 1/64) and (abs (v.y) < 1/64) then
                                                                     v:=VectorDot(YWCS,v)
@@ -289,7 +289,7 @@ begin
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(pcabledesk^.Name),(Vertexmorph(p1,p2,0.5)-v.asPoint3d),2.5,0,0.65,a,jstc,vertexlength(p1,p2),1);
+          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(pcabledesk^.Name),(Vertexmorph(p1,p2,0.5)-v),2.5,0,0.65,a,jstc,vertexlength(p1,p2),1);
           drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(ptext^);
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 

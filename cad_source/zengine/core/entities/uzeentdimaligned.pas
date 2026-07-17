@@ -378,11 +378,13 @@ begin
   vectorD:=normalizevertex(vectorD);
 
   if uzegeometry.sqrVertexlength(DimData.P10InWCS,DimData.P14InWCS)>sqreps then begin
-    vectorN:={vertexsub}(DimData.P10InWCS-DimData.P14InWCS).asVector3d;
+    vectorN:=DimData.P10InWCS-DimData.P14InWCS;
   end else begin
-    vectorN.x:=-vectorD.y;
-    vectorN.y:=vectorD.x;
-    vectorN.z:=0;
+    vectorN.Slice:=vectorD.Slice.Turned90L;
+    {vectorN.x:=-vectorD.y;
+    vectorN.y:=vectorD.x;}
+    vectorN.CutOff:=0;
+    {vectorN.z:=0;}
   end;
   vectorN:=normalizevertex(vectorN);
 end;

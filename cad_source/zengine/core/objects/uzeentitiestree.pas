@@ -185,7 +185,7 @@ begin
     LODSave:=DC.LOD;
     if DC.LOD=LODCalculatedDetail then begin
       if LODDeep=0 then begin
-        v:=(Node.BoundingBox.RTF-Node.BoundingBox.LBN).asVector3d;
+        v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
         if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),300) then begin
           DC.LOD:=LODLowDetail;
           inc(LODDeep);

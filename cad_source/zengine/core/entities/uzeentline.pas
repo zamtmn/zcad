@@ -97,14 +97,14 @@ implementation
 
 function GDBObjLine.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 begin
-  Result:=(CoordInWCS.lEnd-CoordInWCS.lBegin).Normalized;
+  Result:=(CoordInWCS.lEnd-CoordInWCS.lBegin).asPoint3d.Normalized;
 end;
 
 procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var
   tv,dir:TzeVector3d;
 begin
-  dir:={VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin).asVector3d;
+  dir:=CoordInWCS.lEnd-CoordInWCS.lBegin;
   processaxis(posr,dir.asPoint3d);
   tv:=uzegeometry.vectordot(dir,zwcs);
   processaxis(posr,tv.asPoint3d);
@@ -157,12 +157,12 @@ begin
     Result:=pl^.jointoline(@self,drawing);
     exit;
   end;
-  dir:={VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin).asVector3d;
+  dir:=CoordInWCS.lEnd-CoordInWCS.lBegin;
   u:=NormalizeVertex(dir);
-  w:={VertexSub}(pl.CoordInWCS.lbegin-CoordInWCS.lbegin).asVector3d;
+  w:=pl.CoordInWCS.lbegin-CoordInWCS.lbegin;
   t1:=(scalardot(w,dir))/SqrOneVertexlength(dir);
   q:=online(w,u);
-  w:={VertexSub}(pl.CoordInWCS.lend-CoordInWCS.lbegin).asVector3d;
+  w:=pl.CoordInWCS.lend-CoordInWCS.lbegin;
   t2:=(scalardot(w,dir))/SqrOneVertexlength(dir);
   q:=q and online(w,u);
   if not q then
@@ -362,7 +362,7 @@ begin
     exit;
   end;
   Result:=True;
-  dir:={VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin).asVector3d;
+  dir:=CoordInWCS.lEnd-CoordInWCS.lBegin;
   case onlygetsnapcount of
     0:begin
       if (SnapMode and osm_endpoint)<>0 then begin

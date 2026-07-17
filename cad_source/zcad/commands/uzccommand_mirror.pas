@@ -55,7 +55,8 @@ implementation
 
 function Mirror_com.CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;
 var
-  dist,p3:TzePoint3d;
+  dist:TzeVector3d;
+  p3:TzePoint3d;
   d:double;
   plane:TzeVector4d;
 begin
@@ -93,10 +94,10 @@ begin
         FrPos.y:=tempmatr.mtr.v[3].y;
         FrPos.z:=tempmatr.mtr.v[3].z;
 
-        ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset);
+        ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset.asPoint3d);
         ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,MirrMatr);
         ObjMatrix:=uzegeometry.MatrixMultiply(
-          ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset));
+          ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset.asPoint3d));
         FrustumPosition:=FrPos;
       end;
     end;

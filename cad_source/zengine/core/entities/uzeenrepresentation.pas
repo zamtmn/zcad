@@ -129,7 +129,7 @@ var
   simplydraw:boolean;
 begin
   if rc.lod=LODCalculatedDetail then begin
-    v:={uzegeometry.VertexSub}(aabb.RTF-aabb.LBN).asVector3d;
+    v:=aabb.RTF-aabb.LBN;
     simplydraw:=not SqrCanSimplyDrawInWCS(rc,uzegeometry.SqrOneVertexlength(v),49);
   end else
     simplydraw:=rc.lod=LODLowDetail;
@@ -399,7 +399,7 @@ procedure TZEntityRepresentation.CreateLWPolyLineWdh(var DC:TDrawContext;var Ent
 
   procedure CalcSegment(const p1,p2:TzePoint2d;const plw:TSegmentParams;var quad:TQuadData);
   var
-    vtangent,vnormal,vtemp:TzePoint2d;
+    vtangent,vnormal,vtemp:TzeVector2d;
   begin
     vtangent:=p2-p1;
     vnormal:=vtangent.Turned90L;

@@ -753,13 +753,14 @@ end;
 procedure GDBObjLWpolyline.CalcWidthSegment(var p1,p2:TzePoint2d;var plw:TSegmentParams);
 var
   k:integer;
-  vtangent,vnormal,vtemp:TzePoint2d;
+  vtangent,vnormal,vtemp:TzeVector2d;
   q3d:GDBQuad3d;
   v:TzeVector4d;
 begin
   vtangent:=p2-p1;
-  vnormal.x:=-vtangent.y;
-  vnormal.y:=vtangent.x;
+  vnormal:=vtangent.Turned90L;
+  {vnormal.x:=-vtangent.y;
+  vnormal.y:=vtangent.x;}
   vnormal.Normalize;
 
   if (plw.data.startw=0) and (plw.data.endw=0) then

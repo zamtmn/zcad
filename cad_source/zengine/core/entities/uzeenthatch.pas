@@ -306,7 +306,7 @@ begin
   if Strokes.Count=0 then
     Representation.CreateLineWithoutLT(DC,self,ObjMatrix,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0))
   else begin
-    dir:=(p2-p1).Normalize;
+    dir:=(p2-p1).Normalized;
     t:=Scale*normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
     l:=Vertexlength2d(p1,p2);
     findInterval(Strokes,Scale,t,cl,c);

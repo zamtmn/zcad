@@ -97,7 +97,7 @@ implementation
 
 function GDBObjLine.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 begin
-  Result:={normalizevertex}({VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin).Normalize);
+  Result:=(CoordInWCS.lEnd-CoordInWCS.lBegin).Normalized;
 end;
 
 procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);

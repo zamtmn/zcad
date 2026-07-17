@@ -115,7 +115,7 @@ begin
   if IsVectorNul(v.asVector3d) then
     normal:=xy_Z_Vertex
   else
-    normal:=(v).Normalize;
+    normal:=(v).Normalized;
   if IsPointEqual(PInOCS[2],PInOCS[3],sqreps) then
     triangle:=True
   else

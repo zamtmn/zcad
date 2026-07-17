@@ -146,14 +146,14 @@ const
 var
   ZAxis, XAxis, YAxis: TzePoint3d;
 begin
-  ZAxis := (Normal).Normalize;
+  ZAxis := (Normal).Normalized;
 
   if Abs(ZAxis.x) < TEXT_AXIS_THRESHOLD then
-    XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).Normalize
+    XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).Normalized
   else
-    XAxis := (AuxY * ZAxis.z - ZAxis * AuxY.z).Normalize;
+    XAxis := (AuxY * ZAxis.z - ZAxis * AuxY.z).Normalized;
 
-  YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalize;
+  YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalized;
 
   Result.x := scalarDot(Point.asVector3d, XAxis.asVector3d);
   Result.y := scalarDot(Point.asVector3d, YAxis.asVector3d);

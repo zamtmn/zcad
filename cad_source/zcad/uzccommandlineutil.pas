@@ -120,7 +120,7 @@ begin
           if assigned(drawings.GetCurrentDWG.wa.getviewcontrol) then begin
             if (drawings.GetCurrentDWG.wa.param.polarlinetrace = 1)and commandmanager.CurrentCommandNotUseCommandLine then begin
               tv:=drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arrayworldaxis.getData(drawings.GetCurrentDWG.wa.param.axisnum);
-              tv:=(tv).Normalize;
+              tv:=(tv).Normalized;
               temp.x := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.x + len * tv.x * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
               temp.y := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.y + len * tv.y * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
               temp.z := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.z + len * tv.z * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
@@ -217,7 +217,7 @@ begin
                     if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
                       if drawings.GetCurrentDWG.wa.param.polarlinetrace = 1 then begin
                         tv:=drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arrayworldaxis.getData(drawings.GetCurrentDWG.wa.param.axisnum);
-                        tv:=(tv).Normalize;
+                        tv:=(tv).Normalized;
                         temp.x := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.x + strtodouble(parseresult^.getData(0)) * tv.x * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
                         temp.y := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.y + strtodouble(parseresult^.getData(0)) * tv.y * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);
                         temp.z := drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].worldcoord.z + strtodouble(parseresult^.getData(0)) * tv.z * sign(ptraceprop(drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[drawings.GetCurrentDWG.wa.param.pointnum].arraydispaxis.getDataMutable(drawings.GetCurrentDWG.wa.param.axisnum)).tmouse);

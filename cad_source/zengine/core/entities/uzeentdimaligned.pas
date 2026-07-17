@@ -231,7 +231,7 @@ begin
         vertexsub(DimData.P14InWCS,tv);
       tvertex:=
         uzegeometry.vectordot(tvertex.asVector3d,self.Local.Basis.oz).asPoint3d;
-      tvertex:={normalizevertex}(tvertex).Normalize;
+      tvertex:=tvertex.Normalized;
     end
     //else
     //    tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.x_Y_zVertex,dir);
@@ -269,7 +269,7 @@ begin
     begin
       tvertex:=vertexsub(tv,DimData.P13InWCS);
       tvertex:=uzegeometry.vectordot(tvertex.asVector3d,self.Local.Basis.oz).asPoint3d;
-      tvertex:={normalizevertex}(tvertex).Normalize;
+      tvertex:=tvertex.Normalized;
     end
     //else
     //tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.x_Y_zVertex,dir);

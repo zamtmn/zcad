@@ -134,7 +134,7 @@ begin
 
       if found>0 then begin
         Result:=vertexsub(ptv^,ppredtv^);
-        Result:={uzegeometry.Normalize}(Result).Normalize;
+        Result:=Result.Normalized;
         exit;
         Dec(found);
       end;
@@ -760,7 +760,7 @@ begin
   vtangent:=p2-p1;
   vnormal.x:=-vtangent.y;
   vnormal.y:=vtangent.x;
-  vnormal:=vnormal.Normalize;
+  vnormal:=vnormal.Normalized;
 
   if (plw.data.startw=0) and (plw.data.endw=0) then
     plw.data.hw:=False

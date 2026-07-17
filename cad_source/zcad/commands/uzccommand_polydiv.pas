@@ -64,9 +64,7 @@ begin
     if (i<>p1)and  (i<>p2)and  (i<>p3)and
       (i<>p4) then begin
       c:=0;
-      if _intercept2d(
-        PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(pva.getDataMutable(p2))^,
-        PzePoint2d(pva.getDataMutable(i))^,1,0) then
+      if _intercept2d(pva.getDataMutable(p1)^,pva.getDataMutable(p2)^,pva.getDataMutable(i)^,1,0) then
         Inc(c);
       if _intercept2d(
         PzePoint2d(pva.getDataMutable(p2))^,PzePoint2d(pva.getDataMutable(p3))^,

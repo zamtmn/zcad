@@ -156,9 +156,9 @@ begin
         // GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
         if not {uzegeometry.IsVectorNul}(xdir.IsNul) then begin
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-            ydir:=vectordot(PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ,xdir).Normalize
+            ydir:=vectordot(PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ,xdir).Normalized
           else
-            ydir:=uzegeometry.vectordot(ZWCS,xdir).Normalize;
+            ydir:=uzegeometry.vectordot(ZWCS,xdir).Normalized;
           tv:=wc;
           //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
           dispmatr:=uzegeometry.CreateTranslationMatrix(

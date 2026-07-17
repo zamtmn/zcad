@@ -167,7 +167,7 @@ procedure InteractiveConstructRootRotateManipulator(const PInteractiveData:PRota
 
 begin
 
-  v:=(Point-PInteractiveData^.Base).Normalize.asVector3d;
+  v:=(Point-PInteractiveData^.Base).Normalized.asVector3d;
   rotmatr:=CreateAffineRotationMatrix(PInteractiveData^.Axis,PInteractiveData^.ARefV,v);
 
   if click then begin
@@ -586,10 +586,14 @@ begin
     zcSetEntPropFromCurrentDrawingProp(obj.pentity);
     for i:=countVert-1 downto 0 do begin
       SinCos(alpha+(2*pi*i/countVert),sine,cosine);
-      PzePoint2d(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.x:=
+      with PzePoint2d(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^ do begin
+        x:=stPoint.x+radius*cosine;
+        y:=stPoint.y+radius*sine;
+      end;
+      {PzePoint2d(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.x:=
         stPoint.x+radius*cosine;
       PzePoint2d(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.y:=
-        stPoint.y+radius*sine;
+        stPoint.y+radius*sine;}
     end;
     obj.pentity^.YouChanged(drawings.GetCurrentDWG^);
     //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;

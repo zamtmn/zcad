@@ -78,7 +78,7 @@ var
 begin
   d:=Vertexlength(DimData.P15InWCS,DimData.P11InOCS);
   dirv:=vertexsub(DimData.P15InWCS,tv);
-  dirv:={normalizevertex}(dirv).Normalize;
+  dirv:=dirv.Normalized;
 
   Result:=tv;
   DimData.P11InOCS:=VertexDmorph(DimData.P15InWCS,dirv,d);
@@ -91,7 +91,7 @@ var
 begin
   r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
   dirv:=vertexsub(tv,DimData.P10InWCS);
-  dirv:={normalizevertex}(dirv).Normalize;
+  dirv:=dirv.Normalized;
 
   Result:=VertexDmorph(DimData.P10InWCS,dirv,r);
   r:=Vertexlength(DimData.P10InWCS,DimData.P11InOCS);
@@ -105,7 +105,7 @@ var
 begin
   r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
   dirv:=vertexsub(tv,DimData.P10InWCS);
-  dirv:={normalizevertex}(dirv).Normalize;
+  dirv:=dirv.Normalized;
 
   DimData.P15InWCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
   Result:=tv;

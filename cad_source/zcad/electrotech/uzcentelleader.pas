@@ -553,7 +553,7 @@ begin
 
   if {(pdev=nil)and}(pcable<>nil) then begin
     tv:=uzegeometry.vectordot((mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin).asVector3d,Local.basis.OZ).asPoint3d;
-    tv:={uzegeometry.Normalize}(tv).Normalize;
+    tv:={uzegeometry.Normalize}(tv).Normalized;
     tv:=uzegeometry.VertexMulOnSc(tv,scale);
 
     if pcable<>nil then begin
@@ -566,11 +566,11 @@ begin
       else
         tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2.asVector3d).asPoint3d;
       //tv2:=uzegeometry.vectordot(tv2,Local.OZ);
-      tv2:={uzegeometry.Normalize}(tv2).Normalize;
+      tv2:={uzegeometry.Normalize}(tv2).Normalized;
       tv2:=uzegeometry.VertexMulOnSc(tv2,scale);
 
       tv:=tv2+tv;
-      tv:={uzegeometry.Normalize}(tv).Normalize;
+      tv:={uzegeometry.Normalize}(tv).Normalized;
       tv:=uzegeometry.VertexMulOnSc(tv,scale);
 
       //tv:=tv2;
@@ -903,7 +903,7 @@ begin
      //MainLine.Format;
      tv:=vectordot((mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin).asVector3d,Local.basis.OZ).asPoint3d;
      if not IsVectorNul(tv.asVector3d) then
-                                tv:=tv.Normalize;
+       tv:=tv.Normalized;
      MarkLine.init(@self,vp.Layer,vp.LineWeight,MainLine.CoordInOCS.lBegin-tv,MainLine.CoordInOCS.lBegin+tv);
      //MarkLine.Format;
 

@@ -175,7 +175,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
     pc:=(p1+p2)/2;
     n.x:=-d.y;
     n.y:=d.x;
-    n:=n.Normalize;
+    n:=n.Normalized;
     pac:=pc-n*h;
     if divcount=-1 then begin
       //пытаемся сделать лод. вариантов не много

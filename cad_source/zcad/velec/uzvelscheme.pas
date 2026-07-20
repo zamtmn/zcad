@@ -2111,7 +2111,7 @@ var
          //zcUI.TextMessage('getVertexGraphIndexCoo(oGraph:TGraph;vertex:TzePoint3d):integer  oGraph.VertexCount=' + inttostr(oGraph.VertexCount),TMWOHistoryOut);
          for i:= 0 to oGraph.VertexCount-1 do begin
            //zcUI.TextMessage('i='+inttostr(i)+'   dev = '+booltostr(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).isDev)+ 'ccor oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex x=' + floattostr(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex.x),TMWOHistoryOut);
-           if vertexeq(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex,vertex) then begin
+           if {vertexeq}IsPointEqual(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex,vertex,bigeps) then begin
              //if TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then
                  //zcUI.TextMessage(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name + '---gggggggggggggggggggg',TMWOHistoryOut);
                //zcUI.TextMessage(inttostr(i)+ '---hhhhhhhhhhhhhhhhhh',TMWOHistoryOut);

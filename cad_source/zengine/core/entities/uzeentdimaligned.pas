@@ -363,7 +363,7 @@ begin
   pp.P_insertInOCS:=p1;
   pp.FormatEntity(drawing,dc);
 
-  if vertexeq(p1,p2) then
+  if {vertexeq}IsPointEqual(p1,p2,bigeps) then
     pl:=DrawExtensionLineLinePart(p1,p2,drawing,part)
   else
     pl:=DrawExtensionLineLinePart(

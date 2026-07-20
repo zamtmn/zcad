@@ -308,7 +308,7 @@ begin
      if pl<>nil then
      begin
           repeat
-                if not uzegeometry.vertexeq(pl^.CoordInOCS.lbegin,pl^.CoordInOCS.lend) then
+                if not {vertexeq}IsPointEqual(pl^.CoordInOCS.lbegin,pl^.CoordInOCS.lend,bigeps) then
                 begin
 
                 tgf:=graf.addge(pl^.CoordInOCS.lbegin);

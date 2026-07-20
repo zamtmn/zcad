@@ -144,7 +144,7 @@ begin
   p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
   if (button and MZW_LBUTTON)<>0 then begin
     if (p3dpl^.VertexArrayInOCS.Count>1) and
-      vertexeq(wc,p3dpl^.VertexArrayInWCS.getData(0)) then begin
+      {vertexeq}IsPointEqual(wc,p3dpl^.VertexArrayInWCS.getData(0),bigeps) then begin
       p3dpl^.Closed:=True;
       if assigned(p3dplESP) then
         p3dplESP(ESSSetConstructEntity,p3dpl);

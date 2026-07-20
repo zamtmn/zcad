@@ -3144,7 +3144,7 @@ begin
                                             riser2:=net2.riserarray.beginiterate(ir_riser2);
                                             if (riser2<>nil) then
                                             repeat
-                                                  if not uzegeometry.vertexeq(riser2.P_insert_in_WCS,riser.P_insert_in_WCS) then
+                                                  if not {vertexeq}IsPointEqual(riser2.P_insert_in_WCS,riser.P_insert_in_WCS,bigeps) then
                                                   begin
                                                   priser2varext:=riser2^.GetExtension<TVariablesExtender>;
                                                   pvd:=priservarext.entityunit.FindVariable('RiserName');

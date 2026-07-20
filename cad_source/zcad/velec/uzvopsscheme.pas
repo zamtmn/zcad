@@ -1022,7 +1022,7 @@ var
     begin
          result:=-1;
          for i:= 0 to oGraph.VertexCount-1 do
-           if vertexeq(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex,vertex) then begin
+           if {vertexeq}IsPointEqual(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex,vertex,bigeps) then begin
              //if TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev <> nil then
              //    zcUI.TextMessage(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).dev^.Name + '---gggggggggggggggggggg',TMWOHistoryOut);
              //  zcUI.TextMessage(inttostr(i)+ '---hhhhhhhhhhhhhhhhhh',TMWOHistoryOut);

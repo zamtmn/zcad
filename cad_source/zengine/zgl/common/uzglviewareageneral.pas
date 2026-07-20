@@ -2982,7 +2982,7 @@ begin
                   else
                     test:=False;
                   if not(test) then begin
-                    if not uzegeometry.vertexeq(pt.worldraycoord,param.ospoint.worldcoord) then
+                    if not {vertexeq}IsPointEqual(pt.worldraycoord,param.ospoint.worldcoord,bigeps) then
                       test:=True;
                   end;
                   if test then

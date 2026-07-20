@@ -1555,7 +1555,7 @@ var
            if not getDevVertexConnector(dev,devVertex) then       // Получаем координату коннектора
               zcUI.TextMessage('ОШИБКА! устройство без коннектора',TMWOHistoryOut);
            for cab in lCable do    // перебираем все кабели в списке
-               if vertexeq(devVertex,cab^.VertexArrayInWCS.getLast) then    //сравниваем координату устройства с последней точкой кабеля. на вершинах дерьвьев не заканичваются кабели. Они начинаются с вершин. Так можно найти вершены, всех деревьев
+               if {vertexeq}IsPointEqual(devVertex,cab^.VertexArrayInWCS.getLast,bigeps) then    //сравниваем координату устройства с последней точкой кабеля. на вершинах дерьвьев не заканичваются кабели. Они начинаются с вершин. Так можно найти вершены, всех деревьев
                   devFound:=true;
 
            if not devFound then
@@ -1579,7 +1579,7 @@ var
       for cab in lCable do
       begin
            //zcUI.TextMessage('3',TMWOHistoryOut);
-           if vertexeq(devVertex,cab^.VertexArrayInWCS.getData(0)) then    //Ищем кабели у которые начинаются из нашего устройства
+           if {vertexeq}IsPointEqual(devVertex,cab^.VertexArrayInWCS.getData(0),bigeps) then    //Ищем кабели у которые начинаются из нашего устройства
              begin
                 //zcUI.TextMessage('4',TMWOHistoryOut);
                 for dev in lDevice do    // теперь из списка устройств ищем те чьи координаты находятся на конце кабеля
@@ -1588,7 +1588,7 @@ var
                    lastDevVertex:=uzegeometry.CreateVertex(0,0,0);
                    if not getDevVertexConnector(dev,lastDevVertex) then       // Получаем координату коннектора
                       zcUI.TextMessage('ОШИБКА! устройство без коннектора',TMWOHistoryOut);
-                   if vertexeq(lastDevVertex,cab^.VertexArrayInWCS.getLast) then    //сравниваем координату устройства с последней точкой кабеля
+                   if {vertexeq}IsPointEqual(lastDevVertex,cab^.VertexArrayInWCS.getLast,bigeps) then    //сравниваем координату устройства с последней точкой кабеля
                       begin
                          //zcUI.TextMessage('6',TMWOHistoryOut);
                          newVertex:=gDev[index].AddChild;

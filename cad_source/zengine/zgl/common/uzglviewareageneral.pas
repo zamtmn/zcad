@@ -2973,9 +2973,9 @@ begin
             if (pt.dmouse<lastontracdist) then
               if (param.ospoint.ostype=os_blockinsert)or(param.ospoint.ostype=os_insert)or(param.ospoint.ostype=os_textinsert)or
                 (param.ospoint.ostype=os_none)or(param.ospoint.ostype={os_intersection}os_trace) then begin
-                if uzegeometry.vertexlen2df(param.ontrackarray.otrackarray[j].dispcoord.x,
+                if {vertexlen2df(param.ontrackarray.otrackarray[j].dispcoord.x,
                   param.ontrackarray.otrackarray[j].dispcoord.y,param.md.glmouse.x,
-                  param.md.glmouse.y)>ontracignoredist then
+                  param.md.glmouse.y)}(param.ontrackarray.otrackarray[j].dispcoord.Slice-param.md.glmouse).Length>ontracignoredist then
                 begin
                   if param.polarlinetrace=0 then
                     test:=True
@@ -3028,7 +3028,8 @@ begin
                   if ip.isintercept then
                     if not IsPointEqual(ip.interceptcoord,param.ontrackarray.otrackarray[i].worldcoord,bigeps) then begin
                       PDWG.myGluProject2(ip.interceptcoord,temp);
-                      currentontracdist:=vertexlen2df(temp.x,temp.y,param.md.glmouse.x,param.md.glmouse.y);
+                      //currentontracdist:=vertexlen2df(temp.x,temp.y,param.md.glmouse.x,param.md.glmouse.y);
+                      currentontracdist:=(temp.Slice-param.md.glmouse).Length;
                       if currentontracdist<lastontracdist then //if currentontracdist<sysvar.DISP.DISP_CursorSize^*sysvar.DISP.DISP_CursorSize^+1 then
                       begin
                         param.ospoint.worldcoord:=ip.interceptcoord;
@@ -3073,10 +3074,9 @@ begin
                   //ip:=intercept3dmy(createvertex(0,0,0),createvertex(0,2,0),createvertex(-1,1,0),createvertex(1,1,0));
                   begin
                     if ip.isintercept then begin
-                      PDWG.myGluProject2(ip.interceptcoord,
-                        temp);
-
-                      currentontracdist:=vertexlen2df(temp.x,temp.y,param.md.glmouse.x,param.md.glmouse.y);
+                      PDWG.myGluProject2(ip.interceptcoord,temp);
+                      //currentontracdist:=vertexlen2df(temp.x,temp.y,param.md.glmouse.x,param.md.glmouse.y);
+                      currentontracdist:=(temp.Slice-param.md.glmouse).Length;
                       if currentontracdist<lastontracdist then
                         if currentontracdist<sysvarDISPCursorSize*sysvarDISPCursorSize+1 then begin
                           param.ospoint.worldcoord:=ip.interceptcoord;

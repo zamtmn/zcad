@@ -142,10 +142,10 @@ begin
         PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].Slice)/oneVertexlength(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1].slice);
         true0Y:=VectorDot(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[2].Slice,PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].Slice);
         if not IsVectorNul(true0Y) then
-          true0Y:=NormalizeVertex(true0Y);
+          true0Y.Normalize;//:=NormalizeVertex(true0Y);
         fact0y:=PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1].Slice;
         if not IsVectorNul(fact0y) then
-          fact0y:=NormalizeVertex(fact0y);
+          fact0y.Normalize;//:=NormalizeVertex(fact0y);
         PLLSymbolLine^.SymbolsParam.Oblique:=arccos(scalardot(true0Y,fact0y));
         PLLSymbolLine^.SymbolsParam.NeededFontHeight:=PLLSymbolLine^.SymbolsParam.NeededFontHeight*cos(PLLSymbolLine^.SymbolsParam.Oblique);
         PLLSymbolLine^.SymbolsParam.sx:=PLLSymbolLine^.SymbolsParam.sx/cos(PLLSymbolLine^.SymbolsParam.Oblique);

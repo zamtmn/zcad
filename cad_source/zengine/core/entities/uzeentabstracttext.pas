@@ -118,9 +118,9 @@ begin
   Local.basis.ox:=objmatrix.mtr.v[0].slice;
   Local.basis.oy:=objmatrix.mtr.v[1].slice;
 
-  Local.basis.ox:=normalizevertex(Local.basis.ox);
-  Local.basis.oy:=normalizevertex(Local.basis.oy);
-  Local.basis.oz:=normalizevertex(Local.basis.oz);
+  Local.basis.ox.Normalize;//:=normalizevertex(Local.basis.ox);
+  Local.basis.oy.Normalize;//:=normalizevertex(Local.basis.oy);
+  Local.basis.oz.Normalize;//:=normalizevertex(Local.basis.oz);
 
   Local.P_insert:=objmatrix.mtr.v[3].slice.asPoint3d;
 end;
@@ -133,7 +133,7 @@ begin
 
   if bp.ListPos.owner<>nil then begin
     V1:=bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice.asPoint3d;
-    l0:=scalardot(NormalizeVertex(V1.asVector3d),_X_yzVertex.asVector3d);
+    l0:=scalardot({NormalizeVertex}(V1.asVector3d).Normalized,_X_yzVertex.asVector3d);
     l0:=arccos(l0);
     if v1.y<-eps then
       l0:=2*pi-l0;

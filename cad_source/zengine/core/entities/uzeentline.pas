@@ -158,7 +158,7 @@ begin
     exit;
   end;
   dir:=CoordInWCS.lEnd-CoordInWCS.lBegin;
-  u:=NormalizeVertex(dir);
+  u:={NormalizeVertex}(dir).Normalized;
   w:=pl.CoordInWCS.lbegin-CoordInWCS.lbegin;
   t1:=(scalardot(w,dir))/SqrOneVertexlength(dir);
   q:=online(w,u);
@@ -443,7 +443,7 @@ begin
       if (SnapMode and osm_nearest)<>0 then begin
         tv:=vectordot(dir,param.md.mouseray.dir).asPoint3d;
         n:=vectordot(param.md.mouseray.dir,tv.asVector3d);
-        n:=NormalizeVertex(n);
+        n.Normalize;//:=NormalizeVertex(n);
         v.x:=param.md.mouseray.lbegin.x-CoordInWCS.lbegin.x;
         v.y:=param.md.mouseray.lbegin.y-CoordInWCS.lbegin.y;
         v.z:=param.md.mouseray.lbegin.z-CoordInWCS.lbegin.z;

@@ -171,8 +171,8 @@ begin
             rotmatr:=CreateMatrixFromBasis(xdir,ydir,PGDBObjWithLocalCS(
               osp^.PGDBObject)^.Local.basis.OZ)
           else
-            rotmatr:=CreateMatrixFromBasis(xdir,ydir,normalizevertex(
-              uzegeometry.vectordot(ydir,xdir)));
+            rotmatr:=CreateMatrixFromBasis(xdir,ydir,{normalizevertex}(
+              uzegeometry.vectordot(ydir,xdir)).Normalized);
 
           //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
           dispmatr2:=uzegeometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
@@ -203,11 +203,11 @@ begin
         if not uzegeometry.IsVectorNul(xdir) then begin
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
             ydir:=
-              normalizevertex(uzegeometry.vectordot(PGDBObjWithLocalCS(
-              osp^.PGDBObject)^.Local.basis.OZ,xdir))
+              {normalizevertex}(uzegeometry.vectordot(PGDBObjWithLocalCS(
+              osp^.PGDBObject)^.Local.basis.OZ,xdir)).Normalized
           else
             ydir:=
-              normalizevertex(uzegeometry.vectordot(ZWCS,xdir));
+              {normalizevertex}(uzegeometry.vectordot(ZWCS,xdir)).Normalized;
 
           tv:=wc;
           //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
@@ -221,8 +221,8 @@ begin
             rotmatr:=CreateMatrixFromBasis(xdir,ydir,PGDBObjWithLocalCS(
               osp^.PGDBObject)^.Local.basis.OZ)
           else
-            rotmatr:=CreateMatrixFromBasis(xdir,ydir,normalizevertex(
-              uzegeometry.vectordot(ydir,xdir)));
+            rotmatr:=CreateMatrixFromBasis(xdir,ydir,{normalizevertex}(
+              uzegeometry.vectordot(ydir,xdir)).Normalized);
            {xdir:=normalizevertex(xdir);
            ydir:=uzegeometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ,xdir);
 

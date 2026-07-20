@@ -327,8 +327,8 @@ begin
     onel.Normalize;
     tp2:=GetXfFromZ(onel);
     tp3:=VectorDot(tp2,onel);
-    tp3:=NormalizeVertex(tp3);
-    tp2:=NormalizeVertex(tp2);
+    tp3.Normalize;//:=NormalizeVertex(tp3);
+    tp2.Normalize;//:=NormalizeVertex(tp2);
     //rotmatr:=onematrix;
     //PzePoint3d(@rotmatr.mtr[0])^:=onel;
     //PzePoint3d(@rotmatr.mtr[1])^:=tp2;
@@ -435,8 +435,8 @@ begin
     onel:=v;
     tp2:=GetXfFromZ(onel);
     tp3:=VectorDot(tp2,onel);
-    tp3:=NormalizeVertex(tp3);
-    tp2:=NormalizeVertex(tp2);
+    tp3.Normalize;//:=NormalizeVertex(tp3);
+    tp2.Normalize;//:=NormalizeVertex(tp2);
     //rotmatr:=onematrix;
     //PzePoint3d(@rotmatr.mtr[0])^:=onel;
     //PzePoint3d(@rotmatr.mtr[1])^:=tp2*l;

@@ -90,9 +90,9 @@ begin
   Local.basis.oy:=objmatrix.mtr.v[1].Slice;
   Local.basis.oz:=objmatrix.mtr.v[2].Slice;
 
-  Local.basis.ox:=normalizevertex(Local.basis.ox);
-  Local.basis.oy:=normalizevertex(Local.basis.oy);
-  Local.basis.oz:=normalizevertex(Local.basis.oz);
+  Local.basis.ox.Normalize;//:=normalizevertex(Local.basis.ox);
+  Local.basis.oy.Normalize;//:=normalizevertex(Local.basis.oy);
+  Local.basis.oz.Normalize;//:=normalizevertex(Local.basis.oz);
 end;
 
 procedure GDBObjWithLocalCS.higlight;
@@ -178,8 +178,8 @@ begin
   Local.basis.ox:=GetXfFromZ(Local.basis.oz);
   Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
 
-  Local.basis.oy:=NormalizeVertex(Local.basis.oy);
-  Local.basis.oz:=NormalizeVertex(Local.basis.oz);
+  Local.basis.oy.Normalize;//:=NormalizeVertex(Local.basis.oy);
+  Local.basis.oz.Normalize;//:=NormalizeVertex(Local.basis.oz);
 
   rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
   dispmatr:=CreateTranslationMatrix(Local.p_insert);

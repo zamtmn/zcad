@@ -87,24 +87,25 @@ begin
   end;
 end;
 procedure GDBControlPointArray.getnearesttomouse;
-var point:pcontrolpointdesc;
-    d:single;
-    i:Integer;
+var
+  point:pcontrolpointdesc;
+  d:single;
+  i:Integer;
+  tp2d:TzePoint2i;
 begin
-  if count<>0 then
-  begin
-       point:=GetParrayAsPointer;
-       for i:=count-1 downto 0 do           { TODO 1 -ozamtmn -c1 : Переделать нахуй без GDB }
-       begin
-            //d := (vertexlen2id(GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.x,GDB.GetCurrentDWG.OGLwindow1.param.height-GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.y,point^.dispcoord.x,point^.dispcoord.y));
-            d := (vertexlen2id(mx,my,point^.dispcoord.x,point^.dispcoord.y));
-            if d < td.disttomouse then
-                                      begin
-                                           td.disttomouse:=round(d);
-                                           td.pcontrolpoint:=point;
-                                      end;
-            inc(point);
-       end;
+  if count<>0 then begin
+    {$if FPC_FULLVERSION<30205}tp2d.x:=mx;tp2d.y:=my;{$else}tp2d.CreateRec([mx,my]);{$endif}
+    point:=GetParrayAsPointer;
+    for i:=count-1 downto 0 do begin
+      //d := (vertexlen2id(GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.x,GDB.GetCurrentDWG.OGLwindow1.param.height-GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.y,point^.dispcoord.x,point^.dispcoord.y));
+      //d := (vertexlen2id(mx,my,point^.dispcoord.x,point^.dispcoord.y));
+      d:=(point^.dispcoord-tp2d).Length;
+      if d < td.disttomouse then begin
+        td.disttomouse:=round(d);
+        td.pcontrolpoint:=point;
+      end;
+      inc(point);
+    end;
   end;
 end;
 procedure GDBControlPointArray.selectcurrentcontrolpoint;

@@ -105,9 +105,9 @@ begin
   prop.ydir:=tempmatr.mtr.v[1].Slice;
   prop.look:=tempmatr.mtr.v[2].Slice;
 
-  prop.look:=NormalizeVertex(prop.look);
+  prop.look.Normalize;//:=NormalizeVertex(prop.look);
   prop.xdir := VectorDot(prop.ydir,prop.look);
-  prop.xdir:=NormalizeVertex(prop.xdir);
+  prop.xdir.Normalize;//:=NormalizeVertex(prop.xdir);
   prop.ydir := VectorDot(prop.look,prop.xdir);
 end;
 procedure GDBObjCamera.MoveInLocalCSXY(oldx,oldy:Double;ax:TzeVector3d);

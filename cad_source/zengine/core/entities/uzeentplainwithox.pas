@@ -38,10 +38,10 @@ procedure GDBObjPlainWithOX.CalcObjMatrix;
 var
   rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
-  Local.basis.ox:=NormalizeVertex(Local.basis.ox);
+  Local.basis.ox.Normalize;//:=NormalizeVertex(Local.basis.ox);
   Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
-  Local.basis.oy:=NormalizeVertex(Local.basis.oy);
-  Local.basis.oz:=NormalizeVertex(Local.basis.oz);
+  Local.basis.oy.Normalize;//:=NormalizeVertex(Local.basis.oy);
+  Local.basis.oz.Normalize;//:=NormalizeVertex(Local.basis.oz);
 
   rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
 

@@ -104,16 +104,20 @@ begin
      end;
 end;
 function GDBOOutbound2DIArray.perimetr;
-var i,j:Integer;
+var
+  i,j:integer;
 begin
-     result:=0;
-     if count<2 then exit;
-     for i:=0 to count-1 do
-     begin
-          if i=count-1 then j:=0
-                       else j:=i+1;
-          result:=result+vertexlen2df(parray^[i].x, parray^[i].y,parray^[j].x,parray^[j].y);
-     end;
+  Result:=0;
+  if Count<2 then
+    exit;
+  for i:=0 to Count-1 do begin
+    if i=Count-1 then
+      j:=0
+    else
+      j:=i+1;
+    Result:=Result+(parray^[i]-parray^[j]).Length;
+    //Result:=Result+vertexlen2df(parray^[i].x,parray^[i].y,parray^[j].x,parray^[j].y);
+  end;
 end;
 begin
 end.

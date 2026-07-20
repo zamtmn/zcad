@@ -95,13 +95,13 @@ end;
 procedure GDBObjDiametricDimension.CalcDNVectors;
 begin
   vectorD:=DimData.P15InWCS-DimData.P10InWCS;
-  vectorD:=normalizevertex(vectorD);
+  vectorD.Normalize;//:=normalizevertex(vectorD);
   vectorN.Slice:=vectorD.Slice.Turned90L;
   vectorN.CutOff:=0;
   {vectorN.x:=-vectorD.y;
   vectorN.y:=vectorD.x;
   vectorN.z:=0;}
-  vectorN:=normalizevertex(vectorN);
+  vectorN.Normalize;//:=normalizevertex(vectorN);
 end;
 
 procedure GDBObjDiametricDimension.DrawCenterMarker(const cp:TzePoint3d;r:double;

@@ -375,7 +375,7 @@ end;
 procedure GDBObjAlignedDimension.CalcDNVectors;
 begin
   vectorD:=vertexsub(DimData.P14InWCS,DimData.P13InWCS).asVector3d;
-  vectorD:=normalizevertex(vectorD);
+  vectorD.Normalize;//:=normalizevertex(vectorD);
 
   if uzegeometry.sqrVertexlength(DimData.P10InWCS,DimData.P14InWCS)>sqreps then begin
     vectorN:=DimData.P10InWCS-DimData.P14InWCS;
@@ -386,7 +386,7 @@ begin
     vectorN.CutOff:=0;
     {vectorN.z:=0;}
   end;
-  vectorN:=normalizevertex(vectorN);
+  vectorN.Normalize;//:=normalizevertex(vectorN);
 end;
 
 procedure GDBObjAlignedDimension.FormatEntity(var drawing:TDrawingDef;

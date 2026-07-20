@@ -127,7 +127,7 @@ begin
 
      if PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner<>nil then begin
        V1:=PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice;
-       l0:=scalardot(NormalizeVertex(V1),_X_yzVertex.asVector3d);
+       l0:=scalardot({NormalizeVertex}(V1).Normalized,_X_yzVertex.asVector3d);
        l0:=arccos(l0);
        if v1.y<-eps then l0:=2*pi-l0;
        //a0:=l0*180/pi

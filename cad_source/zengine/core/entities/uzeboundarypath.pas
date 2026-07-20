@@ -319,7 +319,8 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
         if dxfLoadGroupCodeFloat(rdr,42,currDXFGroupCode,PCurrCP^.w) then
           currDXFGroupCode:=rdr.ParseInteger;
         if PPrevCP<>nil then begin
-          L:=vertexlen2df(PPrevCP^.x,PPrevCP^.y,PCurrCP^.x,PCurrCP^.y);
+          //L:=vertexlen2df(PPrevCP^.x,PPrevCP^.y,PCurrCP^.x,PCurrCP^.y);
+          L:=(PPrevCP^-PCurrCP^).Length;
           if L>currL then
             currL:=L;
         end;

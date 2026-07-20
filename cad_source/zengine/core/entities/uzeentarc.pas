@@ -196,12 +196,12 @@ begin
   // Шаг 5. Строим канонические оси новой локальной СК (Arbitrary Axis Algorithm).
   // Алгоритм DXF определяет ось X из нормали oz; углы дуги отсчитываются от неё.
   newOcsX := GetXfFromZ(Local.basis.oz);
-  newOcsY := NormalizeVertex(VectorDot(Local.basis.oz, newOcsX));
+  newOcsY := {NormalizeVertex}(VectorDot(Local.basis.oz, newOcsX)).Normalized;
 
   // Шаг 5.1. Обновляем Local.basis.ox и Local.basis.oy для согласованности
   // с CalcObjMatrixWithoutOwner, который также использует Arbitrary Axis Algorithm.
-  Local.basis.ox := NormalizeVertex(newOcsX);
-  Local.basis.oy := NormalizeVertex(newOcsY);
+  Local.basis.ox := {NormalizeVertex}(newOcsX).Normalized;
+  Local.basis.oy := {NormalizeVertex}(newOcsY).Normalized;
 
   // Шаг 6. Используем Local.P_insert (извлечённый из ObjMatrix) как новый центр
   // для согласованности с дальнейшими вычислениями.
@@ -344,9 +344,9 @@ begin
   // Пересчитываем нормализованные оси из текущего oz
   Local.basis.ox := GetXfFromZ(Local.basis.oz);
   Local.basis.oy := VectorDot(Local.basis.oz, Local.basis.ox);
-  Local.basis.ox := NormalizeVertex(Local.basis.ox);
-  Local.basis.oy := NormalizeVertex(Local.basis.oy);
-  Local.basis.oz := NormalizeVertex(Local.basis.oz);
+  Local.basis.ox.Normalize;// := NormalizeVertex(Local.basis.ox);
+  Local.basis.oy.Normalize;// := NormalizeVertex(Local.basis.oy);
+  Local.basis.oz.Normalize;// := NormalizeVertex(Local.basis.oz);
 
   // Матрица поворота из базисных векторов OCS
   rotmatr  := CreateMatrixFromBasis(Local.basis.ox, Local.basis.oy, Local.basis.oz);

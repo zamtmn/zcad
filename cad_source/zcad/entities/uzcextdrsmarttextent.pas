@@ -422,10 +422,6 @@ begin
         end else
           l0:=a;
         PGDBObjText(pEntity)^.Local.basis.ox:=GetXfFromZ(PGDBObjText(pEntity)^.Local.basis.oz);
-        //if (abs(PGDBObjText(pEntity)^.Local.basis.oz.x) < 1/64)and(abs(PGDBObjText(pEntity)^.Local.basis.oz.y)<1/64) then
-        //  PGDBObjText(pEntity)^.Local.basis.ox:=VectorDot(YWCS,PGDBObjText(pEntity)^.Local.basis.oz)
-        //else
-        //  PGDBObjText(pEntity)^.Local.basis.ox:=VectorDot(ZWCS,PGDBObjText(pEntity)^.Local.basis.oz);
         PGDBObjText(pEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(pEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(pEntity)^.Local.basis.oz,l0));
 
       end;

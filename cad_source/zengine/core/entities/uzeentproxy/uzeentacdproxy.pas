@@ -722,7 +722,7 @@ begin
   ox := GetXfFromZ(Local.basis.oz);
   tv := Local.basis.ox.asPoint3d;
   if scale.x < -eps then
-    tv := VertexMulOnSc(tv, -1);
+    tv := {VertexMulOnSc}(-tv{, -1});
   rotate := scalardot(tv.asVector3d, ox);
   if rotate > 1.0 then
     rotate := 1.0

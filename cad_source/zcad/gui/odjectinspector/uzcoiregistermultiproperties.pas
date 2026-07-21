@@ -339,7 +339,7 @@ begin
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   V2:=VertexSub(V2,V1);
   V2.Normalize;
-  V2:=VertexMulOnSc(V2,l1);
+  V2:={VertexMulOnSc}(V2*l1);
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
@@ -364,7 +364,7 @@ begin
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   SinCos(l1,V2.y,V2.x);
   V2.z:=0;
-  V2:=VertexMulOnSc(V2,d);
+  V2:={VertexMulOnSc}(V2*d);
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);

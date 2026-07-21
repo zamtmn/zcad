@@ -62,7 +62,7 @@ var
 begin
   dist:=p2-p1;
   d:=dist.Length;
-  p3:=uzegeometry.VertexMulOnSc(ZWCS.asPoint3d,d);
+  p3:={uzegeometry.VertexMulOnSc}(ZWCS.asPoint3d*d);
   p3:=p3+t3dp;
 
   plane:=PlaneFrom3Pont(p1,p2,p3);

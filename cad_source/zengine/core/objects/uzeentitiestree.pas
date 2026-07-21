@@ -249,7 +249,7 @@ TSMAccumulation:begin
                    inc(FirstStageData.counter,2);
                 end;
         TSMCalc:begin
-                   FirstStageData.midlepoint:=VertexMulOnSc(FirstStageData.midlepoint,1/FirstStageData.counter);
+                   FirstStageData.midlepoint:={VertexMulOnSc}(FirstStageData.midlepoint/FirstStageData.counter);
                    FirstStageData.d:=sqrt(sqr(FirstStageData.midlepoint.x) + sqr(FirstStageData.midlepoint.y) + sqr(FirstStageData.midlepoint.z));
                 end;
          TSMEnd:begin
@@ -261,16 +261,16 @@ class procedure TZEntsManipulator.CreateSeparator(var NodeBB:TBoundingBox;var Te
 begin
 case NodeNum of
       0:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
-                                          FirstStageData.midlepoint+VertexMulOnSc(x_Y_zVertex,FirstStageData.d),
-                                          FirstStageData.midlepoint+VertexMulOnSc(xy_Z_Vertex,FirstStageData.d)
+                                          FirstStageData.midlepoint+{VertexMulOnSc}(x_Y_zVertex*FirstStageData.d),
+                                          FirstStageData.midlepoint+{VertexMulOnSc}(xy_Z_Vertex*FirstStageData.d)
                                           );
       1:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
-                                          FirstStageData.midlepoint+VertexMulOnSc(_X_yzVertex,FirstStageData.d),
-                                          FirstStageData.midlepoint+VertexMulOnSc(xy_Z_Vertex,FirstStageData.d)
+                                          FirstStageData.midlepoint+{VertexMulOnSc}(_X_yzVertex*FirstStageData.d),
+                                          FirstStageData.midlepoint+{VertexMulOnSc}(xy_Z_Vertex*FirstStageData.d)
                                           );
       2:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
-                                          FirstStageData.midlepoint+VertexMulOnSc(_X_yzVertex,FirstStageData.d),
-                                          FirstStageData.midlepoint+VertexMulOnSc(x_Y_ZVertex,FirstStageData.d)
+                                          FirstStageData.midlepoint+{VertexMulOnSc}(_X_yzVertex*FirstStageData.d),
+                                          FirstStageData.midlepoint+{VertexMulOnSc}(x_Y_ZVertex*FirstStageData.d)
                                           );
 end;
 end;

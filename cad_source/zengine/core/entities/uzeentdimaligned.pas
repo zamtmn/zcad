@@ -152,7 +152,7 @@ end;
 procedure GDBObjAlignedDimension.CalcDefaultPlaceText(dlStart,dlEnd:TzePoint3d;
   var drawing:TDrawingDef);
 begin
-  DimData.P11InOCS:=VertexMulOnSc(dlStart+dlEnd,0.5);
+  DimData.P11InOCS:={VertexMulOnSc}(dlStart+dlEnd)*0.5;
   DimData.P11InOCS:=DimData.P11InOCS+getTextOffset(drawing);
 end;
 
@@ -237,7 +237,7 @@ begin
     //    tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.x_Y_zVertex,dir);
 
     ;
-    tvertex:=VertexMulOnSc(tvertex,t);
+    tvertex:={VertexMulOnSc}(tvertex*t);
     DimData.P10InWCS:=DimData.P14InWCS+tvertex;
     DimData.P13InWCS:=tv;
   end;
@@ -275,7 +275,7 @@ begin
     //tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.x_Y_zVertex,dir);
 
     ;
-    tvertex:=VertexMulOnSc(tvertex,t);
+    tvertex:={VertexMulOnSc}(tvertex*t);
     DimData.P10InWCS:=tv+tvertex;
     DimData.P14InWCS:=tv;
     //CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);

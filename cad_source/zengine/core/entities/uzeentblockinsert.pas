@@ -215,7 +215,7 @@ begin
       index:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getindex(Name);
     PDef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
     if PDef<>nil then begin
-      m1:=CreateTranslationMatrix(VertexMulOnSc(PDef.Base,-1));
+      m1:=CreateTranslationMatrix({VertexMulOnSc}(-PDef.Base{,-1}));
       objMatrix:=MatrixMultiply(m1,objMatrix);
     end;
   end;

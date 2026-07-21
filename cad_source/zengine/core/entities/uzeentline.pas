@@ -629,7 +629,7 @@ begin
     CoordInOCS.lend:=rtmod.point.worldcoord+rtmod.dist;
   end else if rtmod.point.pointtype=os_midle then begin
     tv:=uzegeometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
-    tv:=uzegeometry.VertexMulOnSc(tv,0.5);
+    tv:={uzegeometry.VertexMulOnSc}(tv*0.5);
     tv2:=rtmod.point.worldcoord+rtmod.dist;
     CoordInOCS.lbegin:=VertexSub(tv2,tv);
     CoordInOCS.lend:=tv2+tv;

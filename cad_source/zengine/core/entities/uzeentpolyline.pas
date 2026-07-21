@@ -306,7 +306,7 @@ begin
       v2:=vertexarrayinocs.getDataMutable(0);
        // Calculate half-vector (from center to each endpoint)
     halfVector:=uzegeometry.VertexSub(v2^,v1^);
-    halfVector:=uzegeometry.VertexMulOnSc(halfVector,0.5);
+    halfVector:={uzegeometry.VertexMulOnSc}(halfVector*0.5);
 
     // Calculate new center position
     newCenter:=rtmod.point.worldcoord+rtmod.dist;

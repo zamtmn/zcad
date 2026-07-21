@@ -133,7 +133,7 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
+  center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
   d:=Vertexlength(center,tv);
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
@@ -149,7 +149,7 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
+  center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
   d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
@@ -165,7 +165,7 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
+  center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
   d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
@@ -222,7 +222,7 @@ end;
 
 function GDBObjDiametricDimension.GetCenterPoint:TzePoint3d;
 begin
-  Result:=VertexMulOnSc(DimData.P15InWCS+DimData.P10InWCS,0.5);
+  Result:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
 end;
 
 function GDBObjDiametricDimension.GetRadius:double;

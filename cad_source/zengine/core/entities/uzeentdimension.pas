@@ -222,7 +222,7 @@ begin
       DTMCreateLeader:
       begin
         if self.DimData.TextMoved then begin
-          pl:=DrawDimensionLineLinePart(VertexMulOnSc(p1+p2,0.5),
+          pl:=DrawDimensionLineLinePart({VertexMulOnSc}((p1+p2)*0.5),
             DimData.P11InOCS,drawing);
           pl.FormatEntity(drawing,dc);
           pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(
@@ -321,14 +321,14 @@ begin
   txtlines.done;
   if GetCSDirFrom0x0y2D(vectorD,vectorN)=TCSDLeft then
     dimdir:=
-      uzegeometry.VertexMulOnSc(vectorN.asPoint3d,-1)
+      {uzegeometry.VertexMulOnSc}(-vectorN.asPoint3d{,-1})
   else
     dimdir:=vectorN.asPoint3d;
   if PDimStyle.Text.DIMTAD<>DTVPBellov then begin
     if dimdir.x>0 then
-      dimdir:=uzegeometry.VertexMulOnSc(dimdir,-1);
+      dimdir:={uzegeometry.VertexMulOnSc}(-dimdir{,-1});
   end else if dimdir.x<0 then
-    dimdir:=uzegeometry.VertexMulOnSc(dimdir,-1);
+    dimdir:={uzegeometry.VertexMulOnSc}(-dimdir{,-1});
 
   if (textangle=0)and((DimData.TextMoved)or TextAlwaysMoved) then
     dimdir:=x_Y_zVertex;
@@ -345,17 +345,17 @@ begin
       DTVPAbove:begin
         if dimdir.y<-eps then
           dimdir:=
-            uzegeometry.VertexMulOnSc(dimdir,-1);
+            {uzegeometry.VertexMulOnSc}(-dimdir{,-1});
       end;
       DTVPJIS:dimdir:=NulPoint;
       DTVPBellov:begin
         if dimdir.y>eps then
           dimdir:=
-            uzegeometry.VertexMulOnSc(dimdir,-1);
+            {uzegeometry.VertexMulOnSc}(-dimdir{,-1});
       end;
       DTVPOutside:;//заглушка
     end;
-    Result:=uzegeometry.VertexMulOnSc(dimdir,l);
+    Result:={uzegeometry.VertexMulOnSc}(dimdir*l);
   end else
     Result:=NulPoint;
 end;

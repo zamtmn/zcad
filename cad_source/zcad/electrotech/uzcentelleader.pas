@@ -554,7 +554,7 @@ begin
   if {(pdev=nil)and}(pcable<>nil) then begin
     tv:=uzegeometry.vectordot(mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin,Local.basis.OZ).asPoint3d;
     tv.Normalize;
-    tv:=uzegeometry.VertexMulOnSc(tv,scale);
+    tv:={uzegeometry.VertexMulOnSc}(tv*scale);
 
     if pcable<>nil then begin
       tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,
@@ -566,11 +566,11 @@ begin
         tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2.asVector3d).asPoint3d;
       //tv2:=uzegeometry.vectordot(tv2,Local.OZ);
       tv2.Normalize;
-      tv2:=uzegeometry.VertexMulOnSc(tv2,scale);
+      tv2:={uzegeometry.VertexMulOnSc}(tv2*scale);
 
       tv:=tv2+tv;
       tv.Normalize;
-      tv:=uzegeometry.VertexMulOnSc(tv,scale);
+      tv:={uzegeometry.VertexMulOnSc}(tv*scale);
 
       //tv:=tv2;
     end;
@@ -898,7 +898,7 @@ begin
      ShowTable:=true;
      ShowHeader:=true;
      //vp.ID:=GDBElLeaderID;
-     MainLine.init(@self,vp.Layer,vp.LineWeight,uzegeometry.VertexMulOnSc(onevertex,-10),NulPoint);
+     MainLine.init(@self,vp.Layer,vp.LineWeight,{uzegeometry.VertexMulOnSc}(onevertex*-10),NulPoint);
      //MainLine.Format;
      tv:=vectordot(mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin,Local.basis.OZ).asPoint3d;
      if not IsVectorNul(tv.asVector3d) then

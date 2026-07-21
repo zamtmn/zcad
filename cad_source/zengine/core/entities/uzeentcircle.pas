@@ -500,7 +500,7 @@ begin
         then begin
           n:=tv-P_insert_in_WCS;
           n.Normalize;
-          n:=VertexMulOnSc(n.asPoint3d,radius).asVector3d;
+          n:={VertexMulOnSc}(n{.asPoint3d}*radius){.asVector3d};
           osp.worldcoord:=P_insert_in_WCS+n;
           ProjectProc(osp.worldcoord,tv);
           osp.dispcoord:=tv;

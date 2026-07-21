@@ -307,7 +307,7 @@ begin
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[0],plx,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[1],plx,Tempplane);
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
-  dvertex:=uzegeometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize);
+  dvertex:={uzegeometry.VertexMulOnSc}(dvertex*SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=mvertex+dvertex;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
@@ -319,7 +319,7 @@ begin
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[2],ply,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[3],ply,Tempplane);
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
-  dvertex:=uzegeometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize*{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientWidth/{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientHeight);
+  dvertex:={uzegeometry.VertexMulOnSc}(dvertex*(SysVarDISPCrosshairSize*getviewcontrol.ClientWidth/getviewcontrol.ClientHeight));
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=mvertex+dvertex;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
@@ -334,7 +334,7 @@ begin
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[0],plz,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[1],plz,Tempplane);
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
-  dvertex:=uzegeometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize);
+  dvertex:={uzegeometry.VertexMulOnSc}(dvertex*SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
   tv2:=mvertex+dvertex;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
@@ -343,7 +343,7 @@ begin
   dc.drawer.SetColor(palette[ForeGroundColorIndex].RGB);
   //dc.drawer.SetColor(255, 255, 255,255);
   d1:=param.md.mouseray.lbegin+param.md.mouseray.lend;
-  d1:=uzegeometry.VertexMulOnSc(d1,0.5);
+  d1:={uzegeometry.VertexMulOnSc}(d1*0.5);
 
 
   dc.drawer.startrender(TRM_DisplaySpace,dc.DrawingContext.matrixs);
@@ -1196,7 +1196,7 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
     pucommand:=PDWG^.StoreOldCamerapPos;
     if sysvarRDEnableAnimation then begin
       for i:=1 to steps do begin
-        SetCameraPosZoom(camerapos+uzegeometry.VertexMulOnSc(target,i/steps),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
+        SetCameraPosZoom(camerapos+{uzegeometry.VertexMulOnSc}(target*(i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
         if (sysvarRDLastRenderTime<30)and(i<>steps) then
           sleep(30-sysvarRDLastRenderTime);
       end;
@@ -2535,9 +2535,9 @@ begin
   end
   else
   begin
-       LBN:=uzegeometry.VertexMulOnSc(OneVertex,50);
+       LBN:={uzegeometry.VertexMulOnSc}(OneVertex*50);
        //LBN:=vertexadd(LBN,pdwg.pcamera^.CamCSOffset);
-       RTF:=uzegeometry.VertexMulOnSc(OneVertex,100);
+       RTF:={uzegeometry.VertexMulOnSc}(OneVertex*100);
        //RTF:=vertexadd(RTF,pdwg.pcamera^.CamCSOffset);
   end;
   ProjectPoint2(LBN.x,LBN.y,LBN.Z,pcamera^.modelMatrixLCS,ccsLBN,ccsRTF);
@@ -3323,8 +3323,8 @@ begin
                                                           zDebugLn('{WH}'+rsGridTooDensity);
                                                         param.md.WPPointUR.z:=-1;
                                                    end;
-     param.md.WPPointLU:=vertexmulonsc(vertexsub(param.md.WPPointLU,param.md.WPPointBL),1/pv);
-     param.md.WPPointRB:=vertexmulonsc(vertexsub(param.md.WPPointRB,param.md.WPPointBL),1/ph);
+     param.md.WPPointLU:={vertexmulonsc}(vertexsub(param.md.WPPointLU,param.md.WPPointBL)/pv);
+     param.md.WPPointRB:={vertexmulonsc}(vertexsub(param.md.WPPointRB,param.md.WPPointBL)/ph);
 
      param.md.WPPointBL.x:=round((param.md.WPPointBL.x-pdwg^.Snap.Base.x)/pdwg^.GridSpacing.x)*pdwg^.GridSpacing.x+pdwg^.GridSpacing.x+pdwg^.Snap.Base.x;
      param.md.WPPointBL.y:=round((param.md.WPPointBL.y-pdwg^.Snap.Base.y)/pdwg^.GridSpacing.y)*pdwg^.GridSpacing.y-pdwg^.GridSpacing.y+pdwg^.Snap.Base.y;

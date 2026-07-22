@@ -555,7 +555,7 @@ begin
       FProxyBBoxLoaded := True;
       FProxyGripOffset := Vertexmorph(
         FProxyBBoxMin, FProxyBBoxMax, 0.5);
-      if IsVectorNul(Local.P_insert.asVector3d) then
+      if IsVectorNul(Local.P_insert.asVector) then
         Local.P_insert := FProxyGripOffset;
       vp.BoundingBox.LBN := FProxyBBoxMin;
       vp.BoundingBox.RTF := FProxyBBoxMax;
@@ -723,13 +723,13 @@ begin
   tv := Local.basis.ox.asPoint3d;
   if scale.x < -eps then
     tv := {VertexMulOnSc}(-tv{, -1});
-  rotate := scalardot(tv.asVector3d, ox);
+  rotate := scalardot(tv.asVector, ox);
   if rotate > 1.0 then
     rotate := 1.0
   else if rotate < -1.0 then
     rotate := -1.0;
   rotate := arccos(rotate);
-  if scalardot(tv.asVector3d, VectorDot(Local.basis.oz,
+  if scalardot(tv.asVector, VectorDot(Local.basis.oz,
     GetXfFromZ(Local.basis.oz))) < -eps then
     rotate := 2 * pi - rotate;
 end;

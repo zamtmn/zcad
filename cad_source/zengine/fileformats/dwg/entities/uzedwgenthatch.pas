@@ -74,7 +74,7 @@ end;
 function DWGNormalOrDefault(const P: TDWGPoint3D): TzePoint3d;
 begin
   Result := DWGPointToVertex(P);
-  if IsVectorNul(Result.asVector3d) then
+  if IsVectorNul(Result.asVector) then
     Result := ZWCS.asPoint3d;
 end;
 
@@ -316,7 +316,7 @@ begin
     Props);
   pobj := GDBObjHatch.CreateInstance;
   pobj^.Local.p_insert := CreateVertex(0, 0, Props.Elevation);
-  pobj^.Local.basis.oz := DWGNormalOrDefault(Props.Extrusion).asVector3d;
+  pobj^.Local.basis.oz := DWGNormalOrDefault(Props.Extrusion).asVector;
   pobj^.PatternName := Props.PatternName;
   if (pobj^.PatternName = '') and Props.IsSolidFill then
     pobj^.PatternName := 'SOLID';

@@ -97,7 +97,7 @@ begin
      V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
      v1:=VertexSub(v2,v1);
      v1.Normalize;
-     l1:=scalardot(v1.asVector3d,_X_yzVertex.asVector3d);
+     l1:=scalardot(v1.asVector,_X_yzVertex.asVector);
      l1:=arccos(l1){*180/pi};
      if v1.y<-eps then l1:={360}2*pi-l1;
      ChangedData.PGetDataInEtity:=@l1;
@@ -127,7 +127,7 @@ begin
 
      if PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner<>nil then begin
        V1:=PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice;
-       l0:=scalardot({NormalizeVertex}(V1).Normalized,_X_yzVertex.asVector3d);
+       l0:=scalardot({NormalizeVertex}(V1).Normalized,_X_yzVertex.asVector);
        l0:=arccos(l0);
        if v1.y<-eps then l0:=2*pi-l0;
        //a0:=l0*180/pi

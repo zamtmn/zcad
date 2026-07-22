@@ -221,7 +221,7 @@ procedure GDBObjHatch.SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
   var IODXFContext:TIODXFSaveContext;AAPS:TAdditionalPostProcess=nil;AAPSData:PtrUInt=0);
 begin
   inherited;
-  if not IsVectorNul(Origin.asVector3d) then
+  if not IsVectorNul(Origin.asVector) then
     dxfvertexout(outStream,1010,Origin);
 end;
 

@@ -40,7 +40,7 @@ end;
 function DWGNormalOrDefault(const P: TDWGPoint3D): TzePoint3d;
 begin
   Result := DWGPointToVertex(P);
-  if IsVectorNul(Result.asVector3d) then
+  if IsVectorNul(Result.asVector) then
     Result := ZWCS.asPoint3d;
 end;
 
@@ -57,7 +57,7 @@ begin
   pobj := GDBObjEllipse.CreateInstance;
   DWGCopyEllipseProps(PEllipse^, Props);
   pobj^.Local.p_insert := DWGPointToVertex(Props.Center);
-  pobj^.Local.basis.oz := DWGNormalOrDefault(Props.Extrusion).asVector3d;
+  pobj^.Local.basis.oz := DWGNormalOrDefault(Props.Extrusion).asVector;
   pobj^.MajorAxis := DWGPointToVertex(Props.MajorAxis);
   pobj^.Ratio := Props.AxisRatio;
   pobj^.StartAngle := Props.StartAngle;

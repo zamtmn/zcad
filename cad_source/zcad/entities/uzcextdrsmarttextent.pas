@@ -416,7 +416,7 @@ begin
           V1:=PGDBObjEntity(pEntity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice.asPoint3d;
           a:=FRotateOverrideValue*pi/180;
           SinCos(a,sine,cosine);
-          l0:=scalardot(V1.Normalized.asVector3d,CreateVector(cosine,sine,0));
+          l0:=scalardot(V1.Normalized.asVector,CreateVector(cosine,sine,0));
           l0:=arccos(l0);
           if v1.y<-eps then l0:=2*pi-l0;
         end else

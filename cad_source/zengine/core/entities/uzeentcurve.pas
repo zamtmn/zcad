@@ -181,7 +181,7 @@ begin
         tv:=vertexsub(ptv^,ppredtv^);
         tv.Normalize;
         processaxis(posr,tv);
-        tv:=VectorDot(tv.asVector3d,zwcs).asPoint3d;
+        tv:=VectorDot(tv.asVector,zwcs).asPoint3d;
         processaxis(posr,tv);
         Dec(found);
       end;
@@ -541,7 +541,7 @@ begin
             pv2:=VertexArrayInWCS.getDataMutable(0);
           end;
           dir:=uzegeometry.VertexSub(pv2^,pv1^);
-          tv:=vectordot(dir.asVector3d,param.md.mouseray.dir).asPoint3d;
+          tv:=vectordot(dir.asVector,param.md.mouseray.dir).asPoint3d;
           t:=-((pv1.x-param.lastpoint.x)*dir.x+
             (pv1.y-param.lastpoint.y)*dir.y+(pv1.z-param.lastpoint.z)*dir.z)/
             (pv2^.SqrLengthTo(pv1^));
@@ -569,14 +569,14 @@ begin
             pv2:=VertexArrayInWCS.getDataMutable(0);
           end;
           dir:=uzegeometry.VertexSub(pv2^,pv1^);
-          tv:=vectordot(dir.asVector3d,param.md.mouseray.dir).asPoint3d;
-          n:=vectordot(param.md.mouseray.dir,tv.asVector3d).asPoint3d;
+          tv:=vectordot(dir.asVector,param.md.mouseray.dir).asPoint3d;
+          n:=vectordot(param.md.mouseray.dir,tv.asVector).asPoint3d;
           n.Normalize;
           v.x:=param.md.mouseray.lbegin.x-pv1^.x;
           v.y:=param.md.mouseray.lbegin.y-pv1^.y;
           v.z:=param.md.mouseray.lbegin.z-pv1^.z;
-          d:=scalardot(n.asVector3d,v.asVector3d);
-          e:=scalardot(n.asVector3d,dir.asVector3d);
+          d:=scalardot(n.asVector,v.asVector);
+          e:=scalardot(n.asVector,dir.asVector);
           if e<eps then
             osp.ostype:=os_none
           else begin

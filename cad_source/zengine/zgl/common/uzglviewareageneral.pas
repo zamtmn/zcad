@@ -1890,12 +1890,12 @@ begin
                              begin
                                   param.md.mouseray.lbegin:=tv1;
                                   param.md.mouseray.lend:=tv2;
-                                  param.md.mouseray.dir:=vertexsub(tv2,tv1).asVector3d;
+                                  param.md.mouseray.dir:=vertexsub(tv2,tv1).asVector;
                              end;
      end
      else
      begin
-         d:=VertexSub(param.ospoint.worldcoord,pdwg.getpcamera^.prop.point).asVector3d;
+         d:=VertexSub(param.ospoint.worldcoord,pdwg.getpcamera^.prop.point).asVector;
          //d:=gdb.GetCurrentDWG.pcamera^.prop.look;
          b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d.asPoint3d,pdwg.getpcamera^.frustum.v[4],tv1);
          b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d.asPoint3d,pdwg.getpcamera^.frustum.v[5],tv2);
@@ -1903,7 +1903,7 @@ begin
                             begin
                                  param.md.mouseray.lbegin:=tv1;
                                  param.md.mouseray.lend:=tv2;
-                                 param.md.mouseray.dir:=vertexsub(tv2,tv1).asVector3d;
+                                 param.md.mouseray.dir:=vertexsub(tv2,tv1).asVector;
                             end;
          pdwg^.myGluUnProject(createvertex(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 0),param.md.mouseray.lbegin);
          pdwg^.myGluUnProject(createvertex(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 1),param.md.mouseray.lend);
@@ -3159,7 +3159,7 @@ begin
   pdwg^.myGluUnProject(createvertex(x, y, 0),param.md.mouseray.lbegin);
   pdwg^.myGluUnProject(createvertex(x, y, 1),param.md.mouseray.lend);
 
-  param.md.mouseray.dir:=vertexsub(param.md.mouseray.lend,param.md.mouseray.lbegin).asVector3d;
+  param.md.mouseray.dir:=vertexsub(param.md.mouseray.lend,param.md.mouseray.lbegin).asVector;
   cv:=param.md.workplane.v[0]*param.md.mouseray.dir.x +
       param.md.workplane.v[1]*param.md.mouseray.dir.y +
       param.md.workplane.v[2]*param.md.mouseray.dir.z;

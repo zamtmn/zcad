@@ -123,7 +123,7 @@ function GDBObjEllipse.CalcObjMatrixWithoutOwner;
 var
   rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
-  Local.basis.ox:=MajorAxis.asVector3d;
+  Local.basis.ox:=MajorAxis.asVector;
   Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
 
   Local.basis.ox.Normalize;//:=NormalizeVertex(Local.basis.ox);
@@ -212,10 +212,10 @@ var
   l:double;
 begin
   inherited CalcObjMatrix;
-  l:=onevertexlength(majoraxis.asVector3d);
+  l:=onevertexlength(majoraxis.asVector);
   m1:=CreateScaleMatrix(l,ratio*l,1);
   objmatrix:=matrixmultiply(m1,objmatrix);
-  v.Slice.Slice:=local.p_insert.Slice.asVector2d;
+  v.Slice.Slice:=local.p_insert.Slice.asVector;
   v.z:=0;
   v.w:=1;
   m1:=objMatrix;
@@ -232,9 +232,9 @@ begin
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   if self.Ratio<=1 then
-    rr:=uzegeometry.oneVertexlength(majoraxis.asVector3d)
+    rr:=uzegeometry.oneVertexlength(majoraxis.asVector)
   else
-    rr:=uzegeometry.oneVertexlength(majoraxis.asVector3d)*ratio;
+    rr:=uzegeometry.oneVertexlength(majoraxis.asVector)*ratio;
 
   calcObjMatrix;
   angle:=endangle-startangle;

@@ -136,7 +136,7 @@ begin
   {TODO: тут расчет AAA ненужен}
   Local.basis.ox:=GetXfFromZ(Local.basis.oz);
 
-  local.basis.OX:=VectorTransform3D(local.basis.OX.asPoint3d,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,-a)).asVector3d;
+  local.basis.OX:=VectorTransform3D(local.basis.OX.asPoint3d,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,-a)).asVector;
   Text.init(10);
 end;
 
@@ -735,7 +735,7 @@ begin
   Content:=utf8tostring(ttemplate);
   textprop.justify:=b2j[j];
   P_drawInOCS:=Local.p_insert;
-  Local.basis.ox:=ux.asVector3d;
+  Local.basis.ox:=ux.asVector;
 end;
 
 function z2dxfmtext(s:string;var ul:boolean):string;

@@ -149,7 +149,7 @@ begin
           ConcatBB(bb,bb2);
       end;}
       tv:=bb.RTF-bb.LBN;
-      tv:={VertexMulOnSc}(tv.asPoint3d*0.15).asVector3d;
+      tv:={VertexMulOnSc}(tv.asPoint3d*0.15).asVector;
       rasterize(cdwg,bmpw,bmpw,bb.LBN-tv,bb.RTF+tv,
         PrintParam,bmp.Canvas,PrinterDrawer);
 

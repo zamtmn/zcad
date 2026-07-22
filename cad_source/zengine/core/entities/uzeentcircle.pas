@@ -133,7 +133,7 @@ var
 begin
   dir:=VertexSub(P_insert_in_WCS,posr.worldcoord);
   processaxis(posr,dir);
-  tv:=vectordot(dir.asVector3d,zwcs).asPoint3d;
+  tv:=vectordot(dir.asVector,zwcs).asPoint3d;
   processaxis(posr,tv);
 end;
 

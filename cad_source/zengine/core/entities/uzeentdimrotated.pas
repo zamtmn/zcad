@@ -92,8 +92,8 @@ var
 begin
   tm:=t_matrix;
   tm.mtr.v[3]:=NulVector4D2;
-  vectorD:=VectorTransform3D(vectorD.asPoint3d,tm).asVector3d;
-  vectorN:=VectorTransform3D(vectorN.asPoint3d,tm).asVector3d;
+  vectorD:=VectorTransform3D(vectorD.asPoint3d,tm).asVector;
+  vectorN:=VectorTransform3D(vectorN.asPoint3d,tm).asVector;
   vectorD.Normalize;//:=normalizevertex(vectorD);
   vectorN.Normalize;//:=normalizevertex(vectorN);
   inherited;
@@ -105,8 +105,8 @@ var
 begin
   tm:=t_matrix^;
   tm.mtr.v[3]:=NulVector4D2;
-  vectorD:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorD.asPoint3d,tm).asVector3d;
-  vectorN:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorN.asPoint3d,tm).asVector3d;
+  vectorD:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorD.asPoint3d,tm).asVector;
+  vectorN:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorN.asPoint3d,tm).asVector;
   vectorD.Normalize;//:=normalizevertex(vectorD);
   vectorN.Normalize;//:=normalizevertex(vectorN);
   inherited;

@@ -108,8 +108,8 @@ begin
   calcObjMatrix;
   createpoint;
   normal:=(vectordot(
-    VertexSub(PInWCS[0],PInWCS[1]).asVector3d,
-    VertexSub(PInWCS[2],PInWCS[1]).asVector3d)).Normalized.asPoint3d;
+    VertexSub(PInWCS[0],PInWCS[1]).asVector,
+    VertexSub(PInWCS[2],PInWCS[1]).asVector)).Normalized.asPoint3d;
   if uzegeometry.IsPointEqual(PInOCS[2],PInOCS[3],sqreps) then
     triangle:=True
   else

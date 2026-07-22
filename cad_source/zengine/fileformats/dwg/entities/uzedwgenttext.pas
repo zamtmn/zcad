@@ -45,7 +45,7 @@ begin
     Exit;
   PObj^.Local.basis.ox := GetXfFromZ(PObj^.Local.basis.oz);
   PObj^.Local.basis.ox := VectorTransform3D(PObj^.Local.basis.ox.asPoint3d,
-    CreateAffineRotationMatrix(PObj^.Local.basis.oz, -Rotation)).asVector3d;
+    CreateAffineRotationMatrix(PObj^.Local.basis.oz, -Rotation)).asVector;
 end;
 
 procedure AddTextEntity(var ZContext: TZDrawingContext;

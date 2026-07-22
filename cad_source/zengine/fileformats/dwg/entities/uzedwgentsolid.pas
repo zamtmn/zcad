@@ -40,7 +40,7 @@ end;
 function DWGNormalOrDefault(const P: TDWGPoint3D): TzePoint3d;
 begin
   Result := DWGPointToVertex(P);
-  if IsVectorNul(Result.asVector3d) then
+  if IsVectorNul(Result.asVector) then
     Result := ZWCS.asPoint3d;
 end;
 
@@ -59,7 +59,7 @@ begin
   DWGCopySolidProps(PSolid^, Props);
   for i := 0 to 3 do
     pobj^.PInOCS[i] := DWGPointToVertex(Props.Corners[i]);
-  pobj^.Local.basis.oz := DWGNormalOrDefault(Props.Extrusion).asVector3d;
+  pobj^.Local.basis.oz := DWGNormalOrDefault(Props.Extrusion).asVector;
 
   if GetLoadCtx <> nil then
     DWGRegisterEntityShell(PGDBObjEntity(pobj), DWGObject, False, 0)

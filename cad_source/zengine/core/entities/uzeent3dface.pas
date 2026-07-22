@@ -111,8 +111,8 @@ begin
     PInWCS[I]:=VectorTransform3D(
       PInOCS[I],bp.ListPos.owner^.GetMatrix^);
   end;
-  v:=vectordot(VertexSub(PInWCS[0],PInWCS[1]).asVector3d,VertexSub(PInWCS[2],PInWCS[1]).asVector3d).asPoint3d;
-  if IsVectorNul(v.asVector3d) then
+  v:=vectordot(VertexSub(PInWCS[0],PInWCS[1]).asVector,VertexSub(PInWCS[2],PInWCS[1]).asVector).asPoint3d;
+  if IsVectorNul(v.asVector) then
     normal:=xy_Z_Vertex
   else
     normal:=(v).Normalized;

@@ -449,7 +449,7 @@ begin
 
   if dc.lod=LODCalculatedDetail then begin
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
-    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v.asVector3d),49);
+    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v.asVector),49);
   end else
     simplydraw:=dc.lod=LODLowDetail;
 
@@ -777,7 +777,7 @@ begin
   plw.quad[2]:=p2-vtemp;
 
   for k:=0 to 3 do begin
-    v.Slice.Slice:=plw.quad[k].asVector2d;
+    v.Slice.Slice:=plw.quad[k].asVector;
     //v.x:=plw.quad[k].x;
     //v.y:=plw.quad[k].y;
     v.Slice.CutOff:=0;

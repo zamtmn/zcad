@@ -119,7 +119,7 @@ begin
     v:=VectorTransform3d(v,matr);
     v:=VectorTransform3d(v,objmatrix);
     geom.GeomData.Vertex3S.AddGDBVertex(v);
-    sqrsymh:=SqrOneVertexlength(vertexsub(v,v0).asVector3d);
+    sqrsymh:=SqrOneVertexlength(vertexsub(v,v0).asVector);
     v:=createvertex(psyminfo^.SymMaxx,psyminfo^.SymMaxy,0);
     v:=VectorTransform3d(v,matr);
     v:=VectorTransform3d(v,objmatrix);

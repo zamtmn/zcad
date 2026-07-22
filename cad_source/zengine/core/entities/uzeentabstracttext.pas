@@ -99,7 +99,7 @@ begin
   m.mtr.v[3].Slice:=NulVertex;
 
   tv:=VectorTransform3d(tv,m);
-  textprop.size:=oneVertexlength(tv.asVector3d);
+  textprop.size:=oneVertexlength(tv.asVector);
   inherited;
 end;
 
@@ -133,7 +133,7 @@ begin
 
   if bp.ListPos.owner<>nil then begin
     V1:=bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice.asPoint3d;
-    l0:=scalardot({NormalizeVertex}(V1.asVector3d).Normalized,_X_yzVertex.asVector3d);
+    l0:=scalardot(V1.asVector.Normalized,_X_yzVertex.asVector);
     l0:=arccos(l0);
     if v1.y<-eps then
       l0:=2*pi-l0;
@@ -142,7 +142,7 @@ begin
 
   V1:=Local.basis.ox.asPoint3d;
   V2:=GetXfFromZ(Local.basis.oz).asPoint3d;
-  l1:=scalardot(v1.asVector3d,v2.asVector3d);
+  l1:=scalardot(v1.asVector,v2.asVector);
   l1:=arccos(l1);
   if v1.y<-eps then
     l1:=2*pi-l1;

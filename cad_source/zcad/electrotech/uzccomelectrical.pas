@@ -720,9 +720,9 @@ begin
 
       //выставляем клону точку вставки, ориентируем по осям, вращаем
       pnevdev.Local.P_insert:=currentcoord;
-      pnevdev.Local.Basis.oz:=xy_Z_Vertex.asVector3d;
-      pnevdev.Local.Basis.ox:=_X_yzVertex.asVector3d;
-      pnevdev.Local.Basis.oy:=x_Y_zVertex.asVector3d;
+      pnevdev.Local.Basis.oz:=xy_Z_Vertex.asVector;
+      pnevdev.Local.Basis.ox:=_X_yzVertex.asVector;
+      pnevdev.Local.Basis.oy:=x_Y_zVertex.asVector;
       pnevdev.rotate:=0;
 
       //форматируем клон
@@ -831,9 +831,9 @@ begin
 
 
             pnevdev.Local.P_insert:=currentcoord;
-            pnevdev.Local.Basis.oz:=xy_Z_Vertex.asVector3d;
-            pnevdev.Local.Basis.ox:=_X_yzVertex.asVector3d;
-            pnevdev.Local.Basis.oy:=x_Y_zVertex.asVector3d;
+            pnevdev.Local.Basis.oz:=xy_Z_Vertex.asVector;
+            pnevdev.Local.Basis.ox:=_X_yzVertex.asVector;
+            pnevdev.Local.Basis.oy:=x_Y_zVertex.asVector;
             pnevdev.rotate:=0;
 
             //pnevdev^.BuildGeometry(drawings.GetCurrentDWG^);

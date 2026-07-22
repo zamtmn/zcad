@@ -282,7 +282,7 @@ begin
     with dcwa.Mutable[i]^ do begin
       DevCoord:=mpd[i];
       sav:=(DevCoord.coord-CenterPoint).asPoint3d.Normalized;
-      a:=uzegeometry.TwoVectorAngle(_X_yzVertex.asVector3d,sav.asVector3d);
+      a:=uzegeometry.TwoVectorAngle(_X_yzVertex.asVector,sav.asVector);
       if sav.y<-eps then
         a:=2*pi-a;
       a:=a-aa;

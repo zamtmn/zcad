@@ -136,7 +136,7 @@ begin
   dir:=VectorTransform3D(posr.worldcoord,m1);
 
   processaxis(posr,dir);
-  tv:=uzegeometry.vectordot(dir.asVector3d,zwcs).asPoint3d;
+  tv:=uzegeometry.vectordot(dir.asVector,zwcs).asPoint3d;
   processaxis(posr,tv);
 end;
 
@@ -213,11 +213,11 @@ begin
 
   // Шаг 8. Проецируем направления на оси локальной СК и вычисляем новые углы.
   // scalardot — скалярное произведение; оно даёт косинус и синус угла в плоскости дуги
-  StartAngle := ArcTan2(scalardot(dirToStart.asVector3d, newOcsY), scalardot(dirToStart.asVector3d, newOcsX));
+  StartAngle := ArcTan2(scalardot(dirToStart.asVector, newOcsY), scalardot(dirToStart.asVector, newOcsX));
   if StartAngle < 0 then
     StartAngle := 2 * pi + StartAngle;
 
-  EndAngle := ArcTan2(scalardot(dirToEnd.asVector3d, newOcsY), scalardot(dirToEnd.asVector3d, newOcsX));
+  EndAngle := ArcTan2(scalardot(dirToEnd.asVector, newOcsY), scalardot(dirToEnd.asVector, newOcsX));
   if EndAngle < 0 then
     EndAngle := 2 * pi + EndAngle;
 

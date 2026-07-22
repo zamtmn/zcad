@@ -442,7 +442,7 @@ begin
     8:begin
       if (SnapMode and osm_nearest)<>0 then begin
         tv:=vectordot(dir,param.md.mouseray.dir).asPoint3d;
-        n:=vectordot(param.md.mouseray.dir,tv.asVector3d);
+        n:=vectordot(param.md.mouseray.dir,tv.asVector);
         n.Normalize;//:=NormalizeVertex(n);
         v.x:=param.md.mouseray.lbegin.x-CoordInWCS.lbegin.x;
         v.y:=param.md.mouseray.lbegin.y-CoordInWCS.lbegin.y;
@@ -685,12 +685,12 @@ procedure GDBObjLine.transform;
 var
   tv:TzeVector4d;
 begin
-  tv.Slice:=CoordInOCS.lbegin.asVector3d;
+  tv.Slice:=CoordInOCS.lbegin.asVector;
   tv.CutOff:=1;
   tv:=vectortransform(tv,t_matrix);
   CoordInOCS.lbegin:=tv.Slice.asPoint3d;
 
-  tv.Slice:=CoordInOCS.lend.asVector3d;
+  tv.Slice:=CoordInOCS.lend.asVector;
   tv.CutOff:=1;
   tv:=vectortransform(tv,t_matrix);
   CoordInOCS.lend:=tv.Slice.asPoint3d;

@@ -146,7 +146,7 @@ const
 var
   ZAxis, XAxis, YAxis: TzeVector3d;
 begin
-  ZAxis := (Normal).Normalized.asVector3d;
+  ZAxis := (Normal).Normalized.asVector;
 
   if Abs(ZAxis.x) < TEXT_AXIS_THRESHOLD then
     XAxis := (AuxX * ZAxis.z - ZAxis * AuxX.z).Normalized
@@ -155,9 +155,9 @@ begin
 
   YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalized;
 
-  Result.x := scalarDot(Point.asVector3d, XAxis);
-  Result.y := scalarDot(Point.asVector3d, YAxis);
-  Result.z := scalarDot(Point.asVector3d, ZAxis);
+  Result.x := scalarDot(Point.asVector, XAxis);
+  Result.y := scalarDot(Point.asVector, YAxis);
+  Result.z := scalarDot(Point.asVector, ZAxis);
 end;
 
 { Вычисляет аппроксимационный BBox текста.

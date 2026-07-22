@@ -508,7 +508,7 @@ begin
   end;
   if angleload then begin
     Local.basis.ox:=GetXfFromZ(Local.basis.oz);
-    local.basis.OX:=VectorTransform3D(local.basis.OX.asPoint3d,CreateAffineRotationMatrix(Local.basis.oz,-angle)).asVector3d;
+    local.basis.OX:=VectorTransform3D(local.basis.OX.asPoint3d,CreateAffineRotationMatrix(Local.basis.oz,-angle)).asVector;
   end;
 end;
 

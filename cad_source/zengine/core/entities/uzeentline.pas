@@ -624,15 +624,15 @@ var
   tv,tv2:TzePoint3d;
 begin
   if rtmod.point.pointtype=os_begin then begin
-    CoordInOCS.lbegin:=rtmod.point.worldcoord+rtmod.dist;
+    CoordInOCS.lbegin:=rtmod.point.worldcoord+rtmod.dist.asVector;
   end else if rtmod.point.pointtype=os_end then begin
-    CoordInOCS.lend:=rtmod.point.worldcoord+rtmod.dist;
+    CoordInOCS.lend:=rtmod.point.worldcoord+rtmod.dist.asVector;
   end else if rtmod.point.pointtype=os_midle then begin
     tv:=uzegeometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
     tv:={uzegeometry.VertexMulOnSc}(tv*0.5);
-    tv2:=rtmod.point.worldcoord+rtmod.dist;
+    tv2:=rtmod.point.worldcoord+rtmod.dist.asVector;
     CoordInOCS.lbegin:=VertexSub(tv2,tv);
-    CoordInOCS.lend:=tv2+tv;
+    CoordInOCS.lend:=tv2+tv.asVector;
   end;
 end;
 

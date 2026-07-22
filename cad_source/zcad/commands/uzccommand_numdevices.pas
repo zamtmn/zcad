@@ -161,7 +161,7 @@ begin
   if IsObjectIt(TypeOf(pent^),typeof(GDBObjWithLocalCS)) then
     pt:=PGDBObjWithLocalCS(pent)^.P_insert_in_WCS
   else
-    pt:=(pent^.vp.BoundingBox.LBN+pent^.vp.BoundingBox.RTF)/2;
+    pt:=(pent^.vp.BoundingBox.LBN+pent^.vp.BoundingBox.RTF.asVector)/2;
   result:=true;
 end;
 
@@ -273,7 +273,7 @@ var
 begin
   CenterPoint:=NulPoint;
   for i:=0 to mpd.Size-1 do
-    CenterPoint:=CenterPoint+mpd.Mutable[i]^.coord;
+    CenterPoint:=CenterPoint+mpd.Mutable[i]^.coord.asVector;
   CenterPoint:=CenterPoint/mpd.Size;
   aa:=PerimetrParam.StartAngle*pi/180;
   dcwa:=TDevCoordwithAngleVector.Create;

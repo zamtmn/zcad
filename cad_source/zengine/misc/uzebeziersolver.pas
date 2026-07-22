@@ -162,7 +162,7 @@ begin
     AddPoint(scontur,TPA_NotOnCurve);
     AddPoint(truessegment,TPA_OnCurve);
   end else begin
-    AddPoint((FArray.Back+scontur)/2,TPA_OnCurve);
+    AddPoint((FArray.Back+scontur.asVector)/2,TPA_OnCurve);
     AddPoint(scontur,TPA_NotOnCurve);
     AddPoint(truescontur,TPA_OnCurve);
   end;

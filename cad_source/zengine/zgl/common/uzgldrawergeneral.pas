@@ -118,7 +118,7 @@ end;
 
 procedure TZGLGeneralDrawer.AddToLCS(const v:TzePoint3d);
 begin
-  LCS.CurrentCamCSOffset:=LCS.CurrentCamCSOffset+v;
+  LCS.CurrentCamCSOffset:=LCS.CurrentCamCSOffset+v.asVector;
   LCS.CurrentCamCSOffsetS.x:=LCS.CurrentCamCSOffsetS.x+v.x;
   LCS.CurrentCamCSOffsetS.y:=LCS.CurrentCamCSOffsetS.y+v.y;
   LCS.CurrentCamCSOffsetS.z:=LCS.CurrentCamCSOffsetS.z+v.z;

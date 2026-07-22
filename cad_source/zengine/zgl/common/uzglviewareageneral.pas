@@ -301,7 +301,7 @@ begin
 
   PointOfRayPlaneIntersect(param.md.mouseray.lbegin+PDWG.Getpcamera^.CamCSOffset,param.md.mouseray.dir.asPoint3d,tempplane,mvertex);
   plx:=PlaneFrom3Pont(sv1,param.md.mouse3dcoord+PDWG.Getpcamera^.CamCSOffset,
-                      param.md.mouse3dcoord+xWCS.asPoint3d+PDWG.Getpcamera^.CamCSOffset);
+                      param.md.mouse3dcoord+xWCS+PDWG.Getpcamera^.CamCSOffset);
   //if assigned(sysvar.DISP.DISP_ColorAxis)then
   if sysvarDISPColorAxis then dc.drawer.SetColor(255, 0, 0,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[0],plx,Tempplane);
@@ -309,11 +309,11 @@ begin
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
   dvertex:={uzegeometry.VertexMulOnSc}(dvertex*SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
-  tv2:=mvertex+dvertex;
+  tv2:=mvertex+dvertex.asVector;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
 
   ply:=PlaneFrom3Pont(sv1,param.md.mouse3dcoord+PDWG.Getpcamera^.CamCSOffset,
-                      param.md.mouse3dcoord+yWCS.asPoint3d+PDWG.Getpcamera^.CamCSOffset);
+                      param.md.mouse3dcoord+yWCS+PDWG.Getpcamera^.CamCSOffset);
   //if assigned(sysvar.DISP.DISP_ColorAxis)then
   if sysvarDISPColorAxis then dc.drawer.SetColor(0, 255, 0,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[2],ply,Tempplane);
@@ -321,14 +321,14 @@ begin
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
   dvertex:={uzegeometry.VertexMulOnSc}(dvertex*(SysVarDISPCrosshairSize*getviewcontrol.ClientWidth/getviewcontrol.ClientHeight));
   tv1:=VertexSub(mvertex,dvertex);
-  tv2:=mvertex+dvertex;
+  tv2:=mvertex+dvertex.asVector;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
 
   //if assigned(sysvar.DISP.DISP_DrawZAxis)then
   if sysvarDISPDrawZAxis then
   begin
   plz:=PlaneFrom3Pont(sv1,param.md.mouse3dcoord+PDWG.Getpcamera^.CamCSOffset,
-                      param.md.mouse3dcoord+zWCS.asPoint3d+PDWG.Getpcamera^.CamCSOffset);
+                      param.md.mouse3dcoord+zWCS+PDWG.Getpcamera^.CamCSOffset);
   //if assigned(sysvar.DISP.DISP_ColorAxis)then
   if sysvarDISPColorAxis then dc.drawer.SetColor(0, 0, 255,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[0],plz,Tempplane);
@@ -336,13 +336,13 @@ begin
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
   dvertex:={uzegeometry.VertexMulOnSc}(dvertex*SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
-  tv2:=mvertex+dvertex;
+  tv2:=mvertex+dvertex.asVector;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
   end;
   end;
   dc.drawer.SetColor(palette[ForeGroundColorIndex].RGB);
   //dc.drawer.SetColor(255, 255, 255,255);
-  d1:=param.md.mouseray.lbegin+param.md.mouseray.lend;
+  d1:=param.md.mouseray.lbegin+param.md.mouseray.lend.asVector;
   d1:={uzegeometry.VertexMulOnSc}(d1*0.5);
 
 
@@ -1196,7 +1196,7 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
     pucommand:=PDWG^.StoreOldCamerapPos;
     if sysvarRDEnableAnimation then begin
       for i:=1 to steps do begin
-        SetCameraPosZoom(camerapos+{uzegeometry.VertexMulOnSc}(target*(i/steps)),PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
+        SetCameraPosZoom(camerapos+(target*(i/steps)).asVector,PDWG.Getpcamera^.prop.zoom+tzoom{*i}/steps,i=steps);
         if (sysvarRDLastRenderTime<30)and(i<>steps) then
           sleep(30-sysvarRDLastRenderTime);
       end;
@@ -1205,7 +1205,7 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
       draw;
       doCameraChanged;
     end else begin
-      SetCameraPosZoom(camerapos+target,PDWG.Getpcamera^.prop.zoom+tzoom,true);
+      SetCameraPosZoom(camerapos+target.asVector,PDWG.Getpcamera^.prop.zoom+tzoom,true);
       PDWG^.StoreNewCamerapPos(pucommand);
       calcgrid;
       draw;
@@ -2404,8 +2404,8 @@ begin
 
   if IsBBNul(tbb) then
   begin
-       tbb.LBN:=pcamera^.prop.point+MinusOneVertex;
-       tbb.RTF:=pcamera^.prop.point+OneVertex;
+       tbb.LBN:=pcamera^.prop.point+MinusOneVertex.asVector;
+       tbb.RTF:=pcamera^.prop.point+OneVertex.asVector;
   end;
 
   //if param.CSIcon.AxisLen>eps then
@@ -2953,7 +2953,7 @@ begin
           pt.dispraycoord.x:=param.ontrackarray.otrackarray[j].dispcoord.x+pt.tmouse*pt.dir.x;
           pt.dispraycoord.y:=param.ontrackarray.otrackarray[j].dispcoord.y+pt.tmouse*pt.dir.y;
           pt.dispraycoord.z:=0;
-          pt.worldraycoord:=param.ontrackarray.otrackarray[j].worldcoord+t;
+          pt.worldraycoord:=param.ontrackarray.otrackarray[j].worldcoord+t.asVector;
           {pt.worldraycoord.x:=param.ontrackarray.otrackarray[j].worldcoord.x+tx;
           pt.worldraycoord.y:=param.ontrackarray.otrackarray[j].worldcoord.y+ty;
           pt.worldraycoord.z:=param.ontrackarray.otrackarray[j].worldcoord.z+tz;}

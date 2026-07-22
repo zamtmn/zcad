@@ -441,7 +441,7 @@ begin
         TCDM_2P,TCDM_3P:begin
           PGDBObjCircle(PT3PointCircleModePentity(
             PInteractiveData)^.pentity)^.Local.p_insert:=
-            {VertexMulOnSc}(PT3PointCircleModePentity(PInteractiveData)^.p1+point)*0.5;
+            (PT3PointCircleModePentity(PInteractiveData)^.p1+point.asVector)*0.5;
           PGDBObjCircle(PT3PointCircleModePentity(
             PInteractiveData)^.pentity)^.Radius:=
             PT3PointCircleModePentity(PInteractiveData)^.p1.LengthTo(point)/2;

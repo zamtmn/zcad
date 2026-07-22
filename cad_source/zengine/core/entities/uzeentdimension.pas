@@ -222,7 +222,7 @@ begin
       DTMCreateLeader:
       begin
         if self.DimData.TextMoved then begin
-          pl:=DrawDimensionLineLinePart({VertexMulOnSc}((p1+p2)*0.5),
+          pl:=DrawDimensionLineLinePart((p1+p2.asVector)*0.5,
             DimData.P11InOCS,drawing);
           pl.FormatEntity(drawing,dc);
           pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(
@@ -248,12 +248,11 @@ var
 begin
   CalcTextAngle;
 
-  ip:=uzegeometry.intercept3dmy2(dlStart,dlEnd,DimData.P11InOCS,
-    DimData.P11InOCS+vectorN.asPoint3d);
+  ip:=uzegeometry.intercept3dmy2(dlStart,dlEnd,DimData.P11InOCS,DimData.P11InOCS+vectorN);
   TextTParam:=ip.t1;
   CalcTextInside;
   ip:=uzegeometry.intercept3dmy2(dlStart,dlEnd,DimData.P11InOCS,
-    DimData.P11InOCS+vectorN.asPoint3d);
+    DimData.P11InOCS+vectorN);
   if TextInside then begin
     if PDimStyle.Text.DIMTIH then
       TextAngle:=0;
@@ -398,7 +397,7 @@ begin
         p:=VertexDmorph(p,VectorT.asPoint3d,GetPSize/2);
         DimData.NeedTextLeader:=True;
       end;
-    p:=p+TextOffset;
+    p:=p+TextOffset.asVector;
   end;
   ptext.Local.P_insert:=p;
   ptext.linespacef:=1;
@@ -489,19 +488,19 @@ end;
 procedure GDBObjDimension.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
   if rtmod.point.pointtype=os_p10 then begin
-    DimData.P10InWCS:=P10ChangeTo(rtmod.point.worldcoord+rtmod.dist);
+    DimData.P10InWCS:=P10ChangeTo(rtmod.point.worldcoord+rtmod.dist.asVector);
   end else if rtmod.point.pointtype=os_p11 then begin
-    DimData.P11InOCS:=P11ChangeTo(rtmod.point.worldcoord+rtmod.dist);
+    DimData.P11InOCS:=P11ChangeTo(rtmod.point.worldcoord+rtmod.dist.asVector);
   end else if rtmod.point.pointtype=os_p12 then begin
-    DimData.P12InOCS:=P12ChangeTo(rtmod.point.worldcoord+rtmod.dist);
+    DimData.P12InOCS:=P12ChangeTo(rtmod.point.worldcoord+rtmod.dist.asVector);
   end else if rtmod.point.pointtype=os_p13 then begin
-    DimData.P13InWCS:=P13ChangeTo(rtmod.point.worldcoord+rtmod.dist);
+    DimData.P13InWCS:=P13ChangeTo(rtmod.point.worldcoord+rtmod.dist.asVector);
   end else if rtmod.point.pointtype=os_p14 then begin
-    DimData.P14InWCS:=P14ChangeTo(rtmod.point.worldcoord+rtmod.dist);
+    DimData.P14InWCS:=P14ChangeTo(rtmod.point.worldcoord+rtmod.dist.asVector);
   end else if rtmod.point.pointtype=os_p15 then begin
-    DimData.P15InWCS:=P15ChangeTo(rtmod.point.worldcoord+rtmod.dist);
+    DimData.P15InWCS:=P15ChangeTo(rtmod.point.worldcoord+rtmod.dist.asVector);
   end else if rtmod.point.pointtype=os_p16 then begin
-    DimData.P16InOCS:=P16ChangeTo(rtmod.point.worldcoord+rtmod.dist);
+    DimData.P16InOCS:=P16ChangeTo(rtmod.point.worldcoord+rtmod.dist.asVector);
   end;
 end;
 

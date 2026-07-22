@@ -572,12 +572,12 @@ begin
   //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
 
   if IsValidRange(offs.x,dirx.x) and IsValidRange(offs.y,dirx.y)then begin
-    offs2:=offs+dirx;
+    offs2:=offs+dirx.asVector;
     First:=True;
     for i:=0 to Path.paths.Count-1 do
       for j:=0 to Path.paths.getDataMutable(i)^.Count-1 do begin
         pp:=Path.paths.getDataMutable(i)^.getDataMutable(j);
-        p2:=pp^+diry;
+        p2:=pp^+diry.asVector;
         iprop:=intercept2dmy(offs,offs2,pp^,p2);
         if iprop.isintercept then
           if First then begin
@@ -594,12 +594,12 @@ begin
     if not First then begin
       tmin:=int(tmin{+0.5});
       tmax:=int(tmax);
-      ls:=offs+{Vertex2dMulOnSc}(dirx*tmin);
+      ls:=offs+(dirx*tmin).asVector;
       while tmin<=tmax do begin
         IV.Clear;
-        ProcessLines(ls,ls+diry,IV);
+        ProcessLines(ls,ls+diry.asVector,IV);
         ProcessStroke(Strokes,IV,DC);
-        ls:=ls+dirx;
+        ls:=ls+dirx.asVector;
         tmin:=tmin+1;
       end;
     end;
@@ -840,13 +840,14 @@ begin
 
   tv:=rtmod.dist;
   wwc:=rtmod.point.worldcoord;
-  wwc:=wwc+tv;
+  wwc:=wwc+tv.asVector;
   wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
   pv:=Path.getDataMutableByPlainIndex(vertexnumber);
   if pv<>nil then begin
-    pv.x:=wwc.x;
-    pv.y:=wwc.y;
+    pv^:=wwc.Slice;
+    {pv.x:=wwc.x;
+    pv.y:=wwc.y;}
   end;
 end;
 

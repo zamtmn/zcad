@@ -676,7 +676,7 @@ begin
       if tcdp<=(pcurrsegment.naccumlength+eps) then begin
         oldcp:=cp;
         tv:={VertexMulOnSc}(dir*(length/pcurrsegment.nlength));
-        cp:=cp+tv;
+        cp:=cp+tv.asVector;
         if paint then
           self.PGeom.DrawLineWithoutLT(rc,oldcp,cp,dr);
         cdp:=tcdp;

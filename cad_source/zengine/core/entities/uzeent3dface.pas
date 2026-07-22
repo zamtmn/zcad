@@ -328,7 +328,7 @@ var
   vertexnumber:integer;
 begin
   vertexnumber:=rtmod.point.vertexnum;
-  PInOCS[vertexnumber]:=rtmod.point.worldcoord+rtmod.dist;
+  PInOCS[vertexnumber]:=rtmod.point.worldcoord+rtmod.dist.asVector;
 end;
 
 function GDBObj3DFace.Clone;

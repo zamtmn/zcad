@@ -112,18 +112,18 @@ begin
   if PDimStyle.Lines.DIMCEN<>0 then begin
     ls:=abs(PDimStyle.Lines.DIMCEN);
     DrawExtensionLineLinePart(VertexSub(cp,createvertex(ls,0,0)),
-      cp+createvertex(ls,0,0),drawing,0).FormatEntity(drawing,dc);
+      cp+CreateVector(ls,0,0),drawing,0).FormatEntity(drawing,dc);
     DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,ls,0)),
-      cp+createvertex(0,ls,0),drawing,0).FormatEntity(drawing,dc);
+      cp+CreateVector(0,ls,0),drawing,0).FormatEntity(drawing,dc);
     if PDimStyle.Lines.DIMCEN<0 then begin
       DrawExtensionLineLinePart(VertexSub(cp,createvertex(2*ls,0,0)),
         VertexSub(cp,createvertex(r+ls,0,0)),drawing,0).FormatEntity(drawing,dc);
       DrawExtensionLineLinePart(VertexSub(cp,createvertex(0,2*ls,0)),
         VertexSub(cp,createvertex(0,r+ls,0)),drawing,0).FormatEntity(drawing,dc);
-      DrawExtensionLineLinePart(cp+createvertex(2*ls,0,0),
-        cp+createvertex(r+ls,0,0),drawing,0).FormatEntity(drawing,dc);
-      DrawExtensionLineLinePart(cp+createvertex(0,2*ls,0),
-        cp+createvertex(0,r+ls,0),drawing,0).FormatEntity(drawing,dc);
+      DrawExtensionLineLinePart(cp+CreateVector(2*ls,0,0),
+        cp+CreateVector(r+ls,0,0),drawing,0).FormatEntity(drawing,dc);
+      DrawExtensionLineLinePart(cp+CreateVector(0,2*ls,0),
+        cp+CreateVector(0,r+ls,0),drawing,0).FormatEntity(drawing,dc);
     end;
   end;
 end;
@@ -133,7 +133,7 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
+  center:=(DimData.P15InWCS+DimData.P10InWCS.asVector)*0.5;
   d:=center.LengthTo(tv);
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
@@ -149,7 +149,7 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
+  center:=(DimData.P15InWCS+DimData.P10InWCS.asVector)*0.5;
   d:=DimData.P15InWCS.LengthTo(DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
@@ -165,7 +165,7 @@ var
   dirv,center:TzePoint3d;
   d:double;
 begin
-  center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
+  center:=(DimData.P15InWCS+DimData.P10InWCS.asVector)*0.5;
   d:=DimData.P15InWCS.LengthTo(DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
@@ -221,7 +221,7 @@ end;
 
 function GDBObjDiametricDimension.GetCenterPoint:TzePoint3d;
 begin
-  Result:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
+  Result:=(DimData.P15InWCS+DimData.P10InWCS.asVector)*0.5;
 end;
 
 function GDBObjDiametricDimension.GetRadius:double;

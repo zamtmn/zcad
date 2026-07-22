@@ -273,7 +273,7 @@ begin
   tv:=rtmod.dist;
   wwc:=rtmod.point.worldcoord;
 
-  wwc:=wwc+tv;
+  wwc:=wwc+tv.asVector;
   wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
   PInOCS[vertexnumber]:=wwc;

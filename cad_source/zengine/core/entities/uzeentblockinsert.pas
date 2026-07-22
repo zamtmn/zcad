@@ -110,11 +110,11 @@ begin
   if rtmod.point.pointtype=os_point then begin
     if rtmod.point.PDrawable=nil then
       Local:=GetPointInOCSByBasis(objmatrix.mtr.v[0].Slice,
-        objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,rtmod.point.worldcoord+rtmod.dist,scl)
+        objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,rtmod.point.worldcoord+rtmod.dist.asVector,scl)
     else
       Local:=GetPointInOCSByBasis(objmatrix.mtr.v[0].Slice,
         objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,VertexSub(
-        rtmod.point.worldcoord+rtmod.dist,rtmod.point.dcoord),scl);
+        rtmod.point.worldcoord+rtmod.dist.asVector,rtmod.point.dcoord),scl);
   end;
 end;
 

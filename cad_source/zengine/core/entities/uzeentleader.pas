@@ -836,7 +836,7 @@ var
 begin
   VertexNumber:=rtmod.point.vertexnum;
   GDBPoint3dArray.PTArr(VertexArrayInOCS.parray)^[VertexNumber]:=
-    rtmod.point.worldcoord+rtmod.dist;
+    rtmod.point.worldcoord+rtmod.dist.asVector;
 end;
 
 procedure GDBObjLeader.remaponecontrolpoint(pdesc:pcontrolpointdesc;

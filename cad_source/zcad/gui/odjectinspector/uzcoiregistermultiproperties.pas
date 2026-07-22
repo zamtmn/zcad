@@ -348,7 +348,7 @@ begin
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-  PzePoint3d(ChangedData.PSetDataInEtity)^:=v1+v2;
+  PzePoint3d(ChangedData.PSetDataInEtity)^:=v1+v2.asVector;
 end;
 procedure DoubleAngleEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
@@ -373,7 +373,7 @@ begin
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-  PzePoint3d(ChangedData.PSetDataInEtity)^:=v1+v2;
+  PzePoint3d(ChangedData.PSetDataInEtity)^:=v1+v2.asVector;
 end;
 procedure CurrentAngleFormat2DegEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var

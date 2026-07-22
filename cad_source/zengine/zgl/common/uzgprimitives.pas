@@ -631,7 +631,7 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
                                                                      rc.DrawingContext.pcamera.frustum.v[4])
                                              +PointOf3PlaneIntersect(rc.DrawingContext.pcamera.frustum.v[1],
                                                                      rc.DrawingContext.pcamera.frustum.v[3],
-                                                                     rc.DrawingContext.pcamera.frustum.v[5])
+                                                                     rc.DrawingContext.pcamera.frustum.v[5]).asVector
                                                                      )/2;
     dt:=distance2ray(rc.DrawingContext.FrustumCenter.Value,geomdata.Vertex3S.getData(FirstIndex),geomdata.Vertex3S.getData(LastIndex));
     dir:=geomdata.Vertex3S.getData(LastIndex)-geomdata.Vertex3S.getData(FirstIndex);
@@ -1072,7 +1072,7 @@ begin
   oldlcs:=drawer.GetLCS;
   newLCS:=CorrectLCS(SymMatr,oldlcs);
 
-  tv2:=tv+newLCS;
+  tv2:=tv+newLCS.asVector;
 
   //drawer.DisableLCS(rc.DrawingContext.matrixs);
   notuselcs:=drawer.SetLCSState(false);

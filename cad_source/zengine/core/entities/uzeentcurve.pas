@@ -427,7 +427,7 @@ var
   vertexnumber:integer;
 begin
   vertexnumber:=rtmod.point.vertexnum;
-  GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=rtmod.point.worldcoord+rtmod.dist;
+  GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=rtmod.point.worldcoord+rtmod.dist.asVector;
 end;
 
 procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc;

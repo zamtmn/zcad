@@ -568,7 +568,7 @@ begin
       tv2.Normalize;
       tv2:={uzegeometry.VertexMulOnSc}(tv2*scale);
 
-      tv:=tv2+tv;
+      tv:=tv2+tv.asVector;
       tv.Normalize;
       tv:={uzegeometry.VertexMulOnSc}(tv*scale);
 
@@ -583,7 +583,7 @@ begin
   //MarkLine.vp.Layer:=vp.Layer;
   //MarkLine.vp.LineWeight:=vp.LineWeight;
   MarkLine.CoordInOCS.lBegin:=(MainLine.CoordInOCS.lBegin-tv).asPoint3d;
-  MarkLine.CoordInOCS.lEnd:=MainLine.CoordInOCS.lBegin+tv;
+  MarkLine.CoordInOCS.lEnd:=MainLine.CoordInOCS.lBegin+tv.asVector;
 
   MarkLine.FormatEntity(drawing,dc);
 
@@ -903,7 +903,7 @@ begin
      tv:=vectordot(mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin,Local.basis.OZ).asPoint3d;
      if not IsVectorNul(tv.asVector) then
        tv.Normalize;
-     MarkLine.init(@self,vp.Layer,vp.LineWeight,(MainLine.CoordInOCS.lBegin-tv).asPoint3d,MainLine.CoordInOCS.lBegin+tv);
+     MarkLine.init(@self,vp.Layer,vp.LineWeight,(MainLine.CoordInOCS.lBegin-tv).asPoint3d,MainLine.CoordInOCS.lBegin+tv.asVector);
      //MarkLine.Format;
 
      tbl.initnul;

@@ -854,7 +854,7 @@ begin
     d:=GetLTCorrectH(dc.DrawingContext.globalltscale);
     cv:=createvertex(d,d,d);
     vp.BoundingBox.LBN:=VertexSUB(vp.BoundingBox.LBN,cv);
-    vp.BoundingBox.RTF:=vp.BoundingBox.RTF+cv;
+    vp.BoundingBox.RTF:=vp.BoundingBox.RTF+cv.asVector;
   end;
 end;
 

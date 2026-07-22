@@ -253,7 +253,7 @@ end;
 procedure GDBObjPoint.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
   if rtmod.point.pointtype=os_point then begin
-    P_insertInOCS:=rtmod.point.worldcoord+rtmod.dist;
+    P_insertInOCS:=rtmod.point.worldcoord+rtmod.dist.asVector;
   end;
 end;
 

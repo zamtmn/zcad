@@ -346,8 +346,8 @@ begin
 end;
 procedure drawCross(const p1:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 begin
-  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,(p1-_XY_zVertex).asPoint3d,p1+_XY_zVertex);
-  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,(p1-_MinusXY_zVertex).asPoint3d,p1+_MinusXY_zVertex);
+  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,(p1-_XY_zVertex).asPoint3d,p1+_XY_zVertex.asVector);
+  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,(p1-_MinusXY_zVertex).asPoint3d,p1+_MinusXY_zVertex.asVector);
 end;
 procedure drawFilledCircle(const p0:TzePoint3d;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
@@ -355,28 +355,28 @@ var
   sine,cosine:Double;
 begin
   if r>bigeps then begin
-    p1:=CreateVertex(-1,0,0)*r+p0;
+    p1:=CreateVertex(-1,0,0)*r+p0.asVector;
     SinCos(5*pi/6, sine, cosine);
-    p2:=CreateVertex(cosine,sine,0)*r+p0;
+    p2:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     SinCos(4*pi/6, sine, cosine);
-    p3:=CreateVertex(cosine,sine,0)*r+p0;
+    p3:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     SinCos(3*pi/6, sine, cosine);
-    p4:=CreateVertex(cosine,sine,0)*r+p0;
+    p4:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     SinCos(2*pi/6, sine, cosine);
-    p5:=CreateVertex(cosine,sine,0)*r+p0;
+    p5:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     SinCos(1*pi/6, sine, cosine);
-    p6:=CreateVertex(cosine,sine,0)*r+p0;
-    p7:=CreateVertex(1,0,0)*r+p0;
+    p6:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p7:=CreateVertex(1,0,0)*r+p0.asVector;
     SinCos(-1*pi/6, sine, cosine);
-    p8:=CreateVertex(cosine,sine,0)*r+p0;
+    p8:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     SinCos(-2*pi/6, sine, cosine);
-    p9:=CreateVertex(cosine,sine,0)*r+p0;
+    p9:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     SinCos(-3*pi/6, sine, cosine);
-    p10:=CreateVertex(cosine,sine,0)*r+p0;
+    p10:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     SinCos(-4*pi/6, sine, cosine);
-    p11:=CreateVertex(cosine,sine,0)*r+p0;
+    p11:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     SinCos(-5*pi/6, sine, cosine);
-    p12:=CreateVertex(cosine,sine,0)*r+p0;
+    p12:=CreateVertex(cosine,sine,0)*r+p0.asVector;
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1,p2);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p2,p3);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p3,p4);

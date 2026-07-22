@@ -183,7 +183,7 @@ begin
                     temp:=CreateVertex(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),strtodouble(parseresult^.getData(2)));
                     if relativemarker then
                       if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
-                        temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord;
+                        temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord.asVector;
                     commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,temp,MZW_LBUTTON,nil);
                   end;
                  if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
@@ -194,7 +194,7 @@ begin
                       temp:=CreateVertex(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),0);
                       if relativemarker then
                         if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
-                          temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord;
+                          temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord.asVector;
                       commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,temp,MZW_LBUTTON,nil);
                     end;
                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
@@ -208,7 +208,7 @@ begin
                       temp:=CreateVertex(l*cosine,l*sine,0);
                  if relativemarker then
                  if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
-                   temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord;
+                   temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord.asVector;
                  commandmanager.sendcoordtocommandTraceOn(drawings.GetCurrentDWG.wa,temp,MZW_LBUTTON,nil);
                  end;
                  if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;

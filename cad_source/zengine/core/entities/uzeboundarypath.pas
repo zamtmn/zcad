@@ -173,7 +173,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
     d:=p2-p1;
     l:=d.Length;
     h:=l*bulge/2;
-    pc:=(p1+p2)/2;
+    pc:=(p1+p2.asVector)/2;
     n:=d.Turned90L;
     {n.x:=-d.y;
     n.y:=d.x;}
@@ -383,7 +383,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
     end;
     for k:=1 to 16 do begin
       SinCos(sa+k/16*a,p.y,p.x);
-      p:=cp+p*r;
+      p:=cp+(p*r).asVector;
       currpath.PushBackData(p);
     end;
   end;

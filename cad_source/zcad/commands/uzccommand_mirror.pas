@@ -63,7 +63,7 @@ begin
   dist:=p2-p1;
   d:=dist.Length;
   p3:={uzegeometry.VertexMulOnSc}(ZWCS.asPoint3d*d);
-  p3:=p3+t3dp;
+  p3:=p3+t3dp.asVector;
 
   plane:=PlaneFrom3Pont(p1,p2,p3);
   normalizeplane(plane);

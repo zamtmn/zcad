@@ -100,7 +100,7 @@ begin
   d:=q.LengthTo(p1);
   if d>eps then begin
     Result:=
-      p2+VertexSub(uzegeometry.Vertexmorphabs2(p1,q,d),p1);
+      p2+(Vertexmorphabs2(p1,q,d)-p1);
   end else
     Result:=p2;
 end;
@@ -152,8 +152,8 @@ end;
 procedure GDBObjAlignedDimension.CalcDefaultPlaceText(dlStart,dlEnd:TzePoint3d;
   var drawing:TDrawingDef);
 begin
-  DimData.P11InOCS:={VertexMulOnSc}(dlStart+dlEnd)*0.5;
-  DimData.P11InOCS:=DimData.P11InOCS+getTextOffset(drawing);
+  DimData.P11InOCS:=(dlStart+dlEnd.asVector)*0.5;
+  DimData.P11InOCS:=DimData.P11InOCS+getTextOffset(drawing).asVector;
 end;
 
 function GDBObjAlignedDimension.P10ChangeTo(const tv:TzePoint3d):TzePoint3d;
@@ -188,7 +188,7 @@ begin
     t:=GettFromLinePoint(tv,DimData.P13InWCS,temp);
     tvertex:=uzegeometry.Vertexmorph(DimData.P13InWCS,temp,t);
     tvertex:=vertexsub(tv,tvertex);
-    DimData.P10InWCS:=temp+tvertex;
+    DimData.P10InWCS:=temp+tvertex.asVector;
   end;
 end;
 (*
@@ -214,7 +214,7 @@ begin
     tvertex:=
       uzegeometry.Vertexmorph(tv,DimData.P14InWCS,t);
     tvertex:=vertexsub(DimData.P11InOCS,tvertex);
-    DimData.P10InWCS:=DimData.P14InWCS+tvertex;
+    DimData.P10InWCS:=DimData.P14InWCS+tvertex.asVector;
   end else begin
     t:=
       DimData.P10InWCS.LengthTo(DimData.P14InWCS);
@@ -238,7 +238,7 @@ begin
 
     ;
     tvertex:={VertexMulOnSc}(tvertex*t);
-    DimData.P10InWCS:=DimData.P14InWCS+tvertex;
+    DimData.P10InWCS:=DimData.P14InWCS+tvertex.asVector;
     DimData.P13InWCS:=tv;
   end;
 end;
@@ -255,7 +255,7 @@ begin
     tvertex:=
       uzegeometry.Vertexmorph(DimData.P13InWCS,tv,t);
     tvertex:=vertexsub(DimData.P11InOCS,tvertex);
-    DimData.P10InWCS:=tv+tvertex;
+    DimData.P10InWCS:=tv+tvertex.asVector;
   end else begin
     t:=DimData.P10InWCS.LengthTo(DimData.P14InWCS);
     dir:=-1;
@@ -275,7 +275,7 @@ begin
 
     ;
     tvertex:={VertexMulOnSc}(tvertex*t);
-    DimData.P10InWCS:=tv+tvertex;
+    DimData.P10InWCS:=tv+tvertex.asVector;
     DimData.P14InWCS:=tv;
     //CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);
   end;
@@ -406,7 +406,7 @@ begin
   l:=GetTFromDirNormalizedPoint(DimData.P10InWCS,DimData.P13InWCS,vectorN.asPoint3d);
   tv:=VertexDmorph(DimData.P13InWCS,self.vectorN.asPoint3d,l);
   DrawExtensionLine(DimData.P13InWCS,tv,0,drawing,dc,2);
-  DimData.MidPoint:=(tv+DimData.P10InWCS)/2;
+  DimData.MidPoint:=(tv+DimData.P10InWCS.asVector)/2;
 
   CalcTextAngle;
   if not self.DimData.TextMoved then

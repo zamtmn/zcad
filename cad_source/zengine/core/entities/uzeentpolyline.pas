@@ -309,11 +309,11 @@ begin
     halfVector:={uzegeometry.VertexMulOnSc}(halfVector*0.5);
 
     // Calculate new center position
-    newCenter:=rtmod.point.worldcoord+rtmod.dist;
+    newCenter:=rtmod.point.worldcoord+rtmod.dist.asVector;
 
     // Set both vertices relative to new center
     v1^:=VertexSub(newCenter,halfVector);
-    v2^:=newCenter+halfVector;
+    v2^:=newCenter+halfVector.asVector;
     //offset:=rtmod.dist;
     //v1^:=VertexAdd(v1^,offset);
     //v2^:=VertexAdd(v2^,offset);

@@ -359,7 +359,7 @@ end;
 procedure GDBObjText.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
   if rtmod.point.pointtype=os_point then
-    Local.p_insert:=rtmod.point.worldcoord+rtmod.dist;
+    Local.p_insert:=rtmod.point.worldcoord+rtmod.dist.asVector;
 end;
 
 procedure GDBObjText.SaveToDXFObjXData;

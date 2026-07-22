@@ -103,7 +103,7 @@ uses
   procedure zcSelectEntity(pp:PGDBObjEntity);
 
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:TzePoint3d;
-                        scale:TzePoint3d;rotate:Double;needundo:Boolean=false
+                        scale:TzeVector3d;rotate:Double;needundo:Boolean=false
                         ):PGDBObjBlockInsert;
 
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityTreeArray;
@@ -300,7 +300,7 @@ end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:String;       //имя блока
                         p_insert:TzePoint3d;        //точка вставки
-                        scale:TzePoint3d;           //масштаб
+                        scale:TzeVector3d;           //масштаб
                         rotate:Double;          //поворот
                         needundo:Boolean=false  //завернуть в ундо
                         ):PGDBObjBlockInsert;

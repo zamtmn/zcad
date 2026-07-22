@@ -59,7 +59,7 @@ begin
   PObj^.Local.p_insert := DWGPointToVertex(Props.InsertPoint);
   PObj^.Local.basis.oz := DWGNormalOrDefault(Props.Extrusion).asVector;
 
-  PObj^.scale := DWGPointToVertex(Props.Scale);
+  PObj^.scale := DWGPointToVertex(Props.Scale).asVector;
   if PObj^.scale.x = 0 then
     PObj^.scale.x := 1;
   if PObj^.scale.y = 0 then

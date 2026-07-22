@@ -121,7 +121,7 @@ implementation
         //настраивает
         result^.Name:=blockName;
         result^.Local.P_insert:=pt;
-        result^.scale:=uzegeometry.CreateVertex(scalex,scaley,1);
+        result^.scale:=uzegeometry.CreateVector(scalex,scaley,1);
         result^.rotate:=iRotate;
         //строим переменную часть примитива (та что может редактироваться)
         result^.BuildVarGeometry(drawings.GetCurrentDWG^);

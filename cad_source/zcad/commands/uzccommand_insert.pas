@@ -49,7 +49,7 @@ implementation
 type
   TBlockInsert=record
     Blocks:TEnumData;(*'Block'*)
-    Scale:TzePoint3d;(*'Scale'*)
+    Scale:TzeVector3d;(*'Scale'*)
     Rotation:double;(*'Rotation'*)
   end;
 
@@ -237,7 +237,7 @@ initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsInitializeLMId);
   BIProp.Blocks.Enums.init(100);
-  BIProp.Scale:=uzegeometry.OneVertex;
+  BIProp.Scale:=OneVertex.asVector;
   BIProp.Rotation:=0;
   if SysUnit<>nil then begin
     SysUnit^.RegisterType(TypeInfo(TBlockInsert));

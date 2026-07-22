@@ -127,7 +127,7 @@ type
       Поддерживают перемещение/масштабирование/поворот/зеркализацию
       прокси-объекта. Хранятся отдельно, чтобы пережить пересборку
       матрицы objmatrix в CalcObjMatrix. }
-    scale: TzePoint3d;
+    scale: TzeVector3d;
     rotate: double;
   private
     { Сырые байты Proxy Graphic (код 310 из DXF) }
@@ -701,7 +701,7 @@ begin
     or (not SameValue(scale.y, 1.0))
     or (not SameValue(scale.z, 1.0)) then
   begin
-    m1 := CreateScaleMatrix(scale.asVector);
+    m1 := CreateScaleMatrix(scale);
     objMatrix := MatrixMultiply(m1, objMatrix);
   end;
 

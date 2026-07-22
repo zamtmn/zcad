@@ -66,7 +66,7 @@ end;
                 );
          PTBlockScaleParams=^TBlockScaleParams;
          TBlockScaleParams=record
-                             Scale:TzePoint3d;(*'New scale'*)
+                             Scale:TzeVector3d;(*'New scale'*)
                              Absolutely:Boolean;(*'Absolutely'*)
                            end;
          PTBlockRotateParams=^TBlockRotateParams;
@@ -1185,7 +1185,7 @@ begin
 
   BlockScale.init('BlockScale',0,0);
   BlockScale.CEndActionAttr:=[];
-  BlockScaleParams.Scale:=uzegeometry.CreateVertex(1,1,1);
+  BlockScaleParams.Scale:=uzegeometry.CreateVector(1,1,1);
   BlockScaleParams.Absolutely:=true;
   BlockScale.SetCommandParam(@BlockScaleParams,'PTBlockScaleParams');
 

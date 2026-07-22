@@ -36,7 +36,7 @@ type
   PGDBObjBlockInsert=^GDBObjBlockInsert;
 
   GDBObjBlockInsert=object(GDBObjComplex)
-    scale:TzePoint3d;
+    scale:TzeVector3d;
     rotate:double;
     index:integer;
     Name:ansistring;
@@ -104,7 +104,7 @@ end;
 procedure GDBObjBlockInsert.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
   m:TzeTypedMatrix4d;
-  scl:TzePoint3d;
+  scl:TzeVector3d;
 begin
   m:=onematrix;
   if rtmod.point.pointtype=os_point then begin
@@ -205,7 +205,7 @@ begin
 
   setrot(rotate);
 
-  m1:=CreateScaleMatrix(scale.asVector);
+  m1:=CreateScaleMatrix(scale);
   objMatrix:=MatrixMultiply(m1,objMatrix);
 
   PDef:=nil;

@@ -140,7 +140,7 @@ function isPointInAreaLine(linePt1,linePt2,vertexPt:TzePoint3d;accuracy:double):
 //** ptdev-точка поиска
 //** insertDev - мировая точка вставленного блока
 //** scale - масштаб блока
-function getRealPointDevice(ptdev,insertDev,scale:TzePoint3d):TzePoint3d;
+function getRealPointDevice(ptdev,insertDev:TzePoint3d;scale:TzeVector3d):TzePoint3d;
 
 implementation
 
@@ -148,7 +148,7 @@ implementation
   //** ptdev-точка поиска
   //** insertDev - мировая точка вставленного блока
   //**scale - масштаб блока
-  function getRealPointDevice(ptdev,insertDev,scale:TzePoint3d):TzePoint3d;
+  function getRealPointDevice(ptdev,insertDev:TzePoint3d;scale:TzeVector3d):TzePoint3d;
   begin
        result.x:=(ptdev.x * scale.x) + insertDev.x;
        zcUI.TextMessage('result-х = ' + FloatToStr(result.x),TMWOHistoryOut);

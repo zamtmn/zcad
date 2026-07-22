@@ -144,7 +144,7 @@ end;
 
 procedure GDBObjCircle.ReCalcFromObjMatrix;
 var
-  scl:TzePoint3d;
+  scl:TzeVector3d;
 begin
   Local:=GetPInsertInOCSBymatrix(objmatrix,scl);
   Radius:=scl.x;

@@ -843,8 +843,8 @@ begin
           if (ip.t1>0) and (ip.t2>0) then
             if (ip2.t1>0) and (ip2.t2>0) then begin
               v2:=Vertex3D_in_WCS_Array.getDataMutable(j);
-              if SqrVertexlength(v2^,ip.interceptcoord)<l then
-                if SqrVertexlength(v2^,ip2.interceptcoord)<l then begin
+              if v2^.SqrLengthTo(ip.interceptcoord)<l then
+                if v2^.SqrLengthTo(ip2.interceptcoord)<l then begin
                   pq3d^[1]:=ip.interceptcoord;
                   pq3d^[2]:=ip2.interceptcoord;
                   pq3dnext^[0]:=ip.interceptcoord;

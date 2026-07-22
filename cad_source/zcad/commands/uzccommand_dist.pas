@@ -65,7 +65,7 @@ begin
   //c1:=cs;
   c1:=commandmanager.GetValueHeap;
   if c2<>-1 then begin
-    len:=uzegeometry.Vertexlength(point,oldpoint);
+    len:=point.LengthTo(oldpoint);
     distlen:=distlen+len;
     zcUI.TextMessage(
       format(rscmSegmentLengthTotalLength,[floattostr(len),floattostr(distlen)]),

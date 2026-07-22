@@ -304,7 +304,7 @@ begin
   ptv:=VertexArrayInWCS.iterate(ir);
   if ptv<>nil then
     repeat
-      Result:=Result+uzegeometry.Vertexlength(ptv^,ptvprev^);
+      Result:=Result+ptv^.LengthTo(ptvprev^);
       ptvprev:=ptv;
       ptv:=VertexArrayInWCS.iterate(ir);
     until ptv=nil;
@@ -544,7 +544,7 @@ begin
           tv:=vectordot(dir.asVector3d,param.md.mouseray.dir).asPoint3d;
           t:=-((pv1.x-param.lastpoint.x)*dir.x+
             (pv1.y-param.lastpoint.y)*dir.y+(pv1.z-param.lastpoint.z)*dir.z)/
-            (SqrVertexlength(pv2^,pv1^));
+            (pv2^.SqrLengthTo(pv1^));
           if (t>=0) and (t<=1) then begin
             osp.worldcoord.x:=pv1^.x+t*dir.x;
             osp.worldcoord.y:=pv1^.y+t*dir.y;

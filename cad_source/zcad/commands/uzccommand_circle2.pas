@@ -85,7 +85,7 @@ begin
   Result:=mclick;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   zcSetEntPropFromCurrentDrawingProp(pc);
-  pc^.Radius:=Vertexlength(pc^.local.P_insert,wc);
+  pc^.Radius:=pc^.local.P_insert.LengthTo(wc);
   pc^.Formatentity(drawings.GetCurrentDWG^,dc);
   //pc^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
   if (button and MZW_LBUTTON)<>0 then begin

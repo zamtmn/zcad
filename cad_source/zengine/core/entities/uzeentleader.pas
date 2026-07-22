@@ -247,7 +247,7 @@ begin
     exit;
   p1:=Leader.VertexArrayInOCS.getDataMutable(SegmentIndex);
   p2:=Leader.VertexArrayInOCS.getDataMutable(SegmentIndex+1);
-  Result:=uzegeometry.Vertexlength(p1^,p2^);
+  Result:=p1^.LengthTo(p2^);
 end;
 
 function LeaderHasTextTailSegment(const Leader:GDBObjLeader;
@@ -770,7 +770,7 @@ begin
   ptv:=VertexArrayInWCS.iterate(ir);
   if ptv<>nil then
     repeat
-      Result:=Result+uzegeometry.Vertexlength(ptv^,ptvprev^);
+      Result:=Result+ptv^.LengthTo(ptvprev^);
       ptvprev:=ptv;
       ptv:=VertexArrayInWCS.iterate(ir);
     until ptv=nil;

@@ -304,7 +304,7 @@ begin
    repeat
     IsExchange := False;
     for j := 0 to listNumVertex.Size-2 do begin
-      if uzegeometry.Vertexlength(stVertLine,listDevice[listNumVertex[j]].centerPoint) > uzegeometry.Vertexlength(stVertLine,listDevice[listNumVertex[j+1]].centerPoint) then begin
+      if stVertLine.LengthTo(listDevice[listNumVertex[j]].centerPoint) > stVertLine.LengthTo(listDevice[listNumVertex[j+1]].centerPoint) then begin
         tempNumVertex := listNumVertex[j];
         listNumVertex.Mutable[j]^ := listNumVertex[j+1];
         listNumVertex.Mutable[j+1]^ := tempNumVertex;
@@ -357,7 +357,7 @@ end;
                infoEdge.VPoint1:=listVertexGraph[tempListNumVertex[k-1]].centerPoint;
                infoEdge.VIndex2:=tempListNumVertex[k];
                infoEdge.VPoint2:=listVertexGraph[tempListNumVertex[k]].centerPoint;
-               infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+               infoEdge.edgeLength:=infoEdge.VPoint1.LengthTo(infoEdge.VPoint2);
                listEdgeGraph.PushBack(infoEdge);
            end;
          end;
@@ -485,15 +485,15 @@ var
             //ищем близ лежащую стенку
             for i:=0 to listVertexperpend.size-1 do begin
                if i=0 then begin
-                  tempLength:= uzegeometry.Vertexlength(listVertexperpend[i].point,stPoint);
+                  tempLength:= listVertexperpend[i].point.LengthTo(stPoint);
                   tNum:=i;
                   orient:=listVertexperpend[i].wall;
                   mainVertexPerpend:= listVertexperpend[i].point;
                end
                else
-                if uzegeometry.Vertexlength(listVertexperpend[i].point,stPoint) < tempLength then
+                if listVertexperpend[i].point.LengthTo(stPoint) < tempLength then
                   begin
-                   tempLength := uzegeometry.Vertexlength(listVertexperpend[i].point,stPoint);
+                   tempLength := listVertexperpend[i].point.LengthTo(stPoint);
                    tNum:=i;
                    orient:=listVertexperpend[i].wall;
                    mainVertexPerpend:= listVertexperpend[i].point;
@@ -526,7 +526,7 @@ var
                      vertexGraph.deviceEnt:=nil;
                      listVertexGraph.PushBack(vertexGraph);
 
-                     tempLength:= uzegeometry.Vertexlength(newListDev[0].listLineDev[j].point,tempVertex);
+                     tempLength:= newListDev[0].listLineDev[j].point.LengthTo(tempVertex);
                      edgeGraph.edgeLength:=tempLength;
                      edgeGraph.VPoint1:=newListDev[0].listLineDev[j].point;
                      edgeGraph.VPoint2:=tempVertex;
@@ -542,7 +542,7 @@ var
                      vertexGraph.deviceEnt:=nil;
                      listVertexGraph.PushBack(vertexGraph);
 
-                     tempLength:= uzegeometry.Vertexlength(newListDev[0].listLineDev[j].point,tempVertex);
+                     tempLength:= newListDev[0].listLineDev[j].point.LengthTo(tempVertex);
                      edgeGraph.edgeLength:=tempLength;
                      edgeGraph.VPoint1:=newListDev[0].listLineDev[j].point;
                      edgeGraph.VPoint2:=tempVertex;
@@ -558,7 +558,7 @@ var
                      vertexGraph.deviceEnt:=nil;
                      listVertexGraph.PushBack(vertexGraph);
 
-                     tempLength:= uzegeometry.Vertexlength(newListDev[0].listLineDev[j].point,tempVertex);
+                     tempLength:= newListDev[0].listLineDev[j].point.LengthTo(tempVertex);
                      edgeGraph.edgeLength:=tempLength;
                      edgeGraph.VPoint1:=newListDev[0].listLineDev[j].point;
                      edgeGraph.VPoint2:=tempVertex;
@@ -574,7 +574,7 @@ var
                      vertexGraph.deviceEnt:=nil;
                      listVertexGraph.PushBack(vertexGraph);
 
-                     tempLength:= uzegeometry.Vertexlength(newListDev[0].listLineDev[j].point,tempVertex);
+                     tempLength:= newListDev[0].listLineDev[j].point.LengthTo(tempVertex);
                      edgeGraph.edgeLength:=tempLength;
                      edgeGraph.VPoint1:=newListDev[0].listLineDev[j].point;
                      edgeGraph.VPoint2:=tempVertex;
@@ -589,7 +589,7 @@ var
              for j:=0 to newListDev[0].listLineDev.size-1 do begin
              for i:=0 to newListDev.size-2 do  begin
          //      for j:=0 to newListDev[i].listLineDev.size-1 do begin
-                tempLength:= uzegeometry.Vertexlength(newListDev[i].listLineDev[j].point,newListDev[i+1].listLineDev[j].point);
+                tempLength:= newListDev[i].listLineDev[j].point.LengthTo(newListDev[i+1].listLineDev[j].point);
                 edgeGraph.edgeLength:=tempLength;
                 edgeGraph.VPoint1:=newListDev[i].listLineDev[j].point;
                 edgeGraph.VPoint2:=newListDev[i+1].listLineDev[j].point;

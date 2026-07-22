@@ -428,7 +428,7 @@ begin
             PT3PointCircleModePentity(PInteractiveData)^.p1;
           PGDBObjCircle(PT3PointCircleModePentity(
             PInteractiveData)^.pentity)^.Radius:=
-            uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point);
+            PT3PointCircleModePentity(PInteractiveData)^.p1.LengthTo(point);
         end;
         TCDM_CD:begin
           PGDBObjCircle(PT3PointCircleModePentity(
@@ -436,7 +436,7 @@ begin
             PT3PointCircleModePentity(PInteractiveData)^.p1;
           PGDBObjCircle(PT3PointCircleModePentity(
             PInteractiveData)^.pentity)^.Radius:=
-            uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
+            PT3PointCircleModePentity(PInteractiveData)^.p1.LengthTo(point)/2;
         end;
         TCDM_2P,TCDM_3P:begin
           PGDBObjCircle(PT3PointCircleModePentity(
@@ -444,7 +444,7 @@ begin
             {VertexMulOnSc}(PT3PointCircleModePentity(PInteractiveData)^.p1+point)*0.5;
           PGDBObjCircle(PT3PointCircleModePentity(
             PInteractiveData)^.pentity)^.Radius:=
-            uzegeometry.Vertexlength(PT3PointCircleModePentity(PInteractiveData)^.p1,point)/2;
+            PT3PointCircleModePentity(PInteractiveData)^.p1.LengthTo(point)/2;
         end;
 
       end;
@@ -543,14 +543,14 @@ begin
 
   countVert:=obj.npoint;
   stPoint:=obj.p1;
-  xyline:=uzegeometry.Vertexlength(stPoint,Point);
+  xyline:=stPoint.LengthTo(Point);
 
   if xyline<eps then
     exit;
 
-  xline:=uzegeometry.Vertexlength(stPoint,CreateVertex(Point.x,stPoint.y,0));
+  xline:=stPoint.LengthTo(CreateVertex(Point.x,stPoint.y,0));
 
-  radius:=Vertexlength(stPoint,Point);
+  radius:=stPoint.LengthTo(Point);
   stalpha:=0;
 
   if obj.cdm=TPDM_CC then begin

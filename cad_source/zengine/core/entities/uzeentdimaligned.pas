@@ -97,7 +97,7 @@ begin
   end;
   dist:=scalardot(w.asVector3d,l.asVector3d)/llength;
   p1:=Vertexmorph(p1,p2,dist);
-  d:=Vertexlength(q,p1);
+  d:=q.LengthTo(p1);
   if d>eps then begin
     Result:=
       p2+VertexSub(uzegeometry.Vertexmorphabs2(p1,q,d),p1);
@@ -161,7 +161,7 @@ var
   t,tl:double;
   temp:TzePoint3d;
 begin
-  if uzegeometry.sqrVertexlength(tv,DimData.P14InWCS)>sqreps then begin
+  if tv.SqrLengthTo(DimData.P14InWCS)>sqreps then begin
     tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS).asVector3d,vectorD);
     temp:=VertexDmorph(DimData.P13InWCS,self.vectorD.asPoint3d,tl);
     Result:=CorrectPointLine(tv,DimData.P13InWCS,temp,t);
@@ -217,7 +217,7 @@ begin
     DimData.P10InWCS:=DimData.P14InWCS+tvertex;
   end else begin
     t:=
-      vertexlength(DimData.P10InWCS,DimData.P14InWCS);
+      DimData.P10InWCS.LengthTo(DimData.P14InWCS);
     dir:=-1;
     if GetCSDirFrom0x0y2D(
       vertexsub(DimData.P13InWCS,DimData.P14InWCS).asVector3d,vertexsub(
@@ -257,8 +257,7 @@ begin
     tvertex:=vertexsub(DimData.P11InOCS,tvertex);
     DimData.P10InWCS:=tv+tvertex;
   end else begin
-    t:=
-      vertexlength(DimData.P10InWCS,DimData.P14InWCS);
+    t:=DimData.P10InWCS.LengthTo(DimData.P14InWCS);
     dir:=-1;
     if GetCSDirFrom0x0y2D(
       vertexsub(DimData.P13InWCS,DimData.P14InWCS).asVector3d,vertexsub(
@@ -377,7 +376,7 @@ begin
   vectorD:=vertexsub(DimData.P14InWCS,DimData.P13InWCS).asVector3d;
   vectorD.Normalize;//:=normalizevertex(vectorD);
 
-  if uzegeometry.sqrVertexlength(DimData.P10InWCS,DimData.P14InWCS)>sqreps then begin
+  if DimData.P10InWCS.SqrLengthTo(DimData.P14InWCS)>sqreps then begin
     vectorN:=DimData.P10InWCS-DimData.P14InWCS;
   end else begin
     vectorN.Slice:=vectorD.Slice.Turned90L;

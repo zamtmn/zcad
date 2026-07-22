@@ -249,7 +249,7 @@ begin
                       ptn:=NodePropArray.beginiterate(ir_inNodeArray);
                       if ptv<>nil then begin
                         repeat
-                          if SqrVertexlength(ptv^,devpoint)<sqreps then begin
+                          if ptv^.SqrLengthTo(devpoint)<sqreps then begin
                             ptn^.DevLink:=CurrentSubObj;
                             if
                             CurrentSubObj.BlockDesc.BBorder<>BB_Empty then begin

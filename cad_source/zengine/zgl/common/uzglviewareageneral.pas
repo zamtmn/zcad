@@ -3299,10 +3299,10 @@ begin
      param.md.WPPointUR:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[3],pdwg.getpcamera.frustum.v[1],param.md.workplane);
      param.md.WPPointRB:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[1],pdwg.getpcamera.frustum.v[2],param.md.workplane);
      param.md.WPPointBL:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[2],pdwg.getpcamera.frustum.v[0],param.md.workplane);
-     l:=Vertexlength(param.md.WPPointLU,param.md.WPPointBL);
-     r:=Vertexlength(param.md.WPPointUR,param.md.WPPointRB);
-     u:=Vertexlength(param.md.WPPointLU,param.md.WPPointUR);
-     b:=Vertexlength(param.md.WPPointRB,param.md.WPPointBL);
+     l:={Vertexlength}param.md.WPPointLU.LengthTo(param.md.WPPointBL);
+     r:={Vertexlength}param.md.WPPointUR.LengthTo(param.md.WPPointRB);
+     u:={Vertexlength}param.md.WPPointLU.LengthTo(param.md.WPPointUR);
+     b:={Vertexlength}param.md.WPPointRB.LengthTo(param.md.WPPointBL);
      if r>l then
                 maxh:=r
             else

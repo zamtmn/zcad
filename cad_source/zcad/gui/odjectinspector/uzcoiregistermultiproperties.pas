@@ -62,7 +62,7 @@ begin
      V1:=PzePoint3d(ChangedData.PGetDataInEtity)^;
      inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
      V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
-     l1:=Vertexlength(v1,v2);
+     l1:=v1.LengthTo(v2);
      ChangedData.PGetDataInEtity:=@l1;
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
 end;
@@ -79,7 +79,7 @@ begin
      V1:=PzePoint3d(ChangedData.PGetDataInEtity)^;
      inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
      V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
-     l1:=Vertexlength(v1,v2);
+     l1:=v1.LengthTo(v2);
      if @ecp=nil then pvd^.attrib:=pvd^.attrib or vda_RO;
      if fistrun then
                     mp.MPType^.CopyValueToInstance(@l1,pvdata)
@@ -360,7 +360,7 @@ begin
   V1:=PzePoint3d(ChangedData.PSetDataInEtity)^;
   inc(ChangedData.PSetDataInEtity,sizeof(TzePoint3d));
   V2:=PzePoint3d(ChangedData.PSetDataInEtity)^;
-  d:=vertexlength(v2,v1);
+  d:=v2.LengthTo(v1);
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   SinCos(l1,V2.y,V2.x);
   V2.z:=0;

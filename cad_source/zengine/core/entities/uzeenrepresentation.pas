@@ -458,8 +458,8 @@ procedure TZEntityRepresentation.CreateLWPolyLineWdh(var DC:TDrawContext;var Ent
       if ip.isintercept and ip2.isintercept then
         if (ip.t1>0) and (ip.t2>0) then
           if (ip2.t1>0) and (ip2.t2>0) then begin
-            if SqrVertexlength(p,ip.interceptcoord)<l then
-              if SqrVertexlength(p,ip2.interceptcoord)<l then begin
+            if p.SqrLengthTo(ip.interceptcoord)<l then
+              if p.SqrLengthTo(ip2.interceptcoord)<l then begin
                 q1.Quad[1]:=ip.interceptcoord;
                 q1.Quad[2]:=ip2.interceptcoord;
                 q2.Quad[0]:=ip.interceptcoord;

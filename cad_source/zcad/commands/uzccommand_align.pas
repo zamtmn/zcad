@@ -222,8 +222,8 @@ begin
   resultMatrix := uzegeometry.CreateTranslationMatrix((dstPoint1-srcPoint1).asPoint3d);
 
   // Шаг 2: Поворот — применяем только при ненулевых расстояниях
-  srcLen := uzegeometry.Vertexlength(srcPoint1, srcPoint2);
-  dstLen := uzegeometry.Vertexlength(dstPoint1, dstPoint2);
+  srcLen := srcPoint1.LengthTo(srcPoint2);
+  dstLen := dstPoint1.LengthTo(dstPoint2);
 
   if (srcLen > ALIGN_MIN_DISTANCE) and (dstLen > ALIGN_MIN_DISTANCE) then begin
     // Нормализуем направляющие векторы для 3D-поворота
@@ -324,7 +324,7 @@ begin
   transformedSrc3 := uzegeometry.VectorTransform3D(srcPoint3, twoPointMatrix);
 
   // Шаг 3: вычисляем поворот «крен» вокруг оси dst1→dst2
-  rollAxisLen := uzegeometry.Vertexlength(dstPoint1, dstPoint2);
+  rollAxisLen := dstPoint1.LengthTo(dstPoint2);
 
   if rollAxisLen > ALIGN_MIN_DISTANCE then begin
     // Нормализованная ось поворота
@@ -388,9 +388,9 @@ begin
   if applyScale then begin
     // Применяем масштабирование относительно dstPoint1
     // Масштаб = |dst1→dst2| / |src1→src2|, третья точка не участвует
-    rollAxisLen := uzegeometry.Vertexlength(dstPoint1, dstPoint2);
+    rollAxisLen := dstPoint1.LengthTo(dstPoint2);
     if rollAxisLen > ALIGN_MIN_DISTANCE then begin
-      perpSrcLen := uzegeometry.Vertexlength(srcPoint1, srcPoint2);
+      perpSrcLen := srcPoint1.LengthTo(srcPoint2);
       if perpSrcLen > ALIGN_MIN_DISTANCE then begin
         rollMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1);
         rollMatrix := uzegeometry.MatrixMultiply(

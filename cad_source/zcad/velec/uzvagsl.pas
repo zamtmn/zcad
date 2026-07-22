@@ -405,7 +405,7 @@ implementation
           begin
              tempVertex:=perpendListVertex.front;
              for i:=1 to perpendListVertex.size-1 do
-               if uzegeometry.Vertexlength(tempVertex,stPoint) > uzegeometry.Vertexlength(perpendListVertex[i],stPoint) then
+               if tempVertex.LengthTo(stPoint) > perpendListVertex[i].LengthTo(stPoint) then
                  tempVertex:=perpendListVertex[i];
              perpendListVertex.clear;   //очищаем ненужные вершины перпендикуляров
              perpendListVertex.PushBack(stPoint);
@@ -414,7 +414,7 @@ implementation
              //** ищем ближайший угол прокладки кабеля внутри помещения
              tempVertex2:=contourRoomEmbedSL.Front; //первое значение в массиве
              for i:=1 to contourRoomEmbedSL.size-1 do
-                if uzegeometry.Vertexlength(tempVertex,tempVertex2) > uzegeometry.Vertexlength(tempVertex,contourRoomEmbedSL[i]) then
+                if tempVertex.LengthTo(tempVertex2) > tempVertex.LengthTo(contourRoomEmbedSL[i]) then
                   tempVertex2:=contourRoomEmbedSL[i];
 
              perpendListVertex.PushBack(tempVertex2);
@@ -425,7 +425,7 @@ implementation
        begin
          tempVertex:=perpendListVertex[0];
          for i:=1 to perpendListVertex.size-1 do
-           if uzegeometry.Vertexlength(tempVertex,stPoint) > uzegeometry.Vertexlength(perpendListVertex[i],stPoint) then
+           if tempVertex.LengthTo(stPoint) > perpendListVertex[i].LengthTo(stPoint) then
              tempVertex:=perpendListVertex[i];
          perpendListVertex.clear;   //очищаем ненужные вершины перпендикуляров
          perpendListVertex.PushBack(stPoint);
@@ -468,7 +468,7 @@ implementation
          if contour2dRoom^.isPointInside(newVert) then
            result.PushBack(newVert)
            else
-           result.PushBack(uzvsgeom.extendedLine(newVert,pt,uzegeometry.Vertexlength(newVert,pt)));
+           result.PushBack(uzvsgeom.extendedLine(newVert,pt,newVert.LengthTo(pt)));
 
          end;
     end;
@@ -491,11 +491,11 @@ implementation
          contourRoomEmbedSL:=getcontourRoomEmbedSL(contour2dRoom,cableDistWall); // получаем контур прокладки кабеля
          if getVertexPerpendicularRoom(contour2dRoom,contourRoomEmbedSL,stPoint,perpendListVertex) then    //получаем список вершин перпендикуляра
          begin
-            xyline:=uzegeometry.Vertexlength(perpendListVertex[0],perpendListVertex[1]) ;
+            xyline:=perpendListVertex[0].LengthTo(perpendListVertex[1]) ;
             tempVertex.x:=perpendListVertex[1].x;
             tempVertex.y:=perpendListVertex[0].y;
             tempVertex.z:=0;
-            xline:=uzegeometry.Vertexlength(perpendListVertex[0],tempVertex);
+            xline:=perpendListVertex[0].LengthTo(tempVertex);
 
             anglePerpendCos:=xline/xyline; //косинус
             //временая рисовалка
@@ -554,13 +554,13 @@ implementation
       result:=false;
          if contourRoom^.VertexArrayInOCS.GetRealCount = 4 then
             begin
-             catet1:=uzegeometry.Vertexlength(contourRoom^.VertexArrayInOCS.getdata(0),contourRoom^.VertexArrayInOCS.getdata(1));
-             catet2:=uzegeometry.Vertexlength(contourRoom^.VertexArrayInOCS.getdata(1),contourRoom^.VertexArrayInOCS.getdata(2));
-             gipot1:=uzegeometry.Vertexlength(contourRoom^.VertexArrayInOCS.getdata(0),contourRoom^.VertexArrayInOCS.getdata(2));
+             catet1:=contourRoom^.VertexArrayInOCS.getdata(0).LengthTo(contourRoom^.VertexArrayInOCS.getdata(1));
+             catet2:=contourRoom^.VertexArrayInOCS.getdata(1).LengthTo(contourRoom^.VertexArrayInOCS.getdata(2));
+             gipot1:=contourRoom^.VertexArrayInOCS.getdata(0).LengthTo(contourRoom^.VertexArrayInOCS.getdata(2));
              gipot1new:=sqrt(catet1*catet1 + catet2*catet2);
-             catet1:=uzegeometry.Vertexlength(contourRoom^.VertexArrayInOCS.getdata(2),contourRoom^.VertexArrayInOCS.getdata(3));
-             catet2:=uzegeometry.Vertexlength(contourRoom^.VertexArrayInOCS.getdata(3),contourRoom^.VertexArrayInOCS.getdata(0));
-             gipot2:=uzegeometry.Vertexlength(contourRoom^.VertexArrayInOCS.getdata(2),contourRoom^.VertexArrayInOCS.getdata(0));
+             catet1:=contourRoom^.VertexArrayInOCS.getdata(2).LengthTo(contourRoom^.VertexArrayInOCS.getdata(3));
+             catet2:=contourRoom^.VertexArrayInOCS.getdata(3).LengthTo(contourRoom^.VertexArrayInOCS.getdata(0));
+             gipot2:=contourRoom^.VertexArrayInOCS.getdata(2).LengthTo(contourRoom^.VertexArrayInOCS.getdata(0));
              gipot2new:=sqrt(catet1*catet1 + catet2*catet2);
 
              if (abs(gipot1-gipot1new) <= 1) and (abs(gipot2-gipot2new) <= 1) then
@@ -717,22 +717,22 @@ implementation
        przona13:=isZona13(pr1,pr2);
 
        //получение угла стены
-       xyline:= uzegeometry.Vertexlength(p1,p2);
+       xyline:=p1.LengthTo(p2);
        tempVertex.x:=p2.x;
        tempVertex.y:=p1.y;
        tempVertex.z:=0;
-       xline:=uzegeometry.Vertexlength(p1,tempVertex);
+       xline:=p1.LengthTo(tempVertex);
        anglewall:=arccos(xline/xyline);
        //zcUI.TextMessage('anglewall='+floattostr(anglewall));
        if not pzona13 then
          anglewall:=3.1416-anglewall;
 
        //получение угла перпендикуляра
-       xyline:= uzegeometry.Vertexlength(pr1,pr2);
+       xyline:=pr1.LengthTo(pr2);
        tempVertex.x:=pr2.x;
        tempVertex.y:=pr1.y;
        tempVertex.z:=0;
-       xline:=uzegeometry.Vertexlength(pr1,tempVertex);
+       xline:=pr1.LengthTo(tempVertex);
        angleper:=arccos(xline/xyline);
        //zcUI.TextMessage('angleper='+floattostr(angleper));
        if not przona13 then
@@ -1215,7 +1215,7 @@ begin
            infoEdge.VIndex2:=result.listVertex.size-1;
            infoEdge.VPoint1:=result.listVertex[infoEdge.VIndex1].pt;
            infoEdge.VPoint2:=result.listVertex[infoEdge.VIndex2].pt;
-           infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+           infoEdge.edgeLength:=infoEdge.VPoint1.LengthTo(infoEdge.VPoint2);
            result.listEdge.PushBack(infoEdge);
            num:=result.listVertex.size-1;
         end;
@@ -1231,7 +1231,7 @@ begin
    repeat
     IsExchange := False;
     for j := 0 to listNumVertex.Size-2 do begin
-      if uzegeometry.Vertexlength(stVertLine,listVertex[listNumVertex[j]].pt) > uzegeometry.Vertexlength(stVertLine,listVertex[listNumVertex[j+1]].pt) then begin
+      if stVertLine.LengthTo(listVertex[listNumVertex[j]].pt) > stVertLine.LengthTo(listVertex[listNumVertex[j+1]].pt) then begin
         tempNum := listNumVertex[j];
         listNumVertex.Mutable[j]^ := listNumVertex[j+1];
         listNumVertex.Mutable[j+1]^ := tempNum;
@@ -1317,7 +1317,7 @@ begin
              infoEdge.VIndex2:=listNumVertex[k];
              infoEdge.VPoint2:=graphASL.listVertex[listNumVertex[k]].pt;
              infoEdge.VPoint2.z:=0;
-             infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+             infoEdge.edgeLength:=infoEdge.VPoint1.LengthTo(infoEdge.VPoint2);
              graphASL.listEdge.PushBack(infoEdge);
          end;
        end;
@@ -1357,7 +1357,7 @@ begin
                //zcUI.TextMessage('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
                infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
                infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
-               infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+               infoEdge.edgeLength:=infoEdge.VPoint1.LengthTo(infoEdge.VPoint2);
                graphASL.listEdge.PushBack(infoEdge);
            end
            else
@@ -1384,7 +1384,7 @@ begin
                      //zcUI.TextMessage('-v2+'+ inttostr(infoEdge.VIndex2)+'-');
                      infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
                      infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
-                     infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+                     infoEdge.edgeLength:=infoEdge.VPoint1.LengthTo(infoEdge.VPoint2);
                      graphASL.listEdge.PushBack(infoEdge);
                      betweenWall:=false;
                    end;
@@ -1419,7 +1419,7 @@ begin
                //получем перпендикуляр ближайший к главному перпендикуляру
                tempVertex:=listPerp[0];
                for k:=1 to listPerp.size-1 do
-                 if uzegeometry.Vertexlength(tempVertex,perpendListVertex.front) > uzegeometry.Vertexlength(listPerp[k],perpendListVertex.front) then
+                 if tempVertex.LengthTo(perpendListVertex.front) > listPerp[k].LengthTo(perpendListVertex.front) then
                    tempVertex:=listPerp[k];
                listPerp.destroy;   //очищаем ненужные вершины перпендикуляров
 
@@ -1432,7 +1432,7 @@ begin
                  infoEdge.VIndex2:=listColumnDev[i].listLineDev[j].num;
                  infoEdge.VPoint1:=graphASL.listVertex[infoEdge.VIndex1].pt;
                  infoEdge.VPoint2:=graphASL.listVertex[infoEdge.VIndex2].pt;
-                 infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+                 infoEdge.edgeLength:=infoEdge.VPoint1.LengthTo(infoEdge.VPoint2);
                  graphASL.listEdge.PushBack(infoEdge);
                      //uzvtestdraw.testDrawCircle(tempVertex,55,4);
 
@@ -1466,8 +1466,8 @@ begin
             inc(k);
            end;
          if k >= 2 then begin
-           length1:=uzegeometry.Vertexlength(perpendListVertex.Front,listColumnDev[i].listLineDev[j-1].coord);
-           length2:=uzegeometry.Vertexlength(perpendListVertex.Front,listColumnDev[i].listLineDev[j].coord);
+           length1:=perpendListVertex.Front.LengthTo(listColumnDev[i].listLineDev[j-1].coord);
+           length2:=perpendListVertex.Front.LengthTo(listColumnDev[i].listLineDev[j].coord);
            if length1 > length2 then
              result:=false;
          end;
@@ -1553,7 +1553,7 @@ begin
                 //**смотрем его длину
                 tempLength:=0;
                 for k:=1 to tempListVertex.size - 1 do  begin
-                  tempLength:=tempLength+uzegeometry.Vertexlength(graphASL.listVertex[tempListVertex[k-1]].pt,graphASL.listVertex[tempListVertex[k]].pt);
+                  tempLength:=tempLength+graphASL.listVertex[tempListVertex[k-1]].pt.LengthTo(graphASL.listVertex[tempListVertex[k]].pt);
                 end;
 
                 //zcUI.TextMessage('Длина' + FloatToStr(tempLength));
@@ -1701,7 +1701,7 @@ begin
     //if listVertex.size>0 then
     //   result:=listVertex[0];
     for i:=0 to listVertex.size-1 do Begin
-        if  uzegeometry.Vertexlength(stpt,result)>=uzegeometry.Vertexlength(stpt,listVertex[i]) then
+        if stpt.LengthTo(result)>=stpt.LengthTo(listVertex[i]) then
           result:=listVertex[i]
     end;
 

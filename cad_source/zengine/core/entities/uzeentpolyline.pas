@@ -83,7 +83,7 @@ begin
   if closed and (VertexArrayInWCS.Count>0) then begin
     ptpv0:=VertexArrayInWCS.GetParrayAsPointer;
     ptpv1:=VertexArrayInWCS.getDataMutable(VertexArrayInWCS.Count-1);
-    Result:=Result+uzegeometry.Vertexlength(ptpv0^,ptpv1^);
+    Result:=Result+ptpv0^.LengthTo(ptpv1^);
   end;
 end;
 

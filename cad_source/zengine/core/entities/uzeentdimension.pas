@@ -114,7 +114,7 @@ var
   pp1,pp2:TzePoint3d;
   zangle:double;
 begin
-  l:=uzegeometry.Vertexlength(p1,p2);
+  l:=p1.LengthTo(p2);
   tbp0:=PDimStyle.GetDimBlockParam(0);
   tbp1:=PDimStyle.GetDimBlockParam(1);
   if supress1 then

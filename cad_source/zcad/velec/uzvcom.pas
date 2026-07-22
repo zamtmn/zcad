@@ -360,7 +360,7 @@ begin
              if pc2^.GetObjType=GDBCableID then//если он кабель то
              begin
                   FirstPoint:=PzePoint3d(pc2^.VertexArrayInWCS.getDataMutable(0))^;//получаем точку в начале найденного кабеля
-                  if uzegeometry.Vertexlength(LastPoint,FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
+                  if LastPoint.LengthTo(FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
                   begin
                        pc2^.SelectQuik;            //выделяем
                        RecurseSearhCable(pc2);     //рекурсивно ищем на конце найденного кабеля
@@ -711,10 +711,10 @@ function areaOfRectangle(pt1,pt2,pt3,pt4:TzePoint3d):double;
 var
    p,a,b,c,d:double;
 begin
-    a:=uzegeometry.Vertexlength(pt1,pt2);
-    b:=uzegeometry.Vertexlength(pt2,pt3);
-    c:=uzegeometry.Vertexlength(pt3,pt4);
-    d:=uzegeometry.Vertexlength(pt4,pt1);
+    a:=pt1.LengthTo(pt2);
+    b:=pt2.LengthTo(pt3);
+    c:=pt3.LengthTo(pt4);
+    d:=pt4.LengthTo(pt1);
     p:=(a+b+c+d)/2;
     result:=sqrt((p-a)*(p-b)*(p-c)*(p-d));
 end;
@@ -724,9 +724,9 @@ function areaOfTriangle(pt1,pt2,pt3:TzePoint3d):double;
 var
    p,a,b,c:double;
 begin
-   a:=uzegeometry.Vertexlength(pt1,pt2);
-   b:=uzegeometry.Vertexlength(pt2,pt3);
-   c:=uzegeometry.Vertexlength(pt3,pt1);
+   a:=pt1.LengthTo(pt2);
+   b:=pt2.LengthTo(pt3);
+   c:=pt3.LengthTo(pt1);
    p:=(a+b+c)/2;
    result:=sqrt(p*(p-a)*(p-b)*(p-c));
 end;
@@ -776,11 +776,11 @@ begin
 //     anglecos:=uzegeometry.Vertexlength(cableLine.stPoint,tempvert)/uzegeometry.Vertexlength(cableLine.stPoint,cableLine.edPoint);
 //
     result:=false;
-     xyline:=uzegeometry.Vertexlength(cableLine.stPoint,cableLine.edPoint) ;
+     xyline:=cableLine.stPoint.LengthTo(cableLine.edPoint);
      tempVertex.x:=cableLine.edPoint.x;
      tempVertex.y:=cableLine.stPoint.y;
      tempVertex.z:=0;
-     xline:=uzegeometry.Vertexlength(cableLine.stPoint,tempVertex);
+     xline:=cableLine.stPoint.LengthTo(tempVertex);
 
      anglePerpendCos:=xline/xyline;
 
@@ -923,7 +923,7 @@ begin
    repeat
     IsExchange := False;
     for j := 0 to listNumVertex.Size-2 do begin
-      if uzegeometry.Vertexlength(listDevice[myNum].centerPoint,listDevice[listNumVertex[j].num].centerPoint) > uzegeometry.Vertexlength(listDevice[myNum].centerPoint,listDevice[listNumVertex[j+1].num].centerPoint) then begin
+      if listDevice[myNum].centerPoint.LengthTo(listDevice[listNumVertex[j].num].centerPoint) > listDevice[myNum].centerPoint.LengthTo(listDevice[listNumVertex[j+1].num].centerPoint) then begin
         tempNumVertex := listNumVertex[j];
         listNumVertex.Mutable[j]^ := listNumVertex[j+1];
         listNumVertex.Mutable[j+1]^ := tempNumVertex;
@@ -943,7 +943,7 @@ begin
    repeat
     IsExchange := False;
     for j := 0 to listNumVertex.Size-2 do begin
-      if uzegeometry.Vertexlength(stVertLine,listDevice[listNumVertex[j].num].centerPoint) > uzegeometry.Vertexlength(stVertLine,listDevice[listNumVertex[j+1].num].centerPoint) then begin
+      if stVertLine.LengthTo(listDevice[listNumVertex[j].num].centerPoint) > stVertLine.LengthTo(listDevice[listNumVertex[j+1].num].centerPoint) then begin
         tempNumVertex := listNumVertex[j];
         listNumVertex.Mutable[j]^ := listNumVertex[j+1];
         listNumVertex.Mutable[j+1]^ := tempNumVertex;
@@ -1073,7 +1073,7 @@ begin
              infoEdge.VIndex2:=tempListNumVertex[k].num;
              infoEdge.VPoint2:=graph.listVertex[tempListNumVertex[k].num].centerPoint;
              infoEdge.VPoint2.z:=0;
-             infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+             infoEdge.edgeLength:=infoEdge.VPoint1.LengthTo(infoEdge.VPoint2);
              infoEdge.cableEnt:=listCable[i].cableEnt;
              graph.listEdge.PushBack(infoEdge);
          end;
@@ -1165,13 +1165,13 @@ begin
                zcUI.TextMessage('**colDevice ='+inttostr(colDevice) + '** inAddEdge ='+booltostr(inAddEdge),TMWOHistoryOut);
             if (colDevice > 1) then
             begin
-               templength:=uzegeometry.Vertexlength(vertexLine,PGDBObjDevice(listDev[0])^.P_insert_in_WCS);
+               templength:=vertexLine.LengthTo(PGDBObjDevice(listDev[0])^.P_insert_in_WCS);
                pObjDevice:= PGDBObjDevice(listDev[0]);
                for k:= 0 to listDev.Size-1 do
                begin
-                  if templength > uzegeometry.Vertexlength(vertexLine,PGDBObjDevice(listDev[k])^.P_insert_in_WCS) then
+                  if templength > vertexLine.LengthTo(PGDBObjDevice(listDev[k])^.P_insert_in_WCS) then
                   begin
-                    templength:= uzegeometry.Vertexlength(vertexLine,PGDBObjDevice(listDev[k])^.P_insert_in_WCS);
+                    templength:= vertexLine.LengthTo(PGDBObjDevice(listDev[k])^.P_insert_in_WCS);
                     pObjDevice:= PGDBObjDevice(listDev[k]);
                   end;
                end;
@@ -1224,7 +1224,7 @@ begin
 
                   infoEdge.VPoint2:=graph.listVertex[numVertDevice].centerPoint;
                   infoEdge.VPoint2.z:=0;
-                  infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+                  infoEdge.edgeLength:=infoEdge.VPoint1.LengthTo(infoEdge.VPoint2);
                   if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                      zcUI.TextMessage('**infoEdge.VPoint1.X ='+floattostr(infoEdge.VPoint1.x) + '** infoEdge.VPoint1.Y ='+floattostr(infoEdge.VPoint1.y),TMWOHistoryOut);
                   if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then

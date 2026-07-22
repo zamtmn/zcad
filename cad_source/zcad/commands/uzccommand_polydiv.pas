@@ -48,8 +48,8 @@ function isrect(const p1,p2,p3,p4:TzePoint2d):boolean;
 begin
   //p:=SqrVertexlength(p1,p3)-sqrVertexlength(p2,p4);
   //p:=SqrVertexlength(p1,p2)-sqrVertexlength(p3,p4);
-  if (abs(SqrVertexlength(p1,p3)-sqrVertexlength(p2,p4))<sqreps)and
-    (abs(SqrVertexlength(p1,p2)-sqrVertexlength(p3,p4))<sqreps) then
+  if (abs(p1.SqrLengthTo(p3)-p2.SqrLengthTo(p4))<sqreps)and
+    (abs(p1.SqrLengthTo(p2)-p3.SqrLengthTo(p4))<sqreps) then
     Result:=True
   else
     Result:=False;

@@ -150,7 +150,7 @@ function scale_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
 var
   a:double;
 begin
-  a:=uzegeometry.Vertexlength(t3dp,wc);
+  a:=t3dp.LengthTo(wc);
   scale(a,button);
   Result:=cmd_ok;
 end;

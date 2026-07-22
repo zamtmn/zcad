@@ -532,7 +532,7 @@ begin
               ConnectedWith.PushBackIfNotPresent(p);
               TNet.ConcatNets(self,NetExtender);
             end else begin
-              if SqrVertexlength(p1,p2)>SqrVertexlength(p^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd)then
+              if p1.SqrLengthTo(p2)>p^.CoordInWCS.lBegin.SqrLengthTo(p^.CoordInWCS.lEnd)then
                 Knots.PushBackData(TKnot.Create(ip.t1,IntersectRadius,KTArc));
                 IntersectedWith.PushBackIfNotPresent(p);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
@@ -657,7 +657,7 @@ begin
   end;
   oldP:=PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin;
   if Knots.Count>0 then begin
-    linelen:=Vertexlength(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
+    linelen:=PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LengthTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
     for i:=0 to Knots.Count-1 do begin
       knot:=Knots.getData(i);
       l:=knot.HalfWidth/linelen;

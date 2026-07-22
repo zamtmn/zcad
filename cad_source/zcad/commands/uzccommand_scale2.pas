@@ -523,7 +523,7 @@ begin
             SCMWaitScaleFactor: begin
               // В режиме ввода точки — вычисляем коэффициент по расстоянию
               // от базовой точки до указанной
-              ScaleFactor := uzegeometry.Vertexlength(BasePnt, InputPnt);
+              ScaleFactor := BasePnt.LengthTo(InputPnt);
               LogMessage('[SCALE2] Расстояние от базовой точки до указанной: ' + FloatToStrF(ScaleFactor, ffFixed, 15, 6));
               if ScaleFactor < SCALE2_MIN_FACTOR then begin
                 LogMessage('[SCALE2] Расстояние слишком мало, используем коэффициент 1.0');
@@ -548,7 +548,7 @@ begin
 
             SCMWaitRef1: begin
               Ref1Pnt := InputPnt;
-              RefLength := uzegeometry.Vertexlength(Ref0Pnt, Ref1Pnt);
+              RefLength := Ref0Pnt.LengthTo(Ref1Pnt);
               LogMessage('[SCALE2] Вторая опорная точка: ' + Point3DToStr(Ref1Pnt));
               LogMessage('[SCALE2] Опорная длина: ' + FloatToStrF(RefLength, ffFixed, 15, 6));
               programlog.LogOutFormatStr(
@@ -562,7 +562,7 @@ begin
             SCMWaitNew0: begin
               // Пользователь указал точку — вычисляем новую длину как расстояние
               // от базовой точки до указанной точки
-              NewLength := uzegeometry.Vertexlength(BasePnt, InputPnt);
+              NewLength := BasePnt.LengthTo(InputPnt);
               LogMessage('[SCALE2] Новая длина по точке от базовой точки: ' + FloatToStrF(NewLength, ffFixed, 15, 6));
               programlog.LogOutFormatStr(
                 'uzccommand_scale2: новая длина по точке = %.6f',
@@ -586,7 +586,7 @@ begin
             SCMWaitNew2: begin
               // Пользователь указал вторую точку новой длины
               New1Pnt := InputPnt;
-              NewLength := uzegeometry.Vertexlength(New0Pnt, New1Pnt);
+              NewLength := New0Pnt.LengthTo(New1Pnt);
               LogMessage('[SCALE2] Вторая точка новой длины: ' + Point3DToStr(New1Pnt));
               LogMessage('[SCALE2] Новая длина: ' + FloatToStrF(NewLength, ffFixed, 15, 6));
               ScaleFactor := CalcReferenceScaleFactor(RefLength, NewLength);
@@ -641,10 +641,7 @@ begin
                   // SCMWaitNew0: пользователь ввёл число как новую длину
                   NewLength   := RefLength;
                   LogMessage('[SCALE2] Распознана новая длина (число): ' + FloatToStrF(NewLength, ffFixed, 15, 6));
-                  ScaleFactor := CalcReferenceScaleFactor(
-                    uzegeometry.Vertexlength(Ref0Pnt, Ref1Pnt),
-                    NewLength
-                  );
+                  ScaleFactor := CalcReferenceScaleFactor(Ref0Pnt.LengthTo(Ref1Pnt),NewLength);
                   DoApplyScale(ScaleFactor);
                   if not CopyMode then
                     Break;

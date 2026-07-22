@@ -68,7 +68,7 @@ end;
 
 function GDBObjRadialDimension.GetRadius:double;
 begin
-  Result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
+  Result:=DimData.P15InWCS.LengthTo(DimData.P10InWCS);
 end;
 
 function GDBObjRadialDimension.P10ChangeTo(const tv:TzePoint3d):TzePoint3d;
@@ -76,7 +76,7 @@ var
   dirv:TzePoint3d;
   d:double;
 begin
-  d:=Vertexlength(DimData.P15InWCS,DimData.P11InOCS);
+  d:=DimData.P15InWCS.LengthTo(DimData.P11InOCS);
   dirv:=vertexsub(DimData.P15InWCS,tv);
   dirv.Normalize;
 
@@ -89,12 +89,12 @@ var
   dirv:TzePoint3d;
   r:double;
 begin
-  r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
+  r:=DimData.P15InWCS.LengthTo(DimData.P10InWCS);
   dirv:=vertexsub(tv,DimData.P10InWCS);
   dirv.Normalize;
 
   Result:=VertexDmorph(DimData.P10InWCS,dirv,r);
-  r:=Vertexlength(DimData.P10InWCS,DimData.P11InOCS);
+  r:=DimData.P10InWCS.LengthTo(DimData.P11InOCS);
   DimData.P11InOCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
 end;
 
@@ -103,7 +103,7 @@ var
   dirv:TzePoint3d;
   r:double;
 begin
-  r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
+  r:=DimData.P15InWCS.LengthTo(DimData.P10InWCS);
   dirv:=vertexsub(tv,DimData.P10InWCS);
   dirv.Normalize;
 
@@ -133,8 +133,7 @@ end;
 function GDBObjRadialDimension.GetDimStr(
   var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
-  Result:='R'+GetLinearDimStr(
-    Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
+  Result:='R'+GetLinearDimStr(DimData.P10InWCS.LengthTo(DimData.P15InWCS),drawing);
 end;
 
 function GDBObjRadialDimension.GetObjType;

@@ -120,7 +120,7 @@ begin
   ppoint:=VectorTransform3D(point,m1);
   if (abs(ppoint.z)>eps) then
     exit(False);
-  if abs(uzegeometry.Vertexlength(point,P_insert_in_WCS)-radius)<bigeps then begin
+  if abs(point.LengthTo(P_insert_in_WCS)-radius)<bigeps then begin
     Result:=True;
     objects.pushbackdata(@self);
   end else
@@ -606,7 +606,7 @@ begin
     Local.p_insert:=VectorTransform3D(rtmod.wc*Radius,m);
   end else if (rtmod.point.pointtype=os_q0)or(rtmod.point.pointtype=os_q1)or
     (rtmod.point.pointtype=os_q2)or(rtmod.point.pointtype=os_q3) then begin
-    Radius:=Vertexlength(Local.p_insert,VectorTransform3D(rtmod.wc*Radius,m));
+    Radius:=Local.p_insert.LengthTo(VectorTransform3D(rtmod.wc*Radius,m));
   end;
 end;
 

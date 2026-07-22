@@ -151,7 +151,7 @@ begin
     ptv:=p3dpl^.vertexarrayinwcs.beginiterate(ir);
     if ptv<>nil then
       repeat
-        v:=SqrVertexlength(wc,ptv^);
+        v:=wc.SqrLengthTo(ptv^);
         if v<PEProp.vdist then begin
           PEProp.vdist:=v;
           PEProp.nearestvertex:=ir.itc;

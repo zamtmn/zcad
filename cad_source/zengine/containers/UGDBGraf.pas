@@ -98,12 +98,12 @@ begin
      begin
      pvd:=pentvarext.entityunit.FindVariable('LengthOverrider');
      if pvd=nil then
-                    result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend)
+                    result:=pv^.CoordInWCS.lbegin.LengthTo(pv^.CoordInWCS.lend)
                 else
                     result:=PDouble(pvd.data.Addr.Instance)^;
      end
         else
-            result:=Vertexlength(pv^.CoordInWCS.lbegin,pv^.CoordInWCS.lend);
+            result:=pv^.CoordInWCS.lbegin.LengthTo(pv^.CoordInWCS.lend);
 end;
 procedure GDBGraf.FindPath;
 var
@@ -125,7 +125,7 @@ begin
         if pgfe^.link.IsDataExistWithCompareProc(l1,EqualFuncPGDBaseEntity)<>-1 then
         begin
              pgfe^.step:=step;
-             pgfe^.pathlength:=Vertexlength(point1,pgfe^.point);
+             pgfe^.pathlength:=point1.LengthTo(pgfe^.point);
         end;
         pgfe:=iterate(ir);
   until pgfe=nil;
@@ -174,7 +174,7 @@ begin
   repeat
         if pgfe^.link.IsDataExistWithCompareProc(l2,EqualFuncPGDBaseEntity)<>-1 then
         begin
-             npath:=pgfe^.pathlength+Vertexlength(pgfe^.point,point2);
+             npath:=pgfe^.pathlength+pgfe^.point.LengthTo(point2);
              if npath<=npathmin then
              begin
                   pgfe2:=pgfe;

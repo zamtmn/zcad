@@ -134,13 +134,13 @@ var
   d:double;
 begin
   center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
-  d:=Vertexlength(center,tv);
+  d:=center.LengthTo(tv);
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
 
   Result:=VertexDmorph(center,dirv,d);
   DimData.P15InWCS:=VertexDmorph(center,dirv,-d);
-  d:=Vertexlength(center,DimData.P11InOCS);
+  d:=center.LengthTo(DimData.P11InOCS);
   DimData.P11InOCS:=VertexDmorph(center,dirv,-d);
 end;
 
@@ -150,13 +150,13 @@ var
   d:double;
 begin
   center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
-  d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
+  d:=DimData.P15InWCS.LengthTo(DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
 
   Result:=VertexDmorph(center,dirv,d);
   DimData.P10InWCS:=VertexDmorph(center,dirv,-d);
-  d:=Vertexlength(center,DimData.P11InOCS);
+  d:=center.LengthTo(DimData.P11InOCS);
   DimData.P11InOCS:=VertexDmorph(center,dirv,d);
 end;
 
@@ -166,7 +166,7 @@ var
   d:double;
 begin
   center:={VertexMulOnSc}(DimData.P15InWCS+DimData.P10InWCS)*0.5;
-  d:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
+  d:=DimData.P15InWCS.LengthTo(DimData.P10InWCS)/2;
   dirv:=vertexsub(tv,center);
   dirv.Normalize;
   DimData.P10InWCS:=VertexDmorph(center,dirv,-d);
@@ -216,8 +216,7 @@ end;
 function GDBObjDiametricDimension.GetDimStr(
   var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
-  Result:='%%C'+GetLinearDimStr(
-    Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
+  Result:='%%C'+GetLinearDimStr(DimData.P10InWCS.LengthTo(DimData.P15InWCS),drawing);
 end;
 
 function GDBObjDiametricDimension.GetCenterPoint:TzePoint3d;
@@ -227,7 +226,7 @@ end;
 
 function GDBObjDiametricDimension.GetRadius:double;
 begin
-  Result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
+  Result:=DimData.P15InWCS.LengthTo(DimData.P10InWCS)/2;
 end;
 
 procedure GDBObjDiametricDimension.FormatEntity(var drawing:TDrawingDef;
@@ -271,8 +270,8 @@ end;
 
 procedure GDBObjDiametricDimension.CalcTextInside;
 begin
-  if SqrVertexlength(DimData.P15InWCS,DimData.P10InWCS)>
-     SqrVertexlength(DimData.P10InWCS,DimData.P11InOCS) then
+  if DimData.P15InWCS.SqrLengthTo(DimData.P10InWCS)>
+     DimData.P10InWCS.SqrLengthTo(DimData.P11InOCS) then
     TextInside:=True
   else
     TextInside:=False;

@@ -152,8 +152,8 @@ var
   dc:TDrawContext;
 begin
   Result:=False;
-  if Vertexlength(CoordInWCS.lbegin,CoordInWCS.lend)<Vertexlength(
-    pl^.CoordInWCS.lbegin,pl^.CoordInWCS.lend) then begin
+  if CoordInWCS.lbegin.LengthTo(CoordInWCS.lend)<
+     pl^.CoordInWCS.lbegin.LengthTo(pl^.CoordInWCS.lend) then begin
     Result:=pl^.jointoline(@self,drawing);
     exit;
   end;
@@ -426,7 +426,7 @@ begin
         t:=-((CoordInWCS.lbegin.x-param.lastpoint.x)*dir.x+
           (CoordInWCS.lbegin.y-param.lastpoint.y)*dir.y+
           (CoordInWCS.lbegin.z-param.lastpoint.z)*dir.z)/
-          (SqrVertexlength(self.CoordInWCS.lBegin,self.CoordInWCS.lEnd));
+          (self.CoordInWCS.lBegin.SqrLengthTo(self.CoordInWCS.lEnd));
         if (t>=0) and (t<=1) then begin
           osp.worldcoord.x:=CoordInWCS.lbegin.x+t*dir.x;
           osp.worldcoord.y:=CoordInWCS.lbegin.y+t*dir.y;
@@ -529,7 +529,7 @@ begin
           tv2.x:=pgdbobjline(pobj)^.CoordInWCS.lbegin.x+dir2.x*t2;
           tv2.y:=pgdbobjline(pobj)^.CoordInWCS.lbegin.y+dir2.y*t2;
           tv2.z:=pgdbobjline(pobj)^.CoordInWCS.lbegin.z+dir2.z*t2;
-          dist:=Vertexlength(tv1,tv2);
+          dist:=tv1.LengthTo(tv2);
           if dist<bigeps then begin
             if (SnapMode and osm_intersection)<>0 then begin
               osp.worldcoord:=tv1;

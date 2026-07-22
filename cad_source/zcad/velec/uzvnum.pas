@@ -666,7 +666,7 @@ begin
                begin
                    limbTreeDeviceinGroup.VIndex1:=ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num;
                    limbTreeDeviceinGroup.VIndex2:=ourListGroup.listDevice[i].listNumVertexMinWeight[j].num;
-                   limbTreeDeviceinGroup.length:=uzegeometry.Vertexlength(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num].centerPoint,ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j].num].centerPoint);
+                   limbTreeDeviceinGroup.length:=ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num].centerPoint.LengthTo(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j].num].centerPoint);
                    limbTreeDeviceinGroup.beforeLength:=limbTreeDeviceinGroup.length;
                    limbTreeDeviceinGroup.afterLength:=limbTreeDeviceinGroup.length;
                    limbTreeDeviceinGroup.numAfter:=0;
@@ -688,7 +688,7 @@ begin
                            limbTreeDeviceinGroup.VIndex1:=ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num;
                            limbTreeDeviceinGroup.VIndex2:=ourListGroup.listDevice[i].listNumVertexMinWeight[j].num;
                            limbTreeDeviceinGroup.numAfter:=0;
-                           limbTreeDeviceinGroup.length:=uzegeometry.Vertexlength(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num].centerPoint,ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j].num].centerPoint);
+                           limbTreeDeviceinGroup.length:=ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j-1].num].centerPoint.LengthTo(ourGraph.listVertex[ourListGroup.listDevice[i].listNumVertexMinWeight[j].num].centerPoint);
                            limbTreeDeviceinGroup.afterLength:=limbTreeDeviceinGroup.length;
 
                            //Ищем среди всех ребер ребро вершиной которого является наша первая точка,

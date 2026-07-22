@@ -284,12 +284,12 @@ begin
                               a:=180+vertexangle(PzePoint2d(@p1)^,PzePoint2d(@p2)^)*180/pi;
 
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'m'),(Vertexmorph(p1,p2,0.5)+v),2.5,0,0.65,a,jsbc,vertexlength(p1,p2),1);
+          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'m'),(Vertexmorph(p1,p2,0.5)+v),2.5,0,0.65,a,jsbc,p1.LengthTo(p2),1);
           drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(ptext^);
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(pcabledesk^.Name),(Vertexmorph(p1,p2,0.5)-v),2.5,0,0.65,a,jstc,vertexlength(p1,p2),1);
+          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(pcabledesk^.Name),(Vertexmorph(p1,p2,0.5)-v),2.5,0,0.65,a,jstc,p1.LengthTo(p2),1);
           drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(ptext^);
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 
@@ -2648,27 +2648,27 @@ begin
   pv21:=pc2.VertexArrayInWCS.getDataMutable(0);
   pv22:=pc2.VertexArrayInWCS.getDataMutable(pc2.VertexArrayInWCS.Count-1);
 
-     if uzegeometry.Vertexlength(pv11^,pv21^)<eps then
+     if pv11^.LengthTo(pv21^)<eps then
                                                    begin
                                                         pc1.VertexArrayInOCS.Invert;
                                                         pc2.VertexArrayInOCS.deleteelement(0);
                                                         pc2.VertexArrayInOCS.copyto(pc1.VertexArrayInOCS);
                                                         pc2.YouDeleted(drawings.GetCurrentDWG^);
                                                    end
-else if uzegeometry.Vertexlength(pv12^,pv21^)<eps then
+else if pv12^.LengthTo(pv21^)<eps then
                                                    begin
                                                         pc2.VertexArrayInOCS.deleteelement(0);
                                                         pc2.VertexArrayInOCS.copyto(pc1.VertexArrayInOCS);
                                                         pc2.YouDeleted(drawings.GetCurrentDWG^);
                                                    end
-else if uzegeometry.Vertexlength(pv11^,pv22^)<eps then
+else if pv11^.LengthTo(pv22^)<eps then
                                                    begin
                                                         pc1.VertexArrayInOCS.deleteelement(0);
                                                         pc1.VertexArrayInOCS.copyto(pc2.VertexArrayInOCS);
                                                         pc1.YouDeleted(drawings.GetCurrentDWG^);
                                                         pc1:=pc2
                                                    end
-else if uzegeometry.Vertexlength(pv12^,pv22^)<eps then
+else if pv12^.LengthTo(pv22^)<eps then
                                                    begin
                                                         pc2.VertexArrayInOCS.Invert;
                                                         pc2.VertexArrayInOCS.deleteelement(0);

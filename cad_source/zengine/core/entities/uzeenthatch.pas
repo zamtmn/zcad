@@ -308,7 +308,7 @@ begin
   else begin
     dir:=(p2-p1).Normalized;
     t:=Scale*normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
-    l:=Vertexlength2d(p1,p2);
+    l:={Vertexlength2d}p1.LengthTo(p2);
     findInterval(Strokes,Scale,t,cl,c);
     drawedlen:=0;
     p:=p1;

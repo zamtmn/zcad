@@ -94,10 +94,10 @@ begin
         FrPos.y:=tempmatr.mtr.v[3].y;
         FrPos.z:=tempmatr.mtr.v[3].z;
 
-        ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset.asPoint3d);
+        ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset);
         ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,MirrMatr);
         ObjMatrix:=uzegeometry.MatrixMultiply(
-          ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset.asPoint3d));
+          ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset));
         FrustumPosition:=FrPos;
       end;
     end;

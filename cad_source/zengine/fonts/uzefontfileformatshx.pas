@@ -253,7 +253,7 @@ begin
                         offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
                         offset.IndexsIndexOffset:=VDCopyResultParam.EID.IndexsIndexMin-VDCopyParam.EID.IndexsIndexMin;
                         pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,VDCopyResultParam.EID.IndexsIndexMax-VDCopyResultParam.EID.IndexsIndexMin+1,offset);
-                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*TZESHXFontImpl(pf^.font).h,baselen*TZESHXFontImpl(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
+                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVector(baselen*TZESHXFontImpl(pf^.font).h,baselen*TZESHXFontImpl(pf^.font).h,1)),CreateTranslationMatrix(CreateVector(x,y,0))));
                         symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
                         ProcessMinMax(symoutbound.LBN.x,symoutbound.LBN.y);
                         ProcessMinMax(symoutbound.RTF.x,symoutbound.RTF.y);

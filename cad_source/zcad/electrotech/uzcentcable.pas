@@ -411,7 +411,7 @@ begin
 
         //m:=onematrix;
         //PzePoint3d(@m.mtr[3])^:=ptnlastCutted.PrevP;
-        m:=CreateTranslationMatrix(ptnlastCutted.PrevP);
+        m:=CreateTranslationMatrix(ptnlastCutted.PrevP.asVector);
 
         m:=MatrixMultiply(rotmatr,m);
 

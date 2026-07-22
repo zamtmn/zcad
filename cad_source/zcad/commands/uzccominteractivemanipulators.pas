@@ -171,9 +171,9 @@ begin
   rotmatr:=CreateAffineRotationMatrix(PInteractiveData^.Axis,PInteractiveData^.ARefV,v);
 
   if click then begin
-    t_matrix:=CreateTranslationMatrix(-PInteractiveData^.Base);
+    t_matrix:=CreateTranslationMatrix(-PInteractiveData^.Base.asVector);
     t_matrix:=MatrixMultiply(t_matrix,rotmatr);
-    t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(PInteractiveData^.Base));
+    t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(PInteractiveData^.Base.asVector));
 
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
     p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
@@ -189,15 +189,15 @@ begin
     else
       tr:=PInteractiveData^.Base+drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset;
 
-    tempmatr:=uzegeometry.CreateTranslationMatrix(-PInteractiveData^.Base);
+    tempmatr:=uzegeometry.CreateTranslationMatrix(-PInteractiveData^.Base.asVector);
     tempmatr:=uzegeometry.MatrixMultiply(tempmatr,rotmatr);
     FrPos.x:=PInteractiveData^.Base.x+tempmatr.mtr.v[3].x;
     FrPos.y:=PInteractiveData^.Base.y+tempmatr.mtr.v[3].y;
     FrPos.z:=PInteractiveData^.Base.z+tempmatr.mtr.v[3].z;
 
-    dispmatr:=uzegeometry.CreateTranslationMatrix(-tr);
+    dispmatr:=uzegeometry.CreateTranslationMatrix((-tr).asVector);
     tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-    dispmatr:=uzegeometry.CreateTranslationMatrix(tr);
+    dispmatr:=uzegeometry.CreateTranslationMatrix(tr.asVector);
     dispmatr:=uzegeometry.MatrixMultiply(tmatr,dispmatr);
 
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
@@ -223,7 +223,7 @@ var
   RC:TDrawContext;
 begin
   if click then begin
-    t_matrix:=CreateTranslationMatrix(Point);
+    t_matrix:=CreateTranslationMatrix(Point.asVector);
     drawings.GetCurrentDWG^.ConstructObjRoot.transform(t_matrix);
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
     p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
@@ -233,7 +233,7 @@ begin
         p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
       until p=nil;
   end else begin
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=CreateTranslationMatrix(Point);
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=CreateTranslationMatrix(Point.asVector);
     RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
     drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
   end;

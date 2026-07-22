@@ -102,7 +102,7 @@ begin
 
   if GetSelectedEntsAABB(drawings.GetCurrentROOT.ObjArray,SelectedAABB) then begin
     ReCreateClipboardDWG;
-    m:=CreateTranslationMatrix(-SelectedAABB.LBN{-(SelectedAABB.RTF+SelectedAABB.LBN)/2});
+    m:=CreateTranslationMatrix((-SelectedAABB.LBN).asVector{-(SelectedAABB.RTF+SelectedAABB.LBN)/2});
     pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pobj<>nil then
       repeat

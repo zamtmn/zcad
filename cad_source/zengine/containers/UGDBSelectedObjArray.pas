@@ -302,7 +302,7 @@ begin
   P_insert_in_WCS:=VectorTransform3D(P_insert_in_OCS,m);
   //m:=onematrix;
   //PzePoint3d(@m.mtr[3])^:=P_insert_in_wCS;
-  m:=CreateTranslationMatrix(P_insert_in_wCS);
+  m:=CreateTranslationMatrix(P_insert_in_wCS.asVector);
   PGDBObjWithMatrix(pobj)^.ObjMatrix:=m;
   pobj^.Transform(rm);
 

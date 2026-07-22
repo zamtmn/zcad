@@ -336,7 +336,7 @@ begin
     rotmatr:=CreateMatrixFromBasis(onel,tp2,tp3);
     //m:=onematrix;
     //PzePoint3d(@m.mtr[3])^:=l2;
-    m:=CreateTranslationMatrix(l2);
+    m:=CreateTranslationMatrix(l2.asVector);
     m:=MatrixMultiply(rotmatr,m);
     p1:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
     p2:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);

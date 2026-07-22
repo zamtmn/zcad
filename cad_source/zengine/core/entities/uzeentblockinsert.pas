@@ -126,7 +126,7 @@ var
   mtr:TzeTypedMatrix4d;
 begin
   if PDef<>nil then begin
-    Mtr:=MatrixMultiply(CreateTranslationMatrix(PDef.Base),objMatrix);
+    Mtr:=MatrixMultiply(CreateTranslationMatrix(PDef.Base.asVector),objMatrix);
   end else
     Mtr:=objMatrix;
 
@@ -205,7 +205,7 @@ begin
 
   setrot(rotate);
 
-  m1:=CreateScaleMatrix(scale);
+  m1:=CreateScaleMatrix(scale.asVector);
   objMatrix:=MatrixMultiply(m1,objMatrix);
 
   PDef:=nil;
@@ -215,7 +215,7 @@ begin
       index:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getindex(Name);
     PDef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
     if PDef<>nil then begin
-      m1:=CreateTranslationMatrix({VertexMulOnSc}(-PDef.Base{,-1}));
+      m1:=CreateTranslationMatrix((-PDef.Base).asVector);
       objMatrix:=MatrixMultiply(m1,objMatrix);
     end;
   end;

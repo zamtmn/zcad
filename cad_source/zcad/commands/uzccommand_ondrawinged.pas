@@ -162,7 +162,7 @@ begin
           tv:=wc;
           //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
           dispmatr:=uzegeometry.CreateTranslationMatrix(
-            createvertex(-tv.x,-tv.y,-tv.z));
+            CreateVector(-tv.x,-tv.y,-tv.z));
 
           //rotmatr:=onematrix;
           //PzePoint3d(@rotmatr.mtr[0])^:=xdir;
@@ -175,7 +175,7 @@ begin
               uzegeometry.vectordot(ydir,xdir)).Normalized);
 
           //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-          dispmatr2:=uzegeometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
+          dispmatr2:=uzegeometry.CreateTranslationMatrix(CreateVector(tv.x,tv.y,tv.z));
           //dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr2);
 
           //drawings.GetCurrentDWG^.SelObjArray.TransformObj(dispmatr);
@@ -212,7 +212,7 @@ begin
           tv:=wc;
           //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
           dispmatr:=uzegeometry.CreateTranslationMatrix(
-            createvertex(-tv.x,-tv.y,-tv.z));
+            {CreateVector(-tv.x,-tv.y,-tv.z)}(-tv).asVector);
 
           //rotmatr:=onematrix;
           //PzePoint3d(@rotmatr.mtr[0])^:=xdir;
@@ -235,7 +235,7 @@ begin
            PzePoint3d(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ;}
 
           //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-          dispmatr2:=uzegeometry.CreateTranslationMatrix(tv{ createvertex(tv.x,tv.y,tv.z)});
+          dispmatr2:=uzegeometry.CreateTranslationMatrix(tv.asVector);
           //dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr2);
 
 

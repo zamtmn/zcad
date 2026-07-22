@@ -93,7 +93,7 @@ begin
   NeedReCreateClipboardDWG:=True;
   if (button and MZW_LBUTTON)<>0 then begin
     ClipboardDWG^.pObjRoot^.ObjArray.Free;
-    dispmatr:=CreateTranslationMatrix(-wc);
+    dispmatr:=CreateTranslationMatrix(-wc.asVector);
 
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);

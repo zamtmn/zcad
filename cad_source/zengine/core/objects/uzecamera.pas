@@ -135,7 +135,7 @@ begin
     tv:=vectortransform(tv,tempmatr);
     tv.x:=tv.x;
     rotmatr.mtr.v[3].Slice:=prop.point.asVector;
-    tempmatr:=CreateTranslationMatrix(tv.Slice.asPoint3d);
+    tempmatr:=CreateTranslationMatrix(tv.Slice);
     tempmatr:=MatrixMultiply(rotmatr,tempmatr);
     prop.point:=tempmatr.mtr.v[3].Slice.asPoint3d;
   end;

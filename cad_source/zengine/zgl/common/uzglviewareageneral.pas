@@ -2490,7 +2490,7 @@ begin
   pcamera^.CamCSOffset:=pcamera^.prop.point-(pcamera^.prop.look*(pcamera^.zmax+pcamera^.zmin)/2).asPoint3d;
 
   {получение центра виевфрустума}
-  tm:=uzegeometry.CreateTranslationMatrix(NulPoint);
+  tm:=uzegeometry.CreateTranslationMatrix(NulVertex);
 
   //pdwg.pcamera^.modelMatrixLCS:=tm;
   pcamera^.modelMatrixLCS:=lookat(NulPoint,

@@ -157,9 +157,9 @@ begin
   //LogMessage('  ScaleFactor: ' + FloatToStrF(scaleFactor, ffFixed, 15, 6));
 
   // Переносим в начало координат, масштабируем, переносим обратно
-  translateToOrigin := uzegeometry.CreateTranslationMatrix(-basePoint);
+  translateToOrigin := uzegeometry.CreateTranslationMatrix(-basePoint.asVector);
   scaleMatrix       := CreateScaleMatrix(scaleFactor);
-  translateBack     := uzegeometry.CreateTranslationMatrix(basePoint);
+  translateBack     := uzegeometry.CreateTranslationMatrix(basePoint.asVector);
 
   resultMatrix := uzegeometry.MatrixMultiply(translateToOrigin, scaleMatrix);
   resultMatrix := uzegeometry.MatrixMultiply(resultMatrix, translateBack);

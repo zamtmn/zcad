@@ -351,7 +351,7 @@ begin
   // Матрица поворота из базисных векторов OCS
   rotmatr  := CreateMatrixFromBasis(Local.basis.ox, Local.basis.oy, Local.basis.oz);
   // Матрица переноса на центр дуги в WCS
-  dispmatr := CreateTranslationMatrix(Local.p_insert);
+  dispmatr := CreateTranslationMatrix(Local.p_insert.asVector);
 
   // Порядок: сначала поворот, затем перенос — строка 3 результата = Local.p_insert
   Result := MatrixMultiply(rotmatr, dispmatr);

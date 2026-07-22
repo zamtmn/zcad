@@ -45,7 +45,7 @@ begin
 
   rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
 
-  dispmatr:=CreateTranslationMatrix(Local.p_insert);
+  dispmatr:=CreateTranslationMatrix(Local.p_insert.asVector);
 
   objmatrix:=MatrixMultiply(rotmatr,dispmatr);
   if bp.ListPos.owner<>nil then

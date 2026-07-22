@@ -253,7 +253,7 @@ begin
   end else
     m1:=OneMatrix;
 
-  m2:=CreateTranslationMatrix(P_drawInOCS);
+  m2:=CreateTranslationMatrix(P_drawInOCS.asVector);
 
   m3:=CreateScaleMatrix(textprop.wfactor*textprop.size,textprop.size,textprop.size);
 

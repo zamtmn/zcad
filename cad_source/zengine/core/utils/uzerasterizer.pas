@@ -87,8 +87,8 @@ begin
 
   projMatrix:=onematrix;
   projMatrix:=ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@projMatrix);
-  projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVertex(-(point1.x+point2.x)/dx,-(point1.y+point2.y)/dy,0)));
-  projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(CreateVertex(1/sx,1/sy,1)));
+  projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVector(-(point1.x+point2.x)/dx,-(point1.y+point2.y)/dy,0)));
+  projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(CreateVector(1/sx,1/sy,1)));
 
 
 

@@ -128,9 +128,9 @@ begin
               if MoveMode then begin
                 Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
                 zcFreeEntsInCurrentDrawingConstructRoot;
-                t_matrix:=CreateTranslationMatrix(-BasePnt);
+                t_matrix:=CreateTranslationMatrix(-BasePnt.asVector);
                 t_matrix:=MatrixMultiply(t_matrix,CreateAffineRotationMatrix(Axis,RefV,(p1-BasePnt).Normalized));
-                t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(BasePnt));
+                t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(BasePnt.asVector));
                 zcTransformSelectedEntsInDrawingWithUndo('Rotate',t_matrix);
                 Break;
               end else begin
@@ -153,9 +153,9 @@ begin
           case CmdMode of
             RCMWaitAngleCopyReference:begin
               if zeTryStringToAngle(commandmanager.GetLastInput,Angle,Context.PDWG^.GetUnitsFormat) then begin
-                t_matrix:=CreateTranslationMatrix(-BasePnt);
+                t_matrix:=CreateTranslationMatrix(-BasePnt.asVector);
                 t_matrix:=MatrixMultiply(t_matrix,CreateAffineRotationMatrix(Axis,-Angle));
-                t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(BasePnt));
+                t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(BasePnt.asVector));
                 if MoveMode then begin
                   Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
                   zcFreeEntsInCurrentDrawingConstructRoot;

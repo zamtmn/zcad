@@ -701,7 +701,7 @@ begin
     or (not SameValue(scale.y, 1.0))
     or (not SameValue(scale.z, 1.0)) then
   begin
-    m1 := CreateScaleMatrix(scale);
+    m1 := CreateScaleMatrix(scale.asVector);
     objMatrix := MatrixMultiply(m1, objMatrix);
   end;
 

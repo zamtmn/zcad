@@ -97,15 +97,15 @@ begin
     else
       tr:=t3dp+drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset;
 
-    tempmatr:=uzegeometry.CreateTranslationMatrix(-t3dp);
+    tempmatr:=uzegeometry.CreateTranslationMatrix(-t3dp.asVector);
     tempmatr:=uzegeometry.MatrixMultiply(tempmatr,rotmatr);
     FrPos.x:=t3dp.x+tempmatr.mtr.v[3].x;
     FrPos.y:=t3dp.y+tempmatr.mtr.v[3].y;
     FrPos.z:=t3dp.z+tempmatr.mtr.v[3].z;
 
-    dispmatr:=uzegeometry.CreateTranslationMatrix(-tr);
+    dispmatr:=uzegeometry.CreateTranslationMatrix(-tr.asVector);
     tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-    dispmatr:=uzegeometry.CreateTranslationMatrix(tr);
+    dispmatr:=uzegeometry.CreateTranslationMatrix(tr.asVector);
     dispmatr:=uzegeometry.MatrixMultiply(tmatr,dispmatr);
 
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
@@ -114,9 +114,9 @@ begin
     RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
     drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
   end else begin
-    dispmatr:=uzegeometry.CreateTranslationMatrix(-t3dp);
+    dispmatr:=uzegeometry.CreateTranslationMatrix(-t3dp.asVector);
     tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-    dispmatr:=uzegeometry.CreateTranslationMatrix(t3dp);
+    dispmatr:=uzegeometry.CreateTranslationMatrix(t3dp.asVector);
     dispmatr:=uzegeometry.MatrixMultiply(tmatr,dispmatr);
     tempmatr:=dispmatr;
     uzegeometry.MatrixInvert(tempmatr);

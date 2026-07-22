@@ -680,7 +680,7 @@ begin
     //это нужно только чтоб вставить рыбу в упорядоченной по именам последовательности
     devnamesort.Sort(dna,dna.Size);
     //создаем матрицу для перемещения по оси У на +15
-    t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(0,15,0));
+    t_matrix:=uzegeometry.CreateTranslationMatrix(CreateVector(0,15,0));
     //ищем модуль с переменными дефолтными переменными для представителя устройства
     pu:=units.findunit(GetSupportPaths,InterfaceTranslate,'uentrepresentation');
     //эта команда работает после указания пользователем точки вставки
@@ -811,7 +811,7 @@ begin
      else
      begin
      devnamesort.Sort(dna,dna.Size);
-     t_matrix:=uzegeometry.CreateTranslationMatrix(createvertex(50,12,0));
+     t_matrix:=uzegeometry.CreateTranslationMatrix(CreateVector(50,12,0));
 
 
      for i:=0 to dna.Size-1 do

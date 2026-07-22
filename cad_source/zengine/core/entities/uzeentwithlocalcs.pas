@@ -182,7 +182,7 @@ begin
   Local.basis.oz.Normalize;//:=NormalizeVertex(Local.basis.oz);
 
   rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
-  dispmatr:=CreateTranslationMatrix(Local.p_insert);
+  dispmatr:=CreateTranslationMatrix(Local.p_insert.asVector);
   Result:=MatrixMultiply(dispmatr,rotmatr);
 end;
 

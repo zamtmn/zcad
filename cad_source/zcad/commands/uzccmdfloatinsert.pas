@@ -90,7 +90,7 @@ var
   domethod,undomethod:tmethod;
   dc:TDrawContext;
 begin
-  dispmatr:=CreateTranslationMatrix(wc);
+  dispmatr:=CreateTranslationMatrix(wc.asVector);
   drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
 
   if (button and MZW_LBUTTON)<>0 then begin

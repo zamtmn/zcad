@@ -219,7 +219,7 @@ var
   resultMatrix: TzeTypedMatrix4d;
 begin
   // Шаг 1: Трансляция — смещаем srcPoint1 в dstPoint1
-  resultMatrix := uzegeometry.CreateTranslationMatrix((dstPoint1-srcPoint1).asPoint3d);
+  resultMatrix := uzegeometry.CreateTranslationMatrix(dstPoint1-srcPoint1);
 
   // Шаг 2: Поворот — применяем только при ненулевых расстояниях
   srcLen := srcPoint1.LengthTo(srcPoint2);
@@ -237,14 +237,14 @@ begin
 
     // Матрица 3D-поворота вокруг dstPoint1:
     //   T(-dstPoint1) * R3D(srcVec→dstVec) * T(dstPoint1)
-    rotationMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1);
+    rotationMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1.asVector);
     rotationMatrix := uzegeometry.MatrixMultiply(
       rotationMatrix,
       Calc3DRotationMatrix(srcVec, dstVec)
     );
     rotationMatrix := uzegeometry.MatrixMultiply(
       rotationMatrix,
-      uzegeometry.CreateTranslationMatrix(dstPoint1)
+      uzegeometry.CreateTranslationMatrix(dstPoint1.asVector)
     );
 
     resultMatrix := uzegeometry.MatrixMultiply(resultMatrix, rotationMatrix);
@@ -256,14 +256,14 @@ begin
 
       // Матрица масштабирования относительно точки dstPoint1:
       //   T(-dstPoint1) * Scale(scaleValue) * T(dstPoint1)
-      scaleMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1);
+      scaleMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1.asVector);
       scaleMatrix := uzegeometry.MatrixMultiply(
         scaleMatrix,
         CreateScaleMatrix(scaleValue)
       );
       scaleMatrix := uzegeometry.MatrixMultiply(
         scaleMatrix,
-        uzegeometry.CreateTranslationMatrix(dstPoint1)
+        uzegeometry.CreateTranslationMatrix(dstPoint1.asVector)
       );
 
       resultMatrix := uzegeometry.MatrixMultiply(resultMatrix, scaleMatrix);
@@ -370,14 +370,14 @@ begin
       // Матрица «крена» вокруг dst1→dst2 через Calc3DRotationMatrix,
       // дополнительно ограничиваем вращение вокруг нужной оси:
       //   T(-dst1) * R_roll(perpSrc→perpDst, вокруг rollAxis) * T(dst1)
-      rollMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1);
+      rollMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1.asVector);
       rollMatrix := uzegeometry.MatrixMultiply(
         rollMatrix,
         Calc3DRotationMatrix(perpSrc, perpDst)
       );
       rollMatrix := uzegeometry.MatrixMultiply(
         rollMatrix,
-        uzegeometry.CreateTranslationMatrix(dstPoint1)
+        uzegeometry.CreateTranslationMatrix(dstPoint1.asVector)
       );
 
       twoPointMatrix := uzegeometry.MatrixMultiply(twoPointMatrix, rollMatrix);
@@ -392,14 +392,14 @@ begin
     if rollAxisLen > ALIGN_MIN_DISTANCE then begin
       perpSrcLen := srcPoint1.LengthTo(srcPoint2);
       if perpSrcLen > ALIGN_MIN_DISTANCE then begin
-        rollMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1);
+        rollMatrix := uzegeometry.CreateTranslationMatrix(-dstPoint1.asVector);
         rollMatrix := uzegeometry.MatrixMultiply(
           rollMatrix,
           CreateScaleMatrix(rollAxisLen / perpSrcLen)
         );
         rollMatrix := uzegeometry.MatrixMultiply(
           rollMatrix,
-          uzegeometry.CreateTranslationMatrix(dstPoint1)
+          uzegeometry.CreateTranslationMatrix(dstPoint1.asVector)
         );
         twoPointMatrix := uzegeometry.MatrixMultiply(twoPointMatrix, rollMatrix);
       end;

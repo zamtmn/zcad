@@ -176,7 +176,7 @@ var
   dist:TzeVector3d;
 begin
   dist:=p2-p1;
-  Result:=CreateTranslationMatrix(dist.asPoint3d);
+  Result:=CreateTranslationMatrix(dist);
 end;
 
 function Move_com.Move(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;

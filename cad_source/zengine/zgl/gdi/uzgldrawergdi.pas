@@ -608,15 +608,15 @@ begin
 
   SetTextAlignToBaseLine(TZGLGDIDrawer(drawer).OffScreedDC);
   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
-  _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
-  _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
+  _transminusM:=CreateTranslationMatrix(CreateVector(-x,-y,0));
+  _scaleM:=CreateScaleMatrix(CreateVector(txtSx,txtSy,1));
   if txtOblique<>0 then begin
     _obliqueM.CreateRec(OneMtr,CMTShear);
     _obliqueM.mtr.v[1].v[0]:=-cotan(txtOblique)
   end
   else
     _obliqueM:=OneMatrix;
-  _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
+  _transplusM:=CreateTranslationMatrix(CreateVector(x,y,0));
   _rotateM:=CreateRotationMatrixZ(-txtRotate);
 
   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}

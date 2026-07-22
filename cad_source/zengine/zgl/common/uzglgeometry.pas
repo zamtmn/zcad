@@ -496,9 +496,9 @@ begin
                            mentrot:=CreateRotationMatrixZ(LineAngle)
                        else
                            mentrot:=onematrix;
-    madd:=CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
-    mtrans:=CreateTranslationMatrix(createvertex(PInsert.x,PInsert.y,PInsert.z));
-    mscale:=CreateScaleMatrix(createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));
+    madd:=CreateTranslationMatrix(CreateVector(param.x*Scale,param.y*Scale,0));
+    mtrans:=CreateTranslationMatrix(CreateVector(PInsert.x,PInsert.y,PInsert.z));
+    mscale:=CreateScaleMatrix(CreateVector(param.Height*Scale,param.Height*Scale,param.Height*Scale));
     result:=onematrix;
     result:=MatrixMultiply(result,mscale);
     result:=MatrixMultiply(result,mrot);
@@ -520,9 +520,9 @@ begin
                            mentrot:=CreateRotationMatrixZ(LineAngle)
                        else
                            mentrot:=onematrix;
-    madd:=CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
-    mtrans:=CreateTranslationMatrix(createvertex(PInsert.x,PInsert.y,PInsert.z));
-    mscale:=CreateScaleMatrix(createvertex(param.Height*Scale,param.Height*Scale,param.Height*Scale));
+    madd:=CreateTranslationMatrix(CreateVector(param.x*Scale,param.y*Scale,0));
+    mtrans:=CreateTranslationMatrix(CreateVector(PInsert.x,PInsert.y,PInsert.z));
+    mscale:=CreateScaleMatrix(CreateVector(param.Height*Scale,param.Height*Scale,param.Height*Scale));
     result:=onematrix;
     result:=MatrixMultiply(result,mscale);
 
@@ -530,8 +530,8 @@ begin
     if (param.AD<>TACAbs) then
     if isNotReadableAngle(LineAngle) then
     begin
-    madd2:=CreateTranslationMatrix(createvertex(dx*Scale,dy*Scale,0));
-    madd3:=CreateTranslationMatrix(createvertex(-dx*Scale,-dy*Scale,0));
+    madd2:=CreateTranslationMatrix(CreateVector(dx*Scale,dy*Scale,0));
+    madd3:=CreateTranslationMatrix(CreateVector(-dx*Scale,-dy*Scale,0));
     mrot2:=CreateRotationMatrixZ(pi);
     result:=MatrixMultiply(result,madd3);
     result:=MatrixMultiply(result,mrot2);

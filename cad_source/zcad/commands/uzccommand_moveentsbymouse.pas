@@ -94,7 +94,7 @@ begin
   if CloneEnts>0 then begin
     if commandmanager.Get3DPoint('',p1)=IRNormal then begin
       RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
-      t_matrix:=CreateTranslationMatrix(-p1);
+      t_matrix:=CreateTranslationMatrix(-p1.asVector);
       drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
       p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
       if p<>nil then
@@ -118,7 +118,7 @@ begin
         else begin
           p1:=(commandmanager.GetLastPoint-p1).asPoint3d;
           zcTransformSelectedEntsInDrawingWithUndo(
-            'MoveEntsByMouse',CreateTranslationMatrix(p1));
+            'MoveEntsByMouse',CreateTranslationMatrix(p1.asVector));
           zcFreeEntsInCurrentDrawingConstructRoot;
         end;
     end;

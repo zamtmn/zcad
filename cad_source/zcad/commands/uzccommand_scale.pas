@@ -79,7 +79,7 @@ begin
   if a<eps then
     a:=1;
 
-  dispmatr:=uzegeometry.CreateTranslationMatrix(-t3dp);
+  dispmatr:=uzegeometry.CreateTranslationMatrix(-t3dp.asVector);
 
   //rotmatr:=onematrix;
   //rotmatr.mtr[0].v[0]:=a;
@@ -88,7 +88,7 @@ begin
   rotmatr:=CreateScaleMatrix(a);
 
   rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-  dispmatr:=uzegeometry.CreateTranslationMatrix(t3dp);
+  dispmatr:=uzegeometry.CreateTranslationMatrix(t3dp.asVector);
   dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 {pcd:=pcoa^.beginiterate(ir);

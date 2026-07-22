@@ -439,7 +439,7 @@ begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
   ProjectProc(pdesc.worldcoord,tv);
-  pdesc.dispcoord:=ToTzePoint2i(tv);
+  pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
 end;
 
 procedure GDBObjCurve.addcontrolpoints;

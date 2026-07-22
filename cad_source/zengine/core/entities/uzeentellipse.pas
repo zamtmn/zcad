@@ -392,15 +392,15 @@ begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end else if pdesc^.pointtype=os_midle then begin
     pdesc.worldcoord:=q1;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=q2;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end;
 end;
 

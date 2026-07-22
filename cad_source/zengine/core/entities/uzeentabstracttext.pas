@@ -160,7 +160,7 @@ begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insert_in_WCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end;
 end;
 

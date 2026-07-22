@@ -849,7 +849,7 @@ begin
   pdesc^.worldcoord:=
     GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[VertexNumber];
   ProjectProc(pdesc^.worldcoord,tv);
-  pdesc^.dispcoord:=ToTzePoint2i(tv);
+  pdesc^.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
 end;
 
 procedure GDBObjLeader.addcontrolpoints(tdesc:Pointer);

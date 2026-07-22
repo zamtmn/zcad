@@ -644,15 +644,15 @@ begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=CoordInWCS.lbegin;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=CoordInWCS.lend;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end else if pdesc^.pointtype=os_midle then begin
     pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,1/2);
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end;
 end;
 

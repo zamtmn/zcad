@@ -521,23 +521,23 @@ begin
   if pdesc^.pointtype=os_center then begin
     pdesc.worldcoord:=P_insert_in_WCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end else if pdesc^.pointtype=os_q0 then begin
     pdesc.worldcoord:=q0;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end else if pdesc^.pointtype=os_q1 then begin
     pdesc.worldcoord:=q1;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end else if pdesc^.pointtype=os_q2 then begin
     pdesc.worldcoord:=q2;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end else if pdesc^.pointtype=os_q3 then begin
     pdesc.worldcoord:=q3;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToTzePoint2i(tv);
+    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end;
 end;
 

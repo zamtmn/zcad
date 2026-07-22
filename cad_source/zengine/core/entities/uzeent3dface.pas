@@ -304,7 +304,7 @@ begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=PInWCS[vertexnumber];
   ProjectProc(pdesc.worldcoord,tv);
-  pdesc.dispcoord:=ToTzePoint2i(tv);
+  pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
 end;
 
 procedure GDBObj3DFace.addcontrolpoints(tdesc:Pointer);

@@ -32,8 +32,8 @@ GDBPolyline2DArray= object(TZctnrVectorTzePoint2d)
                       //function onmouse(mc:TzePoint2i):Boolean;virtual;
                       procedure optimize;virtual;
                       function _optimize:Boolean;virtual;
-                      function inrect(Frame1, Frame2: TzePoint2i;inv:Boolean):Boolean;virtual;
-                      function inrectd(Frame1, Frame2: TzePoint2d;inv:Boolean):Boolean;virtual;
+                      //function inrect(Frame1, Frame2: TzePoint2i;inv:Boolean):Boolean;virtual;
+                      //function inrectd(Frame1, Frame2: TzePoint2d;inv:Boolean):Boolean;virtual;
                       function ispointinside(const point:TzePoint2d):Boolean;virtual;
                       procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
                       function getoutbound:TBoundingBox;virtual;
@@ -188,7 +188,7 @@ begin
   inherited init(m);
   closed:=c;
 end;
-function GDBPolyline2DArray.inrect;
+(*function GDBPolyline2DArray.inrect;
 var p,pp:PzePoint2d;
 //    counter:Integer;
     i:Integer;
@@ -253,8 +253,8 @@ begin
      end
   end;
   end;
-end;
-function GDBPolyline2DArray.inrectd;
+end;*)
+(*function GDBPolyline2DArray.inrectd;
 var p,pp:PzePoint2d;
 //    counter:Integer;
     i:Integer;
@@ -319,6 +319,6 @@ begin
      end
   end;
   end;
-end;
+end;*)
 begin
 end.

@@ -567,7 +567,7 @@ begin
   dirx.x:=(Strokes.Offset.x*cosA-Strokes.Offset.y*sinA)*Scale;
   dirx.y:=(Strokes.Offset.y*cosA+Strokes.Offset.x*sinA)*Scale;
 
-  offs:=Vertex2dMulOnSc(Strokes.Base,Scale);
+  offs:={Vertex2dMulOnSc}(Strokes.Base*Scale);
   //Origin надо учитывать при копировании паттерна из шаблона
   //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
 
@@ -594,7 +594,7 @@ begin
     if not First then begin
       tmin:=int(tmin{+0.5});
       tmax:=int(tmax);
-      ls:=offs+Vertex2dMulOnSc(dirx,tmin);
+      ls:=offs+{Vertex2dMulOnSc}(dirx*tmin);
       while tmin<=tmax do begin
         IV.Clear;
         ProcessLines(ls,ls+diry,IV);

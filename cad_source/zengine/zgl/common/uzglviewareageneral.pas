@@ -2603,7 +2603,7 @@ begin
                                            //if uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
                                                 LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset.asPoint3d;
-                                                LCS.CurrentCamCSOffsetS:=VertexD2S(LCS.CurrentCamCSOffset);
+                                                LCS.CurrentCamCSOffsetS:={VertexD2S}(LCS.CurrentCamCSOffset.asPoint3s);
                                                 LCS.notuseLCS:=pcamera^.notuseLCS;
                                            end
                                            //else LCS.notuseLCS:=true;

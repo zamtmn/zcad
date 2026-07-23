@@ -164,7 +164,7 @@ begin
     if (content='')and(template='') then
       content:=str_empty;
     lod:=0;
-    P_drawInOCS:=NulPoint;
+    P_drawInOCS:=cP3d__0__0__0;
     CalcGabarit(drawing);
     case textprop.justify of
       jstl:
@@ -504,7 +504,7 @@ begin
   textprop.justify:=jt[vv,gv];
   if doublepoint then begin
     Local.p_Insert:=P_drawInOCS;
-    P_drawInOCS:=NulPoint;
+    P_drawInOCS:=cP3d__0__0__0;
   end;
   if angleload then begin
     Local.basis.ox:=GetXfFromZ(Local.basis.oz);

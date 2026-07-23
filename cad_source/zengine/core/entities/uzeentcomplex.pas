@@ -111,7 +111,7 @@ procedure GDBObjComplex.rtmodifyonepoint;
 var
   m:TzeTypedMatrix4d;
 begin
-  m:=onematrix;
+  m:=cOneMatrix;
   if rtmod.point.pointtype=os_point then begin
     if rtmod.point.PDrawable=nil then
       Local.p_insert:=vectortransform3d(rtmod.point.worldcoord+rtmod.dist.asVector,m)

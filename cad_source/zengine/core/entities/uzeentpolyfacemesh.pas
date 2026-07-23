@@ -452,7 +452,7 @@ begin
     dxfIntegerout(outStream,370,vp.lineweight);
   dxfStringout(outStream,100,'AcDbPolyFaceMesh',IODXFContext.header);
   dxfIntegerout(outStream,66,1); // Следует за POLYLINE
-  dxfvertexout(outStream,10,NulPoint);
+  dxfvertexout(outStream,10,cP3d__0__0__0);
   dxfIntegerout(outStream,70,64); // Флаг Polyface Mesh
   dxfIntegerout(outStream,71,vertexarrayinocs.Count); // Количество вершин
   dxfIntegerout(outStream,72,FFaceCount);   // Количество граней

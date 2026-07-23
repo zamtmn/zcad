@@ -136,7 +136,7 @@ begin
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then
     Representation.Clear;
     if VertexArrayInWCS.Count>1 then
-      Representation.CreatePolyLine(dc,self,vp,OneMatrix,VertexArrayInWCS.getPFirst[0..VertexArrayInWCS.GetLastIndex],closed,False);
+      Representation.CreatePolyLine(dc,self,vp,cOneMatrix,VertexArrayInWCS.getPFirst[0..VertexArrayInWCS.GetLastIndex],closed,False);
 
 
   if assigned(EntExtensions) then
@@ -182,7 +182,7 @@ procedure GDBObjPolyline.SaveToDXF;
 begin
   SaveToDXFObjPrefix(outStream,'POLYLINE','AcDb3dPolyline',IODXFContext);
   dxfIntegerout(outStream,66,1);
-  dxfvertexout(outStream,10,uzegeometry.NulPoint);
+  dxfvertexout(outStream,10,uzegeometry.cP3d__0__0__0);
   if closed then
     dxfIntegerout(outStream,70,9)
   else
@@ -200,7 +200,7 @@ begin
   closed:=False;
   vertexgo:=False;
   hlGDBWord:=0;
-  tv:=NulVertex;
+  tv:=cV3d__0__0__0;
   byt:=rdr.ParseInteger;
   while True do begin
     s:='';

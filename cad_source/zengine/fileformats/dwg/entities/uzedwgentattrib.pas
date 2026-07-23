@@ -66,7 +66,7 @@ begin
     PObj^.Local.p_insert.y := InsertPoint.y;
   end;
   PObj^.Local.p_insert.z := Elevation;
-  PObj^.P_drawInOCS := NulPoint;
+  PObj^.P_drawInOCS := cP3d__0__0__0;
   PObj^.textprop.size := Height;
   if WidthFactor <> 0 then
     PObj^.textprop.wfactor := WidthFactor

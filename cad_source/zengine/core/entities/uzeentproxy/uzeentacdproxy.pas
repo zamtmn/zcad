@@ -314,7 +314,7 @@ begin
   inherited init(own, layeraddres, LW);
   FSubEntitiesBuilt := False;
   FProxyBBoxLoaded := False;
-  FProxyGripOffset := NulPoint;
+  FProxyGripOffset := cP3d__0__0__0;
   FProxyClassID := 498;
   FAppClassID := 499;
   FEntityDataSize := 0;
@@ -322,7 +322,7 @@ begin
   FDrawingFormat := 15;
   FOriginalDataFormat := 0;
   FDXFFileVersion := 0;
-  scale := ScaleOne;
+  scale := cV3d__1__1__1;
   rotate := 0;
   FConvertedBlockName := '';
 end;
@@ -333,7 +333,7 @@ begin
   bp.ListPos.Owner := owner;
   FSubEntitiesBuilt := False;
   FProxyBBoxLoaded := False;
-  FProxyGripOffset := NulPoint;
+  FProxyGripOffset := cP3d__0__0__0;
   FProxyClassID := 498;
   FAppClassID := 499;
   FEntityDataSize := 0;
@@ -341,7 +341,7 @@ begin
   FDrawingFormat := 15;
   FOriginalDataFormat := 0;
   FDXFFileVersion := 0;
-  scale := ScaleOne;
+  scale := cV3d__1__1__1;
   rotate := 0;
   FConvertedBlockName := '';
 end;
@@ -430,7 +430,7 @@ begin
   FDXFFileVersion := ADXFFileVersion;
   FSubEntitiesBuilt := False;
   FProxyBBoxLoaded := False;
-  FProxyGripOffset := NulPoint;
+  FProxyGripOffset := cP3d__0__0__0;
   FConvertedBlockName := '';
 end;
 
@@ -705,7 +705,7 @@ begin
     objMatrix := MatrixMultiply(m1, objMatrix);
   end;
 
-  P_insert_in_WCS := VectorTransform3D(NulPoint, objMatrix);
+  P_insert_in_WCS := VectorTransform3D(cP3d__0__0__0, objMatrix);
 end;
 
 { Декомпозиция objMatrix в Local.p_insert/basis/scale/rotate, чтобы после
@@ -928,7 +928,7 @@ begin
 
   BlockArr := PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple);
   BlockDef := BlockArr^.create(FConvertedBlockName);
-  BlockDef^.Base := NulPoint;
+  BlockDef^.Base := cP3d__0__0__0;
 
   { Копируем подпримитивы из ConstObjArray в ObjArray блока.
     Каждый подпримитив клонируется — владелец клона теперь BlockDef. }

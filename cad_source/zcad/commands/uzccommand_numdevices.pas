@@ -271,7 +271,7 @@ var
   sav:TzePoint3d;
   a,aa:double;
 begin
-  CenterPoint:=NulPoint;
+  CenterPoint:=cP3d__0__0__0;
   for i:=0 to mpd.Size-1 do
     CenterPoint:=CenterPoint+mpd.Mutable[i]^.coord.asVector;
   CenterPoint:=CenterPoint/mpd.Size;
@@ -282,7 +282,7 @@ begin
     with dcwa.Mutable[i]^ do begin
       DevCoord:=mpd[i];
       sav:=(DevCoord.coord-CenterPoint).asPoint3d.Normalized;
-      a:=uzegeometry.TwoVectorAngle(_X_yzVertex.asVector,sav.asVector);
+      a:=uzegeometry.TwoVectorAngle(cV3d__1__0__0,sav.asVector);
       if sav.y<-eps then
         a:=2*pi-a;
       a:=a-aa;

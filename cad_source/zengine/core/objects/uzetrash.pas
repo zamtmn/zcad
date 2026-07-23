@@ -41,7 +41,7 @@ begin
 end;
 function GDBObjTrash.GetMatrix;
 begin
-     result:=@onematrix;
+     result:=@cOneMatrix;
 end;
 constructor GDBObjTrash.initnul;
 begin

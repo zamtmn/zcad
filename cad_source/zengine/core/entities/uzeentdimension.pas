@@ -266,7 +266,7 @@ end;
 
 procedure GDBObjDimension.CalcTextAngle;
 begin
-  DimAngle:=vertexangle(NulVertex2D,CreateVertex2D(vectorD.x,vectorD.y));
+  DimAngle:=vertexangle(cP2d__0__0,CreateVertex2D(vectorD.x,vectorD.y));
   TextAngle:=CorrectAngleIfNotReadable(DimAngle);
 end;
 
@@ -330,7 +330,7 @@ begin
     dimdir:={uzegeometry.VertexMulOnSc}(-dimdir{,-1});
 
   if (textangle=0)and((DimData.TextMoved)or TextAlwaysMoved) then
-    dimdir:=x_Y_zVertex;
+    dimdir:=cP3d__0__1__0;
   if TextNeedOffset(dimdir) then begin
     if PDimStyle.Text.DIMGAP>0 then
       l:=
@@ -340,13 +340,13 @@ begin
     if not DimData.TextMoved then
       l:=l+dimtexth/2;
     case PDimStyle.Text.DIMTAD of
-      DTVPCenters:dimdir:=NulPoint;
+      DTVPCenters:dimdir:=cP3d__0__0__0;
       DTVPAbove:begin
         if dimdir.y<-eps then
           dimdir:=
             {uzegeometry.VertexMulOnSc}(-dimdir{,-1});
       end;
-      DTVPJIS:dimdir:=NulPoint;
+      DTVPJIS:dimdir:=cP3d__0__0__0;
       DTVPBellov:begin
         if dimdir.y>eps then
           dimdir:=
@@ -356,7 +356,7 @@ begin
     end;
     Result:={uzegeometry.VertexMulOnSc}(dimdir*l);
   end else
-    Result:=NulPoint;
+    Result:=cP3d__0__0__0;
 end;
 
 function GDBObjDimension.GetDIMTMOVE:TDimTextMove;

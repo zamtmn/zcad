@@ -52,9 +52,9 @@ begin
     objmatrix:=
       MatrixMultiply(objmatrix,bp.ListPos.owner^.GetMatrix^)
   else
-    objmatrix:=MatrixMultiply(objmatrix,onematrix);
+    objmatrix:=MatrixMultiply(objmatrix,cOneMatrix);
 
-  P_insert_in_WCS:=VectorTransform3D(NulPoint,objmatrix);
+  P_insert_in_WCS:=VectorTransform3D(cP3d__0__0__0,objmatrix);
 end;
 
 begin

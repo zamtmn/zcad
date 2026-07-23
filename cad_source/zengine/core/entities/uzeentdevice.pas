@@ -257,7 +257,7 @@ begin
 
       pvc^.bp.ListPos.Owner:=@self;
 
-      self.ObjMatrix:=onematrix;
+      self.ObjMatrix:=cOneMatrix;
       if pvc^.IsHaveLCS then begin
         pvc^.State:=pv^.State+[ESCalcWithoutOwner,ESTemp];
         pvc^.FormatEntity(drawing,dc);

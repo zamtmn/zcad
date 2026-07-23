@@ -326,7 +326,7 @@ end;
 
 procedure TOGLStateManager.startrender;
 begin
-     middlepoint:=NulPoint;
+     middlepoint:=cP3d__0__0__0;
      pointcount:=0;
      primcount:=0;
      bathcount:=0;

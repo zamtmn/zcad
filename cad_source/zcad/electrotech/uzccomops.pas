@@ -897,7 +897,7 @@ begin
      if name<>'' then
      begin
      pt:=pointer(AllocEnt(GDBMtextID));
-     pt^.init({drawings.GetCurrentROOT}@root,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,UTF8Decode(name),tv,2.5,0,0.65,RightAngle,jsbc,1,1);
+     pt^.init({drawings.GetCurrentROOT}@root,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,UTF8Decode(name),tv,2.5,0,0.65,cRightAngle,jsbc,1,1);
      pt^.TXTStyle:=pointer(drawings.GetCurrentDWG.GetTextStyleTable^.getDataMutable(0));
      root.ObjArray.AddPEntity(pt^);
      zcSetEntPropFromCurrentDrawingProp(pt);
@@ -997,7 +997,7 @@ begin
 
          drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
-  coord:=NulPoint;
+  coord:=cP3d__0__0__0;
   coord.y:=0;
   coord.x:=0;
   prevname:='';
@@ -1241,7 +1241,7 @@ begin
     sdd:=dy/nmin/2;
     //ddd:=dy/nmin;
     if aa then
-              angle:=angle+RightAngle;
+              angle:=angle+cRightAngle;
 
   end;
   dir.x := line2.lend.x - line2.lbegin.x;

@@ -61,7 +61,7 @@ begin
   pobj^.Local.p_insert.x := TextX;
   pobj^.Local.p_insert.y := TextY;
   pobj^.Local.p_insert.z := TextZ;
-  pobj^.P_drawInOCS := NulPoint;
+  pobj^.P_drawInOCS := cP3d__0__0__0;
   pobj^.textprop.size := Props.Height;
   if Props.WidthFactor <> 0 then
     pobj^.textprop.wfactor := Props.WidthFactor

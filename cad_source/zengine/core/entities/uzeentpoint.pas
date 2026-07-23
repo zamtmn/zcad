@@ -118,7 +118,7 @@ constructor GDBObjPoint.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  P_insertInOCS:=NulPoint;
+  P_insertInOCS:=cP3d__0__0__0;
 end;
 
 function GDBObjPoint.GetObjType;
@@ -136,7 +136,7 @@ procedure GDBObjPoint.LoadFromDXF;
 var
   byt:integer;
 begin
-  P_insertInOCS:=NulPoint;
+  P_insertInOCS:=cP3d__0__0__0;
   byt:=rdr.ParseInteger;
   while byt<>0 do begin
     case byt of

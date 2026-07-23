@@ -117,7 +117,7 @@ begin
 
     CopyToClipboard;
 
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
     //commandend;
     commandmanager.executecommandend;
   end;

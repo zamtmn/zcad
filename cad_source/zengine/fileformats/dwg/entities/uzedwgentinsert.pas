@@ -50,7 +50,7 @@ function DWGNormalOrDefault(const P: TDWGPoint3D): TzePoint3d;
 begin
   Result := DWGPointToVertex(P);
   if IsVectorNul(Result.asVector) then
-    Result := ZWCS.asPoint3d;
+    Result := cP3d__0__0__1;
 end;
 
 procedure ApplyInsertTransform(PObj: PGDBObjBlockInsert;

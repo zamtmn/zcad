@@ -261,8 +261,8 @@ begin
     Exit;
 
   HasFirst := False;
-  FirstV := NulPoint;
-  LastV := NulPoint;
+  FirstV := cP3d__0__0__0;
+  LastV := cP3d__0__0__0;
 
   pV := Vertices.beginiterate(ir);
   if pV = nil then

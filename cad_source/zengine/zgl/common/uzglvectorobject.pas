@@ -265,8 +265,8 @@ var
    i:integer;
    p:ZGLVertex3Sarray.PT;
 begin
-     result.LBN:=InfinityVertex;
-     result.RTF:=MinusInfinityVertex;
+     result.LBN:=cP3d_Inf_nf_Inf;
+     result.RTF:=cP3d_mInf_mnf_mInf;
      p:=self.GeomData.Vertex3S.getDataMutable(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
      begin
@@ -291,8 +291,8 @@ var
    p:ZGLVertex3Sarray.PT;
    point:ZGLVertex3Sarray.TDataType;
 begin
-     result.LBN:=InfinityVertex;
-     result.RTF:=MinusInfinityVertex;
+     result.LBN:=cP3d_Inf_nf_Inf;
+     result.RTF:=cP3d_mInf_mnf_mInf;
      p:=self.GeomData.Vertex3S.getDataMutable(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
      begin

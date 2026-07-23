@@ -232,7 +232,7 @@ begin
     end;
     if sym<>1 then
     begin
-      m1.CreateRec(OneMtr,CMTTranslate);
+      m1.CreateRec(cOneMtr,CMTTranslate);
       m1.mtr.v[3].v[0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
       matr:=MatrixMultiply(m1,matr);
     end;
@@ -495,11 +495,11 @@ begin
     if param.AD=TACRel then
                            mentrot:=CreateRotationMatrixZ(LineAngle)
                        else
-                           mentrot:=onematrix;
+                           mentrot:=cOneMatrix;
     madd:=CreateTranslationMatrix(CreateVector(param.x*Scale,param.y*Scale,0));
     mtrans:=CreateTranslationMatrix(CreateVector(PInsert.x,PInsert.y,PInsert.z));
     mscale:=CreateScaleMatrix(CreateVector(param.Height*Scale,param.Height*Scale,param.Height*Scale));
-    result:=onematrix;
+    result:=cOneMatrix;
     result:=MatrixMultiply(result,mscale);
     result:=MatrixMultiply(result,mrot);
     result:=MatrixMultiply(result,madd);
@@ -519,11 +519,11 @@ begin
     if (param.AD<>TACAbs) then
                            mentrot:=CreateRotationMatrixZ(LineAngle)
                        else
-                           mentrot:=onematrix;
+                           mentrot:=cOneMatrix;
     madd:=CreateTranslationMatrix(CreateVector(param.x*Scale,param.y*Scale,0));
     mtrans:=CreateTranslationMatrix(CreateVector(PInsert.x,PInsert.y,PInsert.z));
     mscale:=CreateScaleMatrix(CreateVector(param.Height*Scale,param.Height*Scale,param.Height*Scale));
-    result:=onematrix;
+    result:=cOneMatrix;
     result:=MatrixMultiply(result,mscale);
 
     if sysvarDWGRotateTextInLT then
@@ -552,9 +552,9 @@ var
 begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:=creatematrix(StartPatternPoint,PSP^.param,angle,scale);
-matr:=onematrix;
-Bound.LB:=NulVertex2D;
-Bound.RT:=NulVertex2D;
+matr:=cOneMatrix;
+Bound.LB:=cP2d__0__0;
+Bound.RT:=cP2d__0__0;
 sli:=-1;
 if PSP.Psymbol<> nil then
                     PSP^.param.PStyle.pfont.CreateSymbol(drawer,1,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
@@ -570,9 +570,9 @@ var
 begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:={creatematrix}CreateReadableMatrix(StartPatternPoint,PTP^.param,angle,scale,PTP.txtL,PTP.txtH);
-matr:=onematrix;
-Bound.LB:=NulVertex2D;
-Bound.RT:=NulVertex2D;
+matr:=cOneMatrix;
+Bound.LB:=cP2d__0__0;
+Bound.RT:=cP2d__0__0;
 sli:=-1;
 for j:=1 to (system.length(PTP^.Text)) do
 begin

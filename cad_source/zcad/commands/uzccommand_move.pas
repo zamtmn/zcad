@@ -224,7 +224,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then begin
     move(dispmatr,self.CommandName);
 
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Free;
     drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
 

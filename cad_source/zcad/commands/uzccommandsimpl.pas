@@ -305,7 +305,7 @@ begin
       {drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
       drawings.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
       //drawings.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
-      drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;}
+      drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=cOneMatrix;}
     end;
     if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
       drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
@@ -345,7 +345,7 @@ begin
     drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.Free;
     drawings.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
     //drawings.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
-    drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
+    drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=cOneMatrix;
   end;
   drawings.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   sysvarDWGOSMode:=saveosmode;
@@ -502,7 +502,7 @@ procedure CommandRTEdObject.CommandCancel;
 begin
   drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.Free;
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
-  drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
+  drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=cOneMatrix;
   drawings.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   zcRedrawCurrentDrawing;
 end;

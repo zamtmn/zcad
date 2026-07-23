@@ -128,7 +128,7 @@ begin
 
   if Count = 0 then
   begin
-    Result := NulPoint;
+    Result := cP3d__0__0__0;
     Exit;
   end;
 
@@ -175,7 +175,7 @@ function CalculateEntityCenter(
 var
   ObjType: Integer;
 begin
-  Result := NulPoint;
+  Result := cP3d__0__0__0;
 
   if Entity = nil then
     Exit;

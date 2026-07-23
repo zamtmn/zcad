@@ -266,9 +266,9 @@ begin
       toBoundMatrix:=PGDBObjWithMatrix(pThisEntity)^.GetMatrix^;
       MatrixInvert(toBoundMatrix);
     end else
-      toBoundMatrix:=OneMatrix;
+      toBoundMatrix:=cOneMatrix;
   end else
-    toBoundMatrix:=OneMatrix;
+    toBoundMatrix:=cOneMatrix;
 
 end;
 
@@ -369,7 +369,7 @@ var
       end else begin
         {TODO: пока работает не с всеми примитивами, надо расширять на все остальное}
         //EntTestType:=OTTNotSupported;
-        //testp:=NulVertex;
+        //testp:=cV3d__0__0__0;
         exit;
       end;
 

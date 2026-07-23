@@ -23,6 +23,8 @@ uses
   SysUtils,Nullable,
   uzepalette,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytypes,
   uzeTypes,uzecamera;
+const
+  DefaultVP:TzeVector4i=(x:2;y:0;z:100;w:100);
 type
 TNulableVetrex=TNullable<TzePoint3d>;
 TDrawHeplGeometry=procedure  of object;
@@ -81,8 +83,8 @@ begin
       result.ScrollMode:=false;
       result.DrawingContext.Zoom:=1;
       result.drawer:=nil;
-      result.DrawingContext.matrixs.pmodelMatrix:=@OneMatrix;
-      result.DrawingContext.matrixs.pprojMatrix:=@OneMatrix;
+      result.DrawingContext.matrixs.pmodelMatrix:=@cOneMatrix;
+      result.DrawingContext.matrixs.pprojMatrix:=@cOneMatrix;
       result.DrawingContext.matrixs.pviewport:=@DefaultVP;
       result.DrawingContext.pcamera:=nil;
       result.SystmGeometryDraw:=false;

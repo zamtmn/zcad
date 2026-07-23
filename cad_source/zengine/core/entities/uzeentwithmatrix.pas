@@ -300,7 +300,7 @@ end;
 procedure GDBObjWithMatrix.createfield;
 begin
   inherited;
-  objmatrix:=onematrix;
+  objmatrix:=cOneMatrix;
 end;
 
 function GDBObjWithMatrix.GetMatrix;
@@ -318,7 +318,7 @@ end;
 constructor GDBObjWithMatrix.initnul;
 begin
   inherited initnul(owner);
-  objmatrix:=onematrix;
+  objmatrix:=cOneMatrix;
   CalcObjMatrix;
 end;
 

@@ -328,8 +328,8 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
         Inc(PCurrCP);
       end;
     end;
-    startTg:=NulVertex2D;
-    endTg:=NulVertex2D;
+    startTg:=cP2d__0__0;
+    endTg:=cP2d__0__0;
     if dxfLoadGroupCodeDouble(rdr,12,currDXFGroupCode,startTg.x) then
       currDXFGroupCode:=rdr.ParseInteger;
     if dxfLoadGroupCodeDouble(rdr,22,currDXFGroupCode,startTg.y) then

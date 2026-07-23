@@ -466,7 +466,7 @@ begin
                 pobj^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
                 //pobj^.VarObjArray.free;
-           {powner^.objmatrix:=onematrix;
+           {powner^.objmatrix:=cOneMatrix;
            pvisible:=pobj^.Clone(@powner^);
                     if pvisible^.IsHaveLCS then
                                pvisible^.Format;
@@ -747,7 +747,7 @@ begin
            if pobj^.Selected then
            if pobj<>pointer(powner) then
            begin
-           powner^.objmatrix:=onematrix;
+           powner^.objmatrix:=cOneMatrix;
            pvisible:=pobj^.Clone(@powner^);
                     if pvisible^.IsHaveLCS then
                                pvisible^.Formatentity(drawings.GetCurrentDWG^,dc);

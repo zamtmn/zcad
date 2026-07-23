@@ -329,12 +329,12 @@ begin
     tp3:=VectorDot(tp2,onel);
     tp3.Normalize;//:=NormalizeVertex(tp3);
     tp2.Normalize;//:=NormalizeVertex(tp2);
-    //rotmatr:=onematrix;
+    //rotmatr:=cOneMatrix;
     //PzePoint3d(@rotmatr.mtr[0])^:=onel;
     //PzePoint3d(@rotmatr.mtr[1])^:=tp2;
     //PzePoint3d(@rotmatr.mtr[2])^:=tp3;
     rotmatr:=CreateMatrixFromBasis(onel,tp2,tp3);
-    //m:=onematrix;
+    //m:=cOneMatrix;
     //PzePoint3d(@m.mtr[3])^:=l2;
     m:=CreateTranslationMatrix(l2.asVector);
     m:=MatrixMultiply(rotmatr,m);
@@ -346,8 +346,8 @@ begin
 end;
 procedure drawCross(const p1:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 begin
-  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,(p1-_XY_zVertex).asPoint3d,p1+_XY_zVertex.asVector);
-  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,(p1-_MinusXY_zVertex).asPoint3d,p1+_MinusXY_zVertex.asVector);
+  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1-cV3d__1__1__0,p1+cV3d__1__1__0);
+  pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1-cV3d_m1__1__0,p1+cV3d_m1__1__0);
 end;
 procedure drawFilledCircle(const p0:TzePoint3d;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
@@ -437,12 +437,12 @@ begin
     tp3:=VectorDot(tp2,onel);
     tp3.Normalize;//:=NormalizeVertex(tp3);
     tp2.Normalize;//:=NormalizeVertex(tp2);
-    //rotmatr:=onematrix;
+    //rotmatr:=cOneMatrix;
     //PzePoint3d(@rotmatr.mtr[0])^:=onel;
     //PzePoint3d(@rotmatr.mtr[1])^:=tp2*l;
     //PzePoint3d(@rotmatr.mtr[2])^:=tp3*l;
     rotmatr:=CreateMatrixFromBasis(onel,tp2*l,tp3*l);
-    m:=onematrix;
+    m:=cOneMatrix;
     m.mtr.v[3].Slice:=l1.asVector;
     m:=MatrixMultiply(rotmatr,m);
 
@@ -664,7 +664,7 @@ begin
       case knot.&Type of
         KTArc:begin
           P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
-          pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,OneMatrix,oldP,P);
+          pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,cOneMatrix,oldP,P);
           oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
           P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           drawIntersectArc(P,oldP,pThisEntity,DC);
@@ -672,14 +672,14 @@ begin
         KTEmpty:begin
           if knot.t>bigeps then begin
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
-            pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,OneMatrix,oldP,P);
+            pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,cOneMatrix,oldP,P);
           end;
           oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
         end;
         KTNormal:begin
           if knot.t>bigeps then begin
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
-            pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,OneMatrix,oldP,P);
+            pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,cOneMatrix,oldP,P);
           end else
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           oldP:=p;
@@ -690,7 +690,7 @@ begin
       end;
     end;
     if IsDoubleNotEqual(knot.t,1,bigeps) then
-      pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,OneMatrix,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
+      pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,cOneMatrix,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
     result:=false;
   end;
   finally

@@ -83,9 +83,9 @@ begin
 
   //smatrix:=CreateScaleMatrix(CreateVertex(scale,scale,scale));
 
-  //projMatrix:=ortho(point1.x,point2.x,point1.y,point2.y,-1,1,@onematrix);
+  //projMatrix:=ortho(point1.x,point2.x,point1.y,point2.y,-1,1,@cOneMatrix);
 
-  projMatrix:=onematrix;
+  projMatrix:=cOneMatrix;
   projMatrix:=ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@projMatrix);
   projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVector(-(point1.x+point2.x)/dx,-(point1.y+point2.y)/dy,0)));
   projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(CreateVector(1/sx,1/sy,1)));
@@ -93,9 +93,9 @@ begin
 
 
 
-  modelMatrix:=OneMatrix;
+  modelMatrix:=cOneMatrix;
   //modelMatrix:=CreateTranslationMatrix(CreateVertex(-dx/{2}5,{dy/2}0,0));
-  //projMatrix:=onematrix;
+  //projMatrix:=cOneMatrix;
   //projMatrix:=MatrixMultiply(projMatrix,smatrix);
 
   {point1:=VectorTransform3D(point1,projMatrix);
@@ -149,7 +149,7 @@ begin
   dc.DrawingContext.ForeGroundColorIndex:=uzeconsts.ClBlack;
 
 
-  //modelMatrix:=onematrix;
+  //modelMatrix:=cOneMatrix;
   //projMatrix:TzeTypedMatrix4d;
   viewport.v[0]:=0;
   viewport.v[1]:=0;

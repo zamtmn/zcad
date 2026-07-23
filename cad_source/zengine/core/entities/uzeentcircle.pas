@@ -133,7 +133,7 @@ var
 begin
   dir:=VertexSub(P_insert_in_WCS,posr.worldcoord);
   processaxis(posr,dir);
-  tv:=vectordot(dir.asVector,zwcs).asPoint3d;
+  tv:=vectordot(dir.asVector,cV3d__0__0__1).asPoint3d;
   processaxis(posr,tv);
 end;
 
@@ -196,14 +196,14 @@ procedure GDBObjCircle.createfield;
 begin
   inherited;
   Radius:=1;
-  q0:=NulPoint;
-  q1:=NulPoint;
-  q2:=NulPoint;
-  q3:=NulPoint;
-  Outbound[0]:=NulPoint;
-  Outbound[1]:=NulPoint;
-  Outbound[2]:=NulPoint;
-  Outbound[3]:=NulPoint;
+  q0:=cP3d__0__0__0;
+  q1:=cP3d__0__0__0;
+  q2:=cP3d__0__0__0;
+  q3:=cP3d__0__0__0;
+  Outbound[0]:=cP3d__0__0__0;
+  Outbound[1]:=cP3d__0__0__0;
+  Outbound[2]:=cP3d__0__0__0;
+  Outbound[3]:=cP3d__0__0__0;
 end;
 
 function GDBObjCircle.GetObjTypeName;
@@ -233,9 +233,9 @@ constructor GDBObjCircle.init;
 begin
   inherited init(own,layeraddres,lw);
   Local.p_insert:=p;
-  Local.basis.ox:=XWCS;
-  Local.basis.oy:=YWCS;
-  Local.basis.oz:=ZWCS;
+  Local.basis.ox:=cV3d__1__0__0;
+  Local.basis.oy:=cV3d__0__1__0;
+  Local.basis.oz:=cV3d__0__0__1;
   Radius:=rr;
   Vertex3D_in_WCS_Array.init(4);
 end;
@@ -271,7 +271,7 @@ begin
   if EFDraw in stage then begin
     Representation.Clear;
     if not (ESTemp in State)and(DCODrawable in DC.Options) then
-      Representation.CreatePolyLine(dc,self,vp,OneMatrix,Vertex3D_in_WCS_Array.getPFirst[0..Vertex3D_in_WCS_Array.GetLastIndex],True,True);
+      Representation.CreatePolyLine(dc,self,vp,cOneMatrix,Vertex3D_in_WCS_Array.getPFirst[0..Vertex3D_in_WCS_Array.GetLastIndex],True,True);
     if assigned(EntExtensions) then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
   end;
@@ -601,7 +601,7 @@ var
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m.mtr.v[3]:=NulVector4D;
+  m.mtr.v[3]:=cV4d__0__0__0__0;
   if rtmod.point.pointtype=os_center then begin
     Local.p_insert:=VectorTransform3D(rtmod.wc*Radius,m);
   end else if (rtmod.point.pointtype=os_q0)or(rtmod.point.pointtype=os_q1)or

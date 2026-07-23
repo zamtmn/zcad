@@ -205,7 +205,7 @@ begin
       pvc:=pv^.Clone(@self);
       pvc2:=pv^.Clone(@self);
       pvc^.bp.ListPos.Owner:=@self;
-      self.ObjMatrix:=onematrix;
+      self.ObjMatrix:=cOneMatrix;
       if pvc^.IsHaveLCS then
         pvc^.FormatEntity(drawing,dc);
       pvc^.transform(m4);

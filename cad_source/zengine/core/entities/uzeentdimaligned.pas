@@ -234,7 +234,7 @@ begin
       tvertex:=tvertex.Normalized;
     end
     //else
-    //    tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.x_Y_zVertex,dir);
+    //    tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.cV3d__0__1__0,dir);
 
     ;
     tvertex:={VertexMulOnSc}(tvertex*t);
@@ -271,7 +271,7 @@ begin
       tvertex:=tvertex.Normalized;
     end
     //else
-    //tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.x_Y_zVertex,dir);
+    //tvertex:=uzegeometry.VertexMulOnSc(uzegeometry.cV3d__0__1__0,dir);
 
     ;
     tvertex:={VertexMulOnSc}(tvertex*t);

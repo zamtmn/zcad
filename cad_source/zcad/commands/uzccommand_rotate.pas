@@ -126,7 +126,7 @@ begin
             end;
             RCMWaitAngleCopyReference:begin
               if MoveMode then begin
-                Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+                Context.PDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
                 zcFreeEntsInCurrentDrawingConstructRoot;
                 t_matrix:=CreateTranslationMatrix(-BasePnt.asVector);
                 t_matrix:=MatrixMultiply(t_matrix,CreateAffineRotationMatrix(Axis,RefV,(p1-BasePnt).Normalized));
@@ -157,12 +157,12 @@ begin
                 t_matrix:=MatrixMultiply(t_matrix,CreateAffineRotationMatrix(Axis,-Angle));
                 t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(BasePnt.asVector));
                 if MoveMode then begin
-                  Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+                  Context.PDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
                   zcFreeEntsInCurrentDrawingConstructRoot;
                   zcTransformSelectedEntsInDrawingWithUndo('Rotate',t_matrix);
                   Break;
                 end else begin
-                  Context.PDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+                  Context.PDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
                   p:=Context.PDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
                   if p<>nil then
                     repeat

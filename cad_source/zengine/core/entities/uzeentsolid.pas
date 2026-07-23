@@ -143,7 +143,7 @@ constructor GDBObjSolid.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  PInOCS[1]:=NulPoint;
+  PInOCS[1]:=cP3d__0__0__0;
 end;
 
 function GDBObjSolid.GetObjType;
@@ -284,7 +284,7 @@ var
   tvo:PGDBObjSolid;
 begin
   Getmem(Pointer(tvo),sizeof(GDBObjSolid));
-  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight,NulPoint);
+  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight,cP3d__0__0__0);
   tvo^.Local:=local;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);

@@ -108,7 +108,7 @@ var
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
   tv:=t_matrix.mtr.v[3];
-  t_matrix.mtr.v[3]:=NulVertex4D;
+  t_matrix.mtr.v[3]:=cV4d__0__0__0__1;
   t_matrix.mtr.v[3]:=tv;
   ReCalcFromObjMatrix;
 end;
@@ -136,7 +136,7 @@ begin
   dir:=VectorTransform3D(posr.worldcoord,m1);
 
   processaxis(posr,dir);
-  tv:=uzegeometry.vectordot(dir.asVector,zwcs).asPoint3d;
+  tv:=uzegeometry.vectordot(dir.asVector,cV3d__0__0__1).asPoint3d;
   processaxis(posr,tv);
 end;
 
@@ -242,7 +242,7 @@ begin
   Local.P_insert:=objmatrix.mtr.v[3].Slice.asPoint3d;
 
   // P_insert_in_WCS также обновляем из строки 3 ObjMatrix.
-  // Это эквивалентно VectorTransform3D(nulvertex, objmatrix), но без лишних вычислений.
+  // Это эквивалентно VectorTransform3D(cV3d__0__0__0, objmatrix), но без лишних вычислений.
   P_insert_in_WCS:=Local.P_insert;
 
   // Радиус — длина первого вектора-оси в ObjMatrix (масштаб по оси X)
@@ -429,7 +429,7 @@ begin
   if EFDraw in stage then begin
     Representation.Clear;
     if not (ESTemp in State)and(DCODrawable in DC.Options) then
-      Representation.CreatePolyLine(dc,self,vp,OneMatrix,Vertex3D_in_WCS_Array.getPFirst[0..Vertex3D_in_WCS_Array.GetLastIndex],False,False);
+      Representation.CreatePolyLine(dc,self,vp,cOneMatrix,Vertex3D_in_WCS_Array.getPFirst[0..Vertex3D_in_WCS_Array.GetLastIndex],False,False);
     if assigned(EntExtensions) then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
   end;
@@ -737,7 +737,7 @@ var
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m.mtr.v[3]:=NulVector4D;
+  m.mtr.v[3]:=cV4d__0__0__0__0;
 
   tq0:=VectorTransform3D(q0*R,m);
   tq1:=VectorTransform3D(q1*R,m);

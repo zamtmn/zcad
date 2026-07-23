@@ -141,7 +141,7 @@ begin
 end;
 function GDBObjRoot.GetMatrix;
 begin
-  result:={@self.ObjMatrix}@OneMatrix;
+  result:={@self.ObjMatrix}@cOneMatrix;
 end;
 procedure GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);
 var p:PGDBObjConnected;
@@ -163,8 +163,8 @@ begin
 end;
 procedure GDBObjRoot.getoutbound;
 begin
-  vp.BoundingBox.LBN:=NulPoint;
-  vp.BoundingBox.RTF:=NulPoint;
+  vp.BoundingBox.LBN:=cP3d__0__0__0;
+  vp.BoundingBox.RTF:=cP3d__0__0__0;
   inherited;
 end;
 function GDBObjRoot.getowner;

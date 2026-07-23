@@ -588,7 +588,7 @@ begin
      tx:=0;
      ty:=400;
      penstyle:=TPS_Solid;
-     matr:=OneMatrix;
+     matr:=cOneMatrix;
      mstackindex:=-1;
 end;
 
@@ -597,7 +597,7 @@ begin
   inc(mstackindex);
   mstack[mstackindex]:=matr;
   if FromOneMatrix then
-    matr:=OneMatrix;
+    matr:=cOneMatrix;
   matr:=MatrixMultiply(matr,Transform);
 end;
 procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);
@@ -605,7 +605,7 @@ begin
   inc(mstackindex);
   mstack[mstackindex]:=matr;
   if FromOneMatrix then
-    matr:=OneMatrix;
+    matr:=cOneMatrix;
   matr:=MatrixMultiply(matr,Transform);
 end;
 procedure TZGLGeneral2DDrawer.popMatrix;
@@ -630,8 +630,8 @@ begin
   matrixs.pmodelMatrix^:=matrWithLCS;
   matrixs.pprojMatrix^:=ProjMatrWithLCS;
   LCS.notuseLCS:=true;
-  LCS.CurrentCamCSOffset:=NulPoint;
-  LCS.CurrentCamCSOffsetS:=NulPoint3S;
+  LCS.CurrentCamCSOffset:=cP3d__0__0__0;
+  LCS.CurrentCamCSOffsetS:=cP3s__0__0__0;
 end;
 procedure TZGLGeneral2DDrawer.EnableLCS(var matrixs:tmatrixs);
 //var

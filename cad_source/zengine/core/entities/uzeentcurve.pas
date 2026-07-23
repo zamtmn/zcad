@@ -181,7 +181,7 @@ begin
         tv:=vertexsub(ptv^,ppredtv^);
         tv.Normalize;
         processaxis(posr,tv);
-        tv:=VectorDot(tv.asVector,zwcs).asPoint3d;
+        tv:=VectorDot(tv.asVector,cV3d__0__0__1).asPoint3d;
         processaxis(posr,tv);
         Dec(found);
       end;
@@ -320,7 +320,7 @@ begin
   VertexArrayInWCS.Clear;
   VertexArrayInWCS.SetSize(VertexArrayInOCS.Count);
   if bp.ListPos.owner=nil then
-    pmtx:=@OneMatrix
+    pmtx:=@cOneMatrix
   else
     pmtx:=bp.ListPos.owner^.GetMatrix;
   ptv:=VertexArrayInOCS.beginiterate(ir);

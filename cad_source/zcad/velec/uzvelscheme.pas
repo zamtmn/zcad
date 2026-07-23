@@ -289,7 +289,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
 
          //drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
-  //coord:=uzegeometry.NulVertex;
+  //coord:=uzegeometry.cV3d__0__0__0;
   //coord.y:=0;
   //coord.x:=0;
   //prevname:='';
@@ -384,7 +384,7 @@ begin
      if name<>'' then
      begin
      pt:=pointer(AllocEnt(GDBMtextID));
-     pt^.init({drawings.GetCurrentROOT}@root,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(name),tv,2.5,0,0.65,RightAngle,jsbc,1,1);
+     pt^.init({drawings.GetCurrentROOT}@root,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(name),tv,2.5,0,0.65,cRightAngle,jsbc,1,1);
      pt^.TXTStyle:=pointer(drawings.GetCurrentDWG^.GetTextStyleTable^.getDataMutable(0));
      root.ObjArray.AddPEntity(pt^);
      zcSetEntPropFromCurrentDrawingProp(pt);
@@ -969,8 +969,8 @@ var
       //выставляем клону точку вставки, ориентируем по осям, вращаем
       pnevdev^.Local.P_insert:=currentcoord;
       pnevdev^.scale:=CreateVector(1,1,1);
-      //pnevdev.Local.Basis.ox:=_X_yzVertex;
-      //pnevdev.Local.Basis.oy:=x_Y_zVertex;
+      //pnevdev.Local.Basis.ox:=cV3d__1__0__0;
+      //pnevdev.Local.Basis.oy:=cV3d__0__1__0;
       //pnevdev.rotate:=0;
 
       //форматируем клон
@@ -2344,7 +2344,7 @@ begin
   //** Строим структурную схему
   graphVizPt:=createvertex(0,0,0);
 
-  //coord:=uzegeometry.NulVertex;
+  //coord:=uzegeometry.cV3d__0__0__0;
   //coord.y:=0;
   //coord.x:=0;
   //prevname:='';

@@ -96,7 +96,7 @@ var
 begin
   tv:=CreateVertex(0,textprop.size,0);
   m:=t_matrix;
-  m.mtr.v[3].Slice:=NulVertex;
+  m.mtr.v[3].Slice:=cV3d__0__0__0;
 
   tv:=VectorTransform3d(tv,m);
   textprop.size:=oneVertexlength(tv.asVector);
@@ -133,7 +133,7 @@ begin
 
   if bp.ListPos.owner<>nil then begin
     V1:=bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice.asPoint3d;
-    l0:=scalardot(V1.asVector.Normalized,_X_yzVertex.asVector);
+    l0:=scalardot(V1.asVector.Normalized,cV3d__1__0__0);
     l0:=arccos(l0);
     if v1.y<-eps then
       l0:=2*pi-l0;
@@ -243,15 +243,15 @@ begin
     PzePoint3d(@objmatrix.mtr.v[0])^.y:=-Local.basis.ox.y;
     PzePoint3d(@objmatrix.mtr.v[0])^.z:=-Local.basis.ox.z;}
   end;
-  m1:=OneMatrix;
+  m1:=cOneMatrix;
   objMatrix:=MatrixMultiply(m1,objMatrix);
 
   angle:=(pi/2-textprop.oblique);
   if abs(angle-pi/2)>eps then begin
-    m1.CreateRec(OneMtr,CMTShear);
+    m1.CreateRec(cOneMtr,CMTShear);
     m1.mtr.v[1].v[0]:=cotan(angle);
   end else
-    m1:=OneMatrix;
+    m1:=cOneMatrix;
 
   m2:=CreateTranslationMatrix(P_drawInOCS.asVector);
 

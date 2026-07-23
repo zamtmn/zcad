@@ -61,13 +61,13 @@ begin
   p2:=CreateVertex(-1,1/6,0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  NulPoint,p1);
+                  cP3d__0__0__0,p1);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
                   p1,p2);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  p2,NulPoint);
+                  p2,cP3d__0__0__0);
 end;
 function CreateClosedBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 var
@@ -88,16 +88,16 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  NulPoint,p1);
+                  cP3d__0__0__0,p1);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
                   p1,p2);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  p2,NulPoint);
+                  p2,cP3d__0__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  NulPoint,CreateVertex(-1,0,0));
+                  cP3d__0__0__0,CreateVertex(-1,0,0));
 end;
 
 function CreateDotBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -171,13 +171,13 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  NulPoint,p1);
+                  cP3d__0__0__0,p1);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  p2,NulPoint);
+                  p2,cP3d__0__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  NulPoint,CreateVertex(-1,0,0));
+                  cP3d__0__0__0,CreateVertex(-1,0,0));
 end;
 
 function CreateOriginBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -196,10 +196,10 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  NulPoint,CreateVertex(-1,0,0));
+                  cP3d__0__0__0,CreateVertex(-1,0,0));
   ENTF_CreateCircle(result,@result.ObjArray,
                     SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                    NulPoint,0.5);
+                    cP3d__0__0__0,0.5);
 end;
 
 function CreateOrigin2Block(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -221,10 +221,10 @@ begin
                   CreateVertex(-1,0,0),CreateVertex(-0.5,0,0));
   ENTF_CreateCircle(result,@result.ObjArray,
                     SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                    NulPoint,0.5);
+                    cP3d__0__0__0,0.5);
   ENTF_CreateCircle(result,@result.ObjArray,
                     SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                    NulPoint,0.25);
+                    cP3d__0__0__0,0.25);
 end;
 
 function CreateOpen90Block(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -243,13 +243,13 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  NulPoint,CreateVertex(-1,0,0));
+                  cP3d__0__0__0,CreateVertex(-1,0,0));
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  CreateVertex(-0.5,0.5,0),NulPoint);
+                  CreateVertex(-0.5,0.5,0),cP3d__0__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  CreateVertex(-0.5,-0.5,0),NulPoint);
+                  CreateVertex(-0.5,-0.5,0),cP3d__0__0__0);
 end;
 
 function CreateOpen30Block(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -268,13 +268,13 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  NulPoint,CreateVertex(-1,0,0));
+                  cP3d__0__0__0,CreateVertex(-1,0,0));
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  CreateVertex(-1,0.2679,0),NulPoint);
+                  CreateVertex(-1,0.2679,0),cP3d__0__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  CreateVertex(-1,-0.2679,0),NulPoint);
+                  CreateVertex(-1,-0.2679,0),cP3d__0__0__0);
 end;
 
 function CreateDotSmallBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -310,7 +310,7 @@ begin
                   CreateVertex(-1,0,0),CreateVertex(-0.5,0,0));
   ENTF_CreateCircle(result,@result.ObjArray,
                     SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                    NulPoint,0.5);
+                    cP3d__0__0__0,0.5);
 end;
 
 function CreateSmallBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -321,7 +321,7 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateCircle(result,@result.ObjArray,
                     dwg^.GetLayerTable^.GetSystemLayer,dwg^.GetLTypeTable^.GetSystemLT(TLTByBlock),LnWtByBlock,ClByBlock,
-                    NulPoint,0.25);
+                    cP3d__0__0__0,0.25);
 end;
 
 function CreateBoxBlankBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;

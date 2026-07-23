@@ -126,7 +126,7 @@ begin
   if axisLen < ALIGN_MIN_DISTANCE then begin
     if cosAngle > 0 then begin
       // Угол ≈ 0°: возвращаем единичную матрицу
-      Result := onematrix;
+      Result := cOneMatrix;
       Exit;
     end;
     // Угол ≈ 180°: выбираем произвольную перпендикулярную ось
@@ -139,7 +139,7 @@ begin
     rotAxis := uzegeometry.VectorDot(srcVec, perpAxis);
     axisLen := Sqrt(rotAxis.x * rotAxis.x + rotAxis.y * rotAxis.y + rotAxis.z * rotAxis.z);
     if axisLen < ALIGN_MIN_DISTANCE then begin
-      Result := onematrix;
+      Result := cOneMatrix;
       Exit;
     end;
     rotAxis.x := rotAxis.x / axisLen;
@@ -147,7 +147,7 @@ begin
     rotAxis.z := rotAxis.z / axisLen;
     // Поворот на 180°: cos(π)=-1, sin(π)=0
     kx := rotAxis.x; ky := rotAxis.y; kz := rotAxis.z;
-    m := onematrix;
+    m := cOneMatrix;
     m.mtr.v[0].v[0] := 2.0 * kx * kx - 1.0;
     m.mtr.v[0].v[1] := 2.0 * kx * ky;
     m.mtr.v[0].v[2] := 2.0 * kx * kz;
@@ -180,7 +180,7 @@ begin
   // Строим матрицу Родригеса в строчно-мажорном порядке ZCAD (v' = v * M).
   // Строки матрицы — это новые образы базисных векторов X, Y, Z.
   // R[i][j] = δ(i,j)*c + ki*kj*(1-c) + ε(i,k,j)*kk*s
-  m := onematrix;
+  m := cOneMatrix;
   m.mtr.v[0].v[0] := cosAngle + kx * kx * c1;
   m.mtr.v[0].v[1] := kx * ky * c1 + kz * sinAngle;
   m.mtr.v[0].v[2] := kx * kz * c1 - ky * sinAngle;

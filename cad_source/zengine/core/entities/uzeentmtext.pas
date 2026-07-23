@@ -95,7 +95,7 @@ var
 begin
   tv:=CreateVertex(Width,0,0);
   m:=t_matrix;
-  m.mtr.v[3].Slice:=NulVertex;
+  m.mtr.v[3].Slice:=cV3d__0__0__0;
   tv:=VectorTransform3d(tv,m);
   Width:={oneVertexlength}(tv.Length);
   inherited;
@@ -326,7 +326,7 @@ begin
   Text.Free;
   lod:=0;
 
-  P_drawInOCS:=NulPoint;
+  P_drawInOCS:=cP3d__0__0__0;
 
   //обрезание перевода строки в конце строки
   //странно что в автокаде он обрезается только один
@@ -343,7 +343,7 @@ begin
 
   h:=GetLinesH(linespace,textprop.size,Text);
 
-  P_drawInOCS:=NulPoint;
+  P_drawInOCS:=cP3d__0__0__0;
   angle:=0;
 
   if textprop.justify=jsbtl then
@@ -585,7 +585,7 @@ begin
       ln:=-1;
       matr:=DrawMatrix;
 
-      m1.CreateRec(OneMtr,CMTShear);
+      m1.CreateRec(cOneMtr,CMTShear);
       m1.mtr.v[3].v[0]:=pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique)/textprop.wfactor;
       m1.mtr.v[3].v[1]:=pswp^.y;
       matr:=MatrixMultiply(m1,matr);

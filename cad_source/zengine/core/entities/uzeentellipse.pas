@@ -37,7 +37,7 @@ type
 
   GDBObjEllipse=object(GDBObjPlain)
     RR:double;
-    MajorAxis:TzePoint3d;
+    MajorAxis:TzeVector3d;
     Ratio:double;
     StartAngle:double;
     EndAngle:double;
@@ -46,7 +46,7 @@ type
     length:double;
     q0,q1,q2:TzePoint3d;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:TzePoint3d;{RR,}S,E:double;majaxis:TzePoint3d);
+      LW:smallint;p:TzePoint3d;S,E:double;majaxis:TzeVector3d);
     constructor initnul;
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -96,7 +96,7 @@ var
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
   tv:=t_matrix.mtr.v[3];
-  t_matrix.mtr.v[3]:=NulVertex4D;
+  t_matrix.mtr.v[3]:=cV4d__0__0__0__1;
   MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
   t_matrix.mtr.v[3]:=tv;
   ReCalcFromObjMatrix;
@@ -108,7 +108,7 @@ var
 begin
   inherited;
   mtr:=t_matrix;
-  mtr.mtr.v[3]:=NulVertex4D;
+  mtr.mtr.v[3]:=cV4d__0__0__0__1;
   MajorAxis:=VectorTransform3D(MajorAxis,mtr);
   ReCalcFromObjMatrix;
 end;
@@ -123,7 +123,7 @@ function GDBObjEllipse.CalcObjMatrixWithoutOwner;
 var
   rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
-  Local.basis.ox:=MajorAxis.asVector;
+  Local.basis.ox:=MajorAxis;
   Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
 
   Local.basis.ox.Normalize;//:=NormalizeVertex(Local.basis.ox);
@@ -185,7 +185,7 @@ constructor GDBObjEllipse.initnul;
 begin
   startangle:=0;
   endangle:=2*pi;
-  majoraxis:=onevertex;
+  majoraxis:=cV3d__1__1__1;
   inherited initnul(nil);
   Vertex3D_in_WCS_Array.init(4);
 end;
@@ -212,7 +212,7 @@ var
   l:double;
 begin
   inherited CalcObjMatrix;
-  l:=onevertexlength(majoraxis.asVector);
+  l:=onevertexlength(majoraxis);
   m1:=CreateScaleMatrix(l,ratio*l,1);
   objmatrix:=matrixmultiply(m1,objmatrix);
   v.Slice.Slice:=local.p_insert.Slice.asVector;
@@ -232,9 +232,9 @@ begin
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   if self.Ratio<=1 then
-    rr:=uzegeometry.oneVertexlength(majoraxis.asVector)
+    rr:=uzegeometry.oneVertexlength(majoraxis)
   else
-    rr:=uzegeometry.oneVertexlength(majoraxis.asVector)*ratio;
+    rr:=uzegeometry.oneVertexlength(majoraxis)*ratio;
 
   calcObjMatrix;
   angle:=endangle-startangle;

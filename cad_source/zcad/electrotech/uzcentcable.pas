@@ -144,7 +144,7 @@ begin
 
   SaveToDXFObjPrefix(outStream,'POLYLINE','AcDb3dPolyline',IODXFContext);
   dxfIntegerout(outStream,66,1);
-  dxfvertexout(outStream,10,uzegeometry.NulPoint);
+  dxfvertexout(outStream,10,uzegeometry.cP3d__0__0__0);
   dxfIntegerout(outStream,70,8);
 
   vp.Layer:=pl;
@@ -390,8 +390,8 @@ begin
 
       tp:=ptlast^-ptpred^;
       if uzegeometry.SqrOneVertexlength(tp)>sqreps then begin
-        _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
-        _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;
+        _YWCS:=cV3d__0__1__0;//gdb.GetCurrentDWG.pcamera.ydir;
+        _ZWCS:=cV3d__0__0__1;//gdb.GetCurrentDWG.pcamera.look;
 
         if IsNearToZ(tp)then
           tp2:=VectorDot(_YWCS,tp)
@@ -403,13 +403,13 @@ begin
         tp2.Normalize;
         tp.Normalize;
 
-        //rotmatr:=onematrix;
+        //rotmatr:=cOneMatrix;
         //PzePoint3d(@rotmatr.mtr[0])^:=tp;
         //PzePoint3d(@rotmatr.mtr[1])^:=tp2;
         //PzePoint3d(@rotmatr.mtr[2])^:=tp3;
         rotmatr:=CreateMatrixFromBasis(tp,tp2,tp3);
 
-        //m:=onematrix;
+        //m:=cOneMatrix;
         //PzePoint3d(@m.mtr[3])^:=ptnlastCutted.PrevP;
         m:=CreateTranslationMatrix(ptnlastCutted.PrevP.asVector);
 

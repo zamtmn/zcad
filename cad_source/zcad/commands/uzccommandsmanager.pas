@@ -423,15 +423,15 @@ begin
     Result:=IRNormal;
   end else if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMId)and
     (not Application.Terminated) then begin
-    p:=InfinityVertex;
+    p:=cP3d_Inf_nf_Inf;
     Result:=IRId;
   end else if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMInput)and
     (not Application.Terminated) then begin
-    p:=InfinityVertex;
+    p:=cP3d_Inf_nf_Inf;
     Result:=IRInput;
   end else if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMCancel)and
     (not Application.Terminated) then begin
-    p:=InfinityVertex;
+    p:=cP3d_Inf_nf_Inf;
     Result:=IRCancel;
   end else
     Result:=IRAbort;
@@ -485,7 +485,7 @@ begin
   if CurrCmd.pcommandrunning<>nil then
     Result:=CurrCmd.pcommandrunning^.IData.GetPointValue
   else
-    Result:=NulPoint;
+    Result:=cP3d__0__0__0;
 end;
 
 function GDBcommandmanager.ChangeInputMode(incl,excl:TGetInputMode):TGetInputMode;

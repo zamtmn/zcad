@@ -237,7 +237,7 @@ begin
     LogMessage('  Mode: COPY - cloning objects to ConstructRoot');
     // Копирование: применяем матрицу к клонам в ConstructRoot, затем
     // переносим их в основное пространство модели
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix := OneMatrix;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix := cOneMatrix;
     p := drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
     if p <> nil then
       repeat
@@ -254,7 +254,7 @@ begin
   end else begin
     //LogMessage('  Mode: MOVE - transforming original objects');
     // Перемещение: очищаем ConstructRoot, трансформируем оригиналы
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix := OneMatrix;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix := cOneMatrix;
     zcFreeEntsInCurrentDrawingConstructRoot;
     zcTransformSelectedEntsInDrawingWithUndo('Scale2', scaleMatrix);
 

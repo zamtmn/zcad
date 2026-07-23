@@ -248,7 +248,7 @@ begin
   pobj^.Transform(minusd);
 
   //1) Делаем M единичной
-  m:=onematrix;
+  m:=cOneMatrix;
   //2) Сдвигаем в начало координат. Для этого выдираем из матрицы объекта элементы
   //отвечающие за смещение, и строим на них матрицу сдвига в начало координат - minus
   //и вторую, для сдвига обратно - plus.Умножаем М на матрицу сдвига в начало системы
@@ -262,7 +262,7 @@ begin
   //у нее элементы сдвига, потом инвертируем (или транспонируем, для матриц
   //вращения это одно и то же). M = M*Mobj_inv
   m2:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  PzePoint3d(@m2[3])^:=nulvertex;
+  PzePoint3d(@m2[3])^:=cV3d__0__0__0;
   matrixinvert(m2);
   m:=uzegeometry.MatrixMultiply(m,m2);
 
@@ -297,10 +297,10 @@ begin
 
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
   P_insert_in_OCS:=m.mtr.v[3].Slice.asPoint3d;
-  m.mtr.v[3].Slice:=nulvertex;
+  m.mtr.v[3].Slice:=cV3d__0__0__0;
   matrixinvert(m);
   P_insert_in_WCS:=VectorTransform3D(P_insert_in_OCS,m);
-  //m:=onematrix;
+  //m:=cOneMatrix;
   //PzePoint3d(@m.mtr[3])^:=P_insert_in_wCS;
   m:=CreateTranslationMatrix(P_insert_in_wCS.asVector);
   PGDBObjWithMatrix(pobj)^.ObjMatrix:=m;
@@ -321,7 +321,7 @@ var i: Integer;
 {
 pobj^.Transform(minusd);
 m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-PzePoint3d(@m[3])^:=nulvertex;
+PzePoint3d(@m[3])^:=cV3d__0__0__0;
 matrixinvert(m);
 pobj^.Transform(m);
 pobj^.Transform(rm);
@@ -332,14 +332,14 @@ PGDBObjWithMatrix(pobj)^.Format;
 begin
   l1:=PGDBObjWithLocalCS(pobj)^.Local;
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  pobj^.Transform({minusd}onematrix);
+  pobj^.Transform({minusd}cOneMatrix);
   l2:=PGDBObjWithLocalCS(pobj)^.Local;
   //m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  //PzePoint3d(@m[3])^:=nulvertex;
+  //PzePoint3d(@m[3])^:=cV3d__0__0__0;
   //matrixinvert(m);
   //pobj^.Transform(m);
   //pobj^.Transform(rm);
-  pobj^.Transform({plusd}onematrix);
+  pobj^.Transform({plusd}cOneMatrix);
   m2:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
   l2:=PGDBObjWithLocalCS(pobj)^.Local;
   //PGDBObjWithMatrix(pobj)^.ReCalcFromObjMatrix;
@@ -348,12 +348,12 @@ begin
   m2:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
   {pobj^.Transform(minusd);
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  tv:=vectortransform3d(nulvertex,m);
+  tv:=vectortransform3d(cV3d__0__0__0,m);
   oplus:=uzegeometry.CreateTranslationMatrix(tv);
   ominus:=uzegeometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
-  PzePoint3d(@m[3])^:=nulvertex;
+  PzePoint3d(@m[3])^:=cV3d__0__0__0;
   matrixinvert(m);
-  PGDBObjWithMatrix(pobj)^.ObjMatrix:=onematrix;
+  PGDBObjWithMatrix(pobj)^.ObjMatrix:=cOneMatrix;
   //pobj^.Transform(m);
   pobj^.Transform(oplus);
   pobj^.Transform(rm);
@@ -405,7 +405,7 @@ begin
           processobject(tdesc^.objaddr,minusd,plusd,rm,x,y,z);
           {tdesc^.objaddr^.Transform(minusd);
           m:=PGDBObjWithMatrix(tdesc^.objaddr)^.ObjMatrix;
-          PzePoint3d(@m[3])^:=nulvertex;
+          PzePoint3d(@m[3])^:=cV3d__0__0__0;
           matrixinvert(m);
           tdesc^.objaddr^.Transform(m);
           tdesc^.objaddr^.Transform(rm);
@@ -549,8 +549,8 @@ begin
   end
   else
   begin
-       result.LBN:=NulPoint;
-       result.RTF:=NulPoint;
+       result.LBN:=cP3d__0__0__0;
+       result.RTF:=cP3d__0__0__0;
   end;
 
 end;

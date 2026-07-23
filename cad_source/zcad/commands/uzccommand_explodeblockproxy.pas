@@ -174,7 +174,7 @@ end;
   Алгоритм повторяет подход команды Copy (uzccommand_copy.pas):
     1. Клон создаётся с исходным владельцем подсущности (определением
        блока или самим прокси-объектом). Это важно: GDBObjCircle.Clone
-       и другие Clone-методы после init имеют objmatrix=OneMatrix
+       и другие Clone-методы после init имеют objmatrix=cOneMatrix
        (мусорное значение, неотражающее фактическое положение подсущности
        внутри контейнера). Если сразу сменить владельца, теряется связь
        с корректным objmatrix источника.
@@ -210,7 +210,7 @@ begin
     через TransformAt(source, matrix). Это ключевое отличие от
     прямого transform(matrix): TransformAt использует objmatrix
     исходной подсущности, а не objmatrix клона (который после Clone
-    содержит OneMatrix или мусор). }
+    содержит cOneMatrix или мусор). }
   LocalTransform := ATransform;
   Cloned^.TransformAt(SubEntity, @LocalTransform);
   { Переносим клон в корень чертежа. После TransformAt его Local
@@ -295,7 +295,7 @@ begin
     scale/rotate, и подсущности имеют актуальные objmatrix в
     мировых координатах. }
   Proxy^.FormatEntity(Drawing^, DC);
-  IdentityTransform := OneMatrix;
+  IdentityTransform := cOneMatrix;
   SubEntity := Proxy^.ConstObjArray.beginiterate(IR);
   if SubEntity <> nil then
     repeat

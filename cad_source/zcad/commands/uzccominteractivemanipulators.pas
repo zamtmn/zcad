@@ -175,7 +175,7 @@ begin
     t_matrix:=MatrixMultiply(t_matrix,rotmatr);
     t_matrix:=MatrixMultiply(t_matrix,CreateTranslationMatrix(PInteractiveData^.Base.asVector));
 
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
     p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
     if p<>nil then
       repeat
@@ -225,7 +225,7 @@ begin
   if click then begin
     t_matrix:=CreateTranslationMatrix(Point.asVector);
     drawings.GetCurrentDWG^.ConstructObjRoot.transform(t_matrix);
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
     p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
     if p<>nil then
       repeat
@@ -340,12 +340,12 @@ begin
         DimData.P10InWCS,Point)
       of
       1:begin
-        vectorD:=XWCS;
-        vectorN:=YWCS;
+        vectorD:=cV3d__1__0__0;
+        vectorN:=cV3d__0__1__0;
       end;
       2:begin
-        vectorD:=YWCS;
-        vectorN:=XWCS;
+        vectorD:=cV3d__0__1__0;
+        vectorN:=cV3d__1__0__0;
       end;
     end;
     DimData.P10InWCS:=Point;

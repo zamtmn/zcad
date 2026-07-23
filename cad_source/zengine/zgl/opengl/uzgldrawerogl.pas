@@ -125,8 +125,8 @@ begin
   if FromOneMatrix {and (not LCS.notuseLCS)} then begin
     oglsm.myglLoadMatrixd(@mm);
     {LCS.notuseLCS:=true;
-    LCS.CurrentCamCSOffset:=NulVertex;
-    LCS.CurrentCamCSOffsetS:=NulVertex3S;}
+    LCS.CurrentCamCSOffset:=cV3d__0__0__0;
+    LCS.CurrentCamCSOffsetS:=cV3s__0__0__0;}
   end;
   oglsm.myglMultMatrixD(Transform)
 end;
@@ -136,8 +136,8 @@ begin
   if FromOneMatrix and (not LCS.notuseLCS) then begin
     oglsm.myglLoadMatrixd(@mm);
     {LCS.notuseLCS:=true;
-    LCS.CurrentCamCSOffset:=NulVertex;
-    LCS.CurrentCamCSOffsetS:=NulVertex3S;}
+    LCS.CurrentCamCSOffset:=cV3d__0__0__0;
+    LCS.CurrentCamCSOffsetS:=cV3s__0__0__0;}
   end;
   oglsm.myglMultMatrixF(Transform);
 end;
@@ -149,8 +149,8 @@ end;
 procedure TZGLOpenGLDrawer.DisableLCS(var matrixs:tmatrixs);
 begin
   LCS.notuseLCS:=true;
-  LCS.CurrentCamCSOffset:=NulPoint;
-  LCS.CurrentCamCSOffsetS:=NulPoint3S;
+  LCS.CurrentCamCSOffset:=cP3d__0__0__0;
+  LCS.CurrentCamCSOffsetS:=cP3s__0__0__0;
 end;
 procedure TZGLOpenGLDrawer.EnableLCS(var matrixs:tmatrixs);
 begin

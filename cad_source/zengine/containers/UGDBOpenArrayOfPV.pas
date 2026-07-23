@@ -88,8 +88,8 @@ begin
   pobj:=beginiterate(ir);
   if pobj=nil then
                   begin
-                       result.LBN:=NulPoint;
-                       result.RTF:=NulPoint;
+                       result.LBN:=cP3d__0__0__0;
+                       result.RTF:=cP3d__0__0__0;
                   end
               else
                   begin
@@ -106,8 +106,8 @@ function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActuality):TBoundingBox
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
-     result.LBN:=NulPoint;
-     result.RTF:=NulPoint;
+     result.LBN:=cP3d__0__0__0;
+     result.RTF:=cP3d__0__0__0;
 
      pobj:=beginiterate(ir);
      if pobj<>nil then
@@ -136,8 +136,8 @@ begin
   pobj:=beginiterate(ir);
   if pobj=nil then
                   begin
-                       result.LBN:=NulPoint;
-                       result.RTF:=NulPoint;
+                       result.LBN:=cP3d__0__0__0;
+                       result.RTF:=cP3d__0__0__0;
                   end
               else
                   begin
@@ -161,8 +161,8 @@ begin
   pobj:=beginiterate(ir);
   if pobj=nil then
                   begin
-                       result.LBN:=NulPoint;
-                       result.RTF:=NulPoint;
+                       result.LBN:=cP3d__0__0__0;
+                       result.RTF:=cP3d__0__0__0;
                   end
               else
                   begin
@@ -186,13 +186,13 @@ var pobj:pGDBObjEntity;
 begin
   pobj:=beginiterate(ir);
 
-  result.LBN:=NulPoint;
-  result.RTF:=MinusOneVertex;
+  result.LBN:=cP3d__0__0__0;
+  result.RTF:=cP3d_m1_m1_m1;
 
   if pobj=nil then
                   begin
-                       {result.LBN:=NulVertex;
-                       result.RTF:=MinusOneVertex;}
+                       {result.LBN:=cV3d__0__0__0;
+                       result.RTF:=cV3d_m1_m1_m1;}
                   end
               else
                   begin

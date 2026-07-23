@@ -69,7 +69,7 @@ begin
 end;
 function GDBObjBlockdef.GetMatrix;
 begin
-     result:=@OneMatrix;
+     result:=@cOneMatrix;
 end;
 destructor GDBObjBlockdef.done;
 begin
@@ -123,7 +123,7 @@ begin
      Pointer(VarFromFile):=nil;
      Formated:=false;
      ObjArray.initnul;
-     Base:=NulPoint;
+     Base:=cP3d__0__0__0;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 constructor GDBObjBlockdef.init;
@@ -134,7 +134,7 @@ begin
      Formated:=false;
      //ObjArray.init(10000);
      Name:=_name;
-     Base:=NulPoint;
+     Base:=cP3d__0__0__0;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 class function GDBObjBlockdef.GetDXFIOFeatures:TDXFEntIODataManager;

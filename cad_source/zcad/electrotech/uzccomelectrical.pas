@@ -245,7 +245,7 @@ begin
           if obozn<>'' then
           begin
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,CreateVertex(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,RightAngle,jsbc,1,1);
+          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,CreateVertex(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,cRightAngle,jsbc,1,1);
           drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(ptext^);
           ptext^.FormatEntity(drawings.GetCurrentDWG^,dc);
           end;
@@ -269,15 +269,12 @@ begin
           v:=p1-p2;
           v.Normalize;
           if IsNearToZ(v)then
-            v:=VectorDot(YWCS,v)
+            v:=VectorDot(cV3d__0__1__0,v)
           else
-            v:=VectorDot(ZWCS,v);
-          if {v.x*}v.y<0 then
+            v:=VectorDot(cV3d__0__0__1,v);
+          if v.y<0 then
                           begin
-                               {a:=v.x;
-                               v.x:=v.y;
-                               v.y:=a;}
-                               v:={uzegeometry.VertexMulOnSc}(v*-1);
+                               v:=-v;
                                a:=vertexangle(PzePoint2d(@p1)^,PzePoint2d(@p2)^)*180/pi;
                           end
                           else
@@ -685,7 +682,7 @@ begin
     pu:=units.findunit(GetSupportPaths,InterfaceTranslate,'uentrepresentation');
     //эта команда работает после указания пользователем точки вставки
     //смещение первого вставляемого элемента nulvertex
-    currentcoord:=NulPoint;
+    currentcoord:=cP3d__0__0__0;
     //побежали по массиву сортированных имен
     for i:=0 to dna.Size-1 do begin
       dn:=dna[i];
@@ -720,9 +717,9 @@ begin
 
       //выставляем клону точку вставки, ориентируем по осям, вращаем
       pnevdev.Local.P_insert:=currentcoord;
-      pnevdev.Local.Basis.oz:=xy_Z_Vertex.asVector;
-      pnevdev.Local.Basis.ox:=_X_yzVertex.asVector;
-      pnevdev.Local.Basis.oy:=x_Y_zVertex.asVector;
+      pnevdev.Local.Basis.oz:=cV3d__0__0__1;
+      pnevdev.Local.Basis.ox:=cV3d__1__0__0;
+      pnevdev.Local.Basis.oy:=cV3d__0__1__0;
       pnevdev.rotate:=0;
 
       //форматируем клон
@@ -777,7 +774,7 @@ var
     entvarext,delvarext:TVariablesExtender;
     extensionssave:pointer;
 begin
-     currentcoord:=NulPoint;
+     currentcoord:=cP3d__0__0__0;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      drawings.GetCurrentDWG^.AddBlockFromDBIfNeed('KIP_LUGTABLEELEMENT');
      PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef('KIP_LUGTABLEELEMENT');
@@ -831,9 +828,9 @@ begin
 
 
             pnevdev.Local.P_insert:=currentcoord;
-            pnevdev.Local.Basis.oz:=xy_Z_Vertex.asVector;
-            pnevdev.Local.Basis.ox:=_X_yzVertex.asVector;
-            pnevdev.Local.Basis.oy:=x_Y_zVertex.asVector;
+            pnevdev.Local.Basis.oz:=cV3d__0__0__1;
+            pnevdev.Local.Basis.ox:=cV3d__1__0__0;
+            pnevdev.Local.Basis.oy:=cV3d__0__1__0;
             pnevdev.rotate:=0;
 
             //pnevdev^.BuildGeometry(drawings.GetCurrentDWG^);

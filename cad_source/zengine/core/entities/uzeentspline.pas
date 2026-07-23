@@ -194,7 +194,7 @@ begin
 
     //попытка расчета масштаба при невыставленых матрицах вида, при загрузке dxf
     //по идее наверно надо матрицы выставлять, а не тут заниматься херней
-    tv:=VectorTransform3D(OneVertex,{m}getmatrix^);
+    tv:=VectorTransform3D(cP3d__1__1__1,{m}getmatrix^);
     tv:=VectorTransform3D(tv,DC.DrawingContext.matrixs.pmodelMatrix^);
     tv:=VectorTransform3D(tv,DC.DrawingContext.matrixs.pprojMatrix^);
 
@@ -223,7 +223,7 @@ begin
       Representation.CreateLine(dc,self,vp,getmatrix^,VertexArrayInOCS.getFirst,
         VertexArrayInOCS.getLast)
     else
-      Representation.CreatePolyLine(dc,self,vp,OneMatrix,AproxPointInWCS.getPFirst[0..AproxPointInWCS.GetLastIndex],False,False);
+      Representation.CreatePolyLine(dc,self,vp,cOneMatrix,AproxPointInWCS.getPFirst[0..AproxPointInWCS.GetLastIndex],False,False);
   end;
   calcbb(dc);
   if assigned(EntExtensions) then
@@ -374,7 +374,7 @@ var
   i:integer;
 begin
   Closed:=False;
-  tmpVertex:=NulPoint;
+  tmpVertex:=cP3d__0__0__0;
   tmpKnot:=0;
   tmpFlag:=0;
   pt:=TPointsType.PTControl;

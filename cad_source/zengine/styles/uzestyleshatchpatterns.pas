@@ -33,7 +33,8 @@ type
     fAngle:Double;
     //fDir:GDBVertex2D;
 
-    Base,Offset:TzePoint2d;
+    Base:TzePoint2d;
+    Offset:TzeVector2d;
 
     //procedure setAngle(AAngle:Double);
 
@@ -65,8 +66,8 @@ constructor TPatStrokesArray.init(m:Integer);
 begin
   inherited;
   Angle:=0;
-  Base:=NulVertex2D;
-  Offset:=YWCS2D;
+  Base:=cP2d__0__0;
+  Offset:=cV2d__0__1;
 end;
 function TPatStrokesArray.CopyTo(var dest:GZVector<Double>):Integer;
 begin

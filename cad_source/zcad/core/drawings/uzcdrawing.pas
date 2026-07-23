@@ -149,7 +149,7 @@ begin
   begin
        comit;
        rtmod.wc:=rtmod.point.worldcoord;
-       rtmod.dist:=nulpoint;
+       rtmod.dist:=cP3d__0__0__0;
        StoreUndoData(rtmod);
   end;
 end;

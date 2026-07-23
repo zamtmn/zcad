@@ -237,7 +237,7 @@ initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsInitializeLMId);
   BIProp.Blocks.Enums.init(100);
-  BIProp.Scale:=OneVertex.asVector;
+  BIProp.Scale:=cV3d__1__1__1;
   BIProp.Rotation:=0;
   if SysUnit<>nil then begin
     SysUnit^.RegisterType(TypeInfo(TBlockInsert));

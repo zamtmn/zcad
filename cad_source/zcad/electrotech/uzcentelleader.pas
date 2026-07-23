@@ -245,7 +245,7 @@ begin
          //pvc^.bp.ListPos.Owner:=@gdbtrash;
          p:=pv^.bp.ListPos.Owner;
          pv^.bp.ListPos.Owner:=@gdbtrash;
-         self.ObjMatrix:=onematrix;
+         self.ObjMatrix:=cOneMatrix;
          if pvc^.IsHaveLCS then
                                pvc^.Formatentity(drawing,dc);
          pvc^.transform(m4);
@@ -576,7 +576,7 @@ begin
     end;
 
   end else
-    tv:=NulPoint;
+    tv:=cP3d__0__0__0;
   //MarkLine.done;
   //MarkLine.init(@self,vp.Layer,vp.LineWeight,VertexSub(MainLine.CoordInOCS.lBegin,tv),VertexAdd(MainLine.CoordInOCS.lBegin,tv));
   CopyVPto(MarkLine);
@@ -898,7 +898,7 @@ begin
      ShowTable:=true;
      ShowHeader:=true;
      //vp.ID:=GDBElLeaderID;
-     MainLine.init(@self,vp.Layer,vp.LineWeight,{uzegeometry.VertexMulOnSc}(onevertex*-10),NulPoint);
+     MainLine.init(@self,vp.Layer,vp.LineWeight,{uzegeometry.VertexMulOnSc}(cP3d__1__1__1*-10),cP3d__0__0__0);
      //MainLine.Format;
      tv:=vectordot(mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin,Local.basis.OZ).asPoint3d;
      if not IsVectorNul(tv.asVector) then

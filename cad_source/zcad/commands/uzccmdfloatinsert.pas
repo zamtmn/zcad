@@ -140,7 +140,7 @@ begin
 
     //CopyToClipboard;
 
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
     //commandend;
     if DoEnd(context,tv) then
       commandmanager.executecommandend;

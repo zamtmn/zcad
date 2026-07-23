@@ -81,7 +81,7 @@ begin
 
   dispmatr:=uzegeometry.CreateTranslationMatrix(-t3dp.asVector);
 
-  //rotmatr:=onematrix;
+  //rotmatr:=cOneMatrix;
   //rotmatr.mtr[0].v[0]:=a;
   //rotmatr.mtr[1].v[1]:=a;
   //rotmatr.mtr[2].v[2]:=a;

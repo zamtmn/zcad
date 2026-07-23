@@ -106,7 +106,7 @@ var
 begin
   dir:=CoordInWCS.lEnd-CoordInWCS.lBegin;
   processaxis(posr,dir.asPoint3d);
-  tv:=uzegeometry.vectordot(dir,zwcs);
+  tv:=uzegeometry.vectordot(dir,cV3d__0__0__1);
   processaxis(posr,tv.asPoint3d);
 end;
 
@@ -194,8 +194,8 @@ constructor GDBObjLine.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  CoordInOCS.lBegin:=NulPoint;
-  CoordInOCS.lEnd:=NulPoint;
+  CoordInOCS.lBegin:=cP3d__0__0__0;
+  CoordInOCS.lEnd:=cP3d__0__0__0;
 end;
 
 constructor GDBObjLine.init;

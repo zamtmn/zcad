@@ -106,7 +106,7 @@ var
   m:TzeTypedMatrix4d;
   scl:TzeVector3d;
 begin
-  m:=onematrix;
+  m:=cOneMatrix;
   if rtmod.point.pointtype=os_point then begin
     if rtmod.point.PDrawable=nil then
       Local:=GetPointInOCSByBasis(objmatrix.mtr.v[0].Slice,
@@ -252,7 +252,7 @@ begin
   inherited init(own,layeraddres,LW);
   POINTER(Name):=nil;
   bp.ListPos.Owner:=own;
-  scale:=ScaleOne;
+  scale:=cV3d__1__1__1;
   rotate:=0;
   index:=-1;
   pattrib:=nil;
@@ -263,7 +263,7 @@ begin
   inherited initnul;
   POINTER(Name):=nil;
   bp.ListPos.Owner:=nil;
-  scale:=ScaleOne;
+  scale:=cV3d__1__1__1;
   rotate:=0;
   index:=-1;
   Pointer(Name):=nil;

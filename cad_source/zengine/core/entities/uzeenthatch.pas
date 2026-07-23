@@ -124,10 +124,10 @@ end;
 procedure GDBObjHatch.createfield;
 begin
   inherited;
-  Outbound[0]:=NulPoint;
-  Outbound[1]:=NulPoint;
-  Outbound[2]:=NulPoint;
-  Outbound[3]:=NulPoint;
+  Outbound[0]:=cP3d__0__0__0;
+  Outbound[1]:=cP3d__0__0__0;
+  Outbound[2]:=cP3d__0__0__0;
+  Outbound[3]:=cP3d__0__0__0;
 end;
 
 function GDBObjHatch.GetObjTypeName;
@@ -161,23 +161,23 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
-  Origin:=NulPoint;
+  Origin:=cP3d__0__0__0;
 end;
 
 constructor GDBObjHatch.init;
 begin
   inherited init(own,layeraddres,lw);
   Local.p_insert:=p;
-  Local.basis.ox:=XWCS;
-  Local.basis.oy:=YWCS;
-  Local.basis.oz:=ZWCS;
+  Local.basis.ox:=cV3d__1__0__0;
+  Local.basis.oy:=cV3d__0__1__0;
+  Local.basis.oz:=cV3d__0__0__1;
   Vertex3D_in_WCS_Array.init(4);
   Path.init(10);
   PPattern:=nil;
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
-  Origin:=NulPoint;
+  Origin:=cP3d__0__0__0;
 end;
 
 function GDBObjHatch.GetObjType;

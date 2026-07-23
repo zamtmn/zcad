@@ -215,7 +215,7 @@ begin
         pgfe2:=pgfe3;
         if getlinktype(mainlinkline)=LT_OnlyLink then
         begin
-             pa.PushBackData(InfinityVertex);
+             pa.PushBackData(cP3d_Inf_nf_Inf);
         end;
         pa.PushBackData(pgfe2.point);
   end;
@@ -246,7 +246,7 @@ begin
 end;
 constructor grafelement.initnul;
 begin
-     point:=NulPoint;
+     point:=cP3d__0__0__0;
      link.init(100);
      linkcount:=0;
      connected:=0;
@@ -424,7 +424,7 @@ begin
     for i := 0 to count - 1 do
     begin
       tgf:=pgrafelement(self.getDataMutable(i));
-      tgf^.point:=nulvertex;
+      tgf^.point:=cV3d__0__0__0;
       tgf^.link.Count:=0;
       tgf^.linkcount:=0;
       tgf^.connected:=0;

@@ -545,7 +545,7 @@ begin
   if bp.ListPos.owner<>nil then
     local.p_insert:=bp.ListPos.owner^.GetMatrix^.mtr.v[3].Slice.asPoint3d
   else
-    local.P_insert:=NulPoint;
+    local.P_insert:=cP3d__0__0__0;
 
   byt:=rdr.ParseInteger;
   while byt<>0 do begin

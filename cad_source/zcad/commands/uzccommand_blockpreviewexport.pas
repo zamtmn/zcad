@@ -96,8 +96,8 @@ begin
     pb^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=BlockName;
     zcSetEntPropFromCurrentDrawingProp(pb);
-    pb^.Local.p_insert:=NulPoint;
-    pb^.scale:=ScaleOne;
+    pb^.Local.p_insert:=cP3d__0__0__0;
+    pb^.scale:=cV3d__1__1__1;
     pb^.CalcObjMatrix;
     pb^.setrot(0);
     tb:=pb^.FromDXFPostProcessBeforeAdd(nil,cdwg^);

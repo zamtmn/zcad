@@ -128,7 +128,8 @@ type
 var
   sysvarSysDWG_CodePage:TZCCodePage=ZCCP1252;
 
-procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint3d);
+procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint3d);overload;
+procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzeVector3d);overload;
 procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzeVector3d);
 procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint2d);
 procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
@@ -373,7 +374,7 @@ begin
      result:=inttostr(DXFCode);
 end;
 
-procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint3d);
+procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzeVector3d);
 var s:String;
 begin
      s:=inttostr(dxfcode);
@@ -397,6 +398,12 @@ begin
      f.TXTAddStringEOL(s);
      //WriteString_EOL(outfile,s);
 end;
+
+procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint3d);
+begin
+  dxfvertexout(f,dxfcode,v.asVector);
+end;
+
 procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzeVector3d);
 var s:String;
 begin

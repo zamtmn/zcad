@@ -95,7 +95,7 @@ begin
     if commandmanager.Get3DPoint('',p1)=IRNormal then begin
       RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
       t_matrix:=CreateTranslationMatrix(-p1.asVector);
-      drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=cOneMatrix;
       p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
       if p<>nil then
         repeat

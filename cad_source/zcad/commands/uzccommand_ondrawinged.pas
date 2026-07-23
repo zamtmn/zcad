@@ -158,13 +158,13 @@ begin
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
             ydir:=vectordot(PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ,xdir).Normalized
           else
-            ydir:=uzegeometry.vectordot(ZWCS,xdir).Normalized;
+            ydir:=uzegeometry.vectordot(cV3d__0__0__1,xdir).Normalized;
           tv:=wc;
           //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
           dispmatr:=uzegeometry.CreateTranslationMatrix(
             CreateVector(-tv.x,-tv.y,-tv.z));
 
-          //rotmatr:=onematrix;
+          //rotmatr:=cOneMatrix;
           //PzePoint3d(@rotmatr.mtr[0])^:=xdir;
           //PzePoint3d(@rotmatr.mtr[1])^:=ydir;
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
@@ -202,19 +202,17 @@ begin
         // GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
         if not uzegeometry.IsVectorNul(xdir) then begin
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-            ydir:=
-              {normalizevertex}(uzegeometry.vectordot(PGDBObjWithLocalCS(
+            ydir:=(vectordot(PGDBObjWithLocalCS(
               osp^.PGDBObject)^.Local.basis.OZ,xdir)).Normalized
           else
-            ydir:=
-              {normalizevertex}(uzegeometry.vectordot(ZWCS,xdir)).Normalized;
+            ydir:=vectordot(cV3d__0__0__1,xdir).Normalized;
 
           tv:=wc;
           //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
           dispmatr:=uzegeometry.CreateTranslationMatrix(
             {CreateVector(-tv.x,-tv.y,-tv.z)}(-tv).asVector);
 
-          //rotmatr:=onematrix;
+          //rotmatr:=cOneMatrix;
           //PzePoint3d(@rotmatr.mtr[0])^:=xdir;
           //PzePoint3d(@rotmatr.mtr[1])^:=ydir;
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
@@ -229,7 +227,7 @@ begin
 
            dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
 
-           rotmatr:=onematrix;
+           rotmatr:=cOneMatrix;
            PzePoint3d(@rotmatr[0])^:=xdir;
            PzePoint3d(@rotmatr[1])^:=ydir;
            PzePoint3d(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ;}

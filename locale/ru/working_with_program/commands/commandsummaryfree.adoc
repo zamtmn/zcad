@@ -1,0 +1,8 @@
+:cmdcommand:
+:cmdicon:
+:cmdshortcuts:
+:cmdmenu:
+:cmdoperands:
+:predselect:
+:cmdexample:
+:cmdexample2:

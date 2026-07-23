@@ -1,0 +1,15 @@
+
+[[extdrAdd_com]]
+#### extdrAdd
+
+:cmdcommand: extdrAdd
+:cmdoperands: Обязательный. Имя расширения
+:predselect: Требуется
+:cmdexample: extdrAdd(extdrVariables)
+
+include::../../_elements/commandsummary.adoc[]
+
+Привязка указанного расширения (см. <<ent_extenders>>) к выбраным примитивам. В случае к выбраному примитиву уже привязано данное расширение,
+он будет проигнорирован
+
+include::commandsummaryfree.adoc[]

@@ -1,0 +1,11 @@
+
+#### SaveLayout
+
+:cmdcommand: SaveLayout
+:cmdmenu: Настройки > Сохранить разбивку окон по умолчанию
+
+include::../../_elements/commandsummary.adoc[]
+
+Соxранить текущую разбивку окон как разбивку по умолчанию в файл [.filepath]#$(ZCADPath)/components/defaultlayout.xml#
+
+include::commandsummaryfree.adoc[]

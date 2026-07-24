@@ -152,7 +152,7 @@ uses
 function ProxyToLocalPoint(const Context: TProxySubEntityContext;
   const Pt: TzePoint3d): TzePoint3d;
 begin
-  Result := VertexSub(Pt, Context.GripOffset);
+  Result := {VertexSub}(Pt-Context.GripOffset).asPoint3d;
 end;
 
 function ResolveLineWeight(const Context: TProxySubEntityContext;

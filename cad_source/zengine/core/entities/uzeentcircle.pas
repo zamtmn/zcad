@@ -129,11 +129,12 @@ end;
 
 procedure GDBObjCircle.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var
-  tv,dir:TzePoint3d;
+  tv:TzePoint3d;
+  dir:TzeVector3d;
 begin
-  dir:=VertexSub(P_insert_in_WCS,posr.worldcoord);
-  processaxis(posr,dir);
-  tv:=vectordot(dir.asVector,cV3d__0__0__1).asPoint3d;
+  dir:={VertexSub}(P_insert_in_WCS-posr.worldcoord);
+  processaxis(posr,dir.asPoint3d);
+  tv:=vectordot(dir,cV3d__0__0__1).asPoint3d;
   processaxis(posr,tv);
 end;
 

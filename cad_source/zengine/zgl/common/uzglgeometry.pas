@@ -29,11 +29,13 @@ type
   PZGLGraphix=^ZGLGraphix;
   PZPolySegmentData=^ZPolySegmentData;
   ZPolySegmentData= record
-    startpoint,endpoint,dir:TzePoint3d;
+    startpoint,endpoint:TzePoint3d;
+    dir:TzeVector3d;
     length,nlength,naccumlength,accumlength:Double;
   end;
   ZSegmentator=object(GZVector<ZPolySegmentData>)
-    dir,cp:TzePoint3d;
+    dir:TzeVector3d;
+    cp:TzePoint3d;
     cdp,angle:Double;
     pcurrsegment:PZPolySegmentData;
     ir:itrec;
@@ -330,7 +332,7 @@ function CalcSegment(const startpoint,endpoint:TzePoint3d;out segment:ZPolySegme
 begin
      segment.startpoint:=startpoint;
      segment.endpoint:=endpoint;
-     segment.dir:=VertexSub(endpoint,startpoint);
+     segment.dir:={VertexSub}(endpoint-startpoint);
      segment.length:={Vertexlength}startpoint.LengthTo(endpoint);
      segment.accumlength:=prevlength+segment.length;
      segment.naccumlength:=segment.accumlength;
@@ -664,7 +666,8 @@ end;
 procedure ZSegmentator.draw(var rc:TDrawContext;length:Double;paint:boolean;var dr:TLLDrawResult);
 var
   tcdp:Double;
-  oldcp,tv:TzePoint3d;
+  oldcp:TzePoint3d;
+  tv:TzeVector3d;
 begin
   if cdp<1 then begin
     tcdp:=length+cdp;
@@ -676,7 +679,7 @@ begin
       if tcdp<=(pcurrsegment.naccumlength+eps) then begin
         oldcp:=cp;
         tv:={VertexMulOnSc}(dir*(length/pcurrsegment.nlength));
-        cp:=cp+tv.asVector;
+        cp:=cp+tv;
         if paint then
           self.PGeom.DrawLineWithoutLT(rc,oldcp,cp,dr);
         cdp:=tcdp;

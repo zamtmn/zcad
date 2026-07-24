@@ -174,8 +174,8 @@ begin
             if PGDBObjDevice(pv).Name='FIX' then begin
               pdesc.pointtype:=os_point;
               pdesc.PDrawable:=pv;
-              pdesc.dcoord:=vertexsub(PGDBObjDevice(pv).P_insert_in_WCS,
-                P_insert_in_WCS);
+              pdesc.dcoord:={vertexsub}(PGDBObjDevice(pv).P_insert_in_WCS-
+                P_insert_in_WCS).asPoint3d;
               pdesc.worldcoord:=PGDBObjDevice(pv).P_insert_in_WCS;
               PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
             end;

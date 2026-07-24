@@ -503,7 +503,8 @@ end;
 function GDBObjLine.getintersect;
 var
   t1,t2,dist:double;
-  l1b,l1e,l2b,l2e,tv1,tv2,dir,dir2:TzePoint3d;
+  l1b,l1e,l2b,l2e,tv1,tv2:TzePoint3d;
+  dir,dir2:TzeVector3d;
 begin
   if (onlygetsnapcount=1)or(pobj^.getobjtype<>gdblineid) then
     exit(False);
@@ -520,9 +521,8 @@ begin
         ((SnapMode and osm_intersection)<>0) then begin
         if line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2) then
         begin
-          dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
-          dir2:=VertexSub(pgdbobjline(pobj)^.CoordInWCS.lEnd,pgdbobjline(
-            pobj)^.CoordInWCS.lBegin);
+          dir:={VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin);
+          dir2:={VertexSub}(pgdbobjline(pobj)^.CoordInWCS.lEnd-pgdbobjline(pobj)^.CoordInWCS.lBegin);
           tv1.x:=CoordInWCS.lbegin.x+dir.x*t1;
           tv1.y:=CoordInWCS.lbegin.y+dir.y*t1;
           tv1.z:=CoordInWCS.lbegin.z+dir.z*t1;
@@ -621,18 +621,19 @@ end;
 
 procedure GDBObjLine.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  tv,tv2:TzePoint3d;
+  tv:TzeVector3d;
+  tv2:TzePoint3d;
 begin
   if rtmod.point.pointtype=os_begin then begin
     CoordInOCS.lbegin:=rtmod.point.worldcoord+rtmod.dist.asVector;
   end else if rtmod.point.pointtype=os_end then begin
     CoordInOCS.lend:=rtmod.point.worldcoord+rtmod.dist.asVector;
   end else if rtmod.point.pointtype=os_midle then begin
-    tv:=uzegeometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
+    tv:={uzegeometry.VertexSub}(CoordInOCS.lend-CoordInOCS.lbegin);
     tv:={uzegeometry.VertexMulOnSc}(tv*0.5);
     tv2:=rtmod.point.worldcoord+rtmod.dist.asVector;
-    CoordInOCS.lbegin:=VertexSub(tv2,tv);
-    CoordInOCS.lend:=tv2+tv.asVector;
+    CoordInOCS.lbegin:={VertexSub}(tv2-tv);
+    CoordInOCS.lend:=tv2+tv;
   end;
 end;
 

@@ -133,7 +133,7 @@ begin
       end;
 
       if found>0 then begin
-        Result:=vertexsub(ptv^,ppredtv^);
+        Result:={vertexsub}(ptv^-ppredtv^).asPoint3d;
         Result.Normalize;
         exit;
         Dec(found);
@@ -440,7 +440,7 @@ var
   i,ie:integer;
   q3d:PGDBQuad3d;
   plw:PSegmentParams;
-  v:TzePoint3d;
+  v:TzeVector3d;
   simplydraw:boolean;
 begin
 
@@ -448,8 +448,8 @@ begin
   exit;
 
   if dc.lod=LODCalculatedDetail then begin
-    v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
-    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v.asVector),49);
+    v:={uzegeometry.VertexSub}(vp.BoundingBox.RTF-vp.BoundingBox.LBN);
+    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49);
   end else
     simplydraw:=dc.lod=LODLowDetail;
 

@@ -113,8 +113,8 @@ begin
         objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,rtmod.point.worldcoord+rtmod.dist.asVector,scl)
     else
       Local:=GetPointInOCSByBasis(objmatrix.mtr.v[0].Slice,
-        objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,VertexSub(
-        rtmod.point.worldcoord+rtmod.dist.asVector,rtmod.point.dcoord),scl);
+        objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,{VertexSub}(
+        rtmod.point.worldcoord+rtmod.dist.asVector-rtmod.point.dcoord).asPoint3d,scl);
   end;
 end;
 

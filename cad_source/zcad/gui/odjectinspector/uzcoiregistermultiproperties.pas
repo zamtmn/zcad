@@ -89,15 +89,15 @@ end;
 
 procedure DoubleAngleEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-    v1,v2:TzePoint3d;
+    v1,v2:TzeVector3d;
     l1:Double;
 begin
-     V1:=PzePoint3d(ChangedData.PGetDataInEtity)^;
+     V1:=PzeVector3d(ChangedData.PGetDataInEtity)^;
      inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
-     V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
-     v1:=VertexSub(v2,v1);
+     V2:=PzeVector3d(ChangedData.PGetDataInEtity)^;
+     v1:={VertexSub}(v2-v1);
      v1.Normalize;
-     l1:=scalardot(v1.asVector,cV3d__1__0__0);
+     l1:=scalardot(v1,cV3d__1__0__0);
      l1:=arccos(l1){*180/pi};
      if v1.y<-eps then l1:={360}2*pi-l1;
      ChangedData.PGetDataInEtity:=@l1;
@@ -329,15 +329,15 @@ begin
 end;
 procedure DoubleLengthEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-  v1,v2:TzePoint3d;
+  v1,v2:TzeVector3d;
   l1:Double;
   cp:UCmdChgField;
 begin
-  V1:=PzePoint3d(ChangedData.PSetDataInEtity)^;
+  V1:=PzeVector3d(ChangedData.PSetDataInEtity)^;
   inc(ChangedData.PSetDataInEtity,sizeof(TzePoint3d));
-  V2:=PzePoint3d(ChangedData.PSetDataInEtity)^;
+  V2:=PzeVector3d(ChangedData.PSetDataInEtity)^;
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
-  V2:=VertexSub(V2,V1);
+  V2:={VertexSub}(V2-V1);
   V2.Normalize;
   V2:={VertexMulOnSc}(V2*l1);
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
@@ -348,7 +348,7 @@ begin
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-  PzePoint3d(ChangedData.PSetDataInEtity)^:=v1+v2.asVector;
+  PzeVector3d(ChangedData.PSetDataInEtity)^:=v1+v2;
 end;
 procedure DoubleAngleEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var

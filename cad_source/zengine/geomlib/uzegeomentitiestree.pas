@@ -123,10 +123,10 @@ TSMAccumulation:begin
 end;
 class procedure TZEntsManipulator.CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TGeomEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
 var
-   v:TzePoint3d;
+   v:TzeVector3d;
    axis:integer;
 begin
-   v:=VertexSub(NodeBB.RTF,NodeBB.LBN);
+   v:={VertexSub}(NodeBB.RTF-NodeBB.LBN);
    if v.x>v.y then
               begin
                    if v.x>v.z then

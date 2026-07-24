@@ -117,7 +117,7 @@ begin
       Local.p_insert:=vectortransform3d(rtmod.point.worldcoord+rtmod.dist.asVector,m)
     else
       Local.p_insert:=vectortransform3d(
-        VertexSub(rtmod.point.worldcoord+rtmod.dist.asVector,rtmod.point.dcoord),m);
+        {VertexSub}(rtmod.point.worldcoord+rtmod.dist.asVector-rtmod.point.dcoord).aspoint3d,m);
   end;
 end;
 
@@ -135,8 +135,7 @@ begin
       pdesc.worldcoord:=PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS;
       ProjectProc(pdesc.worldcoord,tv);
       pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
-      pdesc.dcoord:=vertexsub(PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS,
-        P_insert_in_WCS);
+      pdesc.dcoord:={vertexsub}(PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS-P_insert_in_WCS).asPoint3d;
     end;
 
   end;

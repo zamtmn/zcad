@@ -159,7 +159,7 @@ var
   // Оси новой локальной СК (Arbitrary Axis Algorithm)
   newOcsX, newOcsY: TzeVector3d;
   // Нормализованные направления от нового центра к точкам дуги
-  dirToStart, dirToEnd: TzePoint3d;
+  dirToStart, dirToEnd: TzeVector3d;
   // Определитель матрицы трансформации (знак указывает на зеркальность)
   det: double;
 begin
@@ -208,16 +208,16 @@ begin
   newCenter := Local.P_insert;
 
   // Шаг 7. Вычисляем нормализованные направления от нового центра к точкам дуги
-  dirToStart := VertexSub(newStartPoint, newCenter).Normalized;
-  dirToEnd   := VertexSub(newEndPoint, newCenter).Normalized;
+  dirToStart := {VertexSub}(newStartPoint-newCenter).Normalized;
+  dirToEnd   := {VertexSub}(newEndPoint-newCenter).Normalized;
 
   // Шаг 8. Проецируем направления на оси локальной СК и вычисляем новые углы.
   // scalardot — скалярное произведение; оно даёт косинус и синус угла в плоскости дуги
-  StartAngle := ArcTan2(scalardot(dirToStart.asVector, newOcsY), scalardot(dirToStart.asVector, newOcsX));
+  StartAngle := ArcTan2(scalardot(dirToStart, newOcsY), scalardot(dirToStart, newOcsX));
   if StartAngle < 0 then
     StartAngle := 2 * pi + StartAngle;
 
-  EndAngle := ArcTan2(scalardot(dirToEnd.asVector, newOcsY), scalardot(dirToEnd.asVector, newOcsX));
+  EndAngle := ArcTan2(scalardot(dirToEnd, newOcsY), scalardot(dirToEnd, newOcsX));
   if EndAngle < 0 then
     EndAngle := 2 * pi + EndAngle;
 

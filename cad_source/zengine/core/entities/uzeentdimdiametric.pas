@@ -139,10 +139,10 @@ begin
   dirv:={vertexsub}(tv-center);
   dirv.Normalize;
 
-  Result:=VertexDmorph(center,dirv.asPoint3d,d);
-  DimData.P15InWCS:=VertexDmorph(center,dirv.asPoint3d,-d);
+  Result:=center+dirv*d;
+  DimData.P15InWCS:=center-dirv*d;
   d:=center.LengthTo(DimData.P11InOCS);
-  DimData.P11InOCS:=VertexDmorph(center,dirv.asPoint3d,-d);
+  DimData.P11InOCS:=center-dirv*d;
 end;
 
 function GDBObjDiametricDimension.P15ChangeTo(const tv:TzePoint3d):TzePoint3d;
@@ -156,10 +156,10 @@ begin
   dirv:={vertexsub}(tv-center);
   dirv.Normalize;
 
-  Result:=VertexDmorph(center,dirv.asPoint3d,d);
-  DimData.P10InWCS:=VertexDmorph(center,dirv.asPoint3d,-d);
+  Result:=center+dirv*d;
+  DimData.P10InWCS:=center-dirv*d;
   d:=center.LengthTo(DimData.P11InOCS);
-  DimData.P11InOCS:=VertexDmorph(center,dirv.asPoint3d,d);
+  DimData.P11InOCS:=center+dirv*d;
 end;
 
 function GDBObjDiametricDimension.P11ChangeTo(const tv:TzePoint3d):TzePoint3d;
@@ -172,8 +172,8 @@ begin
   d:=DimData.P15InWCS.LengthTo(DimData.P10InWCS)/2;
   dirv:={vertexsub}(tv-center);
   dirv.Normalize;
-  DimData.P10InWCS:=VertexDmorph(center,dirv.asPoint3d,-d);
-  DimData.P15InWCS:=VertexDmorph(center,dirv.asPoint3d,d);
+  DimData.P10InWCS:=center-dirv*d;
+  DimData.P15InWCS:=center+dirv*d;
   Result:=tv;
 end;
 
@@ -253,13 +253,10 @@ begin
     DrawDimensionLine(
       DimData.P11InOCS,DimData.P15InWCS,True,False,False,drawing,dc);
     pl:=
-      DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(
-      DimData.P11InOCS,VectorT.asPoint3d,getpsize),drawing);
+      DrawDimensionLineLinePart(DimData.P11InOCS,DimData.P11InOCS+VectorT*getpsize,drawing);
     pl.FormatEntity(drawing,dc);
   end else begin
-    DrawDimensionLine(
-      uzegeometry.VertexDmorph(DimData.P11InOCS,vectord.asPoint3d,Self.dimtextw),
-      DimData.P15InWCS,True,False,False,drawing,dc);
+    DrawDimensionLine(DimData.P11InOCS+vectord*Self.dimtextw,DimData.P15InWCS,True,False,False,drawing,dc);
   end;
   inherited;
   if assigned(EntExtensions) then

@@ -200,7 +200,7 @@ begin
         //xdir:=GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
         xdir:=pgdbobjentity(osp^.PGDBObject)^.GetTangentInPoint(wc).asVector;
         // GetDirInPoint(pgdbobjlwPolyline(osp^.PGDBObject).Vertex3D_in_WCS_Array,wc,pgdbobjlwPolyline(osp^.PGDBObject).closed);
-        if not uzegeometry.IsVectorNul(xdir) then begin
+        if not xdir.IsNul then begin
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
             ydir:=(vectordot(PGDBObjWithLocalCS(
               osp^.PGDBObject)^.Local.basis.OZ,xdir)).Normalized

@@ -171,7 +171,7 @@ function GDBObjWithLocalCS.CalcObjMatrixWithoutOwner;
 var
   rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
-  if IsVectorNul(Local.basis.oz) then begin
+  if Local.basis.oz.IsNul then begin
     ReportLocalOZIsNul;
     exit(cEmptyMatrix);
   end;

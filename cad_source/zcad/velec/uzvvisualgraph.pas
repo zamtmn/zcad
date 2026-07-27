@@ -1051,7 +1051,7 @@ begin
           end;
           startPt.z:=0;
           endPt.z:=0;
-          centrPt:=uzegeometry.Vertexmorph(startPt,endPt,0.5);
+          centrPt:={uzegeometry.Vertexmorph}startPt.LerpTo(endPt,0.5);
 
           text:=floattostr(TEdgeTree(G.Edges[i].AsPointer[vpTEdgeTree]^).length);
           //uzvtestdraw.testDrawCircle(TVertexTree(G.Edges[i].AsPointer[vpTEdgeTree]^).dev^.P_insert_in_WCS,10,2);

@@ -225,8 +225,7 @@ begin
           pl:=DrawDimensionLineLinePart((p1+p2.asVector)*0.5,
             DimData.P11InOCS,drawing);
           pl.FormatEntity(drawing,dc);
-          pl:=DrawDimensionLineLinePart(DimData.P11InOCS,VertexDmorph(
-            DimData.P11InOCS,VectorT.asPoint3d,getpsize),drawing);
+          pl:=DrawDimensionLineLinePart(DimData.P11InOCS,DimData.P11InOCS+VectorT*getpsize,drawing);
           pl.FormatEntity(drawing,dc);
         end;
       end;
@@ -394,7 +393,7 @@ begin
   if (self.DimData.textmoved)or TextAlwaysMoved then begin
     if (abs(scalardot(p-DimData.MidPoint,vectorN))>2*textsize)or TextAlwaysMoved then
       if GetDIMTMOVE=DTMCreateLeader then begin
-        p:=VertexDmorph(p,VectorT.asPoint3d,GetPSize/2);
+        p:={VertexDmorph}(p+VectorT*GetPSize/2);
         DimData.NeedTextLeader:=True;
       end;
     p:=p+TextOffset.asVector;
@@ -410,19 +409,19 @@ begin
   ptext.FormatEntity(drawing,dc);
 
   if PDimStyle.Text.DIMGAP<0 then begin
-    p:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox.asPoint3d,-dimtextw/2);
-    p:=uzegeometry.VertexDmorph(p,ptext.Local.basis.oy.asPoint3d,dimtexth/2);
+    p:=p-ptext.Local.basis.ox*dimtextw/2;
+    p:=p+ptext.Local.basis.oy*dimtexth/2;
 
-    p2:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox.asPoint3d,dimtextw);
+    p2:=p+ptext.Local.basis.ox*dimtextw;
     DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing,dc);
 
-    p:=uzegeometry.VertexDmorph(p2,ptext.Local.basis.oy.asPoint3d,-dimtexth);
+    p:=p2-ptext.Local.basis.oy*dimtexth;
     DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing,dc);
 
-    p2:=uzegeometry.VertexDmorph(p,ptext.Local.basis.ox.asPoint3d,-dimtextw);
+    p2:=p-ptext.Local.basis.ox*dimtextw;
     DrawDimensionLineLinePart(p,p2,drawing).FormatEntity(drawing,dc);
 
-    p:=uzegeometry.VertexDmorph(p2,ptext.Local.basis.oy.asPoint3d,dimtexth);
+    p:=p2+ptext.Local.basis.oy*dimtexth;
     DrawDimensionLineLinePart(p2,p,drawing).FormatEntity(drawing,dc);
   end;
 

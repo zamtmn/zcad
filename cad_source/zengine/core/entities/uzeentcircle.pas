@@ -180,10 +180,10 @@ begin
         Result.isintercept:=True;
         if abs(1-abs(t1))<abs(1-abs(t2)) then begin
           Result.t1:=t1;
-          Result.interceptcoord:=Vertexmorph(lbegin,lend,Result.t1);
+          Result.interceptcoord:={Vertexmorph}lbegin.LerpTo(lend,Result.t1);
         end else begin
           Result.t1:=t2;
-          Result.interceptcoord:=Vertexmorph(lbegin,lend,Result.t1);
+          Result.interceptcoord:={Vertexmorph}lbegin.LerpTo(lend,Result.t1);
         end;
       end else
         Result.isintercept:=False;
@@ -497,11 +497,9 @@ begin
         plane:=PlaneFrom3Pont(q0,q1,q2);
         Normalizeplane(plane);
         if PointOfRayPlaneIntersect(param.md.mouseraywithoutOS.lbegin,
-          param.md.mouseraywithoutOS.dir.asPoint3d,plane,tv)
+          param.md.mouseraywithoutOS.dir,plane,tv)
         then begin
-          n:=tv-P_insert_in_WCS;
-          n.Normalize;
-          n:={VertexMulOnSc}(n{.asPoint3d}*radius){.asVector3d};
+          n:=(tv-P_insert_in_WCS).Normalized*radius;
           osp.worldcoord:=P_insert_in_WCS+n;
           ProjectProc(osp.worldcoord,tv);
           osp.dispcoord:=tv;

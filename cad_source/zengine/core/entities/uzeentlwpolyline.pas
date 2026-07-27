@@ -449,7 +449,7 @@ begin
 
   if dc.lod=LODCalculatedDetail then begin
     v:={uzegeometry.VertexSub}(vp.BoundingBox.RTF-vp.BoundingBox.LBN);
-    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49);
+    simplydraw:=not SqrCanSimplyDrawInWCS(DC,v.SqrLength,49);
   end else
     simplydraw:=dc.lod=LODLowDetail;
 
@@ -899,7 +899,7 @@ begin
       pw:=ALWpolyLine.SgmntsParams.getDataMutable(i);
       pw.data.startw:=CreateDoubleFromArray(counter,args);
       pw.data.endw:=CreateDoubleFromArray(counter,args);
-      pw.data.hw:=IsDoubleNotEqual(pw.data.startw,0) or IsDoubleNotEqual(pw.data.endw,0);
+      pw.data.hw:=(not SameValue(pw.data.startw,0)) or (not SameValue(pw.data.endw,0));
     end;
   end;
 end;

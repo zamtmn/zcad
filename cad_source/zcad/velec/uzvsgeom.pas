@@ -447,7 +447,7 @@ begin
      pt2new:=offsetOfFirstPointInSecondPointToLine(pline21,pline22,xlinenew2,ylinenew2);
 
      //получаем центр между двумя точками
-     centerPt:=uzegeometry.Vertexmorph(pt1new,pt2new,0.5);
+     centerPt:={uzegeometry.Vertexmorph}pt1new.LerpTo(pt2new,0.5);
      centerline:=pline11.LengthTo(centerPt);
 
 

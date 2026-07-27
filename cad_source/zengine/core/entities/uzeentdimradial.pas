@@ -81,7 +81,7 @@ begin
   dirv.Normalize;
 
   Result:=tv;
-  DimData.P11InOCS:=VertexDmorph(DimData.P15InWCS,dirv.asPoint3d,d);
+  DimData.P11InOCS:=DimData.P15InWCS+dirv*d;
 end;
 
 function GDBObjRadialDimension.P15ChangeTo(const tv:TzePoint3d):TzePoint3d;
@@ -93,9 +93,9 @@ begin
   dirv:={vertexsub}(tv-DimData.P10InWCS);
   dirv.Normalize;
 
-  Result:=VertexDmorph(DimData.P10InWCS,dirv.asPoint3d,r);
+  Result:=DimData.P10InWCS+dirv*r;
   r:=DimData.P10InWCS.LengthTo(DimData.P11InOCS);
-  DimData.P11InOCS:=VertexDmorph(DimData.P10InWCS,dirv.asPoint3d,r);
+  DimData.P11InOCS:=DimData.P10InWCS+dirv*r;
 end;
 
 function GDBObjRadialDimension.P11ChangeTo(const tv:TzePoint3d):TzePoint3d;
@@ -107,7 +107,7 @@ begin
   dirv:={vertexsub}(tv-DimData.P10InWCS);
   dirv.Normalize;
 
-  DimData.P15InWCS:=VertexDmorph(DimData.P10InWCS,dirv.asPoint3d,r);
+  DimData.P15InWCS:=DimData.P10InWCS+dirv*r;
   Result:=tv;
 end;
 

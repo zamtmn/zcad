@@ -412,7 +412,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
   begin
     p:=dxfRequiredVertex2D(rdr,10,currDXFGroupCode);
     if (EdgeNum<>1)and(currpath.Count>0) then begin
-      if not(IsPoint2DEqual(p,currpath.getPLast^)) then
+      if not({IsPointEqual}p.IsEqual(currpath.getPLast^)) then
         currpath.PushBackData(p);
     end else begin
       currpath.PushBackData(p);
@@ -420,7 +420,7 @@ function TBoundaryPath.LoadFromDXF(var rdr:TZMemReader;DXFCode:integer;var conte
     p:=dxfRequiredVertex2D(rdr,11,currDXFGroupCode);
     if EdgeNum<>EdgesCount then
       currpath.PushBackData(p)
-    else if not(IsPoint2DEqual(p,currpath.getPFirst^)) then
+    else if not({IsPointEqual}p.IsEqual(currpath.getPFirst^)) then
       currpath.PushBackData(p);
   end;
 

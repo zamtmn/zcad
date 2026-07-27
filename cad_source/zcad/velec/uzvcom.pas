@@ -749,7 +749,7 @@ begin
                       areaOfTriangle(rectLine.Pt3,rectLine.Pt4,vertexPt)+areaOfTriangle(rectLine.Pt4,rectLine.Pt1,vertexPt);
      //сравниваем площади получаные прямоугольником с суммой 4-х площадей образованных треугольниками
 
-    if  IsDoubleNotEqual(areaRect,sumAreaTriangle,sqreps*1000000) = false then
+    if not SameValue(areaRect,sumAreaTriangle,sqreps*1000000) = false then
       result:=true;
 
     //zcUI.TextMessage('прямоугл = ' + floattostr(areaRect));

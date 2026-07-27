@@ -140,7 +140,7 @@ begin
       PzePoint2d(pva.getDataMutable(p3))^,
       PzePoint2d(pva.getDataMutable(p4))^) then
       if pva.ispointinside(
-        Vertexmorph(PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(
+        {Vertexmorph}PzePoint2d(pva.getDataMutable(p1))^.LerpTo(PzePoint2d(
         pva.getDataMutable(p3))^,0.5)) then
         if IsSubContur(pva,p1,p2,p3,p4) then begin
           pvr.PushBackData(pva.getDataMutable(p1)^);
@@ -180,7 +180,7 @@ begin
     if distance2piece_2dmy(p,PzePoint2d(pva.getDataMutable(p3))^,
       PzePoint2d(pva.getDataMutable(p4))^)<eps then
       if pva.ispointinside(
-        Vertexmorph(PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(
+        {Vertexmorph}PzePoint2d(pva.getDataMutable(p1))^.LerpTo(PzePoint2d(
         pva.getDataMutable(p3))^,0.5)) then
         if IsSubContur2(pva,p1,p2,p3,p) then begin
           pvr.PushBackData(pva.getDataMutable(p1)^);

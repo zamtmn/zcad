@@ -553,9 +553,8 @@ begin
       FProxyBBoxMin := ParseResult.BBoxMin;
       FProxyBBoxMax := ParseResult.BBoxMax;
       FProxyBBoxLoaded := True;
-      FProxyGripOffset := Vertexmorph(
-        FProxyBBoxMin, FProxyBBoxMax, 0.5);
-      if IsVectorNul(Local.P_insert.asVector) then
+      FProxyGripOffset := {Vertexmorph}FProxyBBoxMin.LerpTo(FProxyBBoxMax, 0.5);
+      if Local.P_insert.IsNul then
         Local.P_insert := FProxyGripOffset;
       vp.BoundingBox.LBN := FProxyBBoxMin;
       vp.BoundingBox.RTF := FProxyBBoxMax;

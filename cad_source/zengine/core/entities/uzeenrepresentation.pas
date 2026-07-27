@@ -130,7 +130,7 @@ var
 begin
   if rc.lod=LODCalculatedDetail then begin
     v:=aabb.RTF-aabb.LBN;
-    simplydraw:=not SqrCanSimplyDrawInWCS(rc,uzegeometry.SqrOneVertexlength(v),49);
+    simplydraw:=not SqrCanSimplyDrawInWCS(rc,v.SqrLength,49);
   end else
     simplydraw:=rc.lod=LODLowDetail;
   Graphix.DrawGeometry(rc,inFrustumState,simplydraw);
@@ -710,7 +710,7 @@ begin
         inc(BulgedSegmentsCount);
       if data.hw then begin
         inc(WidthSegmentsCount);
-        if IsDoubleNotEqual(data.startw,data.endw) then
+        if not SameValue(data.startw,data.endw) then
           inc(VariableWidthSegmentsCount);
       end;
     end;

@@ -1049,13 +1049,13 @@ begin
                  pl:=lineiterator.key;
                  PointOnCurve3DPropArraySort.Sort(arr,arr.size);
                  lc:=pl^.CoordInOCS;
-                 point:=uzegeometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[0]);
+                 point:={uzegeometry.Vertexmorph}lc.lBegin.LerpTo(lc.lEnd,arr[0]);
                  pl^.CoordInOCS.lend:=point;
                  pl^.FormatEntity(drawings.GetCurrentDWG^,dc);
                  inc(lm);
                  for i:=1 to arr.size-1 do
                  begin
-                      point2:=uzegeometry.Vertexmorph(lc.lBegin,lc.lEnd,arr[i]);
+                      point2:={uzegeometry.Vertexmorph}lc.lBegin.LerpTo(lc.lEnd,arr[i]);
 
                       begin
                           PCreatedGDBLine := Pointer(drawings.GetCurrentDWG^.mainObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));

@@ -300,7 +300,7 @@ begin
   sv1:=param.md.mouseray.lbegin;
   sv1:=sv1+PDWG.Getpcamera^.CamCSOffset;
 
-  PointOfRayPlaneIntersect(param.md.mouseray.lbegin+PDWG.Getpcamera^.CamCSOffset,param.md.mouseray.dir.asPoint3d,tempplane,mvertex);
+  PointOfRayPlaneIntersect(param.md.mouseray.lbegin+PDWG.Getpcamera^.CamCSOffset,param.md.mouseray.dir,tempplane,mvertex);
   plx:=PlaneFrom3Pont(sv1,param.md.mouse3dcoord+PDWG.Getpcamera^.CamCSOffset,
                       param.md.mouse3dcoord+cV3d__1__0__0+PDWG.Getpcamera^.CamCSOffset);
   //if assigned(sysvar.DISP.DISP_ColorAxis)then
@@ -586,7 +586,7 @@ begin
     dc.drawer.SetColor(0, 0, 255,255);
     dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconZ,dc.DrawingContext.matrixs);
 
-    if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,cV3d__0__0__1)) then begin
+    if vectordot(pdwg.GetPcamera.prop.look,cV3d__0__0__1).IsNul then begin
         dc.drawer.SetColor(255, 255, 255,255);
         dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
         dc.drawer.DrawLine3DInModelSpace(createvertex(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),createvertex(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
@@ -659,7 +659,7 @@ begin
     if DC.LOD=LODCalculatedDetail then begin
       if LODDeep=0 then begin
         v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
-        if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),300) then begin
+        if not SqrCanSimplyDrawInWCS(DC,v.SqrLength,300) then begin
           DC.LOD:=LODLowDetail;
           inc(LODDeep);
         end;
@@ -1181,7 +1181,7 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
                                                                            exit;
                                                                       end;
     //без этого разделения камера уползает по Z
-    if IsPointEqual(pdwg.Getpcamera^.prop.look.asPoint3d,cP3d__0__0_m1) then
+    if {IsPointEqual}pdwg.Getpcamera^.prop.look.asPoint3d.IsEqual(cP3d__0__0_m1) then
       //добавоено чтоб не уполжала камера
       target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z)
     else
@@ -1885,8 +1885,8 @@ begin
      if param.projtype = ProjParallel then
      begin
           d:=pdwg.getpcamera^.prop.look;
-          b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d.asPoint3d,pdwg.getpcamera^.frustum.v[4],tv1);
-          b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d.asPoint3d,pdwg.getpcamera^.frustum.v[5],tv2);
+          b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[4],tv1);
+          b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[5],tv2);
           if (b1 and b2) then
                              begin
                                   param.md.mouseray.lbegin:=tv1;
@@ -1898,8 +1898,8 @@ begin
      begin
          d:={VertexSub}(param.ospoint.worldcoord-pdwg.getpcamera^.prop.point);
          //d:=gdb.GetCurrentDWG.pcamera^.prop.look;
-         b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d.asPoint3d,pdwg.getpcamera^.frustum.v[4],tv1);
-         b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d.asPoint3d,pdwg.getpcamera^.frustum.v[5],tv2);
+         b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[4],tv1);
+         b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[5],tv2);
          if (b1 and b2) then
                             begin
                                  param.md.mouseray.lbegin:=tv1;
@@ -2983,7 +2983,7 @@ begin
                   else
                     test:=False;
                   if not(test) then begin
-                    if not {vertexeq}IsPointEqual(pt.worldraycoord,param.ospoint.worldcoord,bigeps) then
+                    if not {IsPointEqual}pt.worldraycoord.IsEqual(param.ospoint.worldcoord,bigeps) then
                       test:=True;
                   end;
                   if test then
@@ -3027,7 +3027,7 @@ begin
                   ip:=pobj.IsIntersect_Line(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord);
 
                   if ip.isintercept then
-                    if not IsPointEqual(ip.interceptcoord,param.ontrackarray.otrackarray[i].worldcoord,bigeps) then begin
+                    if not {IsPointEqual}ip.interceptcoord.IsEqual(param.ontrackarray.otrackarray[i].worldcoord,bigeps) then begin
                       PDWG.myGluProject2(ip.interceptcoord,temp);
                       //currentontracdist:=vertexlen2df(temp.x,temp.y,param.md.glmouse.x,param.md.glmouse.y);
                       currentontracdist:=(temp.Slice-param.md.glmouse).Length;
@@ -3067,7 +3067,7 @@ begin
           if pt2<>nil then
             repeat
               if (pt.trace)and(pt2.trace) then
-                if SqrOneVertexlength(vectordot(pt.dir,pt2.dir))>sqreps then begin
+                if vectordot(pt.dir,pt2.dir).SqrLength>sqreps then begin
                   //                           ip:=ip;
                   ip.isintercept:=False;
                   ip:=intercept3dmy2(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord,

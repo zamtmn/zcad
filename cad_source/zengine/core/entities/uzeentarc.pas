@@ -246,7 +246,7 @@ begin
   P_insert_in_WCS:=Local.P_insert;
 
   // Радиус — длина первого вектора-оси в ObjMatrix (масштаб по оси X)
-  self.R:=oneVertexLength(objmatrix.mtr.v[0].Slice);
+  self.R:={oneVertexLength}(objmatrix.mtr.v[0].Slice.Length);
 
 end;
 

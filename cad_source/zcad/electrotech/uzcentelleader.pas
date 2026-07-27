@@ -901,7 +901,7 @@ begin
      MainLine.init(@self,vp.Layer,vp.LineWeight,{uzegeometry.VertexMulOnSc}(cP3d__1__1__1*-10),cP3d__0__0__0);
      //MainLine.Format;
      tv:=vectordot(mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin,Local.basis.OZ).asPoint3d;
-     if not IsVectorNul(tv.asVector) then
+     if not tv.IsNul then
        tv.Normalize;
      MarkLine.init(@self,vp.Layer,vp.LineWeight,(MainLine.CoordInOCS.lBegin-tv).asPoint3d,MainLine.CoordInOCS.lBegin+tv.asVector);
      //MarkLine.Format;

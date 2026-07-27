@@ -645,7 +645,7 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
     p:=geomdata.Vertex3S.getData(FirstIndex);
     StackIndex:=low(Stack);
     for i:=Low(rc.DrawingContext.pcamera.frustum.v) to high(rc.DrawingContext.pcamera.frustum.v) do
-      if PointOfRayPlaneIntersect(p,dir.asPoint3d,rc.DrawingContext.pcamera.frustum.v[i],t)then
+      if PointOfRayPlaneIntersect(p,dir,rc.DrawingContext.pcamera.frustum.v[i],t)then
         if t<=1 then begin
           Stack[StackIndex]:=t;
           inc(StackIndex);

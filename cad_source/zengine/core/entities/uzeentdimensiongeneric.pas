@@ -176,7 +176,7 @@ begin
   end;
   d13:=DimData.P10InWCS-DimData.P13InWCS;
   d14:=DimData.P10InWCS-DimData.P14InWCS;
-  if SqrOneVertexlength(d13)<SqrOneVertexlength(d14) then
+  if d13.SqrLength<d14.SqrLength then
     DimData.P10InWCS:=DimData.P14InWCS+d13;
 end;
 

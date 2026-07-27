@@ -146,7 +146,7 @@ begin
        v2.y:=pvnext.y-pv.y;
        v2.z:=0;
 
-       if IsVectorNul(vectordot(v1.asVector,v2.asVector))then
+       if vectordot(v1.asVector,v2.asVector).IsNul then
        begin
             result:=true;
             self.deleteelement(i);

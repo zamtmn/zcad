@@ -123,7 +123,7 @@ begin
   tv2.z:=0;
   tv2.w:=1;
 
-  len:=onevertexlength(ax);
+  len:={onevertexlength}(ax.Length);
   d:=sqrt(tv2.x*tv2.x+tv2.y*tv2.y+tv2.z*tv2.z);
   if d>eps then begin
   len:=len/d;

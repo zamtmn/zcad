@@ -273,22 +273,22 @@ begin
   ptv:=VertexArrayInWCS.iterate(ir);
   if ptv<>nil then
     repeat
-      vs.l_1_4:=vertexmorph(ptvprev^,ptv^,1/4);
-      vs.l_1_3:=vertexmorph(ptvprev^,ptv^,1/3);
-      vs.l_1_2:=vertexmorph(ptvprev^,ptv^,1/2);
-      vs.l_2_3:=vertexmorph(ptvprev^,ptv^,2/3);
-      vs.l_3_4:=vertexmorph(ptvprev^,ptv^,3/4);
+      vs.l_1_4:={vertexmorph}ptvprev^.LerpTo(ptv^,1/4);
+      vs.l_1_3:={vertexmorph}ptvprev^.LerpTo(ptv^,1/3);
+      vs.l_1_2:={vertexmorph}ptvprev^.LerpTo(ptv^,1/2);
+      vs.l_2_3:={vertexmorph}ptvprev^.LerpTo(ptv^,2/3);
+      vs.l_3_4:={vertexmorph}ptvprev^.LerpTo(ptv^,3/4);
       snaparray.PushBackData(vs);
       ptvprev:=ptv;
       ptv:=VertexArrayInWCS.iterate(ir);
     until ptv=nil;
   if closed then begin
     ptv:=VertexArrayInWCS.beginiterate(ir);
-    vs.l_1_4:=vertexmorph(ptvprev^,ptv^,1/4);
-    vs.l_1_3:=vertexmorph(ptvprev^,ptv^,1/3);
-    vs.l_1_2:=vertexmorph(ptvprev^,ptv^,1/2);
-    vs.l_2_3:=vertexmorph(ptvprev^,ptv^,2/3);
-    vs.l_3_4:=vertexmorph(ptvprev^,ptv^,3/4);
+    vs.l_1_4:={vertexmorph}ptvprev^.LerpTo(ptv^,1/4);
+    vs.l_1_3:={vertexmorph}ptvprev^.LerpTo(ptv^,1/3);
+    vs.l_1_2:={vertexmorph}ptvprev^.LerpTo(ptv^,1/2);
+    vs.l_2_3:={vertexmorph}ptvprev^.LerpTo(ptv^,2/3);
+    vs.l_3_4:={vertexmorph}ptvprev^.LerpTo(ptv^,3/4);
     snaparray.PushBackData(vs);
   end;
   snaparray.Shrink;

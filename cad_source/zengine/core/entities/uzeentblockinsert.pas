@@ -165,7 +165,7 @@ end;
 
 function GDBObjBlockInsert.getrot:double;
 begin
-  Result:=arccos((objmatrix.mtr.v[0].v[0])/oneVertexlength(objmatrix.mtr.v[0].Slice));
+  Result:=arccos((objmatrix.mtr.v[0].v[0])/{oneVertexlength}(objmatrix.mtr.v[0].Slice.Length));
 end;
 
 procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;

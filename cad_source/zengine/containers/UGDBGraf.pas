@@ -398,7 +398,7 @@ begin
     for i := 0 to count - 1 do
     begin
       tgf:=pgrafelement(self.getDataMutable(i));
-      if {vertexeq}IsPointEqual(tgf^.point,v,bigeps) then
+      if {IsPointEqual}tgf^.point.IsEqual(v,bigeps) then
         begin
              result:=tgf;
              system.exit;

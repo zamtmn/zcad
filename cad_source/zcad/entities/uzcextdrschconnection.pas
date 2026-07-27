@@ -116,7 +116,7 @@ end;
 
 function IsConnectPointEqual(const a,b:TConnectPoint):Boolean;
 begin
-  result:=IsDoubleEqual(a.t,b.t,bigeps);
+  result:={IsDoubleEqual}SameValue(a.t,b.t,bigeps);
 end;
 
 constructor TConnectPoint.Create(AT:Double);
@@ -510,21 +510,21 @@ begin
         if NetExtender<>nil then begin
           ip:=uzegeometry.intercept3d(p1,p2,p^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd);
           if ip.isintercept then begin
-            if uzegeometry.IsDoubleEqual(ip.t1,0,bigeps)then begin
+            if {IsDoubleEqual}SameValue(ip.t1,0,bigeps)then begin
               addToConnections(0);
               //drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,pThisEntity,DC);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
               ConnectedWith.PushBackIfNotPresent(p);
               TNet.ConcatNets(self,NetExtender);
-            end else if uzegeometry.IsDoubleEqual(ip.t1,1,bigeps)then begin
+            end else if {IsDoubleEqual}SameValue(ip.t1,1,bigeps)then begin
               addToConnections(1);
               //drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
               ConnectedWith.PushBackIfNotPresent(p);
               TNet.ConcatNets(self,NetExtender);
-            end else if (uzegeometry.IsDoubleEqual(ip.t2,0,bigeps))or(uzegeometry.IsDoubleEqual(ip.t2,1,bigeps))then begin
+            end else if ({IsDoubleEqual}SameValue(ip.t2,0,bigeps))or({IsDoubleEqual}SameValue(ip.t2,1,bigeps))then begin
               addToConnections(ip.t1);
               //drawCross(ip.interceptcoord,pThisEntity,DC);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
@@ -595,9 +595,9 @@ begin
         TryConnectToDeviceConnectors(p1,p2,PGDBObjDevice(p)^,drawing,DC)
       else begin
         isConnected:=true;
-        if IsPointEqual(p1,p^.P_insert_in_WCS) then
+        if {IsPointEqual}p1.IsEqual(p^.P_insert_in_WCS) then
           t:=0
-        else if IsPointEqual(p2,p^.P_insert_in_WCS) then
+        else if {IsPointEqual}p2.IsEqual(p^.P_insert_in_WCS) then
           t:=1
         else
           isConnected:=false;
@@ -650,10 +650,10 @@ begin
       else if pc^.t=1 then
         drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC)
       else
-        drawCross(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pThisEntity,DC);
+        drawCross({Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pThisEntity,DC);
     end;
     if (pc^.count>1)or((pc^.t>bigeps)and(pc^.t<(1-bigeps))) then
-      drawFilledCircle(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),ConnectSize/2,pThisEntity,DC);
+      drawFilledCircle({Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),ConnectSize/2,pThisEntity,DC);
   end;
   oldP:=PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin;
   if Knots.Count>0 then begin
@@ -663,25 +663,25 @@ begin
       l:=knot.HalfWidth/linelen;
       case knot.&Type of
         KTArc:begin
-          P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
+          P:={Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
           pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,cOneMatrix,oldP,P);
-          oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
-          P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
+          oldP:={Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
+          P:={Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           drawIntersectArc(P,oldP,pThisEntity,DC);
         end;
         KTEmpty:begin
           if knot.t>bigeps then begin
-            P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
+            P:={Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
             pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,cOneMatrix,oldP,P);
           end;
-          oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
+          oldP:={Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
         end;
         KTNormal:begin
           if knot.t>bigeps then begin
-            P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
+            P:={Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
             pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,cOneMatrix,oldP,P);
           end else
-            P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
+            P:={Vertexmorph}PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           oldP:=p;
         end;
         //это пока не реализовано, или хз
@@ -689,7 +689,7 @@ begin
         //KTFilledCircle:
       end;
     end;
-    if IsDoubleNotEqual(knot.t,1,bigeps) then
+    if not SameValue(knot.t,1,bigeps) then
       pThisEntity^.Representation.CreateLine(DC,pThisEntity^,pThisEntity.vp,cOneMatrix,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
     result:=false;
   end;

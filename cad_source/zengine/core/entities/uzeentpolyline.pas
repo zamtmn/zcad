@@ -281,7 +281,7 @@ begin
 
     pdesc.vertexnum:=-(i+1);
     pdesc.pointtype:=os_midle;
-    pdesc.worldcoord:=Vertexmorph(pv^,pvnext^,0.5);
+    pdesc.worldcoord:={Vertexmorph}pv^.LerpTo(pvnext^,0.5);
         // Store segment direction in dcoord for oriented grip drawing
     pdesc.dcoord:={VertexSub}(pvnext^-pv^).asPoint3d;
     PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
@@ -338,7 +338,7 @@ begin
     else
       v2:=VertexArrayInWCS.getDataMutable(0);
 
-    pdesc.worldcoord:=Vertexmorph(v1^,v2^,0.5);
+    pdesc.worldcoord:={Vertexmorph}v1^.LerpTo(v2^,0.5);
     ProjectProc(pdesc.worldcoord,tv);
     pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
   end;

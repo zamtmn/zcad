@@ -131,11 +131,11 @@ begin
         AddPoint(p,pa);
       end else begin
         if FArray.Size=0 then begin
-          truessegment:=Vertexmorph(scontur,p,0.5);
+          truessegment:={Vertexmorph}scontur.LerpTo(p,0.5);
           AddPoint(truessegment,TPA_OnCurve);
           AddPoint(p,pa);
         end else if FArray.Size=2 then begin
-          AddPoint(Vertexmorph(FArray.Back,p,0.5),TPA_OnCurve);
+          AddPoint({Vertexmorph}FArray.Back.LerpTo(p,0.5),TPA_OnCurve);
           AddPoint(p,pa);
         end else begin
           FArray.PushBack(p);
@@ -216,7 +216,7 @@ begin
           if k>0 then
           begin
           inc(rindex);
-          farray[rindex]:=Vertexmorph(FArray[i],FArray[i+1],t);
+          farray[rindex]:={Vertexmorph}FArray[i].LerpTo(FArray[i+1],t);
           end
           else
           begin

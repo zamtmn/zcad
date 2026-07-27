@@ -212,7 +212,7 @@ var
   l:double;
 begin
   inherited CalcObjMatrix;
-  l:=onevertexlength(majoraxis);
+  l:={onevertexlength}(majoraxis.Length);
   m1:=CreateScaleMatrix(l,ratio*l,1);
   objmatrix:=matrixmultiply(m1,objmatrix);
   v.Slice.Slice:=local.p_insert.Slice.asVector;
@@ -232,9 +232,9 @@ begin
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   if self.Ratio<=1 then
-    rr:=uzegeometry.oneVertexlength(majoraxis)
+    rr:={uzegeometry.oneVertexlength}(majoraxis.Length)
   else
-    rr:=uzegeometry.oneVertexlength(majoraxis)*ratio;
+    rr:={uzegeometry.oneVertexlength}(majoraxis.Length)*ratio;
 
   calcObjMatrix;
   angle:=endangle-startangle;

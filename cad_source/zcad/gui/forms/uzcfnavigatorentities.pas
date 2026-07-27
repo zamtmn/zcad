@@ -148,7 +148,7 @@ begin
     if pnd<>nil then
     if pnd^.Ident.pent<>nil then
     begin
-      pc:=Vertexmorph(pnd^.Ident.pent^.vp.BoundingBox.LBN,pnd^.Ident.pent^.vp.BoundingBox.RTF,0.5);
+      pc:={Vertexmorph}pnd^.Ident.pent^.vp.BoundingBox.LBN.LerpTo(pnd^.Ident.pent^.vp.BoundingBox.RTF,0.5);
       bb.LBN:=pc+({VertexSub}(pc-pnd^.Ident.pent^.vp.BoundingBox.LBN)*scale);
       bb.RTF:=pc+({VertexSub}(pc-pnd^.Ident.pent^.vp.BoundingBox.RTF)*scale);
       drawings.GetCurrentDWG.wa.ZoomToVolume(bb);

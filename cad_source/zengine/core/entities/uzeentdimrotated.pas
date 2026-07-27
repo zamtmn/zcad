@@ -123,7 +123,7 @@ var
 begin
   Result:=tv;
   tl:=GetTFromDirNormalizedPoint(DimData.P10InWCS,tv,vectorN.asPoint3d);
-  DimData.P10InWCS:=VertexDmorph(tv,vectorN.asPoint3d,tl);
+  DimData.P10InWCS:=tv+vectorN*tl;
 end;
 
 procedure GDBObjRotatedDimension.CalcDNVectors;

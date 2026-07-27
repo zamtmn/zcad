@@ -40,7 +40,7 @@ end;
 function DWGNormalOrDefault(const P: TDWGPoint3D): TzePoint3d;
 begin
   Result := DWGPointToVertex(P);
-  if IsVectorNul(Result.asVector) then
+  if Result.IsNul then
     Result := cP3d__0__0__1;
 end;
 

@@ -213,7 +213,7 @@ begin
             end;
      end;
 end;
-procedure place2(pva:PGDBObjEntityTreeArray;basepoint, dir: TzePoint3d; count: integer; length,sd,dd: Double; name: pansichar;angle:Double;norm:Boolean;scaleblock:Double;ps:TPlaceSensorsStrategy);
+procedure place2(pva:PGDBObjEntityTreeArray;basepoint:TzePoint3d;dir:TzeVector3d; count: integer; length,sd,dd: Double; name: pansichar;angle:Double;norm:Boolean;scaleblock:Double;ps:TPlaceSensorsStrategy);
 var //line2: GDBLineOps;
     i: integer;
     d: TPlaceParam;
@@ -224,13 +224,13 @@ begin
      begin
           old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,pva,
                                      drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                     docorrecttogrid(Vertexdmorph(basepoint, dir, d.PlaceFirstOffset),norm), scaleblock, angle, name)
+                                     docorrecttogrid(basepoint+dir*d.PlaceFirstOffset,norm), scaleblock, angle, name)
      end;
      if d.PlaceLast then
      begin
           old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,pva,
                                      drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                     docorrecttogrid(Vertexdmorph(basepoint, dir, d.PlaceLastOffset),norm), scaleblock, angle, name)
+                                     docorrecttogrid(basepoint+dir*d.PlaceLastOffset,norm), scaleblock, angle, name)
      end;
      if count>2 then
      begin
@@ -240,7 +240,7 @@ begin
              d.PlaceFirstOffset:=d.PlaceFirstOffset+d.OtherStep;
              old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,pva,
                                         drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
-                                        docorrecttogrid(Vertexdmorph(basepoint, dir, d.PlaceFirstOffset),norm), scaleblock, angle, name)
+                                        docorrecttogrid(basepoint+dir*d.PlaceFirstOffset,norm), scaleblock, angle, name)
          end;
      end;
 end;
@@ -248,7 +248,7 @@ procedure placedatcic(pva:PGDBObjEntityTreeArray;p1, p2: TzePoint3d; InitialSD, 
 var dx, dy: Double;
   FirstLine, SecondLine: GDBLineProp;
   FirstCount, SecondCount, i: integer;
-  dir: TzePoint3d;
+  dir:TzeVector3d;
   mincount:integer;
   FirstLineLength,SecondLineLength:double;
   d: TPlaceParam;
@@ -342,11 +342,11 @@ begin
 
   if d.PlaceFirst then
   begin
-       place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceFirstOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
+       place2(pva,{Vertexmorph}FirstLine.lbegin.LerpTo(FirstLine.lend,d.PlaceFirstOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
   end;
   if d.PlaceLast then
   begin
-       place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceLastOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
+       place2(pva,{Vertexmorph}FirstLine.lbegin.LerpTo(FirstLine.lend,d.PlaceLastOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
   end;
   if FirstCount>2 then
   begin
@@ -354,7 +354,7 @@ begin
        for i := 1 to FirstCount do
        begin
            d.PlaceFirstOffset:=d.PlaceFirstOffset+d.OtherStep;
-           place2(pva,Vertexmorph(FirstLine.lbegin, FirstLine.lend,d.PlaceFirstOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
+           place2(pva,{Vertexmorph}FirstLine.lbegin.LerpTo(FirstLine.lend,d.PlaceFirstOffset), dir, SecondCount, SecondLineLength,LongSD,LongDD, name,0,norm,scaleblock,ps);
        end;
   end;
 
@@ -1203,7 +1203,7 @@ procedure placedev(pva:PGDBObjEntityTreeArray;p1, p2: TzePoint3d; nmax, nmin: In
 var dx, dy: Double;
   line1, line2: GDBLineProp;
   l1, l2, i: integer;
-  dir: TzePoint3d;
+  dir: TzeVector3d;
 //  mincount:integer;
   sd,{dd,}sdd,{ddd,}angle:double;
   linelength:double;
@@ -1253,13 +1253,13 @@ begin
   Linelength:=line1.lbegin.LengthTo(line1.lend);
   case l1 of
     1: begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 0.5), dir, l2, Linelength,sd,sd*2, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
+        place2(pva,{Vertexmorph}line1.lbegin.LerpTo(line1.lend, 0.5), dir, l2, Linelength,sd,sd*2, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
        end;
     2: begin
         //if (Vertexlength(line1.lbegin, line1.lend) - 2 * sd)<dd then
         begin
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 1 / 4), dir, l2, Linelength,sd,sd*2, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
-        place2(pva,Vertexmorph(line1.lbegin, line1.lend, 3 / 4), dir, l2, Linelength,sd,sd*2, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
+        place2(pva,{Vertexmorph}line1.lbegin.LerpTo(line1.lend, 1 / 4), dir, l2, Linelength,sd,sd*2, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
+        place2(pva,{Vertexmorph}line1.lbegin.LerpTo(line1.lend, 3 / 4), dir, l2, Linelength,sd,sd*2, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
         end
         {else
         begin
@@ -1273,7 +1273,7 @@ begin
       line2.lbegin := Vertexmorphabs2(line1.lbegin, line1.lend, sdd);
       line2.lend := Vertexmorphabs2(line1.lbegin, line1.lend, -sdd);
       l1:=l1-2;
-      for i := 1 to l1 do place2(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l1 + 1)), dir, l2, Linelength,sd,sd*2, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
+      for i := 1 to l1 do place2(pva,{Vertexmorph}line2.lbegin.LerpTo(line2.lend, i / (l1 + 1)), dir, l2, Linelength,sd,sd*2, name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
       //for i := 1 to l2 do place3(pva,Vertexmorph(line2.lbegin, line2.lend, i / (l2 )), dir, l1, dd, name);
        end
   end;

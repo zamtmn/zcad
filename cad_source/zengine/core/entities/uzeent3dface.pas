@@ -112,11 +112,11 @@ begin
       PInOCS[I],bp.ListPos.owner^.GetMatrix^);
   end;
   v:=vectordot({VertexSub}(PInWCS[0]-PInWCS[1]),{VertexSub}(PInWCS[2]-PInWCS[1]){.asVector}).asPoint3d;
-  if IsVectorNul(v.asVector) then
+  if v.IsNul then
     normal:=cV3d__0__0__1
   else
     normal:=v.Normalized.asVector;
-  if IsPointEqual(PInOCS[2],PInOCS[3],sqreps) then
+  if {IsPointEqual}PInOCS[2].IsEqual(PInOCS[3],sqreps) then
     triangle:=True
   else
     triangle:=False;

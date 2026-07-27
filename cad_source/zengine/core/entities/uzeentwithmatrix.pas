@@ -133,7 +133,7 @@ begin
       enttree.FulDraw:=True;}
 
     v1:=enttree.BoundingBox.RTF-enttree.BoundingBox.LBN;
-    tx:=uzegeometry.oneVertexlength(v1);
+    tx:={uzegeometry.oneVertexlength}(v1.Length);
     if tx/zoom<currentdegradationfactor then
       enttree.NodeData.FulDraw:=TDTSimpleDraw
     else

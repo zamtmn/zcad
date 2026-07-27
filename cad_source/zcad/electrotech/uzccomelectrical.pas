@@ -281,12 +281,12 @@ begin
                               a:=180+vertexangle(PzePoint2d(@p1)^,PzePoint2d(@p2)^)*180/pi;
 
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'m'),(Vertexmorph(p1,p2,0.5)+v),2.5,0,0.65,a,jsbc,p1.LengthTo(p2),1);
+          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'m'),({Vertexmorph}p1.LerpTo(p2,0.5)+v),2.5,0,0.65,a,jsbc,p1.LengthTo(p2),1);
           drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(ptext^);
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(pcabledesk^.Name),(Vertexmorph(p1,p2,0.5)-v),2.5,0,0.65,a,jstc,p1.LengthTo(p2),1);
+          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(pcabledesk^.Name),({Vertexmorph}p1.LerpTo(p2,0.5)-v),2.5,0,0.65,a,jstc,p1.LengthTo(p2),1);
           drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(ptext^);
           ptext^.Formatentity(drawings.GetCurrentDWG^,dc);
 
@@ -1645,7 +1645,7 @@ begin
 end;
 procedure AddPolySegmentFromConnIfZnotMatch(const PrevPoint,NextPoint:TzePoint3d;cable:PGDBObjCable);
 begin
-  if IsDoubleNotEqual(PrevPoint.z,NextPoint.z) then begin
+  if not SameValue(PrevPoint.z,NextPoint.z) then begin
     cable^.AddVertex(CreateVertex(NextPoint.x,NextPoint.y,PrevPoint.z));
     cable^.AddVertex(NextPoint);
   end else
@@ -1653,7 +1653,7 @@ begin
 end;
 procedure AddPolySegmentToConnIfZnotMatch(const PrevPoint,NextPoint:TzePoint3d;cable:PGDBObjCable);
 begin
-  if IsDoubleNotEqual(PrevPoint.z,NextPoint.z) then begin
+  if not SameValue(PrevPoint.z,NextPoint.z) then begin
     cable^.AddVertex(CreateVertex(PrevPoint.x,PrevPoint.y,NextPoint.z));
     cable^.AddVertex(NextPoint);
   end else
@@ -1663,8 +1663,8 @@ procedure AddPolySegmentIfZnotMatch(const PrevPoint,NextPoint:TzePoint3d;cable:P
 var
   MidPoint:TzePoint3d;
 begin
-  if IsDoubleNotEqual(PrevPoint.z,NextPoint.z) then begin
-    MidPoint:=Vertexmorph(PrevPoint,NextPoint,0.5);
+  if not SameValue(PrevPoint.z,NextPoint.z) then begin
+    MidPoint:={Vertexmorph}PrevPoint.LerpTo(NextPoint,0.5);
     cable^.AddVertex(CreateVertex(MidPoint.x,MidPoint.y,PrevPoint.z));
     cable^.AddVertex(CreateVertex(MidPoint.x,MidPoint.y,NextPoint.z));
     cable^.AddVertex(NextPoint);
@@ -1690,11 +1690,11 @@ begin
                  begin
                       if addfirstpoint then
                         cable^.AddVertex(firstpoint);
-                      if not IsPointEqual(tw1,firstpoint,sqreps) then
+                      if not {IsPointEqual}tw1.IsEqual(firstpoint,sqreps) then
                         AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
                       tw2:=NearestPointOnSegment(lastpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
                       cable^.AddVertex(tw2);
-                      if not IsPointEqual(tw2,lastpoint,sqreps) then
+                      if not {IsPointEqual}tw2.IsEqual(lastpoint,sqreps) then
                         AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,cable);
                  end
              else
@@ -1705,14 +1705,14 @@ begin
                       PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                       if addfirstpoint then
                       cable^.AddVertex(firstpoint);
-                      if not IsPointEqual(tw1,firstpoint,sqreps) then
+                      if not {IsPointEqual}tw1.IsEqual(firstpoint,sqreps) then
                         AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
                                                           //cable^.AddVertex(tw1);
                       pa.copyto(cable.VertexArrayInOCS);
                       //firstpoint:=PzePoint3d(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
                       //if not IsPointEqual(tw2,firstpoint) then
                         cable^.AddVertex(tw2);
-                      if not IsPointEqual(tw2,lastpoint,sqreps) then
+                      if not {IsPointEqual}tw2.IsEqual(lastpoint,sqreps) then
                         AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,cable);
                                                      //cable^.AddVertex(lastpoint);
                       pa.done;
@@ -1747,11 +1747,11 @@ begin
                begin
                  if addfirstpoint then
                    cable^.AddVertex(firstpoint);
-                 if not IsPointEqual(tw1,firstpoint,sqreps) then
+                 if not {IsPointEqual}tw1.IsEqual(firstpoint,sqreps) then
                    AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
                  tw2:=NearestPointOnSegment(lastpoint,l1.CoordInWCS.lBegin,l1.CoordInWCS.lEnd);
                  cable^.AddVertex(tw2);
-                 if not IsPointEqual(tw2,lastpoint,sqreps) then
+                 if not {IsPointEqual}tw2.IsEqual(lastpoint,sqreps) then
                    AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,cable);
                end
            else
@@ -1762,7 +1762,7 @@ begin
                     PTrace.graf.FindPath(tw1,tw2,l1,l2,pa);
                     if addfirstpoint then
                     cable^.AddVertex(firstpoint);
-                    if not IsPointEqual(tw1,firstpoint,sqreps) then
+                    if not {IsPointEqual}tw1.IsEqual(firstpoint,sqreps) then
                       AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
 
                     //pa.copyto(@cable.VertexArrayInOCS);
@@ -1795,7 +1795,7 @@ begin
                     //firstpoint:=PzePoint3d(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
                     //if not IsPointEqual(tw2,firstpoint) then
                       tcable^.AddVertex(tw2);
-                    if not IsPointEqual(tw2,lastpoint,sqreps) then
+                    if not {IsPointEqual}tw2.IsEqual(lastpoint,sqreps) then
                       AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,tcable);
                     pa.done;
                end;
@@ -3038,7 +3038,7 @@ begin
         repeat
               pointer(nline):=net.GetNearestLine(riser.P_insert_in_WCS);
               np:=NearestPointOnSegment(riser.P_insert_in_WCS,nline.CoordInWCS.lBegin,nline.CoordInWCS.lEnd);
-              if IsPointEqual(np,riser.P_insert_in_WCS,sqreps)then
+              if {IsPointEqual}np.IsEqual(riser.P_insert_in_WCS,sqreps)then
               begin
                    net.riserarray.PushBackData(riser);
               end;
@@ -3141,7 +3141,7 @@ begin
                                             riser2:=net2.riserarray.beginiterate(ir_riser2);
                                             if (riser2<>nil) then
                                             repeat
-                                                  if not {vertexeq}IsPointEqual(riser2.P_insert_in_WCS,riser.P_insert_in_WCS,bigeps) then
+                                                  if not {IsPointEqual}riser2.P_insert_in_WCS.IsEqual(riser.P_insert_in_WCS,bigeps) then
                                                   begin
                                                   priser2varext:=riser2^.GetExtension<TVariablesExtender>;
                                                   pvd:=priservarext.entityunit.FindVariable('RiserName');

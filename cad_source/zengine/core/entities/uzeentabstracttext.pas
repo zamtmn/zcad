@@ -99,7 +99,7 @@ begin
   m.mtr.v[3].Slice:=cV3d__0__0__0;
 
   tv:=VectorTransform3d(tv,m);
-  textprop.size:=oneVertexlength(tv.asVector);
+  textprop.size:={oneVertexlength}tv.Length;
   inherited;
 end;
 

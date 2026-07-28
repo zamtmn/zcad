@@ -969,7 +969,7 @@ end;
 
 
 
-function CalcLCS(const m:TzeTypedMatrix4d):TzePoint3d;
+function CalcLCS(const m:TzeTypedMatrix4d):TzeVector3d;
 {lcsx:= -((-m12 m21 m30 + m11 m22 m30 + m12 m20 m31 - m10 m22 m31 - m11 m20 m32 + m10 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsy:= -(( m02 m21 m30 - m01 m22 m30 - m02 m20 m31 + m00 m22 m31 + m01 m20 m32 - m00 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsz:= -((-m02 m11 m30 + m01 m12 m30 + m02 m10 m31 - m00 m12 m31 - m01 m10 m32 + m00 m11 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22))}
@@ -1005,10 +1005,10 @@ begin
                  +m.mtr.v[0].v[0]*m.mtr.v[1].v[1]*m.mtr.v[3].v[2])
                /t);
   end else
-    Result:=cP3d__0__0__0;
+    Result:=cV3d__0__0__0;
 end;
 
-function CorrectLCS(const m:TzeTypedMatrix4d;LCS:TzePoint3d):TzePoint3d;
+function CorrectLCS(const m:TzeTypedMatrix4d;LCS:TzeVector3d):TzeVector3d;
 {lcsx -> -((-lcs0z m11 m20 + lcs0y m12 m20 + lcs0z m10 m21 -
    lcs0x m12 m21 - lcs0y m10 m22 + lcs0x m11 m22)/(
   m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 +
@@ -1052,15 +1052,15 @@ begin
                  -lcs.x*m.mtr.v[0].v[1]*m.mtr.v[1].v[2])
               /t);
   end else
-    Result:=cP3d__0__0__0;
+    Result:=cV3d__0__0__0;
 end;
 
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);
 var
-  tv,tv2:TzePoint3d;
+  tv,tv2:TzeVector3d;
   sm:TzeTypedMatrix4d;
   notuselcs:boolean;
-  oldLCS,newLCS:TzePoint3d;
+  oldLCS,newLCS:TzeVector3d;
 begin
   sm:=SymMatr;
   tv:=CalcLCS(SymMatr);
@@ -1072,7 +1072,7 @@ begin
   oldlcs:=drawer.GetLCS;
   newLCS:=CorrectLCS(SymMatr,oldlcs);
 
-  tv2:=tv+newLCS.asVector;
+  tv2:=tv+newLCS;
 
   //drawer.DisableLCS(rc.DrawingContext.matrixs);
   notuselcs:=drawer.SetLCSState(false);

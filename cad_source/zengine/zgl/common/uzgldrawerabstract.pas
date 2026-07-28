@@ -92,8 +92,8 @@ TZGLAbstractDrawer=class
                         procedure DisableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure AddToLCS(const v:TzePoint3d);virtual;abstract;
                         function SetLCSState(State:boolean):boolean;virtual;abstract;
-                        function SetLCS(const newLCS:TzePoint3d):TzePoint3d;virtual;abstract;
-                        function GetLCS:TzePoint3d;virtual;abstract;
+                        function SetLCS(const newLCS:TzeVector3d):TzeVector3d;virtual;abstract;
+                        function GetLCS:TzeVector3d;virtual;abstract;
                         procedure EnableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure popMatrix;virtual;abstract;
                    end;

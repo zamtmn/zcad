@@ -2603,8 +2603,8 @@ begin
                                       begin
                                            //if uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
-                                                LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset.asPoint3d;
-                                                LCS.CurrentCamCSOffsetS:={VertexD2S}(LCS.CurrentCamCSOffset.asPoint3s);
+                                                LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset;
+                                                LCS.CurrentCamCSOffsetS:=LCS.CurrentCamCSOffset.asVector3s;
                                                 LCS.notuseLCS:=pcamera^.notuseLCS;
                                            end
                                            //else LCS.notuseLCS:=true;
@@ -2619,7 +2619,7 @@ begin
         pcamera^.modelMatrixLCS:=pcamera^.modelMatrix;
         pcamera^.frustumLCS:=pcamera^.frustum;
         pcamera^.CamCSOffset:=cV3d__0__0__0;
-        LCS.CurrentCamCSOffset:=cP3d__0__0__0;
+        LCS.CurrentCamCSOffset:=cV3d__0__0__0;
   end;
 
 

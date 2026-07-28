@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="12"/>
+    <Version Value="13"/>
     <General>
       <Flags>
         <SaveOnlyProjectUnits Value="True"/>
@@ -10,7 +10,6 @@
         <MainUnitHasScaledStatement Value="False"/>
         <SaveJumpHistory Value="False"/>
         <SaveFoldState Value="False"/>
-        <CompatibilityMode Value="True"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
       <UseAppBundle Value="False"/>
@@ -22,8 +21,8 @@
     <MacroValues Count="1">
       <Macro1 Name="LCLWidgetType" Value="nogui"/>
     </MacroValues>
-    <BuildModes Count="1">
-      <Item1 Name="Default" Default="True"/>
+    <BuildModes>
+      <Item Name="Default" Default="True"/>
       <SharedMatrixOptions Count="1">
         <Item1 ID="480656748252" Modes="Default" Type="IDEMacro" MacroName="LCLWidgetType" Value="nogui"/>
       </SharedMatrixOptions>
@@ -36,36 +35,36 @@
         <CommandLineParams Value="--format=xml -a"/>
       </local>
       <FormatVersion Value="2"/>
-      <Modes Count="1">
-        <Mode0 Name="default">
+      <Modes>
+        <Mode Name="default">
           <local>
             <CommandLineParams Value="--format=xml -a"/>
           </local>
-        </Mode0>
+        </Mode>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="5">
-      <Item1>
+    <RequiredPackages>
+      <Item>
         <PackageName Value="zunits"/>
-      </Item1>
-      <Item2>
+      </Item>
+      <Item>
         <PackageName Value="zreaders"/>
-      </Item2>
-      <Item3>
+      </Item>
+      <Item>
         <PackageName Value="zmath"/>
-      </Item3>
-      <Item4>
+      </Item>
+      <Item>
         <PackageName Value="zcontainers"/>
-      </Item4>
-      <Item5>
+      </Item>
+      <Item>
         <PackageName Value="FCL"/>
-      </Item5>
+      </Item>
     </RequiredPackages>
-    <Units Count="1">
-      <Unit0>
+    <Units>
+      <Unit>
         <Filename Value="testzengine.lpr"/>
         <IsPartOfProject Value="True"/>
-      </Unit0>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -102,16 +101,16 @@
     </Linking>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="3">
-      <Item1>
+    <Exceptions>
+      <Item>
         <Name Value="EAbort"/>
-      </Item1>
-      <Item2>
+      </Item>
+      <Item>
         <Name Value="ECodetoolError"/>
-      </Item2>
-      <Item3>
+      </Item>
+      <Item>
         <Name Value="EFOpenError"/>
-      </Item3>
+      </Item>
     </Exceptions>
   </Debugging>
 </CONFIG>

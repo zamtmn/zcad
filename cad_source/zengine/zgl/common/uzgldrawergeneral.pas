@@ -82,12 +82,12 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure popMatrix;override;
                         procedure AddToLCS(const v:TzePoint3d);override;
                         function SetLCSState(State:boolean):boolean;override;
-                        function SetLCS(const newLCS:TzePoint3d):TzePoint3d;override;
-                        function GetLCS:TzePoint3d;override;
+                        function SetLCS(const newLCS:TzeVector3d):TzeVector3d;override;
+                        function GetLCS:TzeVector3d;override;
                    end;
    TLCSProp=record
-     CurrentCamCSOffset:TzePoint3d;
-     CurrentCamCSOffsetS:TzePoint3s;
+     CurrentCamCSOffset:TzeVector3d;
+     CurrentCamCSOffsetS:TzeVector3s;
      notuseLCS:Boolean;
    end;
 
@@ -103,7 +103,7 @@ begin
   Result:=LCS.notuseLCS;
   LCS.notuseLCS:=State;
 end;
-function TZGLGeneralDrawer.SetLCS(const newLCS:TzePoint3d):TzePoint3d;
+function TZGLGeneralDrawer.SetLCS(const newLCS:TzeVector3d):TzeVector3d;
 begin
   Result:=LCS.CurrentCamCSOffset;
   LCS.CurrentCamCSOffset:=newLCS;
@@ -111,7 +111,7 @@ begin
   LCS.CurrentCamCSOffsetS.y:=newLCS.y;
   LCS.CurrentCamCSOffsetS.z:=newLCS.z
 end;
-function TZGLGeneralDrawer.GetLCS:TzePoint3d;
+function TZGLGeneralDrawer.GetLCS:TzeVector3d;
 begin
   Result:=LCS.CurrentCamCSOffset;
 end;

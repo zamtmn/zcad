@@ -363,7 +363,7 @@ begin
                       glVertex2iV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(createvertex(PzePoint2i(v)^.x,PzePoint2i(v)^.y,0),LCS.CurrentCamCSOffset);
+                           t:={vertexadd}(createvertex(PzePoint2i(v)^.x,PzePoint2i(v)^.y,0)+LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
@@ -378,7 +378,7 @@ begin
                       glVertex2i(x,y)
                   else
                       begin
-                           t:=vertexadd(createvertex(x,y,0),LCS.CurrentCamCSOffset);
+                           t:={vertexadd}(createvertex(x,y,0)+LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
@@ -393,7 +393,7 @@ begin
                       glVertex2dV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(createvertex(PzePoint2d(v)^.x,PzePoint2d(v)^.y,0),LCS.CurrentCamCSOffset);
+                           t:={vertexadd}(createvertex(PzePoint2d(v)^.x,PzePoint2d(v)^.y,0)+LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
@@ -409,7 +409,7 @@ begin
                       glVertex3dV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(v^,LCS.CurrentCamCSOffset);
+                           t:={vertexadd}(v^+LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
@@ -424,7 +424,7 @@ begin
                       glVertex3fV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(v^,LCS.CurrentCamCSOffsetS);
+                           t:={vertexadd}(v^+LCS.CurrentCamCSOffsetS);
                            glVertex3fV(@t);
                       end;
 end;
@@ -450,7 +450,7 @@ begin
                       glVertex2f(x,y)
                   else
                       begin
-                           t:=vertexadd(createvertex(x,y,0),LCS.CurrentCamCSOffset);
+                           t:={vertexadd}(createvertex(x,y,0)+LCS.CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
 end;
@@ -465,7 +465,7 @@ begin
                       glVertex2d(x,y)
                   else
                       begin
-                           t:=vertexadd(createvertex(x,y,0),LCS.CurrentCamCSOffset);
+                           t:={vertexadd}(createvertex(x,y,0)+LCS.CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
 end;
@@ -481,7 +481,7 @@ begin
                       glVertex3dV(@v)
                   else
                       begin
-                           t:=vertexadd(v,LCS.CurrentCamCSOffset);
+                           t:={vertexadd}(v+LCS.CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
 end;
@@ -497,7 +497,7 @@ begin
                       glVertex3dV(@t1)
                   else
                       begin
-                           t:=vertexadd(t1,LCS.CurrentCamCSOffset);
+                           t:={vertexadd}(t1+LCS.CurrentCamCSOffset);
                            glVertex3dv(@t);
                       end;
 end;

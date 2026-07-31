@@ -569,7 +569,9 @@ begin
               exit;
             pv2:=VertexArrayInWCS.getDataMutable(0);
           end;
-          dir:={uzegeometry.VertexSub}(pv2^-pv1^);
+          dir:=pv2^-pv1^;
+          if dir.IsNul then
+            exit(false);
           tv:=vectordot(dir,param.md.mouseray.dir).asPoint3d;
           n:=vectordot(param.md.mouseray.dir,tv.asVector).asPoint3d;
           n.Normalize;

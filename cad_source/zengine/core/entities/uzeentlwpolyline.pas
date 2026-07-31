@@ -211,6 +211,9 @@ begin
   else
     ie:=Width3D_in_WCS_Array.Count-1;
 
+  subresult:=CalcAABBInFrustum(vp.BoundingBox,mf);
+  if subresult=IREmpty then
+    exit(false);
 
   q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
   p3d:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
@@ -223,8 +226,7 @@ begin
 
       subresult:=CalcOutBound4VInFrustum(q3d^,mf);
       if subresult=IRFully then begin
-        Result:=True;
-        exit;
+        exit(True);
       end else if subresult=IRPartially then begin
         if uzegeometry.CalcTrueInFrustum
           (q3d^[0],q3d^[1],mf)<>irempty then begin

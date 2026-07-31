@@ -76,7 +76,7 @@ type
 
     function IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;virtual;
     procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-    function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
+    function GetTangentInPoint(const point:TzePoint3d):TzeVector3d;virtual;
 
     class function CreateInstance:PGDBObjLine;static;
     function GetObjType:TObjID;virtual;
@@ -95,9 +95,9 @@ function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 
 implementation
 
-function GDBObjLine.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
+function GDBObjLine.GetTangentInPoint(const point:TzePoint3d):TzeVector3d;
 begin
-  Result:=(CoordInWCS.lEnd-CoordInWCS.lBegin).asPoint3d.Normalized;
+  Result:=(CoordInWCS.lEnd-CoordInWCS.lBegin).Normalized;
 end;
 
 procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);

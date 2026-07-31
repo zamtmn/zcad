@@ -87,7 +87,7 @@ type
     procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
     procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
-    function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
+    function GetTangentInPoint(const point:TzePoint3d):TzeVector3d;virtual;
     procedure higlight(var DC:TDrawContext);virtual;
     class function CreateInstance:PGDBObjLWPolyline;static;
     function GetObjType:TObjID;virtual;
@@ -105,7 +105,7 @@ procedure GDBObjLWpolyline.higlight(var DC:TDrawContext);
 begin
 end;
 
-function GDBObjLWpolyline.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
+function GDBObjLWpolyline.GetTangentInPoint(const point:TzePoint3d):TzeVector3d;
 var
   ptv,ppredtv:PzePoint3d;
   ir:itrec;
@@ -132,12 +132,8 @@ begin
         found:=1;
       end;
 
-      if found>0 then begin
-        Result:={vertexsub}(ptv^-ppredtv^).asPoint3d;
-        Result.Normalize;
-        exit;
-        Dec(found);
-      end;
+      if found>0 then
+        exit((ptv^-ppredtv^).Normalized);
 
       ppredtv:=ptv;
       ptv:=Vertex3D_in_WCS_Array.iterate(ir);

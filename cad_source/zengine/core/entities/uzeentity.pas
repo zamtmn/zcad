@@ -203,7 +203,7 @@ type
     function CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;virtual;
     procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:integer;
       var drawing:TDrawingDef);virtual;
-    function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
+    function GetTangentInPoint(const point:TzePoint3d):TzeVector3d;virtual;
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     procedure correctsublayers(var la:GDBLayerArray);virtual;
@@ -349,9 +349,9 @@ begin
 
 end;
 
-function GDBObjEntity.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
+function GDBObjEntity.GetTangentInPoint(const point:TzePoint3d):TzeVector3d;
 begin
-  Result:=cP3d__0__0__0;
+  Result:=cV3d__0__0__0;
 end;
 
 function GDBObjEntity.IsHaveLCS:boolean;

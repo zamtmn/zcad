@@ -89,7 +89,7 @@ type
       virtual; //<**Пересечение с линией описанной 2-я точками
     procedure ReCalcFromObjMatrix;virtual;
 
-    function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
+    function GetTangentInPoint(const point:TzePoint3d):TzeVector3d;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
@@ -138,9 +138,9 @@ begin
   processaxis(posr,tv);
 end;
 
-function GDBObjCircle.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
+function GDBObjCircle.GetTangentInPoint(const point:TzePoint3d):TzeVector3d;
 begin
-  Result:=vectordot(P_insert_in_WCS-point,self.Local.basis.oz).Normalized.asPoint3d;
+  Result:=vectordot(P_insert_in_WCS-point,self.Local.basis.oz).Normalized;
 end;
 
 procedure GDBObjCircle.ReCalcFromObjMatrix;

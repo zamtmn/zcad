@@ -326,13 +326,13 @@ begin
         tv:=Sender.param.ospoint.worldcoord;
         if (key and MZW_SHIFT)<>0 then begin
           key:=key and (not MZW_SHIFT);
-          tv:=
-            Vertexmorphabs(Sender.param.lastpoint,Sender.param.ospoint.worldcoord,1);
+          tv:=Sender.param.ospoint.worldcoord+(Sender.param.ospoint.worldcoord-Sender.param.lastpoint).withLength(1);
+            //Vertexmorphabs(Sender.param.lastpoint,Sender.param.ospoint.worldcoord,1);
         end;
         if (key and MZW_ALT)<>0 then begin
           key:=key and (not MZW_CONTROL);
-          tv:=
-            Vertexmorphabs(Sender.param.lastpoint,Sender.param.ospoint.worldcoord,-1);
+          tv:=Sender.param.ospoint.worldcoord+(Sender.param.ospoint.worldcoord-Sender.param.lastpoint).withLength(-1);
+            //Vertexmorphabs(Sender.param.lastpoint,Sender.param.ospoint.worldcoord,-1);
         end;
         key:=key and (not MZW_ALT);
         key:=key and (not MZW_SHIFT);

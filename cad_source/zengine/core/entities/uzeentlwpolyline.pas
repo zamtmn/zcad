@@ -727,23 +727,14 @@ end;
 procedure GDBObjLWpolyline.createpoint;
 var
   i:integer;
-  v:TzeVector4d;
-  v3d:TzeVector3d;
-  pv:PzeVector2d;
+  p3d:TzePoint3d;
+  pv:PzePoint2d;
 begin
   Vertex3D_in_WCS_Array.Clear;
   pv:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
   for i:=0 to Vertex2D_in_OCS_Array.Count-1 do begin
-    v.Slice.Slice:=pv^;
-    {v.x:=pv.x;
-    v.y:=pv.y;}
-    v.Slice.CutOff:=0;
-    //v.z:=0;
-    v.CutOff:=0;
-    //v.w:=1;
-    v:=VectorTransform(v,objMatrix);
-    v3d:=v.Slice;
-    Vertex3D_in_WCS_Array.PushBackData(v3d.asPoint3d);
+    p3d:=VectorTransform2D(pv^,objMatrix);
+    Vertex3D_in_WCS_Array.PushBackData(p3d);
     Inc(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;

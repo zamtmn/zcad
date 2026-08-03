@@ -505,7 +505,7 @@ begin
   begin
 {    if wa.param.projtype = Projparalel then
   begin
-    gdb.GetCurrentDWG.pcamera^.projMatrix:=ortho(-clientwidth * wa.param.zoom / 2, clientwidth * wa.param.zoom / 2,
+    gdb.GetCurrentDWG.pcamera^.projMatrix:=Ortho(-clientwidth * wa.param.zoom / 2, clientwidth * wa.param.zoom / 2,
             -clientheight * wa.param.zoom / 2, clientheight * wa.param.zoom / 2,
              gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@cOneMatrix);
   end;
@@ -2257,7 +2257,7 @@ begin
   if param.projtype = ProjParalel then
                                       begin
 
-                                      param.mouseclipmatrix:=ortho(-sysvar.DISP.DISP_CursorSize^*param.zoom*2,sysvar.DISP.DISP_CursorSize^*param.zoom*2,
+                                      param.mouseclipmatrix:=Ortho(-sysvar.DISP.DISP_CursorSize^*param.zoom*2,sysvar.DISP.DISP_CursorSize^*param.zoom*2,
                                                                    -sysvar.DISP.DISP_CursorSize^*param.zoom*2,sysvar.DISP.DISP_CursorSize^*param.zoom*2,
                                                                    gdb.GetCurrentDWG.pcamera^.zmin, gdb.GetCurrentDWG.pcamera^.zmax,@cOneMatrix);
                                       param.mouseclipmatrix:=MatrixMultiply(tm,param.mouseclipmatrix);
@@ -2466,7 +2466,7 @@ begin
 
   if param.projtype = ProjParallel then
                                       begin
-                                      pcamera^.projMatrix:=ortho(-getviewcontrol.clientwidth*pcamera^.prop.zoom/2,getviewcontrol.clientwidth*pcamera^.prop.zoom/2,
+                                      pcamera^.projMatrix:=Ortho(-getviewcontrol.clientwidth*pcamera^.prop.zoom/2,getviewcontrol.clientwidth*pcamera^.prop.zoom/2,
                                                                                  -getviewcontrol.clientheight*pcamera^.prop.zoom/2,getviewcontrol.clientheight*pcamera^.prop.zoom/2,
                                                                                  pcamera^.zmin, pcamera^.zmax,@cOneMatrix);
                                       end
@@ -2590,7 +2590,7 @@ begin
   //pdwg.pcamera^.projMatrix:=cOneMatrix;
   if param.projtype = ProjParallel then
                                       begin
-                                      pcamera^.projMatrixLCS:=ortho(-getviewcontrol.clientwidth*pcamera^.prop.zoom/2,getviewcontrol.clientwidth*pcamera^.prop.zoom/2,
+                                      pcamera^.projMatrixLCS:=Ortho(-getviewcontrol.clientwidth*pcamera^.prop.zoom/2,getviewcontrol.clientwidth*pcamera^.prop.zoom/2,
                                                                                  -getviewcontrol.clientheight*pcamera^.prop.zoom/2,getviewcontrol.clientheight*pcamera^.prop.zoom/2,
                                                                                  pcamera^.zminLCS, pcamera^.zmaxLCS,@cOneMatrix);
                                       end

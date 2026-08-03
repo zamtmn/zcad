@@ -476,7 +476,7 @@ var
   ConnectorExtender:TSCHConnectorExtender;
   ip:Intercept3DProp;
   PTI:Pointer;
-  dist:DistAndt;
+  dist:TDistWitht;
   knot:TKnot;
 
   procedure addToConnections(t:double);

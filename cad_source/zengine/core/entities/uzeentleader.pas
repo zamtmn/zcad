@@ -264,9 +264,9 @@ function LeaderArrowAngleFromDirection(const Direction:TzeVector3d;const Fallbac
   FallbackEnd:TzePoint3d):double;
 begin
   if Direction.Length>LeaderGeometryEpsilon then
-    Result:=VertexAngle(CreateVertex2D(0,0),CreateVertex2D(Direction.x,Direction.y))-pi
+    Result:=VectorAngle(Direction.Slice)-pi
   else
-    Result:=VertexAngle(CreateVertex2D(FallbackStart.x,FallbackStart.y),CreateVertex2D(FallbackEnd.x,FallbackEnd.y))-pi;
+    Result:=VectorAngle((FallbackEnd-FallbackStart).Slice)-pi;
 end;
 
 function LeaderSplineStartDirection(Spline:PGDBObjSpline;

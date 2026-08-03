@@ -612,7 +612,7 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
     end;
   end;
 
-  function getPointInsideFrustum(out dt:DistAndt):boolean;
+  function getPointInsideFrustum(out dt:TDistWitht):boolean;
   type
     TStack=array[Low(TzeFrustum.v)..high(TzeFrustum.v)]of Double;
   var
@@ -662,7 +662,7 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
   function getI1I2(out i1,i2:TArrayIndex):boolean;
   var
     i:TArrayIndex;
-    dt:DistAndt;
+    dt:TDistWitht;
   begin
     result:=false;
     i1:=-1;

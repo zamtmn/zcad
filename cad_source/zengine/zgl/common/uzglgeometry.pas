@@ -431,7 +431,7 @@ begin
      cdp:=pcurrsegment^.naccumlength;
      pcurrsegment:=psegment;
      dir:=pcurrsegment^.dir;
-     angle:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(dir.x,dir.y));
+     angle:=VectorAngle(dir.Slice);
      cp:=pcurrsegment^.startpoint;
      end;
 //     else
@@ -441,7 +441,7 @@ procedure ZSegmentator.startdraw;
 begin
      pcurrsegment:=beginiterate(ir);
      dir:=pcurrsegment^.dir;
-     angle:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(dir.x,dir.y));
+     angle:=VectorAngle(dir.Slice);
      cdp:=0;
      cp:=pcurrsegment^.startpoint;
 end;

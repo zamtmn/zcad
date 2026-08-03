@@ -271,15 +271,15 @@ begin
           end;
 
           if inFrustomEnts=0 then
-            enttree.NodeData.InFrustumBoundingBox:={BBNul}enttree.BoundingBox;
+            enttree.NodeData.InFrustumBoundingBox:=enttree.BoundingBox;
         end;
         IRNotAplicable,IREmpty:
-          enttree.NodeData.InFrustumBoundingBox:=BBNul;
+          enttree.NodeData.InFrustumBoundingBox:=cBBNul;
       end;
 
     end;
     IRNotAplicable,IREmpty:
-      enttree.NodeData.InFrustumBoundingBox:=BBNul;
+      enttree.NodeData.InFrustumBoundingBox:=cBBNul;
   end;
 end;
 

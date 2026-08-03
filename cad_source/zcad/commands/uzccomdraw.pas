@@ -508,7 +508,7 @@ var
    i:integer;
    nearestd,{nearestd0,}secondd{,secondd0}:double;
    tp1,tp2:TzePoint3d;
-   dit,pdit:DistAndt;
+   dit,pdit:TDistWitht;
    Vertex0:TzePoint3d;
 begin
   nearestaxis:=-1;
@@ -584,7 +584,7 @@ var
    psd:PSelectedObjDesc;
    hi,hi2,vi,vi2,{ti,}i:integer;
    hname,vname:String;
-   dit:DistAndt;
+   dit:TDistWitht;
    Vertex0:TzePoint3d;
    isAxisVerical:TGDB3StateBool;
    isVertical:boolean;

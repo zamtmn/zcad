@@ -83,10 +83,10 @@ begin
 
   //smatrix:=CreateScaleMatrix(CreateVertex(scale,scale,scale));
 
-  //projMatrix:=ortho(point1.x,point2.x,point1.y,point2.y,-1,1,@cOneMatrix);
+  //projMatrix:=Ortho(point1.x,point2.x,point1.y,point2.y,-1,1,@cOneMatrix);
 
   projMatrix:=cOneMatrix;
-  projMatrix:=ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@projMatrix);
+  projMatrix:=Ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@projMatrix);
   projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(CreateVector(-(point1.x+point2.x)/dx,-(point1.y+point2.y)/dy,0)));
   projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(CreateVector(1/sx,1/sy,1)));
 

@@ -275,10 +275,10 @@ begin
           if v.y<0 then
                           begin
                                v:=-v;
-                               a:=vertexangle(PzePoint2d(@p1)^,PzePoint2d(@p2)^)*180/pi;
+                               a:=VectorAngle((p2-p1).Slice)*180/pi;
                           end
                           else
-                              a:=180+vertexangle(PzePoint2d(@p1)^,PzePoint2d(@p2)^)*180/pi;
+                              a:=180+VectorAngle((p2-p1).Slice)*180/pi;
 
           ptext:=pointer(AllocEnt(GDBMtextID));
           ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(GetCableMaterial(pcabledesk)+' L='+floattostr(pcabledesk^.length)+'m'),({Vertexmorph}p1.LerpTo(p2,0.5)+v),2.5,0,0.65,a,jsbc,p1.LengthTo(p2),1);

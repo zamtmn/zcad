@@ -130,8 +130,8 @@ procedure TGLUInterface.SetupNurbsRenderer(const renderer:GLUnurbsObj;
 var
   fm,fp:TzeTypedMatrix4s;
 begin
-  fm:=ToDMatrix4f(model);
-  fp:=ToDMatrix4f(perspective);
+  fm:=model.ToTypedMatrix4s;
+  fp:=perspective.ToTypedMatrix4s;
 
   NurbsProperty(renderer,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
   NurbsProperty(renderer,GLU_SAMPLING_TOLERANCE,tolerance);

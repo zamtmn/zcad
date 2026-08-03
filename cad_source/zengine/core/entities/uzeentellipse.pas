@@ -522,8 +522,8 @@ begin
     Local.p_insert.z:=0;
     tv.x:=p_x;
     tv.y:=p_y;
-    startangle:=vertexangle(tv,ptdata.p1);
-    endangle:=vertexangle(tv,ptdata.p3);
+    startangle:=VectorAngle(ptdata.p1-tv);
+    endangle:=VectorAngle(ptdata.p3-tv);
     if startangle>endangle then begin
       rrr:=
         startangle;
@@ -531,7 +531,7 @@ begin
         endangle;
       endangle:=rrr;
     end;
-    rrr:=vertexangle(tv,ptdata.p2);
+    rrr:=VectorAngle(ptdata.p2-tv);
     if (rrr>startangle) and (rrr<endangle) then begin
     end
     else begin

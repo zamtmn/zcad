@@ -146,7 +146,7 @@ begin
     else
       p1inside:=False;
   end;
-  zangle:=vertexangle(createvertex2d(p1.x,p1.y),createvertex2d(p2.x,p2.y));
+  zangle:=VectorAngle((p2-p1).Slice{(p1.x,p1.y),createvertex2d(p2.x,p2.y)});
   if not supress1 then begin
     if p0inside then
       pointer(pv):=
@@ -269,7 +269,7 @@ end;
 
 procedure GDBObjDimension.CalcTextAngle;
 begin
-  DimAngle:=vertexangle(cP2d__0__0,CreateVertex2D(vectorD.x,vectorD.y));
+  DimAngle:=VectorAngle(vectorD.Slice);
   TextAngle:=CorrectAngleIfNotReadable(DimAngle);
 end;
 

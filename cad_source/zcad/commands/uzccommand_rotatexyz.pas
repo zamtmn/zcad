@@ -156,7 +156,7 @@ begin
   v2.y:=wc.y;
   v1.x:=t3dp.x;
   v1.y:=t3dp.y;
-  a:=uzegeometry.Vertexangle(v1,v2);
+  a:=VectorAngle(v2-v1);
 
   rotate(CreateRotmatr(a),button);
 

@@ -138,7 +138,7 @@ begin
         PLLSymbolLine^.SymbolsParam.pfont:=@self;
         PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
         PLLSymbolLine^.SymbolsParam.FirstSymMatr:=uzegeometry.MatrixMultiply(matr,objmatrix);
-        PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].v[0],PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].v[1]));
+        PLLSymbolLine^.SymbolsParam.Rotate:=VectorAngle(CreateVector2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].v[0],PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].v[1]));
         PLLSymbolLine^.SymbolsParam.sx:={oneVertexlength}(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].Slice.Length)/{oneVertexlength}(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1].Slice.Length);
         true0Y:=VectorDot(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[2].Slice,PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[0].Slice);
         if not true0Y.IsNul then

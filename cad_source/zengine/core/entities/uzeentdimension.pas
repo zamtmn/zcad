@@ -113,6 +113,7 @@ var
   p0inside,p1inside:boolean;
   pp1,pp2:TzePoint3d;
   zangle:double;
+  dp21:TzeVector3d;
 begin
   l:=p1.LengthTo(p2);
   tbp0:=PDimStyle.GetDimBlockParam(0);
@@ -182,21 +183,24 @@ begin
     pv^.BuildGeometry(drawing);
     pv^.formatentity(drawing,dc);
   end;
+  dp21:=(p2-p1).Normalized;
   if tbp0.Width=0 then
-    pp1:=Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE)
+    //pp1:=Vertexmorphabs(p2,p1,PDimStyle.Lines.DIMDLE)
+    pp1:=p1-dp21*(PDimStyle.Lines.DIMDLE)
   else begin
     if p0inside then
-      pp1:=
-        Vertexmorphabs(p2,p1,-PDimStyle.Arrows.DIMASZ*GetDIMSCALE)
+      //pp1:=Vertexmorphabs(p2,p1,-PDimStyle.Arrows.DIMASZ*GetDIMSCALE)
+      pp1:=p1+dp21*(PDimStyle.Arrows.DIMASZ*GetDIMSCALE)
     else
       pp1:=p1;
   end;
   if tbp1.Width=0 then
-    pp2:=Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMDLE)
+    //pp2:=Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMDLE)
+    pp2:=p2+dp21*(PDimStyle.Lines.DIMDLE)
   else begin
     if p0inside then
-      pp2:=
-        Vertexmorphabs(p1,p2,-PDimStyle.Arrows.DIMASZ*GetDIMSCALE)
+      //pp2:=Vertexmorphabs(p1,p2,-PDimStyle.Arrows.DIMASZ*GetDIMSCALE)
+      pp2:=p2-dp21*(PDimStyle.Arrows.DIMASZ*GetDIMSCALE)
     else
       pp2:=p2;
   end;

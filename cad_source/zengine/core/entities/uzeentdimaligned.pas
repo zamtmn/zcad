@@ -87,8 +87,8 @@ var
   dist,llength:double;
 begin
   //расстояние от точки до линии
-  w:={VertexSub}(q-p1);
-  l:={VertexSub}(p2-p1);
+  w:=q-p1;
+  l:=p2-p1;
   llength:=scalardot(l,l);
   if llength<sqreps then begin
     d:=0;
@@ -96,24 +96,24 @@ begin
     exit;
   end;
   dist:=scalardot(w,l)/llength;
-  p1:={Vertexmorph}p1.LerpTo(p2,dist);
+  p1:=p1.LerpTo(p2,dist);
   d:=q.LengthTo(p1);
   if d>eps then begin
-    Result:=
-      p2+(Vertexmorphabs2(p1,q,d)-p1);
+    Result:=p2+((q-p1).Normalized*d{(Vertexmorphabs2(p1,q,d)}-p1.asVector);
   end else
     Result:=p2;
 end;
 
 function SetPointLine(d:double;const q:TzePoint3d;const p1,p2:TzePoint3d):TzePoint3d;
 var
-  w,l:TzeVector3d;
+  l:TzeVector3d;
+  tp:TzePoint3d;
   dist:double;
 begin
-  w:={VertexSub}(q-p1);
-  l:={VertexSub}(p2-p1);
-  dist:=scalardot(w,l)/scalardot(l,l);
-  Result:=uzegeometry.Vertexmorphabs2({Vertexmorph}p1.LerpTo(p2,dist),q,d);
+  l:=p2-p1;
+  dist:=scalardot(q-p1,l)/scalardot(l,l);
+  tp:=p1.LerpTo(p2,dist);
+  Result:=tp+(q-tp).Normalized*d;//uzegeometry.Vertexmorphabs2(tp,q,d);
 end;
 
 function GetTFromLinePoint(const q:TzePoint3d;const p1,p2:TzePoint3d):double;
@@ -353,6 +353,7 @@ procedure GDBObjAlignedDimension.DrawExtensionLine(p1,p2:TzePoint3d;LineNumber:i
 var
   pl:pgdbobjline;
   pp:pgdbobjpoint;
+  dp21:TzeVector3d;
 begin
   pp:=pointer(ConstObjArray.CreateInitObj(GDBpointID,@self));
   pp.vp.Layer:=vp.Layer;
@@ -360,30 +361,28 @@ begin
   pp.P_insertInOCS:=p1;
   pp.FormatEntity(drawing,dc);
 
-  if {vertexeq}{IsPointEqual}p1.IsEqual(p2,bigeps) then
+  if p1.IsEqual(p2,bigeps) then
     pl:=DrawExtensionLineLinePart(p1,p2,drawing,part)
-  else
+  else begin
+    dp21:=(p2-P1).Normalized;
     pl:=DrawExtensionLineLinePart(
-      Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO),Vertexmorphabs(
-      p1,p2,PDimStyle.Lines.DIMEXE),drawing,part);
+      p1+(p2-p1).Normalized*PDimStyle.Lines.DIMEXO{Vertexmorphabs2(p1,p2,PDimStyle.Lines.DIMEXO)},
+      p2+dp21*PDimStyle.Lines.DIMEXE{Vertexmorphabs(p1,p2,PDimStyle.Lines.DIMEXE)},
+      drawing,part);
+  end;
   pl.FormatEntity(drawing,dc);
 end;
 
 procedure GDBObjAlignedDimension.CalcDNVectors;
 begin
-  vectorD:={vertexsub}(DimData.P14InWCS-DimData.P13InWCS);
-  vectorD.Normalize;//:=normalizevertex(vectorD);
-
+  vectorD:=(DimData.P14InWCS-DimData.P13InWCS).Normalized;
   if DimData.P10InWCS.SqrLengthTo(DimData.P14InWCS)>sqreps then begin
     vectorN:=DimData.P10InWCS-DimData.P14InWCS;
   end else begin
     vectorN.Slice:=vectorD.Slice.Turned90L;
-    {vectorN.x:=-vectorD.y;
-    vectorN.y:=vectorD.x;}
     vectorN.CutOff:=0;
-    {vectorN.z:=0;}
   end;
-  vectorN.Normalize;//:=normalizevertex(vectorN);
+  vectorN.Normalize;
 end;
 
 procedure GDBObjAlignedDimension.FormatEntity(var drawing:TDrawingDef;

@@ -389,10 +389,9 @@ end;
 
 function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:TzePoint3d; var root:GDBObjRoot):pgdbobjline;
 var
-//   pv:pGDBObjDevice;
-//   lx,rx,uy,dy:Double;
    pl:pgdbobjline;
    oldcoord,oldcoord2:TzePoint3d;
+   tv:TzeVector3d;
    DC:TDrawContext;
 begin
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -409,25 +408,26 @@ else if datcount>1 then
      if datcount=2 then
                        begin
                          pl:=pointer(AllocEnt(GDBLineID));
-                         pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,oldcoord2);
+                         pl^.init(@root,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,oldcoord2);
                          root.ObjArray.AddPEntity(pl^);
                          zcSetEntPropFromCurrentDrawingProp(pl);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                        end
 else if datcount>2 then
                        begin
+                         tv:=(oldcoord2-oldcoord).Normalized;
                          pl:=pointer(AllocEnt(GDBLineID));
-                         pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord, Vertexmorphabs2(oldcoord,oldcoord2,2));
+                         pl^.init(@root,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,oldcoord+tv*2);
                          root.ObjArray.AddPEntity(pl^);
                          zcSetEntPropFromCurrentDrawingProp(pl);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                          pl:=pointer(AllocEnt(GDBLineID));
-                         pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,4), Vertexmorphabs2(oldcoord,oldcoord2,6));
+                         pl^.init(@root,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord+tv*4,oldcoord+tv*6);
                          root.ObjArray.AddPEntity(pl^);
                          zcSetEntPropFromCurrentDrawingProp(pl);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);
                          pl:=pointer(AllocEnt(GDBLineID));
-                         pl^.init({drawings.GetCurrentROOT}@root,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,8), oldcoord2);
+                         pl^.init(@root,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord+tv*8, oldcoord2);
                          root.ObjArray.AddPEntity(pl^);
                          zcSetEntPropFromCurrentDrawingProp(pl);
                          pl^.Formatentity(drawings.GetCurrentDWG^,dc);

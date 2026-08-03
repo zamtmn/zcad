@@ -706,6 +706,7 @@ var
   pl:pgdbobjline;
   oldcoord,oldcoord2:TzePoint3d;
   DC:TDrawContext;
+  tv:TzeVector3d;
 begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   if datcount=1 then
@@ -724,19 +725,19 @@ begin
     zcSetEntPropFromCurrentDrawingProp(pl);
     pl^.Formatentity(drawings.GetCurrentDWG^,dc);
   end else if datcount>2 then begin
+    tv:=(oldcoord2-oldcoord).Normalized;
     pl:=pointer(AllocEnt(GDBLineID));
-    pl^.init(@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,Vertexmorphabs2(oldcoord,oldcoord2,2));
+    pl^.init(@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord,oldcoord+tv*2);
     root.ObjArray.AddPEntity(pl^);
     zcSetEntPropFromCurrentDrawingProp(pl);
     pl^.Formatentity(drawings.GetCurrentDWG^,dc);
     pl:=pointer(AllocEnt(GDBLineID));
-    pl^.init(@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,4),
-      Vertexmorphabs2(oldcoord,oldcoord2,6));
+    pl^.init(@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord+tv*4,oldcoord+tv*6);
     root.ObjArray.AddPEntity(pl^);
     zcSetEntPropFromCurrentDrawingProp(pl);
     pl^.Formatentity(drawings.GetCurrentDWG^,dc);
     pl:=pointer(AllocEnt(GDBLineID));
-    pl^.init(@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,Vertexmorphabs2(oldcoord,oldcoord2,8),oldcoord2);
+    pl^.init(@root,drawings.GetCurrentDWG.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,oldcoord+tv*8,oldcoord2);
     root.ObjArray.AddPEntity(pl^);
     zcSetEntPropFromCurrentDrawingProp(pl);
     pl^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -957,7 +958,7 @@ var
   dx,dy:double;
   line1,line2:GDBLineProp;
   l1,l2,i:integer;
-  dir:TzeVector3d;
+  dir,tv:TzeVector3d;
   sd,sdd,angle:double;
   linelength:double;
 begin
@@ -1011,12 +1012,14 @@ begin
       end;
     end else
     begin
-      place2(pva,Vertexmorphabs2(line1.lbegin,line1.lend,sdd),dir,l2,Linelength,sd,sd*2,Name,angle,
+      tv:=(line1.lend-line1.lBegin).Normalized;
+      line2.lbegin:=line1.lbegin+tv*sdd;
+      line2.lend:=line1.lEnd-tv*sdd;
+
+      place2(pva,line2.lbegin,dir,l2,Linelength,sd,sd*2,Name,angle,
         norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
-      place2(pva,Vertexmorphabs2(line1.lbegin,line1.lend,-sdd),dir,l2,Linelength,sd,sd*2,Name,angle,
+      place2(pva,line2.lend,dir,l2,Linelength,sd,sd*2,Name,angle,
         norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);
-      line2.lbegin:=Vertexmorphabs2(line1.lbegin,line1.lend,sdd);
-      line2.lend:=Vertexmorphabs2(line1.lbegin,line1.lend,-sdd);
       l1:=l1-2;
       for i:=1 to l1 do
         place2(pva,line2.lbegin.LerpTo(line2.lend,i/(l1+1)),dir,l2,Linelength,sd,sd*2,Name,angle,norm,OrtoDevPlaceParam.ScaleBlock,TPSS_Proportional);

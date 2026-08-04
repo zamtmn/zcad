@@ -157,7 +157,7 @@ begin
     if Count > 0 then
     begin
       SetLength(Result, Count);
-      Vertex := PzePoint3d(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
+      Vertex := PolyPtr^.VertexArrayInOCS.GetParrayAsPointer;
 
       for i := 0 to Count - 1 do
       begin

@@ -66,17 +66,11 @@ begin
       c:=0;
       if _intercept2d(pva.getDataMutable(p1)^,pva.getDataMutable(p2)^,pva.getDataMutable(i)^,1,0) then
         Inc(c);
-      if _intercept2d(
-        PzePoint2d(pva.getDataMutable(p2))^,PzePoint2d(pva.getDataMutable(p3))^,
-        PzePoint2d(pva.getDataMutable(i))^,1,0) then
+      if _intercept2d(pva.getDataMutable(p2)^,pva.getDataMutable(p3)^,pva.getDataMutable(i)^,1,0) then
         Inc(c);
-      if _intercept2d(
-        PzePoint2d(pva.getDataMutable(p3))^,PzePoint2d(pva.getDataMutable(p4))^,
-        PzePoint2d(pva.getDataMutable(i))^,1,0) then
+      if _intercept2d(pva.getDataMutable(p3)^,pva.getDataMutable(p4)^,pva.getDataMutable(i)^,1,0) then
         Inc(c);
-      if _intercept2d(
-        PzePoint2d(pva.getDataMutable(p4))^,PzePoint2d(pva.getDataMutable(p1))^,
-        PzePoint2d(pva.getDataMutable(i))^,1,0) then
+      if _intercept2d(pva.getDataMutable(p4)^,pva.getDataMutable(p1)^,pva.getDataMutable(i)^,1,0) then
         Inc(c);
       if ((c mod 2)=1) then
         exit;
@@ -95,20 +89,14 @@ begin
     if (i<>p1)and  (i<>p2)and  (i<>p3)
     then begin
       c:=0;
-      if _intercept2d(
-        PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(pva.getDataMutable(p2))^,
-        PzePoint2d(pva.getDataMutable(i))^,1,0) then
+      if _intercept2d(pva.getDataMutable(p1)^,pva.getDataMutable(p2)^,pva.getDataMutable(i)^,1,0) then
         Inc(c);
-      if _intercept2d(
-        PzePoint2d(pva.getDataMutable(p2))^,PzePoint2d(pva.getDataMutable(p3))^,
-        PzePoint2d(pva.getDataMutable(i))^,1,0) then
+      if _intercept2d(pva.getDataMutable(p2)^,pva.getDataMutable(p3)^,pva.getDataMutable(i)^,1,0) then
         Inc(c);
-      if _intercept2d(
-        PzePoint2d(pva.getDataMutable(p3))^,p,PzePoint2d(pva.getDataMutable(i))^,1,0)
+      if _intercept2d(pva.getDataMutable(p3)^,p,pva.getDataMutable(i)^,1,0)
       then
         Inc(c);
-      if _intercept2d(
-        p,PzePoint2d(pva.getDataMutable(p1))^,PzePoint2d(pva.getDataMutable(i))^,1,0)
+      if _intercept2d(p,pva.getDataMutable(p1)^,pva.getDataMutable(i)^,1,0)
       then
         Inc(c);
       if ((c mod 2)=1) then
@@ -135,13 +123,8 @@ begin
   p3:=2;
   p4:=3;
   for i:=1 to pva.Count do begin
-    if isrect(PzePoint2d(pva.getDataMutable(p1))^,
-      PzePoint2d(pva.getDataMutable(p2))^,
-      PzePoint2d(pva.getDataMutable(p3))^,
-      PzePoint2d(pva.getDataMutable(p4))^) then
-      if pva.ispointinside(
-        {Vertexmorph}PzePoint2d(pva.getDataMutable(p1))^.LerpTo(PzePoint2d(
-        pva.getDataMutable(p3))^,0.5)) then
+    if isrect(pva.getDataMutable(p1)^,pva.getDataMutable(p2)^,pva.getDataMutable(p3)^,pva.getDataMutable(p4)^) then
+      if pva.ispointinside(pva.getDataMutable(p1)^.LerpTo(pva.getDataMutable(p3)^,0.5)) then
         if IsSubContur(pva,p1,p2,p3,p4) then begin
           pvr.PushBackData(pva.getDataMutable(p1)^);
           pvr.PushBackData(pva.getDataMutable(p2)^);
@@ -173,23 +156,19 @@ begin
   p3:=2;
   p4:=3;
   for i:=1 to pva.Count do begin
-    p.x:=PzePoint2d(pva.getDataMutable(p1))^.x+
-      (PzePoint2d(pva.getDataMutable(p3))^.x-PzePoint2d(pva.getDataMutable(p2))^.x);
-    p.y:=PzePoint2d(pva.getDataMutable(p1))^.y+
-      (PzePoint2d(pva.getDataMutable(p3))^.y-PzePoint2d(pva.getDataMutable(p2))^.y);
-    if distance2piece_2dmy(p,PzePoint2d(pva.getDataMutable(p3))^,
-      PzePoint2d(pva.getDataMutable(p4))^)<eps then
-      if pva.ispointinside(
-        {Vertexmorph}PzePoint2d(pva.getDataMutable(p1))^.LerpTo(PzePoint2d(
-        pva.getDataMutable(p3))^,0.5)) then
+    p.x:=pva.getDataMutable(p1)^.x+(pva.getDataMutable(p3)^.x-pva.getDataMutable(p2)^.x);
+    p.y:=pva.getDataMutable(p1)^.y+(pva.getDataMutable(p3)^.y-pva.getDataMutable(p2)^.y);
+    if distance2piece_2dmy(p,pva.getDataMutable(p3)^,pva.getDataMutable(p4)^)<eps then
+      if pva.ispointinside(pva.getDataMutable(p1)^.LerpTo(pva.getDataMutable(p3)^,0.5)) then
         if IsSubContur2(pva,p1,p2,p3,p) then begin
           pvr.PushBackData(pva.getDataMutable(p1)^);
           pvr.PushBackData(pva.getDataMutable(p2)^);
           pvr.PushBackData(pva.getDataMutable(p3)^);
           pvr.PushBackData(p);
 
-          PzePoint2d(pva.getDataMutable(p3))^.x:=p.x;
-          PzePoint2d(pva.getDataMutable(p3))^.y:=p.y;
+          pva.getDataMutable(p3)^:=p;
+          //PzePoint2d(pva.getDataMutable(p3))^.x:=p.x;
+          //PzePoint2d(pva.getDataMutable(p3))^.y:=p.y;
           pva.deleteelement(p2);
           pva.optimize;
 
@@ -241,9 +220,10 @@ begin
     dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
     i:=0;
     while i<pvr.Count do begin
-      wc.x:=PzePoint2d(pvr.getDataMutable(i))^.x;
-      wc.y:=PzePoint2d(pvr.getDataMutable(i))^.y;
-      wc.z:=0;
+      wc.Slice:=pvr.getDataMutable(i)^;
+      //wc.x:=PzePoint2d(pvr.getDataMutable(i))^.x;
+      //wc.y:=PzePoint2d(pvr.getDataMutable(i))^.y;
+      wc.CutOff:=0;
       wc:=uzegeometry.VectorTransform3D(wc,m);
       p3dpl^.AddVertex(wc);
 

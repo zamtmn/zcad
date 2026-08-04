@@ -112,7 +112,7 @@ begin
 
   if Length(Props.ControlPoints) > 0 then begin
     for i := 0 to High(Props.ControlPoints) do
-      pobj^.AddVertex(CreateVertex(Props.ControlPoints[i].X,
+      pobj^.AddVertex(TzePoint3d.CreateRec(Props.ControlPoints[i].X,
         Props.ControlPoints[i].Y, Props.ControlPoints[i].Z));
   end else begin
     for i := 0 to High(Props.FitPoints) do

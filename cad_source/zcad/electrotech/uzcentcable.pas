@@ -416,8 +416,8 @@ begin
         m:=MatrixMultiply(rotmatr,m);
 
         str22:=ptnlastCutted.PrevP;
-        str21:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
-        str23:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+        str21:=VectorTransform3D(TzePoint3d.CreateRec(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+        str23:=VectorTransform3D(TzePoint3d.CreateRec(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
       end else begin
         str22:=ptnlastCutted.PrevP;
         str21:=ptnlastCutted.PrevP;

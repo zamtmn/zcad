@@ -198,8 +198,8 @@ begin
       cell := CreateEmptyCell(i, j);
 
       // Устанавливаем границы ячейки
-      cell.bounds.LBN := CreateVertex(col^.leftPosition, row^.bottomPosition, 0);
-      cell.bounds.RTF := CreateVertex(col^.rightPosition, row^.topPosition, 0);
+      cell.bounds.LBN := TzePoint3d.CreateRec(col^.leftPosition, row^.bottomPosition, 0);
+      cell.bounds.RTF := TzePoint3d.CreateRec(col^.rightPosition, row^.topPosition, 0);
 
       aTableModel.cells.PushBack(cell);
     end;
@@ -275,8 +275,8 @@ begin
   // Проверка наличия строк и столбцов
   if (aTableModel.columns.Size = 0) or (aTableModel.rows.Size = 0) then
   begin
-    aTableModel.tableBounds.LBN := CreateVertex(0, 0, 0);
-    aTableModel.tableBounds.RTF := CreateVertex(0, 0, 0);
+    aTableModel.tableBounds.LBN := cP3d__0__0__0;
+    aTableModel.tableBounds.RTF := cP3d__0__0__0;
     Exit;
   end;
 
@@ -293,8 +293,8 @@ begin
   row := aTableModel.rows.Mutable[aTableModel.rows.Size - 1];
   maxY := row^.topPosition;
 
-  aTableModel.tableBounds.LBN := CreateVertex(minX, minY, 0);
-  aTableModel.tableBounds.RTF := CreateVertex(maxX, maxY, 0);
+  aTableModel.tableBounds.LBN := TzePoint3d.CreateRec(minX, minY, 0);
+  aTableModel.tableBounds.RTF := TzePoint3d.CreateRec(maxX, maxY, 0);
 end;
 
 // Построить модель таблицы из списка примитивов

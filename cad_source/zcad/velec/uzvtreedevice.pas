@@ -4643,7 +4643,7 @@ var
          //if commandmanager.get3dpoint('Specify insert point:',gg) = IRNormal then begin
            zcUI.TextMessage('***Визуализация отладочного графа! ВКЛЮЧЕНА***',TMWOHistoryOut);
 
-           gg:=uzegeometry.CreateVertex(0,0,0);
+           gg:=cP3d__0__0__0;
            //if listMasterDevice.Size-1 <> -1 then    //пропуск когда лист пустой // Range check error
            if listMasterDevice.Size <> 0 then    //пропуск когда лист пустой
            for i:=0 to listMasterDevice.Size-1 do

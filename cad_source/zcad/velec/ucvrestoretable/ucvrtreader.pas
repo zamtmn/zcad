@@ -186,8 +186,8 @@ begin
   Result.primitiveType := GetPrimitiveType(aEntity);
   Result.objectPointer := aEntity;
   Result.boundingBox := aEntity^.vp.BoundingBox;
-  Result.startPoint := CreateVertex(0, 0, 0);
-  Result.endPoint := CreateVertex(0, 0, 0);
+  Result.startPoint := cP3d__0__0__0;
+  Result.endPoint := cP3d__0__0__0;
   Result.textContent := '';
   Result.processed := False;
 
@@ -235,8 +235,8 @@ begin
           if vertex^.y > maxY then maxY := vertex^.y;
         end;
 
-        Result.boundingBox.LBN := CreateVertex(minX, minY, 0);
-        Result.boundingBox.RTF := CreateVertex(maxX, maxY, 0);
+        Result.boundingBox.LBN := TzePoint3d.CreateRec(minX, minY, 0);
+        Result.boundingBox.RTF := TzePoint3d.CreateRec(maxX, maxY, 0);
       end;
     end;
 

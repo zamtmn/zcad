@@ -243,7 +243,7 @@ var
   listAllHeadDev:TListDev;
 begin
   depthVisual:=15;
-  insertCoordination:=uzegeometry.CreateVertex(0,0,0);
+  insertCoordination:=cP3d__0__0__0;
 
 
    //Получить список всех древовидно ориентированных графов из которых состоит модель

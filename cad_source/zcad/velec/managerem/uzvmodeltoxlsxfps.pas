@@ -2492,7 +2492,7 @@ var
 begin
   //для проверки что было собрано из модели графа
   depthVisual:=15;
-  insertCoordination:=uzegeometry.CreateVertex(0,0,0);
+  insertCoordination:=cP3d__0__0__0;
 
   //Запуск ремонтного режима
   remotemode:=false;

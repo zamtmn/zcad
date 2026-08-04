@@ -270,10 +270,10 @@ var
   t,b,l,rrr,n,f:double;
   i:integer;
 begin
-  outbound[0]:=VectorTransform3d(CreateVertex(-1,1,0),objMatrix);
-  outbound[1]:=VectorTransform3d(CreateVertex(1,1,0),objMatrix);
-  outbound[2]:=VectorTransform3d(CreateVertex(1,-1,0),objMatrix);
-  outbound[3]:=VectorTransform3d(CreateVertex(-1,-1,0),objMatrix);
+  outbound[0]:=VectorTransform3d(TzePoint3d.CreateRec(-1,1,0),objMatrix);
+  outbound[1]:=VectorTransform3d(TzePoint3d.CreateRec(1,1,0),objMatrix);
+  outbound[2]:=VectorTransform3d(TzePoint3d.CreateRec(1,-1,0),objMatrix);
+  outbound[3]:=VectorTransform3d(TzePoint3d.CreateRec(-1,-1,0),objMatrix);
   l:=outbound[0].x;
   rrr:=outbound[0].x;
   t:=outbound[0].y;
@@ -295,8 +295,8 @@ begin
       f:=outbound[i].z;
   end;
 
-  vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-  vp.BoundingBox.RTF:=CreateVertex(rrr,T,f);
+  vp.BoundingBox.LBN:=TzePoint3d.CreateRec(l,B,n);
+  vp.BoundingBox.RTF:=TzePoint3d.CreateRec(rrr,T,f);
 end;
 
 procedure GDBObjEllipse.createpoint;

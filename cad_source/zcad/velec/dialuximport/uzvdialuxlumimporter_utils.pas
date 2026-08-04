@@ -133,7 +133,7 @@ begin
   end;
 
   // Суммируем координаты всех вершин
-  Vertex := PzePoint3d(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
+  Vertex := PolyPtr^.VertexArrayInOCS.GetParrayAsPointer;
   for i := 0 to Count - 1 do
   begin
     SumX := SumX + Vertex^.x;
@@ -272,7 +272,7 @@ begin
   // Настраивает
   result^.Name := blockName;
   result^.Local.P_insert := pt;
-  result^.scale := uzegeometry.CreateVector(scalex, scaley, 1);
+  result^.scale := TzeVector3d.CreateRec(scalex, scaley, 1);
   result^.rotate := iRotate;
 
   // Строим переменную часть примитива (та что может редактироваться)

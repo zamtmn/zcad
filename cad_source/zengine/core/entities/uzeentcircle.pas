@@ -262,10 +262,10 @@ begin
       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
     calcObjMatrix;
     createpoint(dc);
-    q0:=VectorTransform3d(CreateVertex(1,0,0),objMatrix);
-    q1:=VectorTransform3d(CreateVertex(0,-1,0),objMatrix);
-    q2:=VectorTransform3d(CreateVertex(-1,0,0),objMatrix);
-    q3:=VectorTransform3d(CreateVertex(0,1,0),objMatrix);
+    q0:=VectorTransform3d(TzePoint3d.CreateRec(1,0,0),objMatrix);
+    q1:=VectorTransform3d(TzePoint3d.CreateRec(0,-1,0),objMatrix);
+    q2:=VectorTransform3d(TzePoint3d.CreateRec(-1,0,0),objMatrix);
+    q3:=VectorTransform3d(TzePoint3d.CreateRec(0,1,0),objMatrix);
     calcbb(dc);
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
@@ -283,10 +283,10 @@ var
   t,b,l,r,n,f:double;
   i:integer;
 begin
-  outbound[0]:=VectorTransform3d(CreateVertex(-1,1,0),objMatrix);
-  outbound[1]:=VectorTransform3d(CreateVertex(1,1,0),objMatrix);
-  outbound[2]:=VectorTransform3d(CreateVertex(1,-1,0),objMatrix);
-  outbound[3]:=VectorTransform3d(CreateVertex(-1,-1,0),objMatrix);
+  outbound[0]:=VectorTransform3d(TzePoint3d.CreateRec(-1,1,0),objMatrix);
+  outbound[1]:=VectorTransform3d(TzePoint3d.CreateRec(1,1,0),objMatrix);
+  outbound[2]:=VectorTransform3d(TzePoint3d.CreateRec(1,-1,0),objMatrix);
+  outbound[3]:=VectorTransform3d(TzePoint3d.CreateRec(-1,-1,0),objMatrix);
 
   l:=outbound[0].x;
   r:=outbound[0].x;
@@ -309,8 +309,8 @@ begin
       f:=outbound[i].z;
   end;
 
-  vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-  vp.BoundingBox.RTF:=CreateVertex(r,T,f);
+  vp.BoundingBox.LBN:=TzePoint3d.CreateRec(l,B,n);
+  vp.BoundingBox.RTF:=TzePoint3d.CreateRec(r,T,f);
 end;
 
 procedure GDBObjCircle.createpoint(var DC:TDrawContext);
@@ -332,8 +332,8 @@ begin
   pvertex:=circlepointoflod[l].beginiterate(ir);
   if pvertex<>nil then
     repeat
-      PzePoint2d(@tv)^:=pvertex^;
-      tv.z:=0;
+      tv.Slice:=pvertex^;
+      tv.CutOff:=0;
       v:=VectorTransform3D(tv,objmatrix);
       Vertex3D_in_WCS_Array.PushBackData(v);
       pvertex:=circlepointoflod[l].iterate(ir);

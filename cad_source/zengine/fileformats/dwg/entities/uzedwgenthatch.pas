@@ -315,7 +315,7 @@ begin
   DWGCopyHatchProps(PHatch^, DWGContext.DWGVer, DWGContext.DWGCodePage,
     Props);
   pobj := GDBObjHatch.CreateInstance;
-  pobj^.Local.p_insert := CreateVertex(0, 0, Props.Elevation);
+  pobj^.Local.p_insert := TzePoint3d.CreateRec(0, 0, Props.Elevation);
   pobj^.Local.basis.oz := DWGNormalOrDefault(Props.Extrusion).asVector;
   pobj^.PatternName := Props.PatternName;
   if (pobj^.PatternName = '') and Props.IsSolidFill then

@@ -1224,7 +1224,7 @@ begin
          //drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
   //** Строим структурную схему
-  graphVizPt:=createvertex(0,0,0);
+  graphVizPt:=cP3d__0__0__0;// createvertex(0,0,0);
 
   //coord:=uzegeometry.cV3d__0__0__0;
   //coord.y:=0;

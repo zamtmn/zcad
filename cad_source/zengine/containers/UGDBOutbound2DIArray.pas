@@ -63,7 +63,7 @@ begin
                       oldp:=p;
                       inc(p);
                     end;
-                    dc.drawer.DrawLine2DInDCS(PzePoint2i(parray)^.x,PzePoint2i(parray)^.y,oldp^.x,oldp^.y);
+                    dc.drawer.DrawLine2DInDCS(PT(parray)^.x,PT(parray)^.y,oldp^.x,oldp^.y);
                     //oglsm.myglend;
                end;
   end;
@@ -76,7 +76,7 @@ begin
      if Count=0 then exit
      else
      begin
-          p:=PzePoint2i(parray);
+          p:=PT(parray);
           if count=1 then
           begin
                if pointinquad2d(Frame1.x,

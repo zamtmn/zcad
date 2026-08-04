@@ -628,13 +628,13 @@ begin
          for i:=0 to listFullGraph.Size-1 do
             begin
                    if (i = 0) then
-                      addBlockonDraw(velec_SchemaELSTART,uzegeometry.CreateVertex(insertPoint.x-15,insertPoint.y+15,0),drawings.GetCurrentDWG^.mainObjRoot);
+                      addBlockonDraw(velec_SchemaELSTART,TzePoint3d.CreateRec(insertPoint.x-15,insertPoint.y+15,0),drawings.GetCurrentDWG^.mainObjRoot);
                    //visualCabelTree(listGraph[i],insertPoint,1);
 
                    visualCentralCabelTree(listFullGraph[i],insertPoint,1,depth);
 
                    if (i = listFullGraph.Size-1) then
-                      addBlockonDraw(velec_SchemaELEND,uzegeometry.CreateVertex(insertPoint.x+15,depth-15,0),drawings.GetCurrentDWG^.mainObjRoot);
+                      addBlockonDraw(velec_SchemaELEND,TzePoint3d.CreateRec(insertPoint.x+15,depth-15,0),drawings.GetCurrentDWG^.mainObjRoot);
             end;
      zcUI.TextMessage('Визуализация групп ЗАКОНЧЕНА!',TMWOHistoryOut);
 
@@ -965,7 +965,7 @@ var
 
       //выставляем клону точку вставки, ориентируем по осям, вращаем
       pnevdev^.Local.P_insert:=currentcoord;
-      pnevdev^.scale:=CreateVector(1,1,1);
+      pnevdev^.scale:=cV3d__1__1__1;
       //pnevdev.Local.Basis.ox:=cV3d__1__0__0;
       //pnevdev.Local.Basis.oy:=cV3d__0__1__0;
       //pnevdev.rotate:=0;
@@ -1258,7 +1258,7 @@ var
            polyObj^.vp.LineWeight:=LnWt050;
            //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
            polyObj^.VertexArrayInOCS.PushBackData(pt1);
-           polyObj^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(pt1.x,pt2.y,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(pt1.x,pt2.y,0));
            polyObj^.VertexArrayInOCS.PushBackData(pt2);
            zcAddEntToCurrentDrawingWithUndo(polyObj);
       end;
@@ -1288,7 +1288,7 @@ var
 
            cableLine^.VertexArrayInOCS.PushBackData(pSt);
            cableLine^.VertexArrayInOCS.PushBackData(p1);
-           cableLine^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(p2.x,p1.y,0));
+           cableLine^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(p2.x,p1.y,0));
            cableLine^.VertexArrayInOCS.PushBackData(p2);
            cableLine^.VertexArrayInOCS.PushBackData(pEd);
 
@@ -1511,11 +1511,11 @@ begin
 
     infoVertex.num:=G.Root.Index;
     infoVertex.vertex:=G.Root;
-    infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
+    infoVertex.poz:=TzePoint2d.CreateRec(x,0);
     infoVertex.kol:=0;
     infoVertex.childs:=G.Root.ChildCount;
     listVertex.PushBack(infoVertex);
-    ptSt:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0);
+    ptSt:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0);
 
     //zcUI.TextMessage('ptSt.x -' + floattostr(ptSt.x) + ' ptSt.Y -' + floattostr(ptSt.Y),TMWOHistoryOut);
     //*********
@@ -1558,12 +1558,12 @@ begin
         begin
           inc(listVertex.Mutable[tparent]^.kol);
           if listVertex[tparent].kol = 1 then begin
-             infoVertex.poz:=uzegeometry.CreateVertex2D(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
+             infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
              infoVertex.vertex:=TVertex(VertexPath[i]);
           end
           else  begin
             inc(x);
-            infoVertex.poz:=uzegeometry.CreateVertex2D(x,listVertex[tparent].poz.y + 1);
+            infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
             infoVertex.vertex:=TVertex(VertexPath[i]);
           end;
 
@@ -1573,7 +1573,7 @@ begin
           listVertex.PushBack(infoVertex);
 
         //zcUI.TextMessage('1',TMWOHistoryOut);
-        ptEd:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+        ptEd:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
         //zcUI.TextMessage('2',TMWOHistoryOut);
         //if TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev<>nil then
         //   zcUI.TextMessage('VertexPath i -'+ string(TVertexTree(listVertex.Back.vertex.AsPointer[vpTVertexTree]^).dev^.Name),TMWOHistoryOut);
@@ -1623,24 +1623,24 @@ begin
 
         //drawMText(ptext,'Ребро',4,90,height);
 //
-        ptSt:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+        ptSt:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
 
         if listVertex[tparent].kol = 1 then
         begin
-          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
+          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
           //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
           //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
           //pt2.z:=0;
         end
         else
         begin
-          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
+          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
           //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
           //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
           //pt2.z:=0;
         end;
 
-        pt2:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
+        pt2:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
 
         //pt1.x:=startPt.x + listVertex.Back.poz.x*indent;
         //pt1.y:=startPt.y - listVertex.Back.poz.y*indent+size;
@@ -2339,7 +2339,7 @@ begin
          //drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
 
   //** Строим структурную схему
-  graphVizPt:=createvertex(0,0,0);
+  graphVizPt:=cP3d__0__0__0;
 
   //coord:=uzegeometry.cV3d__0__0__0;
   //coord.y:=0;

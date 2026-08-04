@@ -247,7 +247,7 @@ begin
        zcUI.TextMessage('lColumnSchemaOneLevel[i].countCablesGone=' + inttostr(lColumnSchemaOneLevel[i].countCablesGone) + '  lColumnSchemaOneLevel[i].usedCablesGone=' + inttostr(lColumnSchemaOneLevel[i].usedCablesGone)+ '  numWay=' + inttostr(numWay),TMWOHistoryOut);
        ptX:=(zonaWidthColumn/2)+(zonaWidthColumn*i);
        ptY:=-zonaHeightHead - (zonaHeightConnect*numWay)/(lColumnSchemaOneLevel[i].countCablesGone+1);
-       result.PushBack(uzegeometry.CreateVertex(ptX,ptY,0));
+       result.PushBack(TzePoint3d.CreateRec(ptX,ptY,0));
        inc(lColumnSchemaOneLevel.Mutable[i]^.usedCablesGone); //добавляем в список что один путь использован
     end;
 end;
@@ -260,13 +260,13 @@ var
   //vertexWay:TzePoint3d;
 begin
    result:=TVectorOfGDBVertex.Create;
-   pt1:=uzegeometry.CreateVertex((stNumColumn*zonaWidthColumn)+(zonaWidthColumn/2)-1,-zonaHeightHead-zonaHeightConnect-zonaHeightDev,0);
-   pt2:=uzegeometry.CreateVertex((stNumColumn*zonaWidthColumn)+(zonaWidthColumn/4)-1,-zonaHeightHead-zonaHeightConnect-zonaHeightDev+5,0);
+   pt1:=TzePoint3d.CreateRec((stNumColumn*zonaWidthColumn)+(zonaWidthColumn/2)-1,-zonaHeightHead-zonaHeightConnect-zonaHeightDev,0);
+   pt2:=TzePoint3d.CreateRec((stNumColumn*zonaWidthColumn)+(zonaWidthColumn/4)-1,-zonaHeightHead-zonaHeightConnect-zonaHeightDev+5,0);
    numWay:=lColumnSchemaOneLevel[stNumColumn].countCablesGone-lColumnSchemaOneLevel[stNumColumn].usedCablesGone;
    newPt:=((pt1-pt2).Normalized.asPoint3d)*stDev.ChildCount/numWay;
-   result.pushback(uzegeometry.CreateVertex(pt1.x-newPt.x,pt1.y+newPt.y,0));
-   pt1:=uzegeometry.CreateVertex(10,10,0);
-   pt2:=uzegeometry.CreateVertex(20,20,0);
+   result.pushback(TzePoint3d.CreateRec(pt1.x-newPt.x,pt1.y+newPt.y,0));
+   pt1:=TzePoint3d.CreateRec(10,10,0);
+   pt2:=TzePoint3d.CreateRec(20,20,0);
    newPt:=((pt1-pt2).Normalized.asPoint3d)/2;
    zcUI.TextMessage('newPt.x = ' + floattostr(newPt.x) + '  newPt.y = ' + floattostr(newPt.y),TMWOHistoryOut);
 
@@ -280,8 +280,8 @@ function getDotsEndDevice(edPtNumColumn:integer;edDev:TVertex;beforePt:TzePoint3
   //vertexWay:TzePoint3d;
 begin
    result:=TVectorOfGDBVertex.Create;
-   result.pushback(uzegeometry.CreateVertex((edPtNumColumn*zonaWidthColumn)-1,beforePt.y,0));
-   result.pushback(uzegeometry.CreateVertex((edPtNumColumn*zonaWidthColumn),beforePt.y-1,0));
+   result.pushback(TzePoint3d.CreateRec((edPtNumColumn*zonaWidthColumn)-1,beforePt.y,0));
+   result.pushback(TzePoint3d.CreateRec((edPtNumColumn*zonaWidthColumn),beforePt.y-1,0));
 end;
 //
 begin
@@ -303,10 +303,10 @@ begin
         //сначала строим точки описывающие поведение если устройство не разветвитель
        if stDev.getDevice^.Name <> velec_EL_EMSPLITTERBOX then
          begin
-          for ptVertex in getDotsStartDevice(stPtNumColumn,stDev,uzegeometry.CreateVertex(0,0,0)) do
+          for ptVertex in getDotsStartDevice(stPtNumColumn,stDev,cP3d__0__0__0) do
             listPoints.PushBack(ptVertex);
          end;
-       for ptVertex in getDotsBetweenColumns(stPtNumColumn,edPtNumColumn,uzegeometry.CreateVertex(0,0,0)) do
+       for ptVertex in getDotsBetweenColumns(stPtNumColumn,edPtNumColumn,cP3d__0__0__0) do
           listPoints.PushBack(ptVertex);
        //сначала строим точки описывающие поведение если устройство не разветвитель
       if edDev.getDevice^.Name <> velec_EL_EMSPLITTERBOX then
@@ -451,7 +451,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
        if lColumnSchemaOneLevel[countColumn].listDevVertex[i].getDevice = pgdbdev then
          if i = lColumnSchemaOneLevel[countColumn].listDevVertex.size-1 then         // нашлось устройство последним в данной колонке, значет это устройство и оно рисуется внизу
          begin
-          result:=uzegeometry.CreateVertex(countColumn*zonaWidthColumn,-zonaHeightHead-zonaHeightConnect-zonaHeightDev,0)
+          result:=TzePoint3d.CreateRec(countColumn*zonaWidthColumn,-zonaHeightHead-zonaHeightConnect-zonaHeightDev,0)
 //           zonaHeightHead=5;
 //zonaHeightConnect=25;
 //zonaHeightDev=25;
@@ -460,7 +460,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
        else
          begin
            y:= -(zonaHeightConnect/(lColumnSchemaOneLevel[countColumn].countCablesGone+1))*(getNumWay(i))-zonaHeightHead;
-           result:=uzegeometry.CreateVertex(countColumn*zonaWidthColumn,y,0)
+           result:=TzePoint3d.CreateRec(countColumn*zonaWidthColumn,y,0)
          end;
        //zcUI.TextMessage(' for columnShemaOneLevel.listDev - ' + inttostr(columnShemaOneLevel.listDev.Size),TMWOHistoryOut);
        //zcUI.TextMessage(' for countColumn - ' + inttostr(countColumn),TMWOHistoryOut);
@@ -482,7 +482,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
           if vertexDev.parent <> nil then
             begin
              zcUI.TextMessage('рисуем стартовую точку - ' + vertexDev.Parent.getNMONameDevice,TMWOHistoryOut);
-             drawStartGroupSchema(uzegeometry.CreateVertex(vertexPoint.x,0,0));
+             drawStartGroupSchema(TzePoint3d.CreateRec(vertexPoint.x,0,0));
             end
            else
             begin
@@ -519,7 +519,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
            begin
               //zcUI.TextMessage('рисуем стартовую точку - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
               startNewGroup:=true;
-              vertexPoint:=uzegeometry.CreateVertex(vertexPoint.x,0,0);
+              vertexPoint:=TzePoint3d.CreateRec(vertexPoint.x,0,0);
            end;
        zcUI.TextMessage('5',TMWOHistoryOut);
        childVertexPoint:=getchildVertexPoint(vertexDev.Childs[i],i,lColumnSchemaOneLevel,countColumn);
@@ -603,7 +603,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
        end;
 
      columnShema:=0;
-     drawSchemaOneLevel(listStructurGraphEM[0].Root,uzegeometry.CreateVertex(0,0,0),listColumnSchemaOneLevel,columnShema,true);
+     drawSchemaOneLevel(listStructurGraphEM[0].Root,cP3d__0__0__0,listColumnSchemaOneLevel,columnShema,true);
 
        if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=IRNormal then //двигаем их
           zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace'); //если все ок, копируем в чертеж

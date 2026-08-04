@@ -1481,8 +1481,8 @@ var
 
        result:=false;
 
-       VTst:=uzegeometry.CreateVertex(0,0,0);
-       VTed:=uzegeometry.CreateVertex(0,0,0);
+       VTst:=cP3d__0__0__0;
+       VTed:=cP3d__0__0__0;
        //Получаем координаты стартовой и конечной точки электрической модели
        if not getStEdEMVertex(VTst,VTed) then
          exit;
@@ -1551,7 +1551,7 @@ var
       for dev in lDevice do
       begin
            devFound:=false;
-           devVertex:=uzegeometry.CreateVertex(0,0,0);
+           devVertex:=cP3d__0__0__0;
            if not getDevVertexConnector(dev,devVertex) then       // Получаем координату коннектора
               zcUI.TextMessage('ОШИБКА! устройство без коннектора',TMWOHistoryOut);
            for cab in lCable do    // перебираем все кабели в списке
@@ -1585,7 +1585,7 @@ var
                 for dev in lDevice do    // теперь из списка устройств ищем те чьи координаты находятся на конце кабеля
                 begin
                    //zcUI.TextMessage('5',TMWOHistoryOut);
-                   lastDevVertex:=uzegeometry.CreateVertex(0,0,0);
+                   lastDevVertex:=cP3d__0__0__0;
                    if not getDevVertexConnector(dev,lastDevVertex) then       // Получаем координату коннектора
                       zcUI.TextMessage('ОШИБКА! устройство без коннектора',TMWOHistoryOut);
                    if {IsPointEqual}lastDevVertex.IsEqual(cab^.VertexArrayInWCS.getLast,bigeps) then    //сравниваем координату устройства с последней точкой кабеля
@@ -1803,7 +1803,7 @@ var
            zcSetEntPropFromCurrentDrawingProp(cableLine);
            cableLine^.VertexArrayInOCS.PushBackData(pSt);
            cableLine^.VertexArrayInOCS.PushBackData(p1);
-           cableLine^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(p2.x,p1.y,0));
+           cableLine^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(p2.x,p1.y,0));
            cableLine^.VertexArrayInOCS.PushBackData(p2);
            cableLine^.VertexArrayInOCS.PushBackData(pEd);
            zcAddEntToCurrentDrawingWithUndo(cableLine);
@@ -1819,11 +1819,11 @@ begin
 
     infoVertex.num:=G.Root.Index;
     infoVertex.vertex:=G.Root;
-    infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
+    infoVertex.poz:=TzePoint2d.CreateRec(x,0);
     infoVertex.kol:=0;
     infoVertex.childs:=G.Root.ChildCount;
     listVertex.PushBack(infoVertex);
-    ptSt:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0);
+    ptSt:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0);
 
     //zcUI.TextMessage('ptSt.x -' + floattostr(ptSt.x) + ' ptSt.Y -' + floattostr(ptSt.Y),TMWOHistoryOut);
     //*********
@@ -1866,12 +1866,12 @@ begin
         begin
           inc(listVertex.Mutable[tparent]^.kol);
           if listVertex[tparent].kol = 1 then begin
-             infoVertex.poz:=uzegeometry.CreateVertex2D(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
+             infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
              infoVertex.vertex:=TVertex(VertexPath[i]);
           end
           else  begin
             inc(x);
-            infoVertex.poz:=uzegeometry.CreateVertex2D(x,listVertex[tparent].poz.y + 1);
+            infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
             infoVertex.vertex:=TVertex(VertexPath[i]);
           end;
 
@@ -1881,7 +1881,7 @@ begin
           listVertex.PushBack(infoVertex);
 
         //zcUI.TextMessage('1',TMWOHistoryOut);
-        ptEd:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+        ptEd:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
         //zcUI.TextMessage('2',TMWOHistoryOut);
         //if listVertex.Back.vertex.getDevice<>nil then
         //   zcUI.TextMessage('VertexPath i -'+ string(listVertex.Back.vertex.getDevice^.Name),TMWOHistoryOut);
@@ -1898,24 +1898,24 @@ begin
         end;
          //zcUI.TextMessage('4',TMWOHistoryOut);
 
-        ptSt:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+        ptSt:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
 
         if listVertex[tparent].kol = 1 then
         begin
-          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
+          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
           //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
           //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
           //pt2.z:=0;
         end
         else
         begin
-          pt1:=uzegeometry.CreateVertex(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
+          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
           //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
           //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
           //pt2.z:=0;
         end;
 
-        pt2:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
+        pt2:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
 
         //******
         //zcUI.TextMessage('5',TMWOHistoryOut);

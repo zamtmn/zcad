@@ -338,8 +338,8 @@ begin
     //PzePoint3d(@m.mtr[3])^:=l2;
     m:=CreateTranslationMatrix(l2.asVector);
     m:=MatrixMultiply(rotmatr,m);
-    p1:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
-    p2:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+    p1:=VectorTransform3D(TzePoint3d.CreateRec(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+    p2:=VectorTransform3D(TzePoint3d.CreateRec(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1,l2);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p2,l2);
   end;
@@ -355,28 +355,28 @@ var
   sine,cosine:Double;
 begin
   if r>bigeps then begin
-    p1:=CreateVertex(-1,0,0)*r+p0.asVector;
+    p1:=TzePoint3d.CreateRec(-1,0,0)*r+p0.asVector;
     SinCos(5*pi/6, sine, cosine);
-    p2:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p2:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     SinCos(4*pi/6, sine, cosine);
-    p3:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p3:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     SinCos(3*pi/6, sine, cosine);
-    p4:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p4:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     SinCos(2*pi/6, sine, cosine);
-    p5:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p5:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     SinCos(1*pi/6, sine, cosine);
-    p6:=CreateVertex(cosine,sine,0)*r+p0.asVector;
-    p7:=CreateVertex(1,0,0)*r+p0.asVector;
+    p6:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
+    p7:=TzePoint3d.CreateRec(1,0,0)*r+p0.asVector;
     SinCos(-1*pi/6, sine, cosine);
-    p8:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p8:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     SinCos(-2*pi/6, sine, cosine);
-    p9:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p9:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     SinCos(-3*pi/6, sine, cosine);
-    p10:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p10:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     SinCos(-4*pi/6, sine, cosine);
-    p11:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p11:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     SinCos(-5*pi/6, sine, cosine);
-    p12:=CreateVertex(cosine,sine,0)*r+p0.asVector;
+    p12:=TzePoint3d.CreateRec(cosine,sine,0)*r+p0.asVector;
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1,p2);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p2,p3);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p3,p4);
@@ -446,22 +446,22 @@ begin
     m.mtr.v[3].Slice:=l1.asVector;
     m:=MatrixMultiply(rotmatr,m);
 
-    p1:=VectorTransform3D(uzegeometry.CreateVertex(-1,0,0),m);
+    p1:=VectorTransform3D(TzePoint3d.CreateRec(-1,0,0),m);
     SinCos(5*pi/6, sine, cosine);
-    p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
+    p2:=VectorTransform3D(TzePoint3d.CreateRec(cosine,sine,0),m);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1,p2);
     SinCos(4*pi/6, sine, cosine);
-    p1:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
+    p1:=VectorTransform3D(TzePoint3d.CreateRec(cosine,sine,0),m);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p2,p1);
     SinCos(3*pi/6, sine, cosine);
-    p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
+    p2:=VectorTransform3D(TzePoint3d.CreateRec(cosine,sine,0),m);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1,p2);
 
     SinCos(2*pi/6, sine, cosine);
-    p1:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
+    p1:=VectorTransform3D(TzePoint3d.CreateRec(cosine,sine,0),m);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p2,p1);
     SinCos(1*pi/6, sine, cosine);
-    p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
+    p2:=VectorTransform3D(TzePoint3d.CreateRec(cosine,sine,0),m);
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1,p2);
 
     pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p2,l2);

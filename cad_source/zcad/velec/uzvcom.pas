@@ -344,10 +344,10 @@ begin
                     end;
    setlength(DataOpenArray2,0);
    //////////////////////////////////////////////////        }
-  LastPoint:=PzePoint3d(pc^.VertexArrayInWCS.getDataMutable(pc^.VertexArrayInWCS.Count-1))^;//получаем точку в конце кабеля
+  LastPoint:=pc^.VertexArrayInWCS.getDataMutable(pc^.VertexArrayInWCS.Count-1)^;//получаем точку в конце кабеля
 
-  volume.LBN:=createvertex(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
-  volume.RTF:=createvertex(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
+  volume.LBN:=TzePoint3d.CreateRec(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
+  volume.RTF:=TzePoint3d.CreateRec(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
   NearObjects.init(100); //инициализируем список
   if drawings.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
   begin
@@ -359,7 +359,7 @@ begin
        repeat
              if pc2^.GetObjType=GDBCableID then//если он кабель то
              begin
-                  FirstPoint:=PzePoint3d(pc2^.VertexArrayInWCS.getDataMutable(0))^;//получаем точку в начале найденного кабеля
+                  FirstPoint:=pc2^.VertexArrayInWCS.getDataMutable(0)^;//получаем точку в начале найденного кабеля
                   if LastPoint.LengthTo(FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
                   begin
                        pc2^.SelectQuik;            //выделяем

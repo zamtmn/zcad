@@ -94,7 +94,7 @@ var
   tv:TzePoint3d;
   m:TzeTypedMatrix4d;
 begin
-  tv:=CreateVertex(0,textprop.size,0);
+  tv:=TzePoint3d.CreateRec(0,textprop.size,0);
   m:=t_matrix;
   m.mtr.v[3].Slice:=cV3d__0__0__0;
 

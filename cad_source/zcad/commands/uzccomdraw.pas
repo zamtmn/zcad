@@ -1185,7 +1185,7 @@ begin
 
   BlockScale.init('BlockScale',0,0);
   BlockScale.CEndActionAttr:=[];
-  BlockScaleParams.Scale:=uzegeometry.CreateVector(1,1,1);
+  BlockScaleParams.Scale:=cV3d__1__1__1;
   BlockScaleParams.Absolutely:=true;
   BlockScale.SetCommandParam(@BlockScaleParams,'PTBlockScaleParams');
 

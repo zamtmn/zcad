@@ -332,8 +332,8 @@ begin
     if outbound[i].z>f then
       f:=outbound[i].z;
   end;
-  vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-  vp.BoundingBox.RTF:=CreateVertex(r,T,f);
+  vp.BoundingBox.LBN:=TzePoint3d.CreateRec(l,B,n);
+  vp.BoundingBox.RTF:=TzePoint3d.CreateRec(r,T,f);
 end;
 
 function GDBObjText.getsnap;

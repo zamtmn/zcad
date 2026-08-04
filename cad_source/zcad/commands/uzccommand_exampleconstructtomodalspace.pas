@@ -92,9 +92,9 @@ function ExampleConstructToModalSpace_com(const Context:TZCADCommandContext;
     Result^.vp.LineWeight:=LnWt050;
     //Толщина линии
     Result^.VertexArrayInOCS.PushBackData(pt1);
-    Result^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(pt2.x,pt1.y,0));
+    Result^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(pt2.x,pt1.y,0));
     Result^.VertexArrayInOCS.PushBackData(pt2);
-    Result^.VertexArrayInOCS.PushBackData(uzegeometry.CreateVertex(pt1.x,pt2.y,0));
+    Result^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(pt1.x,pt2.y,0));
     zcAddEntToCurrentDrawingConstructRoot(Result);
     //добавляем в конструкторскую область
     //zcAddEntToCurrentDrawingWithUndo(Result);                      //добавляем полилинию с ундо в пространство модели
@@ -120,8 +120,8 @@ begin
   //рисование и перенос из конструкторской обласи в область чертежа
   {pt:=}drawMText(cP3d__0__0__0,2,0);
   //Рисуем текст, и полилинию
-  {pp:=}drawPolyline(uzegeometry.CreateVertex(-20,+5,0),
-    uzegeometry.CreateVertex(+20,-5,0),3);
+  {pp:=}drawPolyline(TzePoint3d.CreateRec(-20,+5,0),
+    TzePoint3d.CreateRec(+20,-5,0),3);
   if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=IRNormal then
     //двигаем их
     zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace');

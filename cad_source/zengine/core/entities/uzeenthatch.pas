@@ -304,7 +304,7 @@ var
   newdrawlen:double;
 begin
   if Strokes.Count=0 then
-    Representation.CreateLineWithoutLT(DC,self,ObjMatrix,CreateVertex(p1.x,p1.y,0),CreateVertex(p2.x,p2.y,0))
+    Representation.CreateLineWithoutLT(DC,self,ObjMatrix,TzePoint3d.CreateRec(p1.x,p1.y,0),TzePoint3d.CreateRec(p2.x,p2.y,0))
   else begin
     dir:=(p2-p1).Normalized;
     t:=Scale*normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
@@ -324,16 +324,16 @@ begin
       end;
       newdrawlen:=drawedlen+abs(d);
       if d=0 then
-        Representation.CreatePoint(DC,self,vp,ObjMatrix,CreateVertex(p.x,p.y,0))
+        Representation.CreatePoint(DC,self,vp,ObjMatrix,TzePoint3d.CreateRec(p.x,p.y,0))
       else if d>0 then begin
         if newdrawlen<=l then begin
           pp.x:=p.x+dir.x*abs(d);
           pp.y:=p.y+dir.y*abs(d);
-          Representation.CreateLineWithoutLT(DC,self,ObjMatrix,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0));
+          Representation.CreateLineWithoutLT(DC,self,ObjMatrix,TzePoint3d.CreateRec(p.x,p.y,0),TzePoint3d.CreateRec(pp.x,pp.y,0));
         end else begin
           pp.x:=p.x+dir.x*(d-(newdrawlen-l));
           pp.y:=p.y+dir.y*(d-(newdrawlen-l));
-          Representation.CreateLineWithoutLT(DC,self,ObjMatrix,CreateVertex(p.x,p.y,0),CreateVertex(pp.x,pp.y,0));
+          Representation.CreateLineWithoutLT(DC,self,ObjMatrix,TzePoint3d.CreateRec(p.x,p.y,0),TzePoint3d.CreateRec(pp.x,pp.y,0));
         end;
       end else begin
         pp.x:=p.x-dir.x*d;
@@ -710,12 +710,12 @@ begin
         f:=ptv.z;
       ptv:=Vertex3D_in_WCS_Array.iterate(ir);
     until ptv=nil;
-    vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-    vp.BoundingBox.RTF:=CreateVertex(r,T,f);
+    vp.BoundingBox.LBN:=TzePoint3d.CreateRec(l,B,n);
+    vp.BoundingBox.RTF:=TzePoint3d.CreateRec(r,T,f);
 
   end else begin
-    vp.BoundingBox.LBN:=CreateVertex(-1,-1,-1);
-    vp.BoundingBox.RTF:=CreateVertex(1,1,1);
+    vp.BoundingBox.LBN:=TzePoint3d.CreateRec(-1,-1,-1);
+    vp.BoundingBox.RTF:=TzePoint3d.CreateRec(1,1,1);
   end;
 end;
 

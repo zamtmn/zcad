@@ -499,28 +499,28 @@ begin
   end;
   if (q and 1)>0 then begin
     concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      CreateVertex(1,0,0),objMatrix));
+      TzePoint3d.CreateRec(1,0,0),objMatrix));
     maxx:=1;
   end;
   if (q and 4)>0 then begin
     concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      CreateVertex(-1,0,0),objMatrix));
+      TzePoint3d.CreateRec(-1,0,0),objMatrix));
     minx:=-1;
   end;
   if (q and 2)>0 then begin
     concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      CreateVertex(0,1,0),objMatrix));
+      TzePoint3d.CreateRec(0,1,0),objMatrix));
     maxy:=1;
   end;
   if (q and 8)>0 then begin
     concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      CreateVertex(0,-1,0),objMatrix));
+      TzePoint3d.CreateRec(0,-1,0),objMatrix));
     miny:=-1;
   end;
-   outbound[0]:=VectorTransform3d(CreateVertex(minx,maxy,0),objMatrix);
-  outbound[1]:=VectorTransform3d(CreateVertex(maxx,maxy,0),objMatrix);
-  outbound[2]:=VectorTransform3d(CreateVertex(maxx,miny,0),objMatrix);
-  outbound[3]:=VectorTransform3d(CreateVertex(minx,miny,0),objMatrix);
+   outbound[0]:=VectorTransform3d(TzePoint3d.CreateRec(minx,maxy,0),objMatrix);
+  outbound[1]:=VectorTransform3d(TzePoint3d.CreateRec(maxx,maxy,0),objMatrix);
+  outbound[2]:=VectorTransform3d(TzePoint3d.CreateRec(maxx,miny,0),objMatrix);
+  outbound[3]:=VectorTransform3d(TzePoint3d.CreateRec(minx,miny,0),objMatrix);
 end;
 
 procedure GDBObjARC.createpoints(var DC:TDrawContext);

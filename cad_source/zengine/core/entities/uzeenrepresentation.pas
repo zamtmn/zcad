@@ -330,7 +330,7 @@ var
 begin
   SetLength(tpts,Length(pts));
   for i:={low(pts)}0 to High(pts) do
-    tpts[i]:=CreateVertex(pts[i].x,pts[i].y,0);
+    tpts[i]:=TzePoint3d.CreateRec(pts[i].x,pts[i].y,0);
   _CreatePolyLine(DC,Ent,vp,tpts,closed,ltgen);
 end;
 

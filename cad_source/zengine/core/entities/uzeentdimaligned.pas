@@ -332,15 +332,15 @@ constructor GDBObjAlignedDimension.initnul;
 begin
   inherited initnul;
   bp.ListPos.Owner:=owner;
-  DimData.P13InWCS:=createvertex(1,1,0);
-  DimData.P14InWCS:=createvertex(300,1,0);
+  DimData.P13InWCS:=TzePoint3d.CreateRec(1,1,0);
+  DimData.P14InWCS:=TzePoint3d.CreateRec(300,1,0);
 end;
 
 constructor GDBObjAlignedDimension.init;
 begin
   inherited init(own,layeraddres,lw);
-  DimData.P13InWCS:=createvertex(1,1,0);
-  DimData.P14InWCS:=createvertex(300,1,0);
+  DimData.P13InWCS:=TzePoint3d.CreateRec(1,1,0);
+  DimData.P14InWCS:=TzePoint3d.CreateRec(300,1,0);
 end;
 
 function GDBObjAlignedDimension.GetObjType;

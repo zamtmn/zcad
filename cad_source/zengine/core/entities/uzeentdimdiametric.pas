@@ -111,19 +111,19 @@ var
 begin
   if PDimStyle.Lines.DIMCEN<>0 then begin
     ls:=abs(PDimStyle.Lines.DIMCEN);
-    DrawExtensionLineLinePart({VertexSub}(cp-CreateVector(ls,0,0)),
-      cp+CreateVector(ls,0,0),drawing,0).FormatEntity(drawing,dc);
-    DrawExtensionLineLinePart({VertexSub}(cp-CreateVector(0,ls,0)),
-      cp+CreateVector(0,ls,0),drawing,0).FormatEntity(drawing,dc);
+    DrawExtensionLineLinePart(cp-TzeVector3d.CreateRec(ls,0,0),
+      cp+TzeVector3d.CreateRec(ls,0,0),drawing,0).FormatEntity(drawing,dc);
+    DrawExtensionLineLinePart(cp-TzeVector3d.CreateRec(0,ls,0),
+      cp+TzeVector3d.CreateRec(0,ls,0),drawing,0).FormatEntity(drawing,dc);
     if PDimStyle.Lines.DIMCEN<0 then begin
-      DrawExtensionLineLinePart({VertexSub}(cp-CreateVector(2*ls,0,0)),
-        {VertexSub}(cp-CreateVector(r+ls,0,0)),drawing,0).FormatEntity(drawing,dc);
-      DrawExtensionLineLinePart({VertexSub}(cp-CreateVector(0,2*ls,0)),
-        {VertexSub}(cp-CreateVector(0,r+ls,0)),drawing,0).FormatEntity(drawing,dc);
-      DrawExtensionLineLinePart(cp+CreateVector(2*ls,0,0),
-        cp+CreateVector(r+ls,0,0),drawing,0).FormatEntity(drawing,dc);
-      DrawExtensionLineLinePart(cp+CreateVector(0,2*ls,0),
-        cp+CreateVector(0,r+ls,0),drawing,0).FormatEntity(drawing,dc);
+      DrawExtensionLineLinePart(cp-TzeVector3d.CreateRec(2*ls,0,0),
+        cp-TzeVector3d.CreateRec(r+ls,0,0),drawing,0).FormatEntity(drawing,dc);
+      DrawExtensionLineLinePart(cp-TzeVector3d.CreateRec(0,2*ls,0),
+        (cp-TzeVector3d.CreateRec(0,r+ls,0)),drawing,0).FormatEntity(drawing,dc);
+      DrawExtensionLineLinePart(cp+TzeVector3d.CreateRec(2*ls,0,0),
+        cp+TzeVector3d.CreateRec(r+ls,0,0),drawing,0).FormatEntity(drawing,dc);
+      DrawExtensionLineLinePart(cp+TzeVector3d.CreateRec(0,2*ls,0),
+        cp+TzeVector3d.CreateRec(0,r+ls,0),drawing,0).FormatEntity(drawing,dc);
     end;
   end;
 end;
@@ -286,15 +286,15 @@ constructor GDBObjDiametricDimension.initnul;
 begin
   inherited initnul;
   bp.ListPos.Owner:=owner;
-  DimData.P13InWCS:=createvertex(1,1,0);
-  DimData.P14InWCS:=createvertex(300,1,0);
+  DimData.P13InWCS:=TzePoint3d.CreateRec(1,1,0);
+  DimData.P14InWCS:=TzePoint3d.CreateRec(300,1,0);
 end;
 
 constructor GDBObjDiametricDimension.init;
 begin
   inherited init(own,layeraddres,lw);
-  DimData.P13InWCS:=createvertex(1,1,0);
-  DimData.P14InWCS:=createvertex(300,1,0);
+  DimData.P13InWCS:=TzePoint3d.CreateRec(1,1,0);
+  DimData.P14InWCS:=TzePoint3d.CreateRec(300,1,0);
 end;
 
 function GDBObjDiametricDimension.GetObjType;

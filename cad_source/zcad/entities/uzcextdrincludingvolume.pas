@@ -300,7 +300,7 @@ begin
       Result:=GetMem(SizeOf(GDBpolyline2DArray));
       Result^.init(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count,false);
       for i:=0 to PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.Count-1 do
-        Result^.PushBackData(PzePoint2d(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.getDataMutable(i))^);
+        Result^.PushBackData(PGDBObjCurve(pThisEntity)^.VertexArrayInWCS.getDataMutable(i)^.Slice);
     end;
   end;
 end;

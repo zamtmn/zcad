@@ -457,9 +457,9 @@ implementation
           if i=contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1 then
             pta2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(0);
 
-          pt:=uzegeometry.CreateVertex(pt2d.x,pt2d.y,0);
-          pta:=uzegeometry.CreateVertex(pta2d.x,pta2d.y,0);
-          ptb:=uzegeometry.CreateVertex(ptb2d.x,ptb2d.y,0);
+          pt:=TzePoint3d.CreateRec(pt2d.x,pt2d.y,0);
+          pta:=TzePoint3d.CreateRec(pta2d.x,pta2d.y,0);
+          ptb:=TzePoint3d.CreateRec(ptb2d.x,ptb2d.y,0);
 
          newVert:=uzvsgeom.getPointRelativeTwoLines(pt,ptb,pt,pta,offsetFromWall,offsetFromWall);
 
@@ -872,7 +872,7 @@ implementation
           //zcUI.TextMessage('column######'+inttostr(columns)+'---lines######'+inttostr(lines));
           for i:=0 to columns+1 do begin
             for j:=0 to lines+1 do begin
-                infoVertexDevice.coord:=uzegeometry.CreateVertex(-1,-1,-1);
+                infoVertexDevice.coord:=cP3d_m1_m1_m1;
                 infoVertexDevice.pdev:=nil;
                 infoVertexDevice.num:=-1;
                 infoColumnDev.listLineDev.PushBack(infoVertexDevice);
@@ -941,7 +941,7 @@ implementation
                    tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * cosine + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * sine ;
                    tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* sine + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* cosine;
                    tempvert.z:=0;
-                   dcoord.coord:=uzegeometry.CreateVertex(tempvert.x,tempvert.y,tempvert.z);
+                   dcoord.coord:=TzePoint3d.CreateRec(tempvert.x,tempvert.y,tempvert.z);
 
                    //uzvtestdraw.testDrawCircle(tempvert,5,4);
                    dcoord.pdev:=listDeviceinRoom[i].pdev;    // получить устройство
@@ -969,7 +969,7 @@ implementation
                    tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * cosine + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * sine ;
                    tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* sine + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* cosine;
                    tempvert.z:=0;
-                   dcoord.coord:=uzegeometry.CreateVertex(tempvert.x,tempvert.y,tempvert.z);
+                   dcoord.coord:=tempvert;
 
                    //uzvtestdraw.testDrawCircle(tempvert,5,4);
                    dcoord.pdev:=listDeviceinRoom[i].pdev;    // получить устройство

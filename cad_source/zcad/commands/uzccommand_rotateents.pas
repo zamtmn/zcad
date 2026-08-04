@@ -73,10 +73,10 @@ begin
             pc:=PGDBObjWithLocalCS(pv)^.P_insert_in_WCS
           else
             pc:={Vertexmorph}pv^.vp.BoundingBox.LBN.LerpTo(pv^.vp.BoundingBox.RTF,0.5);
-          dispmatr:=uzegeometry.CreateTranslationMatrix(CreateVector(-pc.x,-pc.y,-pc.z));
+          dispmatr:=uzegeometry.CreateTranslationMatrix(-pc.asVector);
           rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
           rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-          dispmatr:=uzegeometry.CreateTranslationMatrix(CreateVector(pc.x,pc.y,pc.z));
+          dispmatr:=uzegeometry.CreateTranslationMatrix(pc.asVector);
           dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
 
           im:=dispmatr;

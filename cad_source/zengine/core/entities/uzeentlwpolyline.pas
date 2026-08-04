@@ -295,12 +295,12 @@ begin
         f:=ptv.z;
       ptv:=Vertex3D_in_WCS_Array.iterate(ir);
     until ptv=nil;
-    vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-    vp.BoundingBox.RTF:=CreateVertex(r,T,f);
+    vp.BoundingBox.LBN:=TzePoint3d.CreateRec(l,B,n);
+    vp.BoundingBox.RTF:=TzePoint3d.CreateRec(r,T,f);
 
   end else begin
-    vp.BoundingBox.LBN:=CreateVertex(-1,-1,-1);
-    vp.BoundingBox.RTF:=CreateVertex(1,1,1);
+    vp.BoundingBox.LBN:=TzePoint3d.CreateRec(-1,-1,-1);
+    vp.BoundingBox.RTF:=TzePoint3d.CreateRec(1,1,1);
   end;
 end;
 
@@ -638,7 +638,7 @@ begin
     tv.x:=GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.PArray)^[j].x;
     tv.y:=GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.PArray)^[j].y;
     tv.z:=0;
-    dxfvertex2dout(outStream,10,PzePoint2d(@tv)^);
+    dxfvertex2dout(outStream,10,tv.Slice);
     dxfDoubleout(outStream,40,PSegmentParams(SgmntsParams.getDataMutable(j)).data.startw);
     dxfDoubleout(outStream,41,PSegmentParams(SgmntsParams.getDataMutable(j)).data.endw);
     dxfDoubleout(outStream,42,PSegmentParams(SgmntsParams.getDataMutable(j)).data.bulge);

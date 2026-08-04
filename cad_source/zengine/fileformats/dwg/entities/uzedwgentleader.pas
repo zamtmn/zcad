@@ -56,7 +56,7 @@ type
 
 function Point3DP(const P: BITCODE_3DPOINT): TzePoint3d;
 begin
-  Result := CreateVertex(P.x, P.y, P.z);
+  Result := TzePoint3d.CreateRec(P.x, P.y, P.z);
 end;
 
 { LibreDWG counts are unsigned 32-bit (BITCODE_BL); clamp to a signed Integer

@@ -82,7 +82,7 @@ var
  listStructurGraphEM:TListGraphDev; //граф без разрывов, переходов методов прокладки. Только устройства подключения и разветвительные коробки
 begin
    depthVisual:=15;
-   insertCoordination:=uzegeometry.CreateVertex(0,0,0);
+   insertCoordination:=cP3d__0__0__0;
 
    //получаем структурированный граф (граф без разрывов, переходов методов прокладки. Только устройства подключения и разветвительные коробки)
    listStructurGraphEM:=uzvmanemgetgem.getListStructurGraphEM(listFullGraphEM);

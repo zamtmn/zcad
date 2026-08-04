@@ -136,8 +136,8 @@ begin
   Leader.TextHeight:=0;
   Leader.TextWidth:=0;
   Leader.AnnotationHandle:=0;
-  Leader.NormalVector:=CreateVertex(0,0,1);
-  Leader.HorizontalDirection:=CreateVertex(1,0,0);
+  Leader.NormalVector:=TzePoint3d.CreateRec(0,0,1);
+  Leader.HorizontalDirection:=TzePoint3d.CreateRec(1,0,0);
   Leader.BlockOffset:=cP3d__0__0__0;
   Leader.AnnotationOffset:=cP3d__0__0__0;
   Leader.ArrowStyleIndex:=LeaderArrowStyleInherit;
@@ -579,9 +579,9 @@ begin
     dxfvertexout(outStream,10,VertexArrayInOCS.Items[i]);
   if AnnotationHandle<>0 then
     dxfStringWithoutEncodeOut(outStream,340,IntToHex(AnnotationHandle,0));
-  if not IsSameVertex(NormalVector,CreateVertex(0,0,1)) then
+  if not IsSameVertex(NormalVector,TzePoint3d.CreateRec(0,0,1)) then
     dxfvertexout(outStream,210,NormalVector);
-  if not IsSameVertex(HorizontalDirection,CreateVertex(1,0,0)) then
+  if not IsSameVertex(HorizontalDirection,TzePoint3d.CreateRec(1,0,0)) then
     dxfvertexout(outStream,211,HorizontalDirection);
   if not IsZeroVertex(BlockOffset) then
     dxfvertexout(outStream,212,BlockOffset);

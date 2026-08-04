@@ -65,14 +65,14 @@ begin
                  tt:=ptv.y;
         ptv:=iterate(ir);
   until ptv=nil;
-  result.LBN:=CreateVertex(l,B,0);
-  result.RTF:=CreateVertex(r,Tt,0);
+  result.LBN:=TzePoint3d.CreateRec(l,B,0);
+  result.RTF:=TzePoint3d.CreateRec(r,Tt,0);
 
   end
               else
   begin
-  result.LBN:=CreateVertex(-1,-1,-1);
-  result.RTF:=CreateVertex(1,1,1);
+  result.LBN:=TzePoint3d.CreateRec(-1,-1,-1);
+  result.RTF:=TzePoint3d.CreateRec(1,1,1);
   end;
 end;
 

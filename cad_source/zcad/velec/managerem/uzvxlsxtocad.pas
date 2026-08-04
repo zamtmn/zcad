@@ -121,7 +121,7 @@ implementation
         //настраивает
         result^.Name:=blockName;
         result^.Local.P_insert:=pt;
-        result^.scale:=uzegeometry.CreateVector(scalex,scaley,1);
+        result^.scale:=TzeVector3d.CreateRec(scalex,scaley,1);
         result^.rotate:=iRotate;
         //строим переменную часть примитива (та что может редактироваться)
         result^.BuildVarGeometry(drawings.GetCurrentDWG^);
@@ -188,7 +188,7 @@ implementation
         inc(stColNew);
         iRotate:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
 
-        ourDevOrInsert:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),scalex,scaley,iRotate,insertBlockName);
+        ourDevOrInsert:=drawInsertBlock(TzePoint3d.CreateRec(movex,movey,0),scalex,scaley,iRotate,insertBlockName);
       except
         ourDevOrInsert:=nil;
       end;

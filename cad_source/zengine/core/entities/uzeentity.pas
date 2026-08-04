@@ -849,11 +849,11 @@ var
   d:double;
 begin
   d:=GetLTCorrectL(dc.DrawingContext.globalltscale);
-  cv:={VertexSUB}(vp.BoundingBox.RTF-vp.BoundingBox.LBN);
+  cv:=vp.BoundingBox.RTF-vp.BoundingBox.LBN;
   if (d>0)and(d*d<cv.x*cv.x+cv.y*cv.y+cv.z*cv.z) then begin
     d:=GetLTCorrectH(dc.DrawingContext.globalltscale);
-    cv:=CreateVector(d,d,d);
-    vp.BoundingBox.LBN:={VertexSUB}(vp.BoundingBox.LBN-cv);
+    cv:=TzeVector3d.CreateRec(d,d,d);
+    vp.BoundingBox.LBN:=vp.BoundingBox.LBN-cv;
     vp.BoundingBox.RTF:=vp.BoundingBox.RTF+cv;
   end;
 end;

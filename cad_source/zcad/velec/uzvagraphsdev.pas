@@ -166,7 +166,7 @@ implementation
   var
     dev:PGDBObjDevice;
   begin
-        result:=uzegeometry.CreateVertex(0,0,0);
+        result:=cP3d__0__0__0;
         dev:=self.getDevice;
         if dev<>nil then
           begin

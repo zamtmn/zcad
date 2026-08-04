@@ -208,8 +208,8 @@ begin
   Result.cells := specialize TVector<TRtTableCell>.Create;
   Result.rowCount := 0;
   Result.columnCount := 0;
-  Result.tableBounds.LBN := CreateVertex(0, 0, 0);
-  Result.tableBounds.RTF := CreateVertex(0, 0, 0);
+  Result.tableBounds.LBN := cP3d__0__0__0;
+  Result.tableBounds.RTF := cP3d__0__0__0;
   Result.isValid := False;
 end;
 
@@ -239,8 +239,8 @@ function CreateEmptyCell(aRow, aCol: Integer): TRtTableCell;
 begin
   Result.rowIndex := aRow;
   Result.columnIndex := aCol;
-  Result.bounds.LBN := CreateVertex(0, 0, 0);
-  Result.bounds.RTF := CreateVertex(0, 0, 0);
+  Result.bounds.LBN := cP3d__0__0__0;
+  Result.bounds.RTF := cP3d__0__0__0;
   Result.textContent := '';
   Result.horizontalAlign := rtcaLeft;
   Result.verticalAlign := rtcaTop;

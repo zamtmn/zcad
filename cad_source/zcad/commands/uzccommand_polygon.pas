@@ -164,7 +164,7 @@ begin
       polygonDrawModePentity.pentity^.Closed:=True;
       //drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@polyObj);
       zcAddEntToCurrentDrawingConstructRoot(polygonDrawModePentity.pentity);
-      vertexObj:=TzePoint3d.CreateRec(pe.p1.x,pe.p1.y,pe.p1.z);
+      vertexObj:=TzePoint3d.Make(pe.p1.x,pe.p1.y,pe.p1.z);
       for i:=0 to PolygonParam.VNum-1 do begin
         polygonDrawModePentity.pentity^.VertexArrayInOCS.PushBackData(
           vertexObj);

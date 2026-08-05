@@ -346,8 +346,8 @@ begin
    //////////////////////////////////////////////////        }
   LastPoint:=pc^.VertexArrayInWCS.getDataMutable(pc^.VertexArrayInWCS.Count-1)^;//получаем точку в конце кабеля
 
-  volume.LBN:=TzePoint3d.CreateRec(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
-  volume.RTF:=TzePoint3d.CreateRec(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
+  volume.LBN:=TzePoint3d.Make(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
+  volume.RTF:=TzePoint3d.Make(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
   NearObjects.init(100); //инициализируем список
   if drawings.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
   begin

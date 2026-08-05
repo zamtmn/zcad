@@ -161,10 +161,10 @@ type
            polyObj^.vp.Color:=color;
            polyObj^.vp.LineWeight:=LnWt050;
            //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec((pt.x-size)*height,(pt.y+size)*height,0));
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec((pt.x+size)*height,(pt.y+size)*height,0));
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec((pt.x+size)*height,(pt.y-size)*height,0));
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec((pt.x-size)*height,(pt.y-size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make((pt.x-size)*height,(pt.y+size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make((pt.x+size)*height,(pt.y+size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make((pt.x+size)*height,(pt.y-size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make((pt.x-size)*height,(pt.y-size)*height,0));
            zcAddEntToCurrentDrawingWithUndo(polyObj);
            //result:=cmd_ok;
       end;
@@ -181,7 +181,7 @@ type
            polyObj^.vp.LineWeight:=LnWt050;
            //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
            polyObj^.VertexArrayInOCS.PushBackData(pt1);
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(pt1.x,pt2.y,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make(pt1.x,pt2.y,0));
            polyObj^.VertexArrayInOCS.PushBackData(pt2);
            zcAddEntToCurrentDrawingWithUndo(polyObj);
       end;
@@ -298,14 +298,14 @@ begin
 
 
       infoVertex.num:=G.Root.Index;
-      infoVertex.poz:=TzePoint2d.CreateRec(x,0);
+      infoVertex.poz:=TzePoint2d.Make(x,0);
       infoVertex.kol:=0;
       infoVertex.childs:=G.Root.ChildCount;
       listVertex.PushBack(infoVertex);
-      pt1:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0) ;
+      pt1:=TzePoint3d.Make(startPt.x + x*indent,startPt.y + y*indent,0) ;
       drawVertex(pt1,3,height);
       //drawText(pt1,inttostr(G.Root.index),4);
-      //ptext:=uzegeometry.TzePoint3d.CreateRec(pt1.x,pt1.y + indent/10,0) ;
+      //ptext:=uzegeometry.TzePoint3d.Make(pt1.x,pt1.y + indent/10,0) ;
       //pt1.y+=indent/10;
        //G.Root.
       drawMText(pt1,G.Root.AsString[vGInfoVertex],4,0,height);
@@ -320,10 +320,10 @@ begin
           begin
             inc(listVertex.Mutable[tparent]^.kol);
             if listVertex[tparent].kol = 1 then
-               infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+               infoVertex.poz:=TzePoint2d.Make(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
             else  begin
               inc(x);
-              infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
+              infoVertex.poz:=TzePoint2d.Make(x,listVertex[tparent].poz.y + 1);
             end;
 
             infoVertex.num:=TVertex(VertexPath[i]).Index;
@@ -332,15 +332,15 @@ begin
             listVertex.PushBack(infoVertex);
 
 
-          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+          pt1:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
           drawVertex(pt1,3,height);
           //drawText(pt1,inttostr(listVertex.Back.num),4);
 
           //drawMText(GGraph.listVertex[G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]].centerPoint,inttostr(G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]),4,0,height);
 
           drawMText(pt1,G.Vertices[listVertex.Back.num].AsString[vGInfoVertex],4,0,height);
-          pt3:=TzePoint3d.CreateRec(pt1.x,(pt1.y + size)*height,0) ;
-          ptext:=TzePoint3d.CreateRec(pt3.x,pt3.y + indent/20,0) ;
+          pt3:=TzePoint3d.Make(pt1.x,(pt1.y + size)*height,0) ;
+          ptext:=TzePoint3d.Make(pt3.x,pt3.y + indent/20,0) ;
           drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsString[vGInfoEdge],4,90,height);
 
           if listVertex[tparent].kol = 1 then begin
@@ -394,13 +394,13 @@ begin
 
 
     infoVertex.num:=G.Root.Index;
-    infoVertex.poz:=TzePoint2d.CreateRec(x,0);
+    infoVertex.poz:=TzePoint2d.Make(x,0);
     infoVertex.kol:=0;
     infoVertex.childs:=G.Root.ChildCount;
     //zcUI.TextMessage('1',TMWOHistoryOut);
     //zcUI.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
     listVertex.PushBack(infoVertex);
-    pt1:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0) ;
+    pt1:=TzePoint3d.Make(startPt.x + x*indent,startPt.y + y*indent,0) ;
     drawVertex(pt1,3,height);
     //drawText(pt1,inttostr(G.Root.index),4);
     //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
@@ -428,10 +428,10 @@ begin
         begin
           inc(listVertex.Mutable[tparent]^.kol);
           if listVertex[tparent].kol = 1 then
-             infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+             infoVertex.poz:=TzePoint2d.Make(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
           else  begin
             inc(x);
-            infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
+            infoVertex.poz:=TzePoint2d.Make(x,listVertex[tparent].poz.y + 1);
           end;
 
           infoVertex.num:=TVertex(VertexPath[i]).Index;
@@ -440,7 +440,7 @@ begin
           listVertex.PushBack(infoVertex);
 
 
-        pt1:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+        pt1:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
         drawVertex(pt1,3,height);
         //drawText(pt1,inttostr(listVertex.Back.num),4);
 
@@ -450,8 +450,8 @@ begin
         //drawMText(GGraph.listVertex[G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]].centerPoint,inttostr(G.Vertices[listVertex.Back.num].AsInt32[vGGIndex]),4,0,height);
 
         drawMText(pt1,G.Vertices[listVertex.Back.num].AsString[vGInfoVertex],4,0,height);
-        pt3:=TzePoint3d.CreateRec(pt1.x,(pt1.y + size)*height,0) ;
-        ptext:=TzePoint3d.CreateRec(pt3.x,pt3.y + indent/20,0) ;
+        pt3:=TzePoint3d.Make(pt1.x,(pt1.y + size)*height,0) ;
+        ptext:=TzePoint3d.Make(pt3.x,pt3.y + indent/20,0) ;
         drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsString[vGInfoEdge],4,90,height);
 
         if listVertex[tparent].kol = 1 then begin
@@ -505,11 +505,11 @@ begin
 
 
     infoVertex.num:=G.Root.Index;
-    infoVertex.poz:=TzePoint2d.CreateRec(x,0);
+    infoVertex.poz:=TzePoint2d.Make(x,0);
     infoVertex.kol:=0;
     infoVertex.childs:=G.Root.ChildCount;
     listVertex.PushBack(infoVertex);
-    pt1:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0) ;
+    pt1:=TzePoint3d.Make(startPt.x + x*indent,startPt.y + y*indent,0) ;
     drawVertex(pt1,3,height);
     //drawText(pt1,inttostr(G.Root.index),4);
     //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
@@ -531,10 +531,10 @@ begin
         begin
           inc(listVertex.Mutable[tparent]^.kol);
           if listVertex[tparent].kol = 1 then
-             infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+             infoVertex.poz:=TzePoint2d.Make(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
           else  begin
             inc(x);
-            infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
+            infoVertex.poz:=TzePoint2d.Make(x,listVertex[tparent].poz.y + 1);
           end;
 
           infoVertex.num:=TVertex(VertexPath[i]).Index;
@@ -543,7 +543,7 @@ begin
           listVertex.PushBack(infoVertex);
 
 
-        pt1:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+        pt1:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
         drawVertex(pt1,3,height);
         //drawText(pt1,inttostr(listVertex.Back.num),4);
 
@@ -555,8 +555,8 @@ begin
         iNum:=iNum+1;
         drawMText(pt1,inttostr(iNum),4,0,height);
 
-        pt3:=TzePoint3d.CreateRec(pt1.x,(pt1.y + size)*height,0) ;
-        ptext:=TzePoint3d.CreateRec(pt3.x,pt3.y + indent/20,0) ;
+        pt3:=TzePoint3d.Make(pt1.x,(pt1.y + size)*height,0) ;
+        ptext:=TzePoint3d.Make(pt3.x,pt3.y + indent/20,0) ;
                                              //.AsPointer[vpTEdgeTree]:=
         //drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).length.AsString[vGInfoEdge],4,90,height);
 
@@ -711,7 +711,7 @@ var
            polyObj^.vp.LineWeight:=LnWt050;
            //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
            polyObj^.VertexArrayInOCS.PushBackData(pt1);
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(pt1.x,pt2.y,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make(pt1.x,pt2.y,0));
            polyObj^.VertexArrayInOCS.PushBackData(pt2);
            zcAddEntToCurrentDrawingWithUndo(polyObj);
       end;
@@ -729,7 +729,7 @@ var
 
            cableLine^.VertexArrayInOCS.PushBackData(pSt);
            cableLine^.VertexArrayInOCS.PushBackData(p1);
-           cableLine^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(p2.x,p1.y,0));
+           cableLine^.VertexArrayInOCS.PushBackData(TzePoint3d.Make(p2.x,p1.y,0));
            cableLine^.VertexArrayInOCS.PushBackData(p2);
            cableLine^.VertexArrayInOCS.PushBackData(pEd);
 
@@ -759,11 +759,11 @@ begin
 
     infoVertex.num:=G.Root.Index;
     infoVertex.vertex:=G.Root;
-    infoVertex.poz:=TzePoint2d.CreateRec(x,0);
+    infoVertex.poz:=TzePoint2d.Make(x,0);
     infoVertex.kol:=0;
     infoVertex.childs:=G.Root.ChildCount;
     listVertex.PushBack(infoVertex);
-    ptSt:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0);
+    ptSt:=TzePoint3d.Make(startPt.x + x*indent,startPt.y + y*indent,0);
 
     //zcUI.TextMessage('ptSt.x -' + floattostr(ptSt.x) + ' ptSt.Y -' + floattostr(ptSt.Y),TMWOHistoryOut);
     //*********
@@ -805,12 +805,12 @@ begin
         begin
           inc(listVertex.Mutable[tparent]^.kol);
           if listVertex[tparent].kol = 1 then begin
-             infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
+             infoVertex.poz:=TzePoint2d.Make(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
              infoVertex.vertex:=TVertex(VertexPath[i]);
           end
           else  begin
             inc(x);
-            infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
+            infoVertex.poz:=TzePoint2d.Make(x,listVertex[tparent].poz.y + 1);
             infoVertex.vertex:=TVertex(VertexPath[i]);
           end;
 
@@ -820,7 +820,7 @@ begin
           listVertex.PushBack(infoVertex);
 
 
-        ptEd:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+        ptEd:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
 
         if TStructDeviceLine(listVertex.Back.vertex.AsPointer[vGPGDBObjVertex]^).deviceEnt<>nil then
            zcUI.TextMessage('VertexPath i -'+ string(TStructDeviceLine(listVertex.Back.vertex.AsPointer[vGPGDBObjVertex]^).deviceEnt^.Name),TMWOHistoryOut);
@@ -860,24 +860,24 @@ begin
 
         //drawMText(ptext,'Ребро',4,90,height);
 //
-        ptSt:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+        ptSt:=TzePoint3d.Make(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
 
         if listVertex[tparent].kol = 1 then
         begin
-          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
+          pt1:=TzePoint3d.Make(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
           //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
           //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
           //pt2.z:=0;
         end
         else
         begin
-          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
+          pt1:=TzePoint3d.Make(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
           //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
           //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
           //pt2.z:=0;
         end;
 
-        pt2:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
+        pt2:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
 
         //pt1.x:=startPt.x + listVertex.Back.poz.x*indent;
         //pt1.y:=startPt.y - listVertex.Back.poz.y*indent+size;
@@ -929,11 +929,11 @@ begin
 
 
       infoVertex.num:=G.Root.Index;
-      infoVertex.poz:=TzePoint2d.CreateRec(x,0);
+      infoVertex.poz:=TzePoint2d.Make(x,0);
       infoVertex.kol:=0;
       infoVertex.childs:=G.Root.ChildCount;
       listVertex.PushBack(infoVertex);
-      pt1:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0) ;
+      pt1:=TzePoint3d.Make(startPt.x + x*indent,startPt.y + y*indent,0) ;
       drawVertex(pt1,3,height);
 
       //drawMText(pt1,G.Root.AsString[vGInfoVertex],4,0,height);
@@ -950,10 +950,10 @@ begin
           begin
             inc(listVertex.Mutable[tparent]^.kol);
             if listVertex[tparent].kol = 1 then
-               infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+               infoVertex.poz:=TzePoint2d.Make(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
             else  begin
               inc(x);
-              infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
+              infoVertex.poz:=TzePoint2d.Make(x,listVertex[tparent].poz.y + 1);
             end;
 
             infoVertex.num:=TVertex(VertexPath[i]).Index;
@@ -962,15 +962,15 @@ begin
             listVertex.PushBack(infoVertex);
 
 
-          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+          pt1:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
           drawVertex(pt1,3,height);
 
           //drawMText(pt1,G.Vertices[listVertex.Back.num].AsString[vGInfoVertex],4,0,height);
           drawMText(pt1,inttostr(i),4,0,height); //номера вершин
 
 
-          pt3:=TzePoint3d.CreateRec(pt1.x,(pt1.y + size)*height,0) ;
-          ptext:=TzePoint3d.CreateRec(pt3.x,pt3.y + indent/20,0) ;
+          pt3:=TzePoint3d.Make(pt1.x,(pt1.y + size)*height,0) ;
+          ptext:=TzePoint3d.Make(pt3.x,pt3.y + indent/20,0) ;
           //drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsString[vGInfoEdge],4,90,height);
 
           drawMText(ptext,floattostr(TEdgeTree(G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsPointer[vpTEdgeTree]^).length),4,90,height);

@@ -272,7 +272,7 @@ begin
   // Настраивает
   result^.Name := blockName;
   result^.Local.P_insert := pt;
-  result^.scale := TzeVector3d.CreateRec(scalex, scaley, 1);
+  result^.scale := TzeVector3d.Make(scalex, scaley, 1);
   result^.rotate := iRotate;
 
   // Строим переменную часть примитива (та что может редактироваться)

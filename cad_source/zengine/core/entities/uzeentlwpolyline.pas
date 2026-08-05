@@ -295,12 +295,12 @@ begin
         f:=ptv.z;
       ptv:=Vertex3D_in_WCS_Array.iterate(ir);
     until ptv=nil;
-    vp.BoundingBox.LBN:=TzePoint3d.CreateRec(l,B,n);
-    vp.BoundingBox.RTF:=TzePoint3d.CreateRec(r,T,f);
+    vp.BoundingBox.LBN:=TzePoint3d.Make(l,B,n);
+    vp.BoundingBox.RTF:=TzePoint3d.Make(r,T,f);
 
   end else begin
-    vp.BoundingBox.LBN:=TzePoint3d.CreateRec(-1,-1,-1);
-    vp.BoundingBox.RTF:=TzePoint3d.CreateRec(1,1,1);
+    vp.BoundingBox.LBN:=cP3d_m1_m1_m1;
+    vp.BoundingBox.RTF:=cP3d__1__1__1;
   end;
 end;
 

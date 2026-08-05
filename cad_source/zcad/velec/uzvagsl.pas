@@ -457,9 +457,9 @@ implementation
           if i=contour2dRoom^.Vertex2D_in_OCS_Array.GetRealCount-1 then
             pta2d:=contour2dRoom^.Vertex2D_in_OCS_Array.getdata(0);
 
-          pt:=TzePoint3d.CreateRec(pt2d.x,pt2d.y,0);
-          pta:=TzePoint3d.CreateRec(pta2d.x,pta2d.y,0);
-          ptb:=TzePoint3d.CreateRec(ptb2d.x,ptb2d.y,0);
+          pt:=TzePoint3d.Make(pt2d.x,pt2d.y,0);
+          pta:=TzePoint3d.Make(pta2d.x,pta2d.y,0);
+          ptb:=TzePoint3d.Make(ptb2d.x,ptb2d.y,0);
 
          newVert:=uzvsgeom.getPointRelativeTwoLines(pt,ptb,pt,pta,offsetFromWall,offsetFromWall);
 
@@ -941,7 +941,7 @@ implementation
                    tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * cosine + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * sine ;
                    tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* sine + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* cosine;
                    tempvert.z:=0;
-                   dcoord.coord:=TzePoint3d.CreateRec(tempvert.x,tempvert.y,tempvert.z);
+                   dcoord.coord:=TzePoint3d.Make(tempvert.x,tempvert.y,tempvert.z);
 
                    //uzvtestdraw.testDrawCircle(tempvert,5,4);
                    dcoord.pdev:=listDeviceinRoom[i].pdev;    // получить устройство

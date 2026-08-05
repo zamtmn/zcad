@@ -39,7 +39,7 @@ begin
   //Создание дуги
   arc:=GDBObjArc.CreateInstance;
   //Настройка параметров дуги
-  center:=CreateVertex(10,10,0);  // Центр дуги
+  center:=TzePoint3d.Make(10,10,0);  // Центр дуги
   arc^.Local.P_insert:=center;
   arc^.R:=10.0;                       // Радиус 50 единиц
   arc^.StartAngle:=pi;               // Начальный угол 0 радиан
@@ -57,7 +57,7 @@ begin
   arc^.formatEntity(drawing,dc);
 
   verror:='';
-  if not arc^.P_insert_in_WCS.IsEqual(CreateVertex(-10,10,0)) then
+  if not arc^.P_insert_in_WCS.IsEqual(TzePoint3d.Make(-10,10,0)) then
     verror:=verror+format('arc^.P_insert_in_WCS (%g,%g,%g)<>(-10,10,0); ',
       [arc^.P_insert_in_WCS.x,arc^.P_insert_in_WCS.y,arc^.P_insert_in_WCS.z]);
   if not SameValue(arc^.StartAngle,3*Pi/2) then

@@ -521,7 +521,7 @@ begin
       LinearMatrix.mtr.v[3].Slice := cV3d__0__0__0;
       LinearMatrix.t := CMTTransform;
       ScaledVec := VectorTransform3D(
-        TzePoint3d.CreateRec(0, HandlerResult.TextItem.Height, 0),
+        TzePoint3d.Make(0, HandlerResult.TextItem.Height, 0),
         LinearMatrix);
       NewHeight := (ScaledVec).Length;
       if NewHeight > 0 then

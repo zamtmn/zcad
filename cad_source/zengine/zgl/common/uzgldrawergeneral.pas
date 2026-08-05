@@ -230,30 +230,30 @@ begin
 end;
 procedure TZGLGeneralDrawer.DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);
 begin
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
-                               TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
-                               TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
-                               TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
-                               TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),
-                               TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),
-                               TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),
-                               TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),
-                               TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
-                               TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
-                               TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
-                               TzePoint3d.CreateRec(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
-        DrawLine3DInModelSpace(TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
-                               TzePoint3d.CreateRec(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
+                               TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
+                               TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
+                               TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
+                               TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),
+                               TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),
+                               TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),
+                               TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),
+                               TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
+                               TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.LBN.Z),
+                               TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.LBN.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
+                               TzePoint3d.Make(BoundingBox.RTF.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
+        DrawLine3DInModelSpace(TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
+                               TzePoint3d.Make(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
 end;
 procedure TZGLGeneralDrawer.DrawContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs;Closed:boolean=true);
 var p,pold,pstart:PzePoint3d;

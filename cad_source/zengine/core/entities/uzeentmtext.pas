@@ -93,7 +93,7 @@ var
   tv:TzePoint3d;
   m:TzeTypedMatrix4d;
 begin
-  tv:=TzePoint3d.CreateRec(Width,0,0);
+  tv:=TzePoint3d.Make(Width,0,0);
   m:=t_matrix;
   m.mtr.v[3].Slice:=cV3d__0__0__0;
   tv:=VectorTransform3d(tv,m);

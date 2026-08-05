@@ -45,18 +45,18 @@ type
 
 function Point3BD(const P: BITCODE_3BD): TzePoint3d;
 begin
-  Result := TzePoint3d.CreateRec(P.x, P.y, P.z);
+  Result := TzePoint3d.Make(P.x, P.y, P.z);
 end;
 
 function Point3RD(const P: BITCODE_3RD): TzePoint3d;
 begin
-  Result := TzePoint3d.CreateRec(P.x, P.y, P.z);
+  Result := TzePoint3d.Make(P.x, P.y, P.z);
 end;
 
 function Point2DAtElevation(const P: BITCODE_2RD; Elevation: Double
   ): TzePoint3d;
 begin
-  Result := TzePoint3d.CreateRec(P.x, P.y, Elevation);
+  Result := TzePoint3d.Make(P.x, P.y, Elevation);
 end;
 
 procedure ApplyCommonDimension(PObj: PGDBObjGenericDimension;

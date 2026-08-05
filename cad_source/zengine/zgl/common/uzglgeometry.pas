@@ -498,9 +498,9 @@ begin
                            mentrot:=CreateRotationMatrixZ(LineAngle)
                        else
                            mentrot:=cOneMatrix;
-    madd:=CreateTranslationMatrix(TzeVector3d.CreateRec(param.x*Scale,param.y*Scale,0));
-    mtrans:=CreateTranslationMatrix(TzeVector3d.CreateRec(PInsert.x,PInsert.y,PInsert.z));
-    mscale:=CreateScaleMatrix(TzeVector3d.CreateRec(param.Height*Scale,param.Height*Scale,param.Height*Scale));
+    madd:=CreateTranslationMatrix(TzeVector3d.Make(param.x*Scale,param.y*Scale,0));
+    mtrans:=CreateTranslationMatrix(TzeVector3d.Make(PInsert.x,PInsert.y,PInsert.z));
+    mscale:=CreateScaleMatrix(TzeVector3d.Make(param.Height*Scale,param.Height*Scale,param.Height*Scale));
     result:=cOneMatrix;
     result:=MatrixMultiply(result,mscale);
     result:=MatrixMultiply(result,mrot);
@@ -522,9 +522,9 @@ begin
                            mentrot:=CreateRotationMatrixZ(LineAngle)
                        else
                            mentrot:=cOneMatrix;
-    madd:=CreateTranslationMatrix(TzeVector3d.CreateRec(param.x*Scale,param.y*Scale,0));
-    mtrans:=CreateTranslationMatrix(TzeVector3d.CreateRec(PInsert.x,PInsert.y,PInsert.z));
-    mscale:=CreateScaleMatrix(TzeVector3d.CreateRec(param.Height*Scale,param.Height*Scale,param.Height*Scale));
+    madd:=CreateTranslationMatrix(TzeVector3d.Make(param.x*Scale,param.y*Scale,0));
+    mtrans:=CreateTranslationMatrix(TzeVector3d.Make(PInsert.x,PInsert.y,PInsert.z));
+    mscale:=CreateScaleMatrix(TzeVector3d.Make(param.Height*Scale,param.Height*Scale,param.Height*Scale));
     result:=cOneMatrix;
     result:=MatrixMultiply(result,mscale);
 
@@ -532,8 +532,8 @@ begin
     if (param.AD<>TACAbs) then
     if isNotReadableAngle(LineAngle) then
     begin
-    madd2:=CreateTranslationMatrix(TzeVector3d.CreateRec(dx*Scale,dy*Scale,0));
-    madd3:=CreateTranslationMatrix(TzeVector3d.CreateRec(-dx*Scale,-dy*Scale,0));
+    madd2:=CreateTranslationMatrix(TzeVector3d.Make(dx*Scale,dy*Scale,0));
+    madd3:=CreateTranslationMatrix(TzeVector3d.Make(-dx*Scale,-dy*Scale,0));
     mrot2:=CreateRotationMatrixZ(pi);
     result:=MatrixMultiply(result,madd3);
     result:=MatrixMultiply(result,mrot2);

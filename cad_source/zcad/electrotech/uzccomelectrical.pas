@@ -245,7 +245,7 @@ begin
           if obozn<>'' then
           begin
           ptext:=pointer(AllocEnt(GDBMtextID));
-          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,TzePoint3d.CreateRec(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,cRightAngle,jsbc,1,1);
+          ptext^.init(@drawings.CurrentDWG.ConstructObjRoot,drawings.GetCurrentDWG.LayerTable.getAddres('TEXT'),sysvar.dwg.DWG_CLinew^,obozn,TzePoint3d.Make(p.x+pbdef.vp.BoundingBox.LBN.x-1,p.y,p.z),2.5,0,0.65,cRightAngle,jsbc,1,1);
           drawings.CurrentDWG.ConstructObjRoot.ObjArray.AddPEntity(ptext^);
           ptext^.FormatEntity(drawings.GetCurrentDWG^,dc);
           end;
@@ -298,29 +298,29 @@ procedure drawcable(pcabledesk:PTCableDesctiptor;p1,p2:TzePoint3d;g1,g2:TBoundin
 //   pl:pgdbobjline;
 begin
      if abs(p1.x-p2.x)<eps then
-                               drawlineandtext(pcabledesk,TzePoint3d.CreateRec(p1.x,p1.y+g1.LBN.y,p1.z),TzePoint3d.CreateRec(p2.x,p2.y+g2.RTF.y,p2.z))
+                               drawlineandtext(pcabledesk,TzePoint3d.Make(p1.x,p1.y+g1.LBN.y,p1.z),TzePoint3d.Make(p2.x,p2.y+g2.RTF.y,p2.z))
 else if ({bgm1=bgm2}abs(p1.y-p2.y)<eps)and(bgm1=BGNagr) then
                            begin
-                                drawlineandtext(nil,TzePoint3d.CreateRec(p1.x,p1.y+g1.RTF.y,p1.z),TzePoint3d.CreateRec(p1.x+2,p1.y+g1.RTF.y+10,p1.z));
-                                drawlineandtext(pcabledesk,TzePoint3d.CreateRec(p1.x+2,p1.y+g1.RTF.y+10,p1.z),TzePoint3d.CreateRec(p2.x-2,p1.y+g1.RTF.y+10,p2.z));
-                                drawlineandtext(nil,TzePoint3d.CreateRec(p2.x,p2.y+g2.RTF.y,p2.z),TzePoint3d.CreateRec(p2.x-2,p1.y+g1.RTF.y+10,p2.z));
+                                drawlineandtext(nil,TzePoint3d.Make(p1.x,p1.y+g1.RTF.y,p1.z),TzePoint3d.Make(p1.x+2,p1.y+g1.RTF.y+10,p1.z));
+                                drawlineandtext(pcabledesk,TzePoint3d.Make(p1.x+2,p1.y+g1.RTF.y+10,p1.z),TzePoint3d.Make(p2.x-2,p1.y+g1.RTF.y+10,p2.z));
+                                drawlineandtext(nil,TzePoint3d.Make(p2.x,p2.y+g2.RTF.y,p2.z),TzePoint3d.Make(p2.x-2,p1.y+g1.RTF.y+10,p2.z));
                            end
 else if bgm1=bgm2 then
                            begin
                                 if abs(p1.y-p2.y)<eps then
-                                                          drawlineandtext(pcabledesk,TzePoint3d.CreateRec(p1.x+g1.RTF.x,p1.y,p1.z),TzePoint3d.CreateRec(p2.x+g2.LBN.x,p2.y,p2.z))
+                                                          drawlineandtext(pcabledesk,TzePoint3d.Make(p1.x+g1.RTF.x,p1.y,p1.z),TzePoint3d.Make(p2.x+g2.LBN.x,p2.y,p2.z))
                                                       else
                                 begin
-                                     drawlineandtext(pcabledesk,TzePoint3d.CreateRec(p1.x+g1.rtf.x,p1.y,p1.z),TzePoint3d.CreateRec(p2.x,p1.y,p1.z));
-                                     drawlineandtext(nil,TzePoint3d.CreateRec(p2.x,p1.y,p1.z),TzePoint3d.CreateRec(p2.x,p2.y+g2.RTF.y,p2.z));
+                                     drawlineandtext(pcabledesk,TzePoint3d.Make(p1.x+g1.rtf.x,p1.y,p1.z),TzePoint3d.Make(p2.x,p1.y,p1.z));
+                                     drawlineandtext(nil,TzePoint3d.Make(p2.x,p1.y,p1.z),TzePoint3d.Make(p2.x,p2.y+g2.RTF.y,p2.z));
                                 end;
                            end
 
 else if bgm1<bgm2 then
                            begin
-                                drawlineandtext(nil,TzePoint3d.CreateRec(p1.x,p1.y+g1.LBN.y,p1.z),TzePoint3d.CreateRec(p1.x+1,p1.y+g1.LBN.y-1,p1.z));
-                                drawlineandtext(pcabledesk,TzePoint3d.CreateRec(p1.x+1,p1.y+g1.LBN.y-1,p1.z),TzePoint3d.CreateRec(p2.x,p1.y+g1.LBN.y-1,p1.z));
-                                drawlineandtext(nil,TzePoint3d.CreateRec(p2.x,p1.y+g1.LBN.y-1,p1.z),TzePoint3d.CreateRec(p2.x,p2.y+g2.RTF.y,p2.z));
+                                drawlineandtext(nil,TzePoint3d.Make(p1.x,p1.y+g1.LBN.y,p1.z),TzePoint3d.Make(p1.x+1,p1.y+g1.LBN.y-1,p1.z));
+                                drawlineandtext(pcabledesk,TzePoint3d.Make(p1.x+1,p1.y+g1.LBN.y-1,p1.z),TzePoint3d.Make(p2.x,p1.y+g1.LBN.y-1,p1.z));
+                                drawlineandtext(nil,TzePoint3d.Make(p2.x,p1.y+g1.LBN.y-1,p1.z),TzePoint3d.Make(p2.x,p2.y+g2.RTF.y,p2.z));
                            end;
 
 end;
@@ -677,7 +677,7 @@ begin
     //это нужно только чтоб вставить рыбу в упорядоченной по именам последовательности
     devnamesort.Sort(dna,dna.Size);
     //создаем матрицу для перемещения по оси У на +15
-    t_matrix:=uzegeometry.CreateTranslationMatrix(TzeVector3d.CreateRec(0,15,0));
+    t_matrix:=uzegeometry.CreateTranslationMatrix(TzeVector3d.Make(0,15,0));
     //ищем модуль с переменными дефолтными переменными для представителя устройства
     pu:=units.findunit(GetSupportPaths,InterfaceTranslate,'uentrepresentation');
     //эта команда работает после указания пользователем точки вставки
@@ -808,7 +808,7 @@ begin
      else
      begin
      devnamesort.Sort(dna,dna.Size);
-     t_matrix:=uzegeometry.CreateTranslationMatrix(TzeVector3d.CreateRec(50,12,0));
+     t_matrix:=uzegeometry.CreateTranslationMatrix(TzeVector3d.Make(50,12,0));
 
 
      for i:=0 to dna.Size-1 do
@@ -1646,7 +1646,7 @@ end;
 procedure AddPolySegmentFromConnIfZnotMatch(const PrevPoint,NextPoint:TzePoint3d;cable:PGDBObjCable);
 begin
   if not SameValue(PrevPoint.z,NextPoint.z) then begin
-    cable^.AddVertex(TzePoint3d.CreateRec(NextPoint.x,NextPoint.y,PrevPoint.z));
+    cable^.AddVertex(TzePoint3d.Make(NextPoint.x,NextPoint.y,PrevPoint.z));
     cable^.AddVertex(NextPoint);
   end else
     cable^.AddVertex(NextPoint);
@@ -1654,7 +1654,7 @@ end;
 procedure AddPolySegmentToConnIfZnotMatch(const PrevPoint,NextPoint:TzePoint3d;cable:PGDBObjCable);
 begin
   if not SameValue(PrevPoint.z,NextPoint.z) then begin
-    cable^.AddVertex(TzePoint3d.CreateRec(PrevPoint.x,PrevPoint.y,NextPoint.z));
+    cable^.AddVertex(TzePoint3d.Make(PrevPoint.x,PrevPoint.y,NextPoint.z));
     cable^.AddVertex(NextPoint);
   end else
     cable^.AddVertex(NextPoint);
@@ -1665,8 +1665,8 @@ var
 begin
   if not SameValue(PrevPoint.z,NextPoint.z) then begin
     MidPoint:={Vertexmorph}PrevPoint.LerpTo(NextPoint,0.5);
-    cable^.AddVertex(TzePoint3d.CreateRec(MidPoint.x,MidPoint.y,PrevPoint.z));
-    cable^.AddVertex(TzePoint3d.CreateRec(MidPoint.x,MidPoint.y,NextPoint.z));
+    cable^.AddVertex(TzePoint3d.Make(MidPoint.x,MidPoint.y,PrevPoint.z));
+    cable^.AddVertex(TzePoint3d.Make(MidPoint.x,MidPoint.y,NextPoint.z));
     cable^.AddVertex(NextPoint);
   end else
     cable^.AddVertex(NextPoint);

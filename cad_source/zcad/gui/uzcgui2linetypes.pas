@@ -94,8 +94,8 @@ begin
                  else
                      ll:=0;
         geom.init();
-        p1:=TzePoint3d.CreateRec(ARect.Left+ll,(ARect.Top+ARect.Bottom)/2,0);
-        p2:=TzePoint3d.CreateRec(ARect.Right-txtoffset,p1.y,0);
+        p1:=TzePoint3d.Make(ARect.Left+ll,(ARect.Top+ARect.Bottom)/2,0);
+        p2:=TzePoint3d.Make(ARect.Right-txtoffset,p1.y,0);
         vp.LineType:=plt;
         vp.LineTypeScale:=(p2.x-p1.x)*(1/plt.LengthDXF/sysvar.DWG.DWG_LTScale^);
         if (plt^.Textarray.Count=0) then

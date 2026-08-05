@@ -94,7 +94,7 @@ var
   tp2d:TzePoint2i;
 begin
   if count<>0 then begin
-    {$if FPC_FULLVERSION<30205}tp2d.x:=mx;tp2d.y:=my;{$else}tp2d.CreateRec([mx,my]);{$endif}
+    tp2d.Make(mx,my);
     point:=GetParrayAsPointer;
     for i:=count-1 downto 0 do begin
       //d := (vertexlen2id(GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.x,GDB.GetCurrentDWG.OGLwindow1.param.height-GDB.GetCurrentDWG.OGLwindow1.param.md.mouse.y,point^.dispcoord.x,point^.dispcoord.y));

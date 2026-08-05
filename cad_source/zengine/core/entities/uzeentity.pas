@@ -852,7 +852,7 @@ begin
   cv:=vp.BoundingBox.RTF-vp.BoundingBox.LBN;
   if (d>0)and(d*d<cv.x*cv.x+cv.y*cv.y+cv.z*cv.z) then begin
     d:=GetLTCorrectH(dc.DrawingContext.globalltscale);
-    cv:=TzeVector3d.CreateRec(d,d,d);
+    cv:=TzeVector3d.Make(d,d,d);
     vp.BoundingBox.LBN:=vp.BoundingBox.LBN-cv;
     vp.BoundingBox.RTF:=vp.BoundingBox.RTF+cv;
   end;

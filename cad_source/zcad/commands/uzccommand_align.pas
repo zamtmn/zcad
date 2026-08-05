@@ -132,9 +132,9 @@ begin
     // Угол ≈ 180°: выбираем произвольную перпендикулярную ось
     // Выбираем ось, наименее параллельную srcVec
     if Abs(srcVec.x) <= Abs(srcVec.y) then
-      perpAxis:=TzeVector3d.CreateRec(1,0,0)
+      perpAxis:=cV3d__1__0__0
     else
-      perpAxis:=TzeVector3d.CreateRec(0,1,0);
+      perpAxis:=cV3d__0__1__0;
     // Ось = normalize(srcVec × perpAxis)
     rotAxis := uzegeometry.VectorDot(srcVec, perpAxis);
     axisLen := Sqrt(rotAxis.x * rotAxis.x + rotAxis.y * rotAxis.y + rotAxis.z * rotAxis.z);

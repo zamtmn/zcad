@@ -66,8 +66,8 @@ begin
                  f:=ptv.z;
         ptv:=iterate(ir);
   until ptv=nil;
-  result.LBN:=TzePoint3d.CreateRec(l,B,n);
-  result.RTF:=TzePoint3d.CreateRec(r,Tt,f);
+  result.LBN:=TzePoint3d.Make(l,B,n);
+  result.RTF:=TzePoint3d.Make(r,Tt,f);
 
   end
               else

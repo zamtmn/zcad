@@ -548,7 +548,7 @@ begin
   if xyline<eps then
     exit;
 
-  xline:=stPoint.LengthTo(TzePoint3d.CreateRec(Point.x,stPoint.y,0));
+  xline:=stPoint.LengthTo(TzePoint3d.Make(Point.x,stPoint.y,0));
 
   radius:=stPoint.LengthTo(Point);
   stalpha:=0;

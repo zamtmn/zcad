@@ -198,8 +198,8 @@ begin
       cell := CreateEmptyCell(i, j);
 
       // Устанавливаем границы ячейки
-      cell.bounds.LBN := TzePoint3d.CreateRec(col^.leftPosition, row^.bottomPosition, 0);
-      cell.bounds.RTF := TzePoint3d.CreateRec(col^.rightPosition, row^.topPosition, 0);
+      cell.bounds.LBN := TzePoint3d.Make(col^.leftPosition, row^.bottomPosition, 0);
+      cell.bounds.RTF := TzePoint3d.Make(col^.rightPosition, row^.topPosition, 0);
 
       aTableModel.cells.PushBack(cell);
     end;
@@ -293,8 +293,8 @@ begin
   row := aTableModel.rows.Mutable[aTableModel.rows.Size - 1];
   maxY := row^.topPosition;
 
-  aTableModel.tableBounds.LBN := TzePoint3d.CreateRec(minX, minY, 0);
-  aTableModel.tableBounds.RTF := TzePoint3d.CreateRec(maxX, maxY, 0);
+  aTableModel.tableBounds.LBN := TzePoint3d.Make(minX, minY, 0);
+  aTableModel.tableBounds.RTF := TzePoint3d.Make(maxX, maxY, 0);
 end;
 
 // Построить модель таблицы из списка примитивов

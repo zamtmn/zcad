@@ -87,8 +87,8 @@ begin
 
   projMatrix:=cOneMatrix;
   projMatrix:=Ortho(-dx/2,dx/2,-dy/2,dy/2,-1,1,@projMatrix);
-  projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(TzeVector3d.CreateRec(-(point1.x+point2.x)/dx,-(point1.y+point2.y)/dy,0)));
-  projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(TzeVector3d.CreateRec(1/sx,1/sy,1)));
+  projMatrix:=MatrixMultiply(projMatrix,CreateTranslationMatrix(TzeVector3d.Make(-(point1.x+point2.x)/dx,-(point1.y+point2.y)/dy,0)));
+  projMatrix:=MatrixMultiply(projMatrix,CreateScaleMatrix(TzeVector3d.Make(1/sx,1/sy,1)));
 
 
 

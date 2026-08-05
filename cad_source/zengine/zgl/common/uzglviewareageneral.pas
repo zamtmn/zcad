@@ -452,9 +452,9 @@ begin
             //|       |
             //|---4---|
             {1}
-            i2dresult:=intercept2dmy(cP2d__0__0,TzePoint2d.CreateRec(0,getviewcontrol.clientheight),param.ontrackarray.otrackarray[i].dispcoord.Slice,pt.dispraycoord.Slice);
+            i2dresult:=intercept2dmy(cP2d__0__0,TzePoint2d.Make(0,getviewcontrol.clientheight),param.ontrackarray.otrackarray[i].dispcoord.Slice,pt.dispraycoord.Slice);
             {2}
-            i2d:=intercept2dmy(TzePoint2d.CreateRec(0,getviewcontrol.clientheight),TzePoint2d.CreateRec(getviewcontrol.clientwidth,getviewcontrol.clientheight),param.ontrackarray.otrackarray[i].dispcoord.Slice,pt.dispraycoord.Slice);
+            i2d:=intercept2dmy(TzePoint2d.Make(0,getviewcontrol.clientheight),TzePoint2d.Make(getviewcontrol.clientwidth,getviewcontrol.clientheight),param.ontrackarray.otrackarray[i].dispcoord.Slice,pt.dispraycoord.Slice);
             if not i2dresult.isintercept then
                                              i2dresult:=i2d;
             if i2d.isintercept then
@@ -462,7 +462,7 @@ begin
             if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
                                             i2dresult:=i2d;
             {3}
-            i2d:=intercept2dmy(TzePoint2d.CreateRec(getviewcontrol.clientwidth,getviewcontrol.clientheight),TzePoint2d.CreateRec(getviewcontrol.clientwidth,0),param.ontrackarray.otrackarray[i].dispcoord.Slice,pt.dispraycoord.Slice);
+            i2d:=intercept2dmy(TzePoint2d.Make(getviewcontrol.clientwidth,getviewcontrol.clientheight),TzePoint2d.Make(getviewcontrol.clientwidth,0),param.ontrackarray.otrackarray[i].dispcoord.Slice,pt.dispraycoord.Slice);
             if not i2dresult.isintercept then
                                              i2dresult:=i2d;
             if i2d.isintercept then
@@ -470,7 +470,7 @@ begin
             if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
                                             i2dresult:=i2d;
             {4}
-            i2d:=intercept2dmy(TzePoint2d.CreateRec(getviewcontrol.clientwidth,0),TzePoint2d.CreateRec(0,0),param.ontrackarray.otrackarray[i].dispcoord.Slice,pt.dispraycoord.Slice);
+            i2d:=intercept2dmy(TzePoint2d.Make(getviewcontrol.clientwidth,0),TzePoint2d.Make(0,0),param.ontrackarray.otrackarray[i].dispcoord.Slice,pt.dispraycoord.Slice);
             if not i2dresult.isintercept then
                                              i2dresult:=i2d;
             if i2d.isintercept then
@@ -575,21 +575,21 @@ begin
 
     dc.drawer.SetColor(255, 0, 0,255);
     dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconX,dc.DrawingContext.matrixs);
-    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
-    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,TzePoint3d.Make(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y-td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconX,TzePoint3d.Make(param.CSIcon.CSIconCoord.x + td-td2, param.CSIcon.CSIconCoord.y+td22 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
 
     dc.drawer.SetColor(0, 255, 0,255);
     dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconY,dc.DrawingContext.matrixs);
-    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
-    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,TzePoint3d.Make(param.CSIcon.CSIconCoord.x-td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+    dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconY,TzePoint3d.Make(param.CSIcon.CSIconCoord.x+td22, param.CSIcon.CSIconCoord.y + td-td2, param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
 
     dc.drawer.SetColor(0, 0, 255,255);
     dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconZ,dc.DrawingContext.matrixs);
 
     if vectordot(pdwg.GetPcamera.prop.look,cV3d__0__0__1).IsNul then begin
         dc.drawer.SetColor(255, 255, 255,255);
-        dc.drawer.DrawLine3DInModelSpace(TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
-        dc.drawer.DrawLine3DInModelSpace(TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(TzePoint3d.Make(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),TzePoint3d.Make(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
+        dc.drawer.DrawLine3DInModelSpace(TzePoint3d.Make(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),TzePoint3d.Make(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
     end;
   end;
   dc.drawer.ClearStatesMachine;
@@ -936,7 +936,7 @@ begin
     PLD:=SnapHandles.GetPLincedData(param.ospoint.ostype);
     if assigned(PLD^.DrawIconProc) then begin
       if assigned(PLD^.SetupIconProc) then begin
-        PLD^.SetupIconProc(DC,getviewcontrol.ClientRect,TzePoint2d.CreateRec(param.ospoint.dispcoord.x,param.ospoint.dispcoord.y),sysvarDISPOSSize,2,clr)
+        PLD^.SetupIconProc(DC,getviewcontrol.ClientRect,TzePoint2d.Make(param.ospoint.dispcoord.x,param.ospoint.dispcoord.y),sysvarDISPOSSize,2,clr)
       end else begin
         dc.drawer.SetColor(clr);
         dc.drawer.SetLineWidth(2);
@@ -1183,9 +1183,9 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
     //без этого разделения камера уползает по Z
     if {IsPointEqual}pdwg.Getpcamera^.prop.look.asPoint3d.IsEqual(cP3d__0__0_m1) then
       //добавоено чтоб не уполжала камера
-      target:=TzePoint3d.CreateRec(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z)
+      target:=TzePoint3d.Make(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z)
     else
-      target:=TzePoint3d.CreateRec(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
+      target:=TzePoint3d.Make(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
     camerapos:=pdwg.Getpcamera^.prop.point;
     target:={vertexsub}(target-camerapos.asVector);
 
@@ -1906,8 +1906,8 @@ begin
                                  param.md.mouseray.lend:=tv2;
                                  param.md.mouseray.dir:={vertexsub}(tv2-tv1){.asVector};
                             end;
-         pdwg^.myGluUnProject(TzePoint3d.CreateRec(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 0),param.md.mouseray.lbegin);
-         pdwg^.myGluUnProject(TzePoint3d.CreateRec(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 1),param.md.mouseray.lend);
+         pdwg^.myGluUnProject(TzePoint3d.Make(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 0),param.md.mouseray.lbegin);
+         pdwg^.myGluUnProject(TzePoint3d.Make(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 1),param.md.mouseray.lend);
      end;
      end;
 end;
@@ -2768,8 +2768,8 @@ begin
   pv:=param.ospoint.arrayworldaxis.GetParrayAsPointer;
   for i := 0 to param.ospoint.arrayworldaxis.count - 1 do
   begin
-    PDWG.myGluProject2(TzePoint3d.CreateRec(param.ospoint.worldcoord.x + pv.x, param.ospoint.worldcoord.y + pv.y, param.ospoint.worldcoord.z + pv.z),
-                                     temp);
+    PDWG.myGluProject2(TzePoint3d.Make(param.ospoint.worldcoord.x + pv.x,
+      param.ospoint.worldcoord.y + pv.y, param.ospoint.worldcoord.z + pv.z),temp);
     tp.dir.x:=temp.x - param.ospoint.dispcoord.x;
     tp.dir.y:=(temp.y - param.ospoint.dispcoord.y);
     tp.dir.z:=temp.z - param.ospoint.dispcoord.z;
@@ -2869,7 +2869,7 @@ begin
   pv:=param.ontrackarray.otrackarray[0].arrayworldaxis.GetParrayAsPointer;
   for i := 0 to param.ontrackarray.otrackarray[0].arrayworldaxis.count - 1 do
   begin
-    {gdb.GetCurrentDWG^}pdwg.myGluProject2(TzePoint3d.CreateRec(param.ontrackarray.otrackarray
+    {gdb.GetCurrentDWG^}pdwg.myGluProject2(TzePoint3d.Make(param.ontrackarray.otrackarray
       [0].worldcoord.x + pv.x, param.ontrackarray.otrackarray[0].worldcoord.y +
       pv.y, param.ontrackarray.otrackarray[0].worldcoord.z + pv.z)
                                     , temp);
@@ -2934,7 +2934,7 @@ begin
       pv:=param.ontrackarray.otrackarray[j].arrayworldaxis.GetParrayAsPointer;
       pt:=param.ontrackarray.otrackarray[j].arraydispaxis.GetParrayAsPointer;
       for i:=0 to param.ontrackarray.otrackarray[j].arrayworldaxis.Count-1 do begin
-        PDWG.myGluProject2(TzePoint3d.CreateRec(param.ontrackarray.otrackarray[j].worldcoord.x+pv.x,param.ontrackarray.otrackarray[j].worldcoord.y+pv.y,param.ontrackarray.otrackarray[j].worldcoord.z+pv.z),temp);
+        PDWG.myGluProject2(TzePoint3d.Make(param.ontrackarray.otrackarray[j].worldcoord.x+pv.x,param.ontrackarray.otrackarray[j].worldcoord.y+pv.y,param.ontrackarray.otrackarray[j].worldcoord.z+pv.z),temp);
         pt.dir.x:=temp.x-param.ontrackarray.otrackarray[j].dispcoord.x;
         pt.dir.y:=(temp.y-param.ontrackarray.otrackarray[j].dispcoord.y);
         pt.dir.z:=temp.z-param.ontrackarray.otrackarray[j].dispcoord.z;
@@ -3117,7 +3117,7 @@ end;
 
 function TGeneralViewArea.ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: TzePoint3d):TzePoint3d;
 begin
-     PDWG.myGluProject2(TzePoint3d.CreateRec(pntx,pnty,pntz),
+     PDWG.myGluProject2(TzePoint3d.Make(pntx,pnty,pntz),
      result);
 
 
@@ -3157,8 +3157,8 @@ var ca, cv: extended; ds:String;
 begin
   if pdwg=NIL then exit;
 
-  pdwg^.myGluUnProject(TzePoint3d.CreateRec(x, y, 0),param.md.mouseray.lbegin);
-  pdwg^.myGluUnProject(TzePoint3d.CreateRec(x, y, 1),param.md.mouseray.lend);
+  pdwg^.myGluUnProject(TzePoint3d.Make(x, y, 0),param.md.mouseray.lbegin);
+  pdwg^.myGluUnProject(TzePoint3d.Make(x, y, 1),param.md.mouseray.lend);
 
   param.md.mouseray.dir:={vertexsub}(param.md.mouseray.lend-param.md.mouseray.lbegin);
   cv:=param.md.workplane.v[0]*param.md.mouseray.dir.x +
@@ -3260,9 +3260,9 @@ begin
      end
      else
      begin
-     pdwg^.myGluUnProject(TzePoint3d.CreateRec(40, 40, 0.1),
+     pdwg^.myGluUnProject(TzePoint3d.Make(40, 40, 0.1),
                                  param.CSIcon.CSIconCoord);
-          pdwg^.myGluProject2(TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x,param.CSIcon.CSIconCoord.y+1,param.CSIcon.CSIconCoord.z),
+          pdwg^.myGluProject2(TzePoint3d.Make(param.CSIcon.CSIconCoord.x,param.CSIcon.CSIconCoord.y+1,param.CSIcon.CSIconCoord.z),
 
                      cav);
           cav.x:=40-cav.x;
@@ -3282,15 +3282,15 @@ begin
      param.CSIcon.CSIconZ.z:=param.CSIcon.CSIconZ.z+param.CSIcon.axislen;
 
 
-     pdwg^.myGluProject2(TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x + param.CSIcon.axislen, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z),
+     pdwg^.myGluProject2(TzePoint3d.Make(param.CSIcon.CSIconCoord.x + param.CSIcon.axislen, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z),
                 CAV);
      param.CSIcon.csx.x := cav.x;
      param.CSIcon.csx.y := cav.y;
-     pdwg^.myGluProject2(TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y + param.CSIcon.axislen, param.CSIcon.CSIconCoord.z),
+     pdwg^.myGluProject2(TzePoint3d.Make(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y + param.CSIcon.axislen, param.CSIcon.CSIconCoord.z),
                 CAV);
      param.CSIcon.csy.x := round(cav.x);
      param.CSIcon.csy.y := round(cav.y);
-     pdwg^.myGluProject2(TzePoint3d.CreateRec(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z + param.CSIcon.axislen),
+     pdwg^.myGluProject2(TzePoint3d.Make(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y, param.CSIcon.CSIconCoord.z + param.CSIcon.axislen),
                 CAV);
      param.CSIcon.csz.x := round(cav.x);
      param.CSIcon.csz.y := round(cav.y);

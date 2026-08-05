@@ -180,7 +180,7 @@ begin
                 if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then begin
                   if drawings.GetCurrentDWG<>nil then
                   if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then begin
-                    temp:=TzePoint3d.CreateRec(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),strtodouble(parseresult^.getData(2)));
+                    temp:=TzePoint3d.Make(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),strtodouble(parseresult^.getData(2)));
                     if relativemarker then
                       if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
                         temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord.asVector;
@@ -191,7 +191,7 @@ begin
                   if drawings.GetCurrentDWG<>nil then
                     if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then begin
                       len:=drawings.GetCurrentDWG.wa.param.ontrackarray.total;
-                      temp:=TzePoint3d.CreateRec(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),0);
+                      temp:=TzePoint3d.Make(strtodouble(parseresult^.getData(0)),strtodouble(parseresult^.getData(1)),0);
                       if relativemarker then
                         if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
                           temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord.asVector;
@@ -205,7 +205,7 @@ begin
                       l:=strtodouble(parseresult^.getData(0));
                       a:=strtodouble(parseresult^.getData(1));
                       SinCos(a*pi/180,sine,cosine);
-                      temp:=TzePoint3d.CreateRec(l*cosine,l*sine,0);
+                      temp:=TzePoint3d.Make(l*cosine,l*sine,0);
                  if relativemarker then
                  if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
                    temp:=temp+drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord.asVector;

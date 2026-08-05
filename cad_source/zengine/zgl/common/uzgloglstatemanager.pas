@@ -363,7 +363,7 @@ begin
                       glVertex2iV(pointer(v))
                   else
                       begin
-                           t:=TzePoint3d.CreateRec(PzePoint2i(v)^.x,PzePoint2i(v)^.y,0)+LCS.CurrentCamCSOffset;
+                           t:=TzePoint3d.Make(PzePoint2i(v)^.x,PzePoint2i(v)^.y,0)+LCS.CurrentCamCSOffset;
                            glVertex3dV(@t);
                       end;
 end;
@@ -378,7 +378,7 @@ begin
                       glVertex2i(x,y)
                   else
                       begin
-                           t:=TzePoint3d.CreateRec(x,y,0)+LCS.CurrentCamCSOffset;
+                           t:=TzePoint3d.Make(x,y,0)+LCS.CurrentCamCSOffset;
                            glVertex3dV(@t);
                       end;
 end;
@@ -393,7 +393,7 @@ begin
                       glVertex2dV(pointer(v))
                   else
                       begin
-                           t:=TzePoint3d.CreateRec(PzePoint2d(v)^.x,PzePoint2d(v)^.y,0)+LCS.CurrentCamCSOffset;
+                           t:=TzePoint3d.Make(PzePoint2d(v)^.x,PzePoint2d(v)^.y,0)+LCS.CurrentCamCSOffset;
                            glVertex3dV(@t);
                       end;
 end;
@@ -450,7 +450,7 @@ begin
                       glVertex2f(x,y)
                   else
                       begin
-                           t:=TzePoint3d.CreateRec(x,y,0)+LCS.CurrentCamCSOffset;
+                           t:=TzePoint3d.Make(x,y,0)+LCS.CurrentCamCSOffset;
                            glVertex3dv(@t);
                       end;
 end;
@@ -465,7 +465,7 @@ begin
                       glVertex2d(x,y)
                   else
                       begin
-                           t:=TzePoint3d.CreateRec(x,y,0)+LCS.CurrentCamCSOffset;
+                           t:=TzePoint3d.Make(x,y,0)+LCS.CurrentCamCSOffset;
                            glVertex3dv(@t);
                       end;
 end;
@@ -488,7 +488,7 @@ end;
 procedure TOGLStateManager.myglVertex(const x,y,z:Double);
 var t,t1:TzePoint3d;
 begin
-     t1:=TzePoint3d.CreateRec(x,y,z);
+     t1:=TzePoint3d.Make(x,y,z);
      {$IFDEF DEBUGCOUNTGEOMETRY}
      //processpoint(t1);
      inc(pointcount);

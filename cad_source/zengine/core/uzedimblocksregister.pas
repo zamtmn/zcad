@@ -37,8 +37,8 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateSolid(result,@result.ObjArray,
                    dwg^.GetLayerTable^.GetSystemLayer,dwg^.GetLTypeTable^.GetSystemLT(TLTByBlock),LnWtByBlock,ClByBlock,
-                   TzePoint3d.CreateRec(-1,-1/6,0),
-                   TzePoint3d.CreateRec(-1, 1/6,0),
+                   TzePoint3d.Make(-1,-1/6,0),
+                   TzePoint3d.Make(-1, 1/6,0),
                    cP3d__0__0__0);
 end;
 function CreateClosedBlankBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -57,8 +57,8 @@ begin
 
   BlockDefArray:=dwg^.GetBlockDefArraySimple;
   result:=BlockDefArray.create(BlockName);
-  p1:=TzePoint3d.CreateRec(-1,-1/6,0);
-  p2:=TzePoint3d.CreateRec(-1,1/6,0);
+  p1:=TzePoint3d.Make(-1,-1/6,0);
+  p2:=TzePoint3d.Make(-1,1/6,0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
                   cP3d__0__0__0,p1);
@@ -82,8 +82,8 @@ begin
   lttable:=dwg^.GetLTypeTable;
   SystemLayer:=layertable^.GetSystemLayer;
   SystemLT:=lttable^.GetSystemLT(TLTByBlock);
-  p1:=TzePoint3d.CreateRec(-1,-1/6,0);
-  p2:=TzePoint3d.CreateRec(-1,1/6,0);
+  p1:=TzePoint3d.Make(-1,-1/6,0);
+  p2:=TzePoint3d.Make(-1,1/6,0);
   BlockDefArray:=dwg^.GetBlockDefArraySimple;
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
@@ -97,7 +97,7 @@ begin
                   p2,cP3d__0__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  cP3d__0__0__0,TzePoint3d.CreateRec(-1,0,0));
+                  cP3d__0__0__0,TzePoint3d.Make(-1,0,0));
 end;
 
 function CreateDotBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -116,7 +116,7 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-0.5,0,0),TzePoint3d.CreateRec(-1,0,0));
+                  TzePoint3d.Make(-0.5,0,0),TzePoint3d.Make(-1,0,0));
   ENTF_CreateLWPolyLine(result,@result.ObjArray,
                         SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
                         [true,
@@ -137,10 +137,10 @@ begin
   s:=0.075*sine;
   ENTF_CreateSolid(result,@result.ObjArray,
                    dwg^.GetLayerTable^.GetSystemLayer,dwg^.GetLTypeTable^.GetSystemLT(TLTByBlock),LnWtByBlock,ClByBlock,
-                   TzePoint3d.CreateRec(-0.5-c,-0.5+s,0),
-                   TzePoint3d.CreateRec( 0.5-c, 0.5+s,0),
-                   TzePoint3d.CreateRec(-0.5+c,-0.5-s,0),
-                   TzePoint3d.CreateRec( 0.5+c, 0.5-s,0));
+                   TzePoint3d.Make(-0.5-c,-0.5+s,0),
+                   TzePoint3d.Make( 0.5-c, 0.5+s,0),
+                   TzePoint3d.Make(-0.5+c,-0.5-s,0),
+                   TzePoint3d.Make( 0.5+c, 0.5-s,0));
 end;
 function CreateObliqueBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 var
@@ -150,7 +150,7 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   dwg^.GetLayerTable^.GetSystemLayer,dwg^.GetLTypeTable^.GetSystemLT(TLTByBlock),LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-0.5,-0.5,0),TzePoint3d.CreateRec(0.5,0.5,0));
+                  TzePoint3d.Make(-0.5,-0.5,0),TzePoint3d.Make(0.5,0.5,0));
 end;
 function CreateOpenBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 var
@@ -165,8 +165,8 @@ begin
   lttable:=dwg^.GetLTypeTable;
   SystemLayer:=layertable^.GetSystemLayer;
   SystemLT:=lttable^.GetSystemLT(TLTByBlock);
-  p1:=TzePoint3d.CreateRec(-1,-1/6,0);
-  p2:=TzePoint3d.CreateRec(-1,1/6,0);
+  p1:=TzePoint3d.Make(-1,-1/6,0);
+  p2:=TzePoint3d.Make(-1,1/6,0);
   BlockDefArray:=dwg^.GetBlockDefArraySimple;
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
@@ -177,7 +177,7 @@ begin
                   p2,cP3d__0__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  cP3d__0__0__0,TzePoint3d.CreateRec(-1,0,0));
+                  cP3d__0__0__0,TzePoint3d.Make(-1,0,0));
 end;
 
 function CreateOriginBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -196,7 +196,7 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  cP3d__0__0__0,TzePoint3d.CreateRec(-1,0,0));
+                  cP3d__0__0__0,TzePoint3d.Make(-1,0,0));
   ENTF_CreateCircle(result,@result.ObjArray,
                     SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
                     cP3d__0__0__0,0.5);
@@ -218,7 +218,7 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-1,0,0),TzePoint3d.CreateRec(-0.5,0,0));
+                  cP3d_m1__0__0,TzePoint3d.Make(-0.5,0,0));
   ENTF_CreateCircle(result,@result.ObjArray,
                     SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
                     cP3d__0__0__0,0.5);
@@ -243,13 +243,13 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  cP3d__0__0__0,TzePoint3d.CreateRec(-1,0,0));
+                  cP3d__0__0__0,cP3d_m1__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-0.5,0.5,0),cP3d__0__0__0);
+                  TzePoint3d.Make(-0.5,0.5,0),cP3d__0__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-0.5,-0.5,0),cP3d__0__0__0);
+                  TzePoint3d.Make(-0.5,-0.5,0),cP3d__0__0__0);
 end;
 
 function CreateOpen30Block(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -268,13 +268,13 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  cP3d__0__0__0,TzePoint3d.CreateRec(-1,0,0));
+                  cP3d__0__0__0,cP3d_m1__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-1,0.2679,0),cP3d__0__0__0);
+                  TzePoint3d.Make(-1,0.2679,0),cP3d__0__0__0);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-1,-0.2679,0),cP3d__0__0__0);
+                  TzePoint3d.Make(-1,-0.2679,0),cP3d__0__0__0);
 end;
 
 function CreateDotSmallBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -307,7 +307,7 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-1,0,0),TzePoint3d.CreateRec(-0.5,0,0));
+                  cP3d_m1__0__0,TzePoint3d.make(-0.5,0,0));
   ENTF_CreateCircle(result,@result.ObjArray,
                     SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
                     cP3d__0__0__0,0.5);
@@ -337,10 +337,10 @@ begin
   lttable:=dwg^.GetLTypeTable;
   SystemLayer:=layertable^.GetSystemLayer;
   SystemLT:=lttable^.GetSystemLT(TLTByBlock);
-  p1:=TzePoint3d.CreateRec(-0.5,0.5,0);
-  p2:=TzePoint3d.CreateRec(0.5,0.5,0);
-  p3:=TzePoint3d.CreateRec(0.5,-0.5,0);
-  p4:=TzePoint3d.CreateRec(-0.5,-0.5,0);
+  p1:=TzePoint3d.Make(-0.5,0.5,0);
+  p2:=TzePoint3d.Make(0.5,0.5,0);
+  p3:=TzePoint3d.Make(0.5,-0.5,0);
+  p4:=TzePoint3d.Make(-0.5,-0.5,0);
   BlockDefArray:=dwg^.GetBlockDefArraySimple;
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
@@ -357,7 +357,7 @@ begin
                   p4,p1);
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-0.5,0,0),TzePoint3d.CreateRec(-1,0,0));
+                  TzePoint3d.Make(-0.5,0,0),cP3d_m1__0__0);
 end;
 
 function CreateBoxFilledBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -376,13 +376,13 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateSolid(result,@result.ObjArray,
                    SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                   TzePoint3d.CreateRec( 0.5,-0.5,0),
-                   TzePoint3d.CreateRec(-0.5,-0.5,0),
-                   TzePoint3d.CreateRec( 0.5, 0.5,0),
-                   TzePoint3d.CreateRec(-0.5 ,0.5,0));
+                   TzePoint3d.Make( 0.5,-0.5,0),
+                   TzePoint3d.Make(-0.5,-0.5,0),
+                   TzePoint3d.Make( 0.5, 0.5,0),
+                   TzePoint3d.Make(-0.5 ,0.5,0));
   ENTF_CreateLine(result,@result.ObjArray,
                   SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                  TzePoint3d.CreateRec(-0.5,0,0),TzePoint3d.CreateRec(-1,0,0));
+                  TzePoint3d.Make(-0.5,0,0),cP3d_m1__0__0);
 end;
 
 function CreateDatumBlankBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -398,9 +398,9 @@ begin
   lttable:=dwg^.GetLTypeTable;
   SystemLayer:=layertable^.GetSystemLayer;
   SystemLT:=lttable^.GetSystemLT(TLTByBlock);
-  p1:=TzePoint3d.CreateRec( 0, 0.5774,0);
-  p2:=TzePoint3d.CreateRec(-1, 0     ,0);
-  p3:=TzePoint3d.CreateRec( 0,-0.5774,0);
+  p1:=TzePoint3d.Make( 0, 0.5774,0);
+  p2:=cP3d_m1__0__0;
+  p3:=TzePoint3d.Make( 0,-0.5774,0);
   BlockDefArray:=dwg^.GetBlockDefArraySimple;
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateLine(result,@result.ObjArray,
@@ -422,9 +422,9 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateSolid(result,@result.ObjArray,
                    dwg^.GetLayerTable^.GetSystemLayer,dwg^.GetLTypeTable^.GetSystemLT(TLTByBlock),LnWtByBlock,ClByBlock,
-                   TzePoint3d.CreateRec( 0, 0.5774,0),
-                   TzePoint3d.CreateRec(-1, 0     ,0),
-                   TzePoint3d.CreateRec( 0,-0.5774,0));
+                   TzePoint3d.Make( 0, 0.5774,0),
+                   cP3d_m1__0__0,
+                   TzePoint3d.Make( 0,-0.5774,0));
 end;
 
 function CreateIntegralBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
@@ -443,11 +443,11 @@ begin
   result:=BlockDefArray.create(BlockName);
   ENTF_CreateArc(result,@result.ObjArray,
                  SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                 TzePoint3d.CreateRec(-0.44424204,0.09442656,0),
+                 TzePoint3d.Make(-0.44424204,0.09442656,0),
                  0.45416667,4.92182849,6.07374580);
   ENTF_CreateArc(result,@result.ObjArray,
                  SystemLayer,SystemLT,LnWtByBlock,ClByBlock,
-                 TzePoint3d.CreateRec(0.44553400,-0.08824270,0),
+                 TzePoint3d.Make(0.44553400,-0.08824270,0),
                  0.45416667,1.78023584,2.93215314);
 end;
 

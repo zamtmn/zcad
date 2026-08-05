@@ -40,51 +40,51 @@ var
   recognized:boolean;
 begin
   s:=uppercase(operands);
-  ox:=TzeVector3d.CreateRec(-1,0,0);
-  oy:=TzeVector3d.CreateRec(0,1,0);
+  ox:=cV3d_m1__0__0;
+  oy:=cV3d__0__1__0;
   oz:=uzegeometry.VectorDot(ox,oy);
   recognized:=True;
   if s='TOP' then begin
     //drawings.GetCurrentDWG.OGLwindow1.RotTo(createvertex(-1,0,0),createvertex(0,1,0),createvertex(0,0,-1))
-    ox:=TzeVector3d.CreateRec(-1,0,0);
-    oy:=TzeVector3d.CreateRec(0,1,0);
+    ox:=cV3d_m1__0__0;
+    oy:=cV3d__0__1__0;
   end else if s='BOTTOM' then begin
     //drawings.GetCurrentDWG.OGLwindow1.RotTo(createvertex(1,0,0),createvertex(0,1,0),createvertex(0,0,1))
-    ox:=TzeVector3d.CreateRec(1,0,0);
-    oy:=TzeVector3d.CreateRec(0,1,0);
+    ox:=cV3d__1__0__0;
+    oy:=cV3d__0__1__0;
   end else if s='LEFT' then begin
     //drawings.GetCurrentDWG.OGLwindow1.RotTo(createvertex(0,0,-1),createvertex(0,1,0),createvertex(1,0,0))
-    ox:=TzeVector3d.CreateRec(0,0,-1);
-    oy:=TzeVector3d.CreateRec(0,1,0);
+    ox:=cV3d__0__0_m1;
+    oy:=cV3d__0__1__0;
   end else if s='RIGHT' then begin
     //drawings.GetCurrentDWG.OGLwindow1.RotTo(createvertex(0,0,1),createvertex(0,1,0),createvertex(-1,0,0))
-    ox:=TzeVector3d.CreateRec(0,0,1);
-    oy:=TzeVector3d.CreateRec(0,1,0);
+    ox:=cV3d__0__0__1;
+    oy:=cV3d__0__1__0;
   end else if s='NEISO' then begin
-    ox:=TzeVector3d.CreateRec(1,0,0);
-    oy:=TzeVector3d.CreateRec(0,1,0);
+    ox:=cV3d__1__0__0;
+    oy:=cV3d__0__1__0;
     m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(pi/2+pi/6),CreateRotationMatrixZ(-pi/4));
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='SEISO' then begin
-    ox:=TzeVector3d.CreateRec(1,0,0);
-    oy:=TzeVector3d.CreateRec(0,1,0);
+    ox:=cV3d__1__0__0;
+    oy:=cV3d__0__1__0;
 
     m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(pi/2+pi/6),
       CreateRotationMatrixZ(pi+pi/4));
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='NWISO' then begin
-    ox:=TzeVector3d.CreateRec(1,0,0);
-    oy:=TzeVector3d.CreateRec(0,1,0);
+    ox:=cV3d__1__0__0;
+    oy:=cV3d__0__1__0;
 
     m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(pi/2+pi/6),
       CreateRotationMatrixZ({pi+}pi/4));
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='SWISO' then begin
-    ox:=TzeVector3d.CreateRec(1,0,0);
-    oy:=TzeVector3d.CreateRec(0,1,0);
+    ox:=cV3d__1__0__0;
+    oy:=cV3d__0__1__0;
 
     m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(pi/2+pi/6),
       CreateRotationMatrixZ(pi-pi/4));

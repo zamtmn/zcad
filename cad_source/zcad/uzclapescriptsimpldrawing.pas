@@ -306,7 +306,7 @@ begin
     z2:=PDouble(Params^[6])^;
 
     pline:=AllocEnt(GDBLineID);
-    pline^.init(getctxroot(ctx),nil,LnWtByLayer,TzePoint3d.CreateRec(x1,y1,z1),TzePoint3d.CreateRec(x2,y2,z2));
+    pline^.init(getctxroot(ctx),nil,LnWtByLayer,TzePoint3d.Make(x1,y1,z1),TzePoint3d.Make(x2,y2,z2));
     PGDBObjLine(Result^):=pline;
 
     AddEntityToDWG(pline,ctx);

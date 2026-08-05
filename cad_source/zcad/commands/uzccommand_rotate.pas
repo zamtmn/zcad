@@ -95,8 +95,8 @@ var
   end;
 
 begin
-  RefV:=TzeVector3d.CreateRec(1,0,0);
-  Axis:=TzeVector3d.CreateRec(0,0,1);
+  RefV:=cV3d__1__0__0;
+  Axis:=cV3d__0__0__1;
   if CloneEnts>0 then begin
     SetRotateCmdMode(RCMWaitBasePoint,true);
     repeat
@@ -191,8 +191,8 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   MoveMode:=true;
-  RefV:=TzeVector3d.CreateRec(1,0,0);
-  Axis:=TzeVector3d.CreateRec(0,0,1);
+  RefV:=cV3d__1__0__0;
+  Axis:=cV3d__0__0__1;
   CreateZCADCommand(@Rotate_com,'Rotate',CADWG,0);
 
 finalization

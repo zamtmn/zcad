@@ -1803,7 +1803,7 @@ var
            zcSetEntPropFromCurrentDrawingProp(cableLine);
            cableLine^.VertexArrayInOCS.PushBackData(pSt);
            cableLine^.VertexArrayInOCS.PushBackData(p1);
-           cableLine^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(p2.x,p1.y,0));
+           cableLine^.VertexArrayInOCS.PushBackData(TzePoint3d.Make(p2.x,p1.y,0));
            cableLine^.VertexArrayInOCS.PushBackData(p2);
            cableLine^.VertexArrayInOCS.PushBackData(pEd);
            zcAddEntToCurrentDrawingWithUndo(cableLine);
@@ -1819,11 +1819,11 @@ begin
 
     infoVertex.num:=G.Root.Index;
     infoVertex.vertex:=G.Root;
-    infoVertex.poz:=TzePoint2d.CreateRec(x,0);
+    infoVertex.poz:=TzePoint2d.Make(x,0);
     infoVertex.kol:=0;
     infoVertex.childs:=G.Root.ChildCount;
     listVertex.PushBack(infoVertex);
-    ptSt:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0);
+    ptSt:=TzePoint3d.Make(startPt.x + x*indent,startPt.y + y*indent,0);
 
     //zcUI.TextMessage('ptSt.x -' + floattostr(ptSt.x) + ' ptSt.Y -' + floattostr(ptSt.Y),TMWOHistoryOut);
     //*********
@@ -1866,12 +1866,12 @@ begin
         begin
           inc(listVertex.Mutable[tparent]^.kol);
           if listVertex[tparent].kol = 1 then begin
-             infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
+             infoVertex.poz:=TzePoint2d.Make(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1) ;
              infoVertex.vertex:=TVertex(VertexPath[i]);
           end
           else  begin
             inc(x);
-            infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
+            infoVertex.poz:=TzePoint2d.Make(x,listVertex[tparent].poz.y + 1);
             infoVertex.vertex:=TVertex(VertexPath[i]);
           end;
 
@@ -1881,7 +1881,7 @@ begin
           listVertex.PushBack(infoVertex);
 
         //zcUI.TextMessage('1',TMWOHistoryOut);
-        ptEd:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+        ptEd:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
         //zcUI.TextMessage('2',TMWOHistoryOut);
         //if listVertex.Back.vertex.getDevice<>nil then
         //   zcUI.TextMessage('VertexPath i -'+ string(listVertex.Back.vertex.getDevice^.Name),TMWOHistoryOut);
@@ -1898,24 +1898,24 @@ begin
         end;
          //zcUI.TextMessage('4',TMWOHistoryOut);
 
-        ptSt:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
+        ptSt:=TzePoint3d.Make(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent,0) ;
 
         if listVertex[tparent].kol = 1 then
         begin
-          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
+          pt1:=TzePoint3d.Make(startPt.x + listVertex[tparent].poz.x*indent,startPt.y - listVertex[tparent].poz.y*indent-size,0) ;
           //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent;
           //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size;
           //pt2.z:=0;
         end
         else
         begin
-          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
+          pt1:=TzePoint3d.Make(startPt.x + listVertex[tparent].poz.x*indent + size,startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs),0) ;
           //pt2.x:=startPt.x + listVertex[tparent].poz.x*indent + size;
           //pt2.y:=startPt.y - listVertex[tparent].poz.y*indent-size+(listVertex[tparent].kol-1)*((2*size)/listVertex[tparent].childs);
           //pt2.z:=0;
         end;
 
-        pt2:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
+        pt2:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent+size,0) ;
 
         //******
         //zcUI.TextMessage('5',TMWOHistoryOut);

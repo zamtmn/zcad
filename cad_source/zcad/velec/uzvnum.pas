@@ -2974,10 +2974,10 @@ var
            polyObj^.vp.Color:=color;
            polyObj^.vp.LineWeight:=LnWt050;
            //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec((pt.x-size)*height,(pt.y+size)*height,0));
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec((pt.x+size)*height,(pt.y+size)*height,0));
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec((pt.x+size)*height,(pt.y-size)*height,0));
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec((pt.x-size)*height,(pt.y-size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make((pt.x-size)*height,(pt.y+size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make((pt.x+size)*height,(pt.y+size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make((pt.x+size)*height,(pt.y-size)*height,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make((pt.x-size)*height,(pt.y-size)*height,0));
            zcAddEntToCurrentDrawingWithUndo(polyObj);
            //result:=cmd_ok;
       end;
@@ -2994,7 +2994,7 @@ var
            polyObj^.vp.LineWeight:=LnWt050;
            //polyObj^.vp.Layer:=uzvtestdraw.getTestLayer('systemTempVisualLayer');
            polyObj^.VertexArrayInOCS.PushBackData(pt1);
-           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.CreateRec(pt1.x,pt2.y,0));
+           polyObj^.VertexArrayInOCS.PushBackData(TzePoint3d.Make(pt1.x,pt2.y,0));
            polyObj^.VertexArrayInOCS.PushBackData(pt2);
            zcAddEntToCurrentDrawingWithUndo(polyObj);
       end;
@@ -3070,11 +3070,11 @@ begin
 
 
       infoVertex.num:=G.Root.Index;
-      infoVertex.poz:=TzePoint2d.CreateRec(x,0);
+      infoVertex.poz:=TzePoint2d.Make(x,0);
       infoVertex.kol:=0;
       infoVertex.childs:=G.Root.ChildCount;
       listVertex.PushBack(infoVertex);
-      pt1:=TzePoint3d.CreateRec(startPt.x + x*indent,startPt.y + y*indent,0) ;
+      pt1:=TzePoint3d.Make(startPt.x + x*indent,startPt.y + y*indent,0) ;
       drawVertex(pt1,3);
       //drawText(pt1,inttostr(G.Root.index),4);
       //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
@@ -3088,10 +3088,10 @@ begin
           begin
             inc(listVertex.Mutable[tparent]^.kol);
             if listVertex[tparent].kol = 1 then
-               infoVertex.poz:=TzePoint2d.CreateRec(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
+               infoVertex.poz:=TzePoint2d.Make(listVertex[tparent].poz.x,listVertex[tparent].poz.y + 1)
             else  begin
               inc(x);
-              infoVertex.poz:=TzePoint2d.CreateRec(x,listVertex[tparent].poz.y + 1);
+              infoVertex.poz:=TzePoint2d.Make(x,listVertex[tparent].poz.y + 1);
             end;
 
             infoVertex.num:=TVertex(VertexPath[i]).Index;
@@ -3100,13 +3100,13 @@ begin
             listVertex.PushBack(infoVertex);
 
 
-          pt1:=TzePoint3d.CreateRec(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
+          pt1:=TzePoint3d.Make(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
           drawVertex(pt1,3);
           //drawText(pt1,inttostr(listVertex.Back.num),4);
 
           drawMText(pt1,G.Vertices[listVertex.Back.num].AsString['infoVertex'],4,0);
-          pt3:=TzePoint3d.CreateRec(pt1.x,(pt1.y + size)*height,0) ;
-          ptext:=TzePoint3d.CreateRec(pt3.x,pt3.y + indent/20,0) ;
+          pt3:=TzePoint3d.Make(pt1.x,(pt1.y + size)*height,0) ;
+          ptext:=TzePoint3d.Make(pt3.x,pt3.y + indent/20,0) ;
           drawMText(ptext,G.GetEdge(G.Vertices[listVertex.Back.num],G.Vertices[listVertex.Back.num].Parent).AsString['infoEdge'],4,90);
 
           if listVertex[tparent].kol = 1 then begin
@@ -3286,7 +3286,7 @@ end;
         end;
 
       G.TreeTraversal(G.Root, VertexPath);
-      gg:=TzePoint3d.CreateRec(0,0,0) ;
+      gg:=TzePoint3d.Make(0,0,0) ;
       visualGraph(G,gg,1);
 
       G.SortTree(G.Root,@DummyComparer.Compare);
@@ -3302,7 +3302,7 @@ end;
       //
       G.SetTempToSubtreeSize(G.Root);
 
-      gg:=TzePoint3d.CreateRec(0,-300,0) ;
+      gg:=TzePoint3d.Make(0,-300,0) ;
       visualGraph(G,gg,1);
 
       for i:=1 to VertexPath.Count - 1 do begin

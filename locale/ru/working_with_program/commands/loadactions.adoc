@@ -1,0 +1,13 @@
+
+#### LoadActions
+
+:cmdcommand: LoadActions
+:cmdoperands: Обязательный. Путь и имя файла с описанием экшенов
+:cmdexample: LoadActions(E:\actionscontent.xml)
+
+include::../../_elements/commandsummary.adoc[]
+
+Загрузка файла описаний экшенов !!NEEDLINK!!. Загрузка обычно происходит на ранней стадии запуска программы,
+поэтому команда обычно используется в скрипте [.filepath]#$(ZCADPath)/preload/stage0.cmd0# !!NEEDLINK!!.
+
+include::commandsummaryfree.adoc[]

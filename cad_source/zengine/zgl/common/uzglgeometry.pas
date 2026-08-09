@@ -332,8 +332,8 @@ function CalcSegment(const startpoint,endpoint:TzePoint3d;out segment:ZPolySegme
 begin
      segment.startpoint:=startpoint;
      segment.endpoint:=endpoint;
-     segment.dir:={VertexSub}(endpoint-startpoint);
-     segment.length:={Vertexlength}startpoint.LengthTo(endpoint);
+     segment.dir:=endpoint-startpoint;
+     segment.length:=startpoint.LengthTo(endpoint);
      segment.accumlength:=prevlength+segment.length;
      segment.naccumlength:=segment.accumlength;
      result:=segment.accumlength;
@@ -678,7 +678,7 @@ begin
     if (cdp>=-eps)and(tcdp>eps) then begin
       if tcdp<=(pcurrsegment.naccumlength+eps) then begin
         oldcp:=cp;
-        tv:={VertexMulOnSc}(dir*(length/pcurrsegment.nlength));
+        tv:=dir*(length/pcurrsegment.nlength);
         cp:=cp+tv;
         if paint then
           self.PGeom.DrawLineWithoutLT(rc,oldcp,cp,dr);
@@ -807,7 +807,7 @@ begin
   end else begin
     //LT:=getLTfromVP(vp);
     FirstLinePrimitiveindex:=LLprimitives.Count;
-    length:={Vertexlength}startpoint.LengthTo(endpoint);//длина линии
+    length:=startpoint.LengthTo(endpoint);//длина линии
     scale:=DC.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
     num:=trunc(Length/(scale*LT.strokesarray.LengthFact));//количество повторений шаблона
     if ((num<1)and(not LT^.WithoutLines))or(num>SysVarRDMaxLTPatternsInEntity) then begin

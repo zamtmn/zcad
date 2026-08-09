@@ -77,7 +77,7 @@ var
   d:double;
 begin
   d:=DimData.P15InWCS.LengthTo(DimData.P11InOCS);
-  dirv:={vertexsub}(DimData.P15InWCS-tv);
+  dirv:=DimData.P15InWCS-tv;
   dirv.Normalize;
 
   Result:=tv;
@@ -90,7 +90,7 @@ var
   r:double;
 begin
   r:=DimData.P15InWCS.LengthTo(DimData.P10InWCS);
-  dirv:={vertexsub}(tv-DimData.P10InWCS);
+  dirv:=tv-DimData.P10InWCS;
   dirv.Normalize;
 
   Result:=DimData.P10InWCS+dirv*r;
@@ -104,7 +104,7 @@ var
   r:double;
 begin
   r:=DimData.P15InWCS.LengthTo(DimData.P10InWCS);
-  dirv:={vertexsub}(tv-DimData.P10InWCS);
+  dirv:=tv-DimData.P10InWCS;
   dirv.Normalize;
 
   DimData.P15InWCS:=DimData.P10InWCS+dirv*r;

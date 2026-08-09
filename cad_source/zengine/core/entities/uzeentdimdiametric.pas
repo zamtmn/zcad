@@ -136,7 +136,7 @@ var
 begin
   center:=(DimData.P15InWCS+DimData.P10InWCS.asVector)*0.5;
   d:=center.LengthTo(tv);
-  dirv:={vertexsub}(tv-center);
+  dirv:=tv-center;
   dirv.Normalize;
 
   Result:=center+dirv*d;
@@ -153,7 +153,7 @@ var
 begin
   center:=(DimData.P15InWCS+DimData.P10InWCS.asVector)*0.5;
   d:=DimData.P15InWCS.LengthTo(DimData.P10InWCS)/2;
-  dirv:={vertexsub}(tv-center);
+  dirv:=tv-center;
   dirv.Normalize;
 
   Result:=center+dirv*d;
@@ -170,7 +170,7 @@ var
 begin
   center:=(DimData.P15InWCS+DimData.P10InWCS.asVector)*0.5;
   d:=DimData.P15InWCS.LengthTo(DimData.P10InWCS)/2;
-  dirv:={vertexsub}(tv-center);
+  dirv:=tv-center;
   dirv.Normalize;
   DimData.P10InWCS:=center-dirv*d;
   DimData.P15InWCS:=center+dirv*d;

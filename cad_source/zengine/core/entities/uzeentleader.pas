@@ -275,19 +275,19 @@ var
   i:integer;
   pFirst,pNext:PzePoint3d;
 begin
-  Result:={VertexSub}(FallbackEnd-FallbackStart);
+  Result:=FallbackEnd-FallbackStart;
   if (Spline=nil)or(Spline^.VertexArrayInOCS.Count<2) then
     exit;
 
   pFirst:=Spline^.VertexArrayInOCS.getDataMutable(0);
   for i:=1 to Spline^.VertexArrayInOCS.Count-1 do begin
     pNext:=Spline^.VertexArrayInOCS.getDataMutable(i);
-    Result:={VertexSub}(pNext^-pFirst^);
+    Result:=pNext^-pFirst^;
     if Result.Length>LeaderGeometryEpsilon then
       exit;
   end;
 
-  Result:={VertexSub}(FallbackEnd-FallbackStart);
+  Result:=FallbackEnd-FallbackStart;
 end;
 
 // Выбирает степень сплайна по числу точек участка.
@@ -687,7 +687,7 @@ begin
     if (PathType=1)and(SplinePath<>nil) then
       ArrowDirection:=LeaderSplineStartDirection(SplinePath,p1^,p2^)
     else
-      ArrowDirection:={VertexSub}(p2^-p1^);
+      ArrowDirection:=p2^-p1^;
     ArrowAngle:=LeaderArrowAngleFromDirection(ArrowDirection,p1^,p2^);
     pointer(pv):=ENTF_CreateBlockInsert(@self,@self.ConstObjArray,
       vp.Layer,LeaderArrowLineType(self,PDimStyle),
@@ -849,7 +849,7 @@ begin
   pdesc^.worldcoord:=
     GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[VertexNumber];
   ProjectProc(pdesc^.worldcoord,tv);
-  pdesc^.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+  pdesc^.dispcoord:=tv.Slice.asPoint2i;
 end;
 
 procedure GDBObjLeader.addcontrolpoints(tdesc:Pointer);

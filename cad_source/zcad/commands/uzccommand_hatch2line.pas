@@ -43,9 +43,9 @@ var
   v01,v12:TzeVector2d;
 begin
   case APolyLine.Count of
-    4:if {APolyLine.closed and} ({IsPointEqual}APolyLine.getDataMutable(3)^.IsEqual(APolyLine.getDataMutable(0)^)) then
+    4:if {APolyLine.closed and} (APolyLine.getDataMutable(3)^.IsEqual(APolyLine.getDataMutable(0)^)) then
       exit(false);
-    5:if {(not APolyLine.closed) and} (not {IsPointEqual}APolyLine.getDataMutable(4)^.IsEqual(APolyLine.getDataMutable(0)^)) then
+    5:if {(not APolyLine.closed) and} (not APolyLine.getDataMutable(4)^.IsEqual(APolyLine.getDataMutable(0)^)) then
       exit(false);
     else
       exit(false);

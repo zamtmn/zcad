@@ -107,10 +107,8 @@ begin
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   calcObjMatrix;
   createpoint;
-  normal:=(vectordot(
-    {VertexSub}(PInWCS[0]-PInWCS[1]),
-    {VertexSub}(PInWCS[2]-PInWCS[1]))).Normalized.asPoint3d;
-  if {uzegeometry.IsPointEqual}PInOCS[2].IsEqual(PInOCS[3],sqreps) then
+  normal:=(vectordot(PInWCS[0]-PInWCS[1],PInWCS[2]-PInWCS[1])).Normalized.asPoint3d;
+  if PInOCS[2].IsEqual(PInOCS[3],sqreps) then
     triangle:=True
   else
     triangle:=False;
@@ -238,7 +236,7 @@ begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=PInWCS[vertexnumber];
   ProjectProc(pdesc.worldcoord,tv);
-  pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+  pdesc.dispcoord:=tv.Slice.asPoint2i;
 end;
 
 procedure GDBObjSolid.addcontrolpoints(tdesc:Pointer);

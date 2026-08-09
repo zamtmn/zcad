@@ -281,9 +281,9 @@ begin
 
     pdesc.vertexnum:=-(i+1);
     pdesc.pointtype:=os_midle;
-    pdesc.worldcoord:={Vertexmorph}pv^.LerpTo(pvnext^,0.5);
+    pdesc.worldcoord:=pv^.LerpTo(pvnext^,0.5);
         // Store segment direction in dcoord for oriented grip drawing
-    pdesc.dcoord:={VertexSub}(pvnext^-pv^).asPoint3d;
+    pdesc.dcoord:=(pvnext^-pv^).asPoint3d;
     PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
   end;
 end;
@@ -313,7 +313,7 @@ begin
     newCenter:=rtmod.point.worldcoord+rtmod.dist.asVector;
 
     // Set both vertices relative to new center
-    v1^:={VertexSub}(newCenter-halfVector);
+    v1^:=newCenter-halfVector;
     v2^:=newCenter+halfVector;
     //offset:=rtmod.dist;
     //v1^:=VertexAdd(v1^,offset);
@@ -338,9 +338,9 @@ begin
     else
       v2:=VertexArrayInWCS.getDataMutable(0);
 
-    pdesc.worldcoord:={Vertexmorph}v1^.LerpTo(v2^,0.5);
+    pdesc.worldcoord:=v1^.LerpTo(v2^,0.5);
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end;
 end;
 

@@ -95,7 +95,7 @@ begin
      V1:=PzeVector3d(ChangedData.PGetDataInEtity)^;
      inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
      V2:=PzeVector3d(ChangedData.PGetDataInEtity)^;
-     v1:={VertexSub}(v2-v1);
+     v1:=v2-v1;
      v1.Normalize;
      l1:=scalardot(v1,cV3d__1__0__0);
      l1:=arccos(l1){*180/pi};
@@ -337,9 +337,9 @@ begin
   inc(ChangedData.PSetDataInEtity,sizeof(TzePoint3d));
   V2:=PzeVector3d(ChangedData.PSetDataInEtity)^;
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
-  V2:={VertexSub}(V2-V1);
+  V2:=V2-V1;
   V2.Normalize;
-  V2:={VertexMulOnSc}(V2*l1);
+  V2:=V2*l1;
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
@@ -364,7 +364,7 @@ begin
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   SinCos(l1,V2.y,V2.x);
   V2.z:=0;
-  V2:={VertexMulOnSc}(V2*d);
+  V2:=V2*d;
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);

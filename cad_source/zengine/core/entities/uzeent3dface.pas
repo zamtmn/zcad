@@ -111,12 +111,12 @@ begin
     PInWCS[I]:=VectorTransform3D(
       PInOCS[I],bp.ListPos.owner^.GetMatrix^);
   end;
-  v:=vectordot({VertexSub}(PInWCS[0]-PInWCS[1]),{VertexSub}(PInWCS[2]-PInWCS[1]){.asVector}).asPoint3d;
+  v:=vectordot((PInWCS[0]-PInWCS[1]),(PInWCS[2]-PInWCS[1]){.asVector}).asPoint3d;
   if v.IsNul then
     normal:=cV3d__0__0__1
   else
     normal:=v.Normalized.asVector;
-  if {IsPointEqual}PInOCS[2].IsEqual(PInOCS[3],sqreps) then
+  if PInOCS[2].IsEqual(PInOCS[3],sqreps) then
     triangle:=True
   else
     triangle:=False;
@@ -304,7 +304,7 @@ begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=PInWCS[vertexnumber];
   ProjectProc(pdesc.worldcoord,tv);
-  pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+  pdesc.dispcoord:=tv.Slice.asPoint2i;
 end;
 
 procedure GDBObj3DFace.addcontrolpoints(tdesc:Pointer);

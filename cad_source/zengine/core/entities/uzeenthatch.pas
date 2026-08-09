@@ -308,7 +308,7 @@ begin
   else begin
     dir:=(p2-p1).Normalized;
     t:=Scale*normalizeT(st*Strokes.LengthFact,Strokes.LengthFact);
-    l:={Vertexlength2d}p1.LengthTo(p2);
+    l:=p1.LengthTo(p2);
     findInterval(Strokes,Scale,t,cl,c);
     drawedlen:=0;
     p:=p1;
@@ -567,7 +567,7 @@ begin
   dirx.x:=(Strokes.Offset.x*cosA-Strokes.Offset.y*sinA)*Scale;
   dirx.y:=(Strokes.Offset.y*cosA+Strokes.Offset.x*sinA)*Scale;
 
-  offs:={Vertex2dMulOnSc}(Strokes.Base*Scale);
+  offs:=Strokes.Base*Scale;
   //Origin надо учитывать при копировании паттерна из шаблона
   //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
 
@@ -804,7 +804,7 @@ begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
   ProjectProc(pdesc.worldcoord,tv);
-  pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+  pdesc.dispcoord:=tv.Slice.asPoint2i;
 end;
 
 procedure GDBObjHatch.AddControlpoints;

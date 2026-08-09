@@ -1173,9 +1173,9 @@ begin
     if pnd<>nil then
     if pnd^.Ident.pent<>nil then
     begin
-      pc:={Vertexmorph}pnd^.Ident.pent^.vp.BoundingBox.LBN.LerpTo(pnd^.Ident.pent^.vp.BoundingBox.RTF,0.5);
-      bb.LBN:=pc+{VertexMulOnSc}({VertexSub}(pc-pnd^.Ident.pent^.vp.BoundingBox.LBN)*scale);
-      bb.RTF:=pc+{VertexMulOnSc}({VertexSub}(pc-pnd^.Ident.pent^.vp.BoundingBox.RTF)*scale);
+      pc:=pnd^.Ident.pent^.vp.BoundingBox.LBN.LerpTo(pnd^.Ident.pent^.vp.BoundingBox.RTF,0.5);
+      bb.LBN:=pc+((pc-pnd^.Ident.pent^.vp.BoundingBox.LBN)*scale);
+      bb.RTF:=pc+((pc-pnd^.Ident.pent^.vp.BoundingBox.RTF)*scale);
       drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
     end;
   end;

@@ -307,9 +307,9 @@ begin
   if sysvarDISPColorAxis then dc.drawer.SetColor(255, 0, 0,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[0],plx,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[1],plx,Tempplane);
-  dvertex:={uzegeometry.VertexSub}(tv2-tv1);
-  dvertex:={uzegeometry.VertexMulOnSc}(dvertex*SysVarDISPCrosshairSize);
-  tv1:={VertexSub}(mvertex-dvertex);
+  dvertex:=tv2-tv1;
+  dvertex:=dvertex*SysVarDISPCrosshairSize;
+  tv1:=mvertex-dvertex;
   tv2:=mvertex+dvertex;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
 
@@ -319,9 +319,9 @@ begin
   if sysvarDISPColorAxis then dc.drawer.SetColor(0, 255, 0,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[2],ply,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[3],ply,Tempplane);
-  dvertex:={uzegeometry.VertexSub}(tv2-tv1);
-  dvertex:={uzegeometry.VertexMulOnSc}(dvertex*(SysVarDISPCrosshairSize*getviewcontrol.ClientWidth/getviewcontrol.ClientHeight));
-  tv1:={VertexSub}(mvertex-dvertex);
+  dvertex:=tv2-tv1;
+  dvertex:=dvertex*(SysVarDISPCrosshairSize*getviewcontrol.ClientWidth/getviewcontrol.ClientHeight);
+  tv1:=mvertex-dvertex;
   tv2:=mvertex+dvertex;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
 
@@ -334,9 +334,9 @@ begin
   if sysvarDISPColorAxis then dc.drawer.SetColor(0, 0, 255,255);
   tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[0],plz,Tempplane);
   tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[1],plz,Tempplane);
-  dvertex:={uzegeometry.VertexSub}(tv2-tv1);
-  dvertex:={uzegeometry.VertexMulOnSc}(dvertex*SysVarDISPCrosshairSize);
-  tv1:={VertexSub}(mvertex-dvertex);
+  dvertex:=tv2-tv1;
+  dvertex:=dvertex*SysVarDISPCrosshairSize;
+  tv1:=mvertex-dvertex;
   tv2:=mvertex+dvertex;
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
   end;
@@ -344,7 +344,7 @@ begin
   dc.drawer.SetColor(palette[ForeGroundColorIndex].RGB);
   //dc.drawer.SetColor(255, 255, 255,255);
   d1:=param.md.mouseray.lbegin+param.md.mouseray.lend.asVector;
-  d1:={uzegeometry.VertexMulOnSc}(d1*0.5);
+  d1:=d1*0.5;
 
 
   dc.drawer.startrender(TRM_DisplaySpace,dc.DrawingContext.matrixs);
@@ -1181,13 +1181,13 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
                                                                            exit;
                                                                       end;
     //без этого разделения камера уползает по Z
-    if {IsPointEqual}pdwg.Getpcamera^.prop.look.asPoint3d.IsEqual(cP3d__0__0_m1) then
+    if pdwg.Getpcamera^.prop.look.asPoint3d.IsEqual(cP3d__0__0_m1) then
       //добавоено чтоб не уполжала камера
       target:=TzePoint3d.Make(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z)
     else
       target:=TzePoint3d.Make(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
     camerapos:=pdwg.Getpcamera^.prop.point;
-    target:={vertexsub}(target-camerapos.asVector);
+    target:=target-camerapos.asVector;
 
     tzoom:=abs((wcsRTF.x-wcsLBN.x){*wa.pdwg.GetPcamera.prop.xdir.x}/getviewcontrol.clientwidth);
     tpz:=abs((wcsRTF.y-wcsLBN.y){*wa.pdwg.GetPcamera.prop.ydir.y}/getviewcontrol.clientheight);
@@ -1891,12 +1891,12 @@ begin
                              begin
                                   param.md.mouseray.lbegin:=tv1;
                                   param.md.mouseray.lend:=tv2;
-                                  param.md.mouseray.dir:={vertexsub}(tv2-tv1);
+                                  param.md.mouseray.dir:=tv2-tv1;
                              end;
      end
      else
      begin
-         d:={VertexSub}(param.ospoint.worldcoord-pdwg.getpcamera^.prop.point);
+         d:=param.ospoint.worldcoord-pdwg.getpcamera^.prop.point;
          //d:=gdb.GetCurrentDWG.pcamera^.prop.look;
          b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[4],tv1);
          b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[5],tv2);
@@ -1904,7 +1904,7 @@ begin
                             begin
                                  param.md.mouseray.lbegin:=tv1;
                                  param.md.mouseray.lend:=tv2;
-                                 param.md.mouseray.dir:={vertexsub}(tv2-tv1){.asVector};
+                                 param.md.mouseray.dir:=tv2-tv1;
                             end;
          pdwg^.myGluUnProject(TzePoint3d.Make(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 0),param.md.mouseray.lbegin);
          pdwg^.myGluUnProject(TzePoint3d.Make(param.ospoint.dispcoord.x, param.ospoint.dispcoord.y, 1),param.md.mouseray.lend);
@@ -2974,16 +2974,14 @@ begin
             if (pt.dmouse<lastontracdist) then
               if (param.ospoint.ostype=os_blockinsert)or(param.ospoint.ostype=os_insert)or(param.ospoint.ostype=os_textinsert)or
                 (param.ospoint.ostype=os_none)or(param.ospoint.ostype={os_intersection}os_trace) then begin
-                if {vertexlen2df(param.ontrackarray.otrackarray[j].dispcoord.x,
-                  param.ontrackarray.otrackarray[j].dispcoord.y,param.md.glmouse.x,
-                  param.md.glmouse.y)}(param.ontrackarray.otrackarray[j].dispcoord.Slice-param.md.glmouse).Length>ontracignoredist then
+                if (param.ontrackarray.otrackarray[j].dispcoord.Slice-param.md.glmouse).Length>ontracignoredist then
                 begin
                   if param.polarlinetrace=0 then
                     test:=True
                   else
                     test:=False;
                   if not(test) then begin
-                    if not {IsPointEqual}pt.worldraycoord.IsEqual(param.ospoint.worldcoord,bigeps) then
+                    if not pt.worldraycoord.IsEqual(param.ospoint.worldcoord,bigeps) then
                       test:=True;
                   end;
                   if test then
@@ -3027,7 +3025,7 @@ begin
                   ip:=pobj.IsIntersect_Line(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord);
 
                   if ip.isintercept then
-                    if not {IsPointEqual}ip.interceptcoord.IsEqual(param.ontrackarray.otrackarray[i].worldcoord,bigeps) then begin
+                    if not ip.interceptcoord.IsEqual(param.ontrackarray.otrackarray[i].worldcoord,bigeps) then begin
                       PDWG.myGluProject2(ip.interceptcoord,temp);
                       //currentontracdist:=vertexlen2df(temp.x,temp.y,param.md.glmouse.x,param.md.glmouse.y);
                       currentontracdist:=(temp.Slice-param.md.glmouse).Length;
@@ -3160,7 +3158,7 @@ begin
   pdwg^.myGluUnProject(TzePoint3d.Make(x, y, 0),param.md.mouseray.lbegin);
   pdwg^.myGluUnProject(TzePoint3d.Make(x, y, 1),param.md.mouseray.lend);
 
-  param.md.mouseray.dir:={vertexsub}(param.md.mouseray.lend-param.md.mouseray.lbegin);
+  param.md.mouseray.dir:=param.md.mouseray.lend-param.md.mouseray.lbegin;
   cv:=param.md.workplane.v[0]*param.md.mouseray.dir.x +
       param.md.workplane.v[1]*param.md.mouseray.dir.y +
       param.md.workplane.v[2]*param.md.mouseray.dir.z;
@@ -3299,10 +3297,10 @@ begin
      param.md.WPPointUR:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[3],pdwg.getpcamera.frustum.v[1],param.md.workplane);
      param.md.WPPointRB:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[1],pdwg.getpcamera.frustum.v[2],param.md.workplane);
      param.md.WPPointBL:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[2],pdwg.getpcamera.frustum.v[0],param.md.workplane);
-     l:={Vertexlength}param.md.WPPointLU.LengthTo(param.md.WPPointBL);
-     r:={Vertexlength}param.md.WPPointUR.LengthTo(param.md.WPPointRB);
-     u:={Vertexlength}param.md.WPPointLU.LengthTo(param.md.WPPointUR);
-     b:={Vertexlength}param.md.WPPointRB.LengthTo(param.md.WPPointBL);
+     l:=param.md.WPPointLU.LengthTo(param.md.WPPointBL);
+     r:=param.md.WPPointUR.LengthTo(param.md.WPPointRB);
+     u:=param.md.WPPointLU.LengthTo(param.md.WPPointUR);
+     b:=param.md.WPPointRB.LengthTo(param.md.WPPointBL);
      if r>l then
                 maxh:=r
             else
@@ -3323,8 +3321,8 @@ begin
                                                           zDebugLn('{WH}'+rsGridTooDensity);
                                                         param.md.WPPointUR.z:=-1;
                                                    end;
-     param.md.WPPointLU:={vertexmulonsc}({vertexsub}(param.md.WPPointLU-param.md.WPPointBL).asPoint3d/pv);
-     param.md.WPPointRB:={vertexmulonsc}({vertexsub}(param.md.WPPointRB-param.md.WPPointBL).asPoint3d/ph);
+     param.md.WPPointLU:=(param.md.WPPointLU-param.md.WPPointBL).asPoint3d/pv;
+     param.md.WPPointRB:=(param.md.WPPointRB-param.md.WPPointBL).asPoint3d/ph;
 
      param.md.WPPointBL.x:=round((param.md.WPPointBL.x-pdwg^.Snap.Base.x)/pdwg^.GridSpacing.x)*pdwg^.GridSpacing.x+pdwg^.GridSpacing.x+pdwg^.Snap.Base.x;
      param.md.WPPointBL.y:=round((param.md.WPPointBL.y-pdwg^.Snap.Base.y)/pdwg^.GridSpacing.y)*pdwg^.GridSpacing.y-pdwg^.GridSpacing.y+pdwg^.Snap.Base.y;

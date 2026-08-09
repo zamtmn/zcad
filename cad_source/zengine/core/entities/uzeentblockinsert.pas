@@ -113,7 +113,7 @@ begin
         objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,rtmod.point.worldcoord+rtmod.dist.asVector,scl)
     else
       Local:=GetPointInOCSByBasis(objmatrix.mtr.v[0].Slice,
-        objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,{VertexSub}(
+        objmatrix.mtr.v[1].Slice,objmatrix.mtr.v[2].Slice,(
         rtmod.point.worldcoord+rtmod.dist.asVector-rtmod.point.dcoord).asPoint3d,scl);
   end;
 end;
@@ -147,7 +147,7 @@ begin
   ox:=GetXfFromZ(Local.basis.oz);
   tv:=Local.basis.ox;
   if scale.x<-eps then
-    tv:={VertexMulOnSc}(tv*-1);
+    tv:=-tv;
   rotate:=scalardot(tv,ox);
   rotate:=arccos(rotate);
   if scalardot(tv,VectorDot(Local.basis.oz,GetXfFromZ(Local.basis.oz)))<-eps then

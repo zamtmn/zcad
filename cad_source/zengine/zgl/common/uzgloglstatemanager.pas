@@ -424,7 +424,7 @@ begin
                       glVertex3fV(pointer(v))
                   else
                       begin
-                           t:={vertexadd}(v^+LCS.CurrentCamCSOffsetS);
+                           t:=v^+LCS.CurrentCamCSOffsetS;
                            glVertex3fV(@t);
                       end;
 end;
@@ -481,7 +481,7 @@ begin
                       glVertex3dV(@v)
                   else
                       begin
-                           t:={vertexadd}(v+LCS.CurrentCamCSOffset);
+                           t:=v+LCS.CurrentCamCSOffset;
                            glVertex3dv(@t);
                       end;
 end;
@@ -497,7 +497,7 @@ begin
                       glVertex3dV(@t1)
                   else
                       begin
-                           t:={vertexadd}(t1+LCS.CurrentCamCSOffset);
+                           t:=t1+LCS.CurrentCamCSOffset;
                            glVertex3dv(@t);
                       end;
 end;

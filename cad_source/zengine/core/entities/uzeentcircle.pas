@@ -132,7 +132,7 @@ var
   tv:TzePoint3d;
   dir:TzeVector3d;
 begin
-  dir:={VertexSub}(P_insert_in_WCS-posr.worldcoord);
+  dir:=P_insert_in_WCS-posr.worldcoord;
   processaxis(posr,dir.asPoint3d);
   tv:=vectordot(dir,cV3d__0__0__1).asPoint3d;
   processaxis(posr,tv);
@@ -180,10 +180,10 @@ begin
         Result.isintercept:=True;
         if abs(1-abs(t1))<abs(1-abs(t2)) then begin
           Result.t1:=t1;
-          Result.interceptcoord:={Vertexmorph}lbegin.LerpTo(lend,Result.t1);
+          Result.interceptcoord:=lbegin.LerpTo(lend,Result.t1);
         end else begin
           Result.t1:=t2;
-          Result.interceptcoord:={Vertexmorph}lbegin.LerpTo(lend,Result.t1);
+          Result.interceptcoord:=lbegin.LerpTo(lend,Result.t1);
         end;
       end else
         Result.isintercept:=False;
@@ -520,23 +520,23 @@ begin
   if pdesc^.pointtype=os_center then begin
     pdesc.worldcoord:=P_insert_in_WCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end else if pdesc^.pointtype=os_q0 then begin
     pdesc.worldcoord:=q0;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end else if pdesc^.pointtype=os_q1 then begin
     pdesc.worldcoord:=q1;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end else if pdesc^.pointtype=os_q2 then begin
     pdesc.worldcoord:=q2;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end else if pdesc^.pointtype=os_q3 then begin
     pdesc.worldcoord:=q3;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end;
 end;
 

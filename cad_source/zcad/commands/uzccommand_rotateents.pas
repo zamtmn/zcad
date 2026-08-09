@@ -72,7 +72,7 @@ begin
           if IsObjectIt(typeof(pv^),typeof(GDBObjWithLocalCS)) then
             pc:=PGDBObjWithLocalCS(pv)^.P_insert_in_WCS
           else
-            pc:={Vertexmorph}pv^.vp.BoundingBox.LBN.LerpTo(pv^.vp.BoundingBox.RTF,0.5);
+            pc:=pv^.vp.BoundingBox.LBN.LerpTo(pv^.vp.BoundingBox.RTF,0.5);
           dispmatr:=uzegeometry.CreateTranslationMatrix(-pc.asVector);
           rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
           rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);

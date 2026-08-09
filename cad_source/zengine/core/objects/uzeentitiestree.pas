@@ -249,7 +249,7 @@ TSMAccumulation:begin
                    inc(FirstStageData.counter,2);
                 end;
         TSMCalc:begin
-                   FirstStageData.midlepoint:={VertexMulOnSc}(FirstStageData.midlepoint/FirstStageData.counter);
+                   FirstStageData.midlepoint:=(FirstStageData.midlepoint/FirstStageData.counter);
                    FirstStageData.d:=sqrt(sqr(FirstStageData.midlepoint.x) + sqr(FirstStageData.midlepoint.y) + sqr(FirstStageData.midlepoint.z));
                 end;
          TSMEnd:begin

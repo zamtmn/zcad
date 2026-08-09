@@ -122,7 +122,7 @@ end;
 
 function GDBObjLine.GetCenterPoint;
 begin
-  Result:={Vertexmorph}CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,0.5);
+  Result:=CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,0.5);
 end;
 
 function GDBObjLine.GetObjTypeName;
@@ -177,8 +177,8 @@ begin
     a2:=t1;
   if t2>a2 then
     a2:=t2;
-  self.CoordInOCS.lend:={VertexDmorph}(self.CoordInOCS.lbegin+dir*a2);
-  self.CoordInOCS.lbegin:={VertexDmorph}(self.CoordInOCS.lbegin+dir*a1);
+  self.CoordInOCS.lend:=self.CoordInOCS.lbegin+dir*a2;
+  self.CoordInOCS.lbegin:=self.CoordInOCS.lbegin+dir*a1;
   dc:=drawing.CreateDrawingRC;
   FormatEntity(drawing,dc);
   pl^.YouDeleted(drawing);
@@ -374,7 +374,7 @@ begin
     end;
     1:begin
       if (SnapMode and osm_4)<>0 then begin
-        osp.worldcoord:={Vertexmorph}CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/4);
+        osp.worldcoord:=CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/4);
         ProjectProc(osp.worldcoord,osp.dispcoord);
         osp.ostype:=os_1_4;
       end else
@@ -382,7 +382,7 @@ begin
     end;
     2:begin
       if (SnapMode and osm_3)<>0 then begin
-        osp.worldcoord:={Vertexmorph}CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/3);
+        osp.worldcoord:=CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/3);
         ProjectProc(osp.worldcoord,osp.dispcoord);
         osp.ostype:=os_1_3;
       end else
@@ -390,7 +390,7 @@ begin
     end;
     3:begin
       if (SnapMode and osm_midpoint)<>0 then begin
-        osp.worldcoord:={Vertexmorph}CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/2);
+        osp.worldcoord:=CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/2);
         ProjectProc(osp.worldcoord,osp.dispcoord);
         osp.ostype:=os_midle;
       end else
@@ -398,7 +398,7 @@ begin
     end;
     4:begin
       if (SnapMode and osm_3)<>0 then begin
-        osp.worldcoord:={Vertexmorph}CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,2/3);
+        osp.worldcoord:=CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,2/3);
         ProjectProc(osp.worldcoord,osp.dispcoord);
         osp.ostype:=os_2_3;
       end else
@@ -406,7 +406,7 @@ begin
     end;
     5:begin
       if (SnapMode and osm_4)<>0 then begin
-        osp.worldcoord:={Vertexmorph}CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,3/4);
+        osp.worldcoord:=CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,3/4);
         ProjectProc(osp.worldcoord,osp.dispcoord);
         osp.ostype:=os_3_4;
       end else
@@ -521,8 +521,8 @@ begin
         ((SnapMode and osm_intersection)<>0) then begin
         if line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2) then
         begin
-          dir:={VertexSub}(CoordInWCS.lEnd-CoordInWCS.lBegin);
-          dir2:={VertexSub}(pgdbobjline(pobj)^.CoordInWCS.lEnd-pgdbobjline(pobj)^.CoordInWCS.lBegin);
+          dir:=CoordInWCS.lEnd-CoordInWCS.lBegin;
+          dir2:=pgdbobjline(pobj)^.CoordInWCS.lEnd-pgdbobjline(pobj)^.CoordInWCS.lBegin;
           tv1.x:=CoordInWCS.lbegin.x+dir.x*t1;
           tv1.y:=CoordInWCS.lbegin.y+dir.y*t1;
           tv1.z:=CoordInWCS.lbegin.z+dir.z*t1;
@@ -629,10 +629,10 @@ begin
   end else if rtmod.point.pointtype=os_end then begin
     CoordInOCS.lend:=rtmod.point.worldcoord+rtmod.dist.asVector;
   end else if rtmod.point.pointtype=os_midle then begin
-    tv:={uzegeometry.VertexSub}(CoordInOCS.lend-CoordInOCS.lbegin);
-    tv:={uzegeometry.VertexMulOnSc}(tv*0.5);
+    tv:=CoordInOCS.lend-CoordInOCS.lbegin;
+    tv:=tv*0.5;
     tv2:=rtmod.point.worldcoord+rtmod.dist.asVector;
-    CoordInOCS.lbegin:={VertexSub}(tv2-tv);
+    CoordInOCS.lbegin:=tv2-tv;
     CoordInOCS.lend:=tv2+tv;
   end;
 end;
@@ -645,15 +645,15 @@ begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=CoordInWCS.lbegin;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=CoordInWCS.lend;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end else if pdesc^.pointtype=os_midle then begin
-    pdesc.worldcoord:={Vertexmorph}CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/2);
+    pdesc.worldcoord:=CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/2);
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord:=tv.Slice.asPoint2i;
   end;
 end;
 
@@ -668,7 +668,7 @@ begin
 
   pdesc.pointtype:=os_midle;
   pdesc.attr:=[];
-  pdesc.worldcoord:={Vertexmorph}CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/2);
+  pdesc.worldcoord:=CoordInWCS.lbegin.LerpTo(CoordInWCS.lend,1/2);
   PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
   pdesc.pointtype:=os_begin;

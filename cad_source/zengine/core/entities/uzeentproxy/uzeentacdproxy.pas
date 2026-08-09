@@ -553,7 +553,7 @@ begin
       FProxyBBoxMin := ParseResult.BBoxMin;
       FProxyBBoxMax := ParseResult.BBoxMax;
       FProxyBBoxLoaded := True;
-      FProxyGripOffset := {Vertexmorph}FProxyBBoxMin.LerpTo(FProxyBBoxMax, 0.5);
+      FProxyGripOffset := FProxyBBoxMin.LerpTo(FProxyBBoxMax, 0.5);
       if Local.P_insert.IsNul then
         Local.P_insert := FProxyGripOffset;
       vp.BoundingBox.LBN := FProxyBBoxMin;
@@ -721,7 +721,7 @@ begin
   ox := GetXfFromZ(Local.basis.oz);
   tv := Local.basis.ox.asPoint3d;
   if scale.x < -eps then
-    tv := {VertexMulOnSc}(-tv{, -1});
+    tv := -tv;
   rotate := scalardot(tv.asVector, ox);
   if rotate > 1.0 then
     rotate := 1.0
@@ -789,7 +789,7 @@ begin
   begin
     pdesc.worldcoord := GetCenterPoint;
     ProjectProc(pdesc.worldcoord, tv);
-    pdesc.dispcoord := {ToTzePoint2i}(tv.Slice.asPoint2i);
+    pdesc.dispcoord := tv.Slice.asPoint2i;
   end;
 end;
 

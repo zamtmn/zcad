@@ -136,7 +136,7 @@ begin
         found:=1;
       end;
       if found>0 then begin
-        Result:={vertexsub}(ptv^-ppredtv^).asPoint3d;
+        Result:=(ptv^-ppredtv^).asPoint3d;
         Result.Normalize;
         exit;
         Dec(found);
@@ -178,7 +178,7 @@ begin
       end;
 
       if found>0 then begin
-        tv:={vertexsub}(ptv^-ppredtv^);
+        tv:=ptv^-ppredtv^;
         tv.Normalize;
         processaxis(posr,tv.asPoint3d);
         tv:=VectorDot(tv,cV3d__0__0__1);
@@ -273,22 +273,22 @@ begin
   ptv:=VertexArrayInWCS.iterate(ir);
   if ptv<>nil then
     repeat
-      vs.l_1_4:={vertexmorph}ptvprev^.LerpTo(ptv^,1/4);
-      vs.l_1_3:={vertexmorph}ptvprev^.LerpTo(ptv^,1/3);
-      vs.l_1_2:={vertexmorph}ptvprev^.LerpTo(ptv^,1/2);
-      vs.l_2_3:={vertexmorph}ptvprev^.LerpTo(ptv^,2/3);
-      vs.l_3_4:={vertexmorph}ptvprev^.LerpTo(ptv^,3/4);
+      vs.l_1_4:=ptvprev^.LerpTo(ptv^,1/4);
+      vs.l_1_3:=ptvprev^.LerpTo(ptv^,1/3);
+      vs.l_1_2:=ptvprev^.LerpTo(ptv^,1/2);
+      vs.l_2_3:=ptvprev^.LerpTo(ptv^,2/3);
+      vs.l_3_4:=ptvprev^.LerpTo(ptv^,3/4);
       snaparray.PushBackData(vs);
       ptvprev:=ptv;
       ptv:=VertexArrayInWCS.iterate(ir);
     until ptv=nil;
   if closed then begin
     ptv:=VertexArrayInWCS.beginiterate(ir);
-    vs.l_1_4:={vertexmorph}ptvprev^.LerpTo(ptv^,1/4);
-    vs.l_1_3:={vertexmorph}ptvprev^.LerpTo(ptv^,1/3);
-    vs.l_1_2:={vertexmorph}ptvprev^.LerpTo(ptv^,1/2);
-    vs.l_2_3:={vertexmorph}ptvprev^.LerpTo(ptv^,2/3);
-    vs.l_3_4:={vertexmorph}ptvprev^.LerpTo(ptv^,3/4);
+    vs.l_1_4:=ptvprev^.LerpTo(ptv^,1/4);
+    vs.l_1_3:=ptvprev^.LerpTo(ptv^,1/3);
+    vs.l_1_2:=ptvprev^.LerpTo(ptv^,1/2);
+    vs.l_2_3:=ptvprev^.LerpTo(ptv^,2/3);
+    vs.l_3_4:=ptvprev^.LerpTo(ptv^,3/4);
     snaparray.PushBackData(vs);
   end;
   snaparray.Shrink;
@@ -439,7 +439,7 @@ begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
   ProjectProc(pdesc.worldcoord,tv);
-  pdesc.dispcoord:={ToTzePoint2i}(tv.Slice.asPoint2i);
+  pdesc.dispcoord:=tv.Slice.asPoint2i;
 end;
 
 procedure GDBObjCurve.addcontrolpoints;

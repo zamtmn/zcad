@@ -148,7 +148,7 @@ begin
                     repeat
                           if (pgfe<>pgfe2)and(pgfe2^.link.IsDataExistWithCompareProc(pl,EqualFuncPGDBaseEntity)<>-1) then
                           begin
-                          npath:=pgfe^.pathlength+{Vertexlength(pgfe^.point,pgfe2^.point)}linklength;
+                          npath:=pgfe^.pathlength+linklength;
                           if {(pgfe2.step=0)or}(pgfe2.pathlength>npath) then
                                               begin
                                                    pgfe2^.step:=step;
@@ -200,7 +200,7 @@ begin
              if linkline<>nil then
              begin
                   linklength:=getlinklength(pointer(linkline));
-             npath:=pgfe^.pathlength+{Vertexlength(pgfe2^.point,pgfe^.point)}linklength;
+             npath:=pgfe^.pathlength+linklength;
              if {npathmin>npath}abs(npath-pgfe2^.pathlength)<eps then
              begin
                   //npathmin:=pgfe^.pathlength;
@@ -398,11 +398,10 @@ begin
     for i := 0 to count - 1 do
     begin
       tgf:=pgrafelement(self.getDataMutable(i));
-      if {IsPointEqual}tgf^.point.IsEqual(v,bigeps) then
-        begin
-             result:=tgf;
-             system.exit;
-        end;
+      if tgf^.point.IsEqual(v,bigeps) then begin
+        result:=tgf;
+        system.exit;
+      end;
     end;
     //if i = count then
     begin

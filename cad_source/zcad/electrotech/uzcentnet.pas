@@ -308,7 +308,7 @@ begin
      if pl<>nil then
      begin
           repeat
-                if not {IsPointEqual}pl^.CoordInOCS.lbegin.IsEqual(pl^.CoordInOCS.lend,bigeps) then
+                if not pl^.CoordInOCS.lbegin.IsEqual(pl^.CoordInOCS.lend,bigeps) then
                 begin
 
                 tgf:=graf.addge(pl^.CoordInOCS.lbegin);

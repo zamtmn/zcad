@@ -148,8 +148,8 @@ begin
         if bb2.RTF.x>=bb2.LBN.x then
           ConcatBB(bb,bb2);
       end;}
-      tv:=bb.RTF-bb.LBN;
-      tv:={VertexMulOnSc}(tv.asPoint3d*0.15).asVector;
+      tv:=(bb.RTF-bb.LBN)*0.15;
+      //tv:=tv*0.15;
       rasterize(cdwg,bmpw,bmpw,bb.LBN-tv,bb.RTF+tv,
         PrintParam,bmp.Canvas,PrinterDrawer);
 

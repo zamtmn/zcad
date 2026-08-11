@@ -117,7 +117,7 @@ var
   psa:PTPatStrokesArray;
 begin
   result:=dxfLoadGroupCodeInteger(rdr,78,DXFCode,patternscount);
-  if result then begin
+  if result and (patternscount>0) then begin
     DXFCode:=rdr.ParseInteger;
     for i:=1 to patternscount do begin
       if dxfLoadGroupCodeDouble(rdr,53,DXFCode,angle) then DXFCode:=rdr.ParseInteger;

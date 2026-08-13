@@ -61,10 +61,19 @@ procedure TSingleLineTextEditorForm._onMouseWheel(Sender: TObject;
 var
   n,ss:Integer;
   s:string;
+  multiply:integer;
 begin
   if TryStrToInt(EditField.SelText,n) then begin
+    if Shift=[ssShift] then
+      multiply:=10
+    else if Shift=[ssCtrl] then
+      multiply:=100
+    else if Shift=[ssShift,ssCtrl] then
+      multiply:=1000
+    else
+      multiply:=1;
     ss:=EditField.SelStart;
-    s:=inttostr(n+sign(WheelDelta));
+    s:=inttostr(n+sign(WheelDelta)*multiply);
     EditField.SelText:=s;
     EditField.SelStart:=ss;
     EditField.SelLength:=Length(s);

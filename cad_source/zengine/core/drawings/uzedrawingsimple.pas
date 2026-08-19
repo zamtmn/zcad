@@ -90,7 +90,9 @@ type
                        procedure PushEndMarker;virtual;
                        procedure SetFileName(NewName:String);virtual;
                        function GetFileName:String;virtual;
-                       procedure ChangeStampt(st:Boolean);virtual;
+                       procedure SetAllChangeStampt;virtual;
+                       procedure ResetChangeStampt;virtual;abstract;
+                       procedure ResetChangeFromAutoSaveStampt;virtual;abstract;
                        function GetUndoTop:TArrayIndex;virtual;
                        function CanUndo:boolean;virtual;
                        function CanRedo:boolean;virtual;
@@ -102,6 +104,7 @@ type
                        function SetMouseEditorMode(mode:Byte):Byte;virtual;
                        procedure FreeConstructionObjects;virtual;
                        function GetChangeStampt:Boolean;virtual;
+                       function GetAutoSavedStampt:Boolean;virtual;
                        function CreateDrawingRC(_maxdetail:Boolean=false;ExcludeOpts:TDContextOptions=[]):TDrawContext;virtual;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
@@ -332,6 +335,10 @@ begin
      result:=false;
 end;
 
+function TSimpleDrawing.GetAutoSavedStampt:Boolean;
+begin
+  result:=true;
+end;
 procedure TSimpleDrawing.FreeConstructionObjects;
 begin
   ConstructObjRoot.ObjArray.free;
@@ -438,10 +445,11 @@ function TSimpleDrawing.GetFileName:String;
 begin
      result:=''
 end;
-procedure TSimpleDrawing.ChangeStampt;
+procedure TSimpleDrawing.SetAllChangeStampt;
 begin
-     if wa.getviewcontrol<>nil then
-     wa.param.lastonmouseobject:=nil;
+  inherited;
+  if wa.getviewcontrol<>nil then
+    wa.param.lastonmouseobject:=nil;
 end;
 function TSimpleDrawing.GetUndoTop:TArrayIndex;
 begin

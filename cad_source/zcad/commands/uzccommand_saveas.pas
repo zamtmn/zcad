@@ -141,7 +141,7 @@ begin
         saveproc(s);
         //SaveDXFDPAS(s);
         drawings.GetCurrentDWG.SetFileName(s);
-        drawings.GetCurrentDWG.ChangeStampt(False);
+        drawings.GetCurrentDWG.ResetChangeStampt;
         zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
       end else begin
         zcUI.TextMessage(Format(rsunknownFileExt,[fileext]),TMWOShowError);

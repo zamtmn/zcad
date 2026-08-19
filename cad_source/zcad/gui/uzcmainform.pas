@@ -1416,11 +1416,18 @@ begin
 end;
 
 procedure TzcMainForm.GeneralTick(Sender:TObject);
+var
+  pdwg:PTSimpleDrawing;
 begin
   if sysvar.SYS.SYS_RunTime<>nil then begin
     Inc(sysvar.SYS.SYS_RunTime^);
-    if SysVar.SAVE.SAVE_Auto_On^ then
-      Dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
+    if SysVar.SAVE.SAVE_Auto_On^ then begin
+      pdwg:=drawings.GetCurrentDWG;
+      if pdwg<>nil then begin
+        if pdwg^.GetAutoSavedStampt then
+          Dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
+      end;
+    end;
   end;
 end;
 

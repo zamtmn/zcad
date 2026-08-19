@@ -31,9 +31,11 @@ type
 
 PTZCADDrawing=^TZCADDrawing;
 TZCADDrawing= object(TSimpleDrawing)
-
+           private
+             FChanged:Boolean;
+             FChangedFromAutoSave:Boolean;
+           public
            FileName:String;
-           Changed:Boolean;
            attrib:LongWord;
            UndoStack:TZctnrVectorUndoCommands;
            DWGUnits:TUnitManager;
@@ -52,8 +54,11 @@ TZCADDrawing= object(TSimpleDrawing)
            procedure PushEndMarker;virtual;
            procedure SetFileName(NewName:String);virtual;
            function GetFileName:String;virtual;
-           procedure ChangeStampt(st:Boolean);virtual;
+           procedure SetAllChangeStampt;virtual;
+           procedure ResetChangeStampt;virtual;
+           procedure ResetChangeFromAutoSaveStampt;virtual;
            function GetChangeStampt:Boolean;virtual;
+           function GetAutoSavedStampt:Boolean;virtual;
            function GetUndoTop:TArrayIndex;virtual;
            function GetUndoStack:Pointer;virtual;
            function CanUndo:boolean;virtual;
@@ -174,14 +179,29 @@ function TZCADDrawing.GetFileName:String;
 begin
      result:=FileName;
 end;
-procedure TZCADDrawing.ChangeStampt;
+procedure TZCADDrawing.SetAllChangeStampt;
 begin
-     self.Changed:={true}st;
-     inherited;
+  inherited;
+  FChanged:=true;
+  FChangedFromAutoSave:=true;
+end;
+procedure TZCADDrawing.ResetChangeStampt;
+begin
+  inherited;
+  FChanged:=false;
+end;
+procedure TZCADDrawing.ResetChangeFromAutoSaveStampt;
+begin
+  inherited;
+  FChangedFromAutoSave:=false;
 end;
 function TZCADDrawing.GetChangeStampt:Boolean;
 begin
-     result:=self.Changed;
+  result:=FChanged;
+end;
+function TZCADDrawing.GetAutoSavedStampt:Boolean;
+begin
+  result:=FChangedFromAutoSave;
 end;
 function TZCADDrawing.GetUndoTop:TArrayIndex;
 begin
@@ -268,7 +288,8 @@ begin
 
   Pointer(FileName):=nil;
   FileName:=rsHardUnnamed;
-  Changed:=False;
+  FChanged:=False;
+  FChangedFromAutoSave:=False;
   UndoStack.init;//:=TZctnrVectorUndoCommands.Create;
   UndoStack.onUndoRedo:=self.onUndoRedo;
   zebaseundocommands.onUndoRedoDataOwner:=self.onUndoRedoDataOwner;

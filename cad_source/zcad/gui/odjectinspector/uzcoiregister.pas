@@ -187,9 +187,7 @@ end;
 procedure _onNotify(const pcurcontext:pointer);
 begin
   if pcurcontext<>nil then
-  begin
-       PTDrawingDef(pcurcontext).ChangeStampt(true);
-  end;
+    PTDrawingDef(pcurcontext).SetAllChangeStampt;
 end;
 class procedure tdummyclass._onAfterFreeEditor(sender:tobject);
 begin

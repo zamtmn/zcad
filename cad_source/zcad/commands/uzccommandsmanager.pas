@@ -885,7 +885,7 @@ begin
   pd:={gdb.GetCurrentDWG}PTSimpleDrawing(pdrawing);
   if pd<>nil then begin
     if not(CEDWGNChanged in pc^.CEndActionAttr) then
-      pd.ChangeStampt(True);
+      pd.SetAllChangeStampt;
     pr:=pd.GetCurrentROOT;
   end else
     pr:=nil;

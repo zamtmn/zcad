@@ -66,9 +66,12 @@ begin
     SaveParams(GetWritableFilePath(CFSconfigsDir,CFSconfigxmlFile),TempSavedParam);
   end;
   Result:=SaveDXFDPAS(s1,not itAutoSave);
-  if (not itAutoSave)and(Result=cmd_ok) then
-    drawings.GetCurrentDWG.ChangeStampt(False);
-  SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+  if Result=cmd_ok then begin
+    if not itAutoSave then
+      drawings.GetCurrentDWG.ResetChangeStampt;
+    drawings.GetCurrentDWG.ResetChangeFromAutoSaveStampt;
+    SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+  end;
   RebuildTree_com(Context,'');
 end;
 

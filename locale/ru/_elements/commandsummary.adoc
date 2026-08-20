@@ -1,0 +1,27 @@
+[cols=">3,<6"]
+|==========================
+ifeval::["{cmdcommand}"!=""]
+  |*Команда*:          a|[.command]#{cmdcommand}#
+endif::[]
+ifeval::["{cmdicon}"!=""]
+  |*Иконка*:           |image:{cmdicon}[]
+endif::[]
+ifeval::["{cmdshortcuts}"!=""]
+  |*Сочетания клавиш*: |{cmdshortcuts}
+endif::[]
+ifeval::["{cmdmenu}"!=""]
+  |*Меню*: a|[.menu]#{cmdmenu}#
+endif::[]
+ifeval::["{predselect}"!=""]
+  |*Предвыбор примитивов*: |{predselect}
+endif::[]
+ifeval::["{cmdoperands}"!=""]
+|*Операнды*:         |{cmdoperands}
+endif::[]
+ifeval::["{cmdexample}"!=""]
+  |*Пример использования*:         a|[.cmdline]#{cmdexample}#
+endif::[]
+ifeval::["{cmdexample2}"!=""]
+  |*Пример использования 2*:       a|[.cmdline]#{cmdexample2}#
+endif::[]
+|==========================

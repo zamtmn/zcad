@@ -1,0 +1,7 @@
+
+## Работа с программой
+
+include::working_with_program/user_interface.adoc[]
+include::working_with_program/entities.adoc[]
+include::working_with_program/entities_extensions.adoc[]
+include::working_with_program/commands.adoc[]

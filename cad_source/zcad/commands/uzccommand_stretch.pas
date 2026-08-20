@@ -127,8 +127,8 @@ begin
     // Remap points to ensure they're properly displayed (red grips)
     dc:=drawings.GetCurrentDWG.wa.CreateRC;
     drawings.GetCurrentDWG.GetSelObjArray.remappoints(
-      drawings.GetCurrentDWG.GetPcamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,
-      drawings.GetCurrentDWG.GetPcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+      drawings.GetCurrentDWG.GetPCamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,
+      drawings.GetCurrentDWG.GetPCamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
     zcUI.Do_GUIaction(nil,zcMsgUIActionRedrawContent);
   end else if HasSelectedObjects then begin
     // Если есть выбранные объекты, но нет контрольных точек
@@ -140,8 +140,8 @@ begin
     // Remap points to ensure they're properly displayed
     dc:=drawings.GetCurrentDWG.wa.CreateRC;
     drawings.GetCurrentDWG.GetSelObjArray.remappoints(
-      drawings.GetCurrentDWG.GetPcamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,
-      drawings.GetCurrentDWG.GetPcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+      drawings.GetCurrentDWG.GetPCamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,
+      drawings.GetCurrentDWG.GetPCamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
     // Выбираем только контрольные точки, попавшие в секущую рамку (подсвечиваем их красным)
     // Select only control points that fell within the crossing frame (highlight them in red)
     drawings.GetCurrentDWG.GetSelObjArray.selectcontrolpointinframe(
@@ -196,8 +196,8 @@ begin
   // Перемещаем контрольные точки для правильного отображения на экране
   // Remap control points for proper display on screen
   drawings.GetCurrentDWG.GetSelObjArray.remappoints(
-    drawings.GetCurrentDWG.GetPcamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,
-    drawings.GetCurrentDWG.GetPcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+    drawings.GetCurrentDWG.GetPCamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,
+    drawings.GetCurrentDWG.GetPCamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
   // Выбираем контрольные точки, попавшие в секущую рамку
   // Select control points that fall within the crossing frame
   drawings.GetCurrentDWG.GetSelObjArray.selectcontrolpointinframe(

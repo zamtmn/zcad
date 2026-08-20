@@ -179,17 +179,17 @@ begin
       end;
 
       drawings.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum:=
-        CalcDisplaySubFrustum(x,y,w,h,drawings.getcurrentdwg.pcamera.modelMatrix,
-        drawings.getcurrentdwg.pcamera.projMatrix,drawings.getcurrentdwg.pcamera.viewport);
+        CalcDisplaySubFrustum(x,y,w,h,drawings.getcurrentdwg.GetPCamera.modelMatrix,
+        drawings.getcurrentdwg.GetPCamera.projMatrix,drawings.getcurrentdwg.GetPCamera.viewport);
 
       Ents.init(25000);
 
       pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pv<>nil then
         repeat
-          if (pv^.Visible=drawings.GetCurrentDWG.pcamera.VISCOUNT)or
+          if (pv^.Visible=drawings.GetCurrentDWG.GetPCamera.VISCOUNT)or
             (not OnlyOnScreenSelect) then
-            if (pv^.infrustum=drawings.GetCurrentDWG.pcamera.POSCOUNT)or
+            if (pv^.infrustum=drawings.GetCurrentDWG.GetPCamera.POSCOUNT)or
               (not OnlyOnScreenSelect) then begin
               r:=pv^.CalcTrueInFrustum(
                 drawings.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum);

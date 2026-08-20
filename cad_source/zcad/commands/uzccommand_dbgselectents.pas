@@ -43,7 +43,7 @@ var
 
 function CheckEntitiVisible(pentity:PGDBObjEntity):boolean;
 begin
-  Result:=pentity^.infrustum=drawings.GetCurrentDWG^.pcamera^.POSCOUNT;
+  Result:=pentity^.infrustum=drawings.GetCurrentDWG^.GetPCamera^.POSCOUNT;
 end;
 
 function dbgSelectEnts_com(const Context:TZCADCommandContext;

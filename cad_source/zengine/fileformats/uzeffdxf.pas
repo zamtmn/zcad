@@ -898,9 +898,9 @@ begin
                   if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   if ZCDCtx.PDrawing<>nil then
-                  if ZCDCtx.PDrawing^.pcamera<>nil then
+                  if ZCDCtx.PDrawing^.GetPCamera<>nil then
                   begin
-                       ZCDCtx.PDrawing^.pcamera^.prop.point.x:=-strtofloat(s);
+                       ZCDCtx.PDrawing^.GetPCamera^.prop.point.x:=-strtofloat(s);
                   end;
               end;
            22:
@@ -908,9 +908,9 @@ begin
                   if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   if ZCDCtx.PDrawing<>nil then
-                  if ZCDCtx.PDrawing^.pcamera<>nil then
+                  if ZCDCtx.PDrawing^.GetPCamera<>nil then
                   begin
-                       ZCDCtx.PDrawing^.pcamera^.prop.point.y:=-strtofloat(s);
+                       ZCDCtx.PDrawing^.GetPCamera^.prop.point.y:=-strtofloat(s);
                   end;
               end;
            13:
@@ -972,21 +972,21 @@ begin
                if ZCDCtx.LoadMode=TLOLoad then
                  if active then
                    if ZCDCtx.PDrawing<>nil then
-                     if ZCDCtx.PDrawing^.pcamera<>nil then
+                     if ZCDCtx.PDrawing^.GetPCamera<>nil then
                        if ZCDCtx.PDrawing^.wa<>nil then
                          if ZCDCtx.PDrawing^.wa.getviewcontrol<>nil then
-                           ZCDCtx.PDrawing^.pcamera^.prop.zoom:=(strtofloat(s)/ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight);
+                           ZCDCtx.PDrawing^.GetPCamera^.prop.zoom:=(strtofloat(s)/ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight);
               end;
            41:
              begin
                if ZCDCtx.LoadMode=TLOLoad then
                  if active then
                    if ZCDCtx.PDrawing<>nil then
-                     if ZCDCtx.PDrawing^.pcamera<>nil then
+                     if ZCDCtx.PDrawing^.GetPCamera<>nil then
                        if ZCDCtx.PDrawing^.wa<>nil then
                          if ZCDCtx.PDrawing^.wa.getviewcontrol<>nil then
                            if ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight*strtofloat(s)>ZCDCtx.PDrawing^.wa.getviewcontrol.ClientWidth then
-                             ZCDCtx.PDrawing^.pcamera^.prop.zoom:=ZCDCtx.PDrawing^.pcamera^.prop.zoom*strtofloat(s)*ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight/ZCDCtx.PDrawing^.wa.getviewcontrol.ClientWidth;
+                             ZCDCtx.PDrawing^.GetPCamera^.prop.zoom:=ZCDCtx.PDrawing^.GetPCamera^.prop.zoom*strtofloat(s)*ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight/ZCDCtx.PDrawing^.wa.getviewcontrol.ClientWidth;
               end;
            71:
              begin

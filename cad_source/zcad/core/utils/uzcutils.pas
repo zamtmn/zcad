@@ -360,7 +360,7 @@ end;
 procedure setdefaultproperty(pvo:pgdbobjEntity);
 begin
   pvo^.selected := false;
-  pvo^.Visible:=drawings.GetCurrentDWG.pcamera.VISCOUNT;
+  pvo^.Visible:=drawings.GetCurrentDWG.GetPCamera.VISCOUNT;
   pvo^.vp.layer :=drawings.GetCurrentDWG.GetCurrentLayer;
   pvo^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
 end;

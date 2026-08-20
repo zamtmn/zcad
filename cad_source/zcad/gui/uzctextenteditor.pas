@@ -89,6 +89,7 @@ begin
                                  TSharedPEntityData.CreateRec(pobj),
                                  TAfterChangePDrawing.CreateRec(@drawing));
       PGDBObjText(pobj)^.Template:=UString;
+      drawings.GetCurrentDWG^.SetAllChangeStampt;
     end;
     PGDBObjText(pobj)^.YouChanged(drawing);
     zcRedrawCurrentDrawing;

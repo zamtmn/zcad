@@ -555,7 +555,7 @@ begin
     dc.drawer.DrawLine2DInDCS(param.CSIcon.CS0.x,param.CSIcon.CS0.y,param.CSIcon.CSZ.x,param.CSIcon.CSZ.Y);
     dc.drawer.ClearStatesMachine;
 
-    if IsVectorNul(vectordot(pdwg.GetPcamera.prop.look,ZWCS)) then begin
+    if IsVectorNul(vectordot(pdwg.GetPCamera.prop.look,ZWCS)) then begin
       d2dx:=(param.CSIcon.CSX-param.CSIcon.CS0)*0.25;
       d2dy:=(param.CSIcon.CSY-param.CSIcon.CS0)*0.25;
       d2d:=param.CSIcon.CS0+d2dx+d2dy;
@@ -586,7 +586,7 @@ begin
     dc.drawer.SetColor(0, 0, 255,255);
     dc.drawer.DrawLine3DInModelSpace(param.CSIcon.CSIconCoord,param.CSIcon.CSIconZ,dc.DrawingContext.matrixs);
 
-    if vectordot(pdwg.GetPcamera.prop.look,cV3d__0__0__1).IsNul then begin
+    if vectordot(pdwg.GetPCamera.prop.look,cV3d__0__0__1).IsNul then begin
         dc.drawer.SetColor(255, 255, 255,255);
         dc.drawer.DrawLine3DInModelSpace(TzePoint3d.Make(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y , param.CSIcon.CSIconCoord.z),TzePoint3d.Make(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
         dc.drawer.DrawLine3DInModelSpace(TzePoint3d.Make(param.CSIcon.CSIconCoord.x + td2, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),TzePoint3d.Make(param.CSIcon.CSIconCoord.x, param.CSIcon.CSIconCoord.y+ td2 , param.CSIcon.CSIconCoord.z),dc.DrawingContext.matrixs);
@@ -839,7 +839,7 @@ begin
     PDWG.GetConstructObjRoot.DrawBB(dc);
 
 
-    PDWG.GetSelObjArray.remappoints(PDWG.GetPcamera.POSCOUNT,param.scrollmode,PDWG.GetPcamera^,PDWG^.myGluProject2,dc);
+    PDWG.GetSelObjArray.remappoints(PDWG.GetPCamera.POSCOUNT,param.scrollmode,PDWG.GetPCamera^,PDWG^.myGluProject2,dc);
     dc.drawer.DisableStencil;
     dc.MaxDetail:=true;
     PDWG.GetSelObjArray.drawobj(dc);
@@ -1010,7 +1010,7 @@ begin
 
   {if param.lastonmouseobject<>nil then
                                       begin
-                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^, pdwg^.myGluProject2,dc);
+                                           PGDBObjEntity(param.lastonmouseobject)^.RenderFeedBack(pdwg.GetPCamera^.POSCOUNT,pdwg^.GetPCamera^, pdwg^.myGluProject2,dc);
                                       end;}
 
   Set3dmouse;
@@ -1189,8 +1189,8 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
     camerapos:=pdwg.Getpcamera^.prop.point;
     target:=target-camerapos.asVector;
 
-    tzoom:=abs((wcsRTF.x-wcsLBN.x){*wa.pdwg.GetPcamera.prop.xdir.x}/getviewcontrol.clientwidth);
-    tpz:=abs((wcsRTF.y-wcsLBN.y){*wa.pdwg.GetPcamera.prop.ydir.y}/getviewcontrol.clientheight);
+    tzoom:=abs((wcsRTF.x-wcsLBN.x){*wa.pdwg.GetPCamera.prop.xdir.x}/getviewcontrol.clientwidth);
+    tpz:=abs((wcsRTF.y-wcsLBN.y){*wa.pdwg.GetPCamera.prop.ydir.y}/getviewcontrol.clientheight);
     if tpz>tzoom then tzoom:=tpz;
     tzoom:=tzoom-PDWG.Getpcamera^.prop.zoom;
     //-------with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
@@ -1452,7 +1452,7 @@ begin
     ComitFromObj;
     end;}
     param.firstdraw := true;
-    pdwg.GetPcamera^.NextPosition;
+    pdwg.GetPCamera^.NextPosition;
     CalcOptimalMatrix;
     calcgrid;
     //-------------------CalcOptimalMatrix;
@@ -1467,7 +1467,7 @@ begin
     doCameraChanged;
   end else if pdwg.GetConstructObjRoot.ObjArray.Count>0 then begin
     {todo: переделать без перерасчета видимости чертежа, нужно только обновить VISCOUNT}
-    pdwg.GetPcamera^.NextPosition;
+    pdwg.GetPCamera^.NextPosition;
     CalcOptimalMatrix;
     Actlt.InfrustumActualy:=pdwg.getpcamera.POSCOUNT;
     Actlt.VisibleActualy:=pdwg.getpcamera.VISCOUNT;
@@ -2639,7 +2639,7 @@ procedure TGeneralViewArea.SetOGLMatrix;
 var
     pcam:PGDBObjCamera;
 begin
-  pcam:=pdwg.GetPcamera;
+  pcam:=pdwg.GetPCamera;
   pcam^.viewport.v[0]:=0;
   pcam^.viewport.v[1]:=0;
   pcam^.viewport.v[2]:=getviewcontrol.clientWidth;
@@ -2655,8 +2655,8 @@ begin
   oglsm.myglMatrixMode(GL_MODELVIEW);}
 
 
-  pcam^.getfrustum(@pcam^.modelMatrix,   @pcam^.projMatrix,   pcam^.clip,   pdwg.GetPcamera^.frustum);
-  pcam^.getfrustum(@pcam^.modelMatrixLCS,@pcam^.projMatrixLCS,pcam^.clipLCS,pdwg.GetPcamera^.frustumLCS);
+  pcam^.getfrustum(@pcam^.modelMatrix,   @pcam^.projMatrix,   pcam^.clip,   pdwg.GetPCamera^.frustum);
+  pcam^.getfrustum(@pcam^.modelMatrixLCS,@pcam^.projMatrixLCS,pcam^.clipLCS,pdwg.GetPCamera^.frustumLCS);
 
 end;
 procedure TGeneralViewArea.PanScreen(oldX,oldY,X,Y:Integer);

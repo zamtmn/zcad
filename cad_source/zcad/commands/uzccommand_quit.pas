@@ -50,7 +50,7 @@ var
 begin
   if ClosedDWG<>nil then begin
     Result:=ZCmrYes;
-    if ClosedDWG.Changed then begin
+    if ClosedDWG.GetChangeStampt then begin
       repeat
         s:=format(rsCloseDWGQuery,
           [StringReplace(ClosedDWG.FileName,'\','\\',[rfReplaceAll])]);
@@ -125,7 +125,7 @@ var
       if wa<>nil then begin
         Closeddwg:=PTZCADDrawing(wa.PDWG);
         if ClosedDWG<>nil then
-          if ClosedDWG.Changed then
+          if ClosedDWG.GetChangeStampt then
             Inc(Result);
       end;
     end;

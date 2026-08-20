@@ -91,29 +91,29 @@ begin
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='RL' then begin
-    m:=CreateAffineRotationMatrix(drawings.GetCurrentDWG.GetPcamera^.prop.look,-45*pi/180);
-    ox:=drawings.GetCurrentDWG.GetPcamera^.prop.xdir;
-    oy:=drawings.GetCurrentDWG.GetPcamera^.prop.ydir;
+    m:=CreateAffineRotationMatrix(drawings.GetCurrentDWG.GetPCamera^.prop.look,-45*pi/180);
+    ox:=drawings.GetCurrentDWG.GetPCamera^.prop.xdir;
+    oy:=drawings.GetCurrentDWG.GetPCamera^.prop.ydir;
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='RR' then begin
     m:=CreateAffineRotationMatrix(
-      drawings.GetCurrentDWG.GetPcamera^.prop.look,45*pi/180);
-    ox:=drawings.GetCurrentDWG.GetPcamera^.prop.xdir;
-    oy:=drawings.GetCurrentDWG.GetPcamera^.prop.ydir;
+      drawings.GetCurrentDWG.GetPCamera^.prop.look,45*pi/180);
+    ox:=drawings.GetCurrentDWG.GetPCamera^.prop.xdir;
+    oy:=drawings.GetCurrentDWG.GetPCamera^.prop.ydir;
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='RU' then begin
-    m:=CreateAffineRotationMatrix(drawings.GetCurrentDWG.GetPcamera^.prop.xdir,-45*pi/180);
-    ox:=drawings.GetCurrentDWG.GetPcamera^.prop.xdir;
-    oy:=drawings.GetCurrentDWG.GetPcamera^.prop.ydir;
+    m:=CreateAffineRotationMatrix(drawings.GetCurrentDWG.GetPCamera^.prop.xdir,-45*pi/180);
+    ox:=drawings.GetCurrentDWG.GetPCamera^.prop.xdir;
+    oy:=drawings.GetCurrentDWG.GetPCamera^.prop.ydir;
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='RD' then begin
     m:=CreateAffineRotationMatrix(
-      drawings.GetCurrentDWG.GetPcamera^.prop.xdir,45*pi/180);
-    ox:=drawings.GetCurrentDWG.GetPcamera^.prop.xdir;
-    oy:=drawings.GetCurrentDWG.GetPcamera^.prop.ydir;
+      drawings.GetCurrentDWG.GetPCamera^.prop.xdir,45*pi/180);
+    ox:=drawings.GetCurrentDWG.GetPCamera^.prop.xdir;
+    oy:=drawings.GetCurrentDWG.GetPCamera^.prop.ydir;
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else

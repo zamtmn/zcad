@@ -341,31 +341,31 @@ end;
                 //pl^.CoordInOCS.lbegin:=tgf^.point;
                 //pl^.CoordInOCS.lend:=tgf^.point;
                 //pl^.Format
-function GDBObjNet.CalcNewName(Net1,Net2:PGDBObjNet):Integer;
+function GDBObjNet.CalcNewName(Net1,Net2:PGDBObjNet):integer;
 var
-   pvd1,pvd2:pvardesk;
-   n1,n2:String;
-   pentvarext1,pentvarext2:TVariablesExtender;
+  pvd1,pvd2:pvardesk;
+  n1,n2:string;
+  pentvarext1,pentvarext2:TVariablesExtender;
 begin
-     result:=0;
-     pentvarext1:=net1.GetExtension<TVariablesExtender>;
-     pentvarext2:=net2.GetExtension<TVariablesExtender>;
-     pvd1:=pentvarext1.entityunit.FindVariable('NMO_Name');
-     pvd2:=pentvarext2.entityunit.FindVariable('NMO_Name');
-     n1:=pstring(pvd1^.data.Addr.Instance)^;
-     n2:=pstring(pvd2^.data.Addr.Instance)^;
-     if (n1='')and(n2='') then
-                              result:={gdb.numerator.getnamenumber(el_unname_prefix)}0
-else if n1=n2 then
-                              result:={n1}1{в следующих n убрана}
-else if (n1='') then
-                              result:=2
-else if (n2='') then
-                              result:=1
-else if (n1[1]='@') then
-                              result:=2
-else if (n2[1]='@') then
-                              result:=1
+  Result:=0;
+  pentvarext1:=net1.GetExtension<TVariablesExtender>;
+  pentvarext2:=net2.GetExtension<TVariablesExtender>;
+  pvd1:=pentvarext1.entityunit.FindVariable('NMO_Name');
+  pvd2:=pentvarext2.entityunit.FindVariable('NMO_Name');
+  n1:=pstring(pvd1^.Data.Addr.Instance)^;
+  n2:=pstring(pvd2^.Data.Addr.Instance)^;
+  if (n1='')and(n2='') then
+    Result:=0
+  else if n1=n2 then
+    Result:=1
+  else if (n1='') then
+    Result:=2
+  else if (n2='') then
+    Result:=1
+  else if (n1[1]='@') then
+    Result:=2
+  else if (n2[1]='@') then
+    Result:=1;
 end;
 procedure GDBObjNet.connectedtogdb;
 var CurrentNet:PGDBObjNet;

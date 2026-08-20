@@ -410,11 +410,11 @@ begin
           outstream.TXTAddStringEOL(dxfGroupCode(25));
           outstream.TXTAddStringEOL(floattostr(drawing.GridSpacing.y));
           outstream.TXTAddStringEOL(dxfGroupCode(16));
-          outstream.TXTAddStringEOL(floattostr(-drawing.pcamera^.prop.look.x));
+          outstream.TXTAddStringEOL(floattostr(-drawing.GetPCamera^.prop.look.x));
           outstream.TXTAddStringEOL(dxfGroupCode(26));
-          outstream.TXTAddStringEOL(floattostr(-drawing.pcamera^.prop.look.y));
+          outstream.TXTAddStringEOL(floattostr(-drawing.GetPCamera^.prop.look.y));
           outstream.TXTAddStringEOL(dxfGroupCode(36));
-          outstream.TXTAddStringEOL(floattostr(-drawing.pcamera^.prop.look.z));
+          outstream.TXTAddStringEOL(floattostr(-drawing.GetPCamera^.prop.look.z));
           outstream.TXTAddStringEOL(dxfGroupCode(17));
           outstream.TXTAddStringEOL(floattostr(0));
           outstream.TXTAddStringEOL(dxfGroupCode(27));

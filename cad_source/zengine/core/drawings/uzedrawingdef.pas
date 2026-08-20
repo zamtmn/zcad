@@ -39,7 +39,9 @@ TDrawingDef= object(GDBaseobject)
                        function GetCurrentRootObjArraySimple:Pointer;virtual;abstract;
                        function GetBlockDefArraySimple:Pointer;virtual;abstract;
                        function GetConstructEntsCount:Integer;virtual;abstract;
-                       procedure ChangeStampt(st:Boolean);virtual;abstract;
+                       procedure SetAllChangeStampt;virtual;abstract;
+                       procedure ResetChangeStampt;virtual;abstract;
+                       procedure ResetChangeFromAutoSaveStampt;virtual;abstract;
                        function GetChangeStampt:Boolean;virtual;abstract;
                        function CanUndo:boolean;virtual;abstract;
                        function CanRedo:boolean;virtual;abstract;

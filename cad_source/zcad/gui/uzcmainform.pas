@@ -1363,7 +1363,7 @@ begin
       pdwg:=drawings.GetCurrentDWG;
       if (pdwg<>nil)and(pdwg.wa<>nil) then begin
         if pdwg.wa.getviewcontrol<>nil then begin
-          if pdwg.pcamera.DRAWNOTEND then begin
+          if pdwg.GetPCamera.DRAWNOTEND then begin
             rc:=pdwg.CreateDrawingRC;
             pdwg.wa.finishdraw(rc);
             done:=False;
@@ -1416,11 +1416,18 @@ begin
 end;
 
 procedure TzcMainForm.GeneralTick(Sender:TObject);
+var
+  pdwg:PTSimpleDrawing;
 begin
   if sysvar.SYS.SYS_RunTime<>nil then begin
     Inc(sysvar.SYS.SYS_RunTime^);
-    if SysVar.SAVE.SAVE_Auto_On^ then
-      Dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
+    if SysVar.SAVE.SAVE_Auto_On^ then begin
+      pdwg:=drawings.GetCurrentDWG;
+      if pdwg<>nil then begin
+        if pdwg^.GetAutoSavedStampt then
+          Dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
+      end;
+    end;
   end;
 end;
 
@@ -1906,7 +1913,7 @@ end;
 procedure TzcMainForm.WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 begin
   if Sender.param.lastonmouseobject<>nil then begin
-    //PGDBObjEntity(sender.param.lastonmouseobject)^.RenderFeedBack(sender.pdwg.GetPcamera^.POSCOUNT,sender.pdwg^.GetPcamera^, sender.pdwg^.myGluProject2,dc);
+    //PGDBObjEntity(sender.param.lastonmouseobject)^.RenderFeedBack(sender.pdwg.GetPCamera^.POSCOUNT,sender.pdwg^.GetPCamera^, sender.pdwg^.myGluProject2,dc);
     pGDBObjEntity(
       Sender.param.lastonmouseobject)^.higlight(dc);
   end;
@@ -1964,20 +1971,20 @@ begin
     if pdwg.wa<>nil then
       if pdwg.wa.getviewcontrol<>nil then begin
         bb:=pdwg.GetCurrentROOT.vp.BoundingBox;
-        size:=round(pdwg.wa.getviewcontrol.ClientWidth*pdwg.GetPcamera^.prop.zoom);
-        position:=round(-pdwg.GetPcamera^.prop.point.x);
+        size:=round(pdwg.wa.getviewcontrol.ClientWidth*pdwg.GetPCamera^.prop.zoom);
+        position:=round(-pdwg.GetPCamera^.prop.point.x);
         min:=round(bb.LBN.x+size/2);
         max:=round(bb.RTF.x+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
         if max<min then
           max:=min;
         zcMainForm.HScrollBar.SetParams(position,min,max,size);
 
-        size:=round(pdwg.wa.getviewcontrol.ClientHeight*pdwg.GetPcamera^.prop.zoom);
+        size:=round(pdwg.wa.getviewcontrol.ClientHeight*pdwg.GetPCamera^.prop.zoom);
         min:=round(bb.LBN.y+size/2);
         max:=round(bb.RTF.y+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
         if max<min then
           max:=min;
-        position:=round((bb.LBN.y+bb.RTF.y+pdwg.GetPcamera^.prop.point.y));
+        position:=round((bb.LBN.y+bb.RTF.y+pdwg.GetPCamera^.prop.point.y));
         zcMainForm.VScrollBar.SetParams(position,min,max,size);
       end;
 end;

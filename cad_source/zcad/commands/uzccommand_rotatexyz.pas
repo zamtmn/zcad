@@ -92,10 +92,10 @@ var
 begin
   //rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
   if (button and MZW_LBUTTON)=0 then begin
-    if (drawings.GetCurrentDWG^.GetPcamera^.notuseLCS) then
+    if (drawings.GetCurrentDWG^.GetPCamera^.notuseLCS) then
       tr:=t3dp
     else
-      tr:=t3dp+drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset;
+      tr:=t3dp+drawings.GetCurrentDWG^.GetPCamera^.CamCSOffset;
 
     tempmatr:=uzegeometry.CreateTranslationMatrix(-t3dp.asVector);
     tempmatr:=uzegeometry.MatrixMultiply(tempmatr,rotmatr);

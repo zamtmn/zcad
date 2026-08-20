@@ -49,7 +49,7 @@ begin
   end else if Operands='CAMERA' then begin
     zcUI.Do_PrepareObject(
       nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('GDBObjCamera'),
-      drawings.GetCurrentDWG.pcamera,drawings.GetCurrentDWG);
+      drawings.GetCurrentDWG.GetPCamera,drawings.GetCurrentDWG);
   end else if Operands='CURRENT' then begin
 
     if (drawings.GetCurrentDWG.GetLastSelected<>nil)

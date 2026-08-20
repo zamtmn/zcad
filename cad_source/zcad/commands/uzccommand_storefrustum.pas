@@ -32,7 +32,7 @@ implementation
 function StoreFrustum_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 begin
-  drawings.GetCurrentDWG.wa.param.debugfrustum:=drawings.GetCurrentDWG.pcamera.frustum;
+  drawings.GetCurrentDWG.wa.param.debugfrustum:=drawings.GetCurrentDWG.GetPCamera.frustum;
   drawings.GetCurrentDWG.wa.param.ShowDebugFrustum:=True;
   Result:=cmd_ok;
 end;

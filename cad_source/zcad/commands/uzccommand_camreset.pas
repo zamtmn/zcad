@@ -40,11 +40,11 @@ var
 begin
   cdwg:=drawings.GetCurrentDWG;
   if cdwg<>nil then begin
-    pcamera:=cdwg.pcamera;
+    pcamera:=cdwg.GetPCamera;
     if pcamera<>nil then begin
       PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.PushStartMarker('Reset camera');
       with TGDBCameraBasePropChangeCommand.CreateAndPushIfNeed(
-          PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,drawings.GetCurrentDWG.pcamera^.prop,
+          PTZCADDrawing(drawings.GetCurrentDWG).UndoStack,pcamera^.prop,
           nil,nil) do begin
         pcamera^.prop.point.x:=0;
         pcamera^.prop.point.y:=0;

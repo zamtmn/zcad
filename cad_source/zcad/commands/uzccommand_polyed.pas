@@ -178,7 +178,7 @@ begin
         drawings.
         GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,
         lwgdbdefault,ClByLayer,
-        PEProp.vvertex,10*drawings.GetCurrentDWG^.pcamera^.prop.zoom));
+        PEProp.vvertex,10*drawings.GetCurrentDWG^.GetPCamera^.prop.zoom));
       zcSetEntPropFromCurrentDrawingProp(pc);
       //pc := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
       //GDBObjSetCircleProp(pc,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^,sysvar.dwg.DWG_CLinew^, PEProp.vvertex,10*drawings.GetCurrentDWG^.pcamera^.prop.zoom);
@@ -270,7 +270,7 @@ begin
         GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,
         lwgdbdefault,ClByLayer,
         _tv,
-        10*drawings.GetCurrentDWG^.pcamera^.prop.zoom));
+        10*drawings.GetCurrentDWG^.GetPCamera^.prop.zoom));
       zcSetEntPropFromCurrentDrawingProp(pc);
       //pc := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
       //GDBObjSetCircleProp(pc,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, _tv, 10*drawings.GetCurrentDWG^.pcamera^.prop.zoom);
@@ -297,7 +297,7 @@ begin
         drawings.
         GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,
         lwgdbdefault,ClByLayer,
-        PEProp.vvertex,40*drawings.GetCurrentDWG^.pcamera^.prop.zoom));
+        PEProp.vvertex,40*drawings.GetCurrentDWG^.GetPCamera^.prop.zoom));
       zcSetEntPropFromCurrentDrawingProp(pc);
       //pc := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
       //GDBObjSetCircleProp(pc,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, PEProp.vvertex, 40*drawings.GetCurrentDWG^.pcamera^.prop.zoom);

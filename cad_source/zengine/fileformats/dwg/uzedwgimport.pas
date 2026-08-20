@@ -390,13 +390,13 @@ var
 begin
   if ZContext.LoadMode <> TLOLoad then
     Exit;
-  if (ZContext.PDrawing = nil) or (ZContext.PDrawing^.pcamera = nil) then
+  if (ZContext.PDrawing = nil) or (ZContext.PDrawing^.GetPCamera = nil) then
     Exit;
   if not DWGSelectViewProps(Props, Source) then
     Exit;
 
-  ZContext.PDrawing^.pcamera^.prop.point.x := -Props.CenterX;
-  ZContext.PDrawing^.pcamera^.prop.point.y := -Props.CenterY;
+  ZContext.PDrawing^.GetPCamera^.prop.point.x := -Props.CenterX;
+  ZContext.PDrawing^.GetPCamera^.prop.point.y := -Props.CenterY;
 
   if (ZContext.PDrawing^.wa <> nil) and
      (ZContext.PDrawing^.wa.getviewcontrol <> nil) and
@@ -405,22 +405,22 @@ begin
     ViewHeightZoom := Props.Height /
       ZContext.PDrawing^.wa.getviewcontrol.ClientHeight;
     if ViewHeightZoom > 0 then
-      ZContext.PDrawing^.pcamera^.prop.zoom := ViewHeightZoom;
+      ZContext.PDrawing^.GetPCamera^.prop.zoom := ViewHeightZoom;
     if Props.HasWidth and
        (ZContext.PDrawing^.wa.getviewcontrol.ClientWidth > 0) then
     begin
       ViewWidthZoom := Props.Width /
         ZContext.PDrawing^.wa.getviewcontrol.ClientWidth;
-      if ViewWidthZoom > ZContext.PDrawing^.pcamera^.prop.zoom then
-        ZContext.PDrawing^.pcamera^.prop.zoom := ViewWidthZoom;
+      if ViewWidthZoom > ZContext.PDrawing^.GetPCamera^.prop.zoom then
+        ZContext.PDrawing^.GetPCamera^.prop.zoom := ViewWidthZoom;
     end;
   end;
 
   DWGLogInfoFormatStr(
     'DWG view from %s applied: camera=(%s, %s), zoom=%s',
-    [Source, FloatToStr(ZContext.PDrawing^.pcamera^.prop.point.x),
-     FloatToStr(ZContext.PDrawing^.pcamera^.prop.point.y),
-     FloatToStr(ZContext.PDrawing^.pcamera^.prop.zoom)]);
+    [Source, FloatToStr(ZContext.PDrawing^.GetPCamera^.prop.point.x),
+     FloatToStr(ZContext.PDrawing^.GetPCamera^.prop.point.y),
+     FloatToStr(ZContext.PDrawing^.GetPCamera^.prop.zoom)]);
 end;
 
 { Issue #1198 P4 legacy fallback: locate DWG handles for an entity pointer by

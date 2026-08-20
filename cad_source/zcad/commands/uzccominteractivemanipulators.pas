@@ -184,10 +184,10 @@ begin
       until p=nil;
   end else begin
 
-    if (drawings.GetCurrentDWG^.GetPcamera^.notuseLCS) then
+    if (drawings.GetCurrentDWG^.GetPCamera^.notuseLCS) then
       tr:=PInteractiveData^.Base
     else
-      tr:=PInteractiveData^.Base+drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset;
+      tr:=PInteractiveData^.Base+drawings.GetCurrentDWG^.GetPCamera^.CamCSOffset;
 
     tempmatr:=uzegeometry.CreateTranslationMatrix(-PInteractiveData^.Base.asVector);
     tempmatr:=uzegeometry.MatrixMultiply(tempmatr,rotmatr);

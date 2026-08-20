@@ -31,7 +31,7 @@ uses
   UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,gzctnrVectorTypes,uzetrash,
   uzctnrVectorBytesStream,uzglviewareadata,uzeentitiestypefilter,
   uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,uzcLog,uzbUnits,
-  uzbUnitsUtils;
+  uzbUnitsUtils,uzecamera;
 type
 
 PTZCADDrawingsManager=^TZCADDrawingsManager;
@@ -90,7 +90,7 @@ var drawings: TZCADDrawingsManager;
     LtypeManager:GDBLtypeArray;
 
     function FindEntityByVarInArray(objID:Word;vname,vvalue:String;var ea:TZctnrVectorPGDBaseEntity;InInterfaceOnly:Boolean=False):PGDBObjEntity;
-procedure CalcZ(z:Double);
+//procedure CalcZ(z:Double);
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 procedure startup(preloadedfile1,preloadedfile2:String);
 procedure finalize;
@@ -126,6 +126,7 @@ var
   pdwg:PTSimpleDrawing;
   DC:TDrawContext;
   Actlt:TVisActuality;
+  pcamera:PGDBObjCamera;
 begin
   if GUIAction=zcMsgUIActionRedrawContent then
   begin
@@ -136,10 +137,11 @@ begin
       drawings.GetCurrentRoot.FormatAfterEdit(pdwg^,dc);
       pdwg.wa.param.firstdraw := TRUE;
       pdwg.wa.CalcOptimalMatrix;
-      pdwg.pcamera^.Counters.CreateRec(0,0);
-      Actlt.CreateRec(pdwg.pcamera^.VISCOUNT,pdwg.pcamera^.POSCOUNT);
-      drawings.GetCurrentROOT.CalcVisibleByTree(drawings.GetCurrentDWG.pcamera^.frustum,Actlt,drawings.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.Counters,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-      pdwg.ConstructObjRoot.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,Actlt,pdwg.pcamera^.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+      pcamera:=pdwg.GetPCamera;
+      pcamera^.Counters.CreateRec(0,0);
+      Actlt.CreateRec(pcamera^.VISCOUNT,pcamera^.POSCOUNT);
+      drawings.GetCurrentROOT.CalcVisibleByTree(pcamera^.frustum,Actlt,drawings.GetCurrentROOT.ObjArray.ObjTree,pcamera^.Counters,pdwg^.myGluProject2,pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+      pdwg.ConstructObjRoot.calcvisible(pcamera^.frustum,Actlt,pcamera^.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
       pdwg.wa.calcgrid;
       pdwg.wa.draworinvalidate;
     end;
@@ -481,13 +483,13 @@ begin
  CurrentDWG:=PTZCADDrawing(PDWG);
  asociatedwgvars;
 end;
-procedure CalcZ(z:Double);
+{procedure CalcZ(z:Double);
 begin
      if z<drawings.GetCurrentDWG.pcamera^.obj_zmax then
      drawings.GetCurrentDWG.pcamera^.obj_zmax:=z;
      if z>drawings.GetCurrentDWG.pcamera^.obj_zmin then
      drawings.GetCurrentDWG.pcamera^.obj_zmin:=z;
-end;
+end;}
 procedure TZCADDrawingsManager.RemoveData(const data:PGDBaseObject);
 //procedure TZCADDrawingsManager.eraseobj(ObjAddr:PGDBaseObject);
 begin

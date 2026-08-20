@@ -84,7 +84,7 @@ begin
     end;
     commandmanager.executecommandend;
   end else begin
-    if (drawings.GetCurrentDWG^.GetPcamera^.notuseLCS) then begin
+    if (drawings.GetCurrentDWG^.GetPCamera^.notuseLCS) then begin
       drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=MirrMatr;
     end else begin
       with drawings.GetCurrentDWG^.ConstructObjRoot do begin
@@ -94,10 +94,10 @@ begin
         FrPos.y:=tempmatr.mtr.v[3].y;
         FrPos.z:=tempmatr.mtr.v[3].z;
 
-        ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset);
+        ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPCamera^.CamCSOffset);
         ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,MirrMatr);
         ObjMatrix:=uzegeometry.MatrixMultiply(
-          ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset));
+          ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPCamera^.CamCSOffset));
         FrustumPosition:=FrPos;
       end;
     end;

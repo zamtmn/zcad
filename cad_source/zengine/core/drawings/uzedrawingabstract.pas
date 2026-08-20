@@ -19,68 +19,71 @@
 unit uzedrawingabstract;
 {$INCLUDE zengineconfig.inc}
 interface
+
 uses
-    uzestylesdim,uzestylestexts,uzestyleslinetypes,uzgldrawcontext,uzedrawingdef,
-    uzbUnits,uzeTypes,uzecamera,uzeentity,uzeentgenericsubentry,uzeroot,
-    uzegeometrytypes,UGDBSelectedObjArray,uzestyleslayers,UGDBOpenArrayOfPV;
+  uzestylesdim,uzestylestexts,uzestyleslinetypes,uzgldrawcontext,uzedrawingdef,
+  uzbUnits,uzeTypes,uzecamera,uzeentity,uzeentgenericsubentry,uzeroot,
+  uzegeometrytypes,UGDBSelectedObjArray,uzestyleslayers,UGDBOpenArrayOfPV;
+
 type
 
+  PTAbstractDrawing=^TAbstractDrawing;
 
-PTAbstractDrawing=^TAbstractDrawing;
-TAbstractDrawing= object(TDrawingDef)
-                       DXFCodePage:TZCCodePage;
-                       LWDisplay:Boolean;
-                       SnapGrid:Boolean;
-                       DrawGrid:Boolean;
-                       GridSpacing:TzePoint2d;
-                       Snap:GDBSnap2D;
-                       CurrentLayer:PGDBLayerProp;
-                       CurrentLType:PGDBLtypeProp;
-                       CurrentTextStyle:PGDBTextStyle;
-                       CurrentDimStyle:PGDBDimStyle;
-                       CurrentLineW:TGDBLineWeight;
-                       LTScale:Double;
-                       CLTScale:Double;
-                       CColor:Integer;
+  TAbstractDrawing=object(TDrawingDef)
+    DXFCodePage:TZCCodePage;
+    LWDisplay:boolean;
+    SnapGrid:boolean;
+    DrawGrid:boolean;
+    GridSpacing:TzePoint2d;
+    Snap:GDBSnap2D;
+    CurrentLayer:PGDBLayerProp;
+    CurrentLType:PGDBLtypeProp;
+    CurrentTextStyle:PGDBTextStyle;
+    CurrentDimStyle:PGDBDimStyle;
+    CurrentLineW:TGDBLineWeight;
+    LTScale:double;
+    CLTScale:double;
+    CColor:integer;
 
-                       LUnits:TLUnits;
-                       LUPrec:TUPrec;
-                       AUnits:TAUnits;
-                       AUPrec:TUPrec;
-                       AngDir:TAngDir;
-                       AngBase:TZeAngleDeg;
-                       UnitMode:TUnitMode;
-                       InsUnits:TInsUnits;
-                       TextSize:Double;
+    LUnits:TLUnits;
+    LUPrec:TUPrec;
+    AUnits:TAUnits;
+    AUPrec:TUPrec;
+    AngDir:TAngDir;
+    AngBase:TZeAngleDeg;
+    UnitMode:TUnitMode;
+    InsUnits:TInsUnits;
+    TextSize:double;
 
-                       constructor init;
+    constructor init;
 
-                       procedure myGluProject2(objcoord:TzePoint3d; out wincoord:TzePoint3d);virtual;abstract;
-                       procedure myGluUnProject(const win:TzePoint3d;out obj:TzePoint3d);virtual;abstract;
-                       function GetPcamera:PGDBObjCamera;virtual;abstract;
-                       function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;abstract;
-                       function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;
-                       function GetSelObjArray:PGDBSelectedObjArray;virtual;abstract;
-                       function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
-                       procedure RotateCameraInLocalCSXY(ux,uy:Double);virtual;abstract;
-                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:TzeVector3d);virtual;abstract;
-                       procedure SetCurrentDWG;virtual;abstract;
-                       function GetChangeStampt:Boolean;virtual;abstract;
-                       function StoreOldCamerapPos:Pointer;virtual;abstract;
-                       procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
-                       procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
-                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:TzePoint3d;save:Boolean);virtual;abstract;
-                       procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;
-                       procedure DeSelectAll;virtual;abstract;
-                 end;
+    procedure myGluProject2(objcoord:TzePoint3d;out wincoord:TzePoint3d);virtual;abstract;
+    procedure myGluUnProject(const win:TzePoint3d;out obj:TzePoint3d);virtual;abstract;
+    function GetPCamera:PGDBObjCamera;virtual;abstract;
+    function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;abstract;
+    function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;
+    function GetSelObjArray:PGDBSelectedObjArray;virtual;abstract;
+    function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
+    procedure RotateCameraInLocalCSXY(ux,uy:double);virtual;abstract;
+    procedure MoveCameraInLocalCSXY(oldx,oldy:double;ax:TzeVector3d);virtual;abstract;
+    procedure SetCurrentDWG;virtual;abstract;
+    function GetChangeStampt:boolean;virtual;abstract;
+    function StoreOldCamerapPos:Pointer;virtual;abstract;
+    procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
+    procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
+    procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:TzePoint3d;save:boolean);virtual;abstract;
+    procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;
+    procedure DeSelectAll;virtual;abstract;
+  end;
 
 implementation
+
 constructor TAbstractDrawing.init;
 begin
   DXFCodePage:=TZCCodePage.ZCCPINVALID;
-  LWDisplay:=false;
-  SnapGrid:=false;
-  DrawGrid:=false;
+  LWDisplay:=False;
+  SnapGrid:=False;
+  DrawGrid:=False;
   GridSpacing.x:=0.5;
   GridSpacing.y:=0.5;
   snap.Base.x:=0;

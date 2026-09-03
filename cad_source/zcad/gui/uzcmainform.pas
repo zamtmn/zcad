@@ -157,6 +157,7 @@ type
     procedure myKeyDown(Sender:TObject;var Key:word;Shift:TShiftState);
 
     procedure idle(Sender:TObject;var Done:boolean);virtual;
+    procedure GUIIdleHandler(var Done:boolean);
     procedure GeneralTick(Sender:TObject);
     procedure ShowFastMenu(Sender:TObject);
     procedure asynccloseapp(Data:PtrInt);
@@ -1105,6 +1106,7 @@ begin
       SetupFIPCServer;
       fNeedUpdateMainMenu:=True;
       DoUpdateMainMenu;
+      zcUI.RegisterHandlerIdle(GUIIdleHandler);
     finally
       programlog.leave(IfEntered);
     end;
@@ -1339,6 +1341,19 @@ begin
   InfoProgress:=TZInfoProgress.CreateOnTB(tb);
 end;
 
+procedure TzcMainForm.GUIIdleHandler(var Done:boolean);
+begin
+  InfoProgress.SetText2;
+  DoUpdateMainMenu;
+
+  if RunTime<>SysVar.SYS.SYS_RunTime^ then begin
+    zcUI.Do_GUIaction(self,zcMsgUITimerTick);
+  end;
+  RunTime:=SysVar.SYS.SYS_RunTime^;
+  if ZCStatekInterface.CheckAndResetState(ZCSGUIChanged) then
+    zcUI.Do_SetNormalFocus;
+end;
+
 procedure TzcMainForm.idle(Sender:TObject;var Done:boolean);
 var
   pdwg:PTSimpleDrawing;
@@ -1346,22 +1361,18 @@ var
 begin
   with programlog.Enter('TZCADMainWindow.idle',LM_Debug,LMD) do begin
     try
-
-      InfoProgress.SetText2;
-
-      DoUpdateMainMenu;
-
       {IFDEF linux}
       if assigned(UniqueInstanceBase.FIPCServer) then
         if UniqueInstanceBase.FIPCServer.active then
           UniqueInstanceBase.FIPCServer.PeekMessage(0,True);
       {endif}
-      done:=True;
+
       sysvar.debug.languadedeb.UpdatePO:=_UpdatePO;
       sysvar.debug.languadedeb.NotEnlishWord:=_NotEnlishWord;
       sysvar.debug.languadedeb.DebugWord:=_DebugWord;
+
       pdwg:=drawings.GetCurrentDWG;
-      if (pdwg<>nil)and(pdwg.wa<>nil) then begin
+      if (pdwg<>nil)and(pdwg.wa<>nil) then
         if pdwg.wa.getviewcontrol<>nil then begin
           if pdwg.GetPCamera.DRAWNOTEND then begin
             rc:=pdwg.CreateDrawingRC;
@@ -1371,34 +1382,10 @@ begin
             pdwg.wa.idle(Sender,Done);
           end;
         end;
-      end else
-        SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-      if pdwg<>nil then
-        if not pdwg^.GetChangeStampt then
-          SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-      if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and
-        (commandmanager.CurrCmd.pcommandrunning=nil) then
-        if (pdwg)<>nil then
-          if (pdwg.wa.param.SelDesc.Selectedobjcount=0) then begin
-            commandmanager.executecommandsilent(
-              'QSave(QS)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-            SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-          end;
+
       date:=SysUtils.date;
-      if RunTime<>SysVar.SYS.SYS_RunTime^ then begin
-        zcUI.Do_GUIaction(self,zcMsgUITimerTick);
-      {if assigned(UpdateObjInspProc)then
-         UpdateObjInspProc;}
-      end;
-      RunTime:=SysVar.SYS.SYS_RunTime^;
-      if ZCStatekInterface.CheckAndResetState(ZCSGUIChanged) then
-        zcUI.Do_SetNormalFocus;
-    {if historychanged then begin
-      historychanged:=false;
-      HistoryLine.SelStart:=utflen;
-      HistoryLine.SelLength:=2;
-      HistoryLine.ClearSelection;
-    end;}
+
+      zcUI.Do_Idle(Done);
     finally
       programlog.leave(IfEntered);
     end;

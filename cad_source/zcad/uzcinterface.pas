@@ -64,6 +64,9 @@ var
   zcMsgUIBeforeCloseApp:TzcMessageID=-1;
 
 type
+  TIdleProc=procedure(var ADone:boolean) of object;
+  TIdleProc_HandlersVector=TMyVector<TIdleProc>;
+
   TGetStateFunc=function :TzcUIState of object;
   TGetStateFuncsVector=TMyVector<TGetStateFunc>;
 
@@ -164,6 +167,7 @@ type
 
     FTextQuestionFunc:TTextQuestionFunc;
     ModalShowsCount:integer;
+    IdleProc_HandlersVector:TIdleProc_HandlersVector;
   public
     constructor Create;
     destructor Destroy;override;
@@ -188,6 +192,9 @@ type
       Handler:TGetControlWithPriority_TZMessageID__TControlWithPriority);
 
     procedure RegisterGetStateFunc(fnc:TGetStateFunc);
+
+    procedure RegisterHandlerIdle(AHandler:TIdleProc);
+
 
     function GetState:TzcUIState;
     procedure Do_HistoryOut(s:string);
@@ -218,6 +225,8 @@ type
 
     property TextQuestionFunc:TTextQuestionFunc
       read FTextQuestionFunc write FTextQuestionFunc;
+
+    procedure Do_Idle(var ADone:Boolean);
 
   private
     procedure RegisterTProcedure_String_HandlersVector(
@@ -365,6 +374,8 @@ begin
 
   if assigned(GetStateFuncsVector) then
     FreeAndNil(GetStateFuncsVector);
+
+  FreeAndNil(IdleProc_HandlersVector);
 end;
 
 function TZCUIManager.GetUniqueZMessageID:TzcMessageID;
@@ -580,6 +591,20 @@ begin
   end;
 end;
 
+procedure TZCUIManager.Do_Idle(var ADone:boolean);
+var
+  ip:TIdleProc;
+  done:boolean;
+begin
+  if Assigned(IdleProc_HandlersVector) then
+    for ip in IdleProc_HandlersVector do begin
+      done:=true;
+      ip(done);
+      if not done then
+        ADone:=false;
+    end;
+end;
+
 procedure TZCUIManager.
 RegisterTGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(
   var GCWPHV:TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector;
@@ -741,6 +766,13 @@ begin
   if not assigned(GetStateFuncsVector) then
     GetStateFuncsVector:=TGetStateFuncsVector.Create;
   GetStateFuncsVector.PushBack(fnc);
+end;
+
+procedure TZCUIManager.RegisterHandlerIdle(AHandler:TIdleProc);
+begin
+  if not assigned(IdleProc_HandlersVector) then
+    IdleProc_HandlersVector:=TIdleProc_HandlersVector.Create;
+  IdleProc_HandlersVector.PushBack(AHandler);
 end;
 
 function TZCUIManager.GetState:TzcUIState;

@@ -70,6 +70,7 @@ uses
   uzcregsystempas,//loading rtl/system.pas
   {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
   uzcregother,//setup SysVar
+  uzcRegFeatures,
 
  {$IFDEF WINDOWS}
   uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesAdditional,

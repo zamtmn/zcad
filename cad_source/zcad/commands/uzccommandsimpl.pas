@@ -64,6 +64,7 @@ type
       AShowParams:boolean=True);
     constructor init(cn:string;SA,DA:TCStartAttr);
     function SimulateMouseMove(const Context:TZCADCommandContext):integer;virtual;
+    procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
     //function BeforeClick(wc: TzePoint3d; mc: TzePoint2i; button: Byte;osp:pos_record): Integer; virtual; abstract;
     //function AfterClick(wc: TzePoint3d; mc: TzePoint2i; button: Byte;osp:pos_record): Integer; virtual; abstract;
   end;
@@ -250,6 +251,9 @@ begin
   Result:=MouseMoveCallback(Context,drawings.GetCurrentDWG^.wa.param.md.mouse3dcoord,
     drawings.GetCurrentDWG^.wa.param.md.mouse,t,@drawings.GetCurrentDWG^.wa.param.ospoint);
   zcRedrawCurrentDrawing;
+end;
+procedure CommandRTEdObject.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
+begin
 end;
 
 constructor CommandFastObjectPlugin.Init;

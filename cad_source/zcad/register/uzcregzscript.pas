@@ -18,6 +18,7 @@
 
 unit uzcregzscript;
 {$Codepage UTF8}
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -36,9 +37,19 @@ uses
   uzgldrawerogl,uzgldrawergdi,
   uzcSysParams,
   uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics,
-  URecordDescriptor,uzcTypeDescriprors,uzcTypes,uzcgui2arrows;
+  URecordDescriptor,uzcTypeDescriprors,uzcTypes,uzcgui2arrows,uzObjectInspectorManager;
 
 implementation
+
+procedure OnGDBaseObjectFieldModifyProc(PObj,PField:Pointer;PTypeDescriptor:PUserTypeDescriptor);
+begin
+  PGDBaseObject(PObj)^.FormatAfterFielfmod(PField,PTypeDescriptor);
+end;
+
+procedure OnCommandRTEdObjectFieldModifyProc(PObj,PField:Pointer;PTypeDescriptor:PUserTypeDescriptor);
+begin
+  PCommandRTEdObjectPlugin(PObj)^.FormatAfterFielfmod(PField,PTypeDescriptor);
+end;
 
 procedure _OnCreateSystemUnit(ptsu:PTUnit);
 var
@@ -401,8 +412,9 @@ begin
   ptsu^.RegisterType(TypeInfo(TFString),'TFString');
   //ptsu^.RegisterType(TypeInfo(PFString),'PFString');
 
-  utd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),
-                                        'GDBaseObject',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(GDBaseObject),TypeOf(GDBaseObject),'GDBaseObject',true);
+  if otd<>nil then
+    OIManager.AddOnFieldModifyProc(otd,OnGDBaseObjectFieldModifyProc);
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(GDBBaseCamera),TypeOf(GDBBaseCamera),
                                         'GDBBaseCamera',true);
@@ -430,16 +442,16 @@ begin
 
 
   utd:=ptsu^.RegisterType(TypeInfo(TBlockType),'TBlockType');
-  if otd<>nil then begin
+  if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['BT_Connector','BT_Unknown'],[FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(TBlockBorder),'TBlockBorder');
-  if otd<>nil then begin
+  if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['BB_Owner','BB_Self','BB_Empty'],
                            [FNProgram,FNUser]);
   end;
   utd:=ptsu^.RegisterType(TypeInfo(TBlockGroup),'TBlockGroup');
-  if otd<>nil then begin
+  if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['BG_El_Device','BG_Unknown'],[FNProgram,FNUser]);
   end;
 
@@ -519,19 +531,18 @@ begin
   ptsu^.RegisterType(TypeInfo(PCommandFastObjectPlugin),
                      'PCommandFastObjectPlugin');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObject),
-                                  TypeOf(CommandRTEdObject),
-                                        'CommandRTEdObject',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObject),TypeOf(CommandRTEdObject),
+    'CommandRTEdObject',true);
   if otd<>nil then begin
+    OIManager.AddOnFieldModifyProc(otd,OnCommandRTEdObjectFieldModifyProc);
     ptsu^.SetTypeDesk2(otd,['saveosmode','commanddata','ShowParams'],
                            [FNProgram,FNUser]);
     ptsu^.SetAttrs(otd,[[fldaHidden],[],[fldaHidden]]);
   end;
   ptsu^.RegisterType(TypeInfo(PCommandRTEdObject),'PCommandRTEdObject');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObjectPlugin),
-                                  TypeOf(CommandRTEdObjectPlugin),
-                                        'CommandRTEdObjectPlugin',true);
+  otd:=ptsu^.RegisterObjectType(TypeInfo(CommandRTEdObjectPlugin),TypeOf(CommandRTEdObjectPlugin),
+    'CommandRTEdObjectPlugin',true);
   if otd<>nil then begin
     ptsu^.SetTypeDesk2(otd,['onCommandStart','onCommandEnd','onCommandCancel',
                             'onFormat','onBeforeClick','onAfterClick',

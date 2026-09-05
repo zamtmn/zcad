@@ -1118,6 +1118,18 @@ begin
   executecommand(lastcommand,pdrawing,POGLWndParam);
 end;
 
+procedure StoreDMenuCfg(var AUnit:TSimpleUnit);
+var
+  pint:PInteger;
+begin
+  pint:=AUnit.FindValue('DMenuX').Data.Addr.Instance;
+  if assigned(pint) then
+    pint^:=commandmanager.DMenu.Left;
+  pint:=AUnit.FindValue('DMenuY').Data.Addr.Instance;
+  if assigned(pint) then
+    pint^:=commandmanager.DMenu.Top;
+end;
+
 constructor GDBcommandmanager.init;
 var
   pint:PInteger;
@@ -1184,6 +1196,7 @@ end;
 
 initialization
   commandmanager.init(1000);
+  zcUI.RegisterStoreProc(StoreDMenuCfg);
   DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosPath','',
     'Current macros path',
     commandmanager.MacroFuncsCurrentMacrosPath(),[]));

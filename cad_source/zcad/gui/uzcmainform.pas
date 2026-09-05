@@ -61,9 +61,6 @@ uses
   uzccommand_multiselect2objinsp{$IfDef LINUX},BaseUnix{$EndIf},uzbUnits,
   uzbUnitsUtils;
 
-resourcestring
-  rsClosed='Closed';
-
 type
   TZInfoProgress=class(TPanel)
   strict private
@@ -196,12 +193,14 @@ type
     procedure SwithToHintText;
 
     procedure DropFiles(Sender:TObject;const FileNames:array of string);
+    function GetActiveDocumentControl:TObject;
+    function GetDocumentControl(AIdx:Integer):TComponent;
+    function GetDocumentControlsCount:Integer;
   end;
 
 var
   zcMainForm:TzcMainForm;
 
-function IsRealyQuit:boolean;
 procedure RunCmdFile(const filename:string;pdata:pointer);
 
 implementation
@@ -210,6 +209,28 @@ implementation
 
 var
   LMD:TModuleDesk;
+
+function TzcMainForm.GetActiveDocumentControl:TObject;
+begin
+  if PageControl<>nil then
+    result:=PageControl.ActivePage
+  else
+    result:=nil;
+end;
+function TzcMainForm.GetDocumentControl(AIdx:Integer):TComponent;
+begin
+  if PageControl<>nil then
+    result:=PageControl.Pages[AIdx]
+  else
+    result:=nil;
+end;
+function TzcMainForm.GetDocumentControlsCount:Integer;
+begin
+  if PageControl<>nil then
+    result:=PageControl.PageCount
+  else
+    result:=0;
+end;
 
 procedure TzcMainForm.SwithToProcessBar;
 begin
@@ -615,75 +636,6 @@ begin
   ScrollArray(@CommandsHistory,0,k);
   SetArrayTop(@CommandsHistory,Command,Command,'');
   CheckArray(@CommandsHistory,low(Commandshistory),high(Commandshistory));
-end;
-
-function IsRealyQuit:boolean;
-var
-  pint:PInteger;
-  //mem:TZctnrVectorBytes;
-  i:integer;
-  dr:TZCMsgDialogResult;
-  GVA:TGeneralViewArea;
-begin
-  Result:=False;
-  if zcMainForm.PageControl<>nil then begin
-    for i:=0 to zcMainForm.PageControl.PageCount-1 do begin
-      GVA:=TGeneralViewArea(FindComponentByType(
-        TTabSheet(zcMainForm.PageControl.Pages[i]),TGeneralViewArea));
-      if {poglwnd}GVA<>nil then begin
-        if {poglwnd.wa}GVA.PDWG.GetChangeStampt then
-        begin
-          Result:=
-            True;
-          system.break;
-        end;
-      end;
-    end;
-
-  end;
-  begin
-    if not Result then begin
-      if drawings.GetCurrentDWG<>nil then
-        //i:=zcMainForm.messagebox(@rsQuitQuery[1],@rsQuitCaption[1],MB_YESNO or MB_ICONQUESTION)
-        dr:=
-          zcMsgDlg(rsQuitQuery,zcdiQuestion,[zccbYes,zccbNo],False,nil,rsQuitCaption)
-      else
-        dr.ModalResult:=ZCmrYes;
-    end else
-      dr.ModalResult:=ZCmrYes;
-    if dr.ModalResult=ZCmrYes then begin
-      Result:=True;
-
-          {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-          if sysvar.SYS.SYS_IsHistoryLineCreated^ then}
-      begin
-        pint:=SavedUnit.FindValue('DMenuX').Data.Addr.Instance;
-        if assigned(pint) then
-          pint^:=commandmanager.DMenu.Left;
-        pint:=SavedUnit.FindValue('DMenuY').Data.Addr.Instance;
-        if assigned(pint) then
-          pint^:=commandmanager.DMenu.Top;
-
-        pint:=SavedUnit.FindValue('VIEW_ObjInspSubV').Data.Addr.Instance;
-        if assigned(pint) then
-          if assigned(GetNameColWidthProc) then
-            pint^:=GetNameColWidthProc;
-        pint:=SavedUnit.FindValue('VIEW_ObjInspV').Data.Addr.Instance;
-        if assigned(pint) then
-          if assigned(GetOIWidthProc) then
-            pint^:=GetOIWidthProc;
-
-        if assigned(InfoForm) then
-          StoreBoundsToSavedUnit('TEdWND_',InfoForm.BoundsRect);
-
-          (*mem.init(1024);
-          SavedUnit^.SavePasToMem(mem);
-          mem.SaveToFile(expandpath(DataPath+'rtl'+PathDelim+'savedvar.pas'));
-          mem.done;*)
-      end;
-    end else
-      Result:=False;
-  end;
 end;
 
 procedure TzcMainForm.asynccloseapp(Data:PtrInt);
@@ -1101,6 +1053,11 @@ begin
       FromDirsIterator(sysvar.PATH.Preload_Paths^,'*.cmd0','stage0.cmd0',RunCmdFile,nil);
 
       CreateAnchorDockingInterface;
+
+      zcUI.onGetActiveDocumentControl:=GetActiveDocumentControl;
+      zcUI.onGetDocumentControl:=GetDocumentControl;
+      zcUI.onGetDocumentControlsCount:=GetDocumentControlsCount;
+
       zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
       MouseTimer:=TMouseTimer.Create;
       SetupFIPCServer;

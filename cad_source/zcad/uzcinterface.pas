@@ -28,7 +28,7 @@ uses
   uzsbVarmanDef,Varman,
   gzctnrSTL,
   uzcstrconsts,zeundostack,
-  uzcuilcl2zc,uzcuitypes;
+  uzcuilcl2zc,uzcuitypes,uzedrawingsimple,uzglviewareaabstract;
 
 const
   PopupPriority=1000;
@@ -87,6 +87,10 @@ type
   TMethod__TObject=function:TObject of object;
   TMethod__Integer=function:Integer of object;
   TMethod_Integer_TComponent=function(AIdx:Integer):TComponent of object;
+  TMethod_Integer=procedure(AIdx:Integer) of object;
+
+  TCreateDrawing=function (var ADrawing:TSimpleDrawing;ACaption:string;out ViewControl:TCADControl;
+    out ViewArea:TAbstractViewArea):TComponent of object;
 
   TProcedure_TSimpleUnit=procedure(var AUnit:TSimpleUnit);
   TProcedure_TSimpleUnitVector=TMyVector<TProcedure_TSimpleUnit>;
@@ -176,8 +180,12 @@ type
     StoresProcs:TProcedure_TSimpleUnitVector;
   public
     onGetActiveDocumentControl:TMethod__TObject;
+    onGetActiveDocumentControlIndex:TMethod__Integer;
+    onSetActiveDocumentControlIndex:TMethod_Integer;
+
     onGetDocumentControl:TMethod_Integer_TComponent;
     onGetDocumentControlsCount:TMethod__Integer;
+    onCreateDWGDocumentControl:TCreateDrawing;
 
     constructor Create;
     destructor Destroy;override;
@@ -238,9 +246,14 @@ type
       read FTextQuestionFunc write FTextQuestionFunc;
 
     procedure Do_Idle(var ADone:Boolean);
+
     function getActiveDocumentControl:TObject;
+    function getActiveDocumentControlIndex:Integer;
+    procedure setActiveDocumentControlIndex(AIdx:Integer);
     function getDocumentControl(AIdx:Integer):TComponent;
     function getDocumentControlsCount:Integer;
+    function CreateDWGDocumentControl(var ADrawing:TSimpleDrawing;ACaption:string;out ViewControl:TCADControl;
+      out ViewArea:TAbstractViewArea):TComponent;
 
     procedure Do_UpdateStoredUnit;
 
@@ -639,6 +652,19 @@ begin
     result:=nil;
 end;
 
+function TZCUIManager.getActiveDocumentControlIndex:Integer;
+begin
+  if assigned(onGetActiveDocumentControlIndex) then
+    result:=onGetActiveDocumentControlIndex()
+  else
+    result:=-1;
+end;
+procedure TZCUIManager.setActiveDocumentControlIndex(AIdx:Integer);
+begin
+  if assigned(onSetActiveDocumentControlIndex) then
+    onSetActiveDocumentControlIndex(AIdx);
+end;
+
 function TZCUIManager.getDocumentControl(AIdx:Integer):TComponent;
 begin
   if assigned(onGetDocumentControl) then
@@ -653,6 +679,18 @@ begin
     result:=onGetDocumentControlsCount()
   else
     result:=0;
+end;
+
+function TZCUIManager.CreateDWGDocumentControl(var ADrawing:TSimpleDrawing;ACaption:string;
+  out ViewControl:TCADControl;out ViewArea:TAbstractViewArea):TComponent;
+begin
+  if assigned(onCreateDWGDocumentControl) then
+    result:=onCreateDWGDocumentControl(ADrawing,ACaption,ViewControl,ViewArea)
+  else begin
+    result:=nil;
+    ViewControl:=nil;
+    ViewArea:=nil;
+  end;
 end;
 
 procedure TZCUIManager.RegisterTGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(

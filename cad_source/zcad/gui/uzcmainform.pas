@@ -59,7 +59,8 @@ uses
   uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
   uzmacros,uzcviewareacxmenu,uzccommand_quit,uzeMouseTimer,
   uzccommand_multiselect2objinsp{$IfDef LINUX},BaseUnix{$EndIf},uzbUnits,
-  uzbUnitsUtils;
+  uzbUnitsUtils,
+  uzglbackendmanager;
 
 type
   TZInfoProgress=class(TPanel)
@@ -194,8 +195,12 @@ type
 
     procedure DropFiles(Sender:TObject;const FileNames:array of string);
     function GetActiveDocumentControl:TObject;
+    function getActiveDocumentControlIndex:Integer;
+    procedure setActiveDocumentControlIndex(AIdx:Integer);
     function GetDocumentControl(AIdx:Integer):TComponent;
     function GetDocumentControlsCount:Integer;
+    function CreateDWGDocumentControl(var ADrawing:TSimpleDrawing;ACaption:string;
+      out ViewControl:TCADControl;out ViewArea:TAbstractViewArea):TComponent;
   end;
 
 var
@@ -217,6 +222,20 @@ begin
   else
     result:=nil;
 end;
+function TzcMainForm.getActiveDocumentControlIndex:Integer;
+begin
+  if PageControl<>nil then
+    result:=PageControl.ActivePageIndex
+  else
+    result:=-1;
+end;
+procedure TzcMainForm.setActiveDocumentControlIndex(AIdx:Integer);
+begin
+  if PageControl<>nil then
+    PageControl.ActivePageIndex:=AIdx;
+  ChangedDWGTab(zcMainForm.PageControl);
+end;
+
 function TzcMainForm.GetDocumentControl(AIdx:Integer):TComponent;
 begin
   if PageControl<>nil then
@@ -230,6 +249,49 @@ begin
     result:=PageControl.PageCount
   else
     result:=0;
+end;
+
+function TzcMainForm.CreateDWGDocumentControl(var ADrawing:TSimpleDrawing;ACaption:string;
+  out ViewControl:TCADControl;out ViewArea:TAbstractViewArea):TComponent;
+var
+  tsheet:TTabSheet;
+  //ViewArea:TAbstractViewArea;
+  //ViewControl:TCADControl;
+begin
+  if not assigned(PageControl) then
+    DockMaster.ShowControl('PageControl',True);
+  tsheet:=TTabSheet.Create(PageControl);
+  tsheet.Caption:=ACaption;
+  tsheet.Parent:=PageControl;
+
+  ViewArea:=GetCurrentBackEnd.Create(tsheet);
+  ViewArea.onCameraChanged:=zcMainForm.correctscrollbars;
+  ViewArea.OnWaMouseUp:=zcMainForm.wamu;
+  ViewArea.OnWaMouseDown:=zcMainForm.wamd;
+  ViewArea.OnWaMouseMove:=zcMainForm.wamm;
+  ViewArea.OnWaKeyPress:=zcMainForm.wakp;
+  ViewArea.OnWaMouseSelect:=zcMainForm.wams;
+  ViewArea.OnGetEntsDesc:=zcMainForm.GetEntsDesc;
+  ViewArea.ShowCXMenu:=zcMainForm.ShowCXMenu;
+  ViewArea.MainMouseMove:=zcMainForm.MainMouseMove;
+  ViewArea.MainMouseDown:=zcMainForm.MainMouseDown;
+  ViewArea.MainMouseUp:=zcMainForm.MainMouseUp;
+  ViewArea.OnWaShowCursor:=zcMainForm.WaShowCursor;
+  ADrawing.wa:=ViewArea;
+  ViewArea.PDWG:=@ADrawing;
+
+  drawings.SetCurrentDWG(@ADrawing);
+
+  ViewControl:=ViewArea.getviewcontrol;
+  ViewControl.align:=alClient;
+  ViewControl.Parent:=tsheet;
+  ViewControl.Visible:=True;
+  ViewArea.getareacaps;
+  ViewArea.WaResize(nil);
+  ViewControl.Show;
+  zcMainForm.PageControl.ActivePage:=tsheet;
+
+  result:=tsheet;
 end;
 
 procedure TzcMainForm.SwithToProcessBar;
@@ -1055,8 +1117,11 @@ begin
       CreateAnchorDockingInterface;
 
       zcUI.onGetActiveDocumentControl:=GetActiveDocumentControl;
+      zcUI.onGetActiveDocumentControlIndex:=GetActiveDocumentControlIndex;
+      zcUI.onSetActiveDocumentControlIndex:=SetActiveDocumentControlIndex;
       zcUI.onGetDocumentControl:=GetDocumentControl;
       zcUI.onGetDocumentControlsCount:=GetDocumentControlsCount;
+      zcUI.onCreateDWGDocumentControl:=CreateDWGDocumentControl;
 
       zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
       MouseTimer:=TMouseTimer.Create;

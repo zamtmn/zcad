@@ -24,32 +24,29 @@ interface
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzcMainForm;
+  uzcinterface;
 
 implementation
 
 function DWGNext_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
-  i:integer;
+  i,c:integer;
 begin
-  if assigned(zcMainForm.PageControl) then
-    if zcMainForm.PageControl.PageCount>1 then begin
-      i:=zcMainForm.PageControl.ActivePageIndex+1;
-      if i=zcMainForm.PageControl.PageCount then
-        i:=0;
-      zcMainForm.PageControl.ActivePageIndex:=i;
-      zcMainForm.ChangedDWGTab(zcMainForm.PageControl);
-    end;
+  c:=zcUI.getDocumentControlsCount;
+  if c>1 then begin
+    i:=zcUI.getActiveDocumentControlIndex+1;
+    if i=c then
+      i:=0;
+    zcUI.setActiveDocumentControlIndex(i);
+  end;
   Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DWGNext_com,'DWGNext',0,0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

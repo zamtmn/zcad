@@ -26,25 +26,21 @@ uses
   SysUtils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzcMainForm;
+  uzcinterface;
 
 implementation
 
 function ShowPage_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 begin
-  if assigned(zcMainForm) then
-    if assigned(zcMainForm.PageControl) then
-      zcMainForm.PageControl.ActivePageIndex:=StrToInt(Operands);
+  zcUI.setActiveDocumentControlIndex(StrToInt(Operands));
   Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@ShowPage_com,'ShowPage',0,0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

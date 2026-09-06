@@ -24,8 +24,9 @@ interface
 uses
   uzcLog,Forms,
   uzccommandsabstract,uzccommandsimpl,
-  uzcdrawing,uzcdrawings,uzccommand_quit,
-  uzcMainForm;
+  uzcdrawing,uzcdrawings,
+  uzcinterface,
+  uzccommand_quit;
 
 implementation
 
@@ -36,7 +37,7 @@ var
 begin
   application.ProcessMessages;
   CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
-  _CloseDWGPage(CurrentDWG,zcMainForm.PageControl.ActivePage,False,nil);
+  _CloseDWGPage(CurrentDWG,zcUI.getActiveDocumentControl,False,nil);
   Result:=cmd_ok;
 end;
 

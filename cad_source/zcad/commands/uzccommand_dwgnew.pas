@@ -22,10 +22,12 @@ unit uzccommand_DWGNew;
 interface
 
 uses
-  ComCtrls,Controls,LazUTF8,uzcLog,AnchorDocking,
   SysUtils,
+  LazUTF8,
+
   uzeTypes,uzbpaths,
-  uzglbackendmanager,uzglviewareaabstract,
+  uzcLog,
+  uzglviewareaabstract,
   uzccmdload,
   uzccommandsimpl,uzccommandsabstract,
   uzcsysvars,

@@ -28,7 +28,7 @@ uses
   uzelongprocesssupport,
   uzcdrawings,
   uzcinterface,
-  uzcutils;
+  uzcutils,uzeEntitiesTree;
 
 function RebuildTree_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;

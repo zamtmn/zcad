@@ -50,7 +50,7 @@ uses
   uzedwgtargetedlog,
   uzedwglog,
   uzedwgtimerlog,
-  uzedwgfinalize;
+  uzedwgfinalize,uzeEntitiesTree;
 
 { Stage 2 hooks called by uzefflibredwg.pas around parseDwg_Data. They open
   and close the per-file load context that decouples DWG read order from ZCAD

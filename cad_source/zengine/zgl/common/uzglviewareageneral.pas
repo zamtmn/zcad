@@ -23,7 +23,7 @@ interface
 uses
   gzctnrVectorTypes,uzegeometrytypes,uzepalette,uzeentsubordinated,uzegeometry,
   UGDBSelectedObjArray,uzglviewareadata,uzgldrawcontext,uzeentity,
-  uzedrawingabstract,uzedrawingdef,UGDBPoint3DArray,uzeentitiestree,uzeconsts,
+  uzedrawingabstract,uzedrawingdef,UGDBPoint3DArray,uzeEntitiesTreeNodeData,uzeentitiestree,uzeconsts,
   uzestrconsts,UGDBTracePropArray,math,sysutils,uzbstrproc,ExtCtrls,Controls,
   Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
   UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,

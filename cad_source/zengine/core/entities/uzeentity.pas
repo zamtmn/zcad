@@ -232,7 +232,7 @@ var
 
 implementation
 
-uses usimplegenerics,uzeentityfactory,uzeentitiestree;
+uses usimplegenerics,uzeentityfactory;
 
 function GDBObjEntity.GetInfrustumFromTree:TActuality;
 begin
@@ -242,7 +242,11 @@ begin
     else
       Result:=pgdbobjEntity(bp.ListPos.Owner).infrustum;
   end else
-    Result:=PTEntTreeNode(bp.TreePos.Owner)^.NodeData.infrustum;
+    //TODO: избавиться от хака
+    //хак, считаем что TEntTreeNode начинается с NodeData:TEntTreeNodeData,
+    //а TEntTreeNodeData начинается с infrustum. Сделано чтоб не зависеть от uzeEntitiesTree
+    Result:=PActuality(bp.TreePos.Owner)^;
+    //Result:=PTEntTreeNode(bp.TreePos.Owner)^.NodeData.infrustum;
 end;
 
 function GDBObjEntity.GetObjName:string;

@@ -138,6 +138,7 @@ type
   end;
 
   TActuality=PtrUInt;
+  PActuality=^TActuality;
 
   TVisActuality=record
     VisibleActualy:TActuality;

@@ -23,7 +23,7 @@ interface
 
 uses
   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,gzctnrVectorTypes,
-  uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree,
+  uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeEntitiesTreeNodeData,uzeentitiestree,
   uzeTypes;
 
 type

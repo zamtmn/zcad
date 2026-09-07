@@ -48,7 +48,6 @@ type
     procedure onUndoRedo;
     procedure onUndoRedoDataOwner(PDataOwner:Pointer);
 
-    procedure SetCurrentDWG;virtual;
     function StoreOldCamerapPos:Pointer;virtual;
     procedure StoreNewCamerapPos(command:Pointer);virtual;
     procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:TzePoint3d);virtual;
@@ -66,24 +65,22 @@ type
     function CanUndo:boolean;virtual;
     function CanRedo:boolean;virtual;
     function GetDWGUnits:pointer;virtual;
-    procedure AddBlockFromDBIfNeed(Name:string);virtual;
+    //procedure AddBlockFromDBIfNeed(Name:string);virtual;
     function GetUnitsFormat:TzeUnitsFormat;virtual;
     procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;
     procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
+
+    procedure AfterAutoProcessGDB(const AUndoMethod:TMethod);
 
     property FileName:string read FFileName write FFileName;
   end;
 
 implementation
 
-uses uzcdrawings,uzccommandsmanager;
-
 procedure TZCADDrawing.FillDrawingPartRC(var dc:TDrawContext);
 begin
   inherited FillDrawingPartRC(dc);
   dc.DrawingContext.GlobalLTScale:=LTScale;
-  if commandmanager.CurrCmd.pcommandrunning<>nil then
-    dc.DrawingContext.DrawHeplGeometryProc:=commandmanager.CurrCmd.pcommandrunning^.DrawHeplGeometry;
 end;
 
 function TZCADDrawing.GetUnitsFormat:TzeUnitsFormat;
@@ -141,14 +138,14 @@ begin
     sysvar.DWG.DWG_UnitMode^:=f.umode;
 end;
 
-procedure TZCADDrawing.SetCurrentDWG();
-begin
-  drawings.SetCurrentDWG(@self);
-end;
-
 function TZCADDrawing.StoreOldCamerapPos:Pointer;
 begin
   Result:=TGDBCameraBasePropChangeCommand.CreateAndPushIfNeed(UndoStack,GetPCamera^.prop,nil,nil);
+end;
+
+procedure TZCADDrawing.AfterAutoProcessGDB(const AUndoMethod:TMethod);
+begin
+  PGDBObjEntity(AUndoMethod.Data)^.YouChanged(self)
 end;
 
 procedure TZCADDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:TzePoint3d);
@@ -157,7 +154,7 @@ var
 begin
   tmethod(tum).Code:=pointer(obj.rtmodifyonepoint);
   tmethod(tum).Data:=obj;
-  with GUCmdChgMethod<TRTModifyData>.CreateAndPush(rtmod,tmethod(tum),UndoStack,drawings.AfterAutoProcessGDB) do begin
+  with GUCmdChgMethod<TRTModifyData>.CreateAndPush(rtmod,tmethod(tum),UndoStack,AfterAutoProcessGDB) do begin
     comit;
     rtmod.wc:=rtmod.point.worldcoord;
     rtmod.dist:=cP3d__0__0__0;
@@ -251,10 +248,10 @@ begin
   Result:=@DWGUnits;
 end;
 
-procedure TZCADDrawing.AddBlockFromDBIfNeed(Name:string);
+{procedure TZCADDrawing.AddBlockFromDBIfNeed(Name:string);
 begin
   drawings.AddBlockFromDBIfNeed(@self,Name);
-end;
+end;}
 
 constructor TZCADDrawing.init;
 var
@@ -321,12 +318,12 @@ var
   DC:TDrawContext;
 begin
   if assigned(PDataOwner) then begin
-    if PGDBObjEntity(PDataOwner)^.bp.ListPos.Owner=drawings.GetCurrentDWG^.GetCurrentRootSimple then
-      PGDBObjEntity(PDataOwner)^.YouChanged(drawings.GetCurrentDWG^)
+    if PGDBObjEntity(PDataOwner)^.bp.ListPos.Owner=GetCurrentRootSimple then
+      PGDBObjEntity(PDataOwner)^.YouChanged(self)
     else begin
-      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-      PGDBObjEntity(PDataOwner)^.FormatEntity(drawings.GetCurrentDWG^,dc);
-      drawings.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
+      dc:=CreateDrawingRC;
+      PGDBObjEntity(PDataOwner)^.FormatEntity(self,dc);
+      GetCurrentROOT^.FormatAfterEdit(self,dc);
     end;
   end;
   zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
@@ -337,7 +334,7 @@ var
   DC:TDrawContext;
 begin
   DC:=CreateDrawingRC;
-  GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
+  GetCurrentROOT^.FormatAfterEdit(self,dc);
 end;
 
 destructor TZCADDrawing.done;

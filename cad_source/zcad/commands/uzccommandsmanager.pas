@@ -179,6 +179,7 @@ type
       const {%H-}Param:string;const Data:PtrInt;
       var {%H-}Abort:
       boolean):string;
+    procedure DrawCommandHelpGeometry;
   end;
 
 var
@@ -189,6 +190,12 @@ function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAtt
 procedure ParseCommand(comm:string;out command,operands:string);
 
 implementation
+
+procedure GDBcommandmanager.DrawCommandHelpGeometry;
+begin
+  if CurrCmd.pcommandrunning<>nil then
+    CurrCmd.pcommandrunning^.DrawHeplGeometry();
+end;
 
 function GDBcommandmanager.MacroFuncsCurrentMacrosPath(const {%H-}Param:string;
   const Data:PtrInt;

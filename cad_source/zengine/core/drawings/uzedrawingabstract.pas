@@ -66,7 +66,6 @@ type
     function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
     procedure RotateCameraInLocalCSXY(ux,uy:double);virtual;abstract;
     procedure MoveCameraInLocalCSXY(oldx,oldy:double;ax:TzeVector3d);virtual;abstract;
-    procedure SetCurrentDWG;virtual;abstract;
     function GetChangeStampt:boolean;virtual;abstract;
     function StoreOldCamerapPos:Pointer;virtual;abstract;
     procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;

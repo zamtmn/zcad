@@ -135,6 +135,7 @@ type
     function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):string;
     procedure waSetObjInsp(Sender:{TAbstractViewArea}TObject;GUIAction:TzcMessageID);
     procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
+    procedure WaActivate(Sender:TAbstractViewArea);
 
     //Long process support - draw progressbar. See uzelongprocesssupport unit
     procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;
@@ -277,6 +278,8 @@ begin
   ViewArea.MainMouseDown:=zcMainForm.MainMouseDown;
   ViewArea.MainMouseUp:=zcMainForm.MainMouseUp;
   ViewArea.OnWaShowCursor:=zcMainForm.WaShowCursor;
+  ViewArea.OnActivateProc:=zcMainForm.WaActivate;
+  ViewArea.OnDrawHeplGeometry:=CommandManager.DrawCommandHelpGeometry;
   ADrawing.wa:=ViewArea;
   ViewArea.PDWG:=@ADrawing;
 
@@ -1926,6 +1929,11 @@ begin
     pGDBObjEntity(
       Sender.param.lastonmouseobject)^.higlight(dc);
   end;
+end;
+
+procedure TzcMainForm.WaActivate(Sender:TAbstractViewArea);
+begin
+  drawings.SetCurrentDWG(Sender.PDWG);
 end;
 
 procedure TzcMainForm.waSetObjInsp;

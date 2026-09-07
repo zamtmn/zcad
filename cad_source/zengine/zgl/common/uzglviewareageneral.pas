@@ -23,8 +23,8 @@ interface
 uses
   gzctnrVectorTypes,uzegeometrytypes,uzepalette,uzeentsubordinated,uzegeometry,
   UGDBSelectedObjArray,uzglviewareadata,uzgldrawcontext,uzeentity,
-  uzedrawingabstract,UGDBPoint3DArray,uzeentitiestree,uzeconsts,uzestrconsts,
-  UGDBTracePropArray,math,sysutils,uzedrawingdef,uzbstrproc,ExtCtrls,Controls,
+  uzedrawingabstract,uzedrawingdef,UGDBPoint3DArray,uzeentitiestree,uzeconsts,
+  uzestrconsts,UGDBTracePropArray,math,sysutils,uzbstrproc,ExtCtrls,Controls,
   Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
   UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,
   uzgldrawerabstract,uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,
@@ -40,7 +40,6 @@ resourcestring
 
 type
   TShowCursorHandlersVector=TMyVector<TShowCursorHandler>;
-  TOnActivateProc=Procedure;
   TCameraChangedNotify=procedure of object;
   TGeneralViewArea=class(TAbstractViewArea)
     public
@@ -154,7 +153,6 @@ function MouseBS2ZKey(Button:TMouseButton;Shift:TShiftState):TZKeys;
 function MouseS2ZKey(Shift:TShiftState):TZKeys;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 var
-   OnActivateProc:TOnActivateProc=nil;
    ForeGroundColorIndex:Integer;
    InverseMouseClick:Boolean;
 
@@ -220,13 +218,13 @@ procedure TGeneralViewArea.GDBActivate;
 var
   wc:TCADControl;
 begin
-    pdwg.SetCurrentDWG;
-    param.firstdraw:=true;
-    GDBActivateContext;
-    wc:=getviewcontrol;
-    if wc<>nil then
-      wc.invalidate;
-    if assigned(OnActivateProc) then OnActivateProc;
+  if assigned(OnActivateProc) then OnActivateProc(self);
+
+  param.firstdraw:=true;
+  GDBActivateContext;
+  wc:=getviewcontrol;
+  if wc<>nil then
+    wc.invalidate;
 end;
 procedure drawfrustustum(frustum:TzeFrustum;var DC:TDrawContext);
 var
@@ -827,8 +825,10 @@ begin
 
     dc.drawer.SetZTest(false);
     inc(dc.subrender);
-    if assigned(dc.DrawingContext.DrawHeplGeometryProc) then
-                                               dc.DrawingContext.DrawHeplGeometryProc;
+    //if assigned(dc.DrawingContext.DrawHeplGeometryProc) then
+    //  dc.DrawingContext.DrawHeplGeometryProc;
+    if assigned(OnDrawHeplGeometry) then
+      OnDrawHeplGeometry;
 
     scrollmode:=param.scrollmode;
     param.scrollmode:=true;
@@ -862,8 +862,11 @@ begin
     inc(dc.subrender);
     if PDWG.GetConstructObjRoot.ObjArray.Count>0 then
                                                     PDWG.GetConstructObjRoot.ObjArray.Count:=PDWG.GetConstructObjRoot.ObjArray.Count;
-    if assigned(dc.DrawingContext.DrawHeplGeometryProc) then
-                                               dc.DrawingContext.DrawHeplGeometryProc;
+    //if assigned(dc.DrawingContext.DrawHeplGeometryProc) then
+    //  dc.DrawingContext.DrawHeplGeometryProc;
+    if assigned(OnDrawHeplGeometry) then
+      OnDrawHeplGeometry;
+
     scrollmode:=param.scrollmode;
     param.scrollmode:=true;
     render(PDWG.GetConstructObjRoot^,dc);

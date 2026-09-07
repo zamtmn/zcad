@@ -113,6 +113,7 @@ procedure TZCADDrawingsManager.AfterAutoProcessGDB(const AUndoMethod:TMethod);
 begin
   PGDBObjEntity(AUndoMethod.Data)^.YouChanged(GetCurrentDWG^)
 end;
+
 procedure TZCADDrawingsManager.AfterNotAutoProcessGDB(const AUndoMethod:TMethod);
 var
   DC:TDrawContext;

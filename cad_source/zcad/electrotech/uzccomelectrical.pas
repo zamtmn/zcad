@@ -635,7 +635,7 @@ begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
   //добавляем определение блока HEAD_CONNECTIONDIAGRAM в чечтеж если надо
-  drawings.GetCurrentDWG^.AddBlockFromDBIfNeed('HEAD_CONNECTIONDIAGRAM');
+  drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'HEAD_CONNECTIONDIAGRAM');
 
   //получаеи указатель на него
   PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef('HEAD_CONNECTIONDIAGRAM');
@@ -776,7 +776,7 @@ var
 begin
      currentcoord:=cP3d__0__0__0;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     drawings.GetCurrentDWG^.AddBlockFromDBIfNeed('KIP_LUGTABLEELEMENT');
+     drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'KIP_LUGTABLEELEMENT');
      PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef('KIP_LUGTABLEELEMENT');
      if pbh=nil then
                     exit;

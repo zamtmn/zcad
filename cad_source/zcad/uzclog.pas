@@ -26,6 +26,10 @@ uses
   sysutils,
   uzbLogTypes,uzblog;
 
+const
+  clUInit='Unit "%s" initialization';
+  clUFin='U nit "%s" finalization';
+
 var
 //LM_Trace,     //уже определен в uzbLog.TLog // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
   LM_Debug,     // — журналирование моментов вызова «крупных» операций.
@@ -63,7 +67,7 @@ initialization
   ProgramLog.SetDefaultLogLevel(LM_Debug);
   ProgramLog.SetCurrentLogLevel(LM_Info);
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ProgramLog.done;
 end.
 

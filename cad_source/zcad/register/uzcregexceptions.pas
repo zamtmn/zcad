@@ -153,7 +153,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   if CommandLineParser.HasOption(MaxStackFrameCountHDL) then
     if TryStrToInt(CommandLineParser.OptionOperand(MaxStackFrameCountHDL,0),MaxStackFrameCount) then begin
       RaiseMaxFrameCount:=MaxStackFrameCount;
@@ -167,7 +167,7 @@ initialization
   RegisterCrashInfoProvider(ProvideBuildAndRunTimeInfo);
   RegisterCrashInfoProvider(ProvideFooter);
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ProgramLog.removeBackend(LLMsgsH);
   LLMsgs.done;
 end.

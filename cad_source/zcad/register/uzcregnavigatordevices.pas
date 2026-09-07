@@ -160,6 +160,6 @@ initialization
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorRisers',rsRisers,TNavigatorRisers,rect(0,100,200,600),ZCADFormSetupProc,CreateNavigatorRisers,@NavigatorRisers,true);
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorCables',rsCables,TNavigatorCables,rect(0,100,200,600),ZCADFormSetupProc,CreateNavigatorCables,@NavigatorCables,true);
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

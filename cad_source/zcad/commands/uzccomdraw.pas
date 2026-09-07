@@ -1209,7 +1209,7 @@ initialization
   startup;
   dummyclass:=tdummyclass.Create;
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
   dummyclass.Free;
 end.

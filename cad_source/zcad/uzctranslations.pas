@@ -306,7 +306,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   TranslateLogModuleId:=programlog.RegisterModule('TRANSLATOR');
   TranslateSpellerLogModuleId:=ProgramLog.RegisterModule('TRANSLATOR/SPELLER');
   DisableTranslateCount:=0;
@@ -325,7 +325,7 @@ initialization
   end;
 
 finalization
-  programlog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  programlog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   if assigned(actualypo) then
     freeandnil(actualypo);
   if assigned(RunTimePO) then

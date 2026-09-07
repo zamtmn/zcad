@@ -189,14 +189,14 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   MoveMode:=true;
   RefV:=cV3d__1__0__0;
   Axis:=cV3d__0__0__1;
   CreateZCADCommand(@Rotate_com,'Rotate',CADWG,0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   clAngleCopyReference.Free;
   clAngleMoveReference.Free;
 end.

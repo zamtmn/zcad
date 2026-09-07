@@ -723,12 +723,12 @@ end;
 // ---------------------------------------------------------------------------
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',
+  programlog.LogOutFormatStr(clUInit,
     [{$INCLUDE %FILE%}], LM_Info, UnitsInitializeLMId);
   // Регистрируем расширенную команду масштабирования
   CreateZCADCommand(@Scale2_com, 'Scale2', CADWG, 0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',
+  ProgramLog.LogOutFormatStr(clUFin,
     [{$INCLUDE %FILE%}], LM_Info, UnitsFinalizeLMId);
 end.

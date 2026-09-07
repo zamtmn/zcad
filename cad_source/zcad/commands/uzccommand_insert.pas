@@ -234,8 +234,7 @@ end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   BIProp.Blocks.Enums.init(100);
   BIProp.Scale:=cV3d__1__1__1;
   BIProp.Rotation:=0;
@@ -248,6 +247,5 @@ initialization
 
 finalization
   BIProp.Blocks.Enums.done;
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

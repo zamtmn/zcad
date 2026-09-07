@@ -279,8 +279,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   if SysUnit<>nil then begin
     SysUnit^.RegisterType(TypeInfo(TBlockReplaceParams));
     SysUnit^.RegisterType(TypeInfo(PTBlockReplaceParams));
@@ -299,6 +298,5 @@ initialization
   BlockReplace.SetCommandParam(@BlockReplaceParams,'PTBlockReplaceParams');
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

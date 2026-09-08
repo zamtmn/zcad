@@ -139,14 +139,14 @@ begin
         result:=True;
 end;}
 
-function isEntityInstance(const PTypeDesc:PUserTypeDescriptor;const PData:pointer):boolean;
+{function isEntityInstance(const PTypeDesc:PUserTypeDescriptor;const PData:pointer):boolean;
 begin
   result:=false;
   if (PTypeDesc<>nil)and(PData<>nil) then
     if IsObjectIt(typeof(PTypeDesc^),typeof(ObjectDescriptor)) then
       if IsObjectIt(PObjectDescriptor(PTypeDesc)^.PVMT,typeof(GDBObjEntity)) then
         result:=True;
-end;
+end;}
 
 procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const OnFieldModifyProc:TOnFieldModifyProc);
   function IsEntityInCurrentContext:boolean;

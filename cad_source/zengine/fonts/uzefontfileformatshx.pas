@@ -337,7 +337,7 @@ begin
         sizeshp:=1;
 
         GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-        DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount);
+        DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount+1);
 
         x1:=0;
         y1:=0;
@@ -373,6 +373,7 @@ begin
           angle:=2*pi
         else
           angle:=sign(shortint(byt))*lo*pi/4;
+
         angle:=angle-sign(shortint(byt))*pi/180*((endoffset+startoffset)/256*45); { TODO : symbol & wrong in isocp.shx, see errors\5.dxf }
         startangle:=hi*pi/4+sign(shortint(byt))*pi/180*(startoffset/256*45);
         SinCos(startangle,sine,cosine);
@@ -382,10 +383,10 @@ begin
         sizeshp:=1;
 
         GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-        DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount);
+        DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount+1);
 
-        x1:=0;
-        y1:=0;
+        //x1:=0;
+        //y1:=0;
         for i:=1 to arccount do begin
           SinCos(startangle+i/arccount*angle,sine,cosine);
           x1:=xb+r*cosine;

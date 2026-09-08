@@ -59,6 +59,8 @@ type
     TOnWaKeyPress=procedure (Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState) of object;
     TOnGetEntsDesc=function (ents:PGDBObjOpenArrayOfPV):String of object;
     TOnWaShowCursor=procedure (Sender:TAbstractViewArea;var DC:TDrawContext) of object;
+    TOnActivateProc=Procedure (Sender:TAbstractViewArea) of object;
+    TOnDrawHeplGeometry=procedure of object;
     TAbstractViewArea=class(tcomponent)
                            public
                            Drawer:TZGLAbstractDrawer;
@@ -79,6 +81,8 @@ type
                            OnWaKeyPress:TOnWaKeyPress;
                            OnGetEntsDesc:TOnGetEntsDesc;
                            OnWaShowCursor:TOnWaShowCursor;
+                           OnActivateProc:TOnActivateProc;
+                           OnDrawHeplGeometry:TOnDrawHeplGeometry;
 
                            procedure GDBActivate;virtual;abstract;
                            procedure GDBActivateContext;virtual;abstract;

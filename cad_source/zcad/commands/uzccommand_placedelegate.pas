@@ -110,12 +110,10 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandRTEdObjectPlugin(@PlaceDelegate_Insert_com_CommandStart,@Internal_Insert_com_CommandEnd,nil,nil,@PlaceDelegate_com_BeforeClick,@PlaceDelegate_com_BeforeClick,nil,nil,'PlaceDelegate',0,0).CEndActionAttr:=
     [CEGUIReturnToDefaultObject,CEDeSelect];
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

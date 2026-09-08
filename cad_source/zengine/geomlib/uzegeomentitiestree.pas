@@ -39,9 +39,8 @@ type
     procedure Destroy;
     procedure AfterSeparateNode(var nul:TEntityArray);
   end;
-  PTEntTreeNode=^TGeomEntTreeNode;
-  TGeomEntTreeNode=object(GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>)
-  end;
+  PGeomEntTreeNode=^TGeomEntTreeNode;
+  TGeomEntTreeNode=GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;
 
   TZEntsManipulator=class
     class procedure StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer); static;

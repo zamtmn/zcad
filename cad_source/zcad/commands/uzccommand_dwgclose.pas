@@ -24,8 +24,9 @@ interface
 uses
   uzcLog,Forms,
   uzccommandsabstract,uzccommandsimpl,
-  uzcdrawing,uzcdrawings,uzccommand_quit,
-  uzcMainForm;
+  uzcdrawing,uzcdrawings,
+  uzcinterface,
+  uzccommand_quit;
 
 implementation
 
@@ -36,16 +37,14 @@ var
 begin
   application.ProcessMessages;
   CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
-  _CloseDWGPage(CurrentDWG,zcMainForm.PageControl.ActivePage,False,nil);
+  _CloseDWGPage(CurrentDWG,zcUI.getActiveDocumentControl,False,nil);
   Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DWGClose_com,'DWGClose',CADWG,0).CEndActionAttr:=[CEDWGNChanged];
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

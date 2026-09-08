@@ -25,7 +25,7 @@ uses
   uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
   UGDBVisibleTreeArray,UGDBOpenArrayOfPV,uzeentwithmatrix,uzeentsubordinated,
   uzegeometry,uzeentity,gzctnrVectorTypes,uzegeometrytypes,uzeconsts,
-  uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity,uzeTypes,uzeEntBase,
+  uzeEntitiesTreeNodeData,uzeentitiestree,uzeffdxfsupport,uzCtnrVectorpBaseEntity,uzeTypes,uzeEntBase,
   Generics.Collections;
 
 type

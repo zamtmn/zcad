@@ -643,13 +643,13 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
 
   //CreateZCADCommand(@testRoundExcel_com,'vtestExcel000',CADWG,0);
   CreateZCADCommand(@textexcel333_com,'vtestExcel333',CADWG,0);
   CreateZCADCommand(@textexcel2_com,'vtestExcel111',CADWG,0);
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 
 

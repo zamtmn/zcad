@@ -976,7 +976,7 @@ var
 
 
       //добавляем определение блока HEAD_CONNECTIONDIAGRAM в чечтеж если надо
-      drawings.GetCurrentDWG^.AddBlockFromDBIfNeed(velec_SchemaELDevInfo);
+      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,velec_SchemaELDevInfo);
 
       //получаеи указатель на него
       PBH:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(velec_SchemaELDevInfo);

@@ -383,6 +383,21 @@ begin
     result.control:=GDBobjinsp.PEditor.geteditor;
   end;
 end;
+
+procedure StoreOICfg(var AUnit:TSimpleUnit);
+var
+  pint:PInteger;
+begin
+  pint:=AUnit.FindValue('VIEW_ObjInspSubV').Data.Addr.Instance;
+  if assigned(pint) then
+    if assigned(GetNameColWidthProc) then
+      pint^:=GetNameColWidthProc;
+  pint:=AUnit.FindValue('VIEW_ObjInspV').Data.Addr.Instance;
+  if assigned(pint) then
+    if assigned(GetOIWidthProc) then
+      pint^:=GetOIWidthProc;
+end;
+
 var
   vd:vardesk;
 initialization
@@ -473,11 +488,11 @@ initialization
   //FreEditorProc:=FreEditor;
   zcUI.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);
   zcUI.RegisterHandler_GetFocusedControl(dummyclass.GetPeditorFocusPriority);
-  //StoreAndFreeEditorProc:=StoreAndFreeEditor;
+  zcUI.RegisterStoreProc(StoreOICfg);
   CreateZCADCommand(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
 
 finalization
   dummyclass.free;
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

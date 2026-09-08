@@ -92,7 +92,6 @@ type
     function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;
     procedure RotateCameraInLocalCSXY(ux,uy:double);virtual;
     procedure MoveCameraInLocalCSXY(oldx,oldy:double;ax:TzeVector3d);virtual;
-    procedure SetCurrentDWG;virtual;
     function StoreOldCamerapPos:Pointer;virtual;
     procedure StoreNewCamerapPos(command:Pointer);virtual;
     procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:TzePoint3d;save:boolean);virtual;
@@ -120,7 +119,7 @@ type
     procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
     function GetUnitsFormat:TzeUnitsFormat;virtual;
     procedure CreateBlockDef(Name:string);virtual;
-    procedure HardReDraw;
+    procedure HardReDraw(dhg:TDrawHeplGeometry);
     function GetCurrentLayer:PGDBLayerProp;
     function GetCurrentLType:PGDBLtypeProp;
     function GetCurrentTextStyle:PGDBTextStyle;
@@ -276,7 +275,7 @@ begin
     Result:=LayerTable.getsystemlayer;
 end;
 
-procedure TSimpleDrawing.HardReDraw;
+procedure TSimpleDrawing.HardReDraw(dhg:TDrawHeplGeometry);
 var
   DC:TDrawContext;
   Actlt:TVisActuality;
@@ -344,7 +343,7 @@ begin
   dc.DrawingContext.matrixs.pprojMatrix:=@GetPCamera.projMatrix;
   dc.DrawingContext.matrixs.pviewport:=@GetPCamera.viewport;
   dc.DrawingContext.pcamera:=GetPCamera;
-  dc.DrawingContext.DrawHeplGeometryProc:=nil;
+  //dc.DrawingContext.DrawHeplGeometryProc:=nil;
   dc.DrawMode:=LWDisplay;
   dc.DrawingContext.GlobalLTScale:=LTScale;
   dc.DrawingContext.FrustumCenter.HasValue:=False;
@@ -608,11 +607,6 @@ end;
 function TSimpleDrawing.GetDimStyleTable:PGDBDimStyleArray;
 begin
   Result:=@self.DimStyleTable;
-end;
-
-procedure TSimpleDrawing.SetCurrentDWG;
-begin
-
 end;
 
 procedure TSimpleDrawing.MoveCameraInLocalCSXY(oldx,oldy:double;ax:TzeVector3d);

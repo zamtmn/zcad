@@ -179,6 +179,7 @@ type
       const {%H-}Param:string;const Data:PtrInt;
       var {%H-}Abort:
       boolean):string;
+    procedure DrawCommandHelpGeometry;
   end;
 
 var
@@ -189,6 +190,12 @@ function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAtt
 procedure ParseCommand(comm:string;out command,operands:string);
 
 implementation
+
+procedure GDBcommandmanager.DrawCommandHelpGeometry;
+begin
+  if CurrCmd.pcommandrunning<>nil then
+    CurrCmd.pcommandrunning^.DrawHeplGeometry();
+end;
 
 function GDBcommandmanager.MacroFuncsCurrentMacrosPath(const {%H-}Param:string;
   const Data:PtrInt;
@@ -1118,6 +1125,18 @@ begin
   executecommand(lastcommand,pdrawing,POGLWndParam);
 end;
 
+procedure StoreDMenuCfg(var AUnit:TSimpleUnit);
+var
+  pint:PInteger;
+begin
+  pint:=AUnit.FindValue('DMenuX').Data.Addr.Instance;
+  if assigned(pint) then
+    pint^:=commandmanager.DMenu.Left;
+  pint:=AUnit.FindValue('DMenuY').Data.Addr.Instance;
+  if assigned(pint) then
+    pint^:=commandmanager.DMenu.Top;
+end;
+
 constructor GDBcommandmanager.init;
 var
   pint:PInteger;
@@ -1184,6 +1203,7 @@ end;
 
 initialization
   commandmanager.init(1000);
+  zcUI.RegisterStoreProc(StoreDMenuCfg);
   DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosPath','',
     'Current macros path',
     commandmanager.MacroFuncsCurrentMacrosPath(),[]));
@@ -1192,7 +1212,6 @@ initialization
     commandmanager.MacroFuncsCurrentMacrosFile(),[]));
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   commandmanager.Done;
 end.

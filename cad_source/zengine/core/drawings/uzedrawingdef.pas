@@ -34,7 +34,7 @@ TDrawingDef= object(GDBaseobject)
                        function GetTableStyleTable:PGDBTableStyleArray;virtual;abstract;
                        function GetDimStyleTable:PGDBDimStyleArray;virtual;abstract;
                        function GetDWGUnits:{PTUnitManager}pointer;virtual;abstract;
-                       procedure AddBlockFromDBIfNeed(name:String);virtual;abstract;
+                       //procedure AddBlockFromDBIfNeed(name:String);virtual;abstract;
                        function GetCurrentRootSimple:Pointer;virtual;abstract;
                        function GetCurrentRootObjArraySimple:Pointer;virtual;abstract;
                        function GetBlockDefArraySimple:Pointer;virtual;abstract;

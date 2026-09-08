@@ -33,6 +33,6 @@ end;
 initialization
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorEntities',rsEntities,TNavigatorEntities,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorEntities,true);
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

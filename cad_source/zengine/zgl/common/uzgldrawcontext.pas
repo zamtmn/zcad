@@ -27,7 +27,7 @@ const
   DefaultVP:TzeVector4i=(x:2;y:0;z:100;w:100);
 type
 TNulableVetrex=TNullable<TzePoint3d>;
-TDrawHeplGeometry=procedure  of object;
+TDrawHeplGeometry=procedure of object;
 TDrawingContext=record
                    VActuality:TVisActuality;
                    DRAWCOUNT:TActuality;
@@ -37,7 +37,7 @@ TDrawingContext=record
                    pcamera:PGDBBaseCamera;
                    FrustumCenter:TNulableVetrex;
                    GlobalLTScale:Double;
-                   DrawHeplGeometryProc:TDrawHeplGeometry;
+                   //DrawHeplGeometryProc:TDrawHeplGeometry;
                    ForeGroundColorIndex:Integer;
 end;
 TDContextOption=(DCODrawable);

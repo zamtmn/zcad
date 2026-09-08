@@ -425,12 +425,10 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',
-    [{$INCLUDE %FILE%}], LM_Info, UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}], LM_Info, UnitsInitializeLMId);
   CreateZCADCommand(@ExplodeBlockProxy_cmd, 'ExplodeBlockProxy',
     CADWG or CASelEnts, 0);
 
 finalization
-  programlog.LogOutFormatStr('Unit "%s" finalization',
-    [{$INCLUDE %FILE%}], LM_Info, UnitsFinalizeLMId);
+  programlog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}], LM_Info, UnitsFinalizeLMId);
 end.

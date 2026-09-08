@@ -428,7 +428,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
 
   FindCommandParam.Options.CaseSensitive:=False;
   FindCommandParam.Options.WholeWords:=False;
@@ -445,6 +445,6 @@ initialization
   CreateZCADCommand(@FindNext_com,'FindNext',CADWG,0)^.overlay:=true;
   CreateZCADCommand(@FindPrev_com,'FindPrev',CADWG,0)^.overlay:=true;
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   FindProcsRegister.Free;
 end.

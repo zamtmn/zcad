@@ -164,8 +164,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   if SysUnit<>nil then begin
     SysUnit^.RegisterType(TypeInfo(TCmdProp));
     SysUnit^.SetTypeDesk(TypeInfo(TCmdProp),['параметры']);
@@ -176,8 +175,7 @@ initialization
   CreateZCADCommand(@ExampleRandomizeLines_com,'ExampleRandomizeLines',CADWG,0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   CmdProp.props.Free;
   CmdProp.props.done;
 end.

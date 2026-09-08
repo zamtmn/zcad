@@ -232,8 +232,7 @@ begin
 end;
 
 initialization
-  ProgramLog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   if SysUnit<>nil then begin
     SysUnit^.RegisterType(TypeInfo(PTRasterizeParams));
     SysUnit^.SetTypeDesk(TypeInfo(TRasterizeParams),
@@ -250,8 +249,7 @@ initialization
   PAGED:=TPageSetupDialog.Create(nil);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   FreeAndNil(psd);
   FreeAndNil(paged);
 end.

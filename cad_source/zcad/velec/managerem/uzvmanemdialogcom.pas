@@ -303,7 +303,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   //SysUnit^.RegisterType(TypeInfo(TCmdProp));
   SysUnit^.RegisterType(TypeInfo(TuzvmanemSGSetConstruct));
   SysUnit^.RegisterType(TypeInfo(TuzvmanemSGSetProtectDev));
@@ -344,7 +344,7 @@ initialization
   //SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
   CreateZCADCommand(@generatorOnelineDiagramOneLevel_com,'vGeneratorOneLine',CADWG,0);
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   //CmdProp.props.free;
   //CmdProp.props.done;
   //if clFileParam<>nil then

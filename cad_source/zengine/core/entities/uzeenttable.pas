@@ -26,7 +26,7 @@ uses
   gzctnrVectorPObjects,uzctnrvectorstrings,uzeentmtext,uzeentity,
   uzeTypes,uzeconsts,uzegeometry,gzctnrVectorTypes,uzegeometrytypes,
   uzeentblockinsert,uzeffdxfsupport,uzeentityfactory,uzeobjectextender,uzsbVarmanDef,
-  Varman,uzeentsubordinated;
+  Varman,uzeentsubordinated,uzcdrawings;
 
 type
 
@@ -360,7 +360,7 @@ begin
   dc:=drawing.CreateDrawingRC;
 
   if self.PTableStyle.HeadBlockName<>'' then begin
-    drawing.AddBlockFromDBIfNeed(PTableStyle.HeadBlockName);
+    drawings.AddBlockFromDBIfNeed(@drawing,PTableStyle.HeadBlockName);
     pointer(pgdbins):=self.ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
     pgdbins^.Name:=self.PTableStyle.HeadBlockName;
     pgdbins^.scale.x:=scale;

@@ -26,7 +26,7 @@ uses
   uzeentdevice,uzsbTypeDescriptors,uzctnrVectorBytesStream,
   uzbBaseUtils,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
   uzsbVarmanDef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-  uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
+  uzeEntitiesTreeNodeData,uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
   gzctnrVectorP,uzetextpreprocessor;
 const

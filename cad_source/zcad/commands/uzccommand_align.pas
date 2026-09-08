@@ -792,14 +792,12 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization', [{$INCLUDE %FILE%}],
-    LM_Info, UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   // Регистрируем команду ALIGN в системе команд ZCAD
   CreateZCADCommand(@AlignCommand, 'Align', CADWG, 0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization', [{$INCLUDE %FILE%}],
-    LM_Info, UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   clScaleYesNo.Free;
   clSrc3.Free;
 end.

@@ -35,6 +35,6 @@ initialization
   sysvar.PATH.AdditionalSupport_Paths:=@GetAdditionalSupportPaths;
   sysvar.PATH.Temp_Path:=@GetTempPath;
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

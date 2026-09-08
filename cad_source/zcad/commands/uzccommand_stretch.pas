@@ -241,8 +241,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandRTEdObjectPlugin(@Stretch_com_CommandStart,
     @FrameEdit_com_Command_End,
     nil,nil,
@@ -250,7 +249,6 @@ initialization
     @Stretch_com_AfterClick,nil,nil,'Stretch',0,0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
 

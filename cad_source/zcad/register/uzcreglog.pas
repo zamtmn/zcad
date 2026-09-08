@@ -160,7 +160,7 @@ initialization
   LogerMBoxBackendHandle:=ProgramLog.addBackend(LogerMBoxBackend,'',[]);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   RemoveLoger(programlog.ZDebugLN,nil,programlog.isTraceEnabled);
   ProgramLog.LogEnd;
   ProgramLog.removeBackend(FileLogBackendHandle);

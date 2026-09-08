@@ -22,12 +22,13 @@ unit uzcinterface;
 interface
 
 uses
-  Controls,
-  AnchorDocking,
-  uzbUnits,
-  uzcstrconsts,gzctnrSTL,zeundostack,uzsbVarmanDef,
-  uzcuilcl2zc,uzcuitypes,Forms,Classes,LCLType,LCLProc,SysUtils,uzbHandles,
-  uzbSets;
+  SysUtils,Classes,
+  LCLType,LCLProc,Controls,Forms,AnchorDocking,
+  uzbUnits,uzbHandles,uzbSets,
+  uzsbVarmanDef,Varman,
+  gzctnrSTL,
+  uzcstrconsts,zeundostack,
+  uzcuilcl2zc,uzcuitypes,uzedrawingsimple,uzglviewareaabstract;
 
 const
   PopupPriority=1000;
@@ -83,6 +84,17 @@ type
   TSimpleProcedure=procedure;
   TSimpleProcedure_TZMessageID_HandlersVector=TMyVector<TSimpleProcedure_TZMessageID>;
 
+  TMethod__TObject=function:TObject of object;
+  TMethod__Integer=function:Integer of object;
+  TMethod_Integer_TComponent=function(AIdx:Integer):TComponent of object;
+  TMethod_Integer=procedure(AIdx:Integer) of object;
+
+  TCreateDrawing=function (var ADrawing:TSimpleDrawing;ACaption:string;out ViewControl:TCADControl;
+    out ViewArea:TAbstractViewArea):TComponent of object;
+
+  TProcedure_TSimpleUnit=procedure(var AUnit:TSimpleUnit);
+  TProcedure_TSimpleUnitVector=TMyVector<TProcedure_TSimpleUnit>;
+
   TControlWithPriority=record
     control:TWinControl;
     priority:integer;
@@ -93,8 +105,7 @@ type
   TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector=
     TMyVector<TGetControlWithPriority_TZMessageID__TControlWithPriority>;
 
-  TSimpleLCLMethod_TZMessageID=procedure(Sender:TObject;GUIAction:TzcMessageID) of
-    object;
+  TSimpleLCLMethod_TZMessageID=procedure(Sender:TObject;GUIAction:TzcMessageID) of object;
   TSimpleLCLMethod_HandlersVector=TMyVector<TSimpleLCLMethod_TZMessageID>;
 
   //ObjInsp
@@ -106,16 +117,13 @@ type
   TKeyEvent_HandlersVector=TMyVector<TKeyEvent>;
 
 
-  TTextMessageWriteOptions=(TMWOToConsole,
-    //вывод сообщения в консоль
+  TTextMessageWriteOptions=(
+    TMWOToConsole,            //вывод сообщения в консоль
     TMWOToLog,                //вывод в log
-    TMWOToQuicklyReplaceable,
-    //вывод в статусную строку
+    TMWOToQuicklyReplaceable, //вывод в статусную строку
     TMWOToModal,              //messagebox
-    TMWOWarning,
-    //оформить как варнинг
-    TMWOError);
-  //оформить как ошибку
+    TMWOWarning,              //оформить как варнинг
+    TMWOError);               //оформить как ошибку
 
   TTextMessageWriteOptionsSet=set of TTextMessageWriteOptions;
 
@@ -168,7 +176,17 @@ type
     FTextQuestionFunc:TTextQuestionFunc;
     ModalShowsCount:integer;
     IdleProc_HandlersVector:TIdleProc_HandlersVector;
+
+    StoresProcs:TProcedure_TSimpleUnitVector;
   public
+    onGetActiveDocumentControl:TMethod__TObject;
+    onGetActiveDocumentControlIndex:TMethod__Integer;
+    onSetActiveDocumentControlIndex:TMethod_Integer;
+
+    onGetDocumentControl:TMethod_Integer_TComponent;
+    onGetDocumentControlsCount:TMethod__Integer;
+    onCreateDWGDocumentControl:TCreateDrawing;
+
     constructor Create;
     destructor Destroy;override;
     function GetUniqueZState:TzcUIState;
@@ -195,6 +213,8 @@ type
 
     procedure RegisterHandlerIdle(AHandler:TIdleProc);
 
+    procedure RegisterStoreProc(ASP:TProcedure_TSimpleUnit);
+
 
     function GetState:TzcUIState;
     procedure Do_HistoryOut(s:string);
@@ -207,9 +227,8 @@ type
     procedure Do_GUIMode(GUIMode:TzcMessageID);
     procedure Do_GUIaction(Sender:TObject;GUIaction:TzcMessageID);
 
-    procedure Do_PrepareObject(const UndoStack:PTZctnrVectorUndoCommands;
-      const f:TzeUnitsFormat;exttype:PUserTypeDescriptor;
-      addr,context:Pointer;popoldpos:boolean=False);
+    procedure Do_PrepareObject(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;
+      exttype:PUserTypeDescriptor;addr,context:Pointer;popoldpos:boolean=False);
 
     procedure Do_KeyDown(Sender:TObject;var Key:word;Shift:TShiftState);
     procedure Do_SetNormalFocus;
@@ -227,6 +246,16 @@ type
       read FTextQuestionFunc write FTextQuestionFunc;
 
     procedure Do_Idle(var ADone:Boolean);
+
+    function getActiveDocumentControl:TObject;
+    function getActiveDocumentControlIndex:Integer;
+    procedure setActiveDocumentControlIndex(AIdx:Integer);
+    function getDocumentControl(AIdx:Integer):TComponent;
+    function getDocumentControlsCount:Integer;
+    function CreateDWGDocumentControl(var ADrawing:TSimpleDrawing;ACaption:string;out ViewControl:TCADControl;
+      out ViewArea:TAbstractViewArea):TComponent;
+
+    procedure Do_UpdateStoredUnit;
 
   private
     procedure RegisterTProcedure_String_HandlersVector(
@@ -605,8 +634,66 @@ begin
     end;
 end;
 
-procedure TZCUIManager.
-RegisterTGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(
+procedure TZCUIManager.Do_UpdateStoredUnit;
+var
+  sp:TProcedure_TSimpleUnit;
+begin
+  if Assigned(SavedUnit)then
+    if Assigned(StoresProcs)then
+      for sp in StoresProcs do
+        sp(SavedUnit^);
+end;
+
+function TZCUIManager.GetActiveDocumentControl:TObject;
+begin
+  if assigned(onGetActiveDocumentControl) then
+    result:=onGetActiveDocumentControl()
+  else
+    result:=nil;
+end;
+
+function TZCUIManager.getActiveDocumentControlIndex:Integer;
+begin
+  if assigned(onGetActiveDocumentControlIndex) then
+    result:=onGetActiveDocumentControlIndex()
+  else
+    result:=-1;
+end;
+procedure TZCUIManager.setActiveDocumentControlIndex(AIdx:Integer);
+begin
+  if assigned(onSetActiveDocumentControlIndex) then
+    onSetActiveDocumentControlIndex(AIdx);
+end;
+
+function TZCUIManager.getDocumentControl(AIdx:Integer):TComponent;
+begin
+  if assigned(onGetDocumentControl) then
+    result:=onGetDocumentControl(AIdx)
+  else
+    result:=nil;
+end;
+
+function TZCUIManager.getDocumentControlsCount:Integer;
+begin
+  if assigned(onGetDocumentControlsCount) then
+    result:=onGetDocumentControlsCount()
+  else
+    result:=0;
+end;
+
+function TZCUIManager.CreateDWGDocumentControl(var ADrawing:TSimpleDrawing;ACaption:string;
+  out ViewControl:TCADControl;out ViewArea:TAbstractViewArea):TComponent;
+begin
+  if assigned(onCreateDWGDocumentControl) then
+    result:=onCreateDWGDocumentControl(ADrawing,ACaption,ViewControl,ViewArea)
+  else begin
+    result:=nil;
+    ViewControl:=nil;
+    ViewArea:=nil;
+  end;
+end;
+
+procedure TZCUIManager.RegisterTGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector(
   var GCWPHV:TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector;
   Handler:TGetControlWithPriority_TZMessageID__TControlWithPriority);
 begin
@@ -773,6 +860,13 @@ begin
   if not assigned(IdleProc_HandlersVector) then
     IdleProc_HandlersVector:=TIdleProc_HandlersVector.Create;
   IdleProc_HandlersVector.PushBack(AHandler);
+end;
+
+procedure TZCUIManager.RegisterStoreProc(ASP:TProcedure_TSimpleUnit);
+ begin
+  if not assigned(StoresProcs) then
+    StoresProcs:=TProcedure_TSimpleUnitVector.Create;
+  StoresProcs.PushBack(ASP);
 end;
 
 function TZCUIManager.GetState:TzcUIState;

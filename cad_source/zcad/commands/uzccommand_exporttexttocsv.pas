@@ -181,8 +181,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   ExportTextToCSVParam.Widths:='20,130,60,35,45,20,20,25,40';
   ExportTextToCSVParam.W:=20;
   ExportTextToCSVParam.H:=8;
@@ -198,6 +197,5 @@ initialization
   CreateZCADCommand(@ExportTextToCSV_com,'ExportTextToCSV',CADWG,0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

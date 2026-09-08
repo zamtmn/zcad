@@ -265,8 +265,7 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   MatchPropParam.ProcessLayer:=True;
   MatchPropParam.ProcessLineType:=True;
   MatchPropParam.ProcessLineWeight:=True;
@@ -292,6 +291,5 @@ initialization
   CreateZCADCommand(@matchprop_com,'MatchProp',CADWG,0);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

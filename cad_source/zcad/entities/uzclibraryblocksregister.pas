@@ -65,5 +65,5 @@ end;
 initialization
   CreateZCADCommand(@ReadBlockLibrary_com,'ReadBlockLibrary',0,0);
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

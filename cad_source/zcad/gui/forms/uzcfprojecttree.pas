@@ -365,7 +365,7 @@ begin
 end;
 finalization
 begin
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   {FreeAndNil(ProgramDBContextMenuN);
   FreeAndNil(ProjectDBContextMenuN);
   FreeAndNil(ProgramDEVContextMenuN);}

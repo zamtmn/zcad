@@ -624,6 +624,6 @@ initialization
   RegisterEntityUpgradeInfo(GDBLineID,UD_LineToNet,@UpgradeLine2Net);
   GDBObjNetDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   GDBObjNetDXFFeatures.Destroy;
 end.

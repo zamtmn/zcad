@@ -574,10 +574,10 @@ begin
   pl.init(10);
   ispl:=False;
 
-  Bound.LB.x:=+infinity;
-  Bound.LB.y:=+infinity;
-  Bound.RT.x:=NegInfinity;
-  Bound.RT.y:=NegInfinity;
+  Bound.LBN.x:=+infinity;
+  Bound.LBN.y:=+infinity;
+  Bound.RTF.x:=NegInfinity;
+  Bound.RTF.y:=NegInfinity;
   pswp:=Text.beginiterate(ir);
 
   if pswp<>nil then
@@ -633,35 +633,35 @@ begin
       pswp:=Text.iterate(ir);
     until pswp=nil;
 
-  if Bound.LB.x=+infinity then
-    Bound.LB.x:=0;
-  if Bound.LB.y=+infinity then
-    Bound.LB.y:=0;
-  if Bound.RT.x=NegInfinity then
-    Bound.RT.x:=1;
-  if Bound.RT.y=NegInfinity then
-    Bound.RT.y:=1;
+  if Bound.LBN.x=+infinity then
+    Bound.LBN.x:=0;
+  if Bound.LBN.y=+infinity then
+    Bound.LBN.y:=0;
+  if Bound.RTF.x=NegInfinity then
+    Bound.RTF.x:=1;
+  if Bound.RTF.y=NegInfinity then
+    Bound.RTF.y:=1;
 
-  v.x:=Bound.LB.x;
-  v.y:=Bound.RT.y;
+  v.x:=Bound.LBN.x;
+  v.y:=Bound.RTF.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[0]:=v.Slice.asPoint3d;
-  v.x:=Bound.RT.x;
-  v.y:=Bound.RT.y;
+  v.x:=Bound.RTF.x;
+  v.y:=Bound.RTF.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[1]:=v.Slice.asPoint3d;
-  v.x:=Bound.RT.x;
-  v.y:=Bound.LB.y;
+  v.x:=Bound.RTF.x;
+  v.y:=Bound.LBN.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[2]:=v.Slice.asPoint3d;
-  v.x:=Bound.LB.x;
-  v.y:=Bound.LB.y;
+  v.x:=Bound.LBN.x;
+  v.y:=Bound.LBN.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);

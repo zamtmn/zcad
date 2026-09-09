@@ -197,10 +197,10 @@ begin
   ispl:=false;
   pl.init(10);
 
-  Bound.LB.x:=+infinity;
-  Bound.LB.y:=+infinity;
-  Bound.RT.x:=NegInfinity;
-  Bound.RT.y:=NegInfinity;//-infinity;
+  Bound.LBN.x:=+infinity;
+  Bound.LBN.y:=+infinity;
+  Bound.RTF.x:=NegInfinity;
+  Bound.RTF.y:=NegInfinity;//-infinity;
 
   //matr:=matrixmultiply(DrawMatrix,objmatrix);
   matr:=DrawMatrix;
@@ -250,25 +250,25 @@ begin
                              pl.PushBackData(lp);
                      end;
 
-       if Bound.LB.x=+infinity then Bound.LB.x:=0;
-       if Bound.LB.y=+infinity then Bound.LB.y:=0;
-       if Bound.RT.x=NegInfinity then Bound.RT.x:=1;
-       if Bound.RT.y=NegInfinity then Bound.RT.y:=1;
+       if Bound.LBN.x=+infinity then Bound.LBN.x:=0;
+       if Bound.LBN.y=+infinity then Bound.LBN.y:=0;
+       if Bound.RTF.x=NegInfinity then Bound.RTF.x:=1;
+       if Bound.RTF.y=NegInfinity then Bound.RTF.y:=1;
 
-  outbound[0].x:=Bound.LB.x;
-  outbound[0].y:=Bound.RT.y;
+  outbound[0].x:=Bound.LBN.x;
+  outbound[0].y:=Bound.RTF.y;
   outbound[0].z:=0;
   outbound[0]:=VectorTransform3D(outbound[0],objMatrix);
-  outbound[1].x:=Bound.RT.x;
-  outbound[1].y:=Bound.RT.y;
+  outbound[1].x:=Bound.RTF.x;
+  outbound[1].y:=Bound.RTF.y;
   outbound[1].z:=0;
   outbound[1]:=VectorTransform3D(outbound[1],objMatrix);
-  outbound[2].x:=Bound.RT.x;
-  outbound[2].y:=Bound.LB.y;
+  outbound[2].x:=Bound.RTF.x;
+  outbound[2].y:=Bound.LBN.y;
   outbound[2].z:=0;
   outbound[2]:=VectorTransform3D(outbound[2],objMatrix);
-  outbound[3].x:=Bound.LB.x;
-  outbound[3].y:=Bound.LB.y;
+  outbound[3].x:=Bound.LBN.x;
+  outbound[3].y:=Bound.LBN.y;
   outbound[3].z:=0;
   outbound[3]:=VectorTransform3D(outbound[3],objMatrix);
 
@@ -555,8 +555,8 @@ begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:=creatematrix(StartPatternPoint,PSP^.param,angle,scale);
 matr:=cOneMatrix;
-Bound.LB:=cP2d__0__0;
-Bound.RT:=cP2d__0__0;
+Bound.LBN:=cP2d__0__0;
+Bound.RTF:=cP2d__0__0;
 sli:=-1;
 if PSP.Psymbol<> nil then
                     PSP^.param.PStyle.pfont.CreateSymbol(drawer,1,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
@@ -573,8 +573,8 @@ begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:={creatematrix}CreateReadableMatrix(StartPatternPoint,PTP^.param,angle,scale,PTP.txtL,PTP.txtH);
 matr:=cOneMatrix;
-Bound.LB:=cP2d__0__0;
-Bound.RT:=cP2d__0__0;
+Bound.LBN:=cP2d__0__0;
+Bound.RTF:=cP2d__0__0;
 sli:=-1;
 for j:=1 to (system.length(PTP^.Text)) do
 begin

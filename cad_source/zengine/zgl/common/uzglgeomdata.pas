@@ -31,12 +31,13 @@ ZGLGeomData=object(GDBaseObject)
                                                 destructor done;virtual;
                                                 procedure Clear;virtual;
                                                 procedure Shrink;virtual;
-                                                function Add2DPoint(const x,y:fontfloat):TArrayIndex;virtual;
+                                                //function Add2DPoint(const x,y:fontfloat):TArrayIndex;virtual;
+                                                function AddPoint2D(const p:TzePoint2d):TArrayIndex;virtual;
                                           end;
 
 implementation
 //uses log;
-function ZGLGeomData.Add2DPoint(const x,y:fontfloat):TArrayIndex;
+{function ZGLGeomData.Add2DPoint(const x,y:fontfloat):TArrayIndex;
 var
     vs:ZGLVertex3Sarray.TDataType;
 begin
@@ -44,6 +45,14 @@ begin
      vs.y:=y;
      vs.z:=0;
      result:=Vertex3S.PushBackData(vs);
+end;}
+function ZGLGeomData.AddPoint2D(const p:TzePoint2d):TArrayIndex;
+var
+  vs:ZGLVertex3Sarray.TDataType;
+begin
+  vs.Slice:=p;
+  vs.CutOff:=0;
+  result:=Vertex3S.PushBackData(vs);
 end;
 constructor ZGLGeomData.init;
 begin

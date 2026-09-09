@@ -27,7 +27,7 @@ TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
 TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);
 TVector2D={specialize }TVector<TzePoint2d>;
 TDummyData=record
-                 v:GDBFontVertex2D;
+                 v:TzePoint2FontFloat;
                  attr:TPointAttr;
                  index:TArrayIndex;
            end;
@@ -62,8 +62,7 @@ implementation
 //uses {math,}log;
 procedure TBezierSolver2D.AddPointToContur(x,y:fontfloat;attr:TPointAttr);
 var
-   {tff1,tff0,}tff:{GDBFontVertex2D}TDummyData;
-   //a: Double;
+  tff:TDummyData;
 begin
     //if attr=TPA_NotOnCurve then exit;
     tff.v.x:=x;
@@ -192,7 +191,7 @@ begin
           inc(shxsize^);
           for j:=0 to Conturs.VArray[i].Size-1 do
           begin
-               ii:=VectorData.GeomData.Add2DPoint(Conturs.VArray[i].mutable[j]^.v.x,Conturs.VArray[i].mutable[j]^.v.y);
+               ii:=VectorData.GeomData.AddPoint2d(TzePoint2FontFloat(Conturs.VArray[i].mutable[j]^.v));
                Conturs.VArray[i].mutable[j]^.index:=ii;
                if Conturs.VArray[i].mutable[j]^.attr=TPA_OnCurve then
                                                                      begin

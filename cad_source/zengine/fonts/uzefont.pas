@@ -86,14 +86,14 @@ begin
     end;
     VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
     symoutbound:=font.FontData.GetTransformedBoundingBbox(VDCopyParam.EID.GeomIndexMin,VDCopyParam.EID.GeomIndexMax,matr);
-    if Bound.LB.x>symoutbound.LBN.x then
-      Bound.LB.x:=symoutbound.LBN.x;
-    if Bound.LB.y>symoutbound.LBN.y then
-      Bound.LB.y:=symoutbound.LBN.y;
-    if Bound.RT.x<symoutbound.RTF.x then
-      Bound.RT.x:=symoutbound.RTF.x;
-    if Bound.RT.y<symoutbound.RTF.y then
-      Bound.RT.y:=symoutbound.RTF.y;
+    if Bound.LBN.x>symoutbound.LBN.x then
+      Bound.LBN.x:=symoutbound.LBN.x;
+    if Bound.LBN.y>symoutbound.LBN.y then
+      Bound.LBN.y:=symoutbound.LBN.y;
+    if Bound.RTF.x<symoutbound.RTF.x then
+      Bound.RTF.x:=symoutbound.RTF.x;
+    if Bound.RTF.y<symoutbound.RTF.y then
+      Bound.RTF.y:=symoutbound.RTF.y;
   end;
   if LLSymbolIndex<>-1 then begin
     PLLPsymbol:=pointer(geom.LLprimitives.getDataMutable(LLSymbolIndex));

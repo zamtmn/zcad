@@ -152,12 +152,12 @@ var
    startcountur:boolean;
    k:Double;
    tesselator:TessObj;
-   lastv:GDBFontVertex2D;
+   lastv:TzePoint2FontFloat;
    tparrayindex:integer;
    tv:TzePoint3d;
    p:TzePoint2d;
    glyphBounds:TRect;
-procedure CompareAndTess(const v:GDBFontVertex2D);
+procedure CompareAndTess(const v:TzePoint2FontFloat);
 begin
   if (abs(lastv.x-v.x)>eps)or(abs(lastv.y-v.y)>eps) then begin
     inc(tparrayindex);

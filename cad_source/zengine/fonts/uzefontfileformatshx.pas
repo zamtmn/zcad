@@ -17,6 +17,7 @@
 }
 
 unit uzeFontFileFormatSHX;
+{$Mode objfpc}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 
@@ -32,9 +33,9 @@ implementation
 
 const
   arccount=16;
-  fontdirect:array[0..$F,0..1] of double=(
-  (1,0),(1,0.5),(1,1),(0.5,1),(0,1),(-0.5,1),(-1,1),(-1,0.5),
-  (-1,0),(-1,-0.5),(-1,-1),(-0.5,-1),(0,-1),(0.5,-1),(1,-1),(1,-0.5));
+  fontdirect:array[0..$F] of TzeVector2d=(
+  (x:1;y:0),(x:1;y:0.5),(x:1;y:1),(x:0.5;y:1),(x:0;y:1),(x:-0.5;y:1),(x:-1;y:1),(x:-1;y:0.5),
+  (x:-1;y:0),(x:-1;y:-0.5),(x:-1;y:-1),(x:-0.5;y:-1),(x:0;y:-1),(x:0.5;y:-1),(x:1;y:-1),(x:1;y:-0.5));
 
 type
   tsyminfo=record
@@ -45,13 +46,15 @@ type
 function createsymbol(pf:PGDBfont;symbol:integer;pshxdata:system.pbyte;unicode:boolean;symname:string):integer;
 var
   i,sizeshp,sizeshx,stackheap:integer;
-  baselen,ymin,ymax,xmin,xmax,x,y,x1,y1,xb,yb,r,startangle,angle,normal,hordlen,tgl:fontfloat;
-  stack:array[0..4,0..1] of fontfloat;
+  baselen,r,startangle,angle,normal,hordlen:fontfloat;
+  d:TzeVector2FontFloat;
+  p,p1,pb{,pmin,pmax}:TzePoint2FontFloat;
+  br:TBoundingRect;
+  stack:array[0..4] of TzePoint2FontFloat;
   tr:tarcrtmodify;
   hi,lo,byt,byt2,startoffset,endoffset:byte;
   subsymbol:integer;
   int:integer;
-  dx,dy:shortint;
   draw:boolean;
   onlyver:integer;
   psyminfo,psubsyminfo:PGDBsymdolinfo;
@@ -63,18 +66,6 @@ var
   symoutbound:TBoundingBox;
   offset:TEntIndexesOffsetData;
   sine,cosine:double;
-
-  procedure ProcessMinMax(_x,_y:fontfloat);
-  begin
-    if _y>ymax then
-      ymax:=_y;
-    if _y<ymin then
-      ymin:=_y;
-    if _x>xmax then
-      xmax:=_x;
-    if _x<xmin then
-      xmin:=_x;
-  end;
 
   procedure incpshxdata;
   begin
@@ -88,32 +79,23 @@ var
     j:integer;
     sine,cosine:double;
   begin
-    tr.p1.x:=x;
-    tr.p1.y:=y;
-    tr.p3.x:=x+dx*baselen;
-    tr.p3.y:=y+dy*baselen;
-    x1:=dx*baselen;
-    y1:=dy*baselen;
-    hordlen:=sqrt(sqr(x1)+sqr(y1));
-    x1:=x1/2;
-    y1:=y1/2;
-    normal:=sqrt(sqr(x1)+sqr(y1));
-    x:=x1+x;
-    y:=y1+y;
-    tgl:=y1;
-    y1:=x1/normal;
-    x1:=-tgl/normal;
-
-
+    tr.p1:=p;
+    tr.p3:=p+d*baselen;
+    p1:=(d*baselen).asPoint2d;
+    hordlen:=p1.Length;
+    p1:=p1/2;
+    normal:=p1.Length;
+    p:=p1+p.asVector;
+    p1.Turn90L;
+    p1.Normalize;
     incpshxdata;
     int:=pShortint(pshxdata)^;
     normal:=-int*hordlen/2/127;
-    tr.p2.x:=x+x1*normal;
-    tr.p2.y:=y+y1*normal;
+    tr.p2:=p+(p1*normal).asVector;
     if draw then begin
-      ProcessMinMax(tr.p1.x,tr.p1.y);
-      ProcessMinMax(tr.p2.x,tr.p2.y);
-      ProcessMinMax(tr.p3.x,tr.p3.y);
+      br.Concat(tr.p1);
+      br.Concat(tr.p2);
+      br.Concat(tr.p3);
       if GetArcParamFrom3Point2D(tr,ad) then begin
         startangle:=ad.startangle;
         angle:=ad.endangle-ad.startangle;
@@ -124,41 +106,36 @@ var
         sizeshp:=0;
         for j:=0 to arccount do begin
           SinCos(startangle+j/arccount*angle,sine,cosine);
-          x1:=ad.p.x+(ad.r)*cosine;
-          y1:=ad.p.y+(ad.r)*sine;
+          p1:=ad.p+TzeVector2d.Make(cosine,sine)*ad.r;
           if draw then begin
-            ProcessMinMax(x1,y1);
+            br.Concat(p1);
             Inc(sizeshp);
             if j=0 then begin
-              GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+              GeomDataIndex:=pf^.font.FontData.GeomData.AddPoint2D(p1);
               DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount+1);
             end else
-              pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+              pf^.font.FontData.GeomData.AddPoint2d(p1);
           end;
         end;
       end else begin
       end;
     end;
-    x:=tr.p3.x;
-    y:=tr.p3.y;
+    p:=tr.p3;
   end;
 
 begin
   inccounter:=0;
   psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
   TZESHXFontImpl(pf^.font).FontData.LLprimitives.AlignDataSize;
-  psyminfo.LLPrimitiveStartIndex:=TZESHXFontImpl(pf^.font).FontData.LLprimitives.Count;
+  psyminfo^.LLPrimitiveStartIndex:=TZESHXFontImpl(pf^.font).FontData.LLprimitives.Count;
   onlyver:=0;
   sizeshx:=0;
   draw:=True;
   baselen:=1/TZESHXFontImpl(pf^.font).h;
   stackheap:=-1;
-  x:=0;
-  y:=0;
-  ymin:=infinity;
-  ymax:=NegInfinity;
-  xmin:=infinity;
-  xmax:=NegInfinity;
+  p1.Fill(0);
+  p.Fill(0);
+  br.Fill(Infinity,NegInfinity);
   while pshxdata^<>0 do begin
     zTraceLn('{T}[SHX_CONTENTS]SHX command %x',[integer(pshxdata^)]);
     case pshxdata^ of
@@ -189,14 +166,12 @@ begin
       005:begin
         if onlyver=0 then begin
           Inc(stackheap);
-          stack[stackheap,0]:=x;
-          stack[stackheap,1]:=y;
+          stack[stackheap]:=p;
         end;
       end;
       006:begin
         if (onlyver=0)and(stackheap>=0) then begin
-          x:=stack[stackheap,0];
-          y:=stack[stackheap,1];
+          p:=stack[stackheap];
           Dec(stackheap);
         end;
       end;
@@ -212,104 +187,95 @@ begin
         zTraceLn('{T}[SHX_CONTENTS](%d)',[integer(subsymbol)]);
         psubsyminfo:=pf^.GetOrCreateSymbolInfo(subsymbol);
 
-        if psubsyminfo.LLPrimitiveStartIndex<>-1 then begin
-          VDCopyParam:=pf^.font.FontData.GetCopyParam(psubsyminfo.LLPrimitiveStartIndex,
-            psubsyminfo.LLPrimitiveCount);
+        if psubsyminfo^.LLPrimitiveStartIndex<>-1 then begin
+          VDCopyParam:=pf^.font.FontData.GetCopyParam(psubsyminfo^.LLPrimitiveStartIndex,
+            psubsyminfo^.LLPrimitiveCount);
           VDCopyResultParam:=pf^.font.FontData.CopyTo(pf^.font.FontData,VDCopyParam);
           offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
           offset.IndexsIndexOffset:=VDCopyResultParam.EID.IndexsIndexMin-VDCopyParam.EID.IndexsIndexMin;
           pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,
-            psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,
+            psyminfo^.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,
             VDCopyResultParam.EID.IndexsIndexMax-VDCopyResultParam.EID.IndexsIndexMin+1,offset);
           pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,
             MatrixMultiply(CreateScaleMatrix(TzeVector3d.Make(baselen*TZESHXFontImpl(pf^.font).h,
                                                               baselen*TZESHXFontImpl(pf^.font).h,1)),
-            CreateTranslationMatrix(TzeVector3d.Make(x,y,0))));
+            CreateTranslationMatrix(TzeVector3d.Make(p.x,p.y,0))));
           symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,
             VDCopyResultParam.EID.GeomIndexMax);
-          ProcessMinMax(symoutbound.LBN.x,symoutbound.LBN.y);
-          ProcessMinMax(symoutbound.RTF.x,symoutbound.RTF.y);
-          x:=psubsyminfo.NextSymX+x;
-          y:=psubsyminfo.SymMinY+y;
-          sizeshx:=sizeshx+psubsyminfo.LLPrimitiveCount;
+          br.Concat(symoutbound.LBN.Slice);
+          br.Concat(symoutbound.RTF.Slice);
+          p:=p+TzeVector2d.Make(psubsyminfo^.NextSymX,psubsyminfo^.SymMinY);
+          sizeshx:=sizeshx+psubsyminfo^.LLPrimitiveCount;
         end else begin
           zDebugLn('{E}IOSHX.CreateSymbol(%d), cannot find subform %d',[integer(symbol),integer(subsymbol)]);
         end;
       end;
       008:begin
         incpshxdata;
-        dx:=pShortint(pshxdata)^;
+        d.x:=pShortint(pshxdata)^;
         incpshxdata;
-        dy:=pShortint(pshxdata)^;
-        zTraceLn('{T}[SHX_CONTENTS](%d,%d)',[integer(dx),integer(dy)]);
+        d.y:=pShortint(pshxdata)^;
+        zTraceLn('{T}[SHX_CONTENTS](%e,%e)',[d.x,d.y]);
         if onlyver=0 then begin
-          x1:=x+dx*baselen;
-          y1:=y+dy*baselen;
+          p1:=p+d*baselen;
           if draw then begin
-            GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-            pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+            GeomDataIndex:=pf^.font.FontData.GeomData.AddPoint2D(p);
+            pf^.font.FontData.GeomData.AddPoint2D(p1);
             DefaultLLPCreator.CreateLLLine(pf^.font.FontData.LLprimitives,GeomDataIndex);
 
             Inc(sizeshx);
             if draw then begin
-              ProcessMinMax(x,y);
-              ProcessMinMax(x1,y1);
+              br.Concat(p);
+              br.Concat(p1);
             end;
 
           end;
-          x:=x1;
-          y:=y1;
+          p:=p1;
         end;
       end;
       009:begin
         incpshxdata;
-        dx:=pShortint(pshxdata)^;
+        d.x:=pShortint(pshxdata)^;
         incpshxdata;
-        dy:=pShortint(pshxdata)^;
-        if (dx<>0)or(dy<>0) then begin
+        d.y:=pShortint(pshxdata)^;
+        if (d.x<>0)or(d.y<>0) then begin
           if onlyver=0 then begin
-            x1:=x+dx*baselen;
-            y1:=y+dy*baselen;
+            p1:=p+d*baselen;
           end;
           if draw then begin
             Inc(sizeshx);
-            if (dx<>0)or(dy<>0) then
+            if (d.x<>0)or(d.y<>0) then
               sizeshp:=1
             else
               sizeshp:=0;
-            ProcessMinMax(x,y);
-            GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
+            br.Concat(p);
+            GeomDataIndex:=pf^.font.FontData.GeomData.AddPoint2d(p);
             LLPolyLineIndexInArray:=DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,
-              GeomDataIndex,1{баба ягодка опять, кто считать будет?});
+              GeomDataIndex,1);
           end;
-          while (dx<>0)or(dy<>0) do begin
-            zTraceLn('{T}[SHX_CONTENTS](%d,%d)',[integer(dx),integer(dy)]);
+          while (d.x<>0)or(d.y<>0) do begin
+            zTraceLn('{T}[SHX_CONTENTS](%e,%e)',[d.x,d.y]);
             if draw then begin
               Inc(sizeshp);
-
-              pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+              pf^.font.FontData.GeomData.AddPoint2D(p1);
               Inc(PTLLPolyLine(pf^.font.FontData.LLprimitives.getDataMutable(LLPolyLineIndexInArray))^.Count);
 
               if onlyver=0 then begin
-                ProcessMinMax(x1,y1);
+                br.Concat(p1);
               end;
 
             end;
             if onlyver=0 then begin
-              x:=x1;
-              y:=y1;
+              p:=p1;
             end;
             incpshxdata;
-            dx:=pShortint(pshxdata)^;
+            d.x:=pShortint(pshxdata)^;
             incpshxdata;
-            dy:=pShortint(pshxdata)^;
-            x1:=x+dx*baselen;
-            y1:=y+dy*baselen;
+            d.y:=pShortint(pshxdata)^;
+            p1:=p+d*baselen;
             if onlyver=0 then begin
-              x:=x1;
-              y:=y1;
-
-              ProcessMinMax(x1,y1);
+              p:=p1;
+              br.Concat(p1);
             end;
           end;
           if draw then begin
@@ -330,30 +296,21 @@ begin
         startangle:=hi*pi/4;
 
         SinCos(startangle,sine,cosine);
-        xb:=x-r*cosine;
-        yb:=y-r*sine;
-
+        pb:=p-TzeVector2d.Make(cosine,sine)*r;
         Inc(sizeshx);
         sizeshp:=1;
-
-        GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
+        GeomDataIndex:=pf^.font.FontData.GeomData.AddPoint2D(p);
         DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount+1);
-
-        x1:=0;
-        y1:=0;
         for i:=1 to arccount do begin
           SinCos(startangle+i/arccount*angle,sine,cosine);
-          x1:=xb+r*cosine;
-          y1:=yb+r*sine;
+          p1:=pb+TzeVector2d.Make(cosine,sine)*r;
           if draw then begin
-            ProcessMinMax(x1,y1);
-            pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
-
+            br.Concat(p1);
+            pf^.font.FontData.GeomData.AddPoint2D(p1);
             Inc(sizeshp);
           end;
         end;
-        x:=x1;
-        y:=y1;
+        p:=p1;
       end;
       011:begin
         incpshxdata;
@@ -382,36 +339,27 @@ begin
         angle:=angle+sign(shortint(byt))*pi/180*((endoffset-startoffset)/256*45);
         startangle:=hi*pi/4+sign(shortint(byt))*pi/180*(startoffset/256*45);
         SinCos(startangle,sine,cosine);
-        xb:=x-r*cosine;
-        yb:=y-r*sine;
+        pb:=p-TzeVector2d.Make(cosine,sine)*r;
         Inc(sizeshx);
         sizeshp:=1;
-
-        GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
+        GeomDataIndex:=pf^.font.FontData.GeomData.AddPoint2D(p);
         DefaultLLPCreator.CreateLLPolyLine(pf^.font.FontData.LLprimitives,GeomDataIndex,arccount+1);
-
-        //x1:=0;
-        //y1:=0;
         for i:=1 to arccount do begin
           SinCos(startangle+i/arccount*angle,sine,cosine);
-          x1:=xb+r*cosine;
-          y1:=yb+r*sine;
+          p1:=pb+TzeVector2d.Make(cosine,sine)*r;
           if draw then begin
-            ProcessMinMax(x1,y1);
+            br.Concat(p1);
             Inc(sizeshp);
-
-            pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
-
+            pf^.font.FontData.GeomData.AddPoint2D(p1);
           end;
         end;
-        x:=x1;
-        y:=y1;
+        p:=p1;
       end;
       012:begin
         incpshxdata;
-        dx:=pShortint(pshxdata)^;
+        d.x:=pShortint(pshxdata)^;
         incpshxdata;
-        dy:=pShortint(pshxdata)^;
+        d.y:=pShortint(pshxdata)^;
         createarc;
 
       end;
@@ -419,10 +367,10 @@ begin
         tbool:=False;
         repeat
           incpshxdata;
-          dx:=pShortint(pshxdata)^;
+          d.x:=pShortint(pshxdata)^;
           incpshxdata;
-          dy:=pShortint(pshxdata)^;
-          if (dx=0)and(dy=0) then
+          d.y:=pShortint(pshxdata)^;
+          if (d.x=0)and(d.y=0) then
             tbool:=True
           else begin
             createarc;
@@ -440,22 +388,18 @@ begin
         begin
           if onlyver=0 then begin
             byt2:=pshxdata^div 16;
-            x1:=fontdirect[(pshxdata^and $0F),0];
-            y1:=fontdirect[(pshxdata^and $0F),1];
-            x1:=x+byt2*x1*baselen;
-            y1:=y+byt2*y1*baselen;
+            p1:=fontdirect[(pshxdata^and $0F)].asPoint2d;
+            p1:=p+p1.asVector*baselen*byt2;
             if draw then begin
               Inc(sizeshx);
-
-              GeomDataIndex:=pf^.font.FontData.GeomData.Add2DPoint(x,y);
-              pf^.font.FontData.GeomData.Add2DPoint(x1,y1);
+              GeomDataIndex:=pf^.font.FontData.GeomData.AddPoint2D(p);
+              pf^.font.FontData.GeomData.AddPoint2D(p1);
               DefaultLLPCreator.CreateLLLine(pf^.font.FontData.LLprimitives,GeomDataIndex);
 
-              ProcessMinMax(x,y);
-              ProcessMinMax(x1,y1);
+              br.Concat(p);
+              br.Concat(p1);
             end;
-            x:=x1;
-            y:=y1;
+            p:=p1;
           end;
         end;
       end;
@@ -465,18 +409,18 @@ begin
     incpshxdata;
   end;
   psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
-  psyminfo.LLPrimitiveCount:=sizeshx;
-  psyminfo.NextSymX:=x;
-  psyminfo.SymMaxY:=ymax;
-  psyminfo.SymMinY:=ymin;
-  if xmax<>NegInfinity then
-    psyminfo.SymMaxX:=Xmax
+  psyminfo^.LLPrimitiveCount:=sizeshx;
+  psyminfo^.NextSymX:=p.x;
+  psyminfo^.SymMaxY:=br.RTF.y;
+  psyminfo^.SymMinY:=br.LBN.y;
+  if br.RTF.x<>NegInfinity then
+    psyminfo^.SymMaxX:=br.RTF.x
   else
-    psyminfo.SymMaxX:=psyminfo.NextSymX;
-  if xmin<>infinity then
-    psyminfo.SymMinX:=Xmin
+    psyminfo^.SymMaxX:=psyminfo^.NextSymX;
+  if br.LBN.x<>infinity then
+    psyminfo^.SymMinX:=br.LBN.x
   else
-    psyminfo.SymMinX:=0;
+    psyminfo^.SymMinX:=0;
   psyminfo^.Name:=symname;
   psyminfo^.Number:=symbol;
 
@@ -530,7 +474,7 @@ begin
       end else begin
         zTraceLn('{T+}[SHX]symbol %d',[integer(symnum)]);
         dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,False,line);
-        memorybuf.jump({datalen}dataread);
+        memorybuf.jump(dataread);
         zTraceLn('{T-}[SHX]end');
       end;
       memorybuf.readbyte;
@@ -588,7 +532,7 @@ begin
     TZESHXFontImpl(pf^.font).FontData.Shrink;
   end else
     Result:=False;
-  if pf.font<>nil then
+  if pf^.font<>nil then
     if membufcreated then begin
       memorybuf.done;
       membufcreated:=False;

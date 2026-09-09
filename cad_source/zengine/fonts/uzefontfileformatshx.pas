@@ -371,10 +371,15 @@ begin
         lo:=byt and $0F;
         if lo=0 then
           angle:=2*pi
-        else
-          angle:=sign(shortint(byt))*lo*pi/4;
+        else begin
+          { без (lo-1) символ "&" из isocp.shx рендерится неточно см. errors\shx.dxf }
+          if endoffset=0 then
+            angle:=sign(shortint(byt))*lo*pi/4
+          else
+            angle:=sign(shortint(byt))*(lo-1)*pi/4;
+        end;
 
-        angle:=angle-sign(shortint(byt))*pi/180*((endoffset+startoffset)/256*45); { TODO : symbol & wrong in isocp.shx, see errors\5.dxf }
+        angle:=angle+sign(shortint(byt))*pi/180*((endoffset-startoffset)/256*45);
         startangle:=hi*pi/4+sign(shortint(byt))*pi/180*(startoffset/256*45);
         SinCos(startangle,sine,cosine);
         xb:=x-r*cosine;

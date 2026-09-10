@@ -1,0 +1,11 @@
+
+[[extdrAllList_com]]
+#### extdrAllList 
+
+:cmdcommand: extdrAllList
+
+include::../../_elements/commandsummary.adoc[]
+
+Команда выводит список доступных для привязки расширений (см. <<ent_extenders>>)
+
+include::commandsummaryfree.adoc[]

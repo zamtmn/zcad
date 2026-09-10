@@ -24,6 +24,16 @@ msgstr "A dokkterületek legyenek minimalizálhatók"
 msgid "Amount of pixel the mouse has to drag before drag starts"
 msgstr "Ennyi képpontot kell mozdulnia az egérnek mielőtt a húzás elkezdődik"
 
+#: anchordockstr.adrsanchordockbackuprecovery
+msgctxt "anchordockstr.adrsanchordockbackuprecovery"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr ""
+
+#: anchordockstr.adrsanchordockbackuprecoverycaption
+msgctxt "anchordockstr.adrsanchordockbackuprecoverycaption"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr ""
+
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
 #, object-pascal-format
 msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
@@ -44,9 +54,30 @@ msgstr "Rögzítés az elválasztó rossz oldalához: Csomópont=\"%s\" Horgonyo
 msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
 msgstr "Egy lap nem rögzíthető: Csomópont=\"%s\" Szülő:%s Szülőtípus=%s Horgonyok[%s]=\"%s\""
 
+#: anchordockstr.adrsareyousuretodelete
+msgid "Are you sure you want to delete the backup file?"
+msgstr ""
+
+#: anchordockstr.adrsareyousuretorestore
+msgid "Are you sure you want to restore the window layout? This will overwrite the current layout settings."
+msgstr ""
+
 #: anchordockstr.adrsautomatically
 msgid "Automatically"
 msgstr "Automatikusan"
+
+#: anchordockstr.adrsbackupcurrentlayout
+msgid "Backup current layout"
+msgstr ""
+
+#: anchordockstr.adrsbackupfailed
+msgid "Backup failed"
+msgstr ""
+
+#: anchordockstr.adrsbackupsuccessful
+#, object-pascal-format
+msgid "Backup successful: %s"
+msgstr ""
 
 #: anchordockstr.adrsbottom
 msgid "bottom"
@@ -56,6 +87,10 @@ msgstr "le"
 msgid "Close"
 msgstr "Bezárás"
 
+#: anchordockstr.adrsconfirm
+msgid "Confirm"
+msgstr ""
+
 #: anchordockstr.adrscontrolisalreadyadocksite
 msgid "control is already a docksite"
 msgstr "a vezérlő már dokkterület"
@@ -64,6 +99,10 @@ msgstr "a vezérlő már dokkterület"
 #, object-pascal-format
 msgid "Custom dock site \"%s\" can have only one site."
 msgstr "Az \"%s\" dokkterület csak egy területet tartalmazhat."
+
+#: anchordockstr.adrsdeleteselectedlayout
+msgid "Delete selected layout"
+msgstr ""
 
 #: anchordockstr.adrsdockinganchordocking
 msgid "Docking / Anchordocking"
@@ -171,6 +210,10 @@ msgstr "Kiválasztott elem kiemelése"
 msgid "Highlight header of focused docked control"
 msgstr "Kiválasztott dokkolt vezérlők fejlécének kiemelése"
 
+#: anchordockstr.adrslayoutrestoredsuccessfully
+msgid "Layout restored successfully"
+msgstr ""
+
 #: anchordockstr.adrsleft
 msgid "left"
 msgstr "balra"
@@ -246,10 +289,22 @@ msgstr "Nincs támogatva: %s szülője %s"
 msgid "Quit %s"
 msgstr "Kilépés - %s"
 
+#: anchordockstr.adrsready
+msgid "Ready"
+msgstr ""
+
 #: anchordockstr.adrsrequestedbutcreated
 #, object-pascal-format
 msgid "%s requested, but %s created"
 msgstr "a kért %s helyett %s lett létrehozva"
+
+#: anchordockstr.adrsrestoredefaultlayout
+msgid "Restore default layout"
+msgstr ""
+
+#: anchordockstr.adrsrestoreselectedlayout
+msgid "Restore selected layout"
+msgstr ""
 
 #: anchordockstr.adrsright
 msgid "right"
@@ -274,6 +329,10 @@ msgstr "Fejléc-felíratok megjelenítése"
 #: anchordockstr.adrsshowheaders
 msgid "Show headers"
 msgstr "Fejlécek megjelenítése"
+
+#: anchordockstr.adrssplitterresizestyle
+msgid "Splitter resize style:"
+msgstr ""
 
 #: anchordockstr.adrssplitterthickness
 msgid "Splitter thickness"
@@ -300,6 +359,15 @@ msgstr "fel"
 #, object-pascal-format
 msgid "To use anchordocking you must first uninstall %s"
 msgstr "Az ablakok rögzítésének használatához először el kell távolítani ezt: %s"
+
+#: anchordockstr.adrsunabletodeletefile
+msgid "Unable to delete the file"
+msgstr ""
+
+#: anchordockstr.adrsunabletoreadfile
+#, object-pascal-format
+msgid "Unable to read the file: %s"
+msgstr ""
 
 #: anchordockstr.adrsundock
 msgid "Undock"

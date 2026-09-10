@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: X-1.9\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2025-05-22 21:45+0800\n"
 "Last-Translator: ACTom <i@actom.me>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: TyPoEditor 0.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
@@ -24,6 +24,18 @@ msgstr "允许停靠的站点最小化"
 #: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
 msgid "Amount of pixel the mouse has to drag before drag starts"
 msgstr "开始拖动前鼠标必须拖动的像素数"
+
+#: anchordockstr.adrsanchordockbackuprecovery
+#, fuzzy
+#| msgid "AnchorDock Backup Recovery"
+msgctxt "anchordockstr.adrsanchordockbackuprecovery"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr "备份/恢复锚点停靠布局"
+
+#: anchordockstr.adrsanchordockbackuprecoverycaption
+msgctxt "anchordockstr.adrsanchordockbackuprecoverycaption"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr "备份/恢复锚点停靠布局"
 
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
 #, object-pascal-format
@@ -45,9 +57,31 @@ msgstr "锚定到分割器的错误一侧：Node=\"%s\" Anchors[%s]=\"%s\""
 msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
 msgstr "页面不得被锚定：Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
 
+#: anchordockstr.adrsareyousuretodelete
+msgid "Are you sure you want to delete the backup file?"
+msgstr "您确定要删除备份文件吗？"
+
+#: anchordockstr.adrsareyousuretorestore
+msgid "Are you sure you want to restore the window layout? This will overwrite the current layout settings."
+msgstr "您确定要恢复窗口布局吗？这将覆盖当前的布局设置。"
+
 #: anchordockstr.adrsautomatically
 msgid "Automatically"
 msgstr "自动地"
+
+#: anchordockstr.adrsbackupcurrentlayout
+msgid "Backup current layout"
+msgstr "备份当前布局"
+
+#: anchordockstr.adrsbackupfailed
+msgid "Backup failed"
+msgstr "备份失败"
+
+#: anchordockstr.adrsbackupsuccessful
+#, object-pascal-format, fuzzy
+#| msgid "Backup successful"
+msgid "Backup successful: %s"
+msgstr "备份成功: %s"
 
 #: anchordockstr.adrsbottom
 msgid "bottom"
@@ -56,6 +90,10 @@ msgstr "底部"
 #: anchordockstr.adrsclose
 msgid "Close"
 msgstr "关闭"
+
+#: anchordockstr.adrsconfirm
+msgid "Confirm"
+msgstr "确认"
 
 #: anchordockstr.adrscontrolisalreadyadocksite
 msgid "control is already a docksite"
@@ -66,9 +104,13 @@ msgstr "控件已经是停靠站"
 msgid "Custom dock site \"%s\" can have only one site."
 msgstr "自定义停靠点 \"%s\" 只能有一个站点。"
 
+#: anchordockstr.adrsdeleteselectedlayout
+msgid "Delete selected layout"
+msgstr "选删除中的布局"
+
 #: anchordockstr.adrsdockinganchordocking
 msgid "Docking / Anchordocking"
-msgstr "停靠站 / 锚泊"
+msgstr "IDE 窗口停靠"
 
 #: anchordockstr.adrsdockingoptions
 msgid "Docking options"
@@ -97,11 +139,11 @@ msgstr "空名称： "
 
 #: anchordockstr.adrsenableanchordock
 msgid "Enable docking of IDE Windows (Requires IDE restart)"
-msgstr ""
+msgstr "启用 IDE 窗口停靠（需要重启 IDE）"
 
 #: anchordockstr.adrsenableanchordockhint
 msgid "This option allows to organize groups of windows (or all windows) into a single window. For a \"classic\" IDE with only floating windows turn the option off."
-msgstr ""
+msgstr "此选项允许将窗口组（或所有窗口）组织到单个窗口中。对于只有浮动窗口的“经典”IDE，请关闭此选项。"
 
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
@@ -172,6 +214,12 @@ msgstr "高亮聚焦"
 msgid "Highlight header of focused docked control"
 msgstr "高亮显示聚焦停靠控件的标题栏"
 
+#: anchordockstr.adrslayoutrestoredsuccessfully
+#, fuzzy
+#| msgid "Layout restored successfully!"
+msgid "Layout restored successfully"
+msgstr "布局恢复成功"
+
 #: anchordockstr.adrsleft
 msgid "left"
 msgstr "左"
@@ -198,11 +246,11 @@ msgstr "模态窗体不能停靠"
 
 #: anchordockstr.adrsmoveheadertoleftwhenwidthheight100headeralignleft
 msgid "Move header to left when (Width/Height)*100>=HeaderAlignLeft"
-msgstr "当 (Width/Height)*100>=HeaderAlignLeft 时移动标题栏到左侧"
+msgstr "当 (宽度/高度)*100>=HeaderAlignLeft 时将标题移动到左侧"
 
 #: anchordockstr.adrsmoveheadertotopwhenwidthheight100headeraligntop
 msgid "Move header to top when (Width/Height)*100<=HeaderAlignTop"
-msgstr "当 (Width/Height)*100<=HeaderAlignTop 时移动标题栏到顶侧"
+msgstr "当 (宽度/高度)*100<=头部对齐顶部 时将头部移动到顶部"
 
 #: anchordockstr.adrsmovepageleft
 msgid "Move page left"
@@ -247,10 +295,22 @@ msgstr "不支持：%s 有父 %s"
 msgid "Quit %s"
 msgstr "退出 %s"
 
+#: anchordockstr.adrsready
+msgid "Ready"
+msgstr "就绪"
+
 #: anchordockstr.adrsrequestedbutcreated
 #, object-pascal-format
 msgid "%s requested, but %s created"
 msgstr "请求 %s，但创建了 %s"
+
+#: anchordockstr.adrsrestoredefaultlayout
+msgid "Restore default layout"
+msgstr "恢复默认布局"
+
+#: anchordockstr.adrsrestoreselectedlayout
+msgid "Restore selected layout"
+msgstr "恢复选中的布局"
 
 #: anchordockstr.adrsright
 msgid "right"
@@ -275,6 +335,10 @@ msgstr "显示标题栏标题"
 #: anchordockstr.adrsshowheaders
 msgid "Show headers"
 msgstr "显示标题栏"
+
+#: anchordockstr.adrssplitterresizestyle
+msgid "Splitter resize style:"
+msgstr "分割条调整大小样式："
 
 #: anchordockstr.adrssplitterthickness
 msgid "Splitter thickness"
@@ -302,39 +366,49 @@ msgstr "顶部"
 msgid "To use anchordocking you must first uninstall %s"
 msgstr "要使用 anchordocking，您必须先卸载 %s"
 
+#: anchordockstr.adrsunabletodeletefile
+msgid "Unable to delete the file"
+msgstr "无法删除文件"
+
+#: anchordockstr.adrsunabletoreadfile
+#, object-pascal-format, fuzzy
+#| msgid "Unable to read the file"
+msgid "Unable to read the file: %s"
+msgstr "无法读取文件: %s"
+
 #: anchordockstr.adrsundock
 msgid "Undock"
 msgstr "取消停靠"
 
 #: anchordockstr.setupmultiwindowideclassic
 msgid "Classic IDE (Multi-Window):"
-msgstr ""
+msgstr "经典 IDE (多窗口):"
 
 #: anchordockstr.setupmultiwindowideinfo
 msgid "The \"modern\" single Window mode still allows you to undock individual Windows and have several groups of Windows. The IDE will show additional \"Dock-Handles\" in each Window, which will allow you to change layout, but also require additional space."
-msgstr ""
+msgstr "“现代”单窗口模式仍然允许您拆离个别窗口并拥有多个窗口组。IDE 将在每个窗口中显示额外的“停靠手柄”，这将允许您更改布局，但同时也会占用额外的空间。"
 
 #: anchordockstr.setupmultiwindowidemodern
 msgid "Modern IDE (Single-Window):"
-msgstr ""
+msgstr "现代 IDE (单窗口)："
 
 #: anchordockstr.setupmultiwindowideoption
 msgid "You can change this in the IDE options under: \"Anchordocking\""
-msgstr ""
+msgstr "你可以在 IDE 选项中的 \"锚定停靠\" 部分进行更改。"
 
 #: anchordockstr.setupmultiwindowideseperatewindows
 msgid "There are separate windows for each part of the IDE (Editor, Components, Debug,...). They can all be individually moved around on the screen."
-msgstr ""
+msgstr "每个 IDE 部分（编辑器、组件、调试、...）都有单独的窗口。它们都可以在屏幕上单独移动。"
 
 #: anchordockstr.setupmultiwindowidesinglewindow
 msgid "The IDE consists out of a single Window. Different parts of the IDE are shown in panels of that Window. Some can be reached through a tabbed interface."
-msgstr ""
+msgstr "IDE 由一个窗口组成。IDE 的不同部分在该窗口的面板中显示。有些可以通过选项卡界面访问。"
 
 #: anchordockstr.sidelayout
 msgid "IDE Layout"
-msgstr ""
+msgstr "IDE 布局"
 
 #: anchordockstr.ssinglemultiwindow
 msgid "Single/Multi Window"
-msgstr ""
+msgstr "单窗口/多窗口"
 

@@ -22,6 +22,16 @@ msgstr ""
 msgid "Amount of pixel the mouse has to drag before drag starts"
 msgstr "Cantidad de píxeles el ratón tiene que arrastrar antes del comienzo de arrastre"
 
+#: anchordockstr.adrsanchordockbackuprecovery
+msgctxt "anchordockstr.adrsanchordockbackuprecovery"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr ""
+
+#: anchordockstr.adrsanchordockbackuprecoverycaption
+msgctxt "anchordockstr.adrsanchordockbackuprecoverycaption"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr ""
+
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
 #, object-pascal-format
 msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
@@ -42,9 +52,30 @@ msgstr "Anclaje en lado incorrecto del divisor (splitter): Nodo=\"%s\" Anclajes[
 msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
 msgstr "Una página no debe anclarse: Nodo=\"%s\" Padres=%s Tipo de Padres=%s Anclajes[%s]=\"%s\""
 
+#: anchordockstr.adrsareyousuretodelete
+msgid "Are you sure you want to delete the backup file?"
+msgstr ""
+
+#: anchordockstr.adrsareyousuretorestore
+msgid "Are you sure you want to restore the window layout? This will overwrite the current layout settings."
+msgstr ""
+
 #: anchordockstr.adrsautomatically
 msgid "Automatically"
 msgstr "Automáticamente"
+
+#: anchordockstr.adrsbackupcurrentlayout
+msgid "Backup current layout"
+msgstr ""
+
+#: anchordockstr.adrsbackupfailed
+msgid "Backup failed"
+msgstr ""
+
+#: anchordockstr.adrsbackupsuccessful
+#, object-pascal-format
+msgid "Backup successful: %s"
+msgstr ""
 
 #: anchordockstr.adrsbottom
 msgid "bottom"
@@ -54,6 +85,10 @@ msgstr "parte inferior"
 msgid "Close"
 msgstr "Cerrar"
 
+#: anchordockstr.adrsconfirm
+msgid "Confirm"
+msgstr ""
+
 #: anchordockstr.adrscontrolisalreadyadocksite
 msgid "control is already a docksite"
 msgstr "control ya es un sitio de anclaje"
@@ -62,6 +97,10 @@ msgstr "control ya es un sitio de anclaje"
 #, object-pascal-format
 msgid "Custom dock site \"%s\" can have only one site."
 msgstr "Sitio de anclaje personalizado \"%s\" puede tener sólo un sitio."
+
+#: anchordockstr.adrsdeleteselectedlayout
+msgid "Delete selected layout"
+msgstr ""
 
 #: anchordockstr.adrsdockinganchordocking
 msgid "Docking / Anchordocking"
@@ -169,6 +208,10 @@ msgstr ""
 msgid "Highlight header of focused docked control"
 msgstr ""
 
+#: anchordockstr.adrslayoutrestoredsuccessfully
+msgid "Layout restored successfully"
+msgstr ""
+
 #: anchordockstr.adrsleft
 msgid "left"
 msgstr "izquierda"
@@ -244,10 +287,22 @@ msgstr "No soportados: %s tiene padres %s"
 msgid "Quit %s"
 msgstr "Salir de %s"
 
+#: anchordockstr.adrsready
+msgid "Ready"
+msgstr ""
+
 #: anchordockstr.adrsrequestedbutcreated
 #, object-pascal-format
 msgid "%s requested, but %s created"
 msgstr "%s solicitado, pero %s creado"
+
+#: anchordockstr.adrsrestoredefaultlayout
+msgid "Restore default layout"
+msgstr ""
+
+#: anchordockstr.adrsrestoreselectedlayout
+msgid "Restore selected layout"
+msgstr ""
 
 #: anchordockstr.adrsright
 msgid "right"
@@ -272,6 +327,10 @@ msgstr "Mostrar títulos de cabecera"
 #: anchordockstr.adrsshowheaders
 msgid "Show headers"
 msgstr "Mostrar encabezados"
+
+#: anchordockstr.adrssplitterresizestyle
+msgid "Splitter resize style:"
+msgstr ""
 
 #: anchordockstr.adrssplitterthickness
 msgid "Splitter thickness"
@@ -298,6 +357,15 @@ msgstr "arriba"
 #, object-pascal-format
 msgid "To use anchordocking you must first uninstall %s"
 msgstr "Para utilizar anchordocking primero debe desinstalar %s"
+
+#: anchordockstr.adrsunabletodeletefile
+msgid "Unable to delete the file"
+msgstr ""
+
+#: anchordockstr.adrsunabletoreadfile
+#, object-pascal-format
+msgid "Unable to read the file: %s"
+msgstr ""
 
 #: anchordockstr.adrsundock
 msgid "Undock"

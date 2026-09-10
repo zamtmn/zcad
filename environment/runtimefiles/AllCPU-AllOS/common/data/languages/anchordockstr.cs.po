@@ -26,6 +26,16 @@ msgstr ""
 msgid "Amount of pixel the mouse has to drag before drag starts"
 msgstr "Počet pixelů které musí myš táhnout, než posouvání začne"
 
+#: anchordockstr.adrsanchordockbackuprecovery
+msgctxt "anchordockstr.adrsanchordockbackuprecovery"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr ""
+
+#: anchordockstr.adrsanchordockbackuprecoverycaption
+msgctxt "anchordockstr.adrsanchordockbackuprecoverycaption"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr ""
+
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
 #, object-pascal-format
 msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
@@ -47,9 +57,30 @@ msgstr "Kotva na špatnou stranu děliče: Uzel=\"%s\" Kotvy[%s]=\"%s\""
 msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
 msgstr "Stránka nesmí být kotvena: Uzel=\"%s\" Rodič=%s Typ Rodiče=%s Kotvy[%s]=\"%s\""
 
+#: anchordockstr.adrsareyousuretodelete
+msgid "Are you sure you want to delete the backup file?"
+msgstr ""
+
+#: anchordockstr.adrsareyousuretorestore
+msgid "Are you sure you want to restore the window layout? This will overwrite the current layout settings."
+msgstr ""
+
 #: anchordockstr.adrsautomatically
 msgid "Automatically"
 msgstr "Automaticky"
+
+#: anchordockstr.adrsbackupcurrentlayout
+msgid "Backup current layout"
+msgstr ""
+
+#: anchordockstr.adrsbackupfailed
+msgid "Backup failed"
+msgstr ""
+
+#: anchordockstr.adrsbackupsuccessful
+#, object-pascal-format
+msgid "Backup successful: %s"
+msgstr ""
 
 #: anchordockstr.adrsbottom
 msgid "bottom"
@@ -59,6 +90,10 @@ msgstr "dolů"
 msgid "Close"
 msgstr "Zavřít"
 
+#: anchordockstr.adrsconfirm
+msgid "Confirm"
+msgstr ""
+
 #: anchordockstr.adrscontrolisalreadyadocksite
 msgid "control is already a docksite"
 msgstr "prvek již je dokován"
@@ -67,6 +102,10 @@ msgstr "prvek již je dokován"
 #, object-pascal-format
 msgid "Custom dock site \"%s\" can have only one site."
 msgstr "Vlastní dok \"%s\" může mít pouze jednu stranu."
+
+#: anchordockstr.adrsdeleteselectedlayout
+msgid "Delete selected layout"
+msgstr ""
 
 #: anchordockstr.adrsdockinganchordocking
 msgid "Docking / Anchordocking"
@@ -174,6 +213,10 @@ msgstr ""
 msgid "Highlight header of focused docked control"
 msgstr ""
 
+#: anchordockstr.adrslayoutrestoredsuccessfully
+msgid "Layout restored successfully"
+msgstr ""
+
 #: anchordockstr.adrsleft
 msgid "left"
 msgstr "vlevo"
@@ -249,10 +292,22 @@ msgstr "Nepodporováno: %s má rodiče %s"
 msgid "Quit %s"
 msgstr "Ukončit %s"
 
+#: anchordockstr.adrsready
+msgid "Ready"
+msgstr ""
+
 #: anchordockstr.adrsrequestedbutcreated
 #, object-pascal-format
 msgid "%s requested, but %s created"
 msgstr "%s požadováno,ale %s vytvořeno"
+
+#: anchordockstr.adrsrestoredefaultlayout
+msgid "Restore default layout"
+msgstr ""
+
+#: anchordockstr.adrsrestoreselectedlayout
+msgid "Restore selected layout"
+msgstr ""
 
 #: anchordockstr.adrsright
 msgid "right"
@@ -277,6 +332,10 @@ msgstr "Zobrazit popisky v záhlaví"
 #: anchordockstr.adrsshowheaders
 msgid "Show headers"
 msgstr "Zobrazit záhlaví"
+
+#: anchordockstr.adrssplitterresizestyle
+msgid "Splitter resize style:"
+msgstr ""
 
 #: anchordockstr.adrssplitterthickness
 msgid "Splitter thickness"
@@ -303,6 +362,15 @@ msgstr "nahoru"
 #, object-pascal-format
 msgid "To use anchordocking you must first uninstall %s"
 msgstr "K použití anchordicking musíte nejdříve odinstalovat %s"
+
+#: anchordockstr.adrsunabletodeletefile
+msgid "Unable to delete the file"
+msgstr ""
+
+#: anchordockstr.adrsunabletoreadfile
+#, object-pascal-format
+msgid "Unable to read the file: %s"
+msgstr ""
 
 #: anchordockstr.adrsundock
 msgid "Undock"

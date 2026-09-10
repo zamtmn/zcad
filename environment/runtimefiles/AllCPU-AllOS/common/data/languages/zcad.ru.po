@@ -247,13 +247,11 @@ msgid "AddStyle"
 msgstr ""
 
 #: ttextstylesform.addstyle.hint
-#, fuzzy
 msgctxt "ttextstylesform.addstyle.hint"
 msgid "Add text style"
 msgstr "Добавить стиль текста"
 
 #: ttextstylesform.buttonapplyclose.caption
-#, fuzzy
 msgctxt "ttextstylesform.buttonapplyclose.caption"
 msgid "Apply and close"
 msgstr "Применить и закрыть"
@@ -268,13 +266,11 @@ msgid "DelStyle"
 msgstr ""
 
 #: ttextstylesform.delstyle.hint
-#, fuzzy
 msgctxt "ttextstylesform.delstyle.hint"
 msgid "Delete text style"
 msgstr "Удалить стиль текста"
 
 #: ttextstylesform.fonttypefiltercombobox.text
-#, fuzzy
 msgctxt "ttextstylesform.fonttypefiltercombobox.text"
 msgid "All"
 msgstr "Все"
@@ -284,13 +280,11 @@ msgid "Fonts types filter:"
 msgstr "Фильтр типов:"
 
 #: ttextstylesform.listview1.columns[0].caption
-#, fuzzy
 msgctxt "ttextstylesform.listview1.columns[0].caption"
 msgid "Status"
 msgstr "Статус"
 
 #: ttextstylesform.listview1.columns[1].caption
-#, fuzzy
 msgctxt "ttextstylesform.listview1.columns[1].caption"
 msgid "Name"
 msgstr "Имя"
@@ -514,10 +508,9 @@ msgid "Writeln by Andrey M. Zubarev"
 msgstr "Автор: Зубарев А.М."
 
 #: uzcstrconsts.rsautosave
-#, fuzzy, object-pascal-format
-#| msgid "Autosave"
+#, object-pascal-format
 msgid "Autosave \"%s\""
-msgstr "Автосохранение"
+msgstr "Автосохранение \"%s\""
 
 #: uzcstrconsts.rsblocks
 msgid "Blocks"

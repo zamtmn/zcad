@@ -1,71 +1,112 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Swen Heinig <swen.heinig@freenet.de>\n"
+"Last-Translator: Karl-Michael Schindler <tonne1.schindler@web.de>\n"
 "Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.9\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
 #, object-pascal-format
 msgid "A free side of a splitter must not be anchored: Node=\"%s\" Type=%s Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "Die freie Seite eines Trenners darf nicht verankert sein: Knoten=\"%s\" Typ=%s Anker[%s]=\"%s\""
 
 #: anchordockstr.adrsallowdocksitestobeminimized
 msgid "Allow dock sites to be minimized"
-msgstr ""
+msgstr "Erlaube, Docksites zu minimieren"
 
 #: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
 msgid "Amount of pixel the mouse has to drag before drag starts"
-msgstr ""
+msgstr "Pixelanzahl, die die Maus ziehen muss, bis das Ziehen beginnt"
+
+#: anchordockstr.adrsanchordockbackuprecovery
+msgctxt "anchordockstr.adrsanchordockbackuprecovery"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr "Backup/Wiederherstellen des Anchordocking-Layout"
+
+#: anchordockstr.adrsanchordockbackuprecoverycaption
+msgctxt "anchordockstr.adrsanchordockbackuprecoverycaption"
+msgid "Backup/Restore Anchordocking Layout"
+msgstr "Backup/Wiederherstellen des Anchordocking-Layout"
 
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
 #, object-pascal-format
 msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "Anker ist kein Trenner: Knoten=\"%s\" Anker[%s]=\"%s\""
 
 #: anchordockstr.adrsanchornotfoundnodeanchors
 #, object-pascal-format
 msgid "Anchor not found: Node=\"%s\" Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "Anker nicht gefunden: Knoten=\"%s\" Anker[%s]=\"%s\""
 
 #: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
 #, object-pascal-format
 msgid "Anchor to wrong side of splitter: Node=\"%s\" Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "Anker zur falschen Seite des Trenners: Knoten=\"%s\" Anker[%s]=\"%s\""
 
 #: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
 #, object-pascal-format
 msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "Eine Seite darf nicht verankert werden: Knoten=\"%s\" Parent=%s ParentTyp=%s Anker[%s]=\"%s\""
+
+#: anchordockstr.adrsareyousuretodelete
+msgid "Are you sure you want to delete the backup file?"
+msgstr "Die Backup-Datei wirklich löschen?"
+
+#: anchordockstr.adrsareyousuretorestore
+msgid "Are you sure you want to restore the window layout? This will overwrite the current layout settings."
+msgstr "Das Fenster-Layout wirklich wieder herstellen? Das wird die aktuellen Layout-Einstellungen überschreiben."
 
 #: anchordockstr.adrsautomatically
 msgid "Automatically"
 msgstr "Automatisch"
 
+#: anchordockstr.adrsbackupcurrentlayout
+msgid "Backup current layout"
+msgstr "Aktuelles Layout sichern"
+
+#: anchordockstr.adrsbackupfailed
+msgid "Backup failed"
+msgstr "Sicherung fehlgeschlagen"
+
+#: anchordockstr.adrsbackupsuccessful
+#, object-pascal-format
+msgid "Backup successful: %s"
+msgstr "Sicherung erfolgreich: %s"
+
 #: anchordockstr.adrsbottom
 msgid "bottom"
-msgstr ""
+msgstr "unten"
 
 #: anchordockstr.adrsclose
 msgid "Close"
-msgstr ""
+msgstr "Schließen"
+
+#: anchordockstr.adrsconfirm
+msgid "Confirm"
+msgstr "Bestätigen"
 
 #: anchordockstr.adrscontrolisalreadyadocksite
 msgid "control is already a docksite"
-msgstr ""
+msgstr "Steuerelement ist bereits ein Docksite"
 
 #: anchordockstr.adrscustomdocksitecanhaveonlyonesite
 #, object-pascal-format
 msgid "Custom dock site \"%s\" can have only one site."
-msgstr ""
+msgstr "Benutzerdefinierte Docksite \"%s\" kann nur eine Site haben."
+
+#: anchordockstr.adrsdeleteselectedlayout
+msgid "Delete selected layout"
+msgstr "Ausgewähltes Layout löschen"
 
 #: anchordockstr.adrsdockinganchordocking
 msgid "Docking / Anchordocking"
-msgstr ""
+msgstr "Docking / Anchordocking"
 
 #: anchordockstr.adrsdockingoptions
 msgid "Docking options"
@@ -74,68 +115,68 @@ msgstr "Docking-Einstellungen"
 #: anchordockstr.adrsdraganddockc
 #, object-pascal-format
 msgid "Use the mouse to drag and dock window \"%s\""
-msgstr ""
+msgstr "Fenster \"%s\" mit der Maus ziehen und andocken"
 
 #: anchordockstr.adrsdragthreshold
 msgid "Drag threshold"
-msgstr ""
+msgstr "Schwellenwert für Ziehen"
 
 #: anchordockstr.adrsduplicatename
 msgid "Duplicate name: "
-msgstr ""
+msgstr "Name des Duplikats: "
 
 #: anchordockstr.adrseachdockedwindowhasaheaderthatallowsdragginghasaco
 msgid "Each docked window has a header that allows dragging, has a context menu with extra layout functions and shows the caption of the docked window"
-msgstr ""
+msgstr "Jedes angedocktes Fenster hat einen Header für Ziehen, ein Kontextmenü mit extra Layoutfunktionen und zeigt den Titel des angedockten Fenster an"
 
 #: anchordockstr.adrsemptyname
 msgid "Empty name: "
-msgstr ""
+msgstr "Leerer Name: "
 
 #: anchordockstr.adrsenableanchordock
 msgid "Enable docking of IDE Windows (Requires IDE restart)"
-msgstr ""
+msgstr "Docking von IDE-Fenstern einschalten (Erfordert Neustart der IDE)"
 
 #: anchordockstr.adrsenableanchordockhint
 msgid "This option allows to organize groups of windows (or all windows) into a single window. For a \"classic\" IDE with only floating windows turn the option off."
-msgstr ""
+msgstr "Diese Einstellung erlaubt das Organisieren einer Gruppe von Fenstern (oder allen Fenstern) in einem einzigen Fenster. Für eine \"klassische\" IDE mit schwebenden Fenstern schalte diese Einstellung aus."
 
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
-msgstr ""
+msgstr "Seite %s vergrößern"
 
 #: anchordockstr.adrsfilledheaders
 msgid "Fill headers"
-msgstr ""
+msgstr "Header füllen"
 
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
-msgstr ""
+msgstr "Header der angedockten Steuerelemente füllen"
 
 #: anchordockstr.adrsflatheadersbuttons
 msgid "Flat header buttons"
-msgstr ""
+msgstr "Abgeflachte Header-Buttons"
 
 #: anchordockstr.adrsflatheadersbuttonshint
 msgid "Flat buttons in headers of docked controls"
-msgstr ""
+msgstr "Abgeflachte Buttons in Headern angedockter Steuerelemente"
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"
-msgstr ""
+msgstr "Header abflachen"
 
 #: anchordockstr.adrsflattenheadershint
 msgid "Flatten headers of docked controls"
-msgstr ""
+msgstr "Header angedockter Steuerelemente abflachen"
 
 #: anchordockstr.adrsfloatingwindowsontop
 msgid "Floating windows on top"
-msgstr ""
+msgstr "Schwebende Fenster nach vorne"
 
 #: anchordockstr.adrsfloatingwindowsontophint
 msgid "Show floating windows on top of main form"
-msgstr ""
+msgstr "Schwebende Fenster vor dem Main-Formular anzeigen"
 
 #: anchordockstr.adrsgeneraldockingoptions
 msgid "General docking options"
@@ -143,63 +184,67 @@ msgstr "Allgemeine Docking-Einstellungen"
 
 #: anchordockstr.adrsheaderalignleft
 msgid "Header align left"
-msgstr ""
+msgstr "Header links ausrichten"
 
 #: anchordockstr.adrsheaderaligntop
 msgid "Header align top"
-msgstr ""
+msgstr "Header oben ausrichten"
 
 #: anchordockstr.adrsheaderposition
 msgid "Header position"
-msgstr ""
+msgstr "Header-Position"
 
 #: anchordockstr.adrsheaderstyle
 msgid "Header Style:"
-msgstr ""
+msgstr "Header-Stil:"
 
 #: anchordockstr.adrshideheadercaptionsforsiteswithonlyonedockedcontrol
 msgid "Hide header captions for sites with only one docked control, as that is already shown in the normal window title"
-msgstr ""
+msgstr "Headertitel für Sites mit nur einem angedockten Steuerelement verbergen, weil er bereits im normalen Fenstertitel angezeigt wird"
 
 #: anchordockstr.adrshighlightfocused
 msgid "Highlight focused"
-msgstr ""
+msgstr "Fokussiertes hervorheben"
 
 #: anchordockstr.adrshighlightfocusedhint
 msgid "Highlight header of focused docked control"
-msgstr ""
+msgstr "Header des fokussierten, angedockten Steuerelement hervorheben"
+
+#: anchordockstr.adrslayoutrestoredsuccessfully
+msgid "Layout restored successfully"
+msgstr "Layout erfolgreich wieder hergestellt"
 
 #: anchordockstr.adrsleft
 msgid "left"
-msgstr ""
+msgstr "links"
 
 #: anchordockstr.adrslocked
 msgid "Locked"
-msgstr ""
+msgstr "Gesperrt"
 
 #: anchordockstr.adrsmerge
 msgid "Merge"
-msgstr ""
+msgstr "Zusammenführen"
 
 #: anchordockstr.adrsminimize
 msgid "Minimize"
-msgstr ""
+msgstr "Minimieren"
 
 #: anchordockstr.adrsmissingcontrolname
 msgid "missing control name"
-msgstr ""
+msgstr "fehlender Steuerelementname"
 
 #: anchordockstr.adrsmodalformscannotbemadedockable
 msgid "modal forms can not be made dockable"
-msgstr ""
+msgstr "Modale Formulare können nicht angedockt werden"
 
 #: anchordockstr.adrsmoveheadertoleftwhenwidthheight100headeralignleft
 msgid "Move header to left when (Width/Height)*100>=HeaderAlignLeft"
-msgstr ""
+msgstr "Schiebe Header nach links, wenn (Breite/Höhe)*100>=HeaderAlignLeft"
 
 #: anchordockstr.adrsmoveheadertotopwhenwidthheight100headeraligntop
 msgid "Move header to top when (Width/Height)*100<=HeaderAlignTop"
-msgstr ""
+msgstr "Schiebe Header nach oben, wenn (Breite/Höhe)*100<=HeaderAlignTop"
 
 #: anchordockstr.adrsmovepageleft
 msgid "Move page left"
@@ -219,119 +264,144 @@ msgstr "Seite nach ganz rechts"
 
 #: anchordockstr.adrsmultilinepages
 msgid "Multiline Tabs"
-msgstr ""
+msgstr "Mehrzeilige Tabulatoren"
 
 #: anchordockstr.adrsmultilinepageshint
 msgid "Tabs of pages can be shown in multiple lines"
-msgstr ""
+msgstr "Tabulatoren von Seiten können in mehreren Zeilen angezeigt werden"
 
 #: anchordockstr.adrsnocaptionsforfloatingsites
 msgid "No captions for floating sites"
-msgstr ""
+msgstr "Keine Untertitel für schwebende Sites"
 
 #: anchordockstr.adrsnochildrenallowedfornodetype
 #, object-pascal-format
 msgid "No children allowed for Node=\"%s\" Type=%s"
-msgstr ""
+msgstr "Untereinträge für Knoten \"%s\" und Typ \"%s\" nicht erlaubt"
 
 #: anchordockstr.adrsnotsupportedhasparent
 #, object-pascal-format
 msgid "Not supported: %s has parent %s"
-msgstr ""
+msgstr "Nicht unterstützt: %s hat übergeordnetes Element %s"
 
 #: anchordockstr.adrsquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Beenden %s"
+
+#: anchordockstr.adrsready
+msgid "Ready"
+msgstr "Fertig"
 
 #: anchordockstr.adrsrequestedbutcreated
 #, object-pascal-format
 msgid "%s requested, but %s created"
-msgstr ""
+msgstr "%s verlangt, aber %s erzeugt"
+
+#: anchordockstr.adrsrestoredefaultlayout
+msgid "Restore default layout"
+msgstr "Standard-Layout wieder herstellen"
+
+#: anchordockstr.adrsrestoreselectedlayout
+msgid "Restore selected layout"
+msgstr "Ausgewähltes Layout wieder herstellen"
 
 #: anchordockstr.adrsright
 msgid "right"
-msgstr ""
+msgstr "rechts"
 
 #: anchordockstr.adrsscaleonresize
 msgid "Scale on resize"
-msgstr ""
+msgstr "Beim Größe ändern skalieren"
 
 #: anchordockstr.adrsscalesubsiteswhenasiteisresized
 msgid "Scale sub sites when a site is resized"
-msgstr ""
+msgstr "Beim Ändern der Größe einer Site abhängige Sites skalieren"
 
 #: anchordockstr.adrsshowcaptionsofdockedcontrolsintheheader
 msgid "Show captions of docked controls in the header"
-msgstr ""
+msgstr "Untertitel eines angedockten Steuerelements im Header anzeigen"
 
 #: anchordockstr.adrsshowheadercaptions
 msgid "Show header captions"
-msgstr ""
+msgstr "Header-Untertitel anzeigen"
 
 #: anchordockstr.adrsshowheaders
 msgid "Show headers"
-msgstr ""
+msgstr "Header anzeigen"
+
+#: anchordockstr.adrssplitterresizestyle
+msgid "Splitter resize style:"
+msgstr "Stil beim Ändern der Größe eines Trenners:"
 
 #: anchordockstr.adrssplitterthickness
 msgid "Splitter thickness"
-msgstr ""
+msgstr "Trenner-Dicke"
 
 #: anchordockstr.adrssplitterwidth
 msgid "Splitter width"
-msgstr ""
+msgstr "Trenner-Breite"
 
 #: anchordockstr.adrstabposition
 msgid "Tab position"
-msgstr ""
+msgstr "Tabulatorposition"
 
 #: anchordockstr.adrsthereisanotherdockmasterinstalledonlyonedockingpac
 #, object-pascal-format
 msgid "There is another dock master installed. Only one docking package can be installed at a time. Please uninstall the other dock master %s and restart the IDE"
-msgstr ""
+msgstr "Ein anderer Dock-Master ist bereits installiert. Mehrere Docking-Packages können nicht gleichzeitig installiert sein. Bitte deinstalliere den anderen Dock-Master %s und starte die IDE neu"
 
 #: anchordockstr.adrstop
 msgid "top"
-msgstr ""
+msgstr "oben"
 
 #: anchordockstr.adrstouseanchordockingyoumustfirstuninstall
 #, object-pascal-format
 msgid "To use anchordocking you must first uninstall %s"
-msgstr ""
+msgstr "Für die Benutzung von Anchordocking muss zuerst %s deinstalliert werden"
+
+#: anchordockstr.adrsunabletodeletefile
+msgid "Unable to delete the file"
+msgstr "Kann Datei nicht löschen"
+
+#: anchordockstr.adrsunabletoreadfile
+#, object-pascal-format
+msgid "Unable to read the file: %s"
+msgstr "Kann Datei %s nicht lesen"
 
 #: anchordockstr.adrsundock
 msgid "Undock"
-msgstr ""
+msgstr "Abdocken"
 
 #: anchordockstr.setupmultiwindowideclassic
 msgid "Classic IDE (Multi-Window):"
-msgstr ""
+msgstr "Klassische IDE (Mehrfach-Fenster)"
 
 #: anchordockstr.setupmultiwindowideinfo
 msgid "The \"modern\" single Window mode still allows you to undock individual Windows and have several groups of Windows. The IDE will show additional \"Dock-Handles\" in each Window, which will allow you to change layout, but also require additional space."
-msgstr ""
+msgstr "Der \"moderne\" Einzelfenster-Modus erlaubt einzelne Fenster abzudocken und mehrere Fenstergruppen. Die IDE zeigt dann zusätzliche \"Dock-Handles\" in jedem Fenster, so dass man das Layout ändern kann. Es braucht aber auch zusätzlichen Platz."
 
 #: anchordockstr.setupmultiwindowidemodern
 msgid "Modern IDE (Single-Window):"
-msgstr ""
+msgstr "Moderne IDE (Einzelfenster):"
 
 #: anchordockstr.setupmultiwindowideoption
 msgid "You can change this in the IDE options under: \"Anchordocking\""
-msgstr ""
+msgstr "Du kannst dies in den IDE-Einstellungen unter \"Anchordocking\" ändern"
 
 #: anchordockstr.setupmultiwindowideseperatewindows
 msgid "There are separate windows for each part of the IDE (Editor, Components, Debug,...). They can all be individually moved around on the screen."
-msgstr ""
+msgstr "Jeder Teil der IDE (Editor, Komponenten, Debug, ...) hat sein eigenes Fenster. Sie können unabhängig von einander auf dem Bildschirm angeordnet werden."
 
 #: anchordockstr.setupmultiwindowidesinglewindow
 msgid "The IDE consists out of a single Window. Different parts of the IDE are shown in panels of that Window. Some can be reached through a tabbed interface."
-msgstr ""
+msgstr "Die IDE besteht aus einem einzelnen Fenster. Die jeweiligen Teile der IDE werden in Panels des Fenster angezeigt. Einige können über Tabs benutzt werden."
 
 #: anchordockstr.sidelayout
 msgid "IDE Layout"
-msgstr ""
+msgstr "IDE Layout"
 
 #: anchordockstr.ssinglemultiwindow
 msgid "Single/Multi Window"
-msgstr ""
+msgstr "Einzel/Mehrfach-Fenster"
 

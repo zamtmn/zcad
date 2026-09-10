@@ -32,7 +32,7 @@ function createnewfontfromshx(const Name:string;var pf:PGDBfont):boolean;
 implementation
 
 const
-  arccount=16;
+  arccount=8;
   fontdirect:array[0..$F] of TzeVector2d=(
   (x:1;y:0),(x:1;y:0.5),(x:1;y:1),(x:0.5;y:1),(x:0;y:1),(x:-0.5;y:1),(x:-1;y:1),(x:-1;y:0.5),
   (x:-1;y:0),(x:-1;y:-0.5),(x:-1;y:-1),(x:-0.5;y:-1),(x:0;y:-1),(x:0.5;y:-1),(x:1;y:-1),(x:1;y:-0.5));
@@ -43,18 +43,17 @@ type
   end;
   ptsyminfo=^tsyminfo;
 
-function createsymbol(pf:PGDBfont;symbol:integer;pshxdata:system.pbyte;unicode:boolean;symname:string):integer;
+function createsymbol(pf:PGDBfont;symbol:integer;pshxdata:pbyte;unicode:boolean;symname:string):integer;
 var
   i,sizeshp,sizeshx,stackheap:integer;
   baselen,r,startangle,angle,normal,hordlen:fontfloat;
   d:TzeVector2FontFloat;
-  p,p1,pb{,pmin,pmax}:TzePoint2FontFloat;
+  p,p1,pb:TzePoint2FontFloat;
   br:TBoundingRect;
   stack:array[0..4] of TzePoint2FontFloat;
   tr:tarcrtmodify;
   hi,lo,byt,byt2,startoffset,endoffset:byte;
   subsymbol:integer;
-  int:integer;
   draw:boolean;
   onlyver:integer;
   psyminfo,psubsyminfo:PGDBsymdolinfo;
@@ -78,6 +77,7 @@ var
     ad:TArcData;
     j:integer;
     sine,cosine:double;
+    int:integer;
   begin
     tr.p1:=p;
     tr.p3:=p+d*baselen;

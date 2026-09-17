@@ -1,0 +1,15 @@
+
+[[VarsLink]]
+#### VarsLink
+
+:cmdcommand: VarsLink
+
+include::../../_elements/commandsummary.adoc[]
+
+Создание централизованной связки примитивов (см. <<centralization>>) После запуска команды предлагается указать
+главный примитив звязки ([.hl]#централь#) затем его [.hl]#представителей#. Указанные примитивы должны иметь
+расширение <<extdrVariables>> и не участвовать в других связках
+
+!!NEEDDETAILS!!
+
+include::commandsummaryfree.adoc[]

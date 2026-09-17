@@ -1,0 +1,3 @@
+ifdef::lang[include::locale/{lang}/attributes.adoc[]]
+:experimental:
+:imagesdir: locale/{lang}/_images/

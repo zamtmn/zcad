@@ -212,12 +212,12 @@ begin
   dirToEnd   := (newEndPoint-newCenter).Normalized;
 
   // Шаг 8. Проецируем направления на оси локальной СК и вычисляем новые углы.
-  // scalardot — скалярное произведение; оно даёт косинус и синус угла в плоскости дуги
-  StartAngle := ArcTan2(scalardot(dirToStart, newOcsY), scalardot(dirToStart, newOcsX));
+  // ScalarDot — скалярное произведение; оно даёт косинус и синус угла в плоскости дуги
+  StartAngle := ArcTan2(ScalarDot(dirToStart, newOcsY), ScalarDot(dirToStart, newOcsX));
   if StartAngle < 0 then
     StartAngle := 2 * pi + StartAngle;
 
-  EndAngle := ArcTan2(scalardot(dirToEnd, newOcsY), scalardot(dirToEnd, newOcsX));
+  EndAngle := ArcTan2(ScalarDot(dirToEnd, newOcsY), ScalarDot(dirToEnd, newOcsX));
   if EndAngle < 0 then
     EndAngle := 2 * pi + EndAngle;
 
@@ -475,7 +475,7 @@ var
   sx,sy,ex,ey,minx,miny,maxx,maxy:double;
   sq,eq,q:integer;
 begin
-  vp.BoundingBox:=CreateBBFrom2Point(q0,q2);
+  vp.BoundingBox.MakeFrom2Pt(q0,q2);
   sq:=getQuadrant(self.StartAngle);
   eq:=getQuadrant(self.EndAngle);
   q:=AxisIntersect(sq,eq);
@@ -498,20 +498,24 @@ begin
     maxy:=ey;
   end;
   if (q and 1)>0 then begin
-    concatBBandPoint(vp.BoundingBox,VectorTransform3d(cP3d__1__0__0,objMatrix));
+    vp.BoundingBox.Concat(VectorTransform3d(cP3d__1__0__0,objMatrix));
+    //concatBBandPoint(vp.BoundingBox,VectorTransform3d(cP3d__1__0__0,objMatrix));
     maxx:=1;
   end;
   if (q and 4)>0 then begin
-    concatBBandPoint(vp.BoundingBox,VectorTransform3d(cP3d_m1__0__0,objMatrix));
+    vp.BoundingBox.Concat(VectorTransform3d(cP3d_m1__0__0,objMatrix));
+    //concatBBandPoint(vp.BoundingBox,VectorTransform3d(cP3d_m1__0__0,objMatrix));
     minx:=-1;
   end;
   if (q and 2)>0 then begin
-    concatBBandPoint(vp.BoundingBox,VectorTransform3d(cP3d__0__1__0,objMatrix));
+    vp.BoundingBox.Concat(VectorTransform3d(cP3d__0__1__0,objMatrix));
+    //concatBBandPoint(vp.BoundingBox,VectorTransform3d(cP3d__0__1__0,objMatrix));
     maxy:=1;
   end;
   if (q and 8)>0 then begin
-    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      TzePoint3d.Make(0,-1,0),objMatrix));
+    vp.BoundingBox.Concat(VectorTransform3d({TzePoint3d.Make(0,-1,0)}cP3d__0_m1__0,objMatrix));
+    //concatBBandPoint(vp.BoundingBox,VectorTransform3d(
+    //  TzePoint3d.Make(0,-1,0),objMatrix));
     miny:=-1;
   end;
    outbound[0]:=VectorTransform3d(TzePoint3d.Make(minx,maxy,0),objMatrix);

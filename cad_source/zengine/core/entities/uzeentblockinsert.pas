@@ -148,9 +148,9 @@ begin
   tv:=Local.basis.ox;
   if scale.x<-eps then
     tv:=-tv;
-  rotate:=scalardot(tv,ox);
+  rotate:=ScalarDot(tv,ox);
   rotate:=arccos(rotate);
-  if scalardot(tv,VectorDot(Local.basis.oz,GetXfFromZ(Local.basis.oz)))<-eps then
+  if ScalarDot(tv,VectorDot(Local.basis.oz,GetXfFromZ(Local.basis.oz)))<-eps then
     rotate:=2*pi-rotate;
 end;
 

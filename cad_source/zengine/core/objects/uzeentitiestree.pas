@@ -151,7 +151,7 @@ begin
     LODSave:=DC.LOD;
     if DC.LOD=LODCalculatedDetail then begin
       if LODDeep=0 then begin
-        v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
+        v:=Node.BoundingBox.pMax-Node.BoundingBox.pMin;
         if not SqrCanSimplyDrawInWCS(DC,v.SqrLength,300) then begin
           DC.LOD:=LODLowDetail;
           Inc(LODDeep);
@@ -214,8 +214,8 @@ begin
       PFirstStageData:=@FirstStageData;
     end;
     TSMAccumulation:begin
-      FirstStageData.midlepoint:=Entity.vp.BoundingBox.LBN+FirstStageData.midlepoint.asVector;
-      FirstStageData.midlepoint:=Entity.vp.BoundingBox.RTF+FirstStageData.midlepoint.asVector;
+      FirstStageData.midlepoint:=Entity.vp.BoundingBox.pMin+FirstStageData.midlepoint.asVector;
+      FirstStageData.midlepoint:=Entity.vp.BoundingBox.pMax+FirstStageData.midlepoint.asVector;
       Inc(FirstStageData.counter,2);
     end;
     TSMCalc:begin
@@ -254,7 +254,8 @@ end;
 
 class procedure TZEntsManipulator.CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
 begin
-  ConcatBB(NodeBB,GetEntityBoundingBox(Entity));
+  NodeBB.CheckAndConcat(GetEntityBoundingBox(Entity));
+  //ConcatBB(NodeBB,GetEntityBoundingBox(Entity));
 end;
 
 class function TZEntsManipulator.GetEntityBoundingBox(var Entity:GDBObjEntity):TBoundingBox;
@@ -266,8 +267,8 @@ class function TZEntsManipulator.GetBBPosition(const sep:TzeVector4d;const BB:TB
 var
   d,d1,d2:double;
 begin
-  d1:=sep.v[0]*BB.RTF.x+sep.v[1]*BB.RTF.y+sep.v[2]*BB.RTF.z+sep.v[3];
-  d2:=sep.v[0]*BB.LBN.x+sep.v[1]*BB.LBN.y+sep.v[2]*BB.LBN.z+sep.v[3];
+  d1:=sep.v[0]*BB.pMax.x+sep.v[1]*BB.pMax.y+sep.v[2]*BB.pMax.z+sep.v[3];
+  d2:=sep.v[0]*BB.pMin.x+sep.v[1]*BB.pMin.y+sep.v[2]*BB.pMin.z+sep.v[3];
   if abs(d1)<eps then
     d1:=0;
   if abs(d2)<eps then

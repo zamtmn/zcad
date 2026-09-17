@@ -287,8 +287,8 @@ begin
   if si.LLPrimitiveCount>0 then begin
     VDCopyParam:=FontData.GetCopyParam(si.LLPrimitiveStartIndex,si.LLPrimitiveCount);
     symoutbound:=FontData.GetBoundingBbox(VDCopyParam.EID.GeomIndexMin,VDCopyParam.EID.GeomIndexMax);
-    si.SymMaxY:=symoutbound.RTF.y;
-    si.SymMinY:=symoutbound.LBN.y;
+    si.SymMaxY:=symoutbound.pMax.y;
+    si.SymMinY:=symoutbound.pMin.y;
   end;
 end;
 function TZETFFFontImpl.GetSymbolInfo(symbol:Integer):PGDBsymdolinfo;

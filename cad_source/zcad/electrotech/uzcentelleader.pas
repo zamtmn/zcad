@@ -372,9 +372,9 @@ begin
       pobj:=pointer(pobj.bp.ListPos.Owner);
       if pobj^.GetObjType=GDBDeviceID then begin
         if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
-          if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then begin
+          if pobj^.vp.BoundingBox.IsContainsPoint(mainline.CoordInWCS.lBegin) then begin
             bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound(dc);
-            if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then begin
+            if bb.IsContainsPoint(mainline.CoordInWCS.lBegin) then begin
               pdev:=pointer(pobj);
               system.break;
              end;
@@ -389,7 +389,7 @@ begin
     if pobj<>nil then
     repeat
       if pobj^.GetObjType=GDBCableID then begin
-        if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then begin
+        if pobj^.vp.BoundingBox.IsContainsPoint(mainline.CoordInWCS.lBegin) then begin
           if pobj^.VertexArrayInWCS.onpoint(mainline.CoordInWCS.lBegin,false) then begin
             pcable:=pobj;
             pentvarext:=pobj^.GetExtension<TVariablesExtender>;
@@ -409,9 +409,9 @@ begin
         end;
       end else if pobj^.GetObjType=GDBDeviceID then begin
         if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
-          if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then begin
+          if pobj^.vp.BoundingBox.IsContainsPoint(mainline.CoordInWCS.lBegin) then begin
             bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound(dc);
-            if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then begin
+            if bb.IsContainsPoint(mainline.CoordInWCS.lBegin) then begin
               pdev:=pointer(pobj);
               system.break;
             end;
@@ -560,7 +560,7 @@ begin
       tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,
         mainline.CoordInWCS.lBegin,False);
       //tv3:=uzegeometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
-      if {tv3.z}scalardot(tv2.asVector,mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin)>0 then
+      if {tv3.z}ScalarDot(tv2.asVector,mainline.CoordInWCS.lEnd-mainline.CoordInWCS.lBegin)>0 then
         tv2:=uzegeometry.vectordot(tv2.asVector,Local.basis.OZ).asPoint3d
       else
         tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2.asVector).asPoint3d;
@@ -838,9 +838,12 @@ end;
 procedure GDBObjElLeader.getoutbound;
 begin
      inherited;
-     concatbb(vp.BoundingBox,mainline.vp.BoundingBox);
-     concatbb(vp.BoundingBox,MarkLine.vp.BoundingBox);
-     concatbb(vp.BoundingBox,tbl.vp.BoundingBox);
+     vp.BoundingBox.CheckAndConcat(mainline.vp.BoundingBox);
+     //concatbb(vp.BoundingBox,mainline.vp.BoundingBox);
+     vp.BoundingBox.CheckAndConcat(MarkLine.vp.BoundingBox);
+     //concatbb(vp.BoundingBox,MarkLine.vp.BoundingBox);
+     vp.BoundingBox.CheckAndConcat(tbl.vp.BoundingBox);
+     //concatbb(vp.BoundingBox,tbl.vp.BoundingBox);
      //vp.BoundingBox:=ConstObjArray.calcbb;
 end;
 procedure GDBObjElLeader.DrawGeometry;

@@ -148,9 +148,9 @@ begin
         if bb2.RTF.x>=bb2.LBN.x then
           ConcatBB(bb,bb2);
       end;}
-      tv:=(bb.RTF-bb.LBN)*0.15;
+      tv:=(bb.pMax-bb.pMin)*0.15;
       //tv:=tv*0.15;
-      rasterize(cdwg,bmpw,bmpw,bb.LBN-tv,bb.RTF+tv,
+      rasterize(cdwg,bmpw,bmpw,bb.pMin-tv,bb.pMax+tv,
         PrintParam,bmp.Canvas,PrinterDrawer);
 
       //PNG.Canvas.StretchDraw(Rect(0,0,bmpw,bmpw),bmp);

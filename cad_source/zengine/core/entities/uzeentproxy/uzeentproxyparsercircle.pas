@@ -120,9 +120,9 @@ begin
   YAxis := (ZAxis * XAxis.x - XAxis * ZAxis.x).Normalized;
 
   { Проекция точки на оси OCS }
-  Result.x := scalarDot(Point.asVector, XAxis);
-  Result.y := scalarDot(Point.asVector, YAxis);
-  Result.z := scalarDot(Point.asVector, ZAxis);
+  Result.x := ScalarDot(Point.asVector, XAxis);
+  Result.y := ScalarDot(Point.asVector, YAxis);
+  Result.z := ScalarDot(Point.asVector, ZAxis);
 end;
 
 { --- Обработчик OpCode --- }

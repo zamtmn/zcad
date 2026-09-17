@@ -361,10 +361,10 @@ begin
      pv^.formatentity(drawings.GetCurrentDWG^,dc);
      pv^.getoutbound(dc);
 
-     lx:=pv^.P_insert_in_WCS.x-pv^.vp.BoundingBox.LBN.x;
+     lx:=pv^.P_insert_in_WCS.x-pv^.vp.BoundingBox.pMin.x;
      //rx:=pv.vp.BoundingBox.RTF.x-pv.P_insert_in_WCS.x;
-     dy:=pv^.P_insert_in_WCS.y-pv^.vp.BoundingBox.LBN.y;
-     uy:=pv^.vp.BoundingBox.RTF.y-pv^.P_insert_in_WCS.y;
+     dy:=pv^.P_insert_in_WCS.y-pv^.vp.BoundingBox.pMin.y;
+     uy:=pv^.vp.BoundingBox.pMax.y-pv^.P_insert_in_WCS.y;
 
      pv^.Local.P_insert.y:=pv^.Local.P_insert.y+dy;
      pv^.Formatentity(drawings.GetCurrentDWG^,dc);
@@ -810,8 +810,8 @@ var
           dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
           pv^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
-          dy:=pv^.P_insert_in_WCS.y-pv^.vp.BoundingBox.LBN.y;
-          uy:=pv^.vp.BoundingBox.RTF.y-pv^.P_insert_in_WCS.y;
+          dy:=pv^.P_insert_in_WCS.y-pv^.vp.BoundingBox.pMin.y;
+          uy:=pv^.vp.BoundingBox.pMax.y-pv^.P_insert_in_WCS.y;
           insertPoint.y:=insertPoint.y+dy+uy;
 
     end;

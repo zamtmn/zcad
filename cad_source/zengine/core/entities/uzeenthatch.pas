@@ -711,12 +711,12 @@ begin
         f:=ptv.z;
       ptv:=Vertex3D_in_WCS_Array.iterate(ir);
     until ptv=nil;
-    vp.BoundingBox.LBN:=TzePoint3d.Make(l,B,n);
-    vp.BoundingBox.RTF:=TzePoint3d.Make(r,T,f);
+    vp.BoundingBox.pMin:=TzePoint3d.Make(l,B,n);
+    vp.BoundingBox.pMax:=TzePoint3d.Make(r,T,f);
 
   end else begin
-    vp.BoundingBox.LBN:=TzePoint3d.Make(-1,-1,-1);
-    vp.BoundingBox.RTF:=TzePoint3d.Make(1,1,1);
+    vp.BoundingBox.pMin:=TzePoint3d.Make(-1,-1,-1);
+    vp.BoundingBox.pMax:=TzePoint3d.Make(1,1,1);
   end;
 end;
 

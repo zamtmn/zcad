@@ -47,7 +47,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then begin
     begin
       drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON:=False;
-      drawings.GetCurrentDWG.wa.ZoomToVolume(CreateBBFrom2Point(
+      drawings.GetCurrentDWG.wa.ZoomToVolume(TBoundingBox.MakeFrom2Pt(
         drawings.GetCurrentDWG.wa.param.seldesc.Frame13d,
         drawings.GetCurrentDWG.wa.param.seldesc.Frame23d));
       drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON:=False;

@@ -681,9 +681,9 @@ begin
   zcSetEntPropFromCurrentDrawingProp(pv);
   pv^.formatentity(drawings.GetCurrentDWG^,dc);
   pv^.getoutbound(dc);
-  lx:=pv.P_insert_in_WCS.x-pv.vp.BoundingBox.LBN.x;
-  dy:=pv.P_insert_in_WCS.y-pv.vp.BoundingBox.LBN.y;
-  uy:=pv.vp.BoundingBox.RTF.y-pv.P_insert_in_WCS.y;
+  lx:=pv.P_insert_in_WCS.x-pv.vp.BoundingBox.pMin.x;
+  dy:=pv.P_insert_in_WCS.y-pv.vp.BoundingBox.pMin.y;
+  uy:=pv.vp.BoundingBox.pMax.y-pv.P_insert_in_WCS.y;
   pv^.Local.P_insert.y:=pv^.Local.P_insert.y+dy;
   pv^.Formatentity(drawings.GetCurrentDWG^,dc);
   tv:=currentcoord;
@@ -811,8 +811,8 @@ begin
           Cable2CableMark(pcabledesk,pv);
           pv^.formatentity(drawings.GetCurrentDWG^,dc);
           pv^.getoutbound(dc);
-          dy:=pv.P_insert_in_WCS.y-pv.vp.BoundingBox.LBN.y;
-          uy:=pv.vp.BoundingBox.RTF.y-pv.P_insert_in_WCS.y;
+          dy:=pv.P_insert_in_WCS.y-pv.vp.BoundingBox.pMin.y;
+          uy:=pv.vp.BoundingBox.pMax.y-pv.P_insert_in_WCS.y;
           pv^.Local.P_insert.y:=pv^.Local.P_insert.y+dy;
           pv^.Formatentity(drawings.GetCurrentDWG^,dc);
           currentcoord.y:=currentcoord.y+dy+uy;

@@ -159,13 +159,13 @@ implementation
   //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
   function getAreaVertex(vertexPoint:TzePoint3d;accuracy:double):TBoundingBox;
   begin
-      result.LBN.x:=vertexPoint.x - accuracy;
-      result.LBN.y:=vertexPoint.y - accuracy;
-      result.LBN.z:=0;
+      result.pMin.x:=vertexPoint.x - accuracy;
+      result.pMin.y:=vertexPoint.y - accuracy;
+      result.pMin.z:=0;
 
-      result.RTF.x:=vertexPoint.x + accuracy;
-      result.RTF.y:=vertexPoint.y + accuracy;
-      result.RTF.z:=0;
+      result.pMax.x:=vertexPoint.x + accuracy;
+      result.pMax.y:=vertexPoint.y + accuracy;
+      result.pMax.z:=0;
 
   end;
 
@@ -174,27 +174,27 @@ implementation
   begin
        if point1.x <= point2.x  then
          begin
-           result.LBN.x:=point1.x - accuracy;
-           result.RTF.x:=point2.x + accuracy;
+           result.pMin.x:=point1.x - accuracy;
+           result.pMax.x:=point2.x + accuracy;
          end
        else
          begin
-             result.LBN.x:=point2.x - accuracy;
-             result.RTF.x:=point1.x + accuracy;
+             result.pMin.x:=point2.x - accuracy;
+             result.pMax.x:=point1.x + accuracy;
          end;
        if point1.y <= point2.y then
          begin
-           result.LBN.y:=point1.y - accuracy;
-           result.RTF.y:=point2.y + accuracy;
+           result.pMin.y:=point1.y - accuracy;
+           result.pMax.y:=point2.y + accuracy;
          end
        else
          begin
-           result.LBN.y:=point2.y - accuracy;
-           result.RTF.y:=point1.y + accuracy;
+           result.pMin.y:=point2.y - accuracy;
+           result.pMax.y:=point1.y + accuracy;
          end;
 
-      result.LBN.z:=0;
-      result.RTF.z:=0;
+      result.pMin.z:=0;
+      result.pMax.z:=0;
   end;
   
 //**преобразование линии в прямоугольник (4 точки) с учетом ее направления и погрешности попадания. Т.е. если погрешность равна нулю то получится прямоугольник в виде линии :) **//

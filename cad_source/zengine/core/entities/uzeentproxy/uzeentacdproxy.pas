@@ -556,8 +556,8 @@ begin
       FProxyGripOffset := FProxyBBoxMin.LerpTo(FProxyBBoxMax, 0.5);
       if Local.P_insert.IsNul then
         Local.P_insert := FProxyGripOffset;
-      vp.BoundingBox.LBN := FProxyBBoxMin;
-      vp.BoundingBox.RTF := FProxyBBoxMax;
+      vp.BoundingBox.pMin := FProxyBBoxMin;
+      vp.BoundingBox.pMax := FProxyBBoxMax;
 
       ProxyLogInfoFormatStr(
         'uzeentacdproxy: BuildSubEntities gripOffset='
@@ -651,8 +651,8 @@ begin
     ProxyLogInfoFormatStr(
       'uzeentacdproxy: FormatEntity bbox min=(%.3f,%.3f,%.3f)'
       + ' max=(%.3f,%.3f,%.3f) grip=(%.3f,%.3f,%.3f)',
-      [vp.BoundingBox.LBN.x, vp.BoundingBox.LBN.y, vp.BoundingBox.LBN.z,
-       vp.BoundingBox.RTF.x, vp.BoundingBox.RTF.y, vp.BoundingBox.RTF.z,
+      [vp.BoundingBox.pMin.x, vp.BoundingBox.pMin.y, vp.BoundingBox.pMin.z,
+       vp.BoundingBox.pMax.x, vp.BoundingBox.pMax.y, vp.BoundingBox.pMax.z,
        GetCenterPoint.x, GetCenterPoint.y, GetCenterPoint.z]);
 
   if Assigned(EntExtensions) then

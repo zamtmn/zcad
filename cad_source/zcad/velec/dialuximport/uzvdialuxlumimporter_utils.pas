@@ -191,9 +191,9 @@ begin
   else
   begin
     // Для других типов используем центр ограничивающего прямоугольника
-    Result.x := (Entity^.vp.BoundingBox.LBN.x + Entity^.vp.BoundingBox.RTF.x) / 2.0;
-    Result.y := (Entity^.vp.BoundingBox.LBN.y + Entity^.vp.BoundingBox.RTF.y) / 2.0;
-    Result.z := (Entity^.vp.BoundingBox.LBN.z + Entity^.vp.BoundingBox.RTF.z) / 2.0;
+    Result.x := (Entity^.vp.BoundingBox.pMin.x + Entity^.vp.BoundingBox.pMax.x) / 2.0;
+    Result.y := (Entity^.vp.BoundingBox.pMin.y + Entity^.vp.BoundingBox.pMax.y) / 2.0;
+    Result.z := (Entity^.vp.BoundingBox.pMin.z + Entity^.vp.BoundingBox.pMax.z) / 2.0;
   end;
 end;
 

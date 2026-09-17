@@ -86,14 +86,14 @@ begin
     end;
     VDCopyParam:=font.FontData.GetCopyParam(psyminfo.LLPrimitiveStartIndex,psyminfo.LLPrimitiveCount);
     symoutbound:=font.FontData.GetTransformedBoundingBbox(VDCopyParam.EID.GeomIndexMin,VDCopyParam.EID.GeomIndexMax,matr);
-    if Bound.LBN.x>symoutbound.LBN.x then
-      Bound.LBN.x:=symoutbound.LBN.x;
-    if Bound.LBN.y>symoutbound.LBN.y then
-      Bound.LBN.y:=symoutbound.LBN.y;
-    if Bound.RTF.x<symoutbound.RTF.x then
-      Bound.RTF.x:=symoutbound.RTF.x;
-    if Bound.RTF.y<symoutbound.RTF.y then
-      Bound.RTF.y:=symoutbound.RTF.y;
+    if Bound.pMin.x>symoutbound.pMin.x then
+      Bound.pMin.x:=symoutbound.pMin.x;
+    if Bound.pMin.y>symoutbound.pMin.y then
+      Bound.pMin.y:=symoutbound.pMin.y;
+    if Bound.pMax.x<symoutbound.pMax.x then
+      Bound.pMax.x:=symoutbound.pMax.x;
+    if Bound.pMax.y<symoutbound.pMax.y then
+      Bound.pMax.y:=symoutbound.pMax.y;
   end;
   if LLSymbolIndex<>-1 then begin
     PLLPsymbol:=pointer(geom.LLprimitives.getDataMutable(LLSymbolIndex));
@@ -146,7 +146,7 @@ begin
         fact0y:=PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr.v[1].Slice;
         if not fact0y.IsNul then
           fact0y.Normalize;//:=NormalizeVertex(fact0y);
-        PLLSymbolLine^.SymbolsParam.Oblique:=arccos(scalardot(true0Y,fact0y));
+        PLLSymbolLine^.SymbolsParam.Oblique:=arccos(ScalarDot(true0Y,fact0y));
         PLLSymbolLine^.SymbolsParam.NeededFontHeight:=PLLSymbolLine^.SymbolsParam.NeededFontHeight*cos(PLLSymbolLine^.SymbolsParam.Oblique);
         PLLSymbolLine^.SymbolsParam.sx:=PLLSymbolLine^.SymbolsParam.sx/cos(PLLSymbolLine^.SymbolsParam.Oblique);
         if GetCSDirFrom0x0y2D(true0Y,fact0y)=TCSDLeft then

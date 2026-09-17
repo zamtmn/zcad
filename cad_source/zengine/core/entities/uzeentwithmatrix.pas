@@ -77,52 +77,52 @@ begin
   if OwnerFuldraw=TDTFulDraw then begin
     {вариант с точным расчетом - медленный((}
     {gdb.GetCurrentDWG^.myGluProject2(
-      createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,
-      enttree.BoundingBox.LBN.Z),v1);
+      createvertex(enttree.BoundingBox.pMin.x,enttree.BoundingBox.pMin.y,
+      enttree.BoundingBox.pMin.Z),v1);
     bb.LBN:=v1;
     bb.RTF:=v1;
     gdb.GetCurrentDWG^.myGluProject2(
-      createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,
-      enttree.BoundingBox.LBN.Z),v1);
+      createvertex(enttree.BoundingBox.pMax.x,enttree.BoundingBox.pMin.y,
+      enttree.BoundingBox.pMin.Z),v1);
     concatBBandPoint(bb,v1);
     gdb.GetCurrentDWG^.myGluProject2(
-      createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.RTF.y,
-      enttree.BoundingBox.LBN.Z),v1);
+      createvertex(enttree.BoundingBox.pMax.x,enttree.BoundingBox.pMax.y,
+      enttree.BoundingBox.pMin.Z),v1);
     concatBBandPoint(bb,v1);
     gdb.GetCurrentDWG^.myGluProject2(
-      createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,
-      enttree.BoundingBox.LBN.Z),v1);
+      createvertex(enttree.BoundingBox.pMin.x,enttree.BoundingBox.pMax.y,
+      enttree.BoundingBox.pMin.Z),v1);
     concatBBandPoint(bb,v1);
 
     gdb.GetCurrentDWG^.myGluProject2(
-      createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,
-      enttree.BoundingBox.RTF.Z),v1);
+      createvertex(enttree.BoundingBox.pMin.x,enttree.BoundingBox.pMin.y,
+      enttree.BoundingBox.pMax.Z),v1);
     concatBBandPoint(bb,v1);
     gdb.GetCurrentDWG^.myGluProject2(
-      createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,
-      enttree.BoundingBox.RTF.Z),v1);
+      createvertex(enttree.BoundingBox.pMax.x,enttree.BoundingBox.pMin.y,
+      enttree.BoundingBox.pMax.Z),v1);
     concatBBandPoint(bb,v1);
     gdb.GetCurrentDWG^.myGluProject2(
-      createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.RTF.y,
-      enttree.BoundingBox.RTF.Z),v1);
+      createvertex(enttree.BoundingBox.pMax.x,enttree.BoundingBox.pMax.y,
+      enttree.BoundingBox.pMax.Z),v1);
     concatBBandPoint(bb,v1);
     gdb.GetCurrentDWG^.myGluProject2(
-      createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,
-      enttree.BoundingBox.RTF.Z),v1);
+      createvertex(enttree.BoundingBox.pMin.x,enttree.BoundingBox.pMax.y,
+      enttree.BoundingBox.pMax.Z),v1);
     concatBBandPoint(bb,v1);
     v1:=bb.RTF;
     v2:=bb.LBN;}
 
     {вариант с  неточным расчетом - неточный}
-    {ProjectProc(enttree.BoundingBox.LBN,v1);
-    ProjectProc(enttree.BoundingBox.RTF,v2);
+    {ProjectProc(enttree.BoundingBox.pMin,v1);
+    ProjectProc(enttree.BoundingBox.pMax,v2);
     if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then begin
       ProjectProc(
-        createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,
-        enttree.BoundingBox.LBN.Z),v1);
+        createvertex(enttree.BoundingBox.pMin.x,enttree.BoundingBox.pMax.y,
+        enttree.BoundingBox.pMin.Z),v1);
       ProjectProc(
-        createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,
-        enttree.BoundingBox.RTF.Z),v2);
+        createvertex(enttree.BoundingBox.pMax.x,enttree.BoundingBox.LBN.y,
+        enttree.BoundingBox.pMax.Z),v2);
       if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then
         enttree.
           FulDraw:=False
@@ -132,7 +132,7 @@ begin
     end else
       enttree.FulDraw:=True;}
 
-    v1:=enttree.BoundingBox.RTF-enttree.BoundingBox.LBN;
+    v1:=enttree.BoundingBox.pMax-enttree.BoundingBox.pMin;
     tx:={uzegeometry.oneVertexlength}(v1.Length);
     if tx/zoom<currentdegradationfactor then
       enttree.NodeData.FulDraw:=TDTSimpleDraw
@@ -212,7 +212,8 @@ begin
                 if inFrustomEnts=0 then
                   enttree.NodeData.InFrustumBoundingBox:=pobj^.vp.BoundingBox
                 else
-                  ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);
+                  enttree.NodeData.InFrustumBoundingBox.CheckAndConcat(pobj^.vp.BoundingBox);
+                  //ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);
                 Inc(inFrustomEnts);
               end;
               pobj:=enttree.nul.iterate(ir);
@@ -230,7 +231,8 @@ begin
                 if inFrustomEnts=0 then
                   enttree.NodeData.InFrustumBoundingBox:=pobj^.vp.BoundingBox
                 else
-                  ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);
+                  enttree.NodeData.InFrustumBoundingBox.CheckAndConcat(pobj^.vp.BoundingBox);
+                  //ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);
                 Inc(inFrustomEnts);
               end;
               pobj:=enttree.NodeData.NeedToSeparated.iterate(ir);
@@ -247,8 +249,8 @@ begin
                 enttree.NodeData.InFrustumBoundingBox:=
                   PTEntTreeNode(enttree.pminusnode)^.BoundingBox
               else
-                ConcatBB(enttree.NodeData.InFrustumBoundingBox,
-                  PTEntTreeNode(enttree.pminusnode)^.BoundingBox);
+                enttree.NodeData.InFrustumBoundingBox.CheckAndConcat(PTEntTreeNode(enttree.pminusnode)^.BoundingBox);
+                //ConcatBB(enttree.NodeData.InFrustumBoundingBox,PTEntTreeNode(enttree.pminusnode)^.BoundingBox);
               Inc(inFrustomEnts);
             end;
 
@@ -264,8 +266,8 @@ begin
                 enttree.NodeData.InFrustumBoundingBox:=
                   PTEntTreeNode(enttree.pplusnode)^.BoundingBox
               else
-                ConcatBB(enttree.NodeData.InFrustumBoundingBox,
-                  PTEntTreeNode(enttree.pplusnode)^.BoundingBox);
+                enttree.NodeData.InFrustumBoundingBox.CheckAndConcat(PTEntTreeNode(enttree.pplusnode)^.BoundingBox);
+                //ConcatBB(enttree.NodeData.InFrustumBoundingBox,PTEntTreeNode(enttree.pplusnode)^.BoundingBox);
               Inc(inFrustomEnts);
             end;
           end;

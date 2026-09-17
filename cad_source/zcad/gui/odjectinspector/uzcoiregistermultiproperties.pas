@@ -97,7 +97,7 @@ begin
      V2:=PzeVector3d(ChangedData.PGetDataInEtity)^;
      v1:=v2-v1;
      v1.Normalize;
-     l1:=scalardot(v1,cV3d__1__0__0);
+     l1:=ScalarDot(v1,cV3d__1__0__0);
      l1:=arccos(l1){*180/pi};
      if v1.y<-eps then l1:={360}2*pi-l1;
      ChangedData.PGetDataInEtity:=@l1;
@@ -111,7 +111,7 @@ var
 begin
      V1:=PGDBObjWithLocalCS(ChangedData.PGetDataInEtity)^.Local.basis.ox;
      V2:=GetXfFromZ(PGDBObjWithLocalCS(ChangedData.PGetDataInEtity)^.Local.basis.oz);
-     l1:=scalardot(v1,v2);
+     l1:=ScalarDot(v1,v2);
      l1:=arccos(l1);
      if v1.y<-eps then l1:=2*pi-l1;
      ChangedData.PGetDataInEtity:=@l1;
@@ -127,7 +127,7 @@ begin
 
      if PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner<>nil then begin
        V1:=PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0].Slice;
-       l0:=scalardot(V1.Normalized,cV3d__1__0__0);
+       l0:=ScalarDot(V1.Normalized,cV3d__1__0__0);
        l0:=arccos(l0);
        if v1.y<-eps then l0:=2*pi-l0;
        //a0:=l0*180/pi
@@ -136,7 +136,7 @@ begin
 
      V1:=PGDBObjWithLocalCS(ChangedData.PGetDataInEtity)^.Local.basis.ox;
      V2:=GetXfFromZ(PGDBObjWithLocalCS(ChangedData.PGetDataInEtity)^.Local.basis.oz);
-     l1:=scalardot(v1,v2);
+     l1:=ScalarDot(v1,v2);
      l1:=arccos(l1);
      if v1.y<-eps then l1:=2*pi-l1;
      //a1:=l0*180/pi;

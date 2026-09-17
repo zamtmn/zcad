@@ -517,7 +517,7 @@ begin
   secondd:=Infinity;
   //nearestd0:=infinity;
   //secondd0:=infinity;
-  Vertex0:=drawings.GetCurrentROOT^.vp.BoundingBox.LBN;
+  Vertex0:=drawings.GetCurrentROOT^.vp.BoundingBox.pMin;
   for i:=0 to axisarray.size-1 do
   begin
        tp1:=axisarray[i].p1;
@@ -593,7 +593,7 @@ begin
   vaxis:=taxisdescarray.Create;
   axisdevname:=uppercase(ExportDevWithAxisParams.AxisDeviceName);
   ALLayer:=drawings.GetCurrentDWG^.LayerTable.getAddres('EL_AXIS');
-  Vertex0:=drawings.GetCurrentROOT^.vp.BoundingBox.LBN;
+  Vertex0:=drawings.GetCurrentROOT^.vp.BoundingBox.pMin;
   zcUI.TextMessage('Searh axis.....',TMWOHistoryOut);
   pdev:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pdev<>nil then
@@ -976,7 +976,7 @@ var
     pl1:PGDBObjLine;
 begin
      inc(lineAABBtests);
-     if boundingintersect(pl^.vp.BoundingBox,PNode^.BoundingBox) then
+     if pl^.vp.BoundingBox.IsIntersectWith(PNode^.BoundingBox) then
      begin
            pl1:=PNode^.nulbeginiterate(ir1);
            if pl1<>nil then

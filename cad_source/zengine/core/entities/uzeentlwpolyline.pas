@@ -295,12 +295,12 @@ begin
         f:=ptv.z;
       ptv:=Vertex3D_in_WCS_Array.iterate(ir);
     until ptv=nil;
-    vp.BoundingBox.LBN:=TzePoint3d.Make(l,B,n);
-    vp.BoundingBox.RTF:=TzePoint3d.Make(r,T,f);
+    vp.BoundingBox.pMin:=TzePoint3d.Make(l,B,n);
+    vp.BoundingBox.pMax:=TzePoint3d.Make(r,T,f);
 
   end else begin
-    vp.BoundingBox.LBN:=cP3d_m1_m1_m1;
-    vp.BoundingBox.RTF:=cP3d__1__1__1;
+    vp.BoundingBox.pMin:=cP3d_m1_m1_m1;
+    vp.BoundingBox.pMax:=cP3d__1__1__1;
   end;
 end;
 
@@ -446,7 +446,7 @@ begin
   exit;
 
   if dc.lod=LODCalculatedDetail then begin
-    v:={uzegeometry.VertexSub}(vp.BoundingBox.RTF-vp.BoundingBox.LBN);
+    v:={uzegeometry.VertexSub}(vp.BoundingBox.pMax-vp.BoundingBox.pMin);
     simplydraw:=not SqrCanSimplyDrawInWCS(DC,v.SqrLength,49);
   end else
     simplydraw:=dc.lod=LODLowDetail;
@@ -464,7 +464,7 @@ begin
           end;
         end;
       end else if Width3D_in_WCS_Array.Count>2 then begin
-        dc.drawer.DrawLine3DInModelSpace(vp.BoundingBox.LBN,vp.BoundingBox.RTF,
+        dc.drawer.DrawLine3DInModelSpace(vp.BoundingBox.pMin,vp.BoundingBox.pMax,
           dc.DrawingContext.matrixs);
       end else begin
         dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],

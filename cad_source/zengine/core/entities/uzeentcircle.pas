@@ -309,8 +309,8 @@ begin
       f:=outbound[i].z;
   end;
 
-  vp.BoundingBox.LBN:=TzePoint3d.Make(l,B,n);
-  vp.BoundingBox.RTF:=TzePoint3d.Make(r,T,f);
+  vp.BoundingBox.pMin:=TzePoint3d.Make(l,B,n);
+  vp.BoundingBox.pMax:=TzePoint3d.Make(r,T,f);
 end;
 
 procedure GDBObjCircle.createpoint(var DC:TDrawContext);

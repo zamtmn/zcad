@@ -88,8 +88,8 @@ begin
   pobj:=beginiterate(ir);
   if pobj=nil then
                   begin
-                       result.LBN:=cP3d__0__0__0;
-                       result.RTF:=cP3d__0__0__0;
+                       result.pMin:=cP3d__0__0__0;
+                       result.pMax:=cP3d__0__0__0;
                   end
               else
                   begin
@@ -97,7 +97,8 @@ begin
                        pobj:=iterate(ir);
                        if pobj<>nil then
                        repeat
-                             concatbb(result,pobj^.vp.BoundingBox);
+                         result.CheckAndConcat(pobj^.vp.BoundingBox);
+                             //concatbb(result,pobj^.vp.BoundingBox);
                              pobj:=iterate(ir);
                        until pobj=nil;
                   end;
@@ -106,8 +107,8 @@ function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActuality):TBoundingBox
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
-     result.LBN:=cP3d__0__0__0;
-     result.RTF:=cP3d__0__0__0;
+     result.pMin:=cP3d__0__0__0;
+     result.pMax:=cP3d__0__0__0;
 
      pobj:=beginiterate(ir);
      if pobj<>nil then
@@ -120,7 +121,8 @@ begin
                        repeat
                              if pobj^.infrustum=infrustumactualy then
                              begin
-                                  concatbb(result,pobj^.vp.BoundingBox);
+                               result.CheckAndConcat(pobj^.vp.BoundingBox);
+                               //concatbb(result,pobj^.vp.BoundingBox);
                              end;
                              pobj:=iterate(ir);
                        until pobj=nil;
@@ -136,8 +138,8 @@ begin
   pobj:=beginiterate(ir);
   if pobj=nil then
                   begin
-                       result.LBN:=cP3d__0__0__0;
-                       result.RTF:=cP3d__0__0__0;
+                       result.pMin:=cP3d__0__0__0;
+                       result.pMax:=cP3d__0__0__0;
                   end
               else
                   begin
@@ -148,7 +150,8 @@ begin
                        if pobj<>nil then
                        repeat
                              pobj^.getoutbound(dc);
-                             concatbb(result,pobj^.vp.BoundingBox);
+                         result.CheckAndConcat(pobj^.vp.BoundingBox);
+                         //concatbb(result,pobj^.vp.BoundingBox);
                              pobj^.correctbb(dc);
                              pobj:=iterate(ir);
                        until pobj=nil;
@@ -161,8 +164,8 @@ begin
   pobj:=beginiterate(ir);
   if pobj=nil then
                   begin
-                       result.LBN:=cP3d__0__0__0;
-                       result.RTF:=cP3d__0__0__0;
+                       result.pMin:=cP3d__0__0__0;
+                       result.pMax:=cP3d__0__0__0;
                   end
               else
                   begin
@@ -173,7 +176,8 @@ begin
                        if pobj<>nil then
                        repeat
                              pobj^.getonlyoutbound(dc);
-                             concatbb(result,pobj^.vp.BoundingBox);
+                         result.CheckAndConcat(pobj^.vp.BoundingBox);
+                         //concatbb(result,pobj^.vp.BoundingBox);
                              //pobj^.correctbb;
                              pobj:=iterate(ir);
                        until pobj=nil;
@@ -186,13 +190,13 @@ var pobj:pGDBObjEntity;
 begin
   pobj:=beginiterate(ir);
 
-  result.LBN:=cP3d__0__0__0;
-  result.RTF:=cP3d_m1_m1_m1;
+  result.pMin:=cP3d__0__0__0;
+  result.pMax:=cP3d_m1_m1_m1;
 
   if pobj=nil then
                   begin
-                       {result.LBN:=cV3d__0__0__0;
-                       result.RTF:=cV3d_m1_m1_m1;}
+                       {result.pMin:=cV3d__0__0__0;
+                       result.pMax:=cV3d_m1_m1_m1;}
                   end
               else
                   begin
@@ -204,9 +208,10 @@ begin
                        repeat
                          if (pobj.vp.Layer<>nil)and(pobj.vp.Layer^._on) then begin
                            bb:=pobj^.getonlyvisibleoutbound(dc);
-                           if bb.RTF.x>=bb.LBN.x then begin
-                             if result.RTF.x>=result.LBN.x then
-                               concatbb(result,bb)
+                           if bb.pMax.x>=bb.pMin.x then begin
+                             if result.pMax.x>=result.pMin.x then
+                               result.CheckAndConcat(bb)
+                               //concatbb(result,bb)
                              else
                                result:=bb;
                            end;

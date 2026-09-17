@@ -45,7 +45,7 @@ begin
 end;
 function TGeomLine3D.GetBB:TBoundingBox;
 begin
-  result:=CreateBBFrom2Point(LineData.lBegin,LineData.lEnd);
+  result.MakeFrom2Pt(LineData.lBegin,LineData.lEnd);
 end;
 constructor TGeomPLine3D.init(constref LD:GDBLineProp;const sp:Double);
 begin
@@ -54,7 +54,7 @@ begin
 end;
 function TGeomPLine3D.GetBB:TBoundingBox;
 begin
-  result:=CreateBBFrom2Point(PLineData^.lBegin,PLineData^.lEnd);
+  result.MakeFrom2Pt(PLineData^.lBegin,PLineData^.lEnd);
 end;
 begin
 end.

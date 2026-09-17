@@ -117,7 +117,7 @@ end;
 
 procedure GDBObjLine.getoutbound;
 begin
-  vp.BoundingBox:=CreateBBFrom2Point(CoordInWCS.lBegin,CoordInWCS.lEnd);
+  vp.BoundingBox.MakeFrom2Pt(CoordInWCS.lBegin,CoordInWCS.lEnd);
 end;
 
 function GDBObjLine.GetCenterPoint;
@@ -137,7 +137,7 @@ function GDBObjLine.jointoline(pl:pgdbobjline;var drawing:TDrawingDef):boolean;
     ww:double;
     l:double;
   begin
-    ww:=scalardot(w,u);
+    ww:=ScalarDot(w,u);
     l:=(w-(u*ww)).SqrLength;
     if eps>l then
       Result:=True
@@ -160,10 +160,10 @@ begin
   dir:=CoordInWCS.lEnd-CoordInWCS.lBegin;
   u:={NormalizeVertex}(dir).Normalized;
   w:=pl.CoordInWCS.lbegin-CoordInWCS.lbegin;
-  t1:=(scalardot(w,dir))/dir.SqrLength;
+  t1:=(ScalarDot(w,dir))/dir.SqrLength;
   q:=online(w,u);
   w:=pl.CoordInWCS.lend-CoordInWCS.lbegin;
-  t2:=(scalardot(w,dir))/dir.SqrLength;
+  t2:=(ScalarDot(w,dir))/dir.SqrLength;
   q:=q and online(w,u);
   if not q then
     exit;
@@ -447,8 +447,8 @@ begin
         v.x:=param.md.mouseray.lbegin.x-CoordInWCS.lbegin.x;
         v.y:=param.md.mouseray.lbegin.y-CoordInWCS.lbegin.y;
         v.z:=param.md.mouseray.lbegin.z-CoordInWCS.lbegin.z;
-        d:=scalardot(n,v);
-        e:=scalardot(n,dir);
+        d:=ScalarDot(n,v);
+        e:=ScalarDot(n,dir);
         if e<eps then
           osp.ostype:=os_none
         else begin

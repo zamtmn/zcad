@@ -610,7 +610,7 @@ end;
 procedure TGeneralViewArea.partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext;LODDeep:integer=0);
 //копипаста из treerender
 begin
-  if (Node.NodeData.infrustum=PDWG.Getpcamera.POSCOUNT)and(boundingintersect(Node.BoundingBox,part)) then begin
+  if (Node.NodeData.infrustum=PDWG.Getpcamera.POSCOUNT)and(Node.BoundingBox.IsIntersectWith(part)) then begin
     if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then begin
       if assigned(node.pminusnode)then
         partailtreerender(PTEntTreeNode(node.pminusnode)^,part,dc,LODDeep);
@@ -656,7 +656,7 @@ begin
     LODSave:=DC.LOD;
     if DC.LOD=LODCalculatedDetail then begin
       if LODDeep=0 then begin
-        v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
+        v:=Node.BoundingBox.pMax-Node.BoundingBox.pMin;
         if not SqrCanSimplyDrawInWCS(DC,v.SqrLength,300) then begin
           DC.LOD:=LODLowDetail;
           inc(LODDeep);
@@ -1145,14 +1145,14 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
     dcsRTF:=cP3d_mInf_mnf_mInf;
     wcsLBN:=cP3d_Inf_nf_Inf;
     wcsRTF:=cP3d_mInf_mnf_mInf;
-    {tp:=}ProjectPoint(Volume.LBN.x,Volume.LBN.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-    {tp:=}ProjectPoint(Volume.RTF.x,Volume.LBN.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-    {tp:=}ProjectPoint(Volume.RTF.x,Volume.RTF.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-    {tp:=}ProjectPoint(Volume.LBN.x,Volume.RTF.y,Volume.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-    {tp:=}ProjectPoint(Volume.LBN.x,Volume.LBN.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-    {tp:=}ProjectPoint(Volume.RTF.x,Volume.LBN.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-    {tp:=}ProjectPoint(Volume.RTF.x,Volume.RTF.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-    {tp:=}ProjectPoint(Volume.LBN.x,Volume.RTF.y,Volume.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.pMin.x,Volume.pMin.y,Volume.pMin.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.pMax.x,Volume.pMin.y,Volume.pMin.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.pMax.x,Volume.pMax.y,Volume.pMin.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.pMin.x,Volume.pMax.y,Volume.pMin.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.pMin.x,Volume.pMin.y,Volume.pMax.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.pMax.x,Volume.pMin.y,Volume.pMax.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.pMax.x,Volume.pMax.y,Volume.pMax.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
+    {tp:=}ProjectPoint(Volume.pMin.x,Volume.pMax.y,Volume.pMax.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
 
     dcsLBN.z:=0;
     dcsRTF.z:=0;
@@ -2361,41 +2361,46 @@ begin
 
   ccsLBN:=cP3d_Inf_nf_Inf;
   ccsRTF:=cP3d_mInf_mnf_mInf;
-  {ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.LBN.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  {ProjectPoint2(proot.vp.BoundingBox.pMin.x,proot.vp.BoundingBox.pMin.y,proot.vp.BoundingBox.pMin.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.pMax.x,proot.vp.BoundingBox.pMin.y,proot.vp.BoundingBox.pMin.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.pMax.x,proot.vp.BoundingBox.pMax.y,proot.vp.BoundingBox.pMin.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.pMin.x,proot.vp.BoundingBox.pMax.y,proot.vp.BoundingBox.pMin.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.pMin.x,proot.vp.BoundingBox.pMin.y,proot.vp.BoundingBox.pMax.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.pMax.x,proot.vp.BoundingBox.pMin.y,proot.vp.BoundingBox.pMax.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.pMax.x,proot.vp.BoundingBox.pMax.y,proot.vp.BoundingBox.pMax.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.vp.BoundingBox.pMin.x,proot.vp.BoundingBox.pMax.y,proot.vp.BoundingBox.pMax.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
   }
-  {ProjectPoint2(proot.InFrustumAABB.LBN.x,proot.InFrustumAABB.LBN.y,proot.InFrustumAABB.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.InFrustumAABB.RTF.x,proot.InFrustumAABB.LBN.y,proot.InFrustumAABB.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.InFrustumAABB.RTF.x,proot.InFrustumAABB.RTF.y,proot.InFrustumAABB.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.InFrustumAABB.LBN.x,proot.InFrustumAABB.RTF.y,proot.InFrustumAABB.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.InFrustumAABB.LBN.x,proot.InFrustumAABB.LBN.y,proot.InFrustumAABB.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.InFrustumAABB.RTF.x,proot.InFrustumAABB.LBN.y,proot.InFrustumAABB.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.InFrustumAABB.RTF.x,proot.InFrustumAABB.RTF.y,proot.InFrustumAABB.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.InFrustumAABB.LBN.x,proot.InFrustumAABB.RTF.y,proot.InFrustumAABB.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);}
+  {ProjectPoint2(proot.InFrustumAABB.pMin.x,proot.InFrustumAABB.pMin.y,proot.InFrustumAABB.pMin.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.pMax.x,proot.InFrustumAABB.pMin.y,proot.InFrustumAABB.pMin.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.pMax.x,proot.InFrustumAABB.pMax.y,proot.InFrustumAABB.pMin.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.pMin.x,proot.InFrustumAABB.pMax.y,proot.InFrustumAABB.pMin.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.pMin.x,proot.InFrustumAABB.pMin.y,proot.InFrustumAABB.pMax.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.pMax.x,proot.InFrustumAABB.pMin.y,proot.InFrustumAABB.pMax.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.pMax.x,proot.InFrustumAABB.pMax.y,proot.InFrustumAABB.pMax.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.pMin.x,proot.InFrustumAABB.pMax.y,proot.InFrustumAABB.pMax.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);}
 
   tbb:=proot.vp.BoundingBox;
 
-  if IsBBNul(tbb) then
+  if {IsBBNul}tbb.IsNull then
   begin
-       {tbb.LBN:=uzegeometry.VertexAdd(pdwg.tpcamera^.prop.point,cV3d_m1_m1_m1);
-       tbb.RTF:=uzegeometry.VertexAdd(pdwg.tpcamera^.prop.point,cP3d__1__1__1);}
-       concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
-       concatBBandPoint(tbb,param.CSIcon.CSIconX);
-       concatBBandPoint(tbb,param.CSIcon.CSIconY);
-       concatBBandPoint(tbb,param.CSIcon.CSIconZ);
+       {tbb.pMin:=uzegeometry.VertexAdd(pdwg.tpcamera^.prop.point,cV3d_m1_m1_m1);
+       tbb.pMax:=uzegeometry.VertexAdd(pdwg.tpcamera^.prop.point,cP3d__1__1__1);}
+       //concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
+       tbb.Concat(param.CSIcon.CSIconCoord);
+       //concatBBandPoint(tbb,param.CSIcon.CSIconX);
+       tbb.Concat(param.CSIcon.CSIconX);
+       //concatBBandPoint(tbb,param.CSIcon.CSIconY);
+       tbb.Concat(param.CSIcon.CSIconY);
+       //concatBBandPoint(tbb,param.CSIcon.CSIconZ);
+       tbb.Concat(param.CSIcon.CSIconZ);
   end;
 
   if pdwg.GetConstructObjRoot.ObjArray.Count>0 then
                        begin
   pdwg.GetConstructObjRoot.calcbb(dc);
   tbb2:=pdwg.GetConstructObjRoot.vp.BoundingBox;
-  ConcatBB(tbb,tbb2);
+  tbb.CheckAndConcat(tbb2);
+  //ConcatBB(tbb,tbb2);
   end;
   {if param.CSIcon.AxisLen>eps then
   begin
@@ -2406,10 +2411,10 @@ begin
   end;}
 
 
-  if IsBBNul(tbb) then
+  if {IsBBNul}tbb.IsNull then
   begin
-       tbb.LBN:=pcamera^.prop.point-cV3d__1__1__1;
-       tbb.RTF:=pcamera^.prop.point+cV3d__1__1__1;
+       tbb.pMin:=pcamera^.prop.point-cV3d__1__1__1;
+       tbb.pMax:=pcamera^.prop.point+cV3d__1__1__1;
   end;
 
   //if param.CSIcon.AxisLen>eps then
@@ -2420,8 +2425,8 @@ begin
   //concatBBandPoint(tbb,param.CSIcon.CSIconZ);
   end;
 
-  LBN:=tbb.LBN;
-  RTF:=tbb.RTF;
+  LBN:=tbb.pMin;
+  RTF:=tbb.pMax;
 
   ProjectPoint2(LBN.x,LBN.y,LBN.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
   ProjectPoint2(RTF.x,LBN.y,LBN.Z,pcamera^.modelMatrix,ccsLBN,ccsRTF);
@@ -2505,17 +2510,21 @@ begin
   ccsLBN:=cP3d_Inf_nf_Inf;
   ccsRTF:=cP3d_mInf_mnf_mInf;
   tbb:=proot.InFrustumAABB;
-  if IsBBNul(tbb) then
+  if {IsBBNul}tbb.IsNull then
   begin
-       concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
-       concatBBandPoint(tbb,param.CSIcon.CSIconX);
-       concatBBandPoint(tbb,param.CSIcon.CSIconY);
-       concatBBandPoint(tbb,param.CSIcon.CSIconZ);
+       //concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
+       tbb.Concat(param.CSIcon.CSIconCoord);
+       //concatBBandPoint(tbb,param.CSIcon.CSIconX);
+       tbb.Concat(param.CSIcon.CSIconX);
+       //concatBBandPoint(tbb,param.CSIcon.CSIconY);
+       tbb.Concat(param.CSIcon.CSIconY);
+       //concatBBandPoint(tbb,param.CSIcon.CSIconZ);
+       tbb.Concat(param.CSIcon.CSIconZ);
   end;
   //pdwg.ConstructObjRoot.calcbb;
   //tbb2:=pdwg.getConstructObjRoot.vp.BoundingBox;
-  //tbb2.LBN:=VectorTransform3D(tbb2.LBN,pdwg.getConstructObjRoot.ObjMatrix);
-  //tbb2.RTF:=VectorTransform3D(tbb2.RTF,pdwg.getConstructObjRoot.ObjMatrix);
+  //tbb2.pMin:=VectorTransform3D(tbb2.pMin,pdwg.getConstructObjRoot.ObjMatrix);
+  //tbb2.pMax:=VectorTransform3D(tbb2.pMax,pdwg.getConstructObjRoot.ObjMatrix);
   //ConcatBB(tbb,tbb2);
 
 
@@ -2523,18 +2532,19 @@ begin
                        begin
   pdwg.GetConstructObjRoot.calcbb(dc);
   tbb2:=pdwg.GetConstructObjRoot.vp.BoundingBox;
-  tbb2.LBN:=VectorTransform3D(tbb2.LBN,pdwg.getConstructObjRoot.ObjMatrix);
-  tbb2.RTF:=VectorTransform3D(tbb2.RTF,pdwg.getConstructObjRoot.ObjMatrix);
-  ConcatBB(tbb,tbb2);
+  tbb2.pMin:=VectorTransform3D(tbb2.pMin,pdwg.getConstructObjRoot.ObjMatrix);
+  tbb2.pMax:=VectorTransform3D(tbb2.pMax,pdwg.getConstructObjRoot.ObjMatrix);
+  tbb.CheckAndConcat(tbb2);
+  //ConcatBB(tbb,tbb2);
   end;
 
   //proot.InFrustumAABB:=tbb;
 
-  if not IsBBNul(tbb) then
+  if not {IsBBNul}tbb.IsNull then
   begin
-        LBN:=tbb.LBN;
+        LBN:=tbb.pMin;
         LBN:=LBN+pcamera^.CamCSOffset;
-        RTF:=tbb.RTF;
+        RTF:=tbb.pMax;
         RTF:=RTF+pcamera^.CamCSOffset;
   end
   else

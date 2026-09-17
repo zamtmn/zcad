@@ -197,10 +197,10 @@ begin
   ispl:=false;
   pl.init(10);
 
-  Bound.LBN.x:=+infinity;
-  Bound.LBN.y:=+infinity;
-  Bound.RTF.x:=NegInfinity;
-  Bound.RTF.y:=NegInfinity;//-infinity;
+  Bound.pMin.x:=+infinity;
+  Bound.pMin.y:=+infinity;
+  Bound.pMax.x:=NegInfinity;
+  Bound.pMax.y:=NegInfinity;//-infinity;
 
   //matr:=matrixmultiply(DrawMatrix,objmatrix);
   matr:=DrawMatrix;
@@ -250,25 +250,25 @@ begin
                              pl.PushBackData(lp);
                      end;
 
-       if Bound.LBN.x=+infinity then Bound.LBN.x:=0;
-       if Bound.LBN.y=+infinity then Bound.LBN.y:=0;
-       if Bound.RTF.x=NegInfinity then Bound.RTF.x:=1;
-       if Bound.RTF.y=NegInfinity then Bound.RTF.y:=1;
+       if Bound.pMin.x=+infinity then Bound.pMin.x:=0;
+       if Bound.pMin.y=+infinity then Bound.pMin.y:=0;
+       if Bound.pMax.x=NegInfinity then Bound.pMax.x:=1;
+       if Bound.pMax.y=NegInfinity then Bound.pMax.y:=1;
 
-  outbound[0].x:=Bound.LBN.x;
-  outbound[0].y:=Bound.RTF.y;
+  outbound[0].x:=Bound.pMin.x;
+  outbound[0].y:=Bound.pMax.y;
   outbound[0].z:=0;
   outbound[0]:=VectorTransform3D(outbound[0],objMatrix);
-  outbound[1].x:=Bound.RTF.x;
-  outbound[1].y:=Bound.RTF.y;
+  outbound[1].x:=Bound.pMax.x;
+  outbound[1].y:=Bound.pMax.y;
   outbound[1].z:=0;
   outbound[1]:=VectorTransform3D(outbound[1],objMatrix);
-  outbound[2].x:=Bound.RTF.x;
-  outbound[2].y:=Bound.LBN.y;
+  outbound[2].x:=Bound.pMax.x;
+  outbound[2].y:=Bound.pMin.y;
   outbound[2].z:=0;
   outbound[2]:=VectorTransform3D(outbound[2],objMatrix);
-  outbound[3].x:=Bound.LBN.x;
-  outbound[3].y:=Bound.LBN.y;
+  outbound[3].x:=Bound.pMin.x;
+  outbound[3].y:=Bound.pMin.y;
   outbound[3].z:=0;
   outbound[3]:=VectorTransform3D(outbound[3],objMatrix);
 
@@ -448,10 +448,12 @@ end;
 procedure ZGLGraphix.DrawLineWithoutLT(var DC:TDrawContext;const p1,p2:TzePoint3d;var dr:TLLDrawResult;OnlyOne:Boolean=False);
 begin
   if dr.LLPCount=0 then
-    dr.BB:=CreateBBFrom2Point(p1,p2)
+    dr.BB.MakeFrom2Pt(p1,p2)
   else begin
-      concatBBandPoint(dr.BB,p1);
-      concatBBandPoint(dr.BB,p2);
+      //concatBBandPoint(dr.BB,p1);
+    dr.BB.Concat(p1);
+      //concatBBandPoint(dr.BB,p2);
+    dr.BB.Concat(p2);
   end;
   inc(dr.LLPCount);
   self.AddLine(DC,p1,p2,OnlyOne);
@@ -461,12 +463,14 @@ var
   i:integer;
 begin
   if dr.LLPCount=0 then begin
-    dr.BB:=CreateBBFrom2Point(pts[0]{points.getDataMutable(0)^},{points.getDataMutable(1)^}pts[1]);
+    dr.BB.MakeFrom2Pt(pts[0]{points.getDataMutable(0)^},{points.getDataMutable(1)^}pts[1]);
     for i:=2 to {points.Count-1}high(pts) do
-      concatBBandPoint(dr.BB,{points.getDataMutable(i)^}pts[i]);
+      //concatBBandPoint(dr.BB,{points.getDataMutable(i)^}pts[i]);
+      dr.BB.Concat(pts[i]);
   end else
     for i:=0 to {points.Count-1}high(pts) do
-      concatBBandPoint(dr.BB,{points.getDataMutable(i)^}pts[i]);
+      //concatBBandPoint(dr.BB,{points.getDataMutable(i)^}pts[i]);
+      dr.BB.Concat(pts[i]);
   inc(dr.LLPCount);
   AddPolyLine(DC,closed,{GDBPoint3dArray.PTArr(points.getDataMutable(0))^[0..points.Count-1]}pts);
 end;
@@ -474,9 +478,10 @@ end;
 procedure ZGLGraphix.DrawPointWithoutLT(var DC:TDrawContext;const p:TzePoint3d;var dr:TLLDrawResult);
 begin
      if dr.LLPCount=0 then
-                          dr.BB:=CreateBBFromPoint(p)
-                      else
-                          concatBBandPoint(dr.BB,p);
+                          dr.BB.Fill(p)
+       else
+         //concatBBandPoint(dr.BB,p);
+         dr.BB.Concat(p);
      inc(dr.LLPCount);
      AddPoint(DC,p);
 end;
@@ -555,8 +560,8 @@ begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:=creatematrix(StartPatternPoint,PSP^.param,angle,scale);
 matr:=cOneMatrix;
-Bound.LBN:=cP2d__0__0;
-Bound.RTF:=cP2d__0__0;
+Bound.pMin:=cP2d__0__0;
+Bound.pMax:=cP2d__0__0;
 sli:=-1;
 if PSP.Psymbol<> nil then
                     PSP^.param.PStyle.pfont.CreateSymbol(drawer,1,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
@@ -573,8 +578,8 @@ begin
 { TODO : убрать двойное преобразование номера символа }
 objmatrix:={creatematrix}CreateReadableMatrix(StartPatternPoint,PTP^.param,angle,scale,PTP.txtL,PTP.txtH);
 matr:=cOneMatrix;
-Bound.LBN:=cP2d__0__0;
-Bound.RTF:=cP2d__0__0;
+Bound.pMin:=cP2d__0__0;
+Bound.pMax:=cP2d__0__0;
 sli:=-1;
 for j:=1 to (system.length(PTP^.Text)) do
 begin

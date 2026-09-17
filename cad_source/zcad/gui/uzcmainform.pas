@@ -1990,18 +1990,18 @@ begin
         bb:=pdwg.GetCurrentROOT.vp.BoundingBox;
         size:=round(pdwg.wa.getviewcontrol.ClientWidth*pdwg.GetPCamera^.prop.zoom);
         position:=round(-pdwg.GetPCamera^.prop.point.x);
-        min:=round(bb.LBN.x+size/2);
-        max:=round(bb.RTF.x+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
+        min:=round(bb.pMin.x+size/2);
+        max:=round(bb.pMax.x+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
         if max<min then
           max:=min;
         zcMainForm.HScrollBar.SetParams(position,min,max,size);
 
         size:=round(pdwg.wa.getviewcontrol.ClientHeight*pdwg.GetPCamera^.prop.zoom);
-        min:=round(bb.LBN.y+size/2);
-        max:=round(bb.RTF.y+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
+        min:=round(bb.pMin.y+size/2);
+        max:=round(bb.pMax.y+{$IFNDEF LCLWIN32}-{$ENDIF}size/2);
         if max<min then
           max:=min;
-        position:=round((bb.LBN.y+bb.RTF.y+pdwg.GetPCamera^.prop.point.y));
+        position:=round((bb.pMin.y+bb.pMax.y+pdwg.GetPCamera^.prop.point.y));
         zcMainForm.VScrollBar.SetParams(position,min,max,size);
       end;
 end;

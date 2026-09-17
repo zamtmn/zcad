@@ -346,8 +346,8 @@ begin
    //////////////////////////////////////////////////        }
   LastPoint:=pc^.VertexArrayInWCS.getDataMutable(pc^.VertexArrayInWCS.Count-1)^;//получаем точку в конце кабеля
 
-  volume.LBN:=TzePoint3d.Make(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
-  volume.RTF:=TzePoint3d.Make(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
+  volume.pMin:=TzePoint3d.Make(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
+  volume.pMax:=TzePoint3d.Make(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
   NearObjects.init(100); //инициализируем список
   if drawings.GetCurrentROOT^.FindObjectsInVolume(volume,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
   begin
@@ -635,13 +635,13 @@ end;
 //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
 function getAreaVertex(vertexPoint:TzePoint3d;accuracy:double):TBoundingBox;
 begin
-    result.LBN.x:=vertexPoint.x - accuracy;
-    result.LBN.y:=vertexPoint.y - accuracy;
-    result.LBN.z:=0;
+    result.pMin.x:=vertexPoint.x - accuracy;
+    result.pMin.y:=vertexPoint.y - accuracy;
+    result.pMin.z:=0;
 
-    result.RTF.x:=vertexPoint.x + accuracy;
-    result.RTF.y:=vertexPoint.y + accuracy;
-    result.RTF.z:=0;
+    result.pMax.x:=vertexPoint.x + accuracy;
+    result.pMax.y:=vertexPoint.y + accuracy;
+    result.pMax.z:=0;
 
 end;
 
@@ -650,34 +650,34 @@ function getAreaLine(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TBound
 begin
      if point1.x <= point2.x  then
        begin
-         result.LBN.x:=point1.x - accuracy;
-         result.RTF.x:=point2.x + accuracy;
+         result.pMin.x:=point1.x - accuracy;
+         result.pMax.x:=point2.x + accuracy;
        end
      else
        begin
-           result.LBN.x:=point2.x - accuracy;
-           result.RTF.x:=point1.x + accuracy;
+           result.pMin.x:=point2.x - accuracy;
+           result.pMax.x:=point1.x + accuracy;
        end;
      if point1.y <= point2.y then
        begin
-         result.LBN.y:=point1.y - accuracy;
-         result.RTF.y:=point2.y + accuracy;
+         result.pMin.y:=point1.y - accuracy;
+         result.pMax.y:=point2.y + accuracy;
        end
      else
        begin
-         result.LBN.y:=point2.y - accuracy;
-         result.RTF.y:=point1.y + accuracy;
+         result.pMin.y:=point2.y - accuracy;
+         result.pMax.y:=point1.y + accuracy;
        end;
 
-    result.LBN.z:=0;
-    result.RTF.z:=0;
+    result.pMin.z:=0;
+    result.pMax.z:=0;
 end;
 //** Попалали концы линии в область вершины
 function endsLineToAreaVertex(nowLine:TStructCableLine;areaVertex:TBoundingBox):boolean;
 begin
     result:=false;    // нет попаданий
-    if (areaVertex.LBN.x <= nowLine.stPoint.x) and (areaVertex.LBN.y <= nowLine.stPoint.y) then
-      if (areaVertex.RTF.x >= nowLine.stPoint.x) and (areaVertex.RTF.y >= nowLine.stPoint.y) then
+    if (areaVertex.pMin.x <= nowLine.stPoint.x) and (areaVertex.pMin.y <= nowLine.stPoint.y) then
+      if (areaVertex.pMax.x >= nowLine.stPoint.x) and (areaVertex.pMax.y >= nowLine.stPoint.y) then
          result:=true;
 end;
 
@@ -1044,7 +1044,7 @@ begin
        for j:=0 to graph.listVertex.Size-1 do                                           //перебираем все вершины и ищем те которые попали в область линии грубый вариант (но быстрый) 1-я отсев
        begin
          areaVertex:=getAreaVertex(graph.listVertex[j].centerPoint,0);                  // получаем область поиска около вершины
-         if boundingintersect(areaLine,areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
+         if areaLine.IsIntersectWith(areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
          begin
                //строим прямоугольник вокруг линии что бы по ниму определять находится ли вершина внутри
                vertexRectangleLine:=convertLineInRectangleWithAccuracy(listCable[i].stPoint,listCable[i].edPoint,accuracy);
@@ -1120,9 +1120,9 @@ begin
             vertexLine:=listCable[i].edPoint;
           areaVertex:=getAreaVertex(vertexLine,accuracy);
           //if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
-          //   testTempDrawLine(areaVertex.LBN,areaVertex.RTF); // показать область
+          //   testTempDrawLine(areaVertex.pMin,areaVertex.pMax); // показать область
 
-          //zcUI.TextMessage('x='+ floattostr(areaVertex.LBN.x)+'---y='+floattostr(areaVertex.LBN.y)); // координата данной точки
+          //zcUI.TextMessage('x='+ floattostr(areaVertex.pMin.x)+'---y='+floattostr(areaVertex.pMin.y)); // координата данной точки
 
           if drawings.GetCurrentROOT^.FindObjectsInVolume(areaVertex,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
             begin
@@ -1261,7 +1261,7 @@ begin
 
         areaLine:=getAreaLine(listCable[i].stPoint,listCable[i].stPoint,accuracy);       //получаем область линии с учетом погрешности
         areaVertex:=getAreaVertex(listCable[j].stPoint,0);
-        if boundingintersect(areaLine,areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
+        if areaLine.IsIntersectWith(areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
           if dublicateVertex({listDevice}graph.listVertex,listCable[j].stPoint,accuracy) = false then begin
             infoDevice.deviceEnt:=nil;
             infoDevice.centerPoint:=listCable[j].stPoint;
@@ -1272,7 +1272,7 @@ begin
           end;
         areaLine:=getAreaLine(listCable[i].stPoint,listCable[i].stPoint,accuracy);       //получаем область линии с учетом погрешности
         areaVertex:=getAreaVertex(listCable[j].edPoint,0);
-        if boundingintersect(areaLine,areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
+        if areaLine.IsIntersectWith(areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
           if dublicateVertex({listDevice}graph.listVertex,listCable[j].edPoint,accuracy) = false then begin
             infoDevice.deviceEnt:=nil;
             infoDevice.centerPoint:=listCable[j].edPoint;
@@ -1283,7 +1283,7 @@ begin
           end;
         areaLine:=getAreaLine(listCable[i].edPoint,listCable[i].edPoint,accuracy);       //получаем область линии с учетом погрешности
         areaVertex:=getAreaVertex(listCable[j].stPoint,0);
-        if boundingintersect(areaLine,areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
+        if areaLine.IsIntersectWith(areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
           if dublicateVertex({listDevice}graph.listVertex,listCable[j].stPoint,accuracy) = false then begin
             infoDevice.deviceEnt:=nil;
             infoDevice.centerPoint:=listCable[j].stPoint;
@@ -1294,7 +1294,7 @@ begin
           end;
         areaLine:=getAreaLine(listCable[i].edPoint,listCable[i].edPoint,accuracy);       //получаем область линии с учетом погрешности
         areaVertex:=getAreaVertex(listCable[j].edPoint,0);
-        if boundingintersect(areaLine,areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
+        if areaLine.IsIntersectWith(areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
           if dublicateVertex({listDevice}graph.listVertex,listCable[j].edPoint,accuracy) = false then begin
             infoDevice.deviceEnt:=nil;
             infoDevice.centerPoint:=listCable[j].edPoint;
@@ -1689,7 +1689,7 @@ begin
 
     areaLine:= getAreaLine(listCable[i].stPoint,listCable[i].edPoint,Epsilon) ; // находим зону в которой будет находится наш  удлиненый кабель и кабель который его будет пересекать
                if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
-             testTempDrawLine(areaLine.LBN,areaLine.RTF); // показать область
+             testTempDrawLine(areaLine.pMin,areaLine.pMax); // показать область
     NearObjects.init(100); //инициализируем список
     if drawings.GetCurrentROOT^.FindObjectsInVolume(areaLine,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
     begin

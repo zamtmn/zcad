@@ -110,9 +110,9 @@ var
 begin
   nodename:=PointerToNodeName(node);
   zcUI.TextMessage(format(' %s [label="None with %d ents, %fx%fx%f"]',
-    [nodename,node.nul.Count,node.BoundingBox.RTF.x-node.BoundingBox.LBN.x,
-    node.BoundingBox.RTF.y-node.BoundingBox.LBN.y,node.BoundingBox.RTF.z-
-    node.BoundingBox.LBN.z]),TMWOHistoryOut);
+    [nodename,node.nul.Count,node.BoundingBox.pMax.x-node.BoundingBox.pMin.x,
+    node.BoundingBox.pMax.y-node.BoundingBox.pMin.y,node.BoundingBox.pMax.z-
+    node.BoundingBox.pMin.z]),TMWOHistoryOut);
   if node^.NodeData.infrustum=infrustum then
     zcUI.TextMessage(format(' %s [fillcolor=red, style=filled]',
       [nodename,node.nul.Count]),TMWOHistoryOut);

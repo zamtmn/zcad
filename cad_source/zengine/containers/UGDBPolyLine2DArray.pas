@@ -65,14 +65,14 @@ begin
                  tt:=ptv.y;
         ptv:=iterate(ir);
   until ptv=nil;
-  result.LBN:=TzePoint3d.Make(l,B,0);
-  result.RTF:=TzePoint3d.Make(r,Tt,0);
+  result.pMin:=TzePoint3d.Make(l,B,0);
+  result.pMax:=TzePoint3d.Make(r,Tt,0);
 
   end
               else
   begin
-  result.LBN:=TzePoint3d.Make(-1,-1,-1);
-  result.RTF:=TzePoint3d.Make(1,1,1);
+  result.pMin:=TzePoint3d.Make(-1,-1,-1);
+  result.pMax:=TzePoint3d.Make(1,1,1);
   end;
 end;
 

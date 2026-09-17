@@ -92,10 +92,11 @@ procedure GDBObj3DFace.getoutbound;
 var
   i:integer;
 begin
-  vp.BoundingBox.LBN:=PInWCS[0];
-  vp.BoundingBox.RTF:=PInWCS[0];
+  vp.BoundingBox.pMin:=PInWCS[0];
+  vp.BoundingBox.pMax:=PInWCS[0];
   for i:=1 to 3 do
-    concatBBandPoint(vp.BoundingBox,PInWCS[I]);
+    vp.BoundingBox.Concat(PInWCS[I]);
+    //concatBBandPoint(vp.BoundingBox,PInWCS[I]);
 end;
 
 procedure GDBObj3DFace.FormatEntity(var drawing:TDrawingDef;

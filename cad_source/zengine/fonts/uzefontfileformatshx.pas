@@ -202,8 +202,8 @@ begin
             CreateTranslationMatrix(TzeVector3d.Make(p.x,p.y,0))));
           symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,
             VDCopyResultParam.EID.GeomIndexMax);
-          br.Concat(symoutbound.LBN.Slice);
-          br.Concat(symoutbound.RTF.Slice);
+          br.Concat(symoutbound.pMin.Slice);
+          br.Concat(symoutbound.pMax.Slice);
           p:=p+TzeVector2d.Make(psubsyminfo^.NextSymX,psubsyminfo^.SymMinY);
           sizeshx:=sizeshx+psubsyminfo^.LLPrimitiveCount;
         end else begin
@@ -411,14 +411,14 @@ begin
   psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
   psyminfo^.LLPrimitiveCount:=sizeshx;
   psyminfo^.NextSymX:=p.x;
-  psyminfo^.SymMaxY:=br.RTF.y;
-  psyminfo^.SymMinY:=br.LBN.y;
-  if br.RTF.x<>NegInfinity then
-    psyminfo^.SymMaxX:=br.RTF.x
+  psyminfo^.SymMaxY:=br.pMax.y;
+  psyminfo^.SymMinY:=br.pMin.y;
+  if br.pMax.x<>NegInfinity then
+    psyminfo^.SymMaxX:=br.pMax.x
   else
     psyminfo^.SymMaxX:=psyminfo^.NextSymX;
-  if br.LBN.x<>infinity then
-    psyminfo^.SymMinX:=br.LBN.x
+  if br.pMin.x<>infinity then
+    psyminfo^.SymMinX:=br.pMin.x
   else
     psyminfo^.SymMinX:=0;
   psyminfo^.Name:=symname;

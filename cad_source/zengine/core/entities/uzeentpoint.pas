@@ -80,14 +80,14 @@ end;
 
 procedure GDBObjPoint.getoutbound;
 begin
-  vp.BoundingBox.LBN:=P_insertInWCS;
-  vp.BoundingBox.RTF:=P_insertInWCS;
-  vp.BoundingBox.LBN.x:=vp.BoundingBox.LBN.x-0.1;
-  vp.BoundingBox.LBN.y:=vp.BoundingBox.LBN.y-0.1;
-  vp.BoundingBox.LBN.z:=vp.BoundingBox.LBN.z-0.1;
-  vp.BoundingBox.RTF.x:=vp.BoundingBox.RTF.x+0.1;
-  vp.BoundingBox.RTF.y:=vp.BoundingBox.RTF.y+0.1;
-  vp.BoundingBox.RTF.z:=vp.BoundingBox.RTF.z+0.1;
+  vp.BoundingBox.pMin:=P_insertInWCS;
+  vp.BoundingBox.pMax:=P_insertInWCS;
+  vp.BoundingBox.pMin.x:=vp.BoundingBox.pMin.x-0.1;
+  vp.BoundingBox.pMin.y:=vp.BoundingBox.pMin.y-0.1;
+  vp.BoundingBox.pMin.z:=vp.BoundingBox.pMin.z-0.1;
+  vp.BoundingBox.pMax.x:=vp.BoundingBox.pMax.x+0.1;
+  vp.BoundingBox.pMax.y:=vp.BoundingBox.pMax.y+0.1;
+  vp.BoundingBox.pMax.z:=vp.BoundingBox.pMax.z+0.1;
 end;
 
 procedure GDBObjPoint.FormatEntity(var drawing:TDrawingDef;

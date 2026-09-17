@@ -278,12 +278,12 @@ begin
   minus:=False;
   Result:=False;
   if assigned(Node.pminusnode) then
-    if uzegeometry.IsPointInBB(point,Node.pminusnode.BoundingBox) then begin
+    if Node.pminusnode.BoundingBox.IsContainsPoint(point) then begin
       minus:=FindObjectsInPointInNode(point,PTEntTreeNode(
         Node.pminusnode)^,Objects);
     end;
   if assigned(Node.pplusnode) then
-    if uzegeometry.IsPointInBB(point,Node.pplusnode.BoundingBox) then begin
+    if Node.pplusnode.BoundingBox.IsContainsPoint(point) then begin
       plus:=FindObjectsInPointInNode(point,PTEntTreeNode(Node.pplusnode)^,Objects);
     end;
 
@@ -312,12 +312,12 @@ begin
   minus:=False;
   Result:=False;
   if assigned(Node.pminusnode) then
-    if uzegeometry.boundingintersect(Volume,Node.pminusnode.BoundingBox) then begin
+    if Volume.IsIntersectWith(Node.pminusnode.BoundingBox) then begin
       minus:=FindObjectsInVolumeInNode(Volume,PTEntTreeNode(
         Node.pminusnode)^,Objects);
     end;
   if assigned(Node.pplusnode) then
-    if uzegeometry.boundingintersect(Volume,Node.pplusnode.BoundingBox) then begin
+    if Volume.IsIntersectWith(Node.pplusnode.BoundingBox) then begin
       plus:=FindObjectsInVolumeInNode(Volume,PTEntTreeNode(
         Node.pplusnode)^,Objects);
     end;
@@ -325,7 +325,7 @@ begin
   pobj:=Node.nulbeginiterate(ir);
   if pobj<>nil then
     repeat
-      if boundingintersect(Volume,pobj^.vp.BoundingBox) then begin
+      if Volume.IsIntersectWith(pobj^.vp.BoundingBox) then begin
         Result:=True;
         Objects.PushBackData(pobj);
       end;
@@ -339,7 +339,7 @@ end;
 function GDBObjGenericSubEntry.FindObjectsInPoint(const point:TzePoint3d;
   var Objects:GDBObjOpenArrayOfPV):boolean;
 begin
-  if uzegeometry.IsPointInBB(point,self.ObjArray.ObjTree.BoundingBox) then begin
+  if self.ObjArray.ObjTree.BoundingBox.IsContainsPoint(point) then begin
     Result:=FindObjectsInPointInNode(point,ObjArray.ObjTree,Objects);
   end else
     Result:=False;
@@ -348,7 +348,7 @@ end;
 function GDBObjGenericSubEntry.FindObjectsInVolume(const Volume:TBoundingBox;
   var Objects:GDBObjOpenArrayOfPV):boolean;
 begin
-  if uzegeometry.boundingintersect(Volume,self.ObjArray.ObjTree.BoundingBox) then
+  if Volume.IsIntersectWith(self.ObjArray.ObjTree.BoundingBox) then
   begin
     Result:=FindObjectsInVolumeInNode(Volume,ObjArray.ObjTree,Objects);
   end else

@@ -107,8 +107,8 @@ begin
                    PFirstStageData:={@FirstStageData}nil;
                 end;
 TSMAccumulation:begin
-                   //FirstStageData.midlepoint:=vertexadd(Entity.GetBB.LBN,FirstStageData.midlepoint);
-                   //FirstStageData.midlepoint:=vertexadd(Entity.GetBB.RTF,FirstStageData.midlepoint);
+                   //FirstStageData.midlepoint:=vertexadd(Entity.GetBB.pMin,FirstStageData.midlepoint);
+                   //FirstStageData.midlepoint:=vertexadd(Entity.GetBB.pMax,FirstStageData.midlepoint);
                    //inc(FirstStageData.counter,2);
                 end;
         TSMCalc:begin
@@ -125,7 +125,7 @@ var
    v:TzeVector3d;
    axis:integer;
 begin
-   v:=(NodeBB.RTF-NodeBB.LBN);
+   v:=(NodeBB.pMax-NodeBB.pMin);
    if v.x>v.y then
               begin
                    if v.x>v.z then
@@ -140,7 +140,7 @@ begin
                           else
                               axis:=2
               end;
-   FirstStageData.midlepoint:=(NodeBB.RTF+NodeBB.LBN.asVector)*0.5;
+   FirstStageData.midlepoint:=(NodeBB.pMax+NodeBB.pMin.asVector)*0.5;
    FirstStageData.d:=sqrt(sqr(FirstStageData.midlepoint.x) + sqr(FirstStageData.midlepoint.y) + sqr(FirstStageData.midlepoint.z));
 case axis of
       0:TestNode.plane:=uzegeometry.PlaneFrom3Pont(FirstStageData.midlepoint,
@@ -164,7 +164,8 @@ begin
 end;
 class procedure TZEntsManipulator.CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:TGeomEntity);
 begin
-     ConcatBB(NodeBB,GetEntityBoundingBox(Entity));
+  NodeBB.CheckAndConcat(GetEntityBoundingBox(Entity));
+  //ConcatBB(NodeBB,GetEntityBoundingBox(Entity));
 end;
 class function TZEntsManipulator.GetEntityBoundingBox(var Entity:TGeomEntity):TBoundingBox;
 begin
@@ -175,8 +176,8 @@ class function TZEntsManipulator.GetBBPosition(const sep:TzeVector4d;const BB:TB
 var
     d,d1,d2:double;
 begin
-     d1:=sep.v[0] * BB.RTF.x + sep.v[1] * BB.RTF.y + sep.v[2] * BB.RTF.z + sep.v[3];
-     d2:=sep.v[0] * BB.LBN.x + sep.v[1] * BB.LBN.y + sep.v[2] * BB.LBN.z + sep.v[3];
+     d1:=sep.v[0] * BB.pMax.x + sep.v[1] * BB.pMax.y + sep.v[2] * BB.pMax.z + sep.v[3];
+     d2:=sep.v[0] * BB.pMin.x + sep.v[1] * BB.pMin.y + sep.v[2] * BB.pMin.z + sep.v[3];
      if abs(d1)<eps then
                         d1:=0;
      if abs(d2)<eps then

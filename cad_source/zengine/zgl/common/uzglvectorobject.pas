@@ -265,23 +265,23 @@ var
    i:integer;
    p:ZGLVertex3Sarray.PT;
 begin
-     result.LBN:=cP3d_Inf_nf_Inf;
-     result.RTF:=cP3d_mInf_mnf_mInf;
+     result.pMin:=cP3d_Inf_nf_Inf;
+     result.pMax:=cP3d_mInf_mnf_mInf;
      p:=self.GeomData.Vertex3S.getDataMutable(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
      begin
-       if result.LBN.x>p.x then
-                               result.LBN.x:=p.x;
-       if result.LBN.y>p.y then
-                               result.LBN.y:=p.y;
-       if result.LBN.z>p.z then
-                               result.LBN.z:=p.z;
-       if result.RTF.x<p.x then
-                               result.RTF.x:=p.x;
-       if result.RTF.y<p.y then
-                               result.RTF.y:=p.y;
-       if result.RTF.z<p.z then
-                               result.RTF.z:=p.z;
+       if result.pMin.x>p.x then
+                               result.pMin.x:=p.x;
+       if result.pMin.y>p.y then
+                               result.pMin.y:=p.y;
+       if result.pMin.z>p.z then
+                               result.pMin.z:=p.z;
+       if result.pMax.x<p.x then
+                               result.pMax.x:=p.x;
+       if result.pMax.y<p.y then
+                               result.pMax.y:=p.y;
+       if result.pMax.z<p.z then
+                               result.pMax.z:=p.z;
        inc(p);
      end;
 end;
@@ -291,24 +291,24 @@ var
    p:ZGLVertex3Sarray.PT;
    point:ZGLVertex3Sarray.TDataType;
 begin
-     result.LBN:=cP3d_Inf_nf_Inf;
-     result.RTF:=cP3d_mInf_mnf_mInf;
+     result.pMin:=cP3d_Inf_nf_Inf;
+     result.pMax:=cP3d_mInf_mnf_mInf;
      p:=self.GeomData.Vertex3S.getDataMutable(GeomDataIndexMin);
      for i:=0 to GeomDataIndexMax-GeomDataIndexMin do
      begin
        point:=VectorTransform3D(p^,matrix);
-       if result.LBN.x>point.x then
-                               result.LBN.x:=point.x;
-       if result.LBN.y>point.y then
-                               result.LBN.y:=point.y;
-       if result.LBN.z>point.z then
-                               result.LBN.z:=point.z;
-       if result.RTF.x<point.x then
-                               result.RTF.x:=point.x;
-       if result.RTF.y<point.y then
-                               result.RTF.y:=point.y;
-       if result.RTF.z<point.z then
-                               result.RTF.z:=point.z;
+       if result.pMin.x>point.x then
+                               result.pMin.x:=point.x;
+       if result.pMin.y>point.y then
+                               result.pMin.y:=point.y;
+       if result.pMin.z>point.z then
+                               result.pMin.z:=point.z;
+       if result.pMax.x<point.x then
+                               result.pMax.x:=point.x;
+       if result.pMax.y<point.y then
+                               result.pMax.y:=point.y;
+       if result.pMax.z<point.z then
+                               result.pMax.z:=point.z;
        inc(p);
      end;
 end;

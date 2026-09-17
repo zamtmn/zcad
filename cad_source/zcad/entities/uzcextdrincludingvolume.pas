@@ -376,7 +376,7 @@ var
       if CA<>nil then begin
           case EntTestType of
             OTTByPoint:begin
-              if not IsPointInBB(testp,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
+              if not PGDBObjEntity(pThisEntity)^.vp.BoundingBox.IsContainsPoint(testp)then
                 exit;
               testp:=VectorTransform3D(testp,toBoundMatrix);
               testp2d.x:=testp.x;
@@ -387,7 +387,7 @@ var
             OTTByPoints:begin
               for i:=0 to pPonts^.Count-1 do begin
                 ppoint:=pPonts^.getDataMutable(i);
-                if not IsPointInBB(ppoint^,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
+                if not PGDBObjEntity(pThisEntity)^.vp.BoundingBox.IsContainsPoint(ppoint^)then
                   exit;
                 testp:=VectorTransform3D(ppoint^,toBoundMatrix);
                 testp2d.x:=testp.x;
@@ -399,7 +399,7 @@ var
             end;
           end;
       end else
-        if IsPointInBB(testp,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
+        if PGDBObjEntity(pThisEntity)^.vp.BoundingBox.IsContainsPoint(testp)then
           ConnectToEnt(p,VolumeVExtdr,EntVExtdr,drawing,DC);
 
     end;

@@ -138,9 +138,9 @@ begin
   YAxis := NormalizeVertex(ZAxis * XAxis.x - XAxis * ZAxis.x);
   
   { Преобразование точки из WCS в OCS }
-  Result.x := scalarDot(Point, XAxis);
-  Result.y := scalarDot(Point, YAxis);
-  Result.z := scalarDot(Point, ZAxis);
+  Result.x := ScalarDot(Point, XAxis);
+  Result.y := ScalarDot(Point, YAxis);
+  Result.z := ScalarDot(Point, ZAxis);
 end;
 
 function TProxyBaseParser.NormalizeAngle(Angle: Double): Double;

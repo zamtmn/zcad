@@ -76,7 +76,7 @@ implementation
 function GDBObjAlignedDimension.GetDimStr(
   var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
-  Result:=GetLinearDimStr(abs(scalardot((DimData.P14InWCS-DimData.P13InWCS),vectorD)),drawing);
+  Result:=GetLinearDimStr(abs(ScalarDot((DimData.P14InWCS-DimData.P13InWCS),vectorD)),drawing);
 end;
 
 function CorrectPointLine(const q:TzePoint3d;p1:TzePoint3d;const p2:TzePoint3d;
@@ -88,13 +88,13 @@ begin
   //расстояние от точки до линии
   w:=q-p1;
   l:=p2-p1;
-  llength:=scalardot(l,l);
+  llength:=ScalarDot(l,l);
   if llength<sqreps then begin
     d:=0;
     Result:=p2;
     exit;
   end;
-  dist:=scalardot(w,l)/llength;
+  dist:=ScalarDot(w,l)/llength;
   p1:=p1.LerpTo(p2,dist);
   d:=q.LengthTo(p1);
   if d>eps then begin
@@ -110,7 +110,7 @@ var
   dist:double;
 begin
   l:=p2-p1;
-  dist:=scalardot(q-p1,l)/scalardot(l,l);
+  dist:=ScalarDot(q-p1,l)/ScalarDot(l,l);
   tp:=p1.LerpTo(p2,dist);
   Result:=tp+(q-tp).Normalized*d;//uzegeometry.Vertexmorphabs2(tp,q,d);
 end;
@@ -121,7 +121,7 @@ var
 begin
   w:=q-p1;
   l:=p2-p1;
-  Result:=scalardot(w,l)/scalardot(l,l);
+  Result:=ScalarDot(w,l)/ScalarDot(l,l);
 end;
 
 function GetTFromDirNormalizedPoint(const q:TzePoint3d;
@@ -130,7 +130,7 @@ var
   w:TzeVector3d;
 begin
   w:=q-p1;
-  Result:=scalardot(w,dirNormalized.asVector);
+  Result:=ScalarDot(w,dirNormalized.asVector);
 end;
 
 procedure GDBObjAlignedDimension.SaveToDXF;
@@ -161,7 +161,7 @@ var
   temp:TzePoint3d;
 begin
   if tv.SqrLengthTo(DimData.P14InWCS)>sqreps then begin
-    tl:=scalardot((DimData.P14InWCS-DimData.P13InWCS),vectorD);
+    tl:=ScalarDot((DimData.P14InWCS-DimData.P13InWCS),vectorD);
     temp:=DimData.P13InWCS+self.vectorD*tl;
     Result:=CorrectPointLine(tv,DimData.P13InWCS,temp,t);
   end else
@@ -181,7 +181,7 @@ begin
   Result:=tv;
   DimData.TextMoved:=True;
   if PDimStyle.Placing.DIMTMOVE=DTMMoveDimLine then begin
-    tl:=scalardot((DimData.P14InWCS-DimData.P13InWCS),vectorD);
+    tl:=ScalarDot((DimData.P14InWCS-DimData.P13InWCS),vectorD);
     temp:=DimData.P13InWCS+self.vectorD*tl;
 
     t:=GettFromLinePoint(tv,DimData.P13InWCS,temp);

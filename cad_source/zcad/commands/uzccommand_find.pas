@@ -330,7 +330,7 @@ begin
     zcUI.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut)
   else
     zcUI.TextMessage(format(rscmNEntityFromWithDetails,[fe.Current+1,fe.Finded.Count,Details]),TMWOHistoryOut);
-  drawings.GetCurrentDWG^.wa.ZoomToVolume(ScaleBB(pv^.vp.BoundingBox,10));
+  drawings.GetCurrentDWG^.wa.ZoomToVolume(pv^.vp.BoundingBox*10);
 end;
 
 function FindNext_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;

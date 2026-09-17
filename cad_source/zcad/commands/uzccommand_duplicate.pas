@@ -68,7 +68,8 @@ begin
     repeat
       if pobj.selected then begin
         if Result then
-          ConcatBB(SelectedAABB,pobj.vp.BoundingBox)
+          SelectedAABB.CheckAndConcat(pobj.vp.BoundingBox)
+          //ConcatBB(SelectedAABB,pobj.vp.BoundingBox)
         else
           SelectedAABB:=pobj.vp.BoundingBox;
         Result:=True;
@@ -91,7 +92,7 @@ begin
   inherited;
   if drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.GetRealCount>0 then begin
     GetSelectedEntsAABB(drawings.GetCurrentROOT.ObjArray,SelectedAABB);
-    t3dp:=SelectedAABB.LBN;
+    t3dp:=SelectedAABB.pMin;
     Inc(mouseclic);
     SimulateMouseMove(Context);
   end else begin

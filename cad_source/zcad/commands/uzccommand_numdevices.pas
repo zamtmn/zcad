@@ -161,7 +161,7 @@ begin
   if IsObjectIt(TypeOf(pent^),typeof(GDBObjWithLocalCS)) then
     pt:=PGDBObjWithLocalCS(pent)^.P_insert_in_WCS
   else
-    pt:=(pent^.vp.BoundingBox.LBN+pent^.vp.BoundingBox.RTF.asVector)/2;
+    pt:=(pent^.vp.BoundingBox.pMin+pent^.vp.BoundingBox.pMax.asVector)/2;
   result:=true;
 end;
 

@@ -89,8 +89,8 @@ end;
 procedure GDBObjRoot.calcbb;
 begin
   inherited;
-  vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
-  vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
+  vp.BoundingBox.pMin:=VectorTransform3D(vp.BoundingBox.pMin,ObjMatrix);
+  vp.BoundingBox.pMax:=VectorTransform3D(vp.BoundingBox.pMax,ObjMatrix);
 end;
 procedure GDBObjRoot.CalcVisibleBBByTree(const Actuality:TVisActuality;var enttree:TEntTreeNode);
 begin
@@ -163,8 +163,8 @@ begin
 end;
 procedure GDBObjRoot.getoutbound;
 begin
-  vp.BoundingBox.LBN:=cP3d__0__0__0;
-  vp.BoundingBox.RTF:=cP3d__0__0__0;
+  vp.BoundingBox.pMin:=cP3d__0__0__0;
+  vp.BoundingBox.pMax:=cP3d__0__0__0;
   inherited;
 end;
 function GDBObjRoot.getowner;
@@ -205,7 +205,8 @@ begin
   if p<>nil then repeat
     p^.Formatafteredit(drawing,dc,[EFCalcEntityCS]);
     if HaveNewBB then
-      ConcatBB(bb,p^.vp.BoundingBox)
+      bb.CheckAndConcat(p^.vp.BoundingBox)
+      //ConcatBB(bb,p^.vp.BoundingBox)
     else begin
       bb:=p^.vp.BoundingBox;
       HaveNewBB:=True;
@@ -217,8 +218,10 @@ begin
 
   if @ConnectedArea<>nil then
     if HaveNewBB then begin
-      ConcatBB(ConnectedArea.vp.BoundingBox,bb);
-      ConcatBB(ConnectedArea.ObjArray.ObjTree.BoundingBox,bb);
+      ConnectedArea.vp.BoundingBox.CheckAndConcat(bb);
+      //ConcatBB(ConnectedArea.vp.BoundingBox,bb);
+      ConnectedArea.ObjArray.ObjTree.BoundingBox.CheckAndConcat(bb);
+      //ConcatBB(ConnectedArea.ObjArray.ObjTree.BoundingBox,bb);
     end;
 
   p:=ents2Connected.beginiterate(ir);

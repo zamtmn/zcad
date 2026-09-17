@@ -208,8 +208,8 @@ begin
   Result.cells := specialize TVector<TRtTableCell>.Create;
   Result.rowCount := 0;
   Result.columnCount := 0;
-  Result.tableBounds.LBN := cP3d__0__0__0;
-  Result.tableBounds.RTF := cP3d__0__0__0;
+  Result.tableBounds.pMin := cP3d__0__0__0;
+  Result.tableBounds.pMax := cP3d__0__0__0;
   Result.isValid := False;
 end;
 
@@ -239,8 +239,8 @@ function CreateEmptyCell(aRow, aCol: Integer): TRtTableCell;
 begin
   Result.rowIndex := aRow;
   Result.columnIndex := aCol;
-  Result.bounds.LBN := cP3d__0__0__0;
-  Result.bounds.RTF := cP3d__0__0__0;
+  Result.bounds.pMin := cP3d__0__0__0;
+  Result.bounds.pMax := cP3d__0__0__0;
   Result.textContent := '';
   Result.horizontalAlign := rtcaLeft;
   Result.verticalAlign := rtcaTop;
@@ -262,18 +262,18 @@ end;
 // Проверить, находится ли точка внутри ячейки
 function IsPointInCell(const aPoint: TzePoint3d; const aCell: TRtTableCell): Boolean;
 begin
-  Result := (aPoint.x >= aCell.bounds.LBN.x) and
-            (aPoint.x <= aCell.bounds.RTF.x) and
-            (aPoint.y >= aCell.bounds.LBN.y) and
-            (aPoint.y <= aCell.bounds.RTF.y);
+  Result := (aPoint.x >= aCell.bounds.pMin.x) and
+            (aPoint.x <= aCell.bounds.pMax.x) and
+            (aPoint.y >= aCell.bounds.pMin.y) and
+            (aPoint.y <= aCell.bounds.pMax.y);
 end;
 
 // Получить центр ячейки
 function GetCellCenter(const aCell: TRtTableCell): TzePoint3d;
 begin
-  Result.x := (aCell.bounds.LBN.x + aCell.bounds.RTF.x) / 2.0;
-  Result.y := (aCell.bounds.LBN.y + aCell.bounds.RTF.y) / 2.0;
-  Result.z := (aCell.bounds.LBN.z + aCell.bounds.RTF.z) / 2.0;
+  Result.x := (aCell.bounds.pMin.x + aCell.bounds.pMax.x) / 2.0;
+  Result.y := (aCell.bounds.pMin.y + aCell.bounds.pMax.y) / 2.0;
+  Result.z := (aCell.bounds.pMin.z + aCell.bounds.pMax.z) / 2.0;
 end;
 
 // Сравнить два числа с заданным допуском

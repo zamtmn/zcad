@@ -346,10 +346,11 @@ var
 begin
   inherited;
   tbb:=VarObjArray.getoutbound(dc);
-  if (tbb.LBN.x=tbb.RTF.x)  and (tbb.LBN.y=tbb.RTF.y)  and
-    (tbb.LBN.z=tbb.RTF.z) then
+  if (tbb.pMin.x=tbb.pMax.x)  and (tbb.pMin.y=tbb.pMax.y)  and
+    (tbb.pMin.z=tbb.pMax.z) then
   else
-    concatbb(vp.BoundingBox,tbb);
+    vp.BoundingBox.CheckAndConcat(tbb);
+    //concatbb(vp.BoundingBox,tbb);
 end;
 
 function GDBObjDevice.getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
@@ -358,8 +359,9 @@ var
 begin
   Result:=inherited;
   tbb:=VarObjArray.getonlyvisibleoutbound(dc);
-  if tbb.RTF.x>=tbb.LBN.x then
-    ConcatBB(Result,tbb);
+  if tbb.pMax.x>=tbb.pMin.x then
+    Result.CheckAndConcat(tbb);
+    //ConcatBB(Result,tbb);
 end;
 
 function GDBObjDevice.Clone;

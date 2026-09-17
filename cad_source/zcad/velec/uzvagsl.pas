@@ -575,20 +575,20 @@ implementation
         i:integer;
         pt:TzePoint3d;
     begin
-      result.LBN:=contourRoom^.VertexArrayInOCS.getdata(0);
-      result.RTF:=contourRoom^.VertexArrayInOCS.getdata(0);
+      result.pMin:=contourRoom^.VertexArrayInOCS.getdata(0);
+      result.pMax:=contourRoom^.VertexArrayInOCS.getdata(0);
         for i:=1 to contourRoom^.VertexArrayInOCS.GetRealCount-1 do begin
           pt:=contourRoom^.VertexArrayInOCS.getdata(i);
-          if result.LBN.x > pt.x then
-             result.LBN.x := pt.x;
-          if result.LBN.y > pt.y then
-             result.LBN.y := pt.y;
-          if result.RTF.x < pt.x then
-             result.RTF.x := pt.x;
-          if result.RTF.y < pt.y then
-             result.RTF.y := pt.y;
+          if result.pMin.x > pt.x then
+             result.pMin.x := pt.x;
+          if result.pMin.y > pt.y then
+             result.pMin.y := pt.y;
+          if result.pMax.x < pt.x then
+             result.pMax.x := pt.x;
+          if result.pMax.y < pt.y then
+             result.pMax.y := pt.y;
        end;
-       //uzvtestdraw.testTempDrawLine(result.LBN,result.RTF);
+       //uzvtestdraw.testTempDrawLine(result.pMin,result.pMax);
     end;
 
     //** Получение контура помещения описаннного 2D полилинией из 3D полилинии
@@ -1295,7 +1295,7 @@ begin
        for j:=0 to graphASL.listVertex.Size-1 do                                           //перебираем все вершины и ищем те которые попали в область линии грубый вариант (но быстрый) 1-я отсев
        begin
          areaVertex:=uzvsgeom.getAreaVertex(graphASL.listVertex[j].pt,0);                  // получаем область поиска около вершины
-         if boundingintersect(areaLine,areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
+         if areaLine.IsIntersectWith(areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
          begin
                //определяем лежит ли вершина на линии
                if uzvsgeom.isPointInAreaLine(listWall[i].p1,listWall[i].p2,graphASL.listVertex[j].pt,accuracy) then

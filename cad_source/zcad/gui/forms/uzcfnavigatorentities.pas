@@ -148,9 +148,9 @@ begin
     if pnd<>nil then
     if pnd^.Ident.pent<>nil then
     begin
-      pc:=pnd^.Ident.pent^.vp.BoundingBox.LBN.LerpTo(pnd^.Ident.pent^.vp.BoundingBox.RTF,0.5);
-      bb.LBN:=pc+((pc-pnd^.Ident.pent^.vp.BoundingBox.LBN)*scale);
-      bb.RTF:=pc+((pc-pnd^.Ident.pent^.vp.BoundingBox.RTF)*scale);
+      pc:=pnd^.Ident.pent^.vp.BoundingBox.pMin.LerpTo(pnd^.Ident.pent^.vp.BoundingBox.pMax,0.5);
+      bb.pMin:=pc+((pc-pnd^.Ident.pent^.vp.BoundingBox.pMin)*scale);
+      bb.pMax:=pc+((pc-pnd^.Ident.pent^.vp.BoundingBox.pMax)*scale);
       drawings.GetCurrentDWG.wa.ZoomToVolume(bb);
     end;
   end;

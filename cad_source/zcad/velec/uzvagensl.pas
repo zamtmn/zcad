@@ -334,7 +334,7 @@ end;
          for j:=0 to listVertexGraph.Size-1 do                                           //перебираем все вершины и ищем те которые попали в область линии грубый вариант (но быстрый) 1-я отсев
          begin
            areaVertex:=uzvcom.getAreaVertex(listVertexGraph[j].centerPoint,0);                  // получаем область поиска около вершины
-           if boundingintersect(areaLine,areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
+           if areaLine.IsIntersectWith(areaVertex) then                                 // лежит ли вершина внутри прямоугольника линии
            begin
                  //строим прямоугольник вокруг линии что бы по ниму определять находится ли вершина внутри
                  vertexRectangleLine:=uzvcom.convertLineInRectangleWithAccuracy(stPoint,edPoint,accuracy);

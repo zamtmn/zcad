@@ -542,15 +542,16 @@ begin
       if tdesc^.objaddr<>nil then
                                  begin
                                    tdesc^.objaddr^.getonlyoutbound(dc);
-                                   concatbb(result,tdesc^.objaddr^.vp.BoundingBox);
+                                   result.CheckAndConcat(tdesc^.objaddr^.vp.BoundingBox);
+                                   //concatbb(result,tdesc^.objaddr^.vp.BoundingBox);
                                  end;
       inc(tdesc);
     end;
   end
   else
   begin
-       result.LBN:=cP3d__0__0__0;
-       result.RTF:=cP3d__0__0__0;
+       result.pMin:=cP3d__0__0__0;
+       result.pMax:=cP3d__0__0__0;
   end;
 
 end;

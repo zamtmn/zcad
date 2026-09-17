@@ -1409,10 +1409,10 @@ var
     //** Получение области выделения по полученным точкам, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
     function getTBoundingBox(VT1,VT2:TzePoint3d):TBoundingBox;
     begin
-      result.LBN:=VT1;
-      result.RTF:=VT2;
-      result.LBN.y:= VT2.y;
-      result.RTF.y:= VT1.y;
+      result.pMin:=VT1;
+      result.pMax:=VT2;
+      result.pMin.y:= VT2.y;
+      result.pMax.y:= VT1.y;
     end;
 
     //**Получаем координаты стартовой и конечной точки электрической модели

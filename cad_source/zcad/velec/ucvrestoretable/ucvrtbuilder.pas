@@ -198,8 +198,8 @@ begin
       cell := CreateEmptyCell(i, j);
 
       // Устанавливаем границы ячейки
-      cell.bounds.LBN := TzePoint3d.Make(col^.leftPosition, row^.bottomPosition, 0);
-      cell.bounds.RTF := TzePoint3d.Make(col^.rightPosition, row^.topPosition, 0);
+      cell.bounds.pMin := TzePoint3d.Make(col^.leftPosition, row^.bottomPosition, 0);
+      cell.bounds.pMax := TzePoint3d.Make(col^.rightPosition, row^.topPosition, 0);
 
       aTableModel.cells.PushBack(cell);
     end;
@@ -237,10 +237,10 @@ begin
       else
       begin
         // Для MText берем центр габаритного прямоугольника
-        textCenter.x := (primitive^.boundingBox.LBN.x +
-                         primitive^.boundingBox.RTF.x) / 2;
-        textCenter.y := (primitive^.boundingBox.LBN.y +
-                         primitive^.boundingBox.RTF.y) / 2;
+        textCenter.x := (primitive^.boundingBox.pMin.x +
+                         primitive^.boundingBox.pMax.x) / 2;
+        textCenter.y := (primitive^.boundingBox.pMin.y +
+                         primitive^.boundingBox.pMax.y) / 2;
         textCenter.z := 0;
       end;
 
@@ -275,8 +275,8 @@ begin
   // Проверка наличия строк и столбцов
   if (aTableModel.columns.Size = 0) or (aTableModel.rows.Size = 0) then
   begin
-    aTableModel.tableBounds.LBN := cP3d__0__0__0;
-    aTableModel.tableBounds.RTF := cP3d__0__0__0;
+    aTableModel.tableBounds.pMin := cP3d__0__0__0;
+    aTableModel.tableBounds.pMax := cP3d__0__0__0;
     Exit;
   end;
 
@@ -293,8 +293,8 @@ begin
   row := aTableModel.rows.Mutable[aTableModel.rows.Size - 1];
   maxY := row^.topPosition;
 
-  aTableModel.tableBounds.LBN := TzePoint3d.Make(minX, minY, 0);
-  aTableModel.tableBounds.RTF := TzePoint3d.Make(maxX, maxY, 0);
+  aTableModel.tableBounds.pMin := TzePoint3d.Make(minX, minY, 0);
+  aTableModel.tableBounds.pMax := TzePoint3d.Make(maxX, maxY, 0);
 end;
 
 // Построить модель таблицы из списка примитивов

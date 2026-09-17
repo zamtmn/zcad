@@ -578,8 +578,8 @@ begin
           v.x:=param.md.mouseray.lbegin.x-pv1^.x;
           v.y:=param.md.mouseray.lbegin.y-pv1^.y;
           v.z:=param.md.mouseray.lbegin.z-pv1^.z;
-          d:=scalardot(n.asVector,v.asVector);
-          e:=scalardot(n.asVector,dir);
+          d:=ScalarDot(n.asVector,v.asVector);
+          e:=ScalarDot(n.asVector,dir);
           if e<eps then
             osp.ostype:=os_none
           else begin

@@ -129,7 +129,7 @@ var
   simplydraw:boolean;
 begin
   if rc.lod=LODCalculatedDetail then begin
-    v:=aabb.RTF-aabb.LBN;
+    v:=aabb.pMax-aabb.pMin;
     simplydraw:=not SqrCanSimplyDrawInWCS(rc,v.SqrLength,49);
   end else
     simplydraw:=rc.lod=LODLowDetail;

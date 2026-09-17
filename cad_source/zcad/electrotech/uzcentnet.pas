@@ -389,7 +389,7 @@ begin
            if (currentnet<>@self) then
            if {(currentnet<>@self) and }(currentnet^.GetObjType=GDBNetID) then
            begin
-                if boundingintersect(vp.BoundingBox,currentnet^.vp.BoundingBox) then
+                if vp.BoundingBox.IsIntersectWith(currentnet^.vp.BoundingBox) then
                 begin
                      pmyline:=objarray.beginiterate(ir2);
                      if pmyline<>nil then

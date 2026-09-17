@@ -235,8 +235,8 @@ begin
           if vertex^.y > maxY then maxY := vertex^.y;
         end;
 
-        Result.boundingBox.LBN := TzePoint3d.Make(minX, minY, 0);
-        Result.boundingBox.RTF := TzePoint3d.Make(maxX, maxY, 0);
+        Result.boundingBox.pMin := TzePoint3d.Make(minX, minY, 0);
+        Result.boundingBox.pMax := TzePoint3d.Make(maxX, maxY, 0);
       end;
     end;
 

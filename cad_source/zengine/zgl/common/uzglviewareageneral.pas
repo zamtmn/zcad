@@ -2215,7 +2215,7 @@ begin
     interval:=sysvarDSGNOTrackTimerInterval
   else
     interval:=0;
-  TrackPointMouseTimer.&Set(mp,0,[RMMove,RMDown,RMUp,RReSet,RLeave],AddOTPoint,interval);
+  TrackPointMouseTimer.&Set(mp,0,[RMMove,RMDown,RMUp,RReSet,RLeave],AddOTPoint,interval,0);
 end;
 procedure TGeneralViewArea.KillOHintTimer(Sender: TObject);
 begin

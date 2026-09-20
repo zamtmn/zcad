@@ -23,6 +23,7 @@ unit uzeMouseTimer;
 interface
 
 uses
+  SysUtils,DateUtils,
   ExtCtrls,Types,Math;
 
 type
@@ -39,12 +40,15 @@ type
       fCancelReasons:TReasons;
       fD:Integer;
       fOnTimerProc:TOnTimerProc;
+      fOffsetMinInterval:Cardinal;
+      fSetTime:TDateTime;
       procedure CreateTimer(Interval:Cardinal);
       procedure ItTime(Sender:TObject);
     public
       constructor Create;
       destructor Destroy;override;
-      procedure &Set(MP:TPoint;ADelta:Integer;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval:Cardinal);
+      procedure &Set(MP:TPoint;ADelta:Integer;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval,
+        OffsetMinInterval:Cardinal);
       procedure Cancel;
       procedure Touch(MP:TPoint;AReason:TReasons);
   end;
@@ -86,7 +90,8 @@ begin
   fTmr.Free;
 end;
 
-procedure TMouseTimer.&Set(MP:TPoint;ADelta:Integer;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval:Cardinal);
+procedure TMouseTimer.&Set(MP:TPoint;ADelta:Integer;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval,
+  OffsetMinInterval:Cardinal);
 begin
   if fTmr=nil then
     fTmr:=TTimer.Create(nil)
@@ -102,6 +107,8 @@ begin
   fTmr.OnTimer:=ItTime;
   fTmr.Interval:=Interval;
   fTmr.Enabled:=True;
+  fOffsetMinInterval:=OffsetMinInterval;
+  fSetTime:=now;
  end;
 
 procedure TMouseTimer.Cancel;
@@ -116,6 +123,7 @@ procedure TMouseTimer.Touch(MP:TPoint;AReason:TReasons);
   function Check:T3StateDo;
   var
     d:integer;
+    t:double;
   begin
     if (AReason*fCancelReasons)<>[] then
       exit(T3SCancel);
@@ -125,8 +133,13 @@ procedure TMouseTimer.Touch(MP:TPoint;AReason:TReasons);
         if d>=fd then
           exit(T3SCancel);
       end else begin
-        if d>=-fd then
-          exit(T3SDo);
+        if d>=-fd then begin
+          t:=MilliSecondsBetween(Now,fSetTime);
+          if (fOffsetMinInterval<=0)or(MilliSecondsBetween(Now,fSetTime)>fOffsetMinInterval)then
+            exit(T3SDo)
+          else
+            exit(T3SCancel)
+        end;
       end;
     end;
     result:=T3SWait;

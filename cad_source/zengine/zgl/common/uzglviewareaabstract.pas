@@ -195,7 +195,9 @@ var
   sysvarDISPLWDisplayScale:Integer=10;
   sysvarDISPmaxLWDisplayScale:Integer=20;
   sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
+
   sysvarDSGNEntityMoveStartTimerInterval:Integer=300;
+  sysvarDSGNEntityMoveStartOffsetMinTime:Integer=70;
   sysvarDSGNEntityMoveStartOffset:Integer=-30;
   sysvarDSGNEntityMoveByMouseUp:Boolean=True;
   sysvarDSGNMaxSelectEntsCountWithObjInsp:Integer=25000;

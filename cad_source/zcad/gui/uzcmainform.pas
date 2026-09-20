@@ -1765,7 +1765,8 @@ begin
   else if onmouseobject<>nil then
     if ((MZW_LBUTTON and zc)<>0)and((MZW_SHIFT and zc)=0) then
       MouseTimer.&Set(mp,sysvarDSGNEntityMoveStartOffset,
-        [RMDown,RMUp,RReSet,RLeave],StartEntityDrag,sysvarDSGNEntityMoveStartTimerInterval);
+        [RMDown,RMUp,RReSet,RLeave],StartEntityDrag,sysvarDSGNEntityMoveStartTimerInterval,
+        sysvarDSGNEntityMoveStartOffsetMinTime);
 
   //zcUI.Do_GUIaction(self,zcMsgUIActionRedraw);
 

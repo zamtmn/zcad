@@ -172,6 +172,7 @@ type
     DSGN_MaxSelectEntsCountWithGrips:PInteger;(*'Maximum selected entities with grips'*)
     DSGN_OTrackTimerInterval:PInteger;(*'Object track timer interval'*)
     DSGN_EntityMoveStartTimerInterval:PInteger;
+    DSGN_EntityMoveStartOffsetMinInterval:PInteger;
     DSGN_EntityMoveStartOffset:PInteger;
     DSGN_EntityMoveByMouseUp:PBoolean;
   end;

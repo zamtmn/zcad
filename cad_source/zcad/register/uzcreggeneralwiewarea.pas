@@ -88,6 +88,7 @@ initialization
 
 
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveStartTimerInterval','Integer',@sysvarDSGNEntityMoveStartTimerInterval);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveStartOffsetMinTime','Integer',@sysvarDSGNEntityMoveStartOffsetMinTime);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveStartOffset','Integer',@sysvarDSGNEntityMoveStartOffset);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveByMouseUp','Boolean',@sysvarDSGNEntityMoveByMouseUp);
 
@@ -142,6 +143,7 @@ initialization
 
   sysvar.DSGN.DSGN_OTrackTimerInterval:=@sysvarDSGNOTrackTimerInterval;
   sysvar.DSGN.DSGN_EntityMoveStartTimerInterval:=@sysvarDSGNEntityMoveStartTimerInterval;
+  sysvar.DSGN.DSGN_EntityMoveStartOffsetMinInterval:=@sysvarDSGNEntityMoveStartOffsetMinTime;
   sysvar.DSGN.DSGN_EntityMoveStartOffset:=@sysvarDSGNEntityMoveStartOffset;
   sysvar.DSGN.DSGN_EntityMoveByMouseUp:=@sysvarDSGNEntityMoveByMouseUp;
   sysvar.DSGN.DSGN_MaxSelectEntsCountWithObjInsp:=@sysvarDSGNMaxSelectEntsCountWithObjInsp;

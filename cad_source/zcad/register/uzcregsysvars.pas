@@ -204,12 +204,14 @@ begin
                             'DSGN_SelNew','DSGN_SelSameName',
                             'DSGN_MaxSelectEntsCountWithObjInsp','DSGN_MaxSelectEntsCountWithGrips',
                             'DSGN_OTrackTimerInterval','DSGN_EntityMoveStartTimerInterval',
+                            'DSGN_EntityMoveStartOffsetMinInterval',
                             'DSGN_EntityMoveStartOffset','DSGN_EntityMoveByMouseUp'],[FNProgram]);
     ptsu^.SetTypeDesk2(utd,['Layers control','Increment trace names',
                             'Default leader width','Scale of auxiliary elements',
                             'New selection set','Auto select devices with same name',
                             'Maximum selected entities to object inspector','Maximum selected entities with grips',
                             'Object track timer interval','DSGN_EntityMoveStartTimerInterval',
+                            'DSGN_EntityMoveStartOffsetMinInterval',
                             'DSGN_EntityMoveStartOffset','DSGN_EntityMoveByMouseUp'],[FNUser]);
   end;
 

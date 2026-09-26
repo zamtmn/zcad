@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg height='167pt' preserveAspectRatio='xMidYMid meet' viewBox='0.00 0.00 1058.50 167.00' width='1059pt' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg'>
+<g class='graph' id='graph0' transform='scale(1 1) rotate(0) translate(4 163)'>
+<title>g</title>
+<polygon fill='white' points='-4,4 -4,-163 1054.5,-163 1054.5,4 -4,4' stroke='transparent'/>
+
+<g class='node' id='node1'>
+<title>node0</title>
+<polygon fill='none' points='426,-133.5 426,-154.5 553,-154.5 553,-133.5 426,-133.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='429' y='-140.3'>Configure export</text>
+<polygon fill='gray' points='553,-133.5 553,-154.5 611,-154.5 611,-133.5 553,-133.5' stroke='transparent'/>
+<polygon fill='none' points='553,-133.5 553,-154.5 611,-154.5 611,-133.5 553,-133.5' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' text-anchor='start' text-decoration='underline' x='556' y='-141.3'>p</text>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='566' y='-141.3'>aram,</text>
+<polygon fill='none' points='611,-133.5 611,-154.5 642,-154.5 642,-133.5 611,-133.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='614' y='-140.3'>run</text>
+<polygon fill='gray' points='642,-133.5 642,-154.5 720,-154.5 720,-133.5 642,-133.5' stroke='transparent'/>
+<polygon fill='none' points='642,-133.5 642,-154.5 720,-154.5 720,-133.5 642,-133.5' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' text-anchor='start' text-decoration='underline' x='645' y='-141.3'>f</text>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='651' y='-141.3'>ile dialog</text>
+<polygon fill='none' points='720,-133.5 720,-154.5 1043,-154.5 1043,-133.5 720,-133.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='723' y='-140.3'> or enter file name (empty for default): &gt; (1)</text>
+</g>
+
+<g class='node' id='node2'>
+<title>node1</title>
+<polygon fill='gray' points='287,-68.5 287,-89.5 330,-89.5 330,-68.5 287,-68.5' stroke='transparent'/>
+<polygon fill='none' points='287,-68.5 287,-89.5 330,-89.5 330,-68.5 287,-68.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='290' y='-75.3'>&lt;&lt;&lt;</text>
+<polygon fill='none' points='330,-68.5 330,-89.5 361,-89.5 361,-68.5 330,-68.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='333' y='-75.3'>Set</text>
+<polygon fill='gray' points='361,-68.5 361,-89.5 422,-89.5 422,-68.5 361,-68.5' stroke='transparent'/>
+<polygon fill='none' points='361,-68.5 361,-89.5 422,-89.5 422,-68.5 361,-68.5' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' text-anchor='start' text-decoration='underline' x='364' y='-76.3'>e</text>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='373' y='-76.3'>ntities</text>
+<polygon fill='none' points='422,-68.5 422,-89.5 433,-89.5 433,-68.5 422,-68.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='425' y='-75.3'>/</text>
+<polygon fill='gray' points='433,-68.5 433,-89.5 515,-89.5 515,-68.5 433,-68.5' stroke='transparent'/>
+<polygon fill='none' points='433,-68.5 433,-89.5 515,-89.5 515,-68.5 433,-68.5' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' text-anchor='start' text-decoration='underline' x='436' y='-76.3'>p</text>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='446' y='-76.3'>roperties</text>
+<polygon fill='none' points='515,-68.5 515,-89.5 627,-89.5 627,-68.5 515,-68.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='518' y='-75.3'>filter or export</text>
+<polygon fill='gray' points='627,-68.5 627,-89.5 675,-89.5 675,-68.5 627,-68.5' stroke='transparent'/>
+<polygon fill='none' points='627,-68.5 627,-89.5 675,-89.5 675,-68.5 627,-68.5' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' text-anchor='start' text-decoration='underline' x='630' y='-76.3'>s</text>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='638' y='-76.3'>cript</text>
+</g>
+
+<g class='edge' id='edge1'>
+<title>node0:f0&#45;&gt;node1</title>
+<path d='M582,-132.5C582,-117.13 572.64,-106.3 559.62,-98.67' fill='none' stroke='black'/>
+<polygon fill='black' points='561.1,-95.49 550.6,-94.1 557.94,-101.74 561.1,-95.49' stroke='black'/>
+</g>
+
+<g class='node' id='node6'>
+<title>node5</title>
+<polygon fill='none' points='701,-68 701,-91 863,-91 863,-68 701,-68' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='middle' x='782' y='-75.8'>File select dialog (5)</text>
+</g>
+
+<g class='edge' id='edge2'>
+<title>node0:f1&#45;&gt;node5:f0</title>
+<path d='M681,-132.5C681,-114.71 693.44,-102.87 709.6,-95.01' fill='none' stroke='black'/>
+<polygon fill='black' points='711.08,-98.18 718.9,-91.04 708.33,-91.75 711.08,-98.18' stroke='black'/>
+</g>
+
+<g class='node' id='node3'>
+<title>node2</title>
+<polygon fill='gray' points='8,-3.5 8,-24.5 51,-24.5 51,-3.5 8,-3.5' stroke='transparent'/>
+<polygon fill='none' points='8,-3.5 8,-24.5 51,-24.5 51,-3.5 8,-3.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='11' y='-10.3'>&lt;&lt;&lt;</text>
+<polygon fill='none' points='51,-3.5 51,-24.5 274,-24.5 274,-3.5 51,-3.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='54' y='-10.3'>Enter new entities filter: &gt; (2)</text>
+</g>
+
+<g class='edge' id='edge3'>
+<title>node1:f1&#45;&gt;node2:f1</title>
+<path d='M391,-67.5C391,-19.88 331.13,-54.64 291,-29 286.7,-26.25 285.21,-22.22 283.42,-18.95' fill='none' stroke='black'/>
+<polygon fill='black' points='285.3,-16 275,-13.5 281.49,-21.87 285.3,-16' stroke='black'/>
+</g>
+
+<g class='node' id='node4'>
+<title>node3</title>
+<polygon fill='gray' points='309,-3.5 309,-24.5 352,-24.5 352,-3.5 309,-3.5' stroke='transparent'/>
+<polygon fill='none' points='309,-3.5 309,-24.5 352,-24.5 352,-3.5 309,-3.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='312' y='-10.3'>&lt;&lt;&lt;</text>
+<polygon fill='none' points='352,-3.5 352,-24.5 596,-24.5 596,-3.5 352,-3.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='355' y='-10.3'>Enter new properties filter: &gt; (3)</text>
+</g>
+
+<g class='edge' id='edge4'>
+<title>node1:f2&#45;&gt;node3:f1</title>
+<path d='M474,-67.5C474,-52.77 474,-46.76 474,-35.71' fill='none' stroke='black'/>
+<polygon fill='black' points='477.5,-35.5 474,-25.5 470.5,-35.5 477.5,-35.5' stroke='black'/>
+</g>
+
+<g class='node' id='node5'>
+<title>node4</title>
+<polygon fill='gray' points='630,-3.5 630,-24.5 673,-24.5 673,-3.5 630,-3.5' stroke='transparent'/>
+<polygon fill='none' points='630,-3.5 630,-24.5 673,-24.5 673,-3.5 630,-3.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='633' y='-10.3'>&lt;&lt;&lt;</text>
+<polygon fill='none' points='673,-3.5 673,-24.5 896,-24.5 896,-3.5 673,-3.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' text-anchor='start' x='676' y='-10.3'>Enter new export script: &gt; (4)</text>
+</g>
+
+<g class='edge' id='edge5'>
+<title>node1:f3&#45;&gt;node4:f1</title>
+<path d='M676,-78.5C685.3,-78.5 684.07,-69.87 692,-65 726.97,-43.5 775.71,-65.82 783.83,-35.52' fill='none' stroke='black'/>
+<polygon fill='black' points='787.32,-35.84 785,-25.5 780.37,-35.03 787.32,-35.84' stroke='black'/>
+</g>
+</g>
+</svg>

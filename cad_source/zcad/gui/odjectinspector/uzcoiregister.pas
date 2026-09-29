@@ -53,7 +53,16 @@ procedure SetLastClientWidth(w:integer);
 begin
        if assigned(GDBobjinsp)then
                                   begin
-                                       GDBobjinsp.NameColumnWidthCorrector.LastClientWidth:=w;
+                                       GDBobjinsp.fWidthCorrector.BaseValue:=w;
+                                  end;
+end;
+
+procedure SetNameColWidth(w:integer);
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.PropertyColumnWidth:=w;
+                                       GDBobjinsp.fWidthCorrector.Value:=w;
                                   end;
 end;
 
@@ -61,7 +70,7 @@ function GetPeditor:TComponent;
 begin
        if assigned(GDBobjinsp)then
                                   begin
-                                       result:=GDBobjinsp.peditor;
+                                       result:=GDBobjinsp.InPlaceEditor;
                                   end
                                else
                                    result:=nil;
@@ -71,7 +80,7 @@ function GetNameColWidth:integer;
 begin
        if assigned(GDBobjinsp)then
                                   begin
-                                       result:=GDBobjinsp.NameColumnWidth;
+                                       result:=GDBobjinsp.PropertyColumnWidth;
                                   end
                                else
                                    result:=0;
@@ -89,7 +98,7 @@ function  GetCurrentObj:Pointer;
 begin
        if assigned(GDBobjinsp)then
                                   begin
-                                       result:=GDBobjinsp.CurrData.PObj;
+                                       result:=GDBobjinsp.CurrData.PData;
                                   end
                               else
                                   result:=nil;
@@ -111,7 +120,7 @@ var
   pv:pvardesk;
   vv:string;
 begin
-  if (DD.PObj=@MSEditor)and(valkey<>'')and(DD.Ctx<>nil) then begin
+  if (DD.PData=@MSEditor)and(valkey<>'')and(DD.Ctx<>nil) then begin
     pobj:=PTSimpleDrawing(DD.Ctx).GetCurrentROOT.ObjArray.beginiterate(ir);
     if pobj<>nil then
       repeat
@@ -200,26 +209,17 @@ begin
      if assigned(GDBobjinsp)then
      begin
      if popoldpos then
-     if (GDBobjinsp.StoredData.PObj=nil) then
+     if (GDBobjinsp.StoredData.PData=nil) then
                              begin
                                GDBobjinsp.StoredData:=GDBobjinsp.CurrData;
                                   //GDBobjinsp.PStoredObj:=GDBobjinsp.CurrPObj;
                                   //GDBobjinsp.StoredObjGDBType:=GDBobjinsp.CurrObjGDBType;
                                   //GDBobjinsp.pStoredContext:=GDBobjinsp.CurrContext;
-                                  //GDBobjinsp.StoredUndoStack:=GDBobjinsp.EDContext.UndoStack;
+                                  //GDBobjinsp.StoredUndoStack:=GDBobjinsp.fEDContext.UndoStack;
                                   //GDBobjinsp.StoredUnitsFormat:=GDBobjinsp.CurrUnitsFormat;
                              end;
      GDBobjinsp.setptr(TDisplayedData.CreateRec(addr,exttype,context,f));
      end;
-end;
-
-procedure SetNameColWidth(w:integer);
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       GDBobjinsp.NameColumnWidth:=w;
-                                       GDBobjinsp.NameColumnWidthCorrector.LastNameColumnWidth:=w;
-                                  end;
 end;
 
 procedure ZCADFormSetupProc(Form:TControl);
@@ -284,19 +284,18 @@ end;
 
 function ObjInspCopyToClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-   if GetCurrentObj=nil then
-                             zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)
-                         else
-                             begin
-                                  if uppercase(Operands)='VAR' then
-                                                                   clipbrd.clipboard.AsText:=GDBobjinsp.currpd.ValKey
-                             else if uppercase(Operands)='LVAR' then
-                                                                   clipbrd.clipboard.AsText:='@@['+GDBobjinsp.currpd.ValKey+']'
-                             else if uppercase(Operands)='VALUE' then
-                                                                   clipbrd.clipboard.AsText:=GDBobjinsp.currpd.Value;
-                                  GDBobjinsp.currpd:=nil;
-                             end;
-   result:=cmd_ok;
+  if GetCurrentObj=nil then
+    zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)
+  else begin
+    if uppercase(Operands)='VAR' then
+      clipbrd.clipboard.AsText:=GDBobjinsp.CurrPD.ValKey
+    else if uppercase(Operands)='LVAR' then
+      clipbrd.clipboard.AsText:='@@['+GDBobjinsp.CurrPD.ValKey+']'
+    else if uppercase(Operands)='VALUE' then
+      clipbrd.clipboard.AsText:=GDBobjinsp.CurrPD.Value;
+    //GDBobjinsp.CurrPD:=nil;
+  end;
+  Result:=cmd_ok;
 end;
 procedure tdummyclass.ReBuild(sender:TObject;GUIMode:TzcMessageID);
 begin
@@ -344,8 +343,8 @@ begin
   if (GUIMode=zcMsgUIReturnToDefaultObject) then
        if assigned(GDBobjinsp)then
                                   begin
-                                       GDBobjinsp.StoredData.PObj:=nil;
-                                       GDBobjinsp.StoredData.PType:=nil;
+                                       GDBobjinsp.StoredData.PData:=nil;
+                                       GDBobjinsp.StoredData.PDataType:=nil;
                                        GDBobjinsp.ReturnToDefault;
                                   end;
 end;
@@ -355,11 +354,11 @@ var
 begin
   if sender is TGDBobjinsp then begin
   menu:=nil;
-  if {(clickonheader)or}(sender as TGDBobjinsp).currpd=nil then
+  if (sender as TGDBobjinsp).CurrPD=nil then
   menu:=MenusManager.GetPopupMenu('OBJINSPHEADERCXMENU',nil)
-else if (sender as TGDBobjinsp).currpd^.valkey<>''then
+else if (sender as TGDBobjinsp).CurrPD^.valkey<>''then
   menu:=MenusManager.GetPopupMenu('OBJINSPVARCXMENU',nil)
-else if (sender as TGDBobjinsp).currpd^.Value<>''then
+else if (sender as TGDBobjinsp).CurrPD^.Value<>''then
   menu:=MenusManager.GetPopupMenu('OBJINSPCXMENU',nil)
 else
   menu:=MenusManager.GetPopupMenu('OBJINSPHEADERCXMENU',nil);
@@ -375,12 +374,12 @@ begin
   result.control:=nil;
 
   if assigned(GDBobjinsp) then
-  if GDBobjinsp.PEditor<>nil then
-  if GDBobjinsp.PEditor.geteditor<>nil then
-  if GDBobjinsp.PEditor.geteditor.IsVisible then
-  if GDBobjinsp.PEditor.geteditor.CanFocus then begin
+  if GDBobjinsp.InPlaceEditor<>nil then
+  if GDBobjinsp.InPlaceEditor.geteditor<>nil then
+  if GDBobjinsp.InPlaceEditor.geteditor.IsVisible then
+  if GDBobjinsp.InPlaceEditor.geteditor.CanFocus then begin
     result.priority:=PEditorFocusPriority;
-    result.control:=GDBobjinsp.PEditor.geteditor;
+    result.control:=GDBobjinsp.InPlaceEditor.geteditor;
   end;
 end;
 
@@ -468,7 +467,7 @@ initialization
   OIManager.ValueRowName:=rsValue;
   OIManager.DifferentName:=rsDifferent;
 
-  //GDBobjinsp.currpd:=nil;
+  //GDBobjinsp.fCurrPD:=nil;
   zcUI.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
   dummyclass:=tdummyclass.create;
   zcUI.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);

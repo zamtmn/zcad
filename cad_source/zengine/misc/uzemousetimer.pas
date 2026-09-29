@@ -23,7 +23,7 @@ unit uzeMouseTimer;
 interface
 
 uses
-  SysUtils,DateUtils,
+  SysUtils,
   ExtCtrls,Types,Math;
 
 type
@@ -123,7 +123,6 @@ procedure TMouseTimer.Touch(MP:TPoint;AReason:TReasons);
   function Check:T3StateDo;
   var
     d:integer;
-    t:double;
   begin
     if (AReason*fCancelReasons)<>[] then
       exit(T3SCancel);
@@ -134,8 +133,7 @@ procedure TMouseTimer.Touch(MP:TPoint;AReason:TReasons);
           exit(T3SCancel);
       end else begin
         if d>=-fd then begin
-          t:=MilliSecondsBetween(Now,fSetTime);
-          if (fOffsetMinInterval<=0)or(MilliSecondsBetween(Now,fSetTime)>fOffsetMinInterval)then
+          if (fOffsetMinInterval<=0)or(round((Now-fSetTime)*MSecsPerDay)>fOffsetMinInterval)then
             exit(T3SDo)
           else
             exit(T3SCancel)

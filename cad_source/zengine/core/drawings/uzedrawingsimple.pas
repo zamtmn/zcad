@@ -119,7 +119,7 @@ type
     procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
     function GetUnitsFormat:TzeUnitsFormat;virtual;
     procedure CreateBlockDef(Name:string);virtual;
-    procedure HardReDraw(dhg:TDrawHeplGeometry);
+    procedure HardReDraw(dhg:TDrawHeplGeometry=nil);
     function GetCurrentLayer:PGDBLayerProp;
     function GetCurrentLType:PGDBLtypeProp;
     function GetCurrentTextStyle:PGDBTextStyle;
@@ -275,7 +275,7 @@ begin
     Result:=LayerTable.getsystemlayer;
 end;
 
-procedure TSimpleDrawing.HardReDraw(dhg:TDrawHeplGeometry);
+procedure TSimpleDrawing.HardReDraw(dhg:TDrawHeplGeometry=nil);
 var
   DC:TDrawContext;
   Actlt:TVisActuality;

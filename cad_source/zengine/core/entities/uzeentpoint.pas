@@ -63,6 +63,7 @@ type
     function GetObjTypeName:string;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
 
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
 
     function CreateInstance:PGDBObjPoint;static;
@@ -72,6 +73,17 @@ type
 function AllocAndInitPoint(owner:PGDBObjGenericWithSubordinated):PGDBObjPoint;
 
 implementation
+
+procedure GDBObjPoint.transform;
+var
+  tv:TzeVector4d;
+begin
+  tv.Slice:=P_insertInOCS.asVector;
+  tv.CutOff:=1;
+  tv:=vectortransform(tv,t_matrix);
+  P_insertInOCS:=tv.Slice.asPoint3d;
+end;
+
 
 procedure GDBObjPoint.TransformAt;
 begin

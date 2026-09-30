@@ -58,7 +58,8 @@ begin
      if not assigned(StringsTreeSelector) then
      begin
      StringsTreeSelector:=TStringsTreeSelector.create(application.MainForm);
-     StringsTreeSelector.BoundsRect:=GetBoundsFromSavedUnit('StringsTreeSelectorWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+     StringsTreeSelector.BoundsRect:=GetBoundsFromUnit(SavedUnit^,'StringsTreeSelectorWND',
+       ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
      end;
      StringsTreeSelector.clear;
      StringsTreeSelector.fill(RepresentationsTree.BlobTree);
@@ -77,7 +78,8 @@ begin
      if not assigned(StringsTreeSelector) then
      begin
      StringsTreeSelector:=TStringsTreeSelector.create(application.MainForm);
-     StringsTreeSelector.BoundsRect:=GetBoundsFromSavedUnit('StringsTreeSelectorWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+     StringsTreeSelector.BoundsRect:=GetBoundsFromUnit(SavedUnit^,'StringsTreeSelectorWND',
+       ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
      end;
      StringsTreeSelector.clear;
      StringsTreeSelector.fill(FunctionsTree.BlobTree);

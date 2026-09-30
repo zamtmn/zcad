@@ -277,12 +277,12 @@ var
 begin
   for i:=low(ExtTreeParam.ExtColumnsParams) to high(ExtTreeParam.ExtColumnsParams) do
     if ExtTreeParam.ExtColumnsParams[i].SaveWidthVar<>'' then
-      StoreIntegerToSavedUnit(ExtTreeParam.ExtColumnsParams[i].SaveWidthVar,SuffWidth,NavTree.Header.Columns[i].Width);
+      StoreIntegerToUnit(SavedUnit^,ExtTreeParam.ExtColumnsParams[i].SaveWidthVar,cSuffixWidth,NavTree.Header.Columns[i].Width);
 
-  StoreAnsiStringToSavedUnit(Name,TreeBuildMapSaveVarSuffix,BP.TreeBuildMap);
-  StoreAnsiStringToSavedUnit(Name,IncludeEntitiesSaveVarSuffix,BP.IncludeEntities);
-  StoreAnsiStringToSavedUnit(Name,IncludePropertiesSaveVarSuffix,BP.IncludeProperties);
-  StoreAnsiStringToSavedUnit(Name,TreePropertiesSaveVarSuffix,BP.TreeProperties);
+  StoreAnsiStringToUnit(SavedUnit^,Name,TreeBuildMapSaveVarSuffix,BP.TreeBuildMap);
+  StoreAnsiStringToUnit(SavedUnit^,Name,IncludeEntitiesSaveVarSuffix,BP.IncludeEntities);
+  StoreAnsiStringToUnit(SavedUnit^,Name,IncludePropertiesSaveVarSuffix,BP.IncludeProperties);
+  StoreAnsiStringToUnit(SavedUnit^,Name,TreePropertiesSaveVarSuffix,BP.TreeProperties);
 
   if Assigned(EntsTypeFilter) then
     FreeAndNil(EntsTypeFilter);
@@ -604,7 +604,7 @@ begin
   result:=false;
   if not assigned(InfoForm) then begin
     InfoForm:=TInfoForm.createnew(application.MainForm);
-    InfoForm.BoundsRect:=GetBoundsFromSavedUnit(BoundsSaveName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+    InfoForm.BoundsRect:=GetBoundsFromUnit(SavedUnit^,BoundsSaveName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
   end;
   InfoForm.caption:=cpt;
   InfoForm.memo.text:=AText;
@@ -613,7 +613,7 @@ begin
   modalresult:=zcUI.DOShowModal(InfoForm);
   if modalresult=ZCMrOk then begin
     AText:=InfoForm.memo.text;
-    StoreBoundsToSavedUnit(BoundsSaveName,InfoForm.BoundsRect);
+    StoreBoundsToUnit(SavedUnit^,BoundsSaveName,InfoForm.BoundsRect);
     result:=true;
   end;
 end;

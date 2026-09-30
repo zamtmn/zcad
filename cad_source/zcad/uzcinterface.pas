@@ -324,8 +324,6 @@ var
   //ReturnToDefaultProc:TSimpleProcedure;
   //ClrarIfItIsProc:TOIClearIfItIs_Pointer_;
   //GetCurrentObjProc:TFunction__Pointer;
-  GetNameColWidthProc:TFunction__Integer;
-  GetOIWidthProc:TFunction__Integer;
 
   //GetPeditorProc:TFunction__TComponent;
 

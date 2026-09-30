@@ -49,7 +49,7 @@ begin
   if PGDBObjText(pobj)^.GetObjType=GDBMTextID then begin
     if not assigned(InfoForm) then
       InfoForm:=TInfoForm.createnew(application.MainForm);
-    InfoForm.BoundsRect:=GetBoundsFromSavedUnit(MTextWndSaveParamName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+    InfoForm.BoundsRect:=GetBoundsFromUnit(SavedUnit^,MTextWndSaveParamName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
     InfoForm.caption:=rsMTextEditor;
 
     InfoForm.memo.text:=AString;
@@ -59,12 +59,12 @@ begin
 
     if ModalResult=ZCMrOk then begin
       UString:=ConvertToDxfString(InfoForm.memo.text);
-      StoreBoundsToSavedUnit(MTextWndSaveParamName,InfoForm.BoundsRect);
+      StoreBoundsToUnit(SavedUnit^,MTextWndSaveParamName,InfoForm.BoundsRect);
     end;
   end else begin
     if not assigned(SingleLineTextEditorForm) then
       Application.CreateForm(TSingleLineTextEditorForm,SingleLineTextEditorForm);
-    SingleLineTextEditorForm.BoundsRect:=GetBoundsFromSavedUnit(TextWndSaveParamName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+    SingleLineTextEditorForm.BoundsRect:=GetBoundsFromUnit(SavedUnit^,TextWndSaveParamName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
     SingleLineTextEditorForm.caption:=rsTextEditor;
 
     SingleLineTextEditorForm.HelpText.Caption:=rsTextEdCaption;
@@ -76,7 +76,7 @@ begin
 
     if ModalResult=ZCMrOk then begin
       UString:=ConvertToDxfString(SingleLineTextEditorForm.EditField.text);
-      StoreBoundsToSavedUnit(TextWndSaveParamName,SingleLineTextEditorForm.BoundsRect);
+      StoreBoundsToUnit(SavedUnit^,TextWndSaveParamName,SingleLineTextEditorForm.BoundsRect);
     end;
   end;
 

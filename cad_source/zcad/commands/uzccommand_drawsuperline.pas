@@ -392,27 +392,27 @@ initialization
     'Set SL#1 name:','Set SL#1 typeline:','Set SL#2 name:','Set SL#2 typeline:',
     'Set SL#3 name:','Set SL#3 typeline:']);
   //даем человеческие имена параметрам
-  DrawSuperlineParams.LayerNamePrefix:=
-    GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'LayerNamePrefix','SYS_SL_');
+  DrawSuperlineParams.LayerNamePrefix:=GetAnsiStringFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'LayerNamePrefix','SYS_SL_');
   //начальное значение префикса
-  DrawSuperlineParams.ProcessLayer:=
-    GetBooleanFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'ProcessLayer',True);
+  DrawSuperlineParams.ProcessLayer:=GetBooleanFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'ProcessLayer',True);
   //начальное значение выключателя
-  DrawSuperlineParams.ProcessTypeLine:=
-    GetBooleanFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'ProcessTypeLine',True);
+  DrawSuperlineParams.ProcessTypeLine:=GetBooleanFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'ProcessTypeLine',True);
   //начальное значение выключателя
-  DrawSuperlineParams.SLSetting1:=
-    GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'SLSetting1','???');
-  DrawSuperlineParams.SLSettingTypeLine1:=
-    GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'SLSettingTypeLine1','-');
-  DrawSuperlineParams.SLSetting2:=
-    GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'SLSetting2','???');;
-  DrawSuperlineParams.SLSettingTypeLine2:=
-    GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'SLSettingTypeLine2','-');
-  DrawSuperlineParams.SLSetting3:=
-    GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'SLSetting3','???');;
-  DrawSuperlineParams.SLSettingTypeLine3:=
-    GetAnsiStringFromSavedUnit(DrawSuperLineSaveCmdParamsPref,'SLSettingTypeLine3','-');
+  DrawSuperlineParams.SLSetting1:=GetAnsiStringFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'SLSetting1','???');
+  DrawSuperlineParams.SLSettingTypeLine1:=GetAnsiStringFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'SLSettingTypeLine1','-');
+  DrawSuperlineParams.SLSetting2:=GetAnsiStringFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'SLSetting2','???');;
+  DrawSuperlineParams.SLSettingTypeLine2:=GetAnsiStringFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'SLSettingTypeLine2','-');
+  DrawSuperlineParams.SLSetting3:=GetAnsiStringFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'SLSetting3','???');;
+  DrawSuperlineParams.SLSettingTypeLine3:=GetAnsiStringFromUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,
+    'SLSettingTypeLine3','-');
 
   CreateZCADCommand(@DrawSuperLine_com,'DrawSuperLine',CADWG,0);
 
@@ -422,22 +422,22 @@ initialization
     SuperlineScriptsManager.ScanDirs(ExpandPath(sysvar.PATH.Preload_Paths^));
 
 finalization
-  StoreAnsiStringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
-    'LayerNamePrefix',DrawSuperlineParams.LayerNamePrefix);
-  StoreBooleanToSavedUnit(DrawSuperLineSaveCmdParamsPref,'ProcessLayer',
+  StoreAnsiStringToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'LayerNamePrefix',
+    DrawSuperlineParams.LayerNamePrefix);
+  StoreBooleanToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'ProcessLayer',
     DrawSuperlineParams.ProcessLayer);
-  StoreBooleanToSavedUnit(DrawSuperLineSaveCmdParamsPref,'ProcessTypeLine',
+  StoreBooleanToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'ProcessTypeLine',
     DrawSuperlineParams.ProcessTypeLine);
-  StoreAnsiStringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
-    'SLSetting1',DrawSuperlineParams.SLSetting1);
-  StoreAnsiStringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
-    'SLSettingTypeLine1',DrawSuperlineParams.SLSettingTypeLine1);
-  StoreAnsiStringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
-    'SLSetting2',DrawSuperlineParams.SLSetting2);
-  StoreAnsiStringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
-    'SLSettingTypeLine2',DrawSuperlineParams.SLSettingTypeLine2);
-  StoreAnsistringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
-    'SLSetting3',DrawSuperlineParams.SLSetting3);
-  StoreAnsistringToSavedUnit(DrawSuperLineSaveCmdParamsPref,
-    'SLSettingTypeLine3',DrawSuperlineParams.SLSettingTypeLine3);
+  StoreAnsiStringToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'SLSetting1',
+    DrawSuperlineParams.SLSetting1);
+  StoreAnsiStringToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'SLSettingTypeLine1',
+    DrawSuperlineParams.SLSettingTypeLine1);
+  StoreAnsiStringToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'SLSetting2',
+    DrawSuperlineParams.SLSetting2);
+  StoreAnsiStringToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'SLSettingTypeLine2',
+    DrawSuperlineParams.SLSettingTypeLine2);
+  StoreAnsistringToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'SLSetting3',
+    DrawSuperlineParams.SLSetting3);
+  StoreAnsistringToUnit(SavedUnit^,DrawSuperLineSaveCmdParamsPref,'SLSettingTypeLine3',
+    DrawSuperlineParams.SLSettingTypeLine3);
 end.

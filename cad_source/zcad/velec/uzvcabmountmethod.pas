@@ -76,7 +76,8 @@ begin
      begin
        MountingMethodsTreeSelector:=TStringsTreeSelector.create(application.MainForm);//создаем форму
        //восстанавливаем размеры формы
-       MountingMethodsTreeSelector.BoundsRect:=GetBoundsFromSavedUnit('MountingMethodsTreeSelectorWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+       MountingMethodsTreeSelector.BoundsRect:=GetBoundsFromUnit(SavedUnit^,'MountingMethodsTreeSelectorWND',
+         ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
      end;
      MountingMethodsTreeSelector.clear;//очищаем
      MountingMethodsTreeSelector.fill(MountingMethodsTree.BlobTree);//заполняем
@@ -86,7 +87,7 @@ begin
      modalresult:=zcUI.DOShowModal(MountingMethodsTreeSelector);//показываем форму модально
      if modalresult=ZCMrOk then//если нажали окей
        PStringTreeType(PInstance)^:=MountingMethodsTreeSelector.TreeResult; //сохраняем выбранное значение
-     StoreBoundsToSavedUnit('MountingMethodsTreeSelectorWND',MountingMethodsTreeSelector.BoundsRect);//сохраняем размеры формы
+     StoreBoundsToUnit(SavedUnit^,'MountingMethodsTreeSelectorWND',MountingMethodsTreeSelector.BoundsRect);//сохраняем размеры формы
      freeandnil(MountingMethodsTreeSelector);//уничтожаем форму
 end;
 

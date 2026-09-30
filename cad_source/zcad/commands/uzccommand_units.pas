@@ -46,8 +46,8 @@ begin
   if not assigned(UnitsForm) then begin
     UnitsForm:=TUnitsForm.Create(nil);
     SetHeightControl(UnitsForm,sysvar.INTF.INTF_DefaultControlHeight^);
-    UnitsForm.BoundsRect:=GetBoundsFromSavedUnit(
-      'UnitsWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+    UnitsForm.BoundsRect:=GetBoundsFromUnit(SavedUnit^,'UnitsWND',ZCSysParams.notsaved.ScreenX,
+      ZCSysParams.notsaved.Screeny);
   end;
 
   _UnitsFormat:=drawings.GetUnitsFormat;
@@ -62,7 +62,7 @@ begin
   finally
     zcUI.Do_AfterShowModal(UnitsForm);
   end;
-  StoreBoundsToSavedUnit('UnitsWND',UnitsForm.BoundsRect);
+  StoreBoundsToUnit(SavedUnit^,'UnitsWND',UnitsForm.BoundsRect);
   FreeAndNil(UnitsForm);
   Result:=cmd_ok;
 end;

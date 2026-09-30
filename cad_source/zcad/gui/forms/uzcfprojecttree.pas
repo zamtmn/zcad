@@ -249,7 +249,7 @@ procedure TProjectTreeForm.FormClose(Sender: TObject; var CloseAction: TCloseAct
 begin
   inherited;
   if CloseAction=caFree then
-                            StoreBoundsToSavedUnit('ProjectTreeWND',self.BoundsRect);
+    StoreBoundsToUnit(SavedUnit^,'ProjectTreeWND',self.BoundsRect);
 end;
 
 procedure TProjectTreeForm.AfterConstruction;
@@ -268,7 +268,7 @@ var
 begin
   inherited;
   //self.Position:=poScreenCenter;
-  self.BoundsRect:=GetBoundsFromSavedUnit('ProjectTreeWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+  self.BoundsRect:=GetBoundsFromUnit(SavedUnit^,'ProjectTreeWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
   caption:=rsProjectTree;
   self.borderstyle:=bsSizeToolWin;
 

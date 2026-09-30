@@ -36,7 +36,7 @@ uses
   uzcOI,uzcdrawing,uzbUnits,uzeBaseUtils,uzcTypes,uzObjectInspectorManager;
 type
     AsyncCommHelper=class
-                         class procedure GetVertex(Pinstance:PtrInt);
+                         //class procedure GetVertex(Pinstance:PtrInt);
                          //class procedure GetLength(Pinstance:PtrInt);
                          //class procedure GetVertexX(Pinstance:PtrInt);
                          //class procedure GetVertexY(Pinstance:PtrInt);
@@ -478,7 +478,7 @@ begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+     InfoForm.BoundsRect:=GetBoundsFromUnit(SavedUnit^,'TEdWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
      end;
      InfoForm.caption:=(rsTextEdCaption);
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
@@ -489,7 +489,7 @@ begin
      if modalresult=ZCMrOk then
                          begin
                               pString(PInstance)^:=InfoForm.memo.text;
-                              StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
+                              StoreBoundsToUnit(SavedUnit^,'TEdWND',InfoForm.BoundsRect);
                          end;
 end;
 procedure RunAnsiStringEditor(PInstance:Pointer);
@@ -500,7 +500,7 @@ begin
      if not assigned(InfoForm) then
      begin
      InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
+     InfoForm.BoundsRect:=GetBoundsFromUnit(SavedUnit^,'TEdWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
      end;
      InfoForm.caption:=(rsTextEdCaption);
      if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
@@ -511,10 +511,10 @@ begin
      if modalresult=ZCMrOk then
                          begin
                               PAnsiString(PInstance)^:=ConvertToDxfString(InfoForm.memo.text);
-                              StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
+                              StoreBoundsToUnit(SavedUnit^,'TEdWND',InfoForm.BoundsRect);
                          end;
 end;
-class procedure AsyncCommHelper.GetVertex(Pinstance:PtrInt);
+(*class procedure AsyncCommHelper.GetVertex(Pinstance:PtrInt);
 var
    p:pointer;
 begin
@@ -527,7 +527,7 @@ begin
                     begin
                          commandmanager.PushValue('','PzePoint3d',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PData)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.fDisplayedData.PData)
                                               else
                                                   begin
                                                        p:=nil;
@@ -536,7 +536,7 @@ begin
                          commandmanager.executecommand('GetPoint',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
-end;
+end;*)
 
 (*class procedure AsyncCommHelper.GetLength(Pinstance:PtrInt);
 var
@@ -551,7 +551,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBLength',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PData)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.fDisplayedData.PData)
                                               else
                                                   begin
                                                        p:=nil;
@@ -574,7 +574,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBXCoordinate',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PData)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.fDisplayedData.PData)
                                               else
                                                   begin
                                                        p:=nil;
@@ -597,7 +597,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBYCoordinate',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PData)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.fDisplayedData.PData)
                                               else
                                                   begin
                                                        p:=nil;
@@ -620,7 +620,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBZCoordinate',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PData)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.fDisplayedData.PData)
                                               else
                                                   begin
                                                        p:=nil;

@@ -29,7 +29,7 @@ uses
   uzeentity,
   Varman,
   uzcoimultipropertiesutil,
-  uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,
+  uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeentpoint,uzeenttext,
   uzeentmtext,uzeentpolyline,uzeentlwpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzeEntSpline,
   uzeenthatch,
@@ -549,6 +549,7 @@ const
      parc:PGDBObjArc=nil;
      pline:PGDBObjLine=nil;
      pblockinsert:PGDBObjBlockInsert=nil;
+     ppoint:PGDBObjPoint=nil;
      ptext:PGDBObjText=nil;
      pmtext:PGDBObjMText=nil;
      p3dpoly:PGDBObjPolyline=nil;
@@ -666,6 +667,14 @@ begin
     {--Summary}
     //MultiPropertiesManager.RegisterPhysMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('Double'),MPCSummary,GDBEllipseID,PtrInt(@pellipse^.RR),PtrInt(@pellipse^.RR),@GetOneVarData,@FreeOneVarData,@DoubleR2SumCircumferenceEntIterateProc,nil);
     //MultiPropertiesManager.RegisterPhysMultiproperty('TotalArea','Total area',sysunit^.TypeName2PTD('Double'),MPCSummary,GDBEllipseID,PtrInt(@pellipse^.RR),PtrInt(@pellipse^.RR),@GetOneVarData,@FreeOneVarData,@DoubleR2SumAreaEntIterateProc,nil);
+
+
+    {Point uzegeometry}
+    MultiPropertiesManager.RestartMultipropertySortID;
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBPointID,nil,PtrInt(@ppoint^.P_insertInOCS),PtrInt(@ppoint^.P_insertInOCS.x),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexXOCSEntIterateProc,@GeneralFromVarEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBPointID,nil,PtrInt(@ppoint^.P_insertInOCS),PtrInt(@ppoint^.P_insertInOCS.y),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexYOCSEntIterateProc,@GeneralFromVarEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBPointID,nil,PtrInt(@ppoint^.P_insertInOCS),PtrInt(@ppoint^.P_insertInOCS.z),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexZOCSEntIterateProc,@GeneralFromVarEntChangeProc));
+
 
     {Line uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;

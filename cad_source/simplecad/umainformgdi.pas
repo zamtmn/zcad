@@ -246,7 +246,7 @@ begin
   for i:=1 to SpinEdit1.Value do
   begin
     v1:=CreateRandomVertex(1000,500,_3d);                       //line coord
-    v2:=uzegeometry.VertexAdd(v1,CreateRandomVertex(1000,500,_3d));//line coord
+    v2:=v1+CreateRandomVertex(1000,500,_3d).asVector;//line coord
 
     PLineEnt:=GDBObjLine.CreateInstance;                    //create line
     PLineEnt^.CoordInOCS.lBegin:=v1;                        //setup coord
@@ -291,7 +291,7 @@ begin
          lw.data.endw:=CreateRandomDouble(10);
          lw.data.startw:=CreateRandomDouble(10);
          PLWPolyLineEnt^.SgmntsParams.PushBackData(lw);
-         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex2D(100,50));
+         v1:=v1+CreateRandomVertex2D(100,50).asVector;
     end;
     if vcount>2 then
                     PLWPolyLineEnt^.closed:=random(10)>5;          //random close lwpolyline
@@ -325,7 +325,7 @@ begin
     for j:=0 to 4 do
     begin
          pobj^.VertexArrayInOCS.PushBackData(v1);
-         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+         v1:=v1+CreateRandomVertex(100,50,Form1.ChkBox3D.Checked).asVector;
     end;
     pobj^.Knots.PushBackData(0);
     pobj^.Knots.PushBackData(0);
@@ -365,7 +365,7 @@ begin
     for j:=0 to 2 do
     begin
          pobj^.PInOCS[j]:=v1;
-         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+         v1:=v1+CreateRandomVertex(100,50,Form1.ChkBox3D.Checked).asVector;
     end;
     if istriangle then
                       pobj^.PInOCS[3]:=pobj^.PInOCS[2]
@@ -392,16 +392,16 @@ begin
   repeat
         case pv^.GetObjType of
         GDBLineID:begin
-                       l:=Vertexlength(PGDBObjLine(pv)^.CoordInWCS.lbegin,PGDBObjLine(pv)^.CoordInWCS.lend)/10;
+                       l:=PGDBObjLine(pv)^.CoordInWCS.lbegin.LengthTo(PGDBObjLine(pv)^.CoordInWCS.lend)/10;
                        hl:=l/2;
-                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=uzegeometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lBegin,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
-                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=uzegeometry.VertexAdd(PGDBObjLine(pv)^.CoordInOCS.lEnd,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
+                       PGDBObjLine(pv)^.CoordInOCS.lBegin:=PGDBObjLine(pv)^.CoordInOCS.lBegin+CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked).asVector;
+                       PGDBObjLine(pv)^.CoordInOCS.lEnd:=PGDBObjLine(pv)^.CoordInOCS.lEnd+CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked).asVector;
                        pv^.YouChanged(GetCurrentDrawing^);
                   end;
         GDBCircleID:begin
                        l:=PGDBObjCircle(pv)^.Radius;
                        hl:=l/2;
-                       PGDBObjCircle(pv)^.Local.P_insert:=uzegeometry.VertexAdd(PGDBObjCircle(pv)^.Local.P_insert,CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked));
+                       PGDBObjCircle(pv)^.Local.P_insert:=PGDBObjCircle(pv)^.Local.P_insert+CreateRandomVertex(l,hl,Form1.ChkBox3D.Checked).asVector;
                        PGDBObjCircle(pv)^.Radius:=PGDBObjCircle(pv)^.Radius+CreateRandomDouble(l)-hl;
                        if PGDBObjCircle(pv)^.Radius<=0 then PGDBObjCircle(pv)^.Radius:=CreateRandomDouble(9)+1;
                        pv^.YouChanged(GetCurrentDrawing^);
@@ -456,7 +456,7 @@ begin
     for j:=1 to vcount do
     begin
          pobj^.AddVertex(v1);
-         v1:=uzegeometry.VertexAdd(v1,CreateRandomVertex(100,50,Form1.ChkBox3D.Checked));
+         v1:=v1+CreateRandomVertex(100,50,Form1.ChkBox3D.Checked).asVector;
     end;
     if vcount>2 then
                     pobj^.closed:=random(10)>5;

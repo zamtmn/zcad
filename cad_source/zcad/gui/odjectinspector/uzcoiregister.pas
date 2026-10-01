@@ -21,15 +21,18 @@ unit uzcOIRegister;
 interface
 
 uses
-  Laz2_DOM,ToolWin,Clipbrd,SysUtils,uzccommandsabstract,uzcfcommandline,
-  uzcutils,uzbpaths,uzcTranslations,Forms,uzcinterface,
-  uzedrawingdef,uzgldrawcontext,uzctnrvectorstrings,uzsbVarmanDef,
-  uzedrawingsimple,uzeentity,uzcenitiesvariablesextender,uzObjectInspector,
-  uzcguimanager,uzcstrconsts,gzctnrVectorTypes,Controls,uzcdrawings,
-  Varman,UUnitManager,uzcsysvars,uzcsysparams,
-  uzcoimultiobjects,uzccommandsimpl,uzmenusmanager,uzcLog,Menus,ComCtrls,
-  uztoolbarsmanager,uzcimagesmanager,uzctreenode,uzcActionsManager,
-  uzObjectInspectorManager,zeundostack,uzcOI,UObjectDescriptor,Classes,uzbUnits,
+  SysUtils,Classes,
+  Laz2_DOM,Clipbrd,Controls,ComCtrls,Forms,Menus,
+  uzbpaths,uzbUnits,
+  gzctnrVectorTypes,uzctnrvectorstrings,
+  uzObjectInspectorManager,uzObjectInspector,uzcOI,uzcoimultiobjects,zeundostack,
+  uzcLog,uzcutils,uzcTranslations,uzcinterface,
+  uzccommandsabstract,uzccommandsimpl,
+  uzsbVarmanDef,Varman,UUnitManager,UObjectDescriptor,
+  uzedrawingdef,uzedrawingsimple,uzeentity,uzcenitiesvariablesextender,
+  uzcguimanager,uzcstrconsts,uzcdrawings,
+  uzcsysvars,uzcsysparams,
+  uzmenusmanager,uztoolbarsmanager,uzcimagesmanager,uzctreenode,uzcActionsManager,
   uzeTypes;
 
 implementation
@@ -49,29 +52,6 @@ type
     class function GetPeditorFocusPriority:TControlWithPriority;
     class procedure _onAfterFreeEditor(Sender:TObject);
   end;
-
-function GetPeditor:TComponent;
-begin
-  if assigned(GDBobjinsp) then begin
-    Result:=GDBobjinsp.InPlaceEditor;
-  end else
-    Result:=nil;
-end;
-
-function GetCurrentObj:Pointer;
-begin
-  if assigned(GDBobjinsp) then begin
-    Result:=GDBobjinsp.DisplayedDataPData;
-  end else
-    Result:=nil;
-end;
-
-procedure SetCurrentObjDefault;
-begin
-  if assigned(GDBobjinsp) then begin
-    GDBobjinsp.SetDisplayedDataAsDefault;
-  end;
-end;
 
 procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const DD:TDisplayedData);
 var
@@ -151,7 +131,6 @@ end;
 
 procedure ZCADFormSetupProc(Form:TControl);
 var
-  pint:PInteger;
   TBNode:TDomNode;
   tb:TToolBar;
   action:tmyaction;
@@ -166,10 +145,10 @@ begin
   GDBobjinsp.onAfterFreeEditor:=TDummyOIClass._onAfterFreeEditor;
 
   StoreAndSetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
-  SetCurrentObjDefault;
+  GDBobjinsp.SetDisplayedDataAsDefault;
 
-  cw:=GetIntegerFromUnit(SavedUnit^,'VIEW_ObjInspSubV','',Form.Width div 2,0,Form.Width);
-  w:=GetIntegerFromUnit(SavedUnit^,'VIEW_ObjInspV','',Form.Width,0,Form.Width);
+  w:=GetIntegerFromUnit(SavedUnit^,'VIEW_ObjInspV','',Form.Width,0,ZCSysParams.notsaved.ScreenX);
+  cw:=GetIntegerFromUnit(SavedUnit^,'VIEW_ObjInspSubV','',w div 2,0,w);
   GDBobjinsp.setPropertyColumnWidth(cw,cw,w);
 
   TBNode:=nil;
@@ -208,7 +187,7 @@ end;
 
 function ObjInspCopyToClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  if GetCurrentObj=nil then
+  if (GDBobjinsp=nil)or(GDBobjinsp.DisplayedDataPData=nil) then
     zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)
   else begin
     if uppercase(Operands)='VAR' then
@@ -223,8 +202,8 @@ end;
 
 class procedure TDummyOIClass.ReBuild(Sender:TObject;GUIMode:TzcMessageID);
 begin
-  if (GUIMode=zcMsgUIRePrepareObject) then begin
-    if GetCurrentObj=@MSEditor then
+  if (GUIMode=zcMsgUIRePrepareObject)and(GDBobjinsp<>nil) then begin
+    if GDBobjinsp.DisplayedDataPData=@MSEditor then
       MSEditor.CreateUnit(drawings.GetUnitsFormat);
     if assigned(GDBobjinsp) then begin
       GDBobjinsp.ReBuild;
@@ -243,7 +222,9 @@ end;
 class procedure TDummyOIClass.SetCurrentObjDefault;
 begin
   if (GUIMode=zcMsgUISetDefaultObject) then
-    uzcoiregister.SetCurrentObjDefault;
+    if assigned(GDBobjinsp) then begin
+      GDBobjinsp.SetDisplayedDataAsDefault;
+    end;
 end;
 
 class procedure TDummyOIClass.FreEditor;

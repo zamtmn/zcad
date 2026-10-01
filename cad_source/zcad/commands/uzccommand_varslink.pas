@@ -32,6 +32,8 @@ uses
 resourcestring
   rscmSelectEntityWithMainFunction='Select entity with main function';
   rscmSelectLinkedEntity='Select linked entity';
+  rscmSelectEntityWithextdrVariables='Please select entity with '+VariablesExtenderName;
+  rscmCannotBeLinked='Cannot be linked';
 
 implementation
 
@@ -51,7 +53,11 @@ begin
     pCentralVarext:=pmainobj^.GetExtension<TVariablesExtender>;
     if pCentralVarext=nil then begin
       pmainobj:=nil;
-      zcUI.TextMessage('Please select device with variables',TMWOSilentShowError);
+      zcUI.TextMessage(rscmSelectEntityWithextdrVariables,TMWOShowError);
+    end else if not pCentralVarext.canAddDelegate then begin
+      zcUI.TextMessage(rscmSelectEntityWithMainFunction,TMWOShowError);
+      pmainobj:=nil;
+      pCentralVarext:=nil;
     end;
   until pCentralVarext<>nil;
 
@@ -60,9 +66,11 @@ begin
       exit(cmd_ok);
     pVarext:=pobj^.GetExtension<TVariablesExtender>;
     if pVarext=nil then begin
-      zcUI.TextMessage('Please select device with variables',TMWOSilentShowError);
+      zcUI.TextMessage(rscmSelectEntityWithextdrVariables,TMWOShowError);
+    end else if not pCentralVarext.canAddDelegate(pobj,pVarext) then begin
+      zcUI.TextMessage(rscmCannotBeLinked,TMWOShowError);
     end else begin
-      pCentralVarext.addDelegate({pmainobj,}pobj,pVarext);
+      pCentralVarext.addDelegate(pobj,pVarext);
     end;
   until False;
 

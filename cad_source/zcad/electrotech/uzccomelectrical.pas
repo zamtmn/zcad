@@ -1908,85 +1908,7 @@ begin
   zcUI.TextMessage('Первая точка:',TMWOHistoryOut);
   result:=cmd_ok;
 end;
-function _Cable_com_Manager(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-//var i: Integer;
-    //pv:pGDBObjEntity;
-    //ir:itrec;
-begin
-        CableManager.init;
-        CableManager.build;
-        zcShowCommandParams(SysUnit.TypeName2PTD('TCableManager'),@CableManager);
-        result:=cmd_ok;
-end;
-function _Ren_n_to_0n_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var {i,}len: Integer;
-    pv:pGDBObjEntity;
-    ir:itrec;
-    pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
-    name:String;
-    pentvarext:TVariablesExtender;
-begin
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-    if pv^.GetObjType=GDBCableID then
-    begin
-         pentvarext:=pv^.GetExtension<TVariablesExtender>;
-         pvd:=pentvarext.entityunit.FindVariable('NMO_Name');
-         if pvd<>nil then
-                         begin
-                              name:=pString(pvd.data.Addr.Instance)^;
-                              len:=length(name);
-                              if len=3 then
-                              if name[len] in ['0'..'9'] then
-                              if not(name[len-1] in ['0'..'9']) then
-                              begin
-                                   name:=system.copy(name,1,len-1)+'0'+system.copy(name,len,1);
-                                   pString(pvd.data.Addr.Instance)^:=name;
-                                   //zcUI.TextMessage('Переименован кабель '+name,TMWOHistoryOut);
-                                   zcUI.TextMessage(format('Cable %s renamed',[name]),TMWOHistoryOut);
-                              end
-                                 {else
-                                     zcUI.TextMessage(name);;}
-                         end;
-    end;
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-  result:=cmd_ok;
-end;
-function _SelectMaterial_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var //i,len: Integer;
-    pv:pGDBObjEntity;
-    ir:itrec;
-    pvd{,pvn,pvm,pvmc,pvl}:pvardesk;
-    mat:String;
-    pentvarext:TVariablesExtender;
-begin
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-    if (pv^.GetObjType=GDBCableID)
-    or (pv^.GetObjType=GDBCableID) then
-    begin
-         pentvarext:=pv^.GetExtension<TVariablesExtender>;
-         pvd:=pentvarext.entityunit.FindVariable('DB_link');
-         if pvd<>nil then
-                         begin
-                              mat:=pString(pvd.data.Addr.Instance)^;
-                              if uppercase(mat)=uppercase(operands) then
-                                                                        begin
-                                                                        //pv^.Select;
-                                                                        pString(pvd.data.Addr.Instance)^:='ТППэП 20х2х0.5';
-                                                                        end;
-                         end;
-    end;
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-  result:=cmd_ok;
-  //commandmanager.executecommandend;
-  //OGLwindow1.SetObjInsp;
-      //updatevisible;
-end;
+
 function findconnector(CurrentObj:PGDBObjDevice):PGDBObjDevice;
 var
     CurrentSubObj:PGDBObjDevice;
@@ -2405,38 +2327,6 @@ begin
   result:=cmd_ok;
 end;
 
-function _test_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var
-    p:TzePoint3d;
-    pet:CMDLinePromptParser.TGeneralParsedText;
-    //ts:utf8string;
-    gr:TzcInteractiveResult;
-begin
-     zcUI.TextMessage('Тест производительности. запасаемя терпением',TMWOHistoryOut);
-     //ts:='$<"йцу",Keys[1],Id[1]> Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>';
-     //ts:='$<"123",Keys[1],Id[1]>';
-     pet:=CMDLinePromptParser.GetTokens('<$<"Команда&[1]",Keys[1],Id[1]>/$<"Команда&[2]",Keys[2],Id[2]>/$<"Команда&[3]",Keys[3],Id[3]>> [$<"&[М]олча𤭢123",Keys[М],Id[4]>]');
-     //pet:=CMDLinePromptParser.GetTokens('$<"12&[3]",Keys[1],Id[1]>');
-     //pet:=CMDLinePromptParser.GetTokens('фs "ёба" йs "2ёба2" йцу12');
-     commandmanager.SetPrompt(pet);
-     commandmanager.ChangeInputMode([IPEmpty],[]);
-     pet.Free;
-     repeat
-       gr:=commandmanager.Get3DPoint('ага',p);
-       case gr of
-             IRId:zcUI.TextMessage('Id:'+inttostr(commandmanager.GetLastId),TMWOHistoryOut);
-         IRNormal:zcUI.TextMessage('Normal',TMWOHistoryOut);
-          IRInput:zcUI.TextMessage('Input:'+commandmanager.GetLastInput,TMWOHistoryOut);
-          IRCancel:zcUI.TextMessage('Cancel',TMWOHistoryOut);
-       end;
-     until gr=IRCancel;
-     //for i:=0 to 10000 do
-     //       drawings.GetCurrentDWG.wa.getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
-     zcUI.TextMessage('Конец теста. выходим, смотрим результаты в конце лога.',TMWOHistoryOut);
-     //quit_com('');
-     result:=cmd_ok;
-end;
-
 function RegenZEnts_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pv:pGDBObjEntity;
@@ -2558,14 +2448,12 @@ begin
 
   if SysUnit<>nil then begin
     SysUnit.RegisterType(TypeInfo(TELLeaderComParam));
-    SysUnit.SetTypeDesk(TypeInfo(TELLeaderComParam),['Scale',
-      'Size','Width'],[FNProgram,FNUser]);
+    SysUnit.SetTypeDesk(TypeInfo(TELLeaderComParam),['Scale','Size','Width'],[FNProgram,FNUser]);
   end;
 
   if SysUnit<>nil then begin
     SysUnit.RegisterType(TypeInfo(TELCableComParam));
-    SysUnit.SetTypeDesk(TypeInfo(TELCableComParam),['Traces',
-      'PCable','PTrace'],[FNProgram]);
+    SysUnit.SetTypeDesk(TypeInfo(TELCableComParam),['Traces','PCable','PTrace'],[FNProgram]);
     SysUnit.SetTypeDesk(TypeInfo(TELCableComParam),['Traces',
       'Cabel (pointer)','Trace (pointer)'],[FNUser]);
     SysUnit.RegisterType(TypeInfo(PTELCableComParam));
@@ -2576,14 +2464,14 @@ begin
   CreateZCADCommand(@RegenZEnts_com,'RegenZEnts',CADWG,0);
   Wire.init('El_Wire',0,0);
   commandmanager.CommandRegister(@Wire);
-  pcabcom:=CreateCommandRTEdObjectPlugin(@_Cable_com_CommandStart, _Cable_com_CommandEnd,nil,@cabcomformat,@_Cable_com_BeforeClick,@_Cable_com_AfterClick,@_Cable_com_Hd,nil,'EL_Cable',0,0);
+  pcabcom:=CreateCommandRTEdObjectPlugin(@_Cable_com_CommandStart, _Cable_com_CommandEnd,nil,
+    @cabcomformat,@_Cable_com_BeforeClick,@_Cable_com_AfterClick,@_Cable_com_Hd,nil,'EL_Cable',0,0);
 
   pcabcom^.SetCommandParam(@cabcomparam,'PTELCableComParam');
   cabcomparam.Traces.Enums.init(10);
   cabcomparam.PTrace:=nil;
 
   CreateZCADCommand(@_Cable_com_Invert,'El_Cable_Invert',CADWG,0);
-  CreateZCADCommand(@_Cable_com_Manager,'El_CableMan',CADWG,0);
   CreateZCADCommand(@_Cable_com_Legend,'El_Cable_Legend',CADWG,0);
   CreateZCADCommand(@_Cable_com_Join,'El_Cable_Join',CADWG,0);
   csel:=CreateZCADCommand(@_Cable_com_Select,'El_Cable_Select',CADWG,0);
@@ -2591,9 +2479,6 @@ begin
   CreateZCADCommand(@_Material_com_Legend,'El_Material_Legend',CADWG,0);
   CreateZCADCommand(@_Cable_mark_com,'KIP_Cable_Mark',CADWG,0);
 
-  CreateZCADCommand(@_Ren_n_to_0n_com,'El_Cable_RenN_0N',CADWG,0);
-  CreateZCADCommand(@_SelectMaterial_com,'SelMat',CADWG,0);
-  CreateZCADCommand(@_test_com,'test',CADWG,0);
   CreateZCADCommand(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
   CreateZCADCommand(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
   CreateZCADCommand(@Connection2Dot_com,'Connection2Dot',CADWG,0);
@@ -2605,7 +2490,8 @@ begin
 
   //EM_SEPBUILD.SetCommandParam(@em_sepbuild_params,'PTBasicFinter');
 
-  CreateCommandRTEdObjectPlugin(@ElLeaser_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@El_Leader_com_AfterClick,nil,nil,'El_Leader',0,0);
+  CreateCommandRTEdObjectPlugin(@ElLeaser_com_CommandStart,@Line_com_CommandEnd,nil,nil,
+    @Line_com_BeforeClick,@El_Leader_com_AfterClick,nil,nil,'El_Leader',0,0);
 
   ELLeaderComParam.Scale:=1;
   ELLeaderComParam.Size:=1;

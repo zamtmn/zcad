@@ -1,0 +1,13 @@
+
+#### LoadToolbars
+
+:cmdcommand: LoadToolbars
+:cmdoperands: Обязательный. Путь и имя файла с описанием тулбаров
+:cmdexample: LoadMenus(E:\toolbarscontent.xml)
+
+include::../../_elements/commandsummary.adoc[]
+
+Загрузка файла описаний тулбаров !!NEEDLINK!!. Загрузка обычно происходит на ранней стадии запуска программы,
+поэтому команда обычно используется в скрипте [.filepath]#$(ZCADPath)/preload/stage0.cmd0# !!NEEDLINK!!.
+
+include::commandsummaryfree.adoc[]

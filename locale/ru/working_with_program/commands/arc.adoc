@@ -1,0 +1,13 @@
+
+#### Arc
+
+:cmdcommand: Arc
+:cmdicon: ../../../../images/actions/draw/arc.png
+:cmdmenu: Черчение > Дуга
+
+include::../../_elements/commandsummary.adoc[]
+
+Черчение примитива [.ent]#Arc# (дуга) по 3м точкам. После запуска команды последовательно указать 3 точки
+дуги 
+
+include::commandsummaryfree.adoc[]

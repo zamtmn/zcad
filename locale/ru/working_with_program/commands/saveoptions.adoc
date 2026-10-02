@@ -1,0 +1,12 @@
+
+#### SaveOptions
+
+:cmdcommand: SaveOptions
+:cmdmenu: Настройки > Сохранить параметры
+
+include::../../_elements/commandsummary.adoc[]
+
+Соxранить текущие настройки программы в файлы [.filepath]#$(ZCADPath)/rtl/sysvar.pas# !!NEEDLINK!! и
+[.filepath]#$(ZCADPath)/rtl/config.xml# !!NEEDLINK!!
+
+include::commandsummaryfree.adoc[]

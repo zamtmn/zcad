@@ -1664,89 +1664,6 @@ begin
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
-{
-function _Ren_n_to_0n_com(Operands:pansichar):Integer;
-var len: Integer;
-    pv:pGDBObjEntity;
-    ir:itrec;
-    pvd:pvardesk;
-    name:String;
-begin
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-    if pv^.GetObjType=GDBCableID then
-    begin
-         pvd:=pv^.ou.FindVariable('NMO_Name');
-         if pvd<>nil then
-                         begin
-                              name:=pString(pvd.Instance)^;
-                              len:=length(name);
-                              if len=3 then
-                              if name[len] in ['0'..'9'] then
-                              if not(name[len-1] in ['0'..'9']) then
-                              begin
-                                   name:=system.copy(name,1,len-1)+'0'+system.copy(name,len,1);
-                                   pString(pvd.Instance)^:=name;
-                                   zcUI.TextMessage('Переименован кабель '+name);
-                              end
-                         end;
-    end;
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-end;
-}
-function VarReport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var pv:pGDBObjEntity;
-    ir:itrec;
-    pvd:pvardesk;
-    name,content:String;
-    VarContents:TZctnrVectorStrings;
-    ps{,pspred}:pString;
-    pentvarext:TVariablesExtender;
-begin
-  if operands<>''then
-  begin
-  VarContents.init(100);
-  name:=Operands;
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-    if pv^.Selected then
-    begin
-    pentvarext:=pv^.GetExtension<TVariablesExtender>;
-    if pentvarext<>nil then
-      pvd:=pentvarext.entityunit.FindVariable(name)
-    else
-      pvd:=nil;
-    if pvd<>nil then
-    begin
-         content:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
-    end
-       else
-           begin
-                content:='Переменной в описании примитива не обнаружено';
-           end;
-    VarContents.PushBackData(content);
-    end;
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-  VarContents.sort;
-
-  ps:=VarContents.beginiterate(ir);
-  if (ps<>nil) then
-  repeat
-       zcUI.TextMessage(ps^,TMWOHistoryOut);
-       ps:=VarContents.iterate(ir);
-  until ps=nil;
-
-  VarContents.Done;
-  end
-  else
-      zcUI.TextMessage('Имя переменной должно быть задано в параметре команды',TMWOHistoryOut);
-  zcRedrawCurrentDrawing;
-  result:=cmd_ok;
-end;
 
 function _Cable_com_Invert(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
@@ -2692,8 +2609,6 @@ begin
 
   ELLeaderComParam.Scale:=1;
   ELLeaderComParam.Size:=1;
-
-  CreateZCADCommand(@VarReport_com,'VarReport',CADWG,0);
 end;
 
 procedure finalize;

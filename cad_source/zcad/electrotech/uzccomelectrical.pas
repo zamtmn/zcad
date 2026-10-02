@@ -82,8 +82,6 @@ var
    Wire:El_Wire_com;
    p3dpl:PGDBObjCable;
 
-   //pco:pCommandRTEdObjectPlugin;
-
    CableManager:TCableManager;
 
    pcabcom,pfindcom:pCommandRTEdObjectPlugin;
@@ -91,18 +89,11 @@ var
    csel:pCommandFastObjectPlugin;
    MainSpecContentFormat:TZctnrVectorStrings;
 
-   //EM_SRBUILD:EM_SRBUILD_com;
-   //EM_SEPBUILD:EM_SEPBUILD_com;
-   //em_sepbuild_params:TBasicFinter;
    KIP_CDBuild:KIP_CDBuild_com;
    KIP_LugTableBuild:KIP_LugTableBuild_com;
 
-   //treecontrol:ZTreeViewGeneric;
-   //zf:zform;
    ELLeaderComParam:TELLeaderComParam;
 
-{procedure startup;
-procedure finalize;}
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
 function RegenZEnts_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 implementation
@@ -1757,37 +1748,6 @@ begin
   result:=cmd_ok;
 end;
 
-function TempReport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var pv:pGDBObjEntity;
-    ir:itrec;
-    pvd:pvardesk;
-    name,ConnectTo,ConnectFrom:String;
-    //ps{,pspred}:pString;
-    pentvarext:TVariablesExtender;
-begin
-  name:=Operands;
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then repeat
-    if pv^.Selected then begin
-      pentvarext:=pv^.GetExtension<TVariablesExtender>;
-      if pentvarext<>nil then begin
-        pvd:=pentvarext.entityunit.FindVariable(name);
-        if pvd<>nil then begin
-          ConnectTo:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
-          pvd:=pentvarext.entityunit.FindVariable('NMO_Name');
-          if pvd<>nil then begin
-            ConnectFrom:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
-            zcUI.TextMessage(ConnectTo+'-1;'+ConnectFrom+';'+ConnectTo+';default;_EQ000017',TMWOHistoryOut);
-            zcUI.TextMessage(ConnectTo+'-2;'+ConnectFrom+';'+ConnectTo+';default;_EQ000015',TMWOHistoryOut);
-          end;
-        end
-      end;
-    end;
-    pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-  result:=cmd_ok;
-end;
-
 function _Cable_com_Invert(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pv:pGDBObjEntity;
@@ -2734,7 +2694,6 @@ begin
   ELLeaderComParam.Size:=1;
 
   CreateZCADCommand(@VarReport_com,'VarReport',CADWG,0);
-  CreateZCADCommand(@TempReport_com,'TempReport',CADWG,0);
 end;
 
 procedure finalize;

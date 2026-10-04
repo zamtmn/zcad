@@ -189,6 +189,7 @@ begin
     end;
   end;
   dna.Destroy;
+  drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint)or(MMoveCamera)or(MRotateCamera));
 end;
 
 

@@ -18,10 +18,11 @@ uses
   uzccomdraw,uzeentline,uzbpaths,uzeentblockinsert,
   uzegeometrytypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,Math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
-  gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,uzsbTypeDescriptors,uzcLog,
+  gzctnrVectorTypes,URecordDescriptor,uzsbTypeDescriptors,uzcLog,
   uzcstrconsts,uzccmdfloatinsert,
   zUndoCmdChgTypes,zUndoCmdChgVariable,
-  uzcdrawing,uzCtnrVectorpBaseEntity,UGDBVisibleTreeArray,uzeentabstracttext;
+  uzcdrawing,uzCtnrVectorpBaseEntity,UGDBVisibleTreeArray,uzeentabstracttext,
+  uzcCommand_KIPCableMark;
 
 type
   TPlaceParam=record

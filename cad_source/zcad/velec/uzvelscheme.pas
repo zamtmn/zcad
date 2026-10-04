@@ -117,7 +117,6 @@ uses
 
    uzccablemanager,
    gzctnrVectorTypes,
-   uzccomelectrical,
    uzeroot,
    uzeentmtext,
    uzbstrproc,

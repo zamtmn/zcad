@@ -79,14 +79,10 @@ begin
 end;
 
 procedure rootbytrace(firstpoint,lastpoint:TzePoint3d;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:boolean);
-var //po:PGDBObjSubordinated;
-  //plastw:PzePoint3d;
+var
   tw1,tw2:TzePoint3d;
   l1,l2:pgdbobjline;
   pa:GDBPoint3dArray;
-  //prevpoint:TzePoint3d;
-  //polydata:tpolydata;
-  //domethod,undomethod:tmethod;
 begin
   if ptrace<>nil then begin
     pointer(l1):=PTrace.GetNearestLine(firstpoint);
@@ -110,14 +106,10 @@ begin
         cable^.AddVertex(firstpoint);
       if not tw1.IsEqual(firstpoint,sqreps) then
         AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
-      //cable^.AddVertex(tw1);
       pa.copyto(cable.VertexArrayInOCS);
-      //firstpoint:=PzePoint3d(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
-      //if not IsPointEqual(tw2,firstpoint) then
       cable^.AddVertex(tw2);
       if not tw2.IsEqual(lastpoint,sqreps) then
         AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,cable);
-      //cable^.AddVertex(lastpoint);
       pa.done;
     end;
 
@@ -129,8 +121,7 @@ begin
 end;
 
 function RootByMultiTrace(firstpoint,lastpoint:TzePoint3d;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:boolean):TZctnrVectorPGDBaseEntity;
-var //po:PGDBObjSubordinated;
-  //plastw:PzePoint3d;
+var
   tw1,tw2:TzePoint3d;
   l1,l2:pgdbobjline;
   pa:GDBPoint3dArray;
@@ -139,8 +130,6 @@ var //po:PGDBObjSubordinated;
   tcable:PGDBObjCable;
   pvd:pvardesk;
   cablecount:integer;
-  //polydata:tpolydata;
-  //domethod,undomethod:tmethod;
   ptcablevarext,pcablevarext:TVariablesExtender;
 begin
   pointer(l1):=PTrace.GetNearestLine(firstpoint);
@@ -166,7 +155,6 @@ begin
     if not tw1.IsEqual(firstpoint,sqreps) then
       AddPolySegmentFromConnIfZnotMatch(firstpoint,tw1,cable);
 
-    //pa.copyto(@cable.VertexArrayInOCS);
     tcable:=cable;
     cablecount:=1;
     pv:=pa.beginiterate(ir);
@@ -177,7 +165,6 @@ begin
         else begin
           tcable:=AllocCable;
           tcable.init(drawings.GetCurrentROOT,nil,0);
-          //tcable := Pointer(drawings.GetCurrentROOT.ObjArray.CreateinitObj(GDBCableID,drawings.GetCurrentROOT));
           ptcablevarext:=tcable^.GetExtension<TVariablesExtender>;
           pcablevarext:=cable^.GetExtension<TVariablesExtender>;
           ptcablevarext.entityunit.copyfrom(@pcablevarext.entityunit);
@@ -191,9 +178,6 @@ begin
         pv:=pa.iterate(ir);
       until pv=nil;
 
-
-    //firstpoint:=PzePoint3d(cable^.VertexArrayInWCS.getDataMutable(cable^.VertexArrayInWCS.Count-1))^;
-    //if not IsPointEqual(tw2,firstpoint) then
     tcable^.AddVertex(tw2);
     if not tw2.IsEqual(lastpoint,sqreps) then
       AddPolySegmentToConnIfZnotMatch(tw2,lastpoint,tcable);
@@ -205,7 +189,7 @@ end;
 function findconnector(CurrentObj:PGDBObjDevice):PGDBObjDevice;
 var
   CurrentSubObj:PGDBObjDevice;
-  {ir_inGDB,ir_inVertexArray,ir_inNodeArray,}ir_inDevice:itrec;
+  ir_inDevice:itrec;
 begin
   Result:=nil;
   CurrentSubObj:=CurrentObj^.VarObjArray.beginiterate(ir_inDevice);
@@ -223,13 +207,11 @@ end;
 
 function CreateCable(Name,mater:string):PGDBObjCable;
 var
-  //vd,pvn,pvn2: pvardesk;
-  pvd{,pvd2}:pvardesk;
+  pvd:pvardesk;
   pentvarext:TVariablesExtender;
 begin
   Result:=AllocCable;
   Result.init(drawings.GetCurrentROOT,nil,0);
-  //result := Pointer(drawings.GetCurrentROOT.ObjArray.CreateInitObj(GDBCableID,drawings.GetCurrentROOT));
   pentvarext:=Result^.GetExtension<TVariablesExtender>;
   pentvarext.entityunit.copyfrom(units.findunit(GetSupportPaths,InterfaceTranslate,'cable'));
   pvd:=pentvarext.entityunit.FindVariable('NMO_Suffix');
@@ -284,7 +266,8 @@ var
     entarray.Clear;
     drawings.FindMultiEntityByVar(GDBDeviceID,'NMO_Name',startdevname,entarray);
     if entarray.Count>0 then begin
-      PGDBObjEntity(startdev):=FindEntityByVarInArray(GDBDeviceID,'ENTID_Representation','GraphSymbol~onPlan',entarray,True);
+      PGDBObjEntity(startdev):=FindEntityByVarInArray(GDBDeviceID,'ENTID_Representation',
+        'GraphSymbol~onPlan',entarray,True);
       if startdev=nil then
         pointer(startdev):=entarray.getData(0);
     end;
@@ -292,7 +275,8 @@ var
     entarray.Clear;
     drawings.FindMultiEntityByVar(GDBDeviceID,'NMO_Name',enddevname,entarray);
     if entarray.Count>0 then begin
-      PGDBObjEntity(enddev):=FindEntityByVarInArray(GDBDeviceID,'ENTID_Representation','GraphSymbol~onPlan',entarray,True);
+      PGDBObjEntity(enddev):=FindEntityByVarInArray(GDBDeviceID,'ENTID_Representation',
+        'GraphSymbol~onPlan',entarray,True);
       if enddev=nil then
         pointer(enddev):=entarray.getData(0);
     end;

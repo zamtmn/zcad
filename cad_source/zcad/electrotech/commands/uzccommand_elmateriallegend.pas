@@ -173,33 +173,28 @@ begin
         repeat
           if currentgroup^[1]='!' then begin
             psl:=pt^.tbl.CreateObject;
-            //psl:=pointer(pt^.tbl.CreateObject);
             psl.init(2);
 
             s:='';
             psl.PushBackData(s);
 
-            s:={Tria_Utf8ToAnsi}(currentgroup^);
+            s:=currentgroup^;
             s:='  '+system.copy(s,2,length(s)-1);
-            //s:='  '+system.copy(currentgroup^,2,length(currentgroup^)-1);
             psl.PushBackData(s);
             counter:=1;
             if notempty then begin
               Inc(gcounter);
               notempty:=False;
             end;
-          end
-          else begin
+          end else begin
             PBOMITEM:=bom.beginiterate(ir);
             if PBOMITEM<>nil then
               repeat
                 pdbv:=pdbu^.FindVariable(PBOMITEM^.Material);
                 if pdbv<>nil then
-                  if not(PBOMITEM.processed) then
-                  begin
+                  if not(PBOMITEM.processed) then begin
                     pdbi:=pdbv^.Data.Addr.Instance;
-                    if MatchesMask(pdbi^.Group,currentgroup^) then
-                    begin
+                    if MatchesMask(pdbi^.Group,currentgroup^) then begin
                       PBOMITEM.processed:=True;
                       psl:=pt^.tbl.CreateObject;
                       psl.init(9);
@@ -209,34 +204,34 @@ begin
                       notempty:=True;
 
                       s:=pdbi^.Position;
-                      psl.PushBackData({Tria_Utf8ToAnsi}(s));
+                      psl.PushBackData(s);
 
                       s:=' '+pdbi^.NameFull;
-                      psl.PushBackData({Tria_Utf8ToAnsi}(s));
+                      psl.PushBackData(s);
 
                       s:=pdbi^.NameShort+' '+pdbi^.Standard;
-                      psl.PushBackData({Tria_Utf8ToAnsi}(s));
+                      psl.PushBackData(s);
 
                       s:=pdbi^.OKP;
-                      psl.PushBackData({Tria_Utf8ToAnsi}(s));
+                      psl.PushBackData(s);
 
                       s:=pdbi^.Manufacturer;
-                      psl.PushBackData({Tria_Utf8ToAnsi}(s));
+                      psl.PushBackData(s);
 
                       s:='??';
                       case pdbi^.EdIzm of
                         _sht:s:='шт.';
                         _m:s:='м';
                       end;
-                      psl.PushBackData({Tria_Utf8ToAnsi}(s));
+                      psl.PushBackData(s);
 
                       s:=floattostr(PBOMITEM^.Amount);
                       psl.PushBackData(s);
 
                       s:='';
-                      psl.PushBackData({Tria_Utf8ToAnsi}(s));
+                      psl.PushBackData(s);
                       s:=PBOMITEM.Names;
-                      psl.PushBackData({Tria_Utf8ToAnsi}(s));
+                      psl.PushBackData(s);
                     end;
 
                   end;
@@ -250,7 +245,7 @@ begin
           currentgroup:=MainSpecContentFormat.iterate(ir_inscf);
         until currentgroup=nil;
 
-    drawings.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pt);
+    drawings.GetCurrentROOT.AddObjectToObjArray(@pt);
     pt^.Build(drawings.GetCurrentDWG^);
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     pt^.FormatEntity(drawings.GetCurrentDWG^,dc);

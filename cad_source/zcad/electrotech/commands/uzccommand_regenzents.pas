@@ -36,23 +36,23 @@ implementation
 
 function RegenZEnts_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
-    pv:pGDBObjEntity;
-        ir:itrec;
-    drawing:PTDrawingDef;
-    DC:TDrawContext;
-    lph:TLPSHandle;
+  pv:pGDBObjEntity;
+  ir:itrec;
+  drawing:PTDrawingDef;
+  DC:TDrawContext;
+  lph:TLPSHandle;
 begin
-  lph:=lps.StartLongProcess('Regenerate ZCAD entities',nil,drawings.GetCurrentROOT.ObjArray.count);
+  lph:=lps.StartLongProcess('Regenerate ZCAD entities',nil,drawings.GetCurrentROOT.ObjArray.Count);
   drawing:=drawings.GetCurrentDwg;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
-  repeat
-    if (pv^.GetObjType>=GDBZCadEntsMinID)and(pv^.GetObjType<=GDBZCadEntsMaxID)then
-                                                                        pv^.FormatEntity(drawing^,dc);
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  lps.ProgressLongProcess(lph,ir.itc);
-  until pv=nil;
+    repeat
+      if (pv^.GetObjType>=GDBZCadEntsMinID)and(pv^.GetObjType<=GDBZCadEntsMaxID) then
+        pv^.FormatEntity(drawing^,dc);
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      lps.ProgressLongProcess(lph,ir.itc);
+    until pv=nil;
   drawings.GetCurrentROOT.getoutbound(dc);
   lps.EndLongProcess(lph);
 
@@ -63,7 +63,7 @@ begin
   zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   clearcp;
   //redrawoglwnd;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization

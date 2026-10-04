@@ -67,7 +67,7 @@ begin
   pentvarext:=pv^.GetExtension<TVariablesExtender>;
   pvm:=pentvarext.entityunit.FindVariable('CableMaterial');
   if pvm<>nil then begin
-    pstring(pvm^.Data.Addr.Instance)^:={Tria_Utf8ToAnsi}(GetCableMaterial(pcd));
+    pstring(pvm^.Data.Addr.Instance)^:=GetCableMaterial(pcd);
   end;
   pvl:=pentvarext.entityunit.FindVariable('CableLength');
   if pvl<>nil then

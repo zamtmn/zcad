@@ -43,7 +43,7 @@ implementation
 
 type
   KIP_CDBuild_com=object(FloatInsert_com)
-    procedure Command(Operands:TCommandOperands); virtual;
+    procedure Command(Operands:TCommandOperands);virtual;
   end;
 
 var
@@ -79,9 +79,9 @@ begin
   //такого блок в библиотеке нет, водим
   //TODO: надо добавить ругань
   if pbh=nil then
-                exit;
+    exit;
   if not PBH.Formated then
-                         PBH.FormatEntity(drawings.GetCurrentDWG^,dc);
+    PBH.FormatEntity(drawings.GetCurrentDWG^,dc);
 
   //создаем массив ИмяУстройств+АдресУстройства
   dna:=devnamearray.Create;
@@ -89,21 +89,20 @@ begin
   //TODO: тут нужно учитывать централизацию
   psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
   if psd<>nil then
-  repeat
-       if psd^.objaddr^.GetObjType=GDBDeviceID then
-       begin
-            entvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
-            //pvd:=PTEntityUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
-            pvd:=entvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
-            if pvd<>nil then
-                            dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)
-                        else
-                            dn.name:='';
-            dn.pdev:=pointer(psd^.objaddr);
-            dna.PushBack(dn);
-       end;
-       psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-  until psd=nil;
+    repeat
+      if psd^.objaddr^.GetObjType=GDBDeviceID then begin
+        entvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
+        //pvd:=PTEntityUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
+        pvd:=entvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
+        if pvd<>nil then
+          dn.Name:=pvd.Data.PTD.GetValueAsString(pvd.Data.Addr.Instance)
+        else
+          dn.Name:='';
+        dn.pdev:=pointer(psd^.objaddr);
+        dna.PushBack(dn);
+      end;
+      psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
+    until psd=nil;
 
   if dna.Size=0 then
     //ругаемся если устройств в выделениии не оказалось

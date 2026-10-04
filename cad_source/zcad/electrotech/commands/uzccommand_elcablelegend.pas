@@ -119,7 +119,7 @@ begin
 
     handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
     if summMM='' then
-      line:={Tria_Utf8ToAnsi}('Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10)
+      line:='Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10
     else begin
       line:='Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец';
       for i:=0 to totalMMC do
@@ -152,9 +152,6 @@ begin
       repeat
         begin
           cablename:=pv^.Name;
-
-          //         if cablename='RS' then
-          //                               cablename:=cablename;
 
           pstartsegmentvarext:=pv^.StartSegment^.GetExtension<TVariablesExtender>;
           pvd:=pstartsegmentvarext.entityunit.FindVariable('DB_link');
@@ -193,13 +190,11 @@ begin
             if firstline then begin
               line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+devstart+';'+devend+#13#10;
               s:='';
-              psl.PushBackData({Tria_Utf8ToAnsi}(cablename));
-              psl.PushBackData({Tria_Utf8ToAnsi}(devstart));
+              psl.PushBackData(cablename);
+              psl.PushBackData(devstart);
             end else begin
-              line:={cablename+}';'+{CableMaterial+}';'+{CableLength+}';'+devstart+';'+devend+#13#10;
+              line:=';'+';'+';'+devstart+';'+devend+#13#10;
             end;
-            line:={Tria_Utf8ToAnsi}(line);
-            //FileWrite(handle,line[1],length(line));
             firstline:=False;
             devstart:=devend;
             nodeend:=pv^.Devices.iterate(ir_inDevs);
@@ -239,22 +234,20 @@ begin
           else
             line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+puredevstart+';'+devend+#13#10;
 
-          line:={Tria_Utf8ToAnsi}(line);
           FileWrite(handle,line[1],length(line));
           s:='';
-          psl.PushBackData({Tria_Utf8ToAnsi}(devend));
-          psl.PushBackData({Tria_Utf8ToAnsi}(s));
-          psl.PushBackData({Tria_Utf8ToAnsi}(s));
-          psl.PushBackData({Tria_Utf8ToAnsi}(s));
-          psl.PushBackData({Tria_Utf8ToAnsi}(s));
-          psl.PushBackData({Tria_Utf8ToAnsi}(CableMaterial));
-          psl.PushBackData({Tria_Utf8ToAnsi}(CableLength));
-          psl.PushBackData({Tria_Utf8ToAnsi}(s));
-          psl.PushBackData({Tria_Utf8ToAnsi}(s));
+          psl.PushBackData(devend);
+          psl.PushBackData(s);
+          psl.PushBackData(s);
+          psl.PushBackData(s);
+          psl.PushBackData(s);
+          psl.PushBackData(CableMaterial);
+          psl.PushBackData(CableLength);
+          psl.PushBackData(s);
+          psl.PushBackData(s);
           s:='';
-          psl.PushBackData({Tria_Utf8ToAnsi}(s));
+          psl.PushBackData(s);
 
-          //zcUI.TextMessage('Cable "'+pv^.Name+'", segments '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,TMWOHistoryOut);
           zcUI.TextMessage(format('Cable %s, %d segments, %s, from: %s to: %s',[pv^.Name,pv^.Segments.Count,CableMaterial,puredevstart,devend]),
             TMWOHistoryOut);
 
@@ -262,7 +255,7 @@ begin
         pv:=cman.iterate(ir);
       until pv=nil;
 
-      drawings.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pt);
+      drawings.GetCurrentROOT.AddObjectToObjArray(@pt);
       pt^.Build(drawings.GetCurrentDWG^);
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
       pt^.FormatEntity(drawings.GetCurrentDWG^,dc);

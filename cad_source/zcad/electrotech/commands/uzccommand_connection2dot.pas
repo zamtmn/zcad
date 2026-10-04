@@ -94,13 +94,10 @@ begin
                           TMWOHistoryOut);
                         alreadywrite.add(nodeend,1);
                       end;
-                      zcUI.TextMessage(format(' %s->%s [label="%s"]',[startnodename,endnodename,
-                        pv^.Name]),TMWOHistoryOut);
+                      zcUI.TextMessage(format(' %s->%s [label="%s"]',[startnodename,endnodename,pv^.Name]),TMWOHistoryOut);
                       nodestart:=nodeend;
                     end;
                   end;
-          {if pvd=nil then
-            nodestart:=nodeend;}
                   node:=segment^.NodePropArray.iterate(ir_inNodeArray);
                 until node=nil;
             end;

@@ -329,7 +329,9 @@ uses
   uzcCommand_ElMaterialLegend,uzcCommand_ElExternalKZ,uzcCommand_KIPCableMark,uzcCommand_ElLeader,
   uzcCommand_ElWire,uzcCommand_ElCable,uzcCommand_KIPLugTableBuild,uzcCommand_KIPCDBuild,
   uzcCommand_RegenZEnts,
-  uzccomops,
+  //uzccomops,
+  uzcCommand_PlaceSmokeDetectorOrto,uzcCommand_OrtoDevPlace,uzcCommand_OPSSPBuild,
+  uzcCommand_OPSSensorMark,
   //uzccommaps,
   uzceCommand_SCHConnection,
   {$ENDIF}

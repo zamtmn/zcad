@@ -26,7 +26,7 @@ uses
   uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzcdrawing,gzctnrVectorTypes,uzgldrawcontext,uzegeometrytypes,
   uzglviewareadata,uzeentity,uzegeometry,uzeentwithlocalcs,
-  zcmultiobjectcreateundocommand,uzccommandsmanager;
+  zcmultiobjectcreateundocommand,uzccommandsmanager,uzcutils;
 
 type
 
@@ -89,9 +89,11 @@ var
   tv,pobj:pGDBObjEntity;
   domethod,undomethod:tmethod;
   dc:TDrawContext;
+  UndoStartMarkerPlaced:Boolean;
 begin
   dispmatr:=CreateTranslationMatrix(wc.asVector);
   drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
+  UndoStartMarkerPlaced:=false;
 
   if (button and MZW_LBUTTON)<>0 then begin
     if FSelectInsertedEnts then begin
@@ -118,6 +120,7 @@ begin
             tv^.build(drawings.GetCurrentDWG^);
             tv^.YouChanged(drawings.GetCurrentDWG^);
 
+            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,self.CommandName,True);
             SetObjCreateManipulator(domethod,undomethod);
             with PushMultiObjectCreateCommand(
                 PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),
@@ -134,6 +137,8 @@ begin
         end;
         pobj:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
       until pobj=nil;
+
+    zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
 
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     drawings.GetCurrentROOT^.calcbb(dc);

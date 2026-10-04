@@ -5,5 +5,5 @@ var
    ENTID_Representation:TEentityRepresentation;(*'Representation'*)
 implementation
 begin
-   ENTID_Representation:='Test';
+   ENTID_Representation:='GraphSymbol~onScheme~Connection';
 end.

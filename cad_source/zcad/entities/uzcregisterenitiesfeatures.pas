@@ -252,9 +252,9 @@ begin
         pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,SPFSources.GetFull,pEntity)
       else
         pstring(pvn^.data.Addr.Instance)^:='!!ERR(pEnttity=nil)';}
-      pvn^.attrib:=pvn^.attrib or vda_RO;
+      pvn^.attrib:=pvn^.attrib+[vda_RO];
     end else
-      pvn^.attrib:=pvn^.attrib and (not vda_RO);
+      pvn^.attrib:=pvn^.attrib-[vda_RO];
   end;
 end;
 

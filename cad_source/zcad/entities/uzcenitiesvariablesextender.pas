@@ -551,7 +551,7 @@ begin
        pvd:=vardata.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
        if pvd<>nil then
          repeat
-           if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then begin
+           if not(TA_COMPOUND in pvd^.data.PTD.GetTypeAttributes) then begin
              sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Addr.Instance);
              sv:=StringReplace(sv,#0,'',[rfReplaceAll]);
              sv:=StringReplace(sv,#10,'',[rfReplaceAll]);

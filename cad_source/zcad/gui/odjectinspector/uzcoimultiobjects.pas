@@ -155,7 +155,7 @@ begin
           pentity^.YouChanged(drawings.GetCurrentDWG^);
           result:=true;
           if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Addr.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Addr.Instance) then
-            PSourceVD.attrib:=PSourceVD.attrib or vda_different;
+            PSourceVD.attrib:=PSourceVD.attrib+[vda_different];
         end;
     end;
 
@@ -168,7 +168,7 @@ var
   pentity,pmainentity: pGDBObjEntity;
   psd:PSelectedObjDesc;
 begin
-  PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
+  PSourceVD.attrib:=PSourceVD.attrib-[vda_different];
   psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
   if psd<>nil then
   repeat
@@ -197,7 +197,7 @@ var
   pentity,pmainentity: pGDBObjEntity;
   psd:PSelectedObjDesc;
 begin
-  PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
+  PSourceVD.attrib:=PSourceVD.attrib-[vda_different];
   psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
   if psd<>nil then
   repeat
@@ -309,7 +309,7 @@ var
   lpsh:TLPSHandle;
 begin
   ClearErrorRange;
-  PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
+  PSourceVD.attrib:=PSourceVD.attrib-[vda_different];
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   if drawings.GetCurrentDWG.SelObjArray.Count>1 then
     lpsh:=LPS.StartLongProcess('SetMultiProperty',@TMSEditor.SetMultiProperty,0);
@@ -722,7 +722,7 @@ begin
         vd.SetInstance(nil);
         //vd.Instance:=nil;
         if linkedunit then
-          vd.attrib:=vd.attrib or vda_colored1;
+          vd.attrib:=vd.attrib+[vda_colored1];
         WorkedUnit.InterfaceVariables.createvariable(pvd^.name,vd,vd.attrib);
         pvd^.data.PTD.CopyValueToInstance(pvd.data.Addr.Instance,vd.data.Addr.Instance);
         end
@@ -732,9 +732,9 @@ begin
         end;}
       end else begin
         if pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance)<>pvdmy^.data.PTD.GetValueAsString(pvdmy^.data.Addr.Instance) then
-          pvdmy.attrib:=vda_different;
+          pvdmy.attrib:=[vda_different];
         if linkedunit then
-          pvdmy.attrib:=pvdmy.attrib or vda_colored1;
+          pvdmy.attrib:=pvdmy.attrib+[vda_colored1];
       end;
 
       pvd:=entunit.InterfaceVariables.vardescarray.iterate(ir2)

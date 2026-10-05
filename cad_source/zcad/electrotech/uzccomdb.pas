@@ -125,7 +125,7 @@ var
   procedure setdbvar(nevValue:string);
   begin
     if pvnt<>nil then
-      pvnt^.attrib:=pvnt^.attrib or (vda_RO);
+      pvnt^.attrib:=pvnt^.attrib+[vda_RO];
     if (pvn<>nil)and(pvnt<>nil) then begin
       if nevValue<>'' then
         pvnt.SetValueFromString(nevValue)

@@ -80,7 +80,7 @@ begin
      inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
      V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
      l1:=v1.LengthTo(v2);
-     if @ecp=nil then pvd^.attrib:=pvd^.attrib or vda_RO;
+     if @ecp=nil then pvd^.attrib:=pvd^.attrib+[vda_RO];
      if fistrun then
                     mp.MPType^.CopyValueToInstance(@l1,pvdata)
                 else
@@ -278,7 +278,7 @@ var
 begin
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/2;
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=l1;
 end;
@@ -289,7 +289,7 @@ var
 begin
   R:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(2*PI);
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
@@ -300,7 +300,7 @@ var
 begin
   R:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/PGDBObjArc(ChangedData.pentity)^.angle;
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
@@ -311,7 +311,7 @@ var
 begin
   R:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/PI);
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
@@ -323,7 +323,7 @@ begin
   delta:=PDouble(ChangedData.PSetDataInEtity)^;
   inc(ChangedData.PSetDataInEtity,sizeof(TzePoint3d));
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=delta+PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=oldValue;
 end;
@@ -340,7 +340,7 @@ begin
   V2:=V2-V1;
   V2.Normalize;
   V2:=V2*l1;
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
@@ -365,7 +365,7 @@ begin
   SinCos(l1,V2.y,V2.x);
   V2.z:=0;
   V2:=V2*d;
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
@@ -382,7 +382,7 @@ begin
   angle:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   {TODO: Надо пересчитать из текущих едениц чертежа в градусы}
   //PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=angle;
 end;
@@ -397,7 +397,7 @@ begin
   else
     PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2+0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)));
   ChangedData.PSetDataInEtity:=@PGDBObjArc(ChangedData.pentity)^.R;
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
@@ -509,7 +509,7 @@ var
   a:Double;
   cp:UCmdChgField;
 begin
-  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
   mp.MPType^.CopyValueToInstance(pvardesk(pdata)^.data.Addr.Instance,@a);
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);

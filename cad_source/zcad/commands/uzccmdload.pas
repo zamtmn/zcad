@@ -58,7 +58,7 @@ begin
     repeat
       ptd:=DBUnit.TypeName2PTD(pv.Data.PTD.TypeName);
       if ptd<>nil then
-        if (ptd.GetTypeAttributes and TA_OBJECT)=TA_OBJECT then begin
+        if TA_OBJECT in ptd.GetTypeAttributes then begin
           pvindb:=DBUnit.InterfaceVariables.findvardescbytype(pv.Data.PTD);
           if pvindb<>nil then begin
             pfd:=PRecordDescriptor(pvindb^.Data.PTD)^.FindField('Variants');

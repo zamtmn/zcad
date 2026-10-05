@@ -193,7 +193,7 @@ begin
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
      mp.MPType^.CopyValueToInstance(pvardesk(pdata)^.data.Addr.Instance,ChangedData.PSetDataInEtity);
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+     ProcessVariableAttributes(pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
 end;
 
 function FindOrCreateVar(pu:PTEntityUnit;varname,username,typename:String;out IVA:TInVectorAddr):Boolean;
@@ -543,9 +543,9 @@ begin
 //                    fistrun:=fistrun;
      if @ecp=nil then
                      begin
-                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).attrib,vda_RO,0);
-                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,vda_RO,0);
-                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance).attrib,vda_RO,0);
+                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).attrib,[vda_RO],[]);
+                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,[vda_RO],[]);
+                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance).attrib,[vda_RO],[]);
                      end;
      cc:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).Count-1;
      if cc<PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance).data.Addr.Instance)^ then
@@ -553,9 +553,9 @@ begin
      tv:=PGDBPoint3dArray(ChangedData.PGetDataInEtity).getDataMutable(PTArrayIndex(pvardesk(PTVertex3DControlVarData(pdata).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance)^);
      if fistrun then
                     begin
-                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.attrib,0,vda_different);
-                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.attrib,0,vda_different);
-                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,0,vda_different);
+                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.attrib,[],[vda_different]);
+                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.attrib,[],[vda_different]);
+                         ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,[],[vda_different]);
 
                          PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyValueToInstance(@tv^.x,pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueX:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f);
@@ -567,19 +567,19 @@ begin
                 else
                     begin
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.x,pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).data.Addr.Instance)<>CREqual then
-                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).attrib,vda_approximately,0);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).attrib,[vda_approximately],[]);
                          if PTVertex3DControlVarData(pdata).StrValueX<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f) then
-                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.attrib,vda_different,vda_approximately);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.attrib,[vda_different],[vda_approximately]);
 
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.y,pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.data.Addr.Instance)<>CREqual then
-                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,vda_approximately,0);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,[vda_approximately],[]);
                          if PTVertex3DControlVarData(pdata).StrValueY<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.y,f) then
-                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,vda_different,vda_approximately);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance).attrib,[vda_different],[vda_approximately]);
 
                          if PTVertex3DControlVarData(pdata).PGDBDTypeDesc.Compare(@tv^.z,pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.data.Addr.Instance)<>CREqual then
-                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,vda_approximately,0);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,[vda_approximately],[]);
                          if PTVertex3DControlVarData(pdata).StrValueZ<>PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.z,f) then
-                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,vda_different,vda_approximately);
+                            ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,[vda_different],[vda_approximately]);
                     end;
 end;
 
@@ -597,17 +597,17 @@ var
   faceCount: TArrayIndex;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
   faceCount := PGDBObjPolyFaceMesh(ChangedData.PEntity)^.GetFaceCount;
   if fistrun then begin
-    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    ProcessVariableAttributes(PVD.attrib,[],[vda_different]);
     mp.MPType.CopyValueToInstance(@faceCount,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@faceCount,f);
   end else begin
     if mp.MPType.Compare(@faceCount,PVD.data.Addr.Instance)<>CREqual then
-      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+      ProcessVariableAttributes(PVD.attrib,[vda_approximately],[]);
     if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@faceCount,f) then
-      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+      ProcessVariableAttributes(PVD.attrib,[vda_different],[vda_approximately]);
   end;
 end;
 
@@ -651,10 +651,10 @@ ecp - указатель на процедуру копирования знач
 }
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
      if fistrun then
                     begin
-                      ProcessVariableAttributes(PVD.attrib,0,vda_different);
+                      ProcessVariableAttributes(PVD.attrib,[],[vda_different]);
 
                       if ObjID2EntInfoData.MyGetValue(PGDBObjEntity(ChangedData.PEntity)^.GetObjType,entinfo) then
                         ts:=entinfo.UserName
@@ -666,7 +666,7 @@ begin
                     end
                 else
                     begin
-                      if (PVD.attrib and vda_different)=0 then begin
+                      if not(vda_different in PVD.attrib) then begin
 
                         if ObjID2EntInfoData.MyGetValue(PGDBObjEntity(ChangedData.PEntity)^.GetObjType,entinfo) then
                           ts:=entinfo.UserName
@@ -674,7 +674,7 @@ begin
                           ts:=rsNotRegistred;
 
                         if PTOneVarData(pdata).StrValue<>ts then
-                          ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+                          ProcessVariableAttributes(PVD.attrib,[vda_different],[vda_approximately]);
                       end;
                     end;
 end;
@@ -691,16 +691,16 @@ var
   PVD:pvardesk;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
   if fistrun then begin
-    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    ProcessVariableAttributes(PVD.attrib,[],[vda_different]);
     mp.MPType.CopyValueToInstance(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
   end else begin
     if mp.MPType.Compare(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)<>CREqual then
-      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+      ProcessVariableAttributes(PVD.attrib,[vda_approximately],[]);
     if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f) then
-      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+      ProcessVariableAttributes(PVD.attrib,[vda_different],[vda_approximately]);
   end;
 end;
 
@@ -718,7 +718,7 @@ var
   value:Double;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
 
   CachedVertex.lock;
   try
@@ -733,14 +733,14 @@ begin
   end;
 
   if fistrun then begin
-    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    ProcessVariableAttributes(PVD.attrib,[],[vda_different]);
     mp.MPType.CopyValueToInstance(@value,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
   end else begin
     if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
-      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+      ProcessVariableAttributes(PVD.attrib,[vda_approximately],[]);
     if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@value,f) then
-      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+      ProcessVariableAttributes(PVD.attrib,[vda_different],[vda_approximately]);
   end;
 end;
 procedure VertexYOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -757,7 +757,7 @@ var
   value:Double;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
 
   CachedVertex.lock;
   try
@@ -772,14 +772,14 @@ begin
   end;
 
   if fistrun then begin
-    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    ProcessVariableAttributes(PVD.attrib,[],[vda_different]);
     mp.MPType.CopyValueToInstance(@value,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
   end else begin
     if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
-      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+      ProcessVariableAttributes(PVD.attrib,[vda_approximately],[]);
     if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@value,f) then
-      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+      ProcessVariableAttributes(PVD.attrib,[vda_different],[vda_approximately]);
   end;
 end;
 procedure VertexZOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -796,7 +796,7 @@ var
   value:Double;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
 
   CachedVertex.lock;
   try
@@ -811,14 +811,14 @@ begin
   end;
 
   if fistrun then begin
-    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    ProcessVariableAttributes(PVD.attrib,[],[vda_different]);
     mp.MPType.CopyValueToInstance(@value,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
   end else begin
     if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
-      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+      ProcessVariableAttributes(PVD.attrib,[vda_approximately],[]);
     if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@value,f) then
-      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+      ProcessVariableAttributes(PVD.attrib,[vda_different],[vda_approximately]);
   end;
 end;
 
@@ -838,19 +838,19 @@ var
   PVD:pvardesk;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
      if fistrun then
                     begin
-                      ProcessVariableAttributes(PVD.attrib,0,vda_different);
+                      ProcessVariableAttributes(PVD.attrib,[],[vda_different]);
                       mp.MPType.CopyValueToInstance(@ChangedData.PEntity,PVD.data.Addr.Instance);
                       PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
                     end
                 else
                     begin
                          if mp.MPType.Compare(@ChangedData.PEntity,PVD.data.Addr.Instance)<>CREqual then
-                            ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+                            ProcessVariableAttributes(PVD.attrib,[vda_approximately],[]);
                          if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@ChangedData.PEntity,f) then
-                            ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+                            ProcessVariableAttributes(PVD.attrib,[vda_different],[vda_approximately]);
                     end;
 end;
 
@@ -867,7 +867,7 @@ var
   PVD:pvardesk;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
      if fistrun then
                     mp.MPType.CopyValueToInstance(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
                 else
@@ -886,7 +886,7 @@ var
   PVD:pvardesk;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
      if fistrun then
                     mp.MPType.CopyValueToInstance(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
                 else
@@ -945,12 +945,12 @@ var
   PVD:pvardesk;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
   if fistrun then begin
     PTEnumData(PVD.data.Addr.Instance)^.Selected:=ElLeaderHAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^)
   end else begin
     if PTEnumData(PVD.data.Addr.Instance)^.Selected<>ElLeaderHAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^)then
-      ProcessVariableAttributes(PVD.attrib,vda_different,0);
+      ProcessVariableAttributes(PVD.attrib,[vda_different],[]);
   end;
 end;
 procedure VAlignEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -958,12 +958,12 @@ var
   PVD:pvardesk;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,[vda_RO],[]);
   if fistrun then begin
     PTEnumData(PVD.data.Addr.Instance)^.Selected:=ElLeaderVAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^)
   end else begin
     if PTEnumData(PVD.data.Addr.Instance)^.Selected<>ElLeaderVAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^)then
-      ProcessVariableAttributes(PVD.attrib,vda_different,0);
+      ProcessVariableAttributes(PVD.attrib,[vda_different],[]);
   end;
 end;
 

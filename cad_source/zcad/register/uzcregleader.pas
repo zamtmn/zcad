@@ -137,13 +137,13 @@ var
 begin
   PVD:=PTOneVarData(pdata)^.VDAddr.Instance;
   if @ecp=nil then
-    ProcessVariableAttributes(PVD^.attrib,vda_RO,0);
+    ProcessVariableAttributes(PVD^.attrib,[vda_RO],[]);
   enumindex:=LeaderTypeToEnumIndex(PGDBObjLeader(ChangedData.PEntity)^);
   if fistrun then
     PTEnumData(PVD^.data.Addr.Instance)^.Selected:=enumindex
   else
     if PTEnumData(PVD^.data.Addr.Instance)^.Selected<>enumindex then
-      ProcessVariableAttributes(PVD^.attrib,vda_different,0);
+      ProcessVariableAttributes(PVD^.attrib,[vda_different],[]);
 end;
 
 procedure LeaderTypeEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;
@@ -212,7 +212,7 @@ begin
   end;
 
   ProcessVariableAttributes(
-    pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+    pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
 end;
 
 function GetLeaderDimStyle(const Leader:PGDBObjLeader):PGDBDimStyle;
@@ -238,14 +238,14 @@ begin
   CurrentStyle:=GetLeaderDimStyle(Leader);
 
   if @ecp=nil then
-    ProcessVariableAttributes(PVD^.attrib,vda_RO,0);
+    ProcessVariableAttributes(PVD^.attrib,[vda_RO],[]);
   if fistrun then begin
     PTOneVarData(pdata)^.StrValue:=Leader^.DimStyleName;
     PPGDBDimStyleObjInsp(PVD^.data.Addr.Instance)^:=CurrentStyle;
   end else
     if (PTOneVarData(pdata)^.StrValue<>Leader^.DimStyleName)or
        (PPGDBDimStyleObjInsp(PVD^.data.Addr.Instance)^<>CurrentStyle) then
-      ProcessVariableAttributes(PVD^.attrib,vda_different,0);
+      ProcessVariableAttributes(PVD^.attrib,[vda_different],[]);
 end;
 
 procedure LeaderDimStyleEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;
@@ -281,7 +281,7 @@ begin
   ptdString^.CopyValueToInstance(
     @NewDimStyleName,@PGDBObjLeader(ChangedData.PEntity)^.DimStyleName);
   ProcessVariableAttributes(
-    pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+    pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
 end;
 
 // Возвращает действующий размерный стиль выноски (или nil)
@@ -323,14 +323,14 @@ begin
   PVD:=PTOneVarData(pdata)^.VDAddr.Instance;
   Leader:=PGDBObjLeader(ChangedData.PEntity);
   if @ecp=nil then
-    ProcessVariableAttributes(PVD^.attrib,vda_RO,0);
+    ProcessVariableAttributes(PVD^.attrib,[vda_RO],[]);
   arrowindex:=ResolveLeaderArrowStyleIndex(
     Leader^,GetLeaderEffectiveStyle(Leader));
   if fistrun then
     PTEnumData(PVD^.data.Addr.Instance)^.Selected:=arrowindex
   else
     if PTEnumData(PVD^.data.Addr.Instance)^.Selected<>arrowindex then
-      ProcessVariableAttributes(PVD^.attrib,vda_different,0);
+      ProcessVariableAttributes(PVD^.attrib,[vda_different],[]);
 end;
 
 procedure LeaderArrowStyleEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;
@@ -361,7 +361,7 @@ begin
     TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
   ptdInteger^.CopyValueToInstance(@NewIndex,@Leader^.ArrowStyleIndex);
   ProcessVariableAttributes(
-    pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+    pvardesk(pdata)^.attrib,[],[vda_approximately,vda_different]);
 end;
 
 procedure LeaderArrowSizeEntIterateProc(pdata:Pointer;ChangedData:TChangedData;

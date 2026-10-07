@@ -76,7 +76,7 @@ begin
       pvd:=Varext.entityunit.FindVariable(VarName);
       //а тут уже указатель на настоящий описатель переменной
       pvd^.username:='страшноеИмя';
-      ProcessVariableAttributes(pvd^.attrib,[vda_RO],[]);
+      pvd^.attrib+=[vda_RO];
       //ставим ридонли для инспектора
 
       //пытаемся найти или загрузить модуль

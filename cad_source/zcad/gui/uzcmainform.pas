@@ -1407,9 +1407,6 @@ begin
             pdwg.wa.idle(Sender,Done);
           end;
         end;
-
-      date:=SysUtils.date;
-
       zcUI.Do_Idle(Done);
     finally
       programlog.leave(IfEntered);

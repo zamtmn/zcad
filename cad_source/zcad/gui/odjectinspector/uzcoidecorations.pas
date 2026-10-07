@@ -122,7 +122,7 @@ begin
                                    p:=NO.iterate(ir);
                              until p=nil;
 
-     result.mode:=TEM_Integrate;
+     result.mode:=EM_Inplace;
 end;
 function LineWeightDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
 var
@@ -153,7 +153,7 @@ begin
           addLWtoC(GetLWNameFromN(i),lwarray[i]);
      end;
      cbedit.ItemIndex:=seli;
-     result.mode:=TEM_Integrate;
+     result.mode:=EM_Inplace;
 end;
 function LayersDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
 begin
@@ -291,7 +291,7 @@ begin
 end;
 function CreateEmptyEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
 begin
-     result.mode:=TEM_Nothing;
+     result.mode:=EM_Nothing;
      result.Editor:=nil;
 end;
 procedure runOSwnd(PInstance:Pointer);
@@ -335,7 +335,7 @@ begin
      addColorToC(rsSelectColor,ClSelColor);
 
      cbedit.ItemIndex:=seli;
-     result.mode:=TEM_Integrate;
+     result.mode:=EM_Inplace;
 end;
 
 function TColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
@@ -346,7 +346,7 @@ begin
   SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
   cbedit.Style:=cbedit.Style+[cbStandardColors,cbExtendedColors,cbSystemColors,cbIncludeDefault];
   cbedit.Selected:=PColor(pinstance)^;
-  result.mode:=TEM_Integrate;
+  result.mode:=EM_Inplace;
 end;
 
 function TGetterSetterTColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
@@ -357,7 +357,7 @@ begin
   SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
   cbedit.Style:=cbedit.Style+[cbStandardColors,cbExtendedColors,cbSystemColors,cbIncludeDefault];
   cbedit.Selected:=PTGetterSetterTColor(pinstance)^.Getter{PColor(pinstance)^};
-  result.mode:=TEM_Integrate;
+  result.mode:=EM_Inplace;
 end;
 function TGetterSetterTColorDecorator(PInstance:Pointer):String;
 begin
@@ -414,7 +414,7 @@ begin
        cbedit.ItemIndex:=selected
      else
        cbedit.ItemIndex:=0;
-     result.mode:=TEM_Integrate;
+     result.mode:=EM_Inplace;
 end;
 function IsArrowStyleDataIndex(index:integer):boolean;
 begin
@@ -468,7 +468,7 @@ begin
        cbedit.ItemIndex:=selected
      else
        cbedit.ItemIndex:=0;
-     result.mode:=TEM_Integrate;
+     result.mode:=EM_Inplace;
 end;
 procedure RunStringEditor(PInstance:Pointer);
 var

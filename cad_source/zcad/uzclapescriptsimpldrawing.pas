@@ -25,7 +25,7 @@ uses
   SysUtils,
   lptypes,lpvartypes,lpparser,lpcompiler,lpeval,
   LazUTF8,
-  {uzbLogTypes,}uzcLog,
+  uzcLog,
   uzeentity,uzeExtdrAbstractEntityExtender,
   uzeentline,uzeEntSpline,uzeentdevice,
   uzeentityfactory,uzeconsts,
@@ -45,6 +45,8 @@ type
 
   TDrawingAction=(DBRedraw,DBUndo);
   TDrawingBehavior=set of TDrawingAction;
+  PGVResult=^TGVResult;
+  TGVResult=(GVRNotFound,GVRWrongType,GVRImplicitCast,GVROk);
 
 const
   cEScriptAVmsg='Access violation: "%s" not created or already freed';

@@ -425,7 +425,7 @@ begin
                             'DRAWCOUNT','POSCOUNT','VISCOUNT','CamCSOffset'],
                             [FNProgram,FNUser]);
     otd^.RegisterObject(TypeOf(GDBBaseCamera),@GDBBaseCamera.initnul);
-    otd^.AddMetod('','initnul','',@GDBBaseCamera.initnul,m_constructor);
+    otd^.AddMetod('','initnul','',@GDBBaseCamera.initnul,[mm_constructor]);
   end;
   ptsu^.RegisterType(TypeInfo(PGDBBaseCamera),'PGDBBaseCamera');
 
@@ -436,7 +436,7 @@ begin
                             'clipLCS','projMatrixLCS','notuseLCS'],
                             [FNProgram,FNUser]);
     otd^.RegisterObject(TypeOf(GDBObjCamera),@GDBObjCamera.initnul);
-    otd^.AddMetod('','initnul','',@GDBObjCamera.initnul,m_constructor);
+    otd^.AddMetod('','initnul','',@GDBObjCamera.initnul,[mm_constructor]);
   end;
   ptsu^.RegisterType(TypeInfo(PGDBObjCamera),'PGDBObjCamera');
 
@@ -485,6 +485,9 @@ begin
   RegisterVarCategory('INSERT','Insert',@InterfaceTranslate);
   RegisterVarCategory('NORMAL','Normal',@InterfaceTranslate);
   RegisterVarCategory('SCALE','Scale',@InterfaceTranslate);
+
+  RegisterVarCategory('ENTID','ENTID',@InterfaceTranslate);
+  RegisterVarCategory('INSTRUMENT','INSTRUMENT',@InterfaceTranslate);
 
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(CommandObjectDef),
@@ -621,8 +624,8 @@ begin
 
   //utd:=ptsu^.RegisterType(TypeInfo(itrec),'itrec');
 
-  otd:=ptsu^.RegisterObjectType(TypeInfo(varmanagerdef),TypeOf(varmanagerdef),
-                                        'varmanagerdef',true);
+  //otd:=ptsu^.RegisterObjectType(TypeInfo(varmanagerdef),TypeOf(varmanagerdef),
+  //                                      'varmanagerdef',true);
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TvarDescArray),TypeOf(TvarDescArray));
   otd:=ptsu^.RegisterObjectType(TypeInfo(varmanager),TypeOf(varmanager));
@@ -631,7 +634,7 @@ begin
                                   TypeOf(TZctnrVectorPointer),
                                         'TZctnrVectorPointer');
   if otd<>nil then begin
-    otd^.AddMetod('','done','',@TZctnrVectorPointer.done,m_destructor);
+    otd^.AddMetod('','done','',@TZctnrVectorPointer.done,[mm_constructor]);
   end;
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(TSimpleUnit),TypeOf(TSimpleUnit));
@@ -649,7 +652,7 @@ begin
   otd:=ptsu^.RegisterObjectType(TypeInfo(TZctnrVectorStrings),
                                   TypeOf(TZctnrVectorStrings));
   if otd<>nil then begin
-    otd^.AddMetod('','done','',@TZctnrVectorStrings.done,m_destructor);
+    otd^.AddMetod('','done','',@TZctnrVectorStrings.done,[mm_constructor]);
   end;
 
   utd:=ptsu^.RegisterType(TypeInfo(TEnumData),'TEnumData');
@@ -1090,7 +1093,7 @@ begin
                             '**Ед. изм.','**Производитель','**Позиция в дереве БД','**Каталожный номер'],
                             [FNUser]);
     otd^.RegisterObject(TypeOf(DbBaseObject),@DbBaseObject.initnul);
-    otd^.AddMetod('','initnul','',@DbBaseObject.initnul,m_constructor);
+    otd^.AddMetod('','initnul','',@DbBaseObject.initnul,[mm_constructor]);
   end;
   ptsu^.RegisterType(TypeInfo(PDbBaseObject),'PDbBaseObject');
 
@@ -1109,7 +1112,7 @@ begin
                             '**Варианты'],
                             [FNUser]);
     otd^.RegisterObject(TypeOf(DeviceDbBaseObject),@DeviceDbBaseObject.initnul);
-    otd^.AddMetod('','initnul','',@DeviceDbBaseObject.initnul,m_constructor);
+    otd^.AddMetod('','initnul','',@DeviceDbBaseObject.initnul,[mm_constructor]);
   end;
   ptsu^.RegisterType(TypeInfo(PDeviceDbBaseObject),'PDeviceDbBaseObject');
 
@@ -1120,7 +1123,7 @@ begin
     ptsu^.SetTypeDesk2(otd,['Pins'],[FNProgram]);
     ptsu^.SetTypeDesk2(otd,['**Клеммы'],[FNUser]);
     otd^.RegisterObject(TypeOf(ElDeviceBaseObject),@ElDeviceBaseObject.initnul);
-    otd^.AddMetod('','initnul','',@ElDeviceBaseObject.initnul,m_constructor);
+    otd^.AddMetod('','initnul','',@ElDeviceBaseObject.initnul,[mm_constructor]);
   end;
   ptsu^.RegisterType(TypeInfo(PElDeviceBaseObject),
                              'PElDeviceBaseObject');
@@ -1135,7 +1138,7 @@ begin
                             '**ДТТ'],[FNUser]);
     otd^.RegisterObject(TypeOf(CableDeviceBaseObject),
                         @CableDeviceBaseObject.initnul);
-    otd^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,m_constructor);
+    otd^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,[mm_constructor]);
   end;
   ptsu^.RegisterType(TypeInfo(PCableDeviceBaseObject),'PCableDeviceBaseObject');
 

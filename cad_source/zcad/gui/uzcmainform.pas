@@ -1430,11 +1430,11 @@ var
 begin
   if sysvar.SYS.SYS_RunTime<>nil then begin
     Inc(sysvar.SYS.SYS_RunTime^);
-    if SysVar.SAVE.SAVE_Auto_On^ then begin
+    if SysVar.LOADSAVE.AutoSave.Enable^ then begin
       pdwg:=drawings.GetCurrentDWG;
       if pdwg<>nil then begin
         if pdwg^.GetAutoSavedStampt then
-          Dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
+          Dec(sysvar.LOADSAVE.AutoSave.CurrentInterval^);
       end;
     end;
   end;

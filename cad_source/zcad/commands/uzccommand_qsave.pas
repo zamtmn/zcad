@@ -47,7 +47,7 @@ var
 begin
   itAutoSave:=False;
   if operands='QS' then begin
-    s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
+    s1:=ExpandPath(sysvar.LOADSAVE.AutoSave.FileName^);
     s:=format(rsAutoSave,[s1]);
     zcUI.TextMessage(s,TMWOHistoryOut);
     itAutoSave:=True;
@@ -70,7 +70,7 @@ begin
     if not itAutoSave then
       drawings.GetCurrentDWG.ResetChangeStampt;
     drawings.GetCurrentDWG.ResetChangeFromAutoSaveStampt;
-    SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+    SysVar.LOADSAVE.AutoSave.CurrentInterval^:=SysVar.LOADSAVE.AutoSave.Interval^;
   end;
   RebuildTree_com(Context,'');
 end;

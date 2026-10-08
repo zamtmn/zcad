@@ -40,14 +40,14 @@ begin
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
     if (not pdwg^.GetChangeStampt)or(pdwg.wa=nil) then
-      SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+      SysVar.LOADSAVE.AutoSave.CurrentInterval^:=SysVar.LOADSAVE.AutoSave.Interval^;
 
-  if(SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.CurrCmd.pcommandrunning=nil)then
+  if(SysVar.LOADSAVE.AutoSave.CurrentInterval^<1)and(commandmanager.CurrCmd.pcommandrunning=nil)then
     if pdwg<>nil then
       if (pdwg.wa.param.SelDesc.Selectedobjcount=0) then begin
         commandmanager.executecommandsilent('QSave(QS)',drawings.GetCurrentDWG,
           drawings.GetCurrentOGLWParam);
-        SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+        SysVar.LOADSAVE.AutoSave.CurrentInterval^:=SysVar.LOADSAVE.AutoSave.Interval^;
       end;
 end;
 

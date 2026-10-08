@@ -22,6 +22,7 @@ unit uzcsysvars;
 interface
 uses
   uzbUnits,
+  uzbEncoding,
   uzcsysparams,uzegeometrytypes,uzepalette,
   uzeTypes,uzcTypes,uzctnrvectorstrings,uzsbVarmanDef,
 {$IFDEF LCLGTK2}
@@ -82,11 +83,16 @@ type
     RD_UseLazFreeTypeImplementation:PBoolean;(*'Use LazFreeType engine instead FreeType'*)
   end;
 
-  tsave=record
-    SAVE_Auto_On:PBoolean;(*'Autosave'*)
-    SAVE_Auto_Current_Interval:PInteger;(*'Time to autosave'*)(*oi_readonly*)
-    SAVE_Auto_Interval:PInteger;(*'Time between autosaves'*)
-    SAVE_Auto_FileName:PString;(*'Autosave file name'*)
+  TAutoSavingParams=record
+    Enable:PBoolean;(*'Autosave'*)
+    CurrentInterval:PInteger;(*'Time to autosave'*)(*oi_readonly*)
+    Interval:PInteger;(*'Time between autosaves'*)
+    FileName:PString;(*'Autosave file name'*)
+  end;
+
+  TLoadSave=record
+    AutoSave:TAutoSavingParams;
+    TxtSaveCodePage:PFileCodePage;
   end;
 
   tcompileinfo=record
@@ -239,7 +245,7 @@ type
     RD:trd;(*'Graphics'*)
     DISP:tdisp;(*'Display'*)
     SYS:tsys;(*'System'*)
-    SAVE:tsave;(*'Saving'*)
+    LOADSAVE:TLoadSave;(*'Saving'*)
     DWG:tdwg;(*'Drawing'*)
     DSGN:tdesigning;(*'Design'*)
     debug:tdebug;(*'Debug'*)(*hidden_in_objinsp*)

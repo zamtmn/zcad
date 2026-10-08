@@ -22,7 +22,7 @@ unit uzcRegSysVars;
 interface
 uses
   SysUtils,uzcsysvars,
-  uzsbVarmanDef,
+  uzbEncoding,uzsbVarmanDef,
   varman;
   //UUnitManager,
   //uzsbTypeDescriptors;
@@ -90,24 +90,27 @@ begin
                         [fldaHidden],[],[]]);
   end;
 
-  utd:=ptsu^.RegisterType(TypeInfo(tsave),'tsave');
+  utd:=ptsu^.RegisterType(TypeInfo(TAutoSavingParams),'TAutoSavingParams');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['SAVE_Auto_On','SAVE_Auto_Current_Interval',
-                            'SAVE_Auto_Interval','SAVE_Auto_FileName'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Enable','CurrentInterval',
+                            'Interval','FileName'],[FNProgram]);
     ptsu^.SetTypeDesk2(utd,['Autosave','Time to autosave',
-                            'Time between autosaves','Autosave file name'],
-                            [FNUser]);
+                            'Time between autosaves','File name'],[FNUser]);
     ptsu^.SetAttrs(utd,[[],[fldaReadOnly],[],[]]);
   end;
 
-  utd:=ptsu^.RegisterType(TypeInfo(tsave),'tsave');
+  utd:=ptsu^.RegisterType(TypeInfo(TFileCodePage),'TFileCodePage');
   if utd<>nil then begin
-    ptsu^.SetTypeDesk2(utd,['SAVE_Auto_On','SAVE_Auto_Current_Interval',
-                            'SAVE_Auto_Interval','SAVE_Auto_FileName'],[FNProgram]);
-    ptsu^.SetTypeDesk2(utd,['Autosave','Time to autosave',
-                            'Time between autosaves','Autosave file name'],
-                            [FNUser]);
-    ptsu^.SetAttrs(utd,[[],[fldaReadOnly],[],[]]);
+    ptsu^.SetTypeDesk2(utd,['fcpDefault','fcpANSI',
+                            'fcpUTF8','fcpUTF8BOM','fcpUTF16','fcpUTF16BE'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,[{$ifdef windows}'Default(ANSI)'{$else}'Default(UTF8)'{$endif},'ANSI',
+                            'UTF8','UTF8BOM','UTF16','UTF16BE'],[FNUser]);
+  end;
+
+  utd:=ptsu^.RegisterType(TypeInfo(TLoadSave),'TLoadSave');
+  if utd<>nil then begin
+    ptsu^.SetTypeDesk2(utd,['AutoSave','TxtSaveCodePage'],[FNProgram]);
+    ptsu^.SetTypeDesk2(utd,['Drawing auto save','Text files saving code page'],[FNUser]);
   end;
 
   utd:=ptsu^.RegisterType(TypeInfo(tcompileinfo),'tcompileinfo');
@@ -284,12 +287,12 @@ begin
   if utd<>nil then begin
     ptsu^.SetTypeDesk2(utd,['PATH','RD',
                             'DISP','SYS',
-                            'SAVE','DWG',
+                            'LOADSAVE','DWG',
                             'DSGN','debug',
                             'INTF'],[FNProgram]);
     ptsu^.SetTypeDesk2(utd,['Paths','Graphics',
                             'Display','System',
-                            'Saving','Drawing',
+                            'Loading\Saving','Drawing',
                             'Design','Debug',
                             'Interface'],
                            [FNUser]);

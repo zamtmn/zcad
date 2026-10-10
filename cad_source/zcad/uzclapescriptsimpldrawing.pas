@@ -39,7 +39,7 @@ uses
   uzeEntBase,gzctnrVectorTypes,uzcEnitiesVariablesExtender,uzcExtdrIncludingVolume,
   uzsbVarmanDef,UBaseTypeDescriptor,uzcregisterenitiesfeatures,
   uzcCounter,varman,uzcdevicebaseabstract,Masks,Generics.Defaults,Generics.Collections,
-  gzctnrSTL;
+  gzctnrSTL,uzeTypes;
 
 type
 
@@ -571,7 +571,7 @@ var
   pt:PGDBObjTable;
   row:TStringsArray;
   i:integer;
-  psl:PTZctnrVectorStrings;
+  psl:PDXFEntsInternalVectorStrings;
   DC:TDrawContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);

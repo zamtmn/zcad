@@ -259,6 +259,8 @@ uses
 
   uzcCommand_PlaceDelegate,
 
+  uzcCommand_ZCTable2CSV,
+
   uzccommand_scale2,  //Created using AI
   uzccommand_align,   //Created using AI
   uzccommand_leader,   //Created using AI

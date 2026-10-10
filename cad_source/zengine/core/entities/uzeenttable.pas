@@ -26,7 +26,7 @@ uses
   gzctnrVectorPObjects,uzctnrvectorstrings,uzeentmtext,uzeentity,
   uzeTypes,uzeconsts,uzegeometry,gzctnrVectorTypes,uzegeometrytypes,
   uzeentblockinsert,uzeffdxfsupport,uzeentityfactory,uzeobjectextender,uzsbVarmanDef,
-  Varman,uzeentsubordinated,uzcdrawings;
+  Varman,uzeentsubordinated,uzcdrawings,uzestyleslayers;
 
 type
 
@@ -38,7 +38,7 @@ type
   end;
   PGDBTableArray=^GDBTableArray;
 
-  GDBTableArray=object(GZVectorPObects<PTZctnrVectorStrings,TZctnrVectorStrings>)
+  GDBTableArray=object(GZVectorPObects<PDXFEntsInternalVectorStrings,TDXFEntsInternalVectorStrings>)
   end;
   PGDBObjTable=^GDBObjTable;
 
@@ -50,6 +50,7 @@ type
     tbl:GDBTableArray;
     scale:double;
     constructor initnul;
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
     destructor done;virtual;
     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -76,8 +77,8 @@ implementation
 
 type
   TTblIterData=record
-    psa:PTZctnrVectorStrings;
-    pstr:pString;
+    psa:PDXFEntsInternalVectorStrings;
+    pstr:PDXFEntsInternalStringType;
     ir1,ir2:itrec;
   end;
   PTTblIterData=^TTblIterData;
@@ -114,7 +115,7 @@ var
   row,col:integer;
   &val:string;
   pvd:pvardesk;
-  pvs:PTZctnrVectorStrings;
+  pvs:PDXFEntsInternalVectorStrings;
 begin
   Result:=TR_NeedTrash;
   if ptu<>nil then begin
@@ -290,7 +291,7 @@ function GDBObjTable.Clone;
 var
   tvo:PGDBObjTable;
   i:integer;
-  pvs:PTZctnrVectorStrings;
+  pvs:PDXFEntsInternalVectorStrings;
 begin
   Getmem(Pointer(tvo),sizeof(GDBObjTable));
   tvo^.initnul;
@@ -346,7 +347,7 @@ var
   i:integer;
   ir,ic,icf:itrec;
   psa:PTZctnrVectorStrings;
-  pstr:pString;
+  pstr:PDXFEntsInternalStringType;
   pcf:PTGDBTableItemFormat;
   x,xw,tblwidth:double;
   xcount,xcurrcount,ycount,ycurrcount,ccount:integer;
@@ -395,7 +396,7 @@ begin
           if pstr^<>'' then begin
             pointer(pgdbmtext):=
               self.ConstObjArray.CreateInitObj(GDBMtextID,@self);
-            pgdbmtext.Template:=UTF8ToString({Tria_AnsiToUtf8}(pstr^));
+            pgdbmtext.Template:={UTF8ToString}({Tria_AnsiToUtf8}(pstr^));
             pgdbmtext.textprop.size:=PTableStyle^.textheight*scale;
             pgdbmtext.linespacef:=1;
             pgdbmtext.linespacef:=
@@ -491,6 +492,13 @@ begin
   h:=ccount*PTableStyle^.rowheight*scale;
   w:=x*scale;
   inherited BuildGeometry(drawing);
+end;
+
+constructor GDBObjTable.init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
+begin
+  inherited;
+  tbl.init(20);
+  scale:=1;
 end;
 
 constructor GDBObjTable.initnul;

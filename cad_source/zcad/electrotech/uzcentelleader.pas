@@ -322,7 +322,7 @@ var
   pobj,pcable:PGDBObjCable;
   ir,ir2:itrec;
   s:String;
-  psl:PTZctnrVectorStrings;
+  psl:PDXFEntsInternalVectorStrings;
   pvn,pvNote,pvNoteFormat:pvardesk;
   sta:TZctnrVectorStrings;
   stcnt:TStringCounter;

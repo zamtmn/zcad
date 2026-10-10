@@ -164,15 +164,15 @@ begin
     if Node.NodeData.FulDraw=TDTFulDraw then
       if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.Count=0) then begin
         if assigned(Node.pminusnode)and(LODDeep<MaxLODDeepDrtaw) then
-          if (Node.NodeData.minusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then begin
+          //if (Node.NodeData.minusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then begin
             treerender(Node.pminusnode^,dc,loddeep);
             Node.NodeData.minusdrawpos:=dc.DrawingContext.DRAWCOUNT;
-          end;
+          //end;
         if assigned(Node.pplusnode)and(LODDeep<MaxLODDeepDrtaw) then
-          if (Node.NodeData.plusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then begin
+          //if (Node.NodeData.plusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then begin
             treerender(Node.pplusnode^,dc,loddeep);
             Node.NodeData.plusdrawpos:=dc.DrawingContext.DRAWCOUNT;
-          end;
+          //end;
       end;
     if (Node.NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
       TEntTreeNode(Node).DrawWithAttribExternalArray(dc);

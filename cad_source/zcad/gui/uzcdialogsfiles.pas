@@ -28,6 +28,7 @@ resourcestring
   rsSaveSomething='Save something...';
 const
     {todo: используется для диалога сохранения, убрать, переделать на регистрацию форматов}ProjectFileFilter:String='DXF files (*.dxf)|*.dxf|AutoCAD DWG files (*.dwg)|*.dwg|ZCAD ZCP files (*.zcp)|*.zcp|All files (*.*)|*.*';
+    cCSVExtension: String ='CSV';
     CSVFileFilter: String ='CSV files (*.csv)|*.csv|All files (*.*)|*.*';
 function OpenFileDialog(out FileName:String;var DefFilterIndex:integer; const DefExt, Filter, InitialDir, Title: string):Boolean;overload;
 function OpenFileDialog(out FileName:String;const DefExt, Filter, InitialDir, Title: string):Boolean;overload;

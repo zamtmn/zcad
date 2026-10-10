@@ -23,8 +23,8 @@ unit uzeTypes;
 interface
 
 uses
-  SysUtils,
-  uzbHandles,uzegeometrytypes,uzbGetterSetter,Graphics;
+  SysUtils,Graphics,
+  uzbHandles,uzegeometrytypes,uzbGetterSetter,uzctnrVectorStrings;
 
 type
   TEFStage=(EFCalcEntityCS,EFDraw);
@@ -40,9 +40,19 @@ type
   TLoadOpt=(TLOLoad,TLOMerge);
   TEntUpgradeInfo=longword;
   PExtensionData=Pointer;
-
-  TDXFEntsInternalStringType=unicodestring;
-  TDXFEntsInternalCharType=unicodechar;
+ {$IfDef ANSITEXTINENTS}
+  TDXFEntsInternalStringType=AnsiString;
+  TDXFEntsInternalCharType=AnsiChar;
+  TDXFEntsInternalVectorStrings=TZctnrVectorStrings;
+  TDXFEntsInternalStringBuilder=TStringBuilder;
+ {$Else}
+  TDXFEntsInternalStringType=UnicodeString;
+  TDXFEntsInternalCharType=UnicodeChar;
+  TDXFEntsInternalVectorStrings=TZctnrVectorUnicodeStrings;
+  TDXFEntsInternalStringBuilder=TUnicodeStringBuilder;
+ {$EndIf}
+  PDXFEntsInternalStringType=^TDXFEntsInternalStringType;
+  PDXFEntsInternalVectorStrings=^TDXFEntsInternalVectorStrings;
 
   GDBStrWithPoint=record
     str:TDXFEntsInternalStringType;

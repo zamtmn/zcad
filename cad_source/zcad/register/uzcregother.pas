@@ -35,6 +35,10 @@ var
   mem:TZctnrVectorBytes;
 
 initialization;
+  SysVar.LOADSAVE.TxtSaveCodePage:=@TxtFileSaveCodePage;
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),
+    InterfaceTranslate,'LOADSAVE_TxtSaveCodePage','TFileCodePage',@TxtFileSaveCodePage);
+
   units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInCfgsPaths(CFSconfigsDir,CFSsysvarpasFile),nil);
   units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInCfgsPaths(CFSconfigsDir,CFSsavedvarpasFile),nil);
   units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistribPath)/rtl/devicebase.pas'),nil);
@@ -78,10 +82,6 @@ initialization;
       SysVar.LOADSAVE.AutoSave.CurrentInterval^:=SysVar.LOADSAVE.AutoSave.Interval^;
     SysVarUnit.AssignToSymbol(SysVar.LOADSAVE.AutoSave.FileName,'LOADSAVE_AutoSave_FileName');
     SysVarUnit.AssignToSymbol(SysVar.LOADSAVE.AutoSave.Enable,'LOADSAVE_AutoSave_Enabled');
-
-    SysVar.LOADSAVE.TxtSaveCodePage:=@TxtFileSaveCodePage;
-    units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),
-      InterfaceTranslate,'LOADSAVE_TxtSaveCodePage','TFileCodePage',@TxtFileSaveCodePage);
 
     SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_Version,'SYS_Version');
     SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_RunTime,'SYS_RunTime');

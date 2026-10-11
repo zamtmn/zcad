@@ -117,7 +117,7 @@ var
 begin
   VarsDict.Add('$CLAYER',drawing.GetCurrentLayer^.Name);
   VarsDict.Add('$CELTYPE',drawing.GetCurrentLType^.Name);
-  VarsDict.Add('$DWGCODEPAGE',ZCCP2Str(drawing.DXFCodePage));
+  VarsDict.Add('$DWGCODEPAGE',ZCCP2Str(ZCCodePageOrDefault(drawing.DXFCodePage)));
 
   pcurrtextstyle:=drawing.GetCurrentTextStyle;
   if pcurrtextstyle<>nil then
@@ -200,9 +200,13 @@ begin
   IODXFContext.Header.Version:=ZCDxfVer2DXF_ACVer(AVer);
   IODXFContext.Header.iVersion:=ZCDxfVer2ACVer(AVer);
 
+    { Если кодовая страница чертежа не задана, берём SysDWG_CodePage - так же,
+    как для $DWGCODEPAGE в MakeVariablesDict, иначе заголовок и
+    перекодировка строк DXF2000 расходятся (issue #1438) }
   //if AVer<ZCDxf2007 then begin
-    IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(drawing.DXFCodePage){SysCP2ACCP(ACodePage)};
-    IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(drawing.DXFCodePage);//ACodePage;
+	IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(ZCCodePageOrDefault(drawing.DXFCodePage)){SysCP2ACCP(ACodePage)};
+    IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(ZCCodePageOrDefault(drawing.DXFCodePage));//ACodePage;
+	
   //end else begin
   //  IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(drawing.DXFCodePage){SysCP2ACCP(ACodePage)};
   //  IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(drawing.DXFCodePage);//ACodePage;

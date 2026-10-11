@@ -173,6 +173,8 @@ function SysCP2ACCP(SCP:TSystemCodePage):TACDWGCodePage;
 function ZCCP2Str(ZCCP:TZCCodePage):string;
 function ZCCodePage2ACDWGCodePage(ZCCP:TZCCodePage):TACDWGCodePage;
 function ZCCodePage2SysCP(ZCCP:TZCCodePage):TSystemCodePage;
+function SysCP2ZCCodePage(SCP:TSystemCodePage):TZCCodePage;
+function ZCCodePageOrDefault(ZCCP:TZCCodePage):TZCCodePage;
 
 function ZCDxfVer2ACVer(AZCVer:TZCDxfVersion):integer;
 function ZCDxfVer2DXF_ACVer(AZCVer:TZCDxfVersion):TACDWGVer;
@@ -322,6 +324,42 @@ begin
     ZCCP1258:result:=1258;
     ZCCPINVALID:result:=1252;
   end;
+end;
+
+{ Преобразует системную кодовую страницу в кодовую страницу ZCAD.
+  Для страниц, которые не могут быть $DWGCODEPAGE (UTF-8, OEM и т.п.),
+  возвращает ZCCPINVALID (issue #1438). }
+function SysCP2ZCCodePage(SCP:TSystemCodePage):TZCCodePage;
+begin
+  case SCP of
+    874:result:=ZCCP874;
+    932:result:=ZCCP932;
+    936:result:=ZCCP936;
+    949:result:=ZCCP949;
+    950:result:=ZCCP950;
+    1250:result:=ZCCP1250;
+    1251:result:=ZCCP1251;
+    1252:result:=ZCCP1252;
+    1253:result:=ZCCP1253;
+    1254:result:=ZCCP1254;
+    1255:result:=ZCCP1255;
+    1256:result:=ZCCP1256;
+    1257:result:=ZCCP1257;
+    1258:result:=ZCCP1258;
+    else result:=ZCCPINVALID;
+  end;
+end;
+
+{ Возвращает кодовую страницу чертежа, а если она не задана (ZCCPINVALID) -
+  кодовую страницу для новых чертежей (SysDWG_CodePage). Нужна, чтобы
+  $DWGCODEPAGE в заголовке DXF и фактическая перекодировка строк при
+  записи DXF2000 всегда совпадали (issue #1438). }
+function ZCCodePageOrDefault(ZCCP:TZCCodePage):TZCCodePage;
+begin
+  if ZCCP<>ZCCPINVALID then
+    result:=ZCCP
+  else
+    result:=sysvarSysDWG_CodePage;
 end;
 
 

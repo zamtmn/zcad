@@ -117,7 +117,7 @@ var
 begin
   VarsDict.Add('$CLAYER',drawing.GetCurrentLayer^.Name);
   VarsDict.Add('$CELTYPE',drawing.GetCurrentLType^.Name);
-  VarsDict.Add('$DWGCODEPAGE',ZCCP2Str(drawing.DXFCodePage));
+  VarsDict.Add('$DWGCODEPAGE',ZCCP2Str(ZCCodePageOrDefault(drawing.DXFCodePage)));
 
   pcurrtextstyle:=drawing.GetCurrentTextStyle;
   if pcurrtextstyle<>nil then
@@ -200,13 +200,8 @@ begin
   IODXFContext.Header.Version:=ZCDxfVer2DXF_ACVer(AVer);
   IODXFContext.Header.iVersion:=ZCDxfVer2ACVer(AVer);
 
-  //if AVer<ZCDxf2007 then begin
-    IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(drawing.DXFCodePage){SysCP2ACCP(ACodePage)};
-    IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(drawing.DXFCodePage);//ACodePage;
-  //end else begin
-  //  IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(drawing.DXFCodePage){SysCP2ACCP(ACodePage)};
-  //  IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(drawing.DXFCodePage);//ACodePage;
-  //end;
+  IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(ZCCodePageOrDefault(drawing.DXFCodePage));
+  IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(ZCCodePageOrDefault(drawing.DXFCodePage));
 
   DefaultFormatSettings.DecimalSeparator:='.';
   outstream.init(10*1024*1024);

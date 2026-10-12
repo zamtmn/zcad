@@ -174,6 +174,7 @@ function ZCCP2Str(ZCCP:TZCCodePage):string;
 function ZCCodePage2ACDWGCodePage(ZCCP:TZCCodePage):TACDWGCodePage;
 function ZCCodePage2SysCP(ZCCP:TZCCodePage):TSystemCodePage;
 function SysCP2ZCCodePage(SCP:TSystemCodePage):TZCCodePage;
+function ZCCodePageOrDefault(ZCCP:TZCCodePage):TZCCodePage;
 
 function ZCDxfVer2ACVer(AZCVer:TZCDxfVersion):integer;
 function ZCDxfVer2DXF_ACVer(AZCVer:TZCDxfVersion):TACDWGVer;
@@ -345,6 +346,14 @@ begin
     else
      result:=ZCCPINVALID;
   end;
+end;
+
+function ZCCodePageOrDefault(ZCCP:TZCCodePage):TZCCodePage;
+begin
+  if ZCCP<>ZCCPINVALID then
+    result:=ZCCP
+  else
+    result:=sysvarSysDWG_CodePage;
 end;
 
 

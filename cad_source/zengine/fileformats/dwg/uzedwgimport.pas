@@ -900,9 +900,12 @@ begin
     LoadCtx.RegisterShell(0, dokModelSpace, ZContext.PDrawing^.pObjRoot, -1);
     DWGLogInfoFormatStr('DWG [begin] source=%s drawing=%p root=%p',
       [ASourcePath, ZContext.PDrawing, ZContext.PDrawing^.pObjRoot]);
-    DWGLibreCodePageToSystem(Raw.header.codepage,DWGCodePage);
-    if ZContext.PDrawing<>nil then
-      ZContext.PDrawing^.DXFCodePage:=SysCP2ZCCodePage(DWGCodePage);
+    if ZContext.PDrawing<>nil then begin
+      if DWGLibreCodePageToSystem(Raw.header.codepage,DWGCodePage) then
+        ZContext.PDrawing^.DXFCodePage:=SysCP2ZCCodePage(DWGCodePage)
+      else
+        ZContext.PDrawing^.DXFCodePage:=ZCCPINVALID
+    end;
   finally
     DWGFinishTimer(Timer, 'dwg-import.begin',
       Format('source="%s"', [ASourcePath]));

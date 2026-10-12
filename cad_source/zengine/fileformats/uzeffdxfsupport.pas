@@ -173,6 +173,7 @@ function SysCP2ACCP(SCP:TSystemCodePage):TACDWGCodePage;
 function ZCCP2Str(ZCCP:TZCCodePage):string;
 function ZCCodePage2ACDWGCodePage(ZCCP:TZCCodePage):TACDWGCodePage;
 function ZCCodePage2SysCP(ZCCP:TZCCodePage):TSystemCodePage;
+function SysCP2ZCCodePage(SCP:TSystemCodePage):TZCCodePage;
 
 function ZCDxfVer2ACVer(AZCVer:TZCDxfVersion):integer;
 function ZCDxfVer2DXF_ACVer(AZCVer:TZCDxfVersion):TACDWGVer;
@@ -321,6 +322,28 @@ begin
     ZCCP1257:result:=1257;
     ZCCP1258:result:=1258;
     ZCCPINVALID:result:=1252;
+  end;
+end;
+
+function SysCP2ZCCodePage(SCP:TSystemCodePage):TZCCodePage;
+begin
+  case SCP of
+    874:result:=ZCCP874;
+    932:result:=ZCCP932;
+    936:result:=ZCCP936;
+    949:result:=ZCCP949;
+    950:result:=ZCCP950;
+    1250:result:=ZCCP1250;
+    1251:result:=ZCCP1251;
+    1252:result:=ZCCP1252;
+    1253:result:=ZCCP1253;
+    1254:result:=ZCCP1254;
+    1255:result:=ZCCP1255;
+    1256:result:=ZCCP1256;
+    1257:result:=ZCCP1257;
+    1258:result:=ZCCP1258;
+    else
+     result:=ZCCPINVALID;
   end;
 end;
 

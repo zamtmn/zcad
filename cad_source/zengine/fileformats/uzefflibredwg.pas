@@ -159,7 +159,7 @@ begin
       // happen once, before any mapper allocation.
       // Issue #1198 P3: forward the source path so EndDWGImport can emit
       // diagnostic side-files next to the DWG when DWG_DIAG_MODE enables them.
-      BeginDWGImport(ZCDCtx, filename);
+      BeginDWGImport(ZCDCtx,dwg,filename);
       try
         ScanDWGImport(dwg);
         GetDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,TData(lph));
@@ -251,7 +251,7 @@ begin
     try
       // Issue #1198 P3: forward the source path so EndDWGImport can emit
       // diagnostic side-files next to the DXF when DWG_DIAG_MODE enables them.
-      BeginDWGImport(ZCDCtx, filename);
+      BeginDWGImport(ZCDCtx,dwg,filename);
       try
         ScanDWGImport(dwg);
         GetDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,TData(lph));

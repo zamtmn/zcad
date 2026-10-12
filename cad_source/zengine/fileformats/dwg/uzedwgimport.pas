@@ -50,7 +50,8 @@ uses
   uzedwgtargetedlog,
   uzedwglog,
   uzedwgtimerlog,
-  uzedwgfinalize,uzeEntitiesTree;
+  uzedwgfinalize,uzeEntitiesTree,
+  uzedwgtext,uzeffdxfsupport;
 
 { Stage 2 hooks called by uzefflibredwg.pas around parseDwg_Data. They open
   and close the per-file load context that decouples DWG read order from ZCAD
@@ -63,7 +64,7 @@ uses
   raw-scan over the LibreDWG object array that pre-registers handle -> raw
   index entries so duplicate detection happens once and mappers can upgrade
   placeholders instead of fighting the duplicate-handle warning. }
-procedure BeginDWGImport(var ZContext: TZDrawingContext;
+procedure BeginDWGImport(var ZContext: TZDrawingContext;var Raw: Dwg_Data;
   const ASourcePath: String = '');
 procedure ScanDWGImport(var Raw: Dwg_Data);
 procedure EndDWGImport(var ZContext: TZDrawingContext);
@@ -836,13 +837,14 @@ begin
   DWGAttachRefWithContext(Entity, Ref, Context);
 end;
 
-procedure BeginDWGImport(var ZContext: TZDrawingContext;
+procedure BeginDWGImport(var ZContext: TZDrawingContext;var Raw: Dwg_Data;
   const ASourcePath: String = '');
 var
   ByLayerLT: PGDBLtypeProp;
   SysLayer: PGDBLayerProp;
   StdStyle: PGDBTextStyle;
   StdDimStyle: PGDBDimStyle;
+  DWGCodePage:TSystemCodePage;
   Timer: TTimeMeter;
 begin
   Timer := TTimeMeter.StartMeasure;
@@ -898,6 +900,9 @@ begin
     LoadCtx.RegisterShell(0, dokModelSpace, ZContext.PDrawing^.pObjRoot, -1);
     DWGLogInfoFormatStr('DWG [begin] source=%s drawing=%p root=%p',
       [ASourcePath, ZContext.PDrawing, ZContext.PDrawing^.pObjRoot]);
+    DWGLibreCodePageToSystem(Raw.header.codepage,DWGCodePage);
+    if ZContext.PDrawing<>nil then
+      ZContext.PDrawing^.DXFCodePage:=SysCP2ZCCodePage(DWGCodePage);
   finally
     DWGFinishTimer(Timer, 'dwg-import.begin',
       Format('source="%s"', [ASourcePath]));

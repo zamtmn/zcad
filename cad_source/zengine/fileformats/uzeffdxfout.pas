@@ -29,12 +29,27 @@ uses
   uzegeometrytypes,SysUtils,uzeconsts,UGDBObjBlockdefArray,
   uzctnrVectorBytesStream,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
   uzeffmanager,uzbLogIntf,uzeLogIntf,
-  uzMVSMemoryMappedFile,uzMVReader,uzbBaseUtils;
+  uzMVSMemoryMappedFile,uzMVReader,uzbBaseUtils,
+  uzeffdxfnodregistry;
 type
   { Callback, вызываемый перед началом записи DXF. Позволяет подпиться
     на pre-save обработку чертежа (например, конвертацию ProxyEntity
     в BlockInsert). }
   TBeforeSaveDxfProc=procedure(var drawing:TSimpleDrawing);
+
+  { Callback, вызываемый перед закрытием секции OBJECTS. Позволяет
+    специализированным модулям записывать свои OBJECTS-сущности, не
+    добавляя предметные зависимости в общий DXF writer. }
+  TObjectsSaveDxfProc=procedure(var outstream:TZctnrVectorBytes;
+                                var drawing:TSimpleDrawing;
+                                var IODXFContext:TIODXFSaveContext);
+  { Callback, вызываемый перед закрытием секции CLASSES. Классы
+    прикладных DXF-объектов должны быть объявлены до появления их
+    экземпляров в секциях ENTITIES/OBJECTS. }
+  TClassesSaveDxfProc=procedure(var outstream:TZctnrVectorBytes;
+                                var drawing:TSimpleDrawing;
+                                var IODXFContext:TIODXFSaveContext);
+
 
 { Регистрирует pre-save callback. Все зарегистрированные callback'и
   вызываются в порядке регистрации в начале savedxf20XX. }
@@ -44,8 +59,18 @@ function savedxf20XX(const SavedFileName:string;const TemplateFileName:string;va
 
 implementation
 
+uses
+  Classes,uzeffdxfnod,uzeffdxfnodlog,
+  { NOD-обработчики ACAD_TABLESTYLE, ACAD_MLEADERSTYLE и ZCAD_DATA
+    регистрируются в initialization модулей }
+  uzestylestablesdxfnod,
+  uzestylesmleaderdxfnod,
+  uzeffdxfnodzcad;
+
 var
   BeforeSaveDxfProcs:array of TBeforeSaveDxfProc;
+  ObjectsSaveDxfProcs:array of TObjectsSaveDxfProc;
+  ClassesSaveDxfProcs:array of TClassesSaveDxfProc;
 
 procedure RegisterBeforeSaveDxfProc(proc:TBeforeSaveDxfProc);
 var
@@ -90,6 +115,41 @@ begin
   0
   }
 end;
+{ Регистрирует в APPID приложения расширенных данных объектов сохранённых
+  веток NOD (этап 7 ТЗ NOD), которых нет среди записанных savedxf20XX
+  (ACAD, ZCAD, ... и XDataAppName NOD-обработчиков) }
+procedure RegisterPreservedNODApps(NODSave:TZNODSaveSession;outstream:PTZctnrVectorBytes;var handle:TDWGHandle);
+var
+  written,apps:TStringList;
+  i:Integer;
+begin
+  written:=TStringList.Create;
+  apps:=TStringList.Create;
+  try
+    written.CaseSensitive:=False;
+    apps.CaseSensitive:=False;
+    written.Add('ACAD');
+    written.Add('ACAD_PSEXT');
+    written.Add('AcAecLayerStandard');
+    written.Add(ZCADAppNameInDXF);
+    written.Add('ACAD_DSTYLE_DIM_LINETYPE');
+    written.Add('ACAD_DSTYLE_DIM_EXT1_LINETYPE');
+    written.Add('ACAD_DSTYLE_DIM_EXT2_LINETYPE');
+    for i:=0 to NODSave.Count-1 do
+      if NODSave.Handlers[i].XDataAppName<>'' then
+        written.Add(NODSave.Handlers[i].XDataAppName);
+    NODSave.GetPreservedXDataAppNames(apps);
+    for i:=0 to apps.Count-1 do
+      if written.IndexOf(apps[i])<0 then begin
+        written.Add(apps[i]);
+        NODLogTraceFormatStr('uzeffdxfout: APPID "%s" of preserved NOD objects',[apps[i]]);
+        RegisterAcadAppInDXF(apps[i],outstream,handle);
+      end;
+  finally
+    apps.Free;
+    written.Free;
+  end;
+end;
 
 
 procedure saveentitiesdxf2000(pva:PGDBObjEntityOpenArray;var outStream:TZctnrVectorBytes;var drawing:TSimpleDrawing;var IODXFContext:TIODXFSaveContext);
@@ -117,7 +177,7 @@ var
 begin
   VarsDict.Add('$CLAYER',drawing.GetCurrentLayer^.Name);
   VarsDict.Add('$CELTYPE',drawing.GetCurrentLType^.Name);
-  VarsDict.Add('$DWGCODEPAGE',ZCCP2Str(drawing.DXFCodePage));
+  VarsDict.Add('$DWGCODEPAGE',ZCCP2Str(ZCCodePageOrDefault(drawing.DXFCodePage)));
 
   pcurrtextstyle:=drawing.GetCurrentTextStyle;
   if pcurrtextstyle<>nil then
@@ -186,7 +246,87 @@ var
   variablenotprocessed:boolean;
   processedvarscount:integer;
   lph:TLPSHandle;
+    inobjectssec,inclassessec: boolean;
+  { Внутри объекта NOD шаблона (после его группы 5) }
+  innodobj: boolean;
+  { Пара шаблона, прочитанная заранее и ещё не обработанная }
+  pendingpair: boolean;
+  pendinggroups,pendingvalues: string;
+  peekgroups,peekvalues: string;
+  acadTableOwnerDone: boolean;
   beforeProcIdx: integer;
+  { NOD-обработчики, участвующие в сохранении (реестр uzeffdxfnodregistry) }
+  NODSave: TZNODSaveSession;
+
+  { Вызывается перед ENDSEC секции OBJECTS: сначала ветки NOD-обработчиков
+    (этап 3 ТЗ NOD), затем прикладные OBJECTS-callback'и. }
+  procedure RunObjectsSaveDxfProcs;
+  var
+    objectsProcIdx: Integer;
+    nodHandle: TDWGHandle;
+  begin
+    { Новый хэндл NOD: корневой словарь шаблона уже записан и перемаплен }
+    nodHandle:=0;
+    if NODSave.TemplateNODHandle<>0 then
+      nodHandle:=OldHandele2NewHandle.MyGetValue(NODSave.TemplateNODHandle);
+    NODSave.WriteObjects(outstream,drawing,IODXFContext,nodHandle);
+    for objectsProcIdx:=0 to High(ObjectsSaveDxfProcs) do
+      if Assigned(ObjectsSaveDxfProcs[objectsProcIdx]) then
+        ObjectsSaveDxfProcs[objectsProcIdx](
+          outstream,drawing,IODXFContext);
+  end;
+  
+  procedure RunClassesSaveDxfProcs;
+  var
+    classesProcIdx: Integer;
+  begin
+    NODSave.WriteClasses(outstream,drawing,IODXFContext);
+    for classesProcIdx:=0 to High(ClassesSaveDxfProcs) do
+      if Assigned(ClassesSaveDxfProcs[classesProcIdx]) then
+        ClassesSaveDxfProcs[classesProcIdx](
+          outstream,drawing,IODXFContext);
+  end;
+  
+    { Вычисляет новый хэндл владельца (*Model_Space) для сырых сущностей
+    ACAD_TABLE. Должно вызываться ДО записи секции ENTITIES (issue #1339). }
+  procedure PreallocateAcadTableOwnerHandle;
+  var
+    msHandle: TDWGHandle;
+  begin
+    if acadTableOwnerDone then
+      Exit;
+    acadTableOwnerDone:=True;
+    { Новый хэндл владельца сущностей пространства модели. В шаблоне и в
+      исходных файлах AutoCAD блок *Model_Space всегда имеет хэндл 1F. }
+    msHandle:=OldHandele2NewHandle.MyGetValue($1F);
+    if msHandle>0 then
+      IODXFContext.AcadTableOwnerHandle:=msHandle;
+  end;
+   { Хэндлы веток NOD-обработчиков (стили таблиц и т.п.): до ENTITIES, т.к.
+    сырые ACAD_TABLE ссылаются на стили (342). Затем — перемаппинг
+    словарей-веток шаблона на новые словари (этап 4 ТЗ NOD).
+    Идемпотентна. }
+  procedure ReserveNODHandles;
+  begin
+    NODSave.ReserveHandles(drawing,IODXFContext);
+    NODSave.MapTemplateHandles(OldHandele2NewHandle,IODXFContext);
+  end;
+
+  { Пишет записи NOD обработчиков, которых нет в NOD шаблона и которые по
+    алфавиту идут перед ключом ANextKey ('' — все оставшиеся). }
+  procedure WriteNODInsertions(const ANextKey:string);
+  var
+    entries:TZDXFDictEntries;
+    entryIdx:integer;
+  begin
+    entries:=NODSave.TakeNODInsertions(ANextKey);
+    for entryIdx:=0 to High(entries) do begin
+      outstream.TXTAddStringEOL(dxfGroupCode(3));
+      outstream.TXTAddStringEOL(entries[entryIdx].Key);
+      outstream.TXTAddStringEOL(dxfGroupCode(entries[entryIdx].OwnershipCode));
+      outstream.TXTAddStringEOL(inttohex(entries[entryIdx].TargetHandle,0));
+    end;
+  end;
 begin
   intable:=0;
   IODXFContext.InitRec;
@@ -200,9 +340,12 @@ begin
   IODXFContext.Header.Version:=ZCDxfVer2DXF_ACVer(AVer);
   IODXFContext.Header.iVersion:=ZCDxfVer2ACVer(AVer);
 
+  { Если кодовая страница чертежа не задана, берём SysDWG_CodePage - так же,
+    как для $DWGCODEPAGE в MakeVariablesDict, иначе заголовок и
+    перекодировка строк DXF2000 расходятся }
   //if AVer<ZCDxf2007 then begin
-    IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(drawing.DXFCodePage){SysCP2ACCP(ACodePage)};
-    IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(drawing.DXFCodePage);//ACodePage;
+    IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(ZCCodePageOrDefault(drawing.DXFCodePage)){SysCP2ACCP(ACodePage)};
+    IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(ZCCodePageOrDefault(drawing.DXFCodePage));//ACodePage;
   //end else begin
   //  IODXFContext.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(drawing.DXFCodePage){SysCP2ACCP(ACodePage)};
   //  IODXFContext.Header.iDWGCodePage:=ZCCodePage2SysCP(drawing.DXFCodePage);//ACodePage;
@@ -214,6 +357,12 @@ begin
     lph:=lps.StartLongProcess('Save DXF file',@outstream,drawing.pObjRoot^.ObjArray.Count);
     OldHandele2NewHandle:=TMapHandleToHandle.Create;
     templatefile.InitFromFile(TemplateFileName);
+    { Обработчики NOD, подходящие по версии; хэндл NOD шаблона — из его
+      секции OBJECTS (модель этапа 1) }
+    { Сохранённые при загрузке ветки неизвестных ключей NOD (этап 7)
+      пишутся сессией после веток обработчиков }
+    NODSave:=TZNODSaveSession.Create(IODXFContext.Header.Version,drawing.PreservedNODBranches);
+    NODSave.LoadTemplate(TemplateFileName);	
     inlayertable:=False;
     inblocksec:=False;
     inblocktable:=False;
@@ -223,11 +372,26 @@ begin
     inlttypetable:=False;
     indimstyletable:=False;
     inappidtable:=False;
+    { Состояние разбора секций CLASSES/OBJECTS шаблона: без явной
+      инициализации локальные переменные содержат мусор }
+    inobjectssec:=False;
+    inclassessec:=False;
+    innodobj:=False;
+    pendingpair:=False;
+    pendinggroups:='';
+    pendingvalues:='';
+    acadTableOwnerDone:=False;
     MakeVariablesDict(IODXFContext.VarsDict,drawing);
     processedvarscount:=IODXFContext.VarsDict.Count;
-    while templatefile.notEOF do begin
-      groups:=templatefile.readString;
-      values:=templatefile.readString;
+    while pendingpair or templatefile.notEOF do begin
+      if pendingpair then begin
+        groups:=pendinggroups;
+        values:=pendingvalues;
+        pendingpair:=False;
+      end else begin
+        groups:=templatefile.readString;
+        values:=templatefile.readString;
+      end;
       groupi:=StrToInt(groups);
       variablenotprocessed:=True;
       if (groupi=9)and(processedvarscount>0) then begin
@@ -277,10 +441,38 @@ begin
               plottablefansdle:=lasthandle;  {поймать плоттабле}
             if indimstyletable and (groupi=5) then
               dimtablehandle:=lasthandle;  {поймать dimtable}
+			{ Начало объекта NOD шаблона: в него добавляются записи
+            NOD-обработчиков (этап 4 ТЗ NOD) }
+            if inobjectssec and (groupi=5) and (NODSave.TemplateNODHandle<>0)
+               and (TDWGHandle(valuei)=NODSave.TemplateNODHandle) then
+              innodobj:=True;
           end;
+        end else if (groupi=2) and (values='CLASSES') then begin
+          outstream.TXTAddStringEOL(groups);
+          outstream.TXTAddStringEOL(values);
+          inclassessec:=True;
+        end else if inclassessec and (groupi=1) then begin
+          { Имя класса шаблона — для ClassesProc NOD-обработчиков }
+          IODXFContext.TemplateClassNames.Add(Trim(values));
+          outstream.TXTAddStringEOL(groups);
+          outstream.TXTAddStringEOL(values);
+        end else if inclassessec and (groupi=0)
+                    and (values=dxfName_ENDSEC) then begin
+          { Классы объектов веток NOD (TABLESTYLE, CELLSTYLEMAP,
+            MLEADERSTYLE, сохранённые ветки этапа 7) и прикладных модулей
+            объявляются до закрывающего ENDSEC секции CLASSES }
+          RunClassesSaveDxfProcs;
+          inclassessec:=False;
+          outstream.TXTAddStringEOL(groups);
+          outstream.TXTAddStringEOL(values);
         end else if (groupi=2) and (values='ENTITIES') then begin
           outstream.TXTAddStringEOL(groups);
           outstream.TXTAddStringEOL(values);
+          { Перед записью сущностей вычисляем хэндл владельца и выделяем
+            хэндлы веток NOD (стилей таблиц) — сырые ACAD_TABLE ссылаются
+            на них (issue #1339, этапы 3–4 ТЗ NOD). }
+          PreallocateAcadTableOwnerHandle;
+          ReserveNODHandles;
           saveentitiesdxf2000(@{p}drawing.pObjRoot^.ObjArray,outstream,drawing,IODXFContext);
         end else if (groupi=2) and (values='BLOCKS') then begin
           outstream.TXTAddStringEOL(groups);
@@ -502,6 +694,13 @@ begin
               outstream.TXTAddStringEOL(dxfName_BLOCK_RECORD);
 
               IODXFContext.p2h.MyGetOrCreateValue(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),IODXFContext.handle,temphandle);
+              { Запоминаем «имя блока -> новый хэндл BLOCK_RECORD» для
+                ссылок 341/343 MLEADERSTYLE (этап 6 ТЗ NOD) }
+              if not IODXFContext.BlockNameHandleMap.MyContans(
+                   PBlockdefArray(drawing.BlockDefArray.parray)^[i].Name) then
+                IODXFContext.BlockNameHandleMap.Add(
+                  PBlockdefArray(drawing.BlockDefArray.parray)^[i].Name,
+                  inttohex(temphandle,0));
               outstream.TXTAddStringEOL(dxfGroupCode(5));
               outstream.TXTAddStringEOL(inttohex(temphandle,0));
               outstream.TXTAddStringEOL(dxfGroupCode(100));
@@ -579,6 +778,10 @@ begin
               outstream.TXTAddStringEOL(dxfGroupCode(0));
               outstream.TXTAddStringEOL(dxfName_LTYPE);
               IODXFContext.p2h.MyGetOrCreateValue(pltp,IODXFContext.handle,temphandle);
+			  { «Имя типа линии -> новый хэндл LTYPE» для ссылок 340 стилей
+                мультивыносок (этап 6 ТЗ NOD) }
+              if not IODXFContext.LineTypeNameHandleMap.MyContans(pltp^.Name) then
+                IODXFContext.LineTypeNameHandleMap.Add(pltp^.Name,inttohex(temphandle,0));
               outstream.TXTAddStringEOL(dxfGroupCode(5));
               outstream.TXTAddStringEOL(inttohex(temphandle,0));
               outstream.TXTAddStringEOL(dxfGroupCode(330));
@@ -889,7 +1092,15 @@ begin
           RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_LINETYPE',@outstream,IODXFContext.handle);
           RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT1_LINETYPE',@outstream,IODXFContext.handle);
           RegisterAcadAppInDXF('ACAD_DSTYLE_DIM_EXT2_LINETYPE',@outstream,IODXFContext.handle);
-
+          { Приложения расширенных данных объектов NOD-обработчиков
+            (например, ACAD_MLEADERVER стилей мультивыносок, этап 6 ТЗ NOD) }
+          for i:=0 to NODSave.Count-1 do
+            if NODSave.Handlers[i].XDataAppName<>'' then
+              RegisterAcadAppInDXF(NODSave.Handlers[i].XDataAppName,@outstream,IODXFContext.handle);		  
+          { Приложения расширенных данных (1001) объектов сохранённых веток
+            NOD (этап 7), кроме уже записанных выше }
+          RegisterPreservedNODApps(NODSave,@outstream,IODXFContext.handle);
+		  
           outstream.TXTAddStringEOL(dxfGroupCode(0));
           outstream.TXTAddStringEOL('ENDTAB');
         end else if (instyletable) and ((groupi=0) and (values=dxfName_ENDTAB)) then begin
@@ -948,6 +1159,13 @@ begin
 
                   p:=pcurrtextstyle;
                   IODXFContext.p2h.MyGetOrCreateValue(p,IODXFContext.handle,temphandle);
+                  { Запоминаем «имя текстового стиля -> новый хэндл STYLE»
+                    для ссылок 342 MLEADERSTYLE и стилей таблиц (этапы 5-6
+                    ТЗ NOD) }
+                  if not IODXFContext.TextStyleNameHandleMap.MyContans(
+                    pcurrtextstyle^.Name) then
+                    IODXFContext.TextStyleNameHandleMap.Add(
+                      pcurrtextstyle^.Name, inttohex(temphandle,0));
                   outstream.TXTAddStringEOL(inttohex(temphandle,0));
 
                   outstream.TXTAddStringEOL(dxfGroupCode(330));
@@ -1029,6 +1247,73 @@ begin
           IgnoredSource:=True;
         end else if (groupi=0) and (values=dxfName_DIMSTYLE)and indimstyletable then begin
           IgnoredSource:=True;
+        { === Секция OBJECTS: NOD шаблона и ветки NOD-обработчиков
+              (этап 4 ТЗ NOD) === }
+        end else if (groupi=2) and (values='OBJECTS') then begin
+          inobjectssec:=True;
+          { Обычно уже вызваны перед ENTITIES; вызовы идемпотентны }
+          PreallocateAcadTableOwnerHandle;
+          ReserveNODHandles;
+          outstream.TXTAddStringEOL(groups);
+          outstream.TXTAddStringEOL(values);
+        end else if inobjectssec and innodobj and (groupi=3) then begin
+          { Запись NOD шаблона: перед ней — недостающие записи обработчиков,
+            которые по алфавиту идут раньше. Пары 350 записей, ветки
+            которых заменяет обработчик, перемаплены на его словарь
+            (MapTemplateHandles). }
+          WriteNODInsertions(values);
+          outstream.TXTAddStringEOL(groups);
+          outstream.TXTAddStringEOL(values);
+        end else if inobjectssec and (groupi=0) and (values=dxfName_ENDSEC) then begin
+          if innodobj then begin
+            WriteNODInsertions('');
+            innodobj:=False;
+          end;
+          { Ветки NOD-обработчиков, затем прикладные OBJECTS-callback'и }
+          RunObjectsSaveDxfProcs;
+          inobjectssec:=False;
+          outstream.TXTAddStringEOL(groups);
+          outstream.TXTAddStringEOL(values);
+        end else if inobjectssec and (groupi=0) then begin
+          { Начало следующего объекта шаблона: NOD закончился }
+          if innodobj then begin
+            WriteNODInsertions('');
+            innodobj:=False;
+          end;
+          if NODSave.HasTemplateSkips and templatefile.notEOF then begin
+            { Объект ветки шаблона, которую заменяет обработчик,
+              пропускается целиком — по множеству хэндлов, построенному
+              моделью этапа 1 при LoadTemplate }
+            peekgroups:=templatefile.readString;
+            peekvalues:=templatefile.readString;
+            if (StrToInt(peekgroups)=5)
+               and NODSave.IsTemplateHandleSkipped(StrToInt('$'+Trim(peekvalues))) then begin
+              NODLogTraceFormatStr('uzeffdxfout: template %s %s skipped',
+                [values,Trim(peekvalues)]);
+              while templatefile.notEOF do begin
+                peekgroups:=templatefile.readString;
+                peekvalues:=templatefile.readString;
+                if StrToInt(peekgroups)=0 then begin
+                  { Начало следующего объекта (или ENDSEC) — обработать
+                    на следующей итерации }
+                  pendinggroups:=peekgroups;
+                  pendingvalues:=peekvalues;
+                  pendingpair:=True;
+                  Break;
+                end;
+              end;
+            end else begin
+              outstream.TXTAddStringEOL(groups);
+              outstream.TXTAddStringEOL(values);
+              pendinggroups:=peekgroups;
+              pendingvalues:=peekvalues;
+              pendingpair:=True;
+            end;
+          end else begin
+            outstream.TXTAddStringEOL(groups);
+            outstream.TXTAddStringEOL(values);
+          end;
+
         end else begin
           if not ignoredsource then begin
             outstream.TXTAddStringEOL(groups);
@@ -1041,6 +1326,7 @@ begin
     outstream.TXTAddStringEOL(inttohex(IODXFContext.handle+$100000000,9){'100000013'});
     outstream.Count:=i;
     OldHandele2NewHandle.Destroy;
+	NODSave.Free;
     templatefile.done;
 
     sysfilename:={$IFNDEF DELPHI}utf8tosys{$ENDIF}(SavedFileName);
@@ -1062,5 +1348,4 @@ begin
   IODXFContext.done;
 end;
 
-begin
 end.

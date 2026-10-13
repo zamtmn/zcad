@@ -50,7 +50,8 @@ uses
   uzedwgtargetedlog,
   uzedwglog,
   uzedwgtimerlog,
-  uzedwgfinalize,uzeEntitiesTree;
+  uzedwgfinalize,uzeEntitiesTree,
+  uzedwgnod;
 
 { Stage 2 hooks called by uzefflibredwg.pas around parseDwg_Data. They open
   and close the per-file load context that decouples DWG read order from ZCAD
@@ -914,7 +915,7 @@ end;
 
 procedure ScanDWGImport(var Raw: Dwg_Data);
 var
-  HandlesBefore: Integer;
+  HandlesBefore, NODHandlers: Integer;
   TotalTimer, PhaseTimer: TTimeMeter;
 begin
   // R4 (TZ §3.4): Phase 1 raw scan runs between BeginDWGImport and
@@ -974,6 +975,17 @@ begin
       Format('objects=%d handles_registered=%d handles_total=%d',
         [Integer(Raw.num_objects), LoadCtx.Handles.Count - HandlesBefore,
          LoadCtx.Handles.Count]));
+    // Этап 9 ТЗ NOD: стили таблиц и мультивыносок из Named Object
+    // Dictionary (корень — DICTIONARY_NAMED_OBJECT заголовка) теми же
+    // NOD-обработчиками, что и для DXF; до разбора сущностей.
+    NODHandlers := 0;
+    PhaseTimer := TTimeMeter.StartMeasure;
+    if LoadDrawing <> nil then
+      NODHandlers := DWGNODLoad(Raw, LoadDrawing^);
+    DWGFinishTimer(PhaseTimer, 'dwg-import.scan.nod',
+      Format('drawing=%s handlers=%d',
+        [BoolToStr(LoadDrawing <> nil, True), NODHandlers]));
+
     DWGLogInfoFormatStr(
       'DWG [scan-summary] classes=%d objects=%d alloced_objects=%d entities=%d object_refs=%d handles_registered=%d handles_total=%d',
       [Raw.num_classes, Raw.num_objects, Raw.num_alloced_objects,

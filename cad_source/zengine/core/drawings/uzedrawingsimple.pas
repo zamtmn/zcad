@@ -28,7 +28,8 @@ uses
   uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,
   uzestylestexts,uzbUnits,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,
   uzefont,uzglviewareaabstract,uzgldrawcontext,UGDBControlPointArray,
-  uzglviewareadata,uzeExtdrAbstractDrawingExtender,uzCtnrVectorPBaseEntity;
+  uzglviewareadata,uzeExtdrAbstractDrawingExtender,uzCtnrVectorPBaseEntity,
+  uzestylestablesdxf,uzestylesmleaderdxf,uzeffdxfnodpreserved;
 
 type
   TMainBlockCreateProc=procedure(_to:PTDrawingDef;Name:string) of object;
@@ -63,6 +64,15 @@ type
 
       DrawingExtensions:TDrawingExtensions;
 
+      { Сырой текст секции CLASSES из исходного DXF-файла.
+      Сохраняется при загрузке и записывается обратно при сохранении,
+      чтобы не потерять определения пользовательских классов. }
+      RawClassesSection: string;
+      { Сырой текст секции OBJECTS из исходного DXF-файла.
+       Содержит словари, XRECORD, VISUALSTYLE и другие объекты,
+       которые ZCAD не обрабатывает, но AutoCAD требует при открытии. }
+      RawObjectsSection: string;
+
       {styles}
       BlockDefArray:GDBObjBlockdefArray;
       TextStyleTable:GDBTextStyleArray;
@@ -70,6 +80,17 @@ type
       TableStyleTable:GDBTableStyleArray;
       LTypeStyleTable:GDBLtypeArray;
       DimStyleTable:GDBDimStyleArray;
+       { Таблица стилей таблиц для DXF-обмена.
+         Используется только при загрузке и сохранении DXF. }
+       DXFTableStyleTable: GDBDXFTableStyleArray;
+	     { Таблица стилей мультивыносок для DXF-обмена (MLEADERSTYLE,
+         ветка NOD ACAD_MLEADERSTYLE). Сущности MULTILEADER в ZCAD нет —
+         стили хранятся, чтобы сохранить их без потерь. }
+      DXFMLeaderStyleTable: GDBDXFMLeaderStyleArray;
+	     { Ветки NOD без обработчика (ключи прикладных программ), сохранённые
+         при загрузке DXF 2000+ для записи без потерь (этап 7 ТЗ NOD).
+         nil — таких веток нет; создаётся при загрузке. }
+      PreservedNODBranches: TZNODPreservedBranches;
 
     function GetLastSelected:PGDBObjEntity;virtual;
     constructor init(pcam:PGDBObjCamera);
@@ -89,6 +110,10 @@ type
     function GetTableStyleTable:PGDBTableStyleArray;virtual;
     function GetTextStyleTable:PGDBTextStyleArray;virtual;
     function GetDimStyleTable:PGDBDimStyleArray;virtual;
+        { Возвращает таблицу DXF-стилей таблиц для DXF-обмена }
+    function GetDXFTableStyleTable:PGDBDXFTableStyleArray;virtual;
+	    { Возвращает таблицу DXF-стилей мультивыносок для DXF-обмена }
+    function GetDXFMLeaderStyleTable:PGDBDXFMLeaderStyleArray;virtual;
     function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;
     procedure RotateCameraInLocalCSXY(ux,uy:double);virtual;
     procedure MoveCameraInLocalCSXY(oldx,oldy:double;ax:TzeVector3d);virtual;
@@ -609,6 +634,16 @@ begin
   Result:=@self.DimStyleTable;
 end;
 
+function TSimpleDrawing.GetDXFTableStyleTable:PGDBDXFTableStyleArray;
+begin
+     result:=@DXFTableStyleTable;
+end;
+
+function TSimpleDrawing.GetDXFMLeaderStyleTable:PGDBDXFMLeaderStyleArray;
+begin
+     result:=@DXFMLeaderStyleTable;
+end;
+
 procedure TSimpleDrawing.MoveCameraInLocalCSXY(oldx,oldy:double;ax:TzeVector3d);
 var
   uc:pointer;
@@ -697,6 +732,12 @@ begin
   BlockDefArray.Done;
   Numerator.Done;
   TableStyleTable.Done;
+    { Стили таблиц для DXF-обмена (TABLESTYLE); освобождает и вложенные CellFormats }
+  DXFTableStyleTable.Done;
+  { Стили мультивыносок для DXF-обмена (MLEADERSTYLE) }
+  DXFMLeaderStyleTable.Done;  
+  { Сохранённые ветки NOD (этап 7) }
+  FreeAndNil(PreservedNODBranches);  
   LTypeStyleTable.Done;
   DimStyleTable.Done;
   if internalcamera then
@@ -759,7 +800,14 @@ begin
   Numerator.init(10);
 
   TableStyleTable.init(10);
-
+    { Стили таблиц для DXF-обмена (TABLESTYLE). Инициализация обязательна:
+    чертёж ZCAD выделяется через Getmem без обнуления памяти (issue #1442) }
+  DXFTableStyleTable.init(10);
+  { Стили мультивыносок для DXF-обмена (MLEADERSTYLE) — так же обязательно }
+  DXFMLeaderStyleTable.init(10);
+    { Сохранённые ветки NOD (этап 7): создаются при загрузке DXF }
+  PreservedNODBranches:=nil;
+  
   PTempTableStyle:=TableStyleTable.AddStyle('Temp');
 
   PTempTableStyle.rowheight:=4;

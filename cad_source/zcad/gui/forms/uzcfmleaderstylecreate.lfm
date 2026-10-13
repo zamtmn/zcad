@@ -1,0 +1,144 @@
+object MLeaderStyleCreateForm: TMLeaderStyleCreateForm
+  Left = 0
+  Height = 214
+  Top = 0
+  Width = 356
+  BorderStyle = bsDialog
+  Caption = 'Создание нового стиля мультивыносок'
+  ClientHeight = 214
+  ClientWidth = 356
+  Position = poMainFormCenter
+  LCLVersion = '4.99.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
+  object PanelContent: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = PanelBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 174
+    Top = 0
+    Width = 260
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvNone
+    ClientHeight = 174
+    ClientWidth = 260
+    TabOrder = 0
+    object LabelStyleName: TLabel
+      AnchorSideLeft.Control = PanelContent
+      AnchorSideTop.Control = PanelContent
+      Left = 8
+      Height = 20
+      Top = 12
+      Width = 240
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 12
+      Caption = 'Имя нового стиля:'
+    end
+    object EditStyleName: TEdit
+      AnchorSideLeft.Control = PanelContent
+      AnchorSideTop.Control = LabelStyleName
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = PanelContent
+      AnchorSideRight.Side = asrBottom
+      Left = 8
+      Height = 26
+      Top = 36
+      Width = 244
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 4
+      BorderSpacing.Right = 8
+      TabOrder = 0
+    end
+    object LabelBaseStyle: TLabel
+      AnchorSideLeft.Control = PanelContent
+      AnchorSideTop.Control = EditStyleName
+      AnchorSideTop.Side = asrBottom
+      Left = 8
+      Height = 20
+      Top = 74
+      Width = 240
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 12
+      Caption = 'На основе:'
+    end
+    object ComboBaseStyle: TComboBox
+      AnchorSideLeft.Control = PanelContent
+      AnchorSideTop.Control = LabelBaseStyle
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = PanelContent
+      AnchorSideRight.Side = asrBottom
+      Left = 8
+      Height = 26
+      Top = 98
+      Width = 244
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 4
+      BorderSpacing.Right = 8
+      ItemHeight = 0
+      Style = csDropDownList
+      TabOrder = 1
+      OnChange = ComboBaseStyleChange
+    end
+  end
+  object PanelBottom: TPanel
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 260
+    Height = 214
+    Top = 0
+    Width = 96
+    Anchors = [akTop, akRight, akBottom]
+    BevelOuter = bvNone
+    ClientHeight = 214
+    ClientWidth = 96
+    TabOrder = 1
+    object ButtonNext: TBitBtn
+      AnchorSideLeft.Control = PanelBottom
+      AnchorSideTop.Control = PanelBottom
+      AnchorSideRight.Control = PanelBottom
+      AnchorSideRight.Side = asrBottom
+      Left = 8
+      Height = 30
+      Top = 12
+      Width = 80
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 12
+      BorderSpacing.Right = 8
+      Caption = 'Далее'
+      Default = True
+      TabOrder = 0
+      OnClick = ButtonNextClick
+    end
+    object ButtonCancel: TBitBtn
+      AnchorSideLeft.Control = PanelBottom
+      AnchorSideTop.Control = ButtonNext
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = PanelBottom
+      AnchorSideRight.Side = asrBottom
+      Left = 8
+      Height = 30
+      Top = 54
+      Width = 80
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 12
+      BorderSpacing.Right = 8
+      Cancel = True
+      Caption = 'Отмена'
+      ModalResult = 2
+      TabOrder = 1
+      OnClick = ButtonCancelClick
+    end
+  end
+end

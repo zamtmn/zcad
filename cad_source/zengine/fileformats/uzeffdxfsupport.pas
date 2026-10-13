@@ -24,7 +24,7 @@ unit uzeffdxfsupport;
 interface
 uses
   uzegeometrytypes,sysutils,uzctnrVectorBytesStream,usimplegenerics,
-  uzMVReader,UGDBPoint3DArray,uzeTypes;
+  uzMVReader,UGDBPoint3DArray,uzeTypes,Classes,uzeffdxfnod;
 
 const
   cDXFError_WrogGroupCode='DXF group code "%d" expected but "%d" found';
@@ -104,6 +104,28 @@ type
     VarsDict:TString2StringDictionary;
     Header:TDXFHeaderInfo;
     LocalEntityFlags:TLocalEntityFlags;
+    { Имена классов (группа 1) секции CLASSES шаблона, без учёта регистра.
+      Заполняется при копировании CLASSES, до вызова ClassesProc
+      NOD-обработчиков: класс, который уже есть в шаблоне, повторно не
+      объявляется (этап 4 ТЗ NOD). }
+    TemplateClassNames:TStringList;
+        { Карты ремаппинга хэндлов для сырых (raw) сущностей ACAD_TABLE
+      (issue #1339). При сохранении ACAD_TABLE пишется дословно, сохраняя
+      старые хэндлы исходного файла, тогда как весь остальной файл
+      перенумеровывается. Эти карты позволяют переписать ссылки сырой
+      сущности на актуальные новые хэндлы:
+        AcadTableOwnerHandle  — новый хэндл владельца (*Model_Space) для 330;
+        BlockNameHandleMap    — имя блока -> новый хэндл BLOCK_RECORD для 343;
+        TableStyleNameHandleMap — имя стиля таблицы -> новый хэндл для 342;
+        TextStyleNameHandleMap  — имя текстового стиля -> новый хэндл STYLE
+          для ссылок 340 внутри CELLSTYLEMAP (и 342 MLEADERSTYLE);
+        LineTypeNameHandleMap   — имя типа линии -> новый хэндл LTYPE для
+          ссылки 340 MLEADERSTYLE (этап 6 ТЗ NOD). }
+    AcadTableOwnerHandle:TDWGHandle;
+    BlockNameHandleMap:TString2StringDictionary;
+    TableStyleNameHandleMap:TString2StringDictionary;
+    TextStyleNameHandleMap:TString2StringDictionary;
+    LineTypeNameHandleMap:TString2StringDictionary;
 
     procedure InitRec;
     procedure Done;
@@ -120,7 +142,14 @@ type
     Header:TDXFHeaderInfo;
 
     GDBVertexLoadCache:GDBPoint3dArray;
-
+    { Модель секции OBJECTS и Named Object Dictionary (этап 2 ТЗ
+      cad_source/zengine/TZ_NOD_NamedObjectDictionary.md). Строится в
+      AddFromDXF до разбора TABLES/BLOCKS/ENTITIES и живёт до Done.
+      nil — контекст создан не AddFromDXF (например, в AddFromDXF12);
+      пустая модель (NOD=nil) — R12, нет секции OBJECTS или ошибка её
+      разбора. Владеет контекст: освобождается в Done. }
+    NODModel:TZNODModel;
+	
     procedure InitRec;
     procedure Done;
   end;
@@ -173,6 +202,7 @@ function SysCP2ACCP(SCP:TSystemCodePage):TACDWGCodePage;
 function ZCCP2Str(ZCCP:TZCCodePage):string;
 function ZCCodePage2ACDWGCodePage(ZCCP:TZCCodePage):TACDWGCodePage;
 function ZCCodePage2SysCP(ZCCP:TZCCodePage):TSystemCodePage;
+function ZCCodePageOrDefault(ZCCP:TZCCodePage):TZCCodePage;
 
 function ZCDxfVer2ACVer(AZCVer:TZCDxfVersion):integer;
 function ZCDxfVer2DXF_ACVer(AZCVer:TZCDxfVersion):TACDWGVer;
@@ -324,6 +354,19 @@ begin
   end;
 end;
 
+{ Возвращает кодовую страницу чертежа, а если она не задана (ZCCPINVALID) -
+  кодовую страницу для новых чертежей (SysDWG_CodePage). Нужна, чтобы
+  $DWGCODEPAGE в заголовке и перекодировка строк при сохранении DXF
+  совпадали: ZCCP2Str(ZCCPINVALID) и ZCCodePage2SysCP(ZCCPINVALID) дают
+  разные кодовые страницы }
+function ZCCodePageOrDefault(ZCCP:TZCCodePage):TZCCodePage;
+begin
+  if ZCCP<>ZCCPINVALID then
+    result:=ZCCP
+  else
+    result:=sysvarSysDWG_CodePage;
+end;
+
 
 procedure TIODXFSaveContext.InitRec;
 begin
@@ -332,12 +375,25 @@ begin
   VarsDict:=TString2StringDictionary.create;
   handle := $2;
 
+  AcadTableOwnerHandle:=0;
+  BlockNameHandleMap:=TString2StringDictionary.create;
+  TableStyleNameHandleMap:=TString2StringDictionary.create;
+  TextStyleNameHandleMap:=TString2StringDictionary.create;
+  LineTypeNameHandleMap:=TString2StringDictionary.create;
+  TemplateClassNames:=TStringList.Create;
+  TemplateClassNames.CaseSensitive:=False;
+  
   Header.InitRec;
 end;
 procedure TIODXFSaveContext.Done;
 begin
+  TemplateClassNames.Free;
   p2h.Free;
   VarsDict.Free;
+  BlockNameHandleMap.Free;
+  TableStyleNameHandleMap.Free;
+  TextStyleNameHandleMap.Free;
+  LineTypeNameHandleMap.Free;
 end;
 
 procedure TIODXFLoadContext.InitRec;
@@ -348,6 +404,8 @@ begin
   Header.InitRec;
 
   GDBVertexLoadCache.init(1000);
+  
+  NODModel:=nil;
 end;
 
 procedure TDXFHeaderInfo.InitRec;
@@ -363,6 +421,7 @@ begin
   h2p.Free;
   DWGVarsDict.Free;
   GDBVertexLoadCache.Done;
+  FreeAndNil(NODModel);
 end;
 
 function DXFHandle(const sh:string):TDWGHandle;

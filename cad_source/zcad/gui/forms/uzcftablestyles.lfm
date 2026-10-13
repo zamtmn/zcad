@@ -1,0 +1,201 @@
+object TableStylesForm: TTableStylesForm
+  Left = 400
+  Height = 600
+  Top = 200
+  Width = 900
+  Caption = 'Стили таблиц'
+  ClientHeight = 600
+  ClientWidth = 900
+  Constraints.MinHeight = 400
+  Constraints.MinWidth = 600
+  DesignTimePPI = 96
+  Position = poMainFormCenter
+  LCLVersion = '3.99.0.0'
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
+  object DescLabel: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 8
+    Height = 20
+    Top = 8
+    Width = 884
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 8
+    BorderSpacing.Right = 8
+  end
+  object ButtonApplyClose: TBitBtn
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 690
+    Height = 30
+    Top = 562
+    Width = 200
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 8
+    BorderSpacing.Bottom = 8
+    Caption = 'Закрыть'
+    TabOrder = 0
+    OnClick = AplyClose
+  end
+  object ListView1: TZListView
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Panel1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonApplyClose
+    Left = 2
+    Height = 500
+    Top = 50
+    Width = 896
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 2
+    BorderSpacing.Top = 4
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 4
+    Columns = <
+      item
+        Caption = 'Статус'
+        Width = 60
+      end
+      item
+        Caption = 'Имя'
+        Width = 200
+      end
+      item
+        Caption = 'Высота заголовка'
+        Width = 120
+      end
+      item
+        Caption = 'Высота строки'
+        Width = 120
+      end
+      item
+        Caption = 'Высота данных'
+        Width = 120
+      end
+      item
+        Caption = 'Стиль заголовка'
+        Width = 120
+      end
+      item
+        Caption = 'Стиль строки'
+        Width = 120
+      end
+      item
+        Caption = 'Стиль данных'
+        Width = 120
+      end>
+    HideSelection = False
+    ReadOnly = True
+    RowSelect = True
+    ScrollBars = ssAutoBoth
+    SortColumn = 1
+    SortType = stText
+    TabOrder = 1
+    ViewStyle = vsReport
+    OnResize = onrsz
+    OnSelectItem = ListView1SelectItem
+  end
+  object Panel1: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 0
+    Height = 45
+    Top = 0
+    Width = 300
+    AutoSize = True
+    ClientHeight = 45
+    ClientWidth = 300
+    TabOrder = 2
+    object CoolBar1: TCoolBar
+      Left = 1
+      Height = 43
+      Top = 1
+      Width = 220
+      AutoSize = True
+      Bands = <
+        item
+          Control = ToolBar1
+          Width = 140
+        end>
+      EdgeBorders = []
+      Themed = False
+      object ToolBar1: TToolBar
+        AnchorSideLeft.Control = CoolBar1
+        AnchorSideTop.Control = CoolBar1
+        Left = 22
+        Height = 43
+        Top = 2
+        Width = 110
+        Align = alNone
+        AutoSize = True
+        BorderSpacing.Left = 26
+        BorderSpacing.Top = 4
+        Caption = 'ToolBar1'
+        EdgeBorders = []
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        Transparent = True
+        Wrapable = False
+        object ToolButton_Add: TToolButton
+          Left = 1
+          Top = 0
+          Action = AddStyle
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton_Delete: TToolButton
+          Left = 42
+          Top = 0
+          Action = DelStyle
+        end
+        object Separator1: TToolButton
+          Left = 83
+          Top = 0
+          Caption = 'Separator1'
+          Style = tbsDivider
+        end
+        object ToolButton_Refresh: TToolButton
+          Left = 89
+          Top = 0
+          Action = RefreshStyles
+        end
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Left = 700
+    Top = 200
+    object AddStyle: TAction
+      Caption = 'AddStyle'
+      DisableIfNoHandler = False
+      Hint = 'Добавить стиль таблицы'
+      ImageIndex = 1
+      ShortCut = 45
+      OnExecute = StyleAdd
+    end
+    object DelStyle: TAction
+      Caption = 'DelStyle'
+      DisableIfNoHandler = False
+      Hint = 'Удалить стиль таблицы'
+      ShortCut = 46
+      OnExecute = DeleteItem
+    end
+    object RefreshStyles: TAction
+      Caption = 'RefreshStyles'
+      DisableIfNoHandler = False
+      Hint = 'Обновить список стилей'
+      ShortCut = 115
+      OnExecute = RefreshListItems
+    end
+  end
+end

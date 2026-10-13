@@ -300,6 +300,11 @@ uses
   uzvspreadsheet_register,
   uzvrtrestoretablecmd,
   //****//
+  //uzccommand_adddxftablestyle,
+  uzccommand_tablestyles,
+  uzccommand_tablestylemanager,
+  uzccommand_mleaderstyles,
+  uzccommand_mleaderstylemanager,  
 
   uzvlightexporter_commandexport,
   uzvdialuxlumimporter_main,

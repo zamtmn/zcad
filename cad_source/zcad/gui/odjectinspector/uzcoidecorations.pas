@@ -56,7 +56,7 @@ function NamedObjectsDecorator(PInstance:Pointer):String;
 begin
      if PGDBLayerProp(PInstance^)<>nil then
                                            begin
-                                           result:={Tria_AnsiToUtf8}(PGDBNamedObject(ppointer(PInstance)^).Name)
+                                           result:=PGDBNamedObject(ppointer(PInstance)^).Name
                                            end
                                        else
                                            result:=rsUnassigned;
@@ -116,7 +116,7 @@ begin
                              p:=NO.beginiterate(ir);
                              if p<>nil then
                              repeat
-                                   number:=cbedit.Items.AddObject({Tria_AnsiToUtf8}(p^.Name),tobject(p));
+                                   number:=cbedit.Items.AddObject(p^.Name,tobject(p));
                                    if pcurrent=p then
                                                      cbedit.ItemIndex:=number;
                                    p:=NO.iterate(ir);
@@ -376,7 +376,7 @@ begin
      PLT:=ppointer(PInstance)^;
      if plt<>nil then
                         begin
-                             s:={Tria_AnsiToUtf8}(plt^.Name);
+                             s:=plt^.Name;
                         end
                     else
                         begin

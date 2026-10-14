@@ -357,7 +357,7 @@ var
    tv:TzePoint3d;
    DC:TDrawContext;
 begin
-          name:=uzbstrproc.Tria_Utf8ToAnsi(name);
+     //     name:=uzbstrproc.Tria_Utf8ToAnsi(name);
 
      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,datname);
      pointer(pv):=old_ENTF_CreateBlockInsert(drawings.GetCurrentROOT,@{drawings.GetCurrentROOT}root.ObjArray,

@@ -81,7 +81,7 @@ begin
                                           pts:=IVars.CTStyle;
     if pts<>nil then
                    begin
-                        s:={Tria_AnsiToUtf8}(pts^.Name);
+                        s:=pts^.Name;
                         //ll:=0;
                    end
                else

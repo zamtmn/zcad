@@ -55,7 +55,6 @@ type
     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     function IsStagedFormatEntity:boolean;virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
-    procedure Build(var drawing:TDrawingDef);virtual;
     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
     procedure DXFOut(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
@@ -312,11 +311,6 @@ begin
   Result:=tvo;
 end;
 
-procedure GDBObjTable.BuildGeometry(var drawing:TDrawingDef);
-begin
-  Build(drawing);
-end;
-
 function GDBObjTable.IsStagedFormatEntity:boolean;
 begin
   Result:=True;
@@ -328,18 +322,18 @@ begin
     if assigned(EntExtensions) then
       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
     calcobjmatrix;
-    //ConstObjArray.FormatEntity(drawing,dc);
-    calcbb(dc);
   end;
+  BuildGeometry(drawing);
+  ConstObjArray.FormatEntity(drawing,dc,stage);
+  calcbb(dc);
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
-    self.BuildGeometry(drawing);
       if assigned(EntExtensions) then
         EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
   end;
 end;
 
-procedure GDBObjTable.Build;
+procedure GDBObjTable.BuildGeometry;
 var
   pl:pgdbobjline;
   pgdbmtext:pgdbobjmtext;
@@ -362,7 +356,7 @@ begin
 
   if self.PTableStyle.HeadBlockName<>'' then begin
     drawings.AddBlockFromDBIfNeed(@drawing,PTableStyle.HeadBlockName);
-    pointer(pgdbins):=self.ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
+    pointer(pgdbins):=ConstObjArray.CreateInitObj(GDBBlockInsertID,@self);
     pgdbins^.Name:=self.PTableStyle.HeadBlockName;
     pgdbins^.scale.x:=scale;
     pgdbins^.scale.y:=scale;
@@ -396,7 +390,7 @@ begin
           if pstr^<>'' then begin
             pointer(pgdbmtext):=
               self.ConstObjArray.CreateInitObj(GDBMtextID,@self);
-            pgdbmtext.Template:={UTF8ToString}({Tria_AnsiToUtf8}(pstr^));
+            pgdbmtext.Template:=pstr^;
             pgdbmtext.textprop.size:=PTableStyle^.textheight*scale;
             pgdbmtext.linespacef:=1;
             pgdbmtext.linespacef:=

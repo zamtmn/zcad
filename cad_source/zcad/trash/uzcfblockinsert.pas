@@ -193,7 +193,7 @@ begin
     p:=PBlockDefs^.BeginIterate(ir);//начинаем перебирать описания в таблице
     if p<>nil then
     repeat
-         BlockNameComboBox.AddItem(Tria_AnsiToUtf8(p^.Name),tobject(p));//загоняем имя и адрес найденного описания в комбик
+         BlockNameComboBox.AddItem(p^.Name,tobject(p));//загоняем имя и адрес найденного описания в комбик
                                                                 //причем имена в описании лежат в анси кодировке, комбику они нужны в утф8
          if LastInsertedBlockName=uppercase(p^.Name) then       //если вдруг имя текущего блока совпало с ранее вставленным
           LastInsertedBlockIndex:=BlockNameComboBox.Items.Count-1;      //запоминаем его индекс

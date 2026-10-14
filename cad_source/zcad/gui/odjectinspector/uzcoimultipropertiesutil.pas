@@ -402,7 +402,7 @@ begin
   //repeat
         s:=pair.Key;
         c:=pair.Value;
-        t^.Enums.PushBackData(format('%s (%d)',[{Tria_AnsiToUtf8}(s),c]));
+        t^.Enums.PushBackData(format('%s (%d)',[s,c]));
         t^.Strings.PushBackData(s);
   //until not iterator.Next;
   end;
@@ -431,7 +431,7 @@ begin
         s:=pair.Key;
         c:=pair.Value;
         if assigned(s) then
-          name:={Tria_AnsiToUtf8}(s.GetFullName)
+          name:=s.GetFullName
         else
           name:='nil';
         t^.Enums.PushBackData(format('%s (%d)',[name,c]));

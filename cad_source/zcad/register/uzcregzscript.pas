@@ -37,7 +37,8 @@ uses
   uzgldrawerogl,uzgldrawergdi,
   uzcSysParams,
   uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics,
-  URecordDescriptor,uzcTypeDescriprors,uzcTypes,uzcgui2arrows,uzObjectInspectorManager;
+  URecordDescriptor,uzcTypeDescriprors,uzcTypes,uzcgui2arrows,uzObjectInspectorManager,
+  uzcExtdrSCHConnector;
 
 implementation
 
@@ -1141,6 +1142,9 @@ begin
     otd^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,[mm_constructor]);
   end;
   ptsu^.RegisterType(TypeInfo(PCableDeviceBaseObject),'PCableDeviceBaseObject');
+
+  ptsu^.RegisterType(TypeInfo(TNetTypeHandle),'TNetTypeHandle');
+
 
   RegSysVars(ptsu);
 end;

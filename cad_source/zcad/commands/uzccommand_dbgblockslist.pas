@@ -42,7 +42,7 @@ begin
   if pb<>nil then
     repeat
       zcUI.TextMessage(format('Found block "%s", contains %d entities',
-        [Tria_AnsiToUtf8(pb^.Name),pb^.ObjArray.Count]),TMWOHistoryOut);
+        [pb^.Name,pb^.ObjArray.Count]),TMWOHistoryOut);
       pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
     until pb=nil;
   Result:=cmd_ok;

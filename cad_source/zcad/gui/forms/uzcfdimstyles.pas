@@ -195,7 +195,7 @@ end;
 {Style name handle procedures}
 function TDimStylesForm.GetStyleName(Item: TListItem):string;
 begin
-  result:={Tria_AnsiToUtf8}(PGDBDimStyle(Item.Data)^.Name);
+  result:=PGDBDimStyle(Item.Data)^.Name;
 end;
 function TDimStylesForm.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin
@@ -512,7 +512,7 @@ begin
                                  else
                                      pstyle:=pdwg^.GetCurrentDimStyle;
 
-  stylename:=pdwg^.DimStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewDimStyleNameFormat),1);
+  stylename:=pdwg^.DimStyleTable.GetFreeName(rsNewDimStyleNameFormat,1);
   if stylename='' then
   begin
     zcUI.TextMessage(rsUnableSelectFreeDimStylerName,TMWOShowError);

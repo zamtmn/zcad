@@ -196,7 +196,7 @@ end;
 {Style name handle procedures}
 function TTextStylesForm.GetStyleName(Item: TListItem):string;
 begin
-  result:={Tria_AnsiToUtf8}(PGDBTextStyle(Item.Data)^.Name);
+  result:=PGDBTextStyle(Item.Data)^.Name;
 end;
 function TTextStylesForm.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin
@@ -501,7 +501,7 @@ begin
                                  else
                                      pstyle:=pdwg^.GetCurrentTextStyle;
 
-  stylename:=pdwg^.TextStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewTextStyleNameFormat),1);
+  stylename:=pdwg^.TextStyleTable.GetFreeName(rsNewTextStyleNameFormat,1);
   if stylename='' then
   begin
     zcUI.TextMessage(rsUnableSelectFreeTextStylerName,TMWOShowError);

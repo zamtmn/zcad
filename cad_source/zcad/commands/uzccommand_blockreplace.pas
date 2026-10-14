@@ -211,8 +211,8 @@ begin
     poa:=@drawings.GetCurrentROOT^.ObjArray;
     rslt:=0;
     //i:=0;
-    newname:=Tria_Utf8ToAnsi(GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Replace));
-    selname:=Tria_Utf8ToAnsi(GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find));
+    newname:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Replace);
+    selname:=GDBEnumDataDescriptorObj.GetValueAsString(@BlockReplaceParams.Find);
     selname:=uppercase(selname);
     pb:=poa^.beginiterate(ir);
     psdesc:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);

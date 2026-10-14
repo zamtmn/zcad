@@ -261,13 +261,13 @@ begin
        pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
        if pltp<>nil then
        repeat
-            lineTypeComboBox.AddItem({Tria_AnsiToUtf8}(pltp^.Name),Sender);
+            lineTypeComboBox.AddItem(pltp^.Name,Sender);
             pltp:=pdwg^.LTypeStyleTable.iterate(ir);
        until pltp=nil;
      end;
 
      for i:=0 to lineTypeComboBox.Items.Count-1 do begin
-         if {Tria_AnsiToUtf8}(itemtype^.Name) = lineTypeComboBox.Items[i] then begin
+         if itemtype^.Name = lineTypeComboBox.Items[i] then begin
             lineTypeComboBox.ItemIndex := i;
             end;
      end;
@@ -286,7 +286,7 @@ begin
        pltp:=pdwg^.LTypeStyleTable.beginiterate(ir);
        if pltp<>nil then
        repeat
-            if {Tria_AnsiToUtf8}(pltp^.Name) = lineTypeComboBox.Items[index] then begin
+            if pltp^.Name=lineTypeComboBox.Items[index] then begin
                result := pltp;
                //zcUI.TextMessage(dimStyle^.Lines.DIMLTYPE^.Name,TMWOHistoryOut);
             end;
@@ -654,7 +654,7 @@ begin
 end;
 procedure TDimStyleEditForm.unitDIMPOSTEditChange(Sender: TObject);
 begin
-     dimStyle^.Units.DIMPOST:=Tria_Utf8ToAnsi(unitDIMPOSTEdit.Text);
+     dimStyle^.Units.DIMPOST:=unitDIMPOSTEdit.Text;
 end;
 
 procedure TDimStyleEditForm.FormCreate(Sender: TObject);
@@ -743,7 +743,7 @@ begin
      unitDIMLFACEdit.Value:=dimStyle^.Units.DIMLFAC;
      unitDIMRNDEdit.Value:=dimStyle^.Units.DIMRND;
      unitDIMDECEdit.Value:=dimStyle^.Units.DIMDEC;
-     unitDIMPOSTEdit.Text:={Tria_AnsiToUtf8}(dimStyle^.Units.DIMPOST);
+     unitDIMPOSTEdit.Text:=dimStyle^.Units.DIMPOST;
 
 end;
 

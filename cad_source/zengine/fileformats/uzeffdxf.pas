@@ -1224,7 +1224,7 @@ begin
                   s := rdr.ParseString;
               end
               else if ZCDCtx.pdrawing^.BlockDefArray.getindex(s)>=0 then begin
-                zDebugLn('{I}'+rsDoubleBlockIgnored,[{Tria_AnsiToUtf8}(s)]);
+                zDebugLn('{I}'+rsDoubleBlockIgnored,[s]);
                 while (s <> 'ENDBLK') do
                 s := rdr.ParseString;
               end else begin

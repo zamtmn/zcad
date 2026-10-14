@@ -338,16 +338,16 @@ begin
     'superline');//имя модуля
 
   if operands='1' then begin
-    hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting1);
-    hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine1);
+    hotkeyname:=DrawSuperlineParams.SLSetting1;
+    hotkeytypeline:=DrawSuperlineParams.SLSettingTypeLine1;
   end;
   if operands='2' then begin
-    hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting2);
-    hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine2);
+    hotkeyname:=DrawSuperlineParams.SLSetting2;
+    hotkeytypeline:=DrawSuperlineParams.SLSettingTypeLine2;
   end;
   if operands='3' then begin
-    hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting3);
-    hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine3);
+    hotkeyname:=DrawSuperlineParams.SLSetting3;
+    hotkeytypeline:=DrawSuperlineParams.SLSettingTypeLine3;
   end;
 
   //zcUI.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);

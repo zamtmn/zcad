@@ -530,7 +530,7 @@ begin
           psl.init(10);
         end;
         s:=ps^;
-        psl.PushBackData({Tria_Utf8ToAnsi}(s));
+        psl.PushBackData(s);
         S:='';
         ps:=sta.iterate(ir);
       until ps=nil;
@@ -651,7 +651,7 @@ begin
     if s<>'' then begin
       ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
       ptext.vp.Layer:=vp.Layer;
-      ptext.Template:=UTF8ToString({Tria_AnsiToUtf8}(s));
+      ptext.Template:=UTF8ToString(s);
       ptext.Local.P_insert:=tbl.Local.P_insert;
       ptext.Local.P_insert.y:=ptext.Local.P_insert.y+textyoffset*scale;
       ptext.textprop.justify:=jsbl;

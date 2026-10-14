@@ -118,8 +118,8 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if Tria_Utf8ToAnsi(p^.Name)='*D234' then
-                            p^.Name:=p^.Name;
+       //if Tria_Utf8ToAnsi(p^.Name)='*D234' then
+       //                     p^.Name:=p^.Name;
        zTraceLn('{D+}Formatting blockdef name="%s"',[p^.Name]);
 
        //programlog.LogOutFormatStr('Formatting blockdef name="%s"',[p^.Name],lp_IncPos,LM_Debug);

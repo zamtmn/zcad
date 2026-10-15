@@ -17,6 +17,8 @@
 }
 unit uzcExtdrSCHConnector;
 {$INCLUDE zengineconfig.inc}
+{$Mode delphi}{$H+}
+{$ModeSwitch advancedrecords}
 
 interface
 
@@ -33,16 +35,33 @@ uses
   uzcsysvars,gzctnrVectorSimple,gzctnrVectorP,UGDBOpenArrayOfPV,
   gzctnrVector;
 
+type
+  TKnotType=(KTNormal,KTEmpty,KTArc,KTCircle,KTFilledCircle);
+  TNetTypeData=record
+    IntersectRadius:Double;
+    ConnectRadius:Double;
+    IntersectType:TKnotType;
+    ConnectType:TKnotType;
+    constructor CreateRec(const AIntersectRadius,AConnectSize:Double;const AIntersectType:TKnotType;
+      const AConnectType:TKnotType);
+  end;
+  PNetTypeData=^TNetTypeData;
+
 const
   ConnectionExtenderName='extdrSCHConnector';
+  NetDefaultData:TNetTypeData=(
+  IntersectRadius:0.5;
+  ConnectRadius:0.5;
+  IntersectType:KTEmpty;
+  ConnectType:KTFilledCircle;
+  );
+
 
 type
 
   TNet=class;
   TNetTypeHandle=Integer;
   TNetTypeName=AnsiString;
-  TNetTypeData=record
-  end;
 
   TNetTypeHandles=GTNamedHandlesWithData<TNetTypeHandle,GTLinearIncHandleManipulator<TNetTypeHandle>,
     TNetTypeName,GTStringNamesUPPERCASE<TNetTypeName>,TNetTypeData>;
@@ -130,9 +149,11 @@ type
   end;
 
 function AddConnectorExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectorExtender;
-function RegisrterNETType(AName:TNetTypeName):TNetTypeHandle;
-function GetNETNameByType(AHandle:TNetTypeHandle):TNetTypeName;
-function GetTypeByNETName(AName:TNetTypeName):TNetTypeHandle;
+
+function RegisrterNETType(const AName:TNetTypeName;const ANetTypeData:TNetTypeData):TNetTypeHandle;
+function GetNETNameByType(const AHandle:TNetTypeHandle):TNetTypeName;
+function GetTypeByNETName(const AName:TNetTypeName):TNetTypeHandle;
+function GetNETDataByType(const AHandle:TNetTypeHandle):TNetTypeHandles.PGLincedData;
 
 
 implementation
@@ -148,11 +169,20 @@ const
 var
   NetTypeHandles:TNetTypeHandles;
 
-function RegisrterNETType(AName:TNetTypeName):TNetTypeHandle;
+constructor TNetTypeData.CreateRec(const AIntersectRadius,AConnectSize:Double;
+  const AIntersectType:TKnotType;const AConnectType:TKnotType);
 begin
-  result:=NetTypeHandles.CreateOrGetHandle(AName);
+  IntersectRadius:=AIntersectRadius;
+  ConnectRadius:=AConnectSize;
+  IntersectType:=AIntersectType;
+  ConnectType:=AConnectType;
 end;
-function GetNETNameByType(AHandle:TNetTypeHandle):TNetTypeName;
+
+function RegisrterNETType(const AName:TNetTypeName;const ANetTypeData:TNetTypeData):TNetTypeHandle;
+begin
+  result:=NetTypeHandles.CreateOrGetHandleAndSetData(AName,ANetTypeData);
+end;
+function GetNETNameByType(const AHandle:TNetTypeHandle):TNetTypeName;
 var
   idx:TNetTypeHandle;
 begin
@@ -162,7 +192,18 @@ begin
   else
     result:=cDefaultNetTypeHandle;
 end;
-function GetTypeByNETName(AName:TNetTypeName):TNetTypeHandle;
+function GetNETDataByType(const AHandle:TNetTypeHandle):TNetTypeHandles.PGLincedData;
+var
+  idx:TNetTypeHandle;
+begin
+  idx:=NetTypeHandles.GetDataIndex(AHandle);
+  if NetTypeHandles.isValidIndex(idx)then
+    result:=NetTypeHandles.GetPLincedData(AHandle)
+  else
+    result:=@NetDefaultData;
+end;
+
+function GetTypeByNETName(const AName:TNetTypeName):TNetTypeHandle;
 begin
   result:=NetTypeHandles.GetHandleByName(AName);
 end;

@@ -21,7 +21,8 @@ unit uzcExtdrSCHConnection;
 interface
 
 uses
-  SysUtils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
+  SysUtils,
+  uzedrawingdef,uzeExtdrAbstractEntityExtender,
   UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
   uzeentdevice,uzctnrVectorBytesStream,
   uzbBaseUtils,uzeTypes,uzeentsubordinated,uzeentity,uzeblockdef,
@@ -34,17 +35,18 @@ uses
 
 const
   ConnectionExtenderName='extdrSCHConnection';
-  IntersectRadius=0.5;
-  ConnectSize=1;
+  //IntersectRadius=0.5;
+  //ConnectSize=1;
 
 type
-  TKnotType=(KTNormal,KTEmpty,KTArc,KTCircle,KTFilledCircle);
-
   TKnot=record
     t,HalfWidth:double;
+    {todo: тип наверно стоит убрать, он такойжк как в TNetTypeData всегда}
     &Type:TKnotType;
     constructor Create(const AT,AHW:double;const AType:TKnotType);
   end;
+  PKnot=^TKnot;
+
   TKnots=GZVector<TKnot>;
 
   TKnotLess=class
@@ -70,7 +72,7 @@ type
 
   TSCHConnectionExtender=class(TBaseSCHConnectExtender)
   private
-    FConnectedWith,FIntersectedWith:GDBObjOpenArrayOfPV;
+    FConnectedWith,FIntersectedWith:TZctnrVectorPGDBaseEntityNoDbl;
     FConnections:TConnectPoints;
     FKnots:TKnots;
   public
@@ -98,7 +100,7 @@ type
 
     procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);override;
 
-    procedure TryConnectToEnts(const p1,p2:TzePoint3d;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure TryConnectToEnts(const p1,p2:TzePoint3d;var Objects:GDBObjOpenArrayOfPV;constref ANetData:TNetTypeData;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure TryConnectToDeviceConnectors(const p1,p2:TzePoint3d;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
     function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):boolean;override;
 
@@ -110,6 +112,10 @@ type
 function AddSCHConnectionExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectionExtender;
 
 implementation
+
+const
+  cNetConnectionSegsCount=6;
+
 
 constructor TKnot.Create(const AT,AHW:double;const AType:TKnotType);
 begin
@@ -177,6 +183,7 @@ end;
 
 procedure TSCHConnectionExtender.Assign(Source:TBaseExtender);
 begin
+  FNetType:=TSCHConnectionExtender(Source).FNetType;
 end;
 
 procedure TSCHConnectionExtender.AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
@@ -289,7 +296,7 @@ begin
       if IsObjectIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         objects.init(10);
         if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInVolume(PGDBObjLine(pThisEntity)^.vp.BoundingBox,Objects) then
-          TryConnectToEnts(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,Objects,drawing,dc);
+          TryConnectToEnts(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,Objects,GetNETDataByType(FNetType)^,drawing,dc);
         {if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInPoint(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,Objects) then
           TryConnectToEnts(Objects,LBegin,drawing,dc);
         objects.Clear;
@@ -379,59 +386,88 @@ begin
   pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1-cV3d_m1__1__0,p1+cV3d_m1__1__0);
 end;
 
-procedure drawFilledCircle(const p0:TzePoint3d;r:double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+procedure drawCircle(const p0:TzePoint3d;r:double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
-  p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12:TzePoint3d;
-  sine,cosine:double;
+  v:TzeVector3d;
+  p,mp:array[boolean]of TzePoint3d;
+  i:integer;
 begin
   if r>bigeps then begin
-    p1:=TzePoint3d.Make(-1,0,0)*r+p0.asVector;
-    SinCos(5*pi/6,sine,cosine);
-    p2:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    SinCos(4*pi/6,sine,cosine);
-    p3:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    SinCos(3*pi/6,sine,cosine);
-    p4:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    SinCos(2*pi/6,sine,cosine);
-    p5:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    SinCos(1*pi/6,sine,cosine);
-    p6:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    p7:=TzePoint3d.Make(1,0,0)*r+p0.asVector;
-    SinCos(-1*pi/6,sine,cosine);
-    p8:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    SinCos(-2*pi/6,sine,cosine);
-    p9:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    SinCos(-3*pi/6,sine,cosine);
-    p10:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    SinCos(-4*pi/6,sine,cosine);
-    p11:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    SinCos(-5*pi/6,sine,cosine);
-    p12:=TzePoint3d.Make(cosine,sine,0)*r+p0.asVector;
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p1,p2);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p2,p3);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p3,p4);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p4,p5);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p5,p6);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p6,p7);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p7,p8);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p8,p9);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p9,p10);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p10,p11);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p11,p12);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p12,p1);
+    p[false]:=p0+cV3d__1__0__0*r;
+    mp[false]:=p[false];
+    v.Z:=0;
+    for i:=1 to cNetConnectionSegsCount-1 do begin
+      SinCos(i*pi/cNetConnectionSegsCount,v.y,v.x);
+      if odd(i) then begin
+        p[true]:=p0+v*r;
+      end else begin
+        p[false]:=p0+v*r;
+       end;
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p[false],p[true]);
 
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p1);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p2);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p3);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p4);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p5);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p6);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p7);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p8);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p9);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p10);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p11);
-    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p12);
+      v.y:=-v.y;
+      if odd(i) then begin
+        mp[true]:=p0+v*r;
+      end else begin
+        mp[false]:=p0+v*r;
+      end;
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,mp[false],mp[true]);
+
+    end;
+    if odd(cNetConnectionSegsCount) then begin
+      p[true]:=p0+cV3d_m1__0__0*r;
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,mp[false],p[true]);
+    end else begin
+      p[false]:=p0+cV3d_m1__0__0*r;
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p[false],mp[true]);
+    end;
+    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p[false],p[true]);
+  end;
+end;
+
+procedure drawFilledCircle(const p0:TzePoint3d;r:double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+var
+  v:TzeVector3d;
+  p,mp:array[boolean]of TzePoint3d;
+  i:integer;
+begin
+  if r>bigeps then begin
+    p[false]:=p0+cV3d__1__0__0*r;
+    mp[false]:=p[false];
+    v.Z:=0;
+    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p[false]);
+    for i:=1 to cNetConnectionSegsCount-1 do begin
+      SinCos(i*pi/cNetConnectionSegsCount,v.y,v.x);
+      if odd(i) then begin
+        p[true]:=p0+v*r;
+        pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p[true]);
+      end else begin
+        p[false]:=p0+v*r;
+        pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p[false]);
+      end;
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p[false],p[true]);
+
+      v.y:=-v.y;
+      if odd(i) then begin
+        mp[true]:=p0+v*r;
+        pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,mp[true]);
+      end else begin
+        mp[false]:=p0+v*r;
+        pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,mp[false]);
+      end;
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,mp[false],mp[true]);
+
+    end;
+    if odd(cNetConnectionSegsCount) then begin
+      p[true]:=p0+cV3d_m1__0__0*r;
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p[true]);
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,mp[false],p[true]);
+    end else begin
+      p[false]:=p0+cV3d_m1__0__0*r;
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p0,p[false]);
+      pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p[false],mp[true]);
+    end;
+    pThisEntity^.Representation.CreateWCSLineWithoutLT(DC,pThisEntity^,p[false],p[true]);
   end;
 end;
 
@@ -498,7 +534,7 @@ begin
   end;
 end;
 
-procedure TSCHConnectionExtender.TryConnectToEnts(const p1,p2:TzePoint3d;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.TryConnectToEnts(const p1,p2:TzePoint3d;var Objects:GDBObjOpenArrayOfPV;constref ANetData:TNetTypeData;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjLine;
   ir:itrec;
@@ -565,7 +601,7 @@ begin
                   TNet.ConcatNets(self,NetExtender);
                 end else begin
                   if p1.SqrLengthTo(p2)>p^.CoordInWCS.lBegin.SqrLengthTo(p^.CoordInWCS.lEnd) then
-                    FKnots.PushBackData(TKnot.Create(ip.t1,IntersectRadius,KTArc));
+                    FKnots.PushBackData(TKnot.Create(ip.t1,ANetData.IntersectRadius,{KTArc}ANetData.IntersectType));
                   FIntersectedWith.PushBackIfNotPresent(p);
                   p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
                   p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
@@ -668,12 +704,14 @@ function TSCHConnectionExtender.NeedStandardDraw(pEntity:Pointer;const drawing:T
 var
   i:integer;
   pc:TConnectPoints.PT;
+  pnd:TNetTypeHandles.PGLincedData;
   linelen,l:double;
   knot:TKnot;
   oldP,P:TzePoint3d;
 begin
   pThisEntity^.Representation.geometry.lock;
   try
+    pnd:=GetNETDataByType(FNetType);
     Result:=True;
     for i:=0 to FConnections.Count-1 do begin
       pc:=FConnections.getDataMutable(i);
@@ -685,8 +723,12 @@ begin
         else
           drawCross(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pThisEntity,DC);
       end;
-      if (pc^.Count>1)or((pc^.t>bigeps)and(pc^.t<(1-bigeps))) then
-        drawFilledCircle(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),ConnectSize/2,pThisEntity,DC);
+      if (pc^.Count>1)or((pc^.t>bigeps)and(pc^.t<(1-bigeps))) then begin
+        case pnd^.ConnectType of
+          KTFilledCircle:drawFilledCircle(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pnd^.ConnectRadius,pThisEntity,DC);
+          KTCircle:drawCircle(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pnd^.ConnectRadius,pThisEntity,DC);
+        end;
+      end;
     end;
     oldP:=PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin;
     if FKnots.Count>0 then begin

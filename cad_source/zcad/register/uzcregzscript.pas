@@ -1143,9 +1143,6 @@ begin
   end;
   ptsu^.RegisterType(TypeInfo(PCableDeviceBaseObject),'PCableDeviceBaseObject');
 
-  ptsu^.RegisterType(TypeInfo(TNetTypeHandle),'TNetTypeHandle');
-
-
   RegSysVars(ptsu);
 end;
 

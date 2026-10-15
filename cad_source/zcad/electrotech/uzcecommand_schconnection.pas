@@ -27,19 +27,30 @@ uses
   uzcstrconsts,
   uzccommandsmanager,
   uzeentity,
-  uzcExtdrSCHConnection,
+  uzcExtdrSCHConnection,uzcExtdrSCHConnector,
   uzccommand_line;
+
+const
+  cNTwireName='ELSCHConnection';
+
+var
+  NTwire:TNetTypeHandle;
+
 
 implementation
 
 function AddExtdrSCHConnection(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity):boolean;
+var
+  extdr:TSCHConnectionExtender;
 begin
   case AStage of
     ESSSuppressCommandParams:
       result:=true;
     ESSSetEntity:begin
       if APEnt<>nil then begin
-        AddSCHConnectionExtenderToEntity(APEnt);
+        extdr:=AddSCHConnectionExtenderToEntity(APEnt);
+        if extdr<>nil then
+          extdr.FNetType:=NTwire;
         result:=true;
       end else
         result:=False;
@@ -58,6 +69,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  NTwire:=RegisrterNETType(cNTwireName);
   CreateZCADCommand(@SCHConnection_com,'SCHConnection',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

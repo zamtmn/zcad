@@ -18,7 +18,7 @@
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONNECTION_NAME)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONNECTOR_TERMINAL)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONNECTOR_TERMINAL2)"/>
-          <ZTreeCommand Command="SCHConnection"/>
+          <ZTreeCommand Command="DrawSCHConnection"/>
         </ZTreeNode>
       </ZTreeNode>
     </BlockLib>

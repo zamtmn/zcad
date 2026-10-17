@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzcCommand_SCHConnection;
+unit uzcCommand_DrawSCHConnection;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -63,7 +63,7 @@ begin
   end;
 end;
 
-function SCHConnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DrawSCHConnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,AddExtdrSCHConnection,
     Pointer(NTwire));
@@ -72,7 +72,7 @@ end;
 initialization
   programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   NTwire:=RegisrterNETType(cNTwireName,TNetTypeData.CreateRec(0.5,0.5,KTArc,KTFilledCircle));
-  CreateZCADCommand(@SCHConnection_com,'SCHConnection',CADWG,0);
+  CreateZCADCommand(@DrawSCHConnection_com,'DrawSCHConnection',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

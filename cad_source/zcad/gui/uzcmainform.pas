@@ -1330,7 +1330,7 @@ begin
               drawings.GetCurrentDWG.wa.myKeyPress(tempkey,shift);
       end else if key=VK_ESCAPE then
         cmdedit.Text:='';
-      if tempkey<>0 then begin
+      {if tempkey<>0 then begin
         if (tempkey=VK_TAB)and(shift=[ssctrl,ssShift]) then begin
           if assigned(PageControl) then
             if PageControl.PageCount>1 then begin
@@ -1346,7 +1346,7 @@ begin
               tempkey:=0;
             end;
         end;
-      end;
+      end;}
       if assigned(cmdedit) then
         if tempkey<>0 then begin
           tempkey:=key;
@@ -1854,11 +1854,11 @@ begin
   end else if ((Key=VK_RETURN)or(Key=VK_SPACE))and(not waitinput) then begin
     commandmanager.executelastcommad(Sender.pdwg,@Sender.param);
     Key:=00;
-  end else if (Key=VK_V)and(shift=[ssctrl]) then begin
+  end {else if (Key=VK_V)and(shift=[ssctrl]) then begin
     commandmanager.executecommand(
       'PasteClip',Sender.pdwg,@Sender.param);
     key:=00;
-  end;
+  end};
 end;
 
 procedure TzcMainForm.wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);

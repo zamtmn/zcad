@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzceCommand_SCHConnection;
+unit uzcCommand_SCHConnection;
 
 {$INCLUDE zengineconfig.inc}
 

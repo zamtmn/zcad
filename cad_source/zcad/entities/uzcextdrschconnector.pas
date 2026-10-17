@@ -50,8 +50,8 @@ type
 const
   ConnectionExtenderName='extdrSCHConnector';
   NetDefaultData:TNetTypeData=(
-  IntersectRadius:0.5;
-  ConnectRadius:0.5;
+  IntersectRadius:0.05;
+  ConnectRadius:0.05;
   IntersectType:KTEmpty;
   ConnectType:KTFilledCircle;
   );

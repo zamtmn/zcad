@@ -39,7 +39,8 @@ var
 
 implementation
 
-function AddExtdrSCHConnection(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity):boolean;
+function AddExtdrSCHConnection(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity;
+  const ASD:TEntitySetupData):boolean;
 var
   extdr:TSCHConnectionExtender;
 begin
@@ -50,7 +51,7 @@ begin
       if APEnt<>nil then begin
         extdr:=AddSCHConnectionExtenderToEntity(APEnt);
         if extdr<>nil then
-          extdr.FNetType:=NTwire;
+          extdr.FNetType:=TNetTypeHandle(ASD);
         result:=true;
       end else
         result:=False;
@@ -64,7 +65,8 @@ end;
 
 function SCHConnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
- Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,AddExtdrSCHConnection);
+  Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,AddExtdrSCHConnection,
+    Pointer(NTwire));
 end;
 
 initialization

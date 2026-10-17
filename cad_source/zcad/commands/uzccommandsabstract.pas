@@ -50,14 +50,12 @@ const
 
 type
 
-  TEntitySetupStage=(ESSSuppressCommandParams,ESSSetConstructEntity,
-                     ESSSetEntity,ESSCommandEnd);
-
-  TEntitySetupProc=function(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity):boolean;
-
-  TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;
-                                     Point:TzePoint3d;Click:boolean;
-                                     ESP:TEntitySetupProc=nil);
+  TEntitySetupStage=(ESSSuppressCommandParams,ESSSetConstructEntity,ESSSetEntity,ESSCommandEnd);
+  TEntitySetupData=Pointer;
+  TEntitySetupProc=function(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity;
+    const AData:TEntitySetupData):boolean;
+  TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:TzePoint3d;Click:boolean;
+    ESP:TEntitySetupProc=nil);
   TGetInputPossible=(IPEmpty,//возможность пустого ввода
     IPShortCuts//разрешение перехвата шорткатов
     );

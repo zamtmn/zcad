@@ -45,7 +45,7 @@ begin
   result:=_3DPoly_com_CommandStart(Context,operands);
   p3dplESP:=@AddExtdrToRectangle;
   if assigned(p3dplESP) then
-    p3dplESP(ESSSuppressCommandParams,nil);
+    p3dplESP(ESSSuppressCommandParams,nil,nil);
 end;
 
 

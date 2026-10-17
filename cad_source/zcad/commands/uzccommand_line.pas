@@ -32,17 +32,17 @@ uses
   uzcutils;
 
 function InteractiveDrawLines(const Context:TZCADCommandContext;
-  APrompt1,APromptNext:string;ESP:TEntitySetupProc):TCommandResult;
+  APrompt1,APromptNext:string;ESP:TEntitySetupProc;ESD:TEntitySetupData):TCommandResult;
 
 implementation
 
 function InteractiveDrawLines(const Context:TZCADCommandContext;
-  APrompt1,APromptNext:string;ESP:TEntitySetupProc):TCommandResult;
+  APrompt1,APromptNext:string;ESP:TEntitySetupProc;ESD:TEntitySetupData):TCommandResult;
 var
   pline:PGDBObjLine;
   p1,p2:TzePoint3d;
 begin
-  if not (assigned(ESP) and ESP(ESSSuppressCommandParams,nil))then
+  if not (assigned(ESP) and ESP(ESSSuppressCommandParams,nil,ESD))then
     {тут можно настроить параметры команды};
 
   {запрос первой координаты}
@@ -61,7 +61,7 @@ begin
 
         //дополнительная настройка примитива
         if assigned(ESP) then
-          ESP(ESSSetEntity,pline);
+          ESP(ESSSetEntity,pline,ESD);
 
         //добавляем в чертеж
         zcAddEntToCurrentDrawingWithUndo(pline);
@@ -73,15 +73,14 @@ begin
       end else
         break;
   if assigned(ESP) then
-    ESP(ESSCommandEnd,nil);
+    ESP(ESSCommandEnd,nil,ESD);
   Result:=cmd_ok;
 end;
 
 
-function DrawLine_com(const Context:TZCADCommandContext;
-  operands:TCommandOperands):TCommandResult;
+function DrawLine_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,nil);
+  Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,nil,nil);
 end;
 
 initialization

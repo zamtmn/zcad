@@ -121,27 +121,27 @@ type
   PRotateManipulatorData=^TRotateManipulatorData;
 
 procedure InteractiveLineEndManipulator(const PInteractiveData:PGDBObjLine;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveADimManipulator(const PInteractiveData:PGDBObjAlignedDimension;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveRDimManipulator(const PInteractiveData:PGDBObjRotatedDimension;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveDDimManipulator(const PInteractiveData:pgdbObjDiametricDimension;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveArcManipulator(const PInteractiveData:PT3PointPentity;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveSmartCircleManipulator(const PInteractiveData:PT3PointCircleModePentity;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveLWRectangleManipulator(const PInteractiveData:PGDBObjLWPolyline;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveRectangleManipulator(const PInteractiveData:PGDBObjPolyline;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractivePolygonManipulator(const PInteractiveData:TPointPolygonDrawModePentity;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveConstructRootToPtManipulator(const PInteractiveData:Pointer;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 procedure InteractiveConstructRootRotateManipulator(const PInteractiveData:PRotateManipulatorData;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 
 implementation
 
@@ -151,7 +151,7 @@ implementation
   later to be moved to a separate unit }
 
 procedure InteractiveConstructRootRotateManipulator(const PInteractiveData:PRotateManipulatorData;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
  var
   ir:itrec;
   p:PGDBObjEntity;
@@ -215,7 +215,7 @@ end;
 
 {Процедура интерактивного "перемещения" конструкторской области}
 procedure InteractiveConstructRootToPtManipulator(const PInteractiveData:Pointer;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   ir:itrec;
   p:PGDBObjEntity;
@@ -242,7 +242,7 @@ end;
 {Procedure interactive changes end of the line}
 {Процедура интерактивного изменения конца линии}
 procedure InteractiveLineEndManipulator(const PInteractiveData:PGDBObjLine;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   ln:PGDBObjLine absolute PInteractiveData;
   dc:TDrawContext;
@@ -265,7 +265,7 @@ end;
 {Procedure interactive changes third point of aligned dimensions}
 {Процедура интерактивного изменения третьей точки выровненного размера}
 procedure InteractiveADimManipulator(const PInteractiveData:PGDBObjAlignedDimension;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   ad:PGDBObjAlignedDimension absolute PInteractiveData;
   dc:TDrawContext;
@@ -326,7 +326,7 @@ begin
 end;
 
 procedure InteractiveRDimManipulator(const PInteractiveData:PGDBObjRotatedDimension;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   rd:PGDBObjRotatedDimension absolute PInteractiveData;
   dc:TDrawContext;
@@ -355,7 +355,7 @@ begin
 end;
 
 procedure InteractiveDDimManipulator(const PInteractiveData:pgdbObjDiametricDimension;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   dd:pgdbObjDiametricDimension absolute PInteractiveData;
   dc:TDrawContext;
@@ -371,7 +371,7 @@ begin
 end;
 
 procedure InteractiveArcManipulator(const PInteractiveData:PT3PointPentity;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   PointData:TArcrtModify;
   ad:TArcData;
@@ -402,9 +402,8 @@ begin
   end;
 end;
 
-procedure InteractiveSmartCircleManipulator(
-  const PInteractiveData:PT3PointCircleModePentity;Point:TzePoint3d;
-  Click:boolean;ESP:TEntitySetupProc=nil);
+procedure InteractiveSmartCircleManipulator(const PInteractiveData:PT3PointCircleModePentity;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   PointData:tarcrtmodify;
   ad:TArcData;
@@ -473,7 +472,7 @@ begin
 end;
 
 procedure InteractiveLWRectangleManipulator(const PInteractiveData:PGDBObjLWPolyline;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   polyLWObj:PGDBObjLWPolyline absolute PInteractiveData;
   stPoint:TzePoint2d;
@@ -498,7 +497,7 @@ end;
 
 
 procedure InteractiveRectangleManipulator(const PInteractiveData:PGDBObjPolyline;
-  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   polyObj:PGDBObjPolyline absolute PInteractiveData;
   stPoint:TzePoint3d;
@@ -524,14 +523,14 @@ begin
   end;
 
   if ESP<>nil then
-    ESP(ESSSetConstructEntity,polyObj);
+    ESP(ESSSetConstructEntity,polyObj,ESD);
 
   polyObj^.YouChanged(drawings.GetCurrentDWG^);
 end;
 
 procedure InteractivePolygonManipulator(
   const PInteractiveData:TPointPolygonDrawModePentity;Point:TzePoint3d;
-  Click:boolean;ESP:TEntitySetupProc=nil);
+  Click:boolean;ESP:TEntitySetupProc=nil;ESD:TEntitySetupData=nil);
 var
   obj:TPointPolygonDrawModePentity absolute PInteractiveData;
   stPoint:TzePoint3d;

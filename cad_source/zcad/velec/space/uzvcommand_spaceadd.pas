@@ -45,12 +45,8 @@ uses
   uzvcommand_spaceutils;  // Space utilities with shared structures / Утилиты для команд пространств
 
 
-function AddExtdrToRectangle(
-  const AStage: TEntitySetupStage;
-  const APEnt: PGDBObjEntity): boolean;
-
-
-
+function AddExtdrToRectangle(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity;
+  const AESD:TEntitySetupData):boolean;
 
 implementation
 
@@ -59,9 +55,8 @@ implementation
    @param(AStage - стадия настройки примитива)
    @param(APEnt - указатель на примитив)
    @return(true если обработка успешна)}
-function AddExtdrToRectangle(
-  const AStage: TEntitySetupStage;
-  const APEnt: PGDBObjEntity): boolean;
+function AddExtdrToRectangle(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity;
+  const AESD:TEntitySetupData):boolean;
 var
   pLayer: PGDBLayerProp;
 begin
@@ -171,7 +166,8 @@ begin
     Context,
     rscmSpecifyFirstPoint,
     rscmSpecifySecondPoint,
-    AddExtdrToRectangle
+    @AddExtdrToRectangle,
+    nil
   );
 end;
 

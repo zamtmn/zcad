@@ -49,7 +49,7 @@ type
   end;
 
 function InteractiveDrawRectangle(const Context:TZCADCommandContext;
-  APrompt1,APrompt2:string;ESP:TEntitySetupProc):TCommandResult;
+  APrompt1,APrompt2:string;ESP:TEntitySetupProc;ESD:TEntitySetupData):TCommandResult;
 
 implementation
 
@@ -58,7 +58,7 @@ var
   //**< Переменная содержащая опции команды Rectangle
 
 function InteractiveDrawRectangle(const Context:TZCADCommandContext;
-  APrompt1,APrompt2:string;ESP:TEntitySetupProc):TCommandResult;    //< Чертим прямоугольник
+  APrompt1,APrompt2:string;ESP:TEntitySetupProc;ESD:TEntitySetupData):TCommandResult;    //< Чертим прямоугольник
 var
   vertexLWObj:TzePoint2d;
   //переменная для добавления вершин в полилинию
@@ -74,7 +74,7 @@ var
   //**< Управление нашей панелью в инспекторе
   CommandParamsShowed:boolean;
 begin
-  if not (assigned(ESP) and ESP(ESSSuppressCommandParams,nil))then begin
+  if not (assigned(ESP) and ESP(ESSSuppressCommandParams,nil,ESD))then begin
     PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TRectangParam'));
     //находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
     pf:=PInternalRTTITypeDesk^.FindField('ET');
@@ -128,7 +128,7 @@ begin
       if commandmanager.Get3DPointInteractive(APrompt2,pe.p2,
            @InteractiveLWRectangleManipulator,polyLWObj,ESP)=IRNormal then begin
         if assigned(ESP) then
-          ESP(ESSSetEntity,polyLWObj);
+          ESP(ESSSetEntity,polyLWObj,ESD);
         zcAddEntToCurrentDrawingWithUndo(polyLWObj);
         //Добавить объект из конструкторской области в чертеж через ундо//
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
@@ -150,7 +150,7 @@ begin
       if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,
          @InteractiveRectangleManipulator,polyObj,ESP)=IRNormal then begin
            if assigned(ESP) then
-             ESP(ESSSetEntity,polyObj);
+             ESP(ESSSetEntity,polyObj,ESD);
            zcAddEntToCurrentDrawingWithUndo(polyObj);
            //Добавить объект из конструкторской области в чертеж через ундо//
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
@@ -165,14 +165,13 @@ begin
   if CommandParamsShowed then
     zcHideCommandParams;
   if assigned(ESP) then
-    ESP(ESSCommandEnd,polyObj);
+    ESP(ESSCommandEnd,polyObj,ESD);
   Result:=cmd_ok;
 end;
 
-function DrawRectangle_com(const Context:TZCADCommandContext;
-  operands:TCommandOperands):TCommandResult;
+function DrawRectangle_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  Result:=InteractiveDrawRectangle(Context,rscmSpecifyFirstPoint,rscmSpecifySecondPoint,nil);
+  Result:=InteractiveDrawRectangle(Context,rscmSpecifyFirstPoint,rscmSpecifySecondPoint,nil,nil);
 end;
 
 initialization

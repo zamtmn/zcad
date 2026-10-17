@@ -1,0 +1,12 @@
+
+#### DWGNext
+
+:cmdcommand: DWGNext
+:cmdshortcuts: kbd:[Ctrl+Tab]
+:cmdmenu: Окно > Следующее окно
+
+include::../../_elements/commandsummary.adoc[]
+
+Если в программе открыто несколько чертежей текущим становится следующий открытый чертеж
+
+include::commandsummaryfree.adoc[]

@@ -26,9 +26,8 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzcstrconsts,
   uzccommandsmanager,
-  uzeentity,
-  uzcExtdrSCHConnection,uzcExtdrSCHConnector,
-  uzccommand_line;
+  uzcExtdrSCHConnector,
+  uzccommand_line,uzcComSCHConnection;
 
 const
   cNTwireName='ELSCHConnection';
@@ -38,30 +37,6 @@ var
 
 
 implementation
-
-function AddExtdrSCHConnection(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity;
-  const ASD:TEntitySetupData):boolean;
-var
-  extdr:TSCHConnectionExtender;
-begin
-  case AStage of
-    ESSSuppressCommandParams:
-      result:=true;
-    ESSSetEntity:begin
-      if APEnt<>nil then begin
-        extdr:=AddSCHConnectionExtenderToEntity(APEnt);
-        if extdr<>nil then
-          extdr.FNetType:=TNetTypeHandle(ASD);
-        result:=true;
-      end else
-        result:=False;
-      end;
-    ESSSetConstructEntity:
-      result:=False;
-    ESSCommandEnd:
-      result:=False;
-  end;
-end;
 
 function DrawSCHConnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin

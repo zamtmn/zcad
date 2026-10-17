@@ -335,7 +335,7 @@ uses
   uzcCommand_PlaceSmokeDetectorOrto,uzcCommand_OrtoDevPlace,uzcCommand_OPSSPBuild,
   uzcCommand_OPSSensorMark,
   //uzccommaps,
-  uzcCommand_DrawSCHConnection,
+  uzcCommand_DrawSCHConnection,uzcCommand_DrawCableManagmentConnection,
   {$ENDIF}
   uzcMainForm,
   uzcuidialogs,

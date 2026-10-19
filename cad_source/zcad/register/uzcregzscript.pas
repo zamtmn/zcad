@@ -38,7 +38,7 @@ uses
   uzcSysParams,
   uzcdevicebaseabstract,uzcdevicebase,uzcRegSysVars,Graphics,
   URecordDescriptor,uzcTypeDescriprors,uzcTypes,uzcgui2arrows,uzObjectInspectorManager,
-  uzcExtdrSCHConnector;
+  uzcExtdrSCHConnector,UGDBGraf;
 
 implementation
 
@@ -1142,6 +1142,8 @@ begin
     otd^.AddMetod('','initnul','',@CableDeviceBaseObject.initnul,[mm_constructor]);
   end;
   ptsu^.RegisterType(TypeInfo(PCableDeviceBaseObject),'PCableDeviceBaseObject');
+
+  ptsu^.RegisterType(TypeInfo(TLinkType),'TLinkType');
 
   RegSysVars(ptsu);
 end;

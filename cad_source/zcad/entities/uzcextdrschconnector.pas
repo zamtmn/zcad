@@ -36,14 +36,17 @@ uses
   gzctnrVector;
 
 type
-  TKnotType=(KTNormal,KTEmpty,KTArc,KTCircle,KTFilledCircle);
+  TKnotType=(KTEmpty,KTArc,KTNormal,KTCircle,KTFilledCircle);
+  TIntersectKnotType=KTEmpty..KTNormal;
+  TJoinKnotType=KTNormal..KTFilledCircle;
   TNetTypeData=record
     IntersectRadius:Double;
     ConnectRadius:Double;
     IntersectType:TKnotType;
-    ConnectType:TKnotType;
-    constructor CreateRec(const AIntersectRadius,AConnectSize:Double;const AIntersectType:TKnotType;
-      const AConnectType:TKnotType);
+    TConnectType:TKnotType;
+    LConnectType:TKnotType;
+    constructor CreateRec(const AIntersectRadius,AConnectSize:Double;
+      const AIntersectType:TIntersectKnotType;const ATConnectType,ALConnectType:TJoinKnotType);
   end;
   PNetTypeData=^TNetTypeData;
 
@@ -53,7 +56,7 @@ const
   IntersectRadius:0.05;
   ConnectRadius:0.05;
   IntersectType:KTEmpty;
-  ConnectType:KTFilledCircle;
+  TConnectType:KTFilledCircle;
   );
 
 
@@ -170,12 +173,13 @@ var
   NetTypeHandles:TNetTypeHandles;
 
 constructor TNetTypeData.CreateRec(const AIntersectRadius,AConnectSize:Double;
-  const AIntersectType:TKnotType;const AConnectType:TKnotType);
+      const AIntersectType:TIntersectKnotType;const ATConnectType,ALConnectType:TJoinKnotType);
 begin
   IntersectRadius:=AIntersectRadius;
   ConnectRadius:=AConnectSize;
   IntersectType:=AIntersectType;
-  ConnectType:=AConnectType;
+  TConnectType:=ATConnectType;
+  LConnectType:=ALConnectType;
 end;
 
 function RegisrterNETType(const AName:TNetTypeName;const ANetTypeData:TNetTypeData):TNetTypeHandle;

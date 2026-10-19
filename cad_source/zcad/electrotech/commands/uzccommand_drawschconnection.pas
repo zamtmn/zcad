@@ -46,7 +46,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  NTwire:=RegisrterNETType(cNTwireName,TNetTypeData.CreateRec(0.5,0.5,KTArc,KTFilledCircle));
+  NTwire:=RegisrterNETType(cNTwireName,TNetTypeData.CreateRec(0.5,0.5,KTArc,KTFilledCircle,KTNormal));
   CreateZCADCommand(@DrawSCHConnection_com,'DrawSCHConnection',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

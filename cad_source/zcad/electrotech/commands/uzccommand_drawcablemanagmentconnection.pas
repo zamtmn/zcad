@@ -46,7 +46,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr(clUInit,[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  NTCableManagment:=RegisrterNETType(cNTCableManagmentName,TNetTypeData.CreateRec(0.5,0.5,KTEmpty,KTCircle));
+  NTCableManagment:=RegisrterNETType(cNTCableManagmentName,TNetTypeData.CreateRec(0.5,0.5,KTEmpty,KTCircle,KTCircle));
   CreateZCADCommand(@DrawCableManagmentConnection_com,'DrawCableManagmentConnection',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr(clUFin,[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

@@ -35,8 +35,6 @@ uses
 
 const
   ConnectionExtenderName='extdrSCHConnection';
-  //IntersectRadius=0.5;
-  //ConnectSize=1;
 
 type
   TKnot=record
@@ -724,7 +722,12 @@ begin
           drawCross(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pThisEntity,DC);
       end;
       if (pc^.Count>1)or((pc^.t>bigeps)and(pc^.t<(1-bigeps))) then begin
-        case pnd^.ConnectType of
+        case pnd^.TConnectType of
+          KTFilledCircle:drawFilledCircle(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pnd^.ConnectRadius,pThisEntity,DC);
+          KTCircle:drawCircle(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pnd^.ConnectRadius,pThisEntity,DC);
+        end;
+      end else begin
+        case pnd^.LConnectType of
           KTFilledCircle:drawFilledCircle(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pnd^.ConnectRadius,pThisEntity,DC);
           KTCircle:drawCircle(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin.LerpTo(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pnd^.ConnectRadius,pThisEntity,DC);
         end;

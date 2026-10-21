@@ -1,0 +1,23 @@
+; Icon aliases for navigator
+; alias=filename
+
+;navautogroup - grouping by basename
+navautogroup=navgroup
+
+;navmanualgroup - grouping devices with same name
+navmanualgroup=navgroup
+
+; !!!NOIMAGE - "filename" for default "?" icon
+; it is possible to omit
+;OBJT_Unknown=!!!NOIMAGE
+OBJT_Unknown=dxf
+
+OBJT_Devices_OnPlans=onplan.png
+OBJT_Devices_OnDiagrams_PIDDiagram=ondiagram.png
+
+;functions (ENTID_Function variable)
+Electrotechnics~Alarm~Fire~Detectors~Smoke~Spot=DEVICE_PS_DAT_SMOKE.png
+
+;functions (ENTID_Representation variable)
+GraphSymbol~onPlan=onplan.png
+GraphSymbol~onScheme~Connection=ondiagram.png

@@ -424,6 +424,7 @@ procedure TSCHConnectorExtender.Assign(Source:TBaseExtender);
 begin
   FConnectorRadius:=TSCHConnectorExtender(Source).FConnectorRadius;
   FConnectorType:=TSCHConnectorExtender(Source).FConnectorType;
+  FNetType:=TSCHConnectorExtender(Source).FNetType;
 end;
 
 
@@ -610,6 +611,7 @@ initialization
   EntityExtenders.RegisterKey(uppercase(ConnectionExtenderName),TSCHConnectorExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorRadius',TSCHConnectorExtender.EntIOLoadNetConnectorRadius);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorType',TSCHConnectorExtender.EntIOLoadNetConnectorSetter);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHNetType',TSCHConnectorExtender.EntIOLoadNetConnectorNETType);
 
 finalization
   NetTypeHandles.done;

@@ -593,6 +593,7 @@ begin
     ptype:=sysunit^.TypeName2PTD('TConnectorType');
     if ptype=nil then begin
       ptype:=SysUnit^.RegisterType(TypeInfo(TConnectorType),'TConnectorType');
+      SysUnit^.SetTypeDesk2(ptype,['CTInfo','CTPin','CTSetter'],[FNUser,FNProgram]);
     end;
     ptype:=sysunit^.TypeName2PTD('TNetTypeHandle');
     if ptype=nil then begin
@@ -603,7 +604,7 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECT_NetType','Net type',sysunit^.TypeName2PTD('TNetTypeHandle'),MPCExtenders,0,TSCHConnectionExtender,PtrInt(@NetConnectionExtender.FNetType),PtrInt(@NetConnectionExtender.FNetType),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECT_NetType','Net type',sysunit^.TypeName2PTD('TNetTypeHandle'),MPCExtenders,0,TSCHConnectorExtender,PtrInt(@NetConnectorExtender.FNetType),PtrInt(@NetConnectorExtender.FNetType),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECT_ConnectorRadius','Connector radius',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TSCHConnectorExtender,PtrInt(@NetConnectorExtender.FConnectorRadius),PtrInt(@NetConnectorExtender.FConnectorRadius),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECT_ConnectorType','Connector type',ptype,MPCExtenders,0,TSCHConnectorExtender,PtrInt(@NetConnectorExtender.FConnectorType),PtrInt(@NetConnectorExtender.FConnectorType),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECT_ConnectorType','Connector type',sysunit^.TypeName2PTD('TConnectorType'),MPCExtenders,0,TSCHConnectorExtender,PtrInt(@NetConnectorExtender.FConnectorType),PtrInt(@NetConnectorExtender.FConnectorType),OneVarDataMIPD,OneVarDataEIPD);
 
 
     {General section}

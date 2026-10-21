@@ -1,0 +1,4 @@
+cfgAddSupportPath($(CurrentMacrosPath))
+cfgAddSupportPath($(CurrentMacrosPath)$(DirectorySeparator)rtl)
+cfgAddSupportPath($(CurrentMacrosPath)$(DirectorySeparator)rtl$(DirectorySeparator)include)
+LoadPalettes($(CurrentMacrosPath)$(DirectorySeparator)cablemanagment.xml)

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <PalettesContent>
+    <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
+      <ZTreeNode Caption='Cable managment'>
+        <ZTreeNode Caption='Unsorted'>
+          <ZTreeCommand Command="Insert(DEVICE_CM_2WAY)"/>
+          <ZTreeCommand Command="DrawCableManagmentConnection"/>
+        </ZTreeNode>
+      </ZTreeNode>
+    </BlockLib>
+  </PalettesContent>
+</CONFIG>

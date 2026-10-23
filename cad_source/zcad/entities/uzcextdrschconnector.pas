@@ -602,7 +602,7 @@ begin
       CTPin:dxfStringWithoutEncodeOut(outStream,1000,'SCHConnectorType=CTPin');
       CTSetter:dxfStringWithoutEncodeOut(outStream,1000,'SCHConnectorType=CTSetter');
     end;
-  dxfStringout(outStream,1000,'SCHNetType=',GetNETNameByType(FNetType));
+  dxfStringout(outStream,1000,'SCHConnectorNetType=',GetNETNameByType(FNetType));
 end;
 
 initialization
@@ -611,7 +611,7 @@ initialization
   EntityExtenders.RegisterKey(uppercase(ConnectionExtenderName),TSCHConnectorExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorRadius',TSCHConnectorExtender.EntIOLoadNetConnectorRadius);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorType',TSCHConnectorExtender.EntIOLoadNetConnectorSetter);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHNetType',TSCHConnectorExtender.EntIOLoadNetConnectorNETType);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorNetType',TSCHConnectorExtender.EntIOLoadNetConnectorNETType);
 
 finalization
   NetTypeHandles.done;

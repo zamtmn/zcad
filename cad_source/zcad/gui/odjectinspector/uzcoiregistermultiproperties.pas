@@ -590,16 +590,6 @@ begin
     RegisterVarCategory('EXTDRREPORT','Report',@InterfaceTranslate);
     MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRREPORT_Scriptname','Script name',sysunit^.TypeName2PTD('AnsiString'),MPCExtenders,0,TReportExtender,PtrInt(@ReportExtender.fScriptName),PtrInt(@ReportExtender.fScriptName),OneVarDataMIPD,OneVarDataEIPD);
 
-    ptype:=sysunit^.TypeName2PTD('TConnectorType');
-    if ptype=nil then begin
-      ptype:=SysUnit^.RegisterType(TypeInfo(TConnectorType),'TConnectorType');
-      SysUnit^.SetTypeDesk2(ptype,['CTInfo','CTPin','CTSetter'],[FNUser,FNProgram]);
-    end;
-    ptype:=sysunit^.TypeName2PTD('TNetTypeHandle');
-    if ptype=nil then begin
-      ptype:=SysUnit^.RegisterType(TypeInfo(TNetTypeHandle),'TNetTypeHandle');
-    end;
-
     RegisterVarCategory('EXTDRNETCONNECT','Connect control',@InterfaceTranslate);
     MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECT_NetType','Net type',sysunit^.TypeName2PTD('TNetTypeHandle'),MPCExtenders,0,TSCHConnectionExtender,PtrInt(@NetConnectionExtender.FNetType),PtrInt(@NetConnectionExtender.FNetType),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECT_NetType','Net type',sysunit^.TypeName2PTD('TNetTypeHandle'),MPCExtenders,0,TSCHConnectorExtender,PtrInt(@NetConnectorExtender.FNetType),PtrInt(@NetConnectorExtender.FNetType),OneVarDataMIPD,OneVarDataEIPD);

@@ -64,6 +64,7 @@ type
 
   TNet=class;
   TNetTypeHandle=Integer;
+  PNetTypeHandle=^TNetTypeHandle;
   TNetTypeName=AnsiString;
 
   TNetTypeHandles=GTNamedHandlesWithData<TNetTypeHandle,GTLinearIncHandleManipulator<TNetTypeHandle>,
@@ -157,6 +158,8 @@ function RegisrterNETType(const AName:TNetTypeName;const ANetTypeData:TNetTypeDa
 function GetNETNameByType(const AHandle:TNetTypeHandle):TNetTypeName;
 function GetTypeByNETName(const AName:TNetTypeName):TNetTypeHandle;
 function GetNETDataByType(const AHandle:TNetTypeHandle):TNetTypeHandles.PGLincedData;
+function GetMinNETTypeHandle:TNetTypeHandle;
+function GetMaxNETTypeHandle:TNetTypeHandle;
 
 
 implementation
@@ -185,6 +188,14 @@ end;
 function RegisrterNETType(const AName:TNetTypeName;const ANetTypeData:TNetTypeData):TNetTypeHandle;
 begin
   result:=NetTypeHandles.CreateOrGetHandleAndSetData(AName,ANetTypeData);
+end;
+function GetMinNETTypeHandle:TNetTypeHandle;
+begin
+  result:=0;
+end;
+function GetMaxNETTypeHandle:TNetTypeHandle;
+begin
+  result:=NetTypeHandles.HandleDataVector.Size;
 end;
 function GetNETNameByType(const AHandle:TNetTypeHandle):TNetTypeName;
 var

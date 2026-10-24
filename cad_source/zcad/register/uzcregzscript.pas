@@ -1145,6 +1145,11 @@ begin
 
   ptsu^.RegisterType(TypeInfo(TLinkType),'TLinkType');
 
+  utd:=ptsu^.RegisterType(TypeInfo(TConnectorType),'TConnectorType');
+  ptsu^.SetTypeDesk2(utd,['CTInfo','CTPin','CTSetter'],[FNUser,FNProgram]);
+
+  utd:=ptsu^.RegisterType(TypeInfo(TNetTypeHandle),'TNetTypeHandle');
+
   RegSysVars(ptsu);
 end;
 

@@ -272,6 +272,15 @@ begin
             ppin:=Net.Pins.iterate(eir);
           until ppin=nil;
 
+        ppin:=Net.Infos.beginiterate(eir);
+        if ppin<>nil then
+          repeat
+            PVExtdr:=ppin.pThisEntity^.GetExtension<TVariablesExtender>;
+            PVExtdr.addConnected(SVExtdr);
+            ppin:=Net.Infos.iterate(eir);
+          until ppin=nil;
+
+
         setter:=Net.Setters.iterate(ir);
       until setter=nil;
   end;

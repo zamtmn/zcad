@@ -5,6 +5,7 @@
       <ZTreeNode Caption='Cable managment'>
         <ZTreeNode Caption='Unsorted'>
           <ZTreeCommand Command="Insert(DEVICE_CM_2WAY)"/>
+          <ZTreeCommand Command="Insert(DEVICE_CM_SETTER_TERMINAL)"/>
           <ZTreeCommand Command="DrawCableManagmentConnection"/>
         </ZTreeNode>
       </ZTreeNode>

@@ -104,6 +104,7 @@ type
     procedure RemoveConnection(Extdr:TBaseSCHConnectExtender);
     procedure AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
 
+    property Infos:TConnectExtendersVector read FInfos;
     property Setters:TConnectExtendersVector read FSetters;
     property Pins:TConnectExtendersVector read FPins;
   end;
@@ -379,6 +380,15 @@ begin
       PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p.pThisEntity);
 
       p:=FPins.iterate(ir);
+    until p=nil;
+
+  p:=FInfos.beginiterate(ir);
+  if p<>nil then
+    repeat
+      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p.pThisEntity);
+      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p.pThisEntity);
+
+      p:=FInfos.iterate(ir);
     until p=nil;
 end;
 

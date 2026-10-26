@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <STRINGTREE>
+    <Instruction Desc="Instruction">
+    </Instruction>
     <Connections Desc="Connections">
       <Electrotechnics Desc="Electrotechnics">
         <Power Desc="Power">
@@ -9,6 +11,15 @@
         </Control>
       </Electrotechnics>
     </Connections>
+    <Mechanics Desc="Mechanics">
+      <Cable_management_system Desc="Cable management systems">
+        <Cable_trays Desc="Cable trays">
+          <Tray Desc="Tray"/>
+          <Cover Desc="Cover"/>
+          <Fittings Desc="Fittings"/>
+        </Cable_trays>
+      </Cable_management_system>
+    </Mechanics>
     <Electrotechnics Desc="Electrotechnics">
       <Power_consumer Desc="Power consumers">
         <Heating Desc="Heating">

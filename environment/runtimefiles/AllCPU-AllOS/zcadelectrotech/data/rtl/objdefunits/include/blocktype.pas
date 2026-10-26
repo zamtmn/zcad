@@ -8,8 +8,6 @@ var
    Device_Group:TDeviceGroup;(*'Группа устройства'*) 
    BTY_TreeCoord:String;(*'Позиция в дереве'*)
    ENTID_Type:TENTID;(*'Object type'*)
-   ENTID_Representation:TEentityRepresentation;(*'Representation'*)
-   ENTID_Function:TEentityFunction;(*'Function'*)
 implementation
 begin
    BTY_TreeCoord:='';

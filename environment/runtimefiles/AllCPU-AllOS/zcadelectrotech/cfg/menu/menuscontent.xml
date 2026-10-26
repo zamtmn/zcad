@@ -17,6 +17,10 @@
         <Action Name="ACN_CLOSE"/>
       </IFONE>
       <Separator/>
+      <SubMenu Name="Utilites">
+        <Action Name="ACN_LOADLIBRARY"/>
+      </SubMenu>
+      <Separator/>
       <FileHistory/>
       <Separator/>
       <Action Name="ACN_QUIT"/>

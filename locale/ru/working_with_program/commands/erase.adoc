@@ -1,0 +1,14 @@
+
+#### Erase
+
+:cmdcommand: Erase
+:cmdshortcuts: kbd:[Del]
+:cmdicon: ../../../../images/actions/erase.png
+:predselect: Требуется
+:cmdmenu: Правка > Стереть
+
+include::../../_elements/commandsummary.adoc[]
+
+Стирает выбранные примитивы на чертеже
+
+include::commandsummaryfree.adoc[]

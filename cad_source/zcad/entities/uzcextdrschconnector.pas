@@ -314,7 +314,7 @@ end;
 
 function TNet.IsEmpty:boolean;
 begin
-  Result:=(FConnections.GetCount=0)and(FSetters.GetCount=0)and(FPins.GetCount=0);
+  Result:=(FConnections.GetCount=0)and(FSetters.GetCount=0)and(FPins.GetCount=0)and(FInfos.GetCount=0);
 end;
 
 procedure TNet.ConsumeNet(Net:TNet);

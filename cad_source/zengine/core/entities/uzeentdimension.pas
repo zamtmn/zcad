@@ -529,7 +529,8 @@ var
   i:integer;
   str:TDXFEntsInternalStringType;
 begin
-  l:=l*PDimStyle.Units.DIMLFAC;
+  if PDimStyle.Units.DIMLFAC>0 then
+    l:=l*PDimStyle.Units.DIMLFAC;
   if PDimStyle.Units.DIMRND<>0 then begin
     n:=l/PDimStyle.Units.DIMRND;
     l:=round(n)*PDimStyle.Units.DIMRND;

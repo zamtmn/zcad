@@ -604,6 +604,25 @@ begin
     CopyBlock(BlockBaseDWG,PTSimpleDrawing(_to),td);
   end;
 end;
+
+function createtstylebyindex(_from,_to:PTSimpleDrawing;PTStyle:PGDBTextStyle):PGDBTextStyle;
+var
+  TSName,FontName:string;
+begin
+  if PTStyle=nil then
+    exit(nil);
+  TSName:=PTStyle^.Name;
+  Result:=_to.TextStyleTable.FindStyle(TSName,PTStyle^.UsedInLTYPE);
+  if Result=nil then begin
+    if PTStyle.pfont<>nil then
+      FontName:=PTStyle.pfont.Name
+    else
+      FontName:='';
+    Result:=_to.TextStyleTable.addstyle(PTStyle.Name,FontName,PTStyle.FontFamily,PTStyle.prop,PTStyle.UsedInLTYPE);
+    Result^:=PTStyle^;
+  end;
+end;
+
 function RemapLStyle2(_from,_to:PTSimpleDrawing;_source:PGDBLtypeProp):PGDBLtypeProp;
 var
   ir:itrec;
@@ -616,17 +635,19 @@ begin
   psp:=_source.shapearray.beginiterate(ir);
   if psp<>nil then
   repeat
-        if psp^.param.PStyle.pfont<>nil then
+        createtstylebyindex(_from,_to,psp^.param.PStyle);
+        {if psp^.param.PStyle.pfont<>nil then
           fn:=psp^.param.PStyle.pfont.Name
         else
           fn:='';
-        _to.TextStyleTable.addstyle(psp^.param.PStyle.name,fn,psp^.param.PStyle.FontFamily,psp^.param.PStyle.prop,psp^.param.PStyle.UsedInLTYPE);
+        _to.TextStyleTable.addstyle(psp^.param.PStyle.name,fn,psp^.param.PStyle.FontFamily,psp^.param.PStyle.prop,psp^.param.PStyle.UsedInLTYPE);}
         psp:=_source.shapearray.iterate(ir);
   until psp=nil;
   ptp:=_source.textarray.beginiterate(ir);
   if ptp<>nil then
   repeat
-        _to.TextStyleTable.addstyle(ptp^.param.PStyle.name,ptp^.param.PStyle.pfont.Name,ptp^.param.PStyle.FontFamily,ptp^.param.PStyle.prop,ptp^.param.PStyle.UsedInLTYPE);
+        createtstylebyindex(_from,_to,ptp^.param.PStyle);
+        //_to.TextStyleTable.addstyle(ptp^.param.PStyle.name,ptp^.param.PStyle.pfont.Name,ptp^.param.PStyle.FontFamily,ptp^.param.PStyle.prop,ptp^.param.PStyle.UsedInLTYPE);
         ptp:=_source.textarray.iterate(ir);
   until ptp=nil;
   result:=_to.LTypeStyleTable.createltypeifneed(_source,_to.TextStyleTable);
@@ -653,27 +674,6 @@ begin
     end;
 end;
 
-function createtstylebyindex(_from,_to:PTSimpleDrawing;oldti:{TArrayIndex}PGDBTextStyle):PGDBTextStyle;
-var
-   //{_dest,}td:PGDBObjBlockdef;
-   newti:{TArrayIndex}PGDBTextStyle;
-   tsname:String;
-   poldstyle,pnevstyle:PGDBTextStyle;
-   //ir:itrec;
-   //{pvisible,}pvisible2:PGDBObjEntity;
-   //pl:PGDBLayerProp;
-begin
-                    poldstyle:=oldti{PGDBTextStyle(_from.TextStyleTable.getDataMutable(oldti))};
-                    tsname:=poldstyle^.name;
-                    newti:=_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE);
-                    if newti{<0}=nil then
-                                   begin
-                                        newti:=_to.TextStyleTable.addstyle(poldstyle.name,poldstyle.pfont.Name,poldstyle.FontFamily,poldstyle.prop,poldstyle.UsedInLTYPE);
-                                        pnevstyle:=PGDBTextStyle({_to.TextStyleTable.getDataMutable}(newti));
-                                        pnevstyle^:=poldstyle^;
-                                   end;
-      result:={_to.TextStyleTable.getDataMutable}(_to.TextStyleTable.FindStyle(tsname,poldstyle^.UsedInLTYPE));
-end;
 procedure createtstyleifneed(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 //var
    //{_dest,}td:PGDBObjBlockdef;

@@ -453,7 +453,10 @@ begin
                              sp:=psp^;
                              //i:=_DestTextStyleTable.FindStyle(sp.param.PStyle^.name,sp.param.PStyle^.UsedInLTYPE);
                              sp.param.PStyle:=_DestTextStyleTable.FindStyle(sp.param.PStyle^.name,sp.param.PStyle^.UsedInLTYPE);//_DestTextStyleTable.getelement(i);
-                             sp.Psymbol:=sp.param.PStyle.pfont.GetOrCreateSymbolInfo(sp.Psymbol.Number);
+                             if sp.param.PStyle.pfont<>nil then
+                               sp.Psymbol:=sp.param.PStyle.pfont.GetOrCreateSymbolInfo(sp.Psymbol.Number)
+                             else
+                               sp.Psymbol:=nil;
                              result.shapearray.PushBackData(sp);
                              pointer(sp.SymbolName):=nil;
                              pointer(sp.FontName):=nil;

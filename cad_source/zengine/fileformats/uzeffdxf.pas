@@ -800,7 +800,10 @@ begin
              41:tstyle.prop.wfactor:=rdr.ParseDouble;
              50:tstyle.prop.oblique:=rdr.ParseDouble*pi/180;
              70:flags:=rdr.ParseInteger;
-              3:FontFile:=rdr.ParseString;
+              3:begin
+                dxfLoadString(rdr,FontFile,context.Header);//FontFile:=rdr.ParseString;
+                FontFile:=ExtractFileName(FontFile);
+              end;
            1000:FontFamily:=rdr.ParseString;
            else
              s := rdr.ParseString;

@@ -170,9 +170,9 @@ var
                    pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
                    if pvd <> nil then begin
                    if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
-                   zcUI.TextMessage('**Имя ГУ='+name + '   Имя подключаемого устройства = ' + pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+                   zcUI.TextMessage('**Имя ГУ='+name + '   Имя подключаемого устройства = ' + pvd^.GetValueAsString,TMWOHistoryOut);
 
-                   if pString(pvd^.data.Addr.Instance)^ = name then begin
+                   if pvd^.GetValueAsString = name then begin
                       //result:=-1;
                       if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                          zcUI.TextMessage('**НАЙДЕН',TMWOHistoryOut);
@@ -701,7 +701,7 @@ var
         begin
          pvd:=FindVariableInEnt(listVertexEdge.listVertex[num].deviceEnt,'NMO_BaseName');
          if pvd <> nil then
-            name:=pString(pvd^.data.Addr.Instance)^
+            name:=pvd^.GetValueAsString;
         end;
      if listCounterGroupDevice.size = 0 then
        begin
@@ -1062,7 +1062,8 @@ if pobjsl<>nil then
         superlineclean:=PGDBObjSuperline(pobjsl);
         pvdslcablelist:=FindVariableInEnt(superlineclean,velec_SLcablelist);
          if pvdslcablelist<>nil then
-           pString(pvdslcablelist^.data.Addr.Instance)^:='';
+           pvdslcablelist^.SetValueFromString('');
+           //pString(pvdslcablelist^.data.Addr.Instance)^:='';
        end;
     pobjsl:=drawings.GetCurrentROOT^.ObjArray.iterate(itsl); //переход к следующем примитиву в списке выбраных примитивов
   until pobjsl=nil;
@@ -1131,12 +1132,12 @@ var
         if isMetricNumeric then begin
          pvd:=FindVariableInEnt(dev,'NMO_BaseName');
          if pvd<>nil then
-           name:=pString(pvd^.data.Addr.Instance)^;
+           name:=pvd^.GetValueAsString;
          end;
 
          pvd:=FindVariableInEnt(dev,'GC_InGroup_Metric');
            if pvd<>nil then
-               pString(pvd^.data.Addr.Instance)^:=name ;
+               pvd^.SetValueFromString(name);
     end;
 
     //Получение списка главной функции и всех ее делегатов
@@ -1161,7 +1162,7 @@ var
 
           if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
             if pvd<>nil then
-               zcUI.TextMessage(' ИМЯ УСТРОЙСТВА = '+pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut) ;
+               zcUI.TextMessage(' ИМЯ УСТРОЙСТВА = '+pvd^.GetValueAsString,TMWOHistoryOut) ;
 
           devExtens:=dev^.specialize GetExtension<TVariablesExtender>;
 
@@ -1183,7 +1184,7 @@ var
 
                if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                  if pvd<>nil then
-                   zcUI.TextMessage(' ИМЯ УСТРОЙСТВА = '+pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut)
+                   zcUI.TextMessage(' ИМЯ УСТРОЙСТВА = '+pvd^.GetValueAsString,TMWOHistoryOut)
                  else
                    zcUI.TextMessage(' ИМЯ УСТРОЙСТВА = ОТСУТСТВУЕТ',TMWOHistoryOut);
 
@@ -1263,16 +1264,16 @@ var
       //** Имя мастера устройства
        pvd:=FindVariableInEnt(cableLine,'GC_HeadDevice');
        if pvd<>nil then
-             pString(pvd^.data.Addr.Instance)^:=listMasterDevice[numLMaster].name;
+             pvd^.SetValueFromString(listMasterDevice[numLMaster].name);
 
        pvd:=FindVariableInEnt(cableLine,'GC_HDShortName');
        if pvd<>nil then
-             pString(pvd^.data.Addr.Instance)^:=listMasterDevice[numLMaster].name;
+             pvd^.SetValueFromString(listMasterDevice[numLMaster].name);
 
       //** обавляем суффикс
       pvd:=FindVariableInEnt(cableLine,'NMO_Suffix');
        if pvd<>nil then
-             pString(pvd^.data.Addr.Instance)^:=listMasterDevice[numLMaster].LGroup[numLGroup].name;
+             pvd^.SetValueFromString(listMasterDevice[numLMaster].LGroup[numLGroup].name);
 
        pvd:=FindVariableInEnt(cableLine,'CABLE_AutoGen');
               if pvd<>nil then
@@ -1280,19 +1281,19 @@ var
 
        pvd:=FindVariableInEnt(cableLine,'GC_HDGroup');
        if pvd<>nil then
-       pString(pvd^.data.Addr.Instance)^:=listMasterDevice[numLMaster].LGroup[numLGroup].name;
+       pvd^.SetValueFromString(listMasterDevice[numLMaster].LGroup[numLGroup].name);
 
        //правка шаблона что бы выводилось короткое имя плюс точка плюс номер группы
        pvd:=FindVariableInEnt(cableLine,'NMO_Template');
        if pvd<>nil then
          if cableNameinGraph = vGCableNameDefault then
-           pString(pvd^.data.Addr.Instance)^:='@@[GC_HDShortName].@@[GC_HDGroup]'
+           pvd^.SetValueFromString('@@[GC_HDShortName].@@[GC_HDGroup]')
          else
-           pString(pvd^.data.Addr.Instance)^:=cableNameinGraph;
+           pvd^.SetValueFromString(cableNameinGraph);
 
       pvd:=FindVariableInEnt(cableLine,'NMO_BaseName');
        if pvd<>nil then
-             pString(pvd^.data.Addr.Instance)^:=listMasterDevice[numLMaster].name + '-';
+             pvd^.SetValueFromString(listMasterDevice[numLMaster].name + '-');
 
        pvd:=FindVariableInEnt(cableLine,'CABLE_Segment');
        if pvd<>nil then
@@ -1307,7 +1308,7 @@ var
        //zcUI.TextMessage('3',TMWOHistoryOut);
        pvd:=FindVariableInEnt(cableLine,velec_cableMounting);
          if pvd<>nil then
-         pString(pvd^.data.Addr.Instance)^:=cabMounting;
+           pvd^.SetValueFromString(cabMounting);
 
 
      zcAddEntToCurrentDrawingWithUndo(cableLine);
@@ -1324,7 +1325,7 @@ var
 
          pvd:=FindVariableInEnt(dev,velec_VarNameForConnectBefore+inttostr(numConnect)+'_'+velec_VarNameForConnectAfter_HeadDeviceName);
          if pvd<>nil then
-              result:=velec_masterTravelNode + pString(pvd^.data.Addr.Instance)^
+              result:=velec_masterTravelNode + pvd^.GetValueAsString
          else
            if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
              zcUI.TextMessage('ОШИБКА getSpecNameTravelNodeMain',TMWOHistoryOut);
@@ -1332,14 +1333,14 @@ var
          pvd:=FindVariableInEnt(dev,velec_VarNameForConnectBefore+inttostr(numConnect)+'_'+velec_VarNameForConnectAfter_ControlUnitName);
          if pvd<>nil then
          begin
-             if pString(pvd^.data.Addr.Instance)^ <> velec_CableRoutNodes then
+             if pvd^.GetValueAsString <> velec_CableRoutNodes then
              begin
-                  result:=pString(pvd^.data.Addr.Instance)^;
+                  result:=pvd^.GetValueAsString;
 
                   pvd2:=FindVariableInEnt(dev,velec_VarNameForConnectBefore+inttostr(numConnect)+'_'+velec_VarNameForConnectAfter_NGControlUnit);
                   if pvd2<>nil then
-                     if pString(pvd2^.data.Addr.Instance)^ <> velec_CableRoutNodes then
-                        result:= result + velec_separator + pString(pvd2^.data.Addr.Instance)^;
+                     if pvd2^.GetValueAsString <> velec_CableRoutNodes then
+                        result:= result + velec_separator + pvd2^.GetValueAsString;
              end;
          end
          else
@@ -1384,7 +1385,7 @@ var
                  //if pvd<>nil then
                  //   zcUI.TextMessage(' dev = ' + pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
                if pvd<>nil then
-                 if listDev[i].devConnectInfo.ControlUnitName = pString(pvd^.data.Addr.Instance)^ then
+                 if listDev[i].devConnectInfo.ControlUnitName = pvd^.GetValueAsString then
                     begin
                       result:= true;
                     end;
@@ -1418,7 +1419,7 @@ var
                  if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then begin
                    pvd:=FindVariableInEnt(dev,'NMO_Name');
                      if pvd<>nil then
-                        zcUI.TextMessage(' 1255: dev = ' + pString(pvd^.data.Addr.Instance)^ + '+++ numConnect ='+inttostr(numConnect) +' velecNumConnectDev=' + inttostr(mTree.GetEdge(tvertex(VPath[index]).Parent,tvertex(VPath[index])).AsInt32[velecNumConnectDev]),TMWOHistoryOut);
+                        zcUI.TextMessage(' 1255: dev = ' + pvd^.GetValueAsString + '+++ numConnect ='+inttostr(numConnect) +' velecNumConnectDev=' + inttostr(mTree.GetEdge(tvertex(VPath[index]).Parent,tvertex(VPath[index])).AsInt32[velecNumConnectDev]),TMWOHistoryOut);
                  end;
                  specNameTravelNode:=getSpecNameTravelNode(dev,numConnect);
                  //pvd:=FindVariableInEnt(dev,velec_ControlUnitName);
@@ -1645,7 +1646,7 @@ begin
                          CabellingMountigNamePVD:=FindVariableInEnt(superlinedev,velec_cableMounting);
                          if CabellingMountigNamePVD<>nil then
                          begin
-                           CabellingMountigName:=pString(CabellingMountigNamePVD^.data.Addr.Instance)^;
+                           CabellingMountigName:=CabellingMountigNamePVD^.GetValueAsString;
                            //zcUI.TextMessage('superlinedev<>nil CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
                          end;
 
@@ -1658,9 +1659,9 @@ begin
                          pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
                          if pvdslcablelist<>nil then
                             if cableNameinGraph = vGCableNameDefault then
-                               pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name)
+                               pvdslcablelist^.SetValueFromString(AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name))
                             else
-                               pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph);
+                               pvdslcablelist^.SetValueFromString(AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph));
 
                        end;
 
@@ -1675,7 +1676,7 @@ begin
 
                          if CabellingMountigNamePVD<>nil then
                          begin
-                           CabellingMountigName:=pString(CabellingMountigNamePVD^.data.Addr.Instance)^;
+                           CabellingMountigName:=CabellingMountigNamePVD^.GetValueAsString;
                            //zcUI.TextMessage('superlinedev<>nil CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
                          end;
 
@@ -1695,9 +1696,9 @@ begin
                          pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
                          if pvdslcablelist<>nil then
                             if cableNameinGraph = vGCableNameDefault then
-                               pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name)
+                               pvdslcablelist^.SetValueFromString(AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name))
                             else
-                               pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph);
+                               pvdslcablelist^.SetValueFromString(AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph));
 
                        end
                        else
@@ -1748,7 +1749,7 @@ begin
                             begin
                               CabellingMountigNamePVD:=FindVariableInEnt(superlinedev,velec_cableMounting);
                               if CabellingMountigNamePVD<>nil then begin
-                                 CabellingMountigName:=pString(CabellingMountigNamePVD^.data.Addr.Instance)^;
+                                 CabellingMountigName:=CabellingMountigNamePVD^.GetValueAsString;
                                  //zcUI.TextMessage('Кабель укладки принят = ' + CabellingMountigName,TMWOHistoryOut);
                                 end
                                 else
@@ -1766,9 +1767,9 @@ begin
                                 pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
                                 if pvdslcablelist<>nil then
                                    if cableNameinGraph = vGCableNameDefault then
-                                      pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name)
+                                      pvdslcablelist^.SetValueFromString(AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name))
                                    else
-                                      pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph);
+                                      pvdslcablelist^.SetValueFromString(AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph));
                             end
                           else
                           begin
@@ -2473,23 +2474,23 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
               pvd:=Varext.entityunit.FindVariable(varName);
               if pvd<>nil then begin
                  pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_HeadDeviceName);
-                 infoLay.HeadDeviceName:=pString(pvd2^.data.Addr.Instance)^;
+                 infoLay.HeadDeviceName:=pvd2^.GetValueAsString;
                  //zcUI.TextMessage(infoLay.HeadDeviceName,TMWOHistoryOut);
 
                  pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_ControlUnitName);
-                 infoLay.controlUnitName:=pString(pvd2^.data.Addr.Instance)^;
+                 infoLay.controlUnitName:=pvd2^.GetValueAsString;
                  //zcUI.TextMessage(infoLay.controlUnitName,TMWOHistoryOut);
 
                  pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_NGHeadDevice);
-                 infoLay.NGHeadDevice:=pString(pvd2^.data.Addr.Instance)^;
+                 infoLay.NGHeadDevice:=pvd2^.GetValueAsString;
                  //zcUI.TextMessage(infoLay.NGHeadDevice,TMWOHistoryOut);
 
                  pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_SLTypeagen);
-                 infoLay.SLTypeagen:=pString(pvd2^.data.Addr.Instance)^;
+                 infoLay.SLTypeagen:=pvd2^.GetValueAsString;
                  //zcUI.TextMessage(infoLay.SLTypeagen,TMWOHistoryOut);
 
                  pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_NGControlUnit);
-                 infoLay.NGControlUnit:=pString(pvd2^.data.Addr.Instance)^;
+                 infoLay.NGControlUnit:=pvd2^.GetValueAsString;
                  //zcUI.TextMessage(infoLay.NGControlUnit,TMWOHistoryOut);
 
                  pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_DevConnectMethod);
@@ -2504,7 +2505,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                  //zcUI.TextMessage(floattostr(infoLay.CabConnectAddLength),TMWOHistoryOut);
 
                  pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_CabConnectMountingMethod);
-                 infoLay.CabConnectMountingMethod:=pString(pvd2^.data.Addr.Instance)^;
+                 infoLay.CabConnectMountingMethod:=pvd2^.GetValueAsString;
 
                  //pvd2:=FindVariableInEnt(nowDev,velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_CableName);
                  //infoLay.CableName:=pString(pvd2^.data.Addr.Instance)^;
@@ -2619,7 +2620,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                              masterDevInfo.shortName:='nil';
                              pvd:=FindVariableInEnt(listVertexEdge.listVertex[numHeadDev].deviceEnt,'NMO_Suffix');
                              if pvd<>nil then
-                                   masterDevInfo.shortName:=pString(pvd^.data.Addr.Instance)^;
+                                   masterDevInfo.shortName:=pvd^.GetValueAsString;
                              result.PushBack(masterDevInfo);
                              numHead:=result.Size-1;
                              masterDevInfo:=nil;
@@ -3707,6 +3708,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
     var
     i:integer;
     tempNameMaster:string;
+    pvd:pvardesk;
     begin
         result:=-1;
         for i:= 0 to listVertexEdge.listVertex.size-1 do
@@ -3719,7 +3721,11 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
            //zcUI.TextMessage(booltostr(listVertexEdge.listVertex[i].break),TMWOHistoryOut);
            if listVertexEdge.listVertex[i].break <> true then begin
                      //zcUI.TextMessage('2',TMWOHistoryOut);
-          tempNameMaster:= pString(FindVariableInEnt(listVertexEdge.listVertex[i].deviceEnt,velec_nameDevice)^.data.Addr.Instance)^;
+          pvd:=FindVariableInEnt(listVertexEdge.listVertex[i].deviceEnt,velec_nameDevice);
+          if assigned(pvd)then
+            tempNameMaster:=pvd^.GetValueAsString
+          else
+            tempNameMaster:='';
                      //zcUI.TextMessage('3',TMWOHistoryOut);
           //zcUI.TextMessage('tempNameMaster - ' + tempNameMaster + ' nameMaster:' + nameMaster,TMWOHistoryOut);
             if tempNameMaster = nameMaster then
@@ -3915,7 +3921,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                     pvd:=FindVariableInEnt(listVertexEdge.listVertex[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub].deviceEnt,velec_nameDevice);
                     if pvd<>nil then
                       zcUI.TextMessage('НОМЕР УСТРОЙСТВА= '+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub) +
-                                                                     ' ИМЯ УСТРОЙСТВА= ' + pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut)
+                                                                     ' ИМЯ УСТРОЙСТВА= ' + pvd^.GetValueAsString,TMWOHistoryOut)
                     else
                       zcUI.TextMessage('ОШИБКА НОМЕР УСТРОЙСТВА= '+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub) +
                                                                      ' ИМЯ УСТРОЙСТВА= ОТСУТСТВУЕТ',TMWOHistoryOut);
@@ -3929,7 +3935,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                     //zcUI.TextMessage('Название переменной = '+velec_VarNameForConnectBefore+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].devConnectInfo.numConnect)+'_'+velec_VarNameForConnectAfter_CableName,TMWOHistoryOut);
                     pvd:=FindVariableInEnt(listVertexEdge.listVertex[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub].deviceEnt,velec_VarNameForConnectBefore+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].devConnectInfo.numConnect)+'_'+velec_VarNameForConnectAfter_CableName);
                     if pvd<>nil then
-                      cableNameinGraph:=pString(pvd^.data.Addr.Instance)^;
+                      cableNameinGraph:=pvd^.GetValueAsString;
 
                     //zcUI.TextMessage('cableNameinGraph='+cableNameinGraph,TMWOHistoryOut);
 
@@ -4132,12 +4138,12 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                       if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then begin
                         pvd:=FindVariableInEnt(listVertexEdge.listVertex[indexSub].deviceEnt,'NMO_Name');
                          if pvd<>nil then
-                            tempSlaveName:= pString(pvd^.data.Addr.Instance)^
+                            tempSlaveName:=pvd^.GetValueAsString
                          else
                             tempSlaveName:=listVertexEdge.listVertex[indexSub].deviceEnt^.Name;
                         pvd:=FindVariableInEnt(listVertexEdge.listVertex[indexMaster].deviceEnt,'NMO_Name');
                          if pvd<>nil then
-                            tempMasterName:= pString(pvd^.data.Addr.Instance)^
+                            tempMasterName:=pvd^.GetValueAsString
                          else
                             tempMasterName:=listVertexEdge.listVertex[indexMaster].deviceEnt^.Name;
 
@@ -4416,8 +4422,8 @@ var
                begin
                    pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
                    if pvd <> nil then
-                   if pString(pvd^.data.Addr.Instance)^ = name then
-                      result:= false;
+                     if pvd^.GetValueAsString = name then
+                       result:= false;
                end;
     end;
 
@@ -4568,7 +4574,7 @@ var
            begin
            pvd:=FindVariableInEnt(listVertexEdge.listVertex[i].deviceEnt,velec_nameDevice);
            if pvd<>nil then
-               zcUI.TextMessage('Полученное имя устройства = '+ pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+               zcUI.TextMessage('Полученное имя устройства = '+ pvd^.GetValueAsString,TMWOHistoryOut);
            end;
         end;
     end;

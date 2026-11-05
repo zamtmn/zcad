@@ -1338,11 +1338,12 @@ begin
   if varsextdr<>nil then begin
     vn:=pstring(Params^[1])^;
     pvv:=Params^[2];
-    InInterfaceOnly:=pboolean(Params^[3])^;
+    InInterfaceOnly:=pboolean(Params^[4])^;
     pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
-    if pvd=nil then
-      PGVResult(Result)^:=GVRNotFound
-    else if pvd^.data.PTD.GetFactTypedef=@FundamentalStringDescriptorObj then begin
+    if pvd=nil then begin
+      PGVResult(Result)^:=GVRNotFound;
+      pvv^:=pstring(Params^[3])^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalStringDescriptorObj then begin
       PGVResult(Result)^:=GVROk;
       pvv^:=pstring(pvd^.data.Addr.Instance)^;
     end else if pvd^.data.PTD.GetFactTypedef=@FundamentalAnsiStringDescriptorObj then begin
@@ -1351,8 +1352,10 @@ begin
     end else if pvd^.data.PTD.GetFactTypedef=@FundamentalUnicodeStringDescriptorObj then begin
       PGVResult(Result)^:=GVRImplicitCast;
       pvv^:=PUnicodeString(pvd^.data.Addr.Instance)^;
-    end else
+    end else begin
       PGVResult(Result)^:=GVRWrongType;
+      pvv^:=pstring(Params^[3])^;
+    end;
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;
@@ -1417,11 +1420,12 @@ begin
   if varsextdr<>nil then begin
     vn:=pstring(Params^[1])^;
     pvv:=Params^[2];
-    InInterfaceOnly:=pboolean(Params^[3])^;
+    InInterfaceOnly:=pboolean(Params^[4])^;
     pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
-    if pvd=nil then
-      PGVResult(Result)^:=GVRNotFound
-    else if pvd^.data.PTD.GetFactTypedef=@FundamentalDoubleDescriptorObj then begin
+    if pvd=nil then begin
+      PGVResult(Result)^:=GVRNotFound;
+      pvv^:=PDouble(Params^[3])^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalDoubleDescriptorObj then begin
       PGVResult(Result)^:=GVROk;
       pvv^:=PDouble(pvd^.data.Addr.Instance)^;
     end else if pvd^.data.PTD.GetFactTypedef=@FundamentalSingleDescriptorObj then begin
@@ -1430,8 +1434,10 @@ begin
     end else if pvd^.data.PTD.GetFactTypedef=@FundamentalLongIntDescriptorObj then begin
       PGVResult(Result)^:=GVRImplicitCast;
       pvv^:=PLongInt(pvd^.data.Addr.Instance)^;
-    end else
+    end else begin
       PGVResult(Result)^:=GVRWrongType;
+      pvv^:=PDouble(Params^[3])^;
+    end;
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;
@@ -1448,11 +1454,12 @@ begin
   if varsextdr<>nil then begin
     vn:=pstring(Params^[1])^;
     pvv:=Params^[2];
-    InInterfaceOnly:=pboolean(Params^[3])^;
+    InInterfaceOnly:=pboolean(Params^[4])^;
     pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
-    if pvd=nil then
-      PGVResult(Result)^:=GVRNotFound
-    else if pvd^.data.PTD.GetFactTypedef=@FundamentalLongIntDescriptorObj then begin
+    if pvd=nil then begin
+      PGVResult(Result)^:=GVRNotFound;
+      pvv^:=PLongInt(Params^[3])^;
+    end else if pvd^.data.PTD.GetFactTypedef=@FundamentalLongIntDescriptorObj then begin
       PGVResult(Result)^:=GVROk;
       pvv^:=PLongInt(pvd^.data.Addr.Instance)^;
     end else if pvd^.data.PTD.GetFactTypedef=@FundamentalWordDescriptorObj then begin
@@ -1461,8 +1468,10 @@ begin
     end else if pvd^.data.PTD.GetFactTypedef=@FundamentalByteDescriptorObj then begin
       PGVResult(Result)^:=GVRImplicitCast;
       pvv^:=PByte(pvd^.data.Addr.Instance)^;
-    end else
+    end else begin
       PGVResult(Result)^:=GVRWrongType;
+      pvv^:=PLongInt(Params^[3])^;
+    end;
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;
@@ -1497,9 +1506,9 @@ begin
       cplr.addGlobalFunc('function GetEntityExtenderClass(extdrName:string):TzeEntityExtenderClass;',@GetEntityExtenderClass);
       cplr.addGlobalFunc('function PzeEntity.GetVariableExtdr:TVariablesExtender;',@PzeEntity_GetVariableExtdr);
 
-      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:Int32;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_int32);
-      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:double;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_double);
-      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:string;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_string);
+      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:Int32;ADefaultValue:int32=0;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_int32);
+      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:double;ADefaultValue:double=0;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_double);
+      cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(AVarName:string;out AValue:string;ADefaultValue:string='''';InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_string);
       cplr.addGlobalFunc('function TVariablesExtender.GetVarDesk(VarName:string;InInterfaceOnly:boolean=false):PVarDesk;',@TVariablesExtender_GetVarDesk);
       cplr.addGlobalFunc('function TVariablesExtender.GetValueTemplate(PVD:PVarDesk;PEnt:PzeEntity):String;',@TVariablesExtender_GetVarTemplate);
 

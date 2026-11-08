@@ -192,12 +192,10 @@ end;
 
 initialization
   //extdrAdd(extdrReport)
-  ReportScriptsManager:=STManager.CreateType('lpr','Script test',
-    TEntityExtentionContext,LSCMCreateOnce,[TLapeDwg.zeGeom2cplr,
-    TLapeDwg.ze2cplr,TLapeDwg.zeStyles2cplr,TLapeDwg.zeEnt2cplr,
-    TLapeDwg.zeEntsArrays2cplr,TLapeDwg.zeEntsExtenders2cplr,
-    TLapeDwg.zc2cplr,TLapeDwg.zcReport2cplr,
-    TLapeDwg.ctxSetup,TLapeEntityExtention.ctxSetup]);
+  ReportScriptsManager:=STManager.CreateType('lpr','Script test',TEntityExtentionContext,LSCMCreateOnce,
+    [TLapeBase.zcBase2cplr,TLapeDwg.zeGeom2cplr,TLapeDwg.ze2cplr,TLapeDwg.zeStyles2cplr,
+    TLapeDwg.zeEnt2cplr,TLapeDwg.zeEntsArrays2cplr,TLapeDwg.zeEntsExtenders2cplr,TLapeDwg.zc2cplr,
+    TLapeDwg.zcReport2cplr,TLapeDwg.ctxSetup,TLapeEntityExtention.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);
 

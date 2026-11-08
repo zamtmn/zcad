@@ -22,14 +22,14 @@ unit uzcLapeScriptsImplBase;
 interface
 
 uses
-  SysUtils,
+  SysUtils,Masks,
   lptypes,lpvartypes,lpparser,lpcompiler,lpeval,
   LazUTF8,
   uzcLog,
   uzeentity,uzeExtdrAbstractEntityExtender,
   uzeentline,uzeentityfactory,
   uzelongprocesssupport,uzccommandsabstract,
-  gzctnrSTL;
+  gzctnrSTL,uzbPaths;
 
 type
   TLapeScriptContextMode=(LSCMCompilerSetup,LSCMContextSetup);
@@ -124,7 +124,7 @@ var
   ctx:TBaseScriptContext;
 begin
   ctx:=TBaseScriptContext(Params^[0]);
-  PLPSHandle(Result)^:=ctx.LongProcessSupport.StartLongProcess(PString(Params^[1])^,{Result}nil,PLPSCounter(Params^[2])^);
+  PLPSHandle(Result)^:=ctx.LongProcessSupport.StartLongProcess(PlpString(Params^[1])^,{Result}nil,PLPSCounter(Params^[2])^);
 end;
 
 procedure plp(const Params: PParamArray); cdecl;
@@ -148,6 +148,33 @@ begin
   ctx.LongProcessSupport.EndLongProcess(PLPSHandle(Params^[1])^);
 end;
 
+procedure FindFileInSupportPaths(const Params: PParamArray; const Result: Pointer); cdecl;
+type
+  PLPSHandle=^TLPSHandle;
+  PLPSCounter=^TLPSCounter;
+var
+  ctx:TBaseScriptContext;
+begin
+  ctx:=TBaseScriptContext(Params^[0]);
+  PlpString(Result)^:=FindInPaths(GetSupportPaths,PlpString(Params^[1])^)
+end;
+
+procedure lpMatchesMask(const Params: PParamArray; const Result: Pointer); cdecl;
+//var
+//  ctx:TBaseScriptContext;
+var
+  s1,s2:string;
+begin
+  //ctx:=TBaseScriptContext(Params^[0]);
+  s1:=PlpString(Params^[1])^;
+  s2:=PlpString(Params^[2])^;
+  if s1='Приборы_ОПС_'then
+     PBoolean(Result)^:=MatchesMask(PlpString(Params^[1])^,PlpString(Params^[2])^,PBoolean(Params^[3])^);
+  if s2='Приборы_ОПС_*'then
+    PBoolean(Result)^:=MatchesMask(PlpString(Params^[1])^,PlpString(Params^[2])^,PBoolean(Params^[3])^);
+  PBoolean(Result)^:=MatchesMask(PlpString(Params^[1])^,PlpString(Params^[2])^,PBoolean(Params^[3])^);
+end;
+
 class procedure TLapeBase.zcBase2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
@@ -158,6 +185,8 @@ begin
     cplr.addGlobalMethod('function StartLongProcess(LPName:string;Total:int32=0):TLPSHandle;',@slp,ctx);
     cplr.addGlobalMethod('procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:int32);',@plp,ctx);
     cplr.addGlobalMethod('procedure EndLongProcess(LPHandle:TLPSHandle);',@elp,ctx);
+    cplr.addGlobalMethod('function FindFileInSupportPaths(AFileName:string):string;',@FindFileInSupportPaths,ctx);
+    cplr.addGlobalMethod('function MatchesMask(const AStr,AMask:string;ACaseSensitive:boolean=False):boolean;',@lpMatchesMask,ctx);
 
     cplr.EndImporting;
   end;

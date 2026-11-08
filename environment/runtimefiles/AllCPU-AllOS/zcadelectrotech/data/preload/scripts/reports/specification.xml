@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Specification>
+  <Section Caption="ПРИБОРЫ И СРЕДСТВА АВТОМАТИЗАЦИИ">
+    <Items Mask="Приборы_ОПС_"/>
+    <Section Caption="Температура">
+      <Section Caption="Термометры">
+        <Items Mask="Датчикитемпературы_термометры_*"/>
+      </Section>
+      <Section Caption="Датчики температуры">
+        <Items Mask="Датчикитемпературы_термосопротивления_*"/>
+        <Items Mask="Датчикитемпературы_преобразователи_*"/>
+        <Items Mask="Датчикитемпературы_*"/>
+      </Section>
+    </Section>
+    <Section Caption="Давление">
+      <Section Caption="Манометры">
+        <Items Mask="Датчикидавления_манометры_*"/>
+      </Section>
+      <Section Caption="Датчики давления">
+        <Items Mask="Датчикидавления_реледавления_*"/>
+        <Items Mask="Датчикидавления_преобразователи_*"/>
+        <Items Mask="Датчикидавления_*"/>
+      </Section>
+    </Section>
+    <Section Caption="Уровень">
+      <Section Caption="Датчики уровня">
+        <Items Mask="Датчикиуровня_реле_*"/>
+        <Items Mask="Датчикиуровня_*"/>
+      </Section>
+    </Section>
+    <Section Caption="Поток">
+      <Items Mask="Датчикипотока_реле_*"/>
+      <Items Mask="Датчикипотока_*"/>
+    </Section>
+    <Section Caption="Загазованность">
+      <Items Mask="Датчикизагазованности_детекторы_*"/>
+      <Items Mask="Датчикизагазованности_*"/>
+    </Section>
+  </Section>
+  <Section Caption="ПРИБОРЫ И СРЕДСТВА ПОЖАРООХРАННОЙ СИГНАЛИЗАЦИИ">
+    <Items Mask="Приборы_ОПС_"/>
+    <Items Mask="Приборы_ОПС_ПУ_оповещение"/>
+    <Items Mask="Приборы_ОПС_ibp"/>
+    <Items Mask="Приборы_ОПС_*"/>
+    <Items Mask="Приборы_ОПС_СОУЭ_оповещатели_речевые"/>
+    <Items Mask="Извещатели пожарные_дымовые_шлейфовые_"/>
+    <Items Mask="Извещатели_пожарные_*"/>
+  </Section>
+  <Section Caption="КАБЕЛЬНАЯ ПРОДУКЦИЯ">
+    <Items Mask="Кабели_связь"/>
+    <Items Mask="Кабели_*"/>
+  </Section>
+  <Section Caption="НИКУДА НЕ ПОПАЛИ">
+    <Items Mask="*"/>
+  </Section>
+</Specification>

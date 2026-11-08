@@ -23,6 +23,7 @@ interface
 
 uses
   SysUtils,
+  DOM,XMLRead,
   lptypes,lpvartypes,lpparser,lpcompiler,lpeval,
   LazUTF8,
   uzcLog,
@@ -70,9 +71,11 @@ const
   cThngNameTEntsTypeFilter='TEntsTypeFilter';
   cThngNameThEnts='ThEnts';
   cThngNameThCombineCounter='ThCombineCounter';
+  cThngNameThXMLDocument='ThXMLDocument';
   cNamePzeEntity='PzeEntity';
   cNameTVariablesExtender='TVariablesExtender';
   cNamePVarDesk='PVarDesk';
+  cNamePDOMNode='PDOMNode';
 type
 
   EScriptException=class(Exception);
@@ -151,7 +154,20 @@ type
 
 type
   TNames=array of string;
-  TCounterResult=record names:Tnames;Key:string;Value:double;isInteger:boolean; end;
+  TCounterResult=record
+    names:Tnames;
+    Group:lpString;
+    NameShort:lpString;
+    Name:lpString;
+    NameFull:lpString;
+    Standard:lpString;
+    OKP:lpString;
+    EdIzm:lpString;
+    Manufacturer:lpString;
+    PartNumber:lpString;
+    Value:double;isInteger:boolean;
+    Processed:boolean;
+  end;
   TCounterResults=array of TCounterResult;
   PCounterResults=^TCounterResults;
 
@@ -161,6 +177,7 @@ type
   end;
 
   TPCounter=TMyMapCounter<pointer>;
+  TStringCounter=TMyMapCounter<string>;
 
 function TCounterResultComparer.Compare({$IF FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}Left,Right:TCounterResult):Integer;overload;
 var
@@ -177,7 +194,7 @@ begin
     r0:=right.names[0];
   Result:=CompareStr(l0,r0);
   if Result=0 then
-    Result:=CompareStr(left.Key,right.Key);
+    Result:=CompareStr(left.NameShort,right.NameShort);
 end;
 
 constructor ThEnts.Create;
@@ -342,7 +359,7 @@ var
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx.DWG<>nil then begin
-    CommandName:=PString(Params^[1])^;
+    CommandName:=PlpString(Params^[1])^;
     PushStone:=Pboolean(Params^[2])^;
     zcStartUndoCommand(ctx.DWG^,CommandName,PushStone);
   end;
@@ -410,7 +427,7 @@ begin
   else
     plt:=nil;
   if plt<>nil then
-    PGDBLayerProp(Result^):=plt^.getAddres(PString(Params^[1])^)
+    PGDBLayerProp(Result^):=plt^.getAddres(PlpString(Params^[1])^)
   else
     PGDBLayerProp(Result^):=nil;
 end;
@@ -423,9 +440,9 @@ begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   pl:=PGDBLayerProp(Params^[1]^);
   if PGDBLayerProp(Params^[1])<>nil then
-     PString(Result)^:=PGDBLayerProp(Params^[1]^)^.GetName
+     PlpString(Result)^:=PGDBLayerProp(Params^[1]^)^.GetName
    else
-     PString(Result)^:='';
+     PlpString(Result)^:='';
 end;
 
 procedure zeDwgGetTableStylesCount(const Params: PParamArray;const Result: Pointer);cdecl;
@@ -471,7 +488,7 @@ begin
   else
     ptsa:=nil;
   if ptsa<>nil then
-    PTGDBTableStyle(Result^):=ptsa^.getAddres(PString(Params^[1])^)
+    PTGDBTableStyle(Result^):=ptsa^.getAddres(PlpString(Params^[1])^)
   else
     PTGDBTableStyle(Result^):=nil;
 end;
@@ -480,21 +497,21 @@ procedure zcUIHistoryOut(const Params: PParamArray{(AMsg:string)}); cdecl;
 //var
 //  ctx:TCurrentDrawingContext;
 begin
-  zcUI.TextMessage(PString(Params^[1])^,TMWOHistoryOut);
+  zcUI.TextMessage(PlpString(Params^[1])^,TMWOHistoryOut);
 end;
 
 procedure zcUIMessageBox(const Params: PParamArray{(AMsg:string)}); cdecl;
 //var
 //  ctx:TCurrentDrawingContext;
 begin
-  zcUI.TextMessage(PString(Params^[1])^,TMWOMessageBox);
+  zcUI.TextMessage(PlpString(Params^[1])^,TMWOMessageBox);
 end;
 
 procedure zcUITextQuestion(const Params:PParamArray;const Result:Pointer{(ACaption,AQuestion:string)}); cdecl;
 //var
 //  ctx:TCurrentDrawingContext;
 begin
-  PBoolean(Result)^:=zcUI.TextQuestion(PString(Params^[1])^,PString(Params^[2])^)=zccbYes;
+  PBoolean(Result)^:=zcUI.TextQuestion(PlpString(Params^[1])^,PlpString(Params^[2])^)=zccbYes;
 end;
 
 
@@ -594,7 +611,7 @@ var
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx.DWG<>nil then begin
-    PzcInteractiveResult(Result)^:=commandmanager.GetEntity(PString(Params^[1])^,PGDBObjEntity(Params^[2]^));
+    PzcInteractiveResult(Result)^:=commandmanager.GetEntity(PlpString(Params^[1])^,PGDBObjEntity(Params^[2]^));
     if PzcInteractiveResult(Result)^=IRAbort then
       raise EScriptAbort.Create(CScriptAbort);
   end;
@@ -607,7 +624,7 @@ var
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx.DWG<>nil then begin
-    PzcInteractiveResult(Result)^:=commandmanager.Get3DPoint(PString(Params^[1])^,PzePoint3d(Params^[2])^);
+    PzcInteractiveResult(Result)^:=commandmanager.Get3DPoint(PlpString(Params^[1])^,PzePoint3d(Params^[2])^);
     if PzcInteractiveResult(Result)^=IRAbort then
       raise EScriptAbort.Create(CScriptAbort);
   end;
@@ -620,7 +637,7 @@ var
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx.DWG<>nil then begin
-    PzcInteractiveResult(Result)^:=commandmanager.Get3DPointWithLineFromBase(PString(Params^[1])^,PzePoint3d(Params^[2])^,PzePoint3d(Params^[3])^);
+    PzcInteractiveResult(Result)^:=commandmanager.Get3DPointWithLineFromBase(PlpString(Params^[1])^,PzePoint3d(Params^[2])^,PzePoint3d(Params^[3])^);
     if PzcInteractiveResult(Result)^=IRAbort then
       raise EScriptAbort.Create(CScriptAbort);
   end;
@@ -812,7 +829,7 @@ begin
   Index:=PThingsIndex(Params^[0])^;
   if (Index.Things<>nil)and(Index.Index>=0) then begin
     fltr:=TEntsTypeFilter(TThings(Index.Things)[Index.Index]);
-    nameMask:=PString(Params^[1])^;
+    nameMask:=PlpString(Params^[1])^;
     fltr.AddTypeNameMask(nameMask);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
@@ -827,7 +844,7 @@ begin
   Index:=PThingsIndex(Params^[0])^;
   if (Index.Things<>nil)and(Index.Index>=0) then begin
     fltr:=TEntsTypeFilter(TThings(Index.Things)[Index.Index]);
-    nameMask:=PString(Params^[1])^;
+    nameMask:=PlpString(Params^[1])^;
     fltr.SubTypeNameMask(nameMask);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
@@ -842,7 +859,7 @@ begin
   Index:=PThingsIndex(Params^[0])^;
   if (Index.Things<>nil)and(Index.Index>=0) then begin
     fltr:=TEntsTypeFilter(TThings(Index.Things)[Index.Index]);
-    nameMask:=PString(Params^[1])^;
+    nameMask:=PlpString(Params^[1])^;
     fltr.AddExtdrNameMask(nameMask);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
@@ -857,7 +874,7 @@ begin
   Index:=PThingsIndex(Params^[0])^;
   if (Index.Things<>nil)and(Index.Index>=0) then begin
     fltr:=TEntsTypeFilter(TThings(Index.Things)[Index.Index]);
-    nameMask:=PString(Params^[1])^;
+    nameMask:=PlpString(Params^[1])^;
     fltr.SubExtdrNameMask(nameMask);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
@@ -965,8 +982,8 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameTEntsTypeFilter]);
 
   AConnectedEnt:=ppointer(Params^[3])^;
-  AVarName:=Pstring(Params^[4])^;
-  AVarValue:=Pstring(Params^[5])^;
+  AVarName:=PlpString(Params^[4])^;
+  AVarValue:=PlpString(Params^[5])^;
 
   VarsExtdr:=nil;
   FoundedVarsExtd:=nil;
@@ -1193,6 +1210,244 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
 end;
 
+procedure ThXMLDocument_CreateFromFile(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  XMLDocument:TXMLDocument;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  XMLDocument:=nil;
+  ReadXMLFile(XMLDocument,PlpString(Params^[1])^);
+  ctx.Things.PushBack(XMLDocument);
+  PThingsIndex(Result)^.Things:=ctx.Things;
+  PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
+end;
+
+procedure ThXMLDocument_Free(const Params:PParamArray); cdecl;
+var
+  Index:TThingsIndex;
+  XMLDocument:TXMLDocument;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    XMLDocument:=TXMLDocument(TThings(Index.Things)[Index.Index]);
+    XMLDocument.Free;
+    TThings(Index.Things).mutable[Index.Index]^:=nil;
+    PThingsIndex(Params^[0])^.Index:=-1;
+    PThingsIndex(Params^[0])^.Things:=nil;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThXMLDocument]);
+end;
+
+procedure ThXMLDocument_FindNode(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  XMLDocument:TXMLDocument;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    XMLDocument:=TXMLDocument(TThings(Index.Things)[Index.Index]);
+    PPointer(Result)^:=XMLDocument.FindNode(PlpString(Params^[1])^)
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThXMLDocument]);
+end;
+
+procedure PDOMNode_FindNode(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  DOMNode:TDOMNode;
+begin
+  DOMNode:=TDOMNode((Params^[0])^);
+  if DOMNode<>nil then begin
+    PPointer(Result)^:=DOMNode.FindNode(PlpString(Params^[1])^);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePDOMNode]);
+end;
+
+function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;
+var
+aNodeAttr:TDomNode;
+begin
+if assigned(aNode)then
+aNodeAttr:=aNode.Attributes.GetNamedItem(AttrName)
+else
+aNodeAttr:=nil;
+if assigned(aNodeAttr) then
+                        result:=aNodeAttr.NodeValue
+                    else
+                        result:=DefValue;
+end;
+
+
+procedure PDOMNode_NodeName(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  DOMNode:TDOMNode;
+begin
+  DOMNode:=TDOMNode((Params^[0])^);
+  if DOMNode<>nil then begin
+    PlpString(Result)^:=DOMNode.NodeName;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePDOMNode]);
+end;
+
+procedure PDOMNode_ParentNode(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  DOMNode:TDOMNode;
+begin
+  DOMNode:=TDOMNode((Params^[0])^);
+  if DOMNode<>nil then begin
+    PPointer(Result)^:=DOMNode.ParentNode;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePDOMNode]);
+end;
+
+procedure PDOMNode_FirstChild(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  DOMNode:TDOMNode;
+begin
+  DOMNode:=TDOMNode((Params^[0])^);
+  if DOMNode<>nil then begin
+    PPointer(Result)^:=DOMNode.FirstChild;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePDOMNode]);
+end;
+
+procedure PDOMNode_LastChild(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  DOMNode:TDOMNode;
+begin
+  DOMNode:=TDOMNode((Params^[0])^);
+  if DOMNode<>nil then begin
+    PPointer(Result)^:=DOMNode.LastChild;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePDOMNode]);
+end;
+
+procedure PDOMNode_PreviousSibling(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  DOMNode:TDOMNode;
+begin
+  DOMNode:=TDOMNode((Params^[0])^);
+  if DOMNode<>nil then begin
+    PPointer(Result)^:=DOMNode.PreviousSibling;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePDOMNode]);
+end;
+
+procedure PDOMNode_NextSibling(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  DOMNode:TDOMNode;
+begin
+  DOMNode:=TDOMNode((Params^[0])^);
+  if DOMNode<>nil then begin
+    PPointer(Result)^:=DOMNode.NextSibling;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePDOMNode]);
+end;
+
+procedure PDOMNode_AttrValue(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  DOMNode:TDOMNode;
+  aNodeAttr:TDomNode;
+begin
+  DOMNode:=TDOMNode((Params^[0])^);
+  if DOMNode<>nil then begin
+    aNodeAttr:=DOMNode.Attributes.GetNamedItem(PlpString(Params^[1])^);
+    if assigned(aNodeAttr) then
+      PlpString(Result)^:=aNodeAttr.NodeValue
+    else
+      PlpString(Result)^:=PlpString(Params^[2])^;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePDOMNode]);
+end;
+
+procedure ThStringDictionary_Create(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  counter:TStringCounter;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  counter:=TStringCounter.Create;
+  ctx.Things.PushBack(counter);
+  PThingsIndex(Result)^.Things:=ctx.Things;
+  PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
+end;
+
+procedure ThStringDictionary_Free(const Params:PParamArray); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TStringCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TStringCounter(TThings(Index.Things)[Index.Index]);
+    counter.Free;
+    TThings(Index.Things).mutable[Index.Index]^:=nil;
+    PThingsIndex(Params^[0])^.Index:=-1;
+    PThingsIndex(Params^[0])^.Things:=nil;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThStringDictionary_Add(const Params:PParamArray); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TStringCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TStringCounter(TThings(Index.Things)[Index.Index]);
+    counter.CountKey(PlpString(Params^[1])^);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThStringDictionary_Contains(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TStringCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TStringCounter(TThings(Index.Things)[Index.Index]);
+    if counter.ContainsKey(PlpString(Params^[1])^) then
+      PBoolean(Result)^:=true
+    else
+      PBoolean(Result)^:=false;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThStringDictionary_Count(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TStringCounter;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TStringCounter(TThings(Index.Things)[Index.Index]);
+    PInt32(Result)^:=counter.Count;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
+procedure ThStringDictionary_KeystoArray(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  Index:TThingsIndex;
+  counter:TStringCounter;
+  pairs:array of TStringCounter.TDictionaryPair;
+  i:integer;
+begin
+  Index:=PThingsIndex(Params^[0])^;
+  if (Index.Things<>nil)and(Index.Index>=0) then begin
+    counter:=TStringCounter(TThings(Index.Things)[Index.Index]);
+    pairs:=counter.ToArray;
+    setlength(PStringsArray(Result)^,length(pairs));
+    for i:=low(pairs) to high(pairs) do
+      PStringsArray(Result)^[i]:=pairs[i].Key;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVmsg,[cThngNameThCombineCounter]);
+end;
+
 procedure ThCombineCounter_Free(const Params:PParamArray); cdecl;
 var
   Index:TThingsIndex;
@@ -1210,7 +1465,6 @@ begin
 end;
 
 procedure ThCombineCounter_CombineAndCount(const Params: PParamArray); cdecl;
-//procedure ThCombineCounter.CombineAndCount(AEnt:PzeEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;AKey:string);',@ThCombineCounter_CombineAndCount)
 var
   Index:TThingsIndex;
   cc:TCombineCounter;
@@ -1259,12 +1513,34 @@ begin
         names:=pair.Value.getNames;
         TArrayHelper<string>.Sort(names);
         pvd:=DWGDBUnit^.FindVariable(pair.Key);
-        if pvd=nil then
-          Key:=pair.Key
-        else
-          Key:=PDbBaseObject(pvd^.data.Addr.Instance)^.Name+'; '+PDbBaseObject(pvd^.data.Addr.Instance)^.NameShort;
+        if pvd=nil then begin
+          Group:='undef';
+          NameShort:=pair.Key;
+          Name:=pair.Key;
+          NameFull:=pair.Key;
+          Standard:='';
+          OKP:='';
+          EdIzm:='шт.';
+          Manufacturer:='';
+          PartNumber:='';
+        end
+        else begin
+          Group:=PDbBaseObject(pvd^.data.Addr.Instance)^.Group;
+          NameShort:=PDbBaseObject(pvd^.data.Addr.Instance)^.NameShort;
+          Name:=PDbBaseObject(pvd^.data.Addr.Instance)^.Name;
+          NameFull:=PDbBaseObject(pvd^.data.Addr.Instance)^.NameFull;
+          Standard:=PDbBaseObject(pvd^.data.Addr.Instance)^.Standard;
+          OKP:=PDbBaseObject(pvd^.data.Addr.Instance)^.OKP;
+          case PDbBaseObject(pvd^.data.Addr.Instance)^.EdIzm of
+            _sht:EdIzm:='шт.';
+            _m:EdIzm:='м';
+          end;
+          Manufacturer:=PDbBaseObject(pvd^.data.Addr.Instance)^.Manufacturer;
+          PartNumber:=PDbBaseObject(pvd^.data.Addr.Instance)^.PartNumber;
+        end;
         Value:=pair.Value.Value;
         isInteger:=pair.Value.isInteger;
+        Processed:=false;
       end;
       inc(i);
     end;
@@ -1281,10 +1557,27 @@ begin
       cplr.addBaseDefine(cZeReport);
 
       cplr.addGlobalType('type TThingsIndex','ThCombineCounter');
-      cplr.addGlobalType('array of string','TNames');
-      cplr.addGlobalType('record names:Tnames;Key:string;Value:double;isInteger:boolean; end;','TCounterResult');
+      cplr.addGlobalType('array of string','TStringsArray');
+      cplr.addGlobalType('record '
+                          +'names:TStringsArray;'
+                          +'Group:String;'
+                          +'NameShort:String;'
+                          +'Name:String;'
+                          +'NameFull:String;'
+                          +'Standard:String;'
+                          +'OKP:String;'
+                          +'EdIzm:String;'
+                          +'Manufacturer:String;'
+                          +'PartNumber:String;'
+                          +'Value:double;'
+                          +'isInteger:boolean;'
+                          +'Processed:boolean;'
+                        +' end;','TCounterResult');
       cplr.addGlobalType('array of TCounterResult','TCounterResults');
       cplr.addGlobalType('type TThingsIndex','ThDictionary');
+      cplr.addGlobalType('type TThingsIndex','ThStringDictionary');
+      cplr.addGlobalType('type TThingsIndex','ThXMLDocument');
+      cplr.addGlobalType('type pointer','PDOMNode');
 
       cplr.addGlobalMethod('function ThCombineCounter.Create: ThCombineCounter; static;',@ThCombineCounter_Create,ctx);
       cplr.addGlobalFunc('procedure ThCombineCounter.Free;',@ThCombineCounter_Free);
@@ -1297,6 +1590,26 @@ begin
       cplr.addGlobalFunc('procedure ThDictionary.Add(P:Pointer);',@ThDictionary_Add);
       cplr.addGlobalFunc('function ThDictionary.Contains(P:Pointer):boolean;',@ThDictionary_Contains);
 
+      cplr.addGlobalMethod('function ThStringDictionary.Create: ThStringDictionary; static;',@ThStringDictionary_Create,ctx);
+      cplr.addGlobalFunc('procedure ThStringDictionary.Free;',@ThStringDictionary_Free);
+      cplr.addGlobalFunc('procedure ThStringDictionary.Add(AString:string);',@ThStringDictionary_Add);
+      cplr.addGlobalFunc('function ThStringDictionary.Contains(AString:string):boolean;',@ThStringDictionary_Contains);
+      cplr.addGlobalFunc('function ThStringDictionary.Count:Int32;',@ThStringDictionary_Count);
+      cplr.addGlobalFunc('function ThStringDictionary.KeysToArray:TStringsArray;',@ThStringDictionary_KeystoArray);
+
+      cplr.addGlobalMethod('function ThXMLDocument.CreateFromFile(AFileName:string): ThXMLDocument; static;',@ThXMLDocument_CreateFromFile,ctx);
+      cplr.addGlobalFunc('procedure ThXMLDocument.Free;',@ThXMLDocument_Free);
+      cplr.addGlobalFunc('function ThXMLDocument.FindNode(const ANodeName:string):PDOMNode;',@ThXMLDocument_FindNode);
+
+      cplr.addGlobalFunc('function PDOMNode.FindNode(const ANodeName:string):PDOMNode;',@PDOMNode_FindNode);
+      cplr.addGlobalFunc('function PDOMNode.NodeName:string;',@PDOMNode_NodeName);
+      cplr.addGlobalFunc('function PDOMNode.ParentNode:PDOMNode;',@PDOMNode_ParentNode);
+      cplr.addGlobalFunc('function PDOMNode.FirstChild:PDOMNode;',@PDOMNode_FirstChild);
+      cplr.addGlobalFunc('function PDOMNode.LastChild:PDOMNode;',@PDOMNode_LastChild);
+      cplr.addGlobalFunc('function PDOMNode.PreviousSibling:PDOMNode;',@PDOMNode_PreviousSibling);
+      cplr.addGlobalFunc('function PDOMNode.NextSibling:PDOMNode;',@PDOMNode_NextSibling);
+
+      cplr.addGlobalFunc('function PDOMNode.AttrValue(const AAttrName:string;ADefaultValue:string=''''):string;',@PDOMNode_AttrValue);
 
       cplr.addGlobalMethod('function ThisReport:PzeEntity;',@ThisReportOwner,ctx);
       cplr.addGlobalMethod('function ThisReportVariableExtdr:TVariablesExtender;',@ThisReportVariableExtdr,ctx);
@@ -1310,7 +1623,7 @@ procedure GetEntityExtenderClass(const Params: PParamArray;const Result: Pointer
 var
   extdrName:string;
 begin
-  extdrName:=PString(Params^[0])^;
+  extdrName:=PlpString(Params^[0])^;
   if not EntityExtenders.tryGetValue(uppercase(extdrName),TzeEntityExtenderClass(PPointer(Result)^)) then
     PPointer(Result)^:=nil;
 end;
@@ -1329,23 +1642,23 @@ end;
 procedure TVariablesExtender_GetVarValue_string(const Params: PParamArray;const Result: Pointer); cdecl;
 var
   vn:string;
-  pvv:pstring;
+  pvv:PlpString;
   varsextdr:TVariablesExtender;
   InInterfaceOnly:boolean;
   pvd:pvardesk;
 begin
   varsextdr:=TVariablesExtender((Params^[0])^);
   if varsextdr<>nil then begin
-    vn:=pstring(Params^[1])^;
+    vn:=PlpString(Params^[1])^;
     pvv:=Params^[2];
     InInterfaceOnly:=pboolean(Params^[4])^;
     pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
     if pvd=nil then begin
       PGVResult(Result)^:=GVRNotFound;
-      pvv^:=pstring(Params^[3])^;
+      pvv^:=PlpString(Params^[3])^;
     end else if pvd^.data.PTD.GetFactTypedef=@FundamentalStringDescriptorObj then begin
       PGVResult(Result)^:=GVROk;
-      pvv^:=pstring(pvd^.data.Addr.Instance)^;
+      pvv^:=PlpString(pvd^.data.Addr.Instance)^;
     end else if pvd^.data.PTD.GetFactTypedef=@FundamentalAnsiStringDescriptorObj then begin
       PGVResult(Result)^:=GVROk;
       pvv^:=PAnsiString(pvd^.data.Addr.Instance)^;
@@ -1354,7 +1667,7 @@ begin
       pvv^:=PUnicodeString(pvd^.data.Addr.Instance)^;
     end else begin
       PGVResult(Result)^:=GVRWrongType;
-      pvv^:=pstring(Params^[3])^;
+      pvv^:=PlpString(Params^[3])^;
     end;
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
@@ -1368,7 +1681,7 @@ var
 begin
   varsextdr:=TVariablesExtender((Params^[0])^);
   if varsextdr<>nil then begin
-    vn:=pstring(Params^[1])^;
+    vn:=PlpString(Params^[1])^;
     InInterfaceOnly:=pboolean(Params^[2])^;
     ppointer(Result)^:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
   end else
@@ -1385,7 +1698,7 @@ begin
   if varsextdr<>nil then begin
     pvd:=ppointer(Params^[1])^;
     pent:=ppointer(Params^[2])^;
-    pstring(Result)^:=GetVarTemplate(varsextdr,pvd,pent);
+    PlpString(Result)^:=GetVarTemplate(varsextdr,pvd,pent);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;
@@ -1418,7 +1731,7 @@ var
 begin
   varsextdr:=TVariablesExtender((Params^[0])^);
   if varsextdr<>nil then begin
-    vn:=pstring(Params^[1])^;
+    vn:=PlpString(Params^[1])^;
     pvv:=Params^[2];
     InInterfaceOnly:=pboolean(Params^[4])^;
     pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
@@ -1452,7 +1765,7 @@ var
 begin
   varsextdr:=TVariablesExtender((Params^[0])^);
   if varsextdr<>nil then begin
-    vn:=pstring(Params^[1])^;
+    vn:=PlpString(Params^[1])^;
     pvv:=Params^[2];
     InInterfaceOnly:=pboolean(Params^[4])^;
     pvd:=varsextdr.entityunit.FindVariable(vn,InInterfaceOnly);
@@ -1482,7 +1795,7 @@ var
 begin
   pvd:=pvardesk((Params^[0])^);
   if pvd<>nil then begin
-    pstring(Result)^:=pvd^.GetValueAsString;
+    PlpString(Result)^:=pvd^.GetValueAsString;
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePVarDesk]);
 end;

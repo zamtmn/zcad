@@ -33,21 +33,11 @@ PBbillOfMaterial=^GDBBbillOfMaterial;
 GDBBbillOfMaterial= object(GZVector<GDBBOMItem>)
                        constructor init(m:Integer);
                        procedure freeelement(PItem:PT);virtual;
-                       //function getnamenumber(_Name:String):String;
-                       //function AddByPointer(p:Pointer):TArrayIndex;virtual;
                        function findorcreate(_Name:String):PGDBBOMItem;virtual;
                        end;
 
 implementation
-//uses
-//    log;
-{function GDBBbillOfMaterial.getnamenumber;
-var p:PGDBBOMItem;
-begin
-     p:=findorcreate(_name);
-     result:=p^.Name+inttostr(p^.Nymber);
-     inc(p^.Nymber);
-end;}
+
 function GDBBbillOfMaterial.findorcreate;
 var p:PGDBBOMItem;
     ir:itrec;
@@ -55,7 +45,6 @@ var p:PGDBBOMItem;
     ni:GDBBOMItem;
 begin
   nn:=uppercase(_name);
-  //result:=nil;
   p:=beginiterate(ir);
   if p<>nil then
   repeat

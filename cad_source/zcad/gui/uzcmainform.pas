@@ -1267,18 +1267,19 @@ function TzcMainForm.IsShortcut(var Message:TLMKey):boolean;
 var
   OldFunction:TIsShortcutFunc;
 begin
-  if Message.CharCode<>17 then begin
-    Message.CharCode:=Message.CharCode+1;
-    Message.CharCode:=Message.CharCode-1;
-  end;
   with programlog.Enter('TZCADMainWindow.IsShortcut',LM_Debug,LMD) do begin
-    TMethod(OldFunction).code:=@TForm.IsShortcut;
-    TMethod(OldFunction).Data:=self;
-    Result:=CommandManager.ProcessCommandShortcuts(LMKey2ShortCut(Message));
-    if not Result then
-      Result:=IsZShortcut(Message,Screen.ActiveControl,zcUI.GetPriorityFocus,
-        OldFunction,SuppressedShortcuts);
-    programlog.leave(IfEntered);
+    try
+      if Screen.ActiveForm<>self then
+        exit(false);
+      TMethod(OldFunction).code:=@TForm.IsShortcut;
+      TMethod(OldFunction).Data:=self;
+      Result:=CommandManager.ProcessCommandShortcuts(LMKey2ShortCut(Message));
+      if not Result then
+        Result:=IsZShortcut(Message,Screen.ActiveControl,zcUI.GetPriorityFocus,OldFunction,
+          SuppressedShortcuts);
+    finally
+      programlog.leave(IfEntered);
+    end;
   end;
 end;
 

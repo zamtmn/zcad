@@ -15,8 +15,8 @@ var
 
    SerialConnection:Integer;
    GC_NumberInGroup:Integer;(*'Номер устройства в группе'*)
-   GC_InGroup_Metric:String;(*'Метрика нумерации в группе'*)
-   GC_Metric:String;(*'Метрика нумерации'*)
+   GC_InGroup_Metric:TCalculatedString;(*'Метрика нумерации в группе'*)
+   GC_Metric:TCalculatedString;(*'Метрика нумерации'*)
 
    GC_NameGroup:String;(*'Имя группы'*)
    GC_NameGroupPrefix:String;(*'Префикс имени группы'*)
@@ -30,7 +30,10 @@ begin
    GC_NumberInGroup:=0;
    GC_HeadDevice:='??';
    GC_HDShortName:='??';
-   GC_Metric:='';
+   GC_Metric.value:='';
+   GC_Metric.format:='';
+   GC_InGroup_Metric.value:='';
+   GC_InGroup_Metric.format:='';
    GC_velecSubGroupControlUnit:='-';
    GC_velecNumConnectDevice:=0;
    GC_HDGroup:='0';

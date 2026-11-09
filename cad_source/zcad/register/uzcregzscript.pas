@@ -490,6 +490,10 @@ begin
   RegisterVarCategory('ENTID','ENTID',@InterfaceTranslate);
   RegisterVarCategory('INSTRUMENT','INSTRUMENT',@InterfaceTranslate);
 
+  RegisterVarCategory('RPRTSRC','RPRTSRC',@InterfaceTranslate);
+  RegisterVarCategory('RPRTFLTR','RPRTFLTR',@InterfaceTranslate);
+  RegisterVarCategory('RPRTBUILD','RPRTBUILD',@InterfaceTranslate);
+
 
   otd:=ptsu^.RegisterObjectType(TypeInfo(CommandObjectDef),
                                   TypeOf(CommandObjectDef),

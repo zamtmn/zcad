@@ -7,6 +7,7 @@ type
   TCounterResultsArray=array of TCounterResults;
 
   TPartDesc=record
+    Placed:boolean;
     PartName:string;
     Counter:int32;
   end;
@@ -16,6 +17,7 @@ type
 
 function TPartDesc.Create(APartName:string;ACounter:int32):TPartDesc;static;
 begin
+  result.Placed:=false;
   result.PartName:=APartName;
   result.Counter:=ACounter;
 end;
@@ -50,12 +52,15 @@ begin
     result:=cMissedGroup;
 end;
 
-function ProcessItems(const AGroups:array of string;ATable:PzeEntity;CounterResults:TCounterResultsArray;AMask:String;var part:TPartDesc;APartCounterPrefix:string):string;
+function ProcessItems(const AGroups:array of string;ATable:PzeEntity;CounterResults:TCounterResultsArray;AMask:String;var parts:TPartDescs;var part:TPartDesc):string;
 var
-  i,j,k:int32;
+  i,j,k,l:int32;
   names:string;
-  GroupIsPlaced:boolean;
+  GroupIsPlaced,NeedCalcPozNum:boolean;
+  pozNum,CalcPozNum:string;
 begin
+  CalcPozNum:='';
+  NeedCalcPozNum:=true;
   for k:=low(CounterResults) to high(CounterResults) do begin
     GroupIsPlaced:=false;
     for i:=0 to length(CounterResults[k])-1 do
@@ -68,12 +73,37 @@ begin
               names:=names+', '+CounterResults[k][i].names[j];
           end else
             names:='';
-          if not GroupIsPlaced then
-            zeEntTableAddRow(ATable,['',AGroups[k]],false);
-          GroupIsPlaced:=true;
           CounterResults[k][i].Processed:=true;
           inc(part.Counter);
-          zeEntTableAddRow(ATable,[APartCounterPrefix+tostring(part.Counter),CounterResults[k][i].NameFull,
+
+          if NeedCalcPozNum then begin
+            for l:=low(parts.stack) to high(parts.stack) do begin
+              if not parts.stack[l].Placed then begin
+                inc(parts.stack[l].Counter);
+                zeEntTableAddRow(ATable,[''],false);
+                zeEntTableAddRow(ATable,['',parts.stack[l].PartName],false);
+                parts.stack[l].Placed:=true;
+              end;
+              if CalcPozNum=''then
+                CalcPozNum:=tostring(parts.stack[l].Counter)
+              else
+                CalcPozNum:=CalcPozNum+'.'+tostring(parts.stack[l].Counter);
+            end;
+            NeedCalcPozNum:=false;
+          end;
+
+          if not GroupIsPlaced then begin
+            zeEntTableAddRow(ATable,[''],false);
+            zeEntTableAddRow(ATable,['',AGroups[k]],false);
+            GroupIsPlaced:=true;
+          end;
+
+          if CalcPozNum='' then
+            pozNum:=tostring(part.Counter)
+          else
+            pozNum:=CalcPozNum+'.'+tostring(part.Counter);
+
+          zeEntTableAddRow(ATable,[pozNum,CounterResults[k][i].NameFull,
             CounterResults[k][i].NameShort+' '+CounterResults[k][i].Standard,CounterResults[k][i].OKP,
             CounterResults[k][i].Manufacturer,CounterResults[k][i].EdIzm,ToString(CounterResults[k][i].Value),
             '',names],false);
@@ -82,31 +112,41 @@ begin
   end;
 end;
 
-function _ProcessNode(const AGroups:array of string;AXMLNode:PDOMNode;ATable:PzeEntity;CounterResults:TCounterResultsArray;var parts:TPartDescs;APartCounterPrefix:string):string;
+function _ProcessNode(const AGroups:array of string;AXMLNode:PDOMNode;ATable:PzeEntity;CounterResults:TCounterResultsArray;var parts:TPartDescs):string;
 var
   NodeCaption,NodeName,NodeMask:string;
   part:TPartDesc;
+  counter:int32;
 begin
+  counter:=0;
   if AXMLNode<>nil then begin
-  repeat
-    NodeName:=AXMLNode.NodeName;
-    NodeCaption:=AXMLNode.AttrValue('Caption','Отсутствует');
-    part:=TPartDesc.create(NodeCaption,0);
-    //zeEntTableAddRow(ATable,['',NodeCaption],false);
+    repeat
+      part:=TPartDesc.create('',counter);
+      NodeName:=AXMLNode.NodeName;
+      NodeCaption:=AXMLNode.AttrValue('Caption','Отсутствует');
+      part.PartName:=NodeCaption;
 
-    if NodeName=cSectionNodeName then begin
-      parts.push(part);
-      _ProcessNode(AGroups,AXMLNode.FirstChild,ATable,CounterResults,parts,APartCounterPrefix+'.'+tostring(part.Counter));
-      part:=parts.pop;
-    end else if NodeName=cItemsNodeName then begin
-      NodeMask:=AXMLNode.AttrValue('Mask','');
-      if NodeMask<>'' then
-        ProcessItems(AGroups,ATable,CounterResults,NodeMask,part,APartCounterPrefix);
+      if NodeName=cSectionNodeName then begin
+
+        parts.push(part);
+        _ProcessNode(AGroups,AXMLNode.FirstChild,ATable,CounterResults,parts);
+        part:=parts.pop;
+      end else if NodeName=cItemsNodeName then begin
+        NodeMask:=AXMLNode.AttrValue('Mask','');
+        if NodeMask<>'' then begin
+          ProcessItems(AGroups,ATable,CounterResults,NodeMask,parts,part);
+        end;
+      end;
+      counter:=part.Counter;
+      AXMLNode:=AXMLNode.NextSibling;
+      until AXMLNode=nil;
     end;
 
-    AXMLNode:=AXMLNode.NextSibling;
-    until AXMLNode=nil;
-  end;
+    {if part.Counter>0 then
+      if Length(parts.stack)>0 then begin
+        inc(parts.stack[high(parts.stack)].Counter);
+        zeEntTableAddRow(ATable,['!!!',tostring(parts.stack[high(parts.stack)].Counter)],false);
+      end;}
 end;
 
 function ProcessNode(const AGroups:array of string;AXMLNode:PDOMNode;ATable:PzeEntity;CounterResults:TCounterResultsArray):string;
@@ -114,7 +154,7 @@ var
   parts:TPartDescs;
 begin
   parts:=TPartDescs.Create;
-  _ProcessNode(AGroups,AXMLNode,ATable,CounterResults,parts,'num');
+  _ProcessNode(AGroups,AXMLNode,ATable,CounterResults,parts);
 end;
 
 var

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Specification>
   <Section Caption="ПРИБОРЫ И СРЕДСТВА АВТОМАТИЗАЦИИ">
-    <Items Mask="Приборы_ОПС_"/>
     <Section Caption="Температура">
       <Section Caption="Термометры">
         <Items Mask="Датчикитемпературы_термометры_*"/>
@@ -49,6 +48,9 @@
   <Section Caption="КАБЕЛЬНАЯ ПРОДУКЦИЯ">
     <Items Mask="Кабели_связь"/>
     <Items Mask="Кабели_*"/>
+  </Section>
+  <Section Caption="МАТЕРИАЛЫ">
+    <Items Mask="Материалы_*"/>
   </Section>
   <Section Caption="НИКУДА НЕ ПОПАЛИ">
     <Items Mask="*"/>

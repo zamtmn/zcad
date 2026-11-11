@@ -24,7 +24,7 @@ interface
 
 uses
   SysUtils,Classes,
-  LazUTF8,Masks,
+  LazUTF8,Masks,Laz2_XMLCfg,
   gzctnrVectorTypes,uzsbVarmanDef,
   uzbEncoding,
   uzeconsts,
@@ -111,24 +111,20 @@ begin
           if pvm<>nil then begin
             pvad:=pcablevarext.entityunit.FindVariable('AmountD');
             pvai:=pcablevarext.entityunit.FindVariable('AmountI');
-            //if (pvad<>nil)or(pvai<>nil) then
-            begin
-              pbomitem:=bom.findorcreate(pstring(pvm^.Data.Addr.Instance)^);
-              if pbomitem<>nil then begin
-                if (pvad<>nil) then
-                  pbomitem.Amount:=pbomitem.Amount+pDouble(pvad^.Data.Addr.Instance)^
-                else if (pvai<>nil) then
-                  pbomitem.Amount:=pbomitem.Amount+PInteger(pvai^.Data.Addr.Instance)^
+            pbomitem:=bom.findorcreate(pvm^.GetValueAsString);
+            if pbomitem<>nil then begin
+              if (pvad<>nil) then
+                pbomitem.Amount:=pbomitem.Amount+pDouble(pvad^.Data.Addr.Instance)^
+              else if (pvai<>nil) then
+                pbomitem.Amount:=pbomitem.Amount+PInteger(pvai^.Data.Addr.Instance)^
+              else
+                pbomitem.Amount:=pbomitem.Amount+1;
+              pvm:=pcablevarext.entityunit.FindVariable('NMO_Name');
+              if (pvm<>nil) then
+                if pbomitem.Names<>'' then
+                  pbomitem.Names:=pbomitem.Names+', '+pvm^.GetValueAsString
                 else
-                  pbomitem.Amount:=pbomitem.Amount+1;
-                pvm:=pcablevarext.entityunit.FindVariable('NMO_Name');
-                if (pvm<>nil) then
-                  if pbomitem.Names<>'' then
-                    pbomitem.Names:=pbomitem.Names+', '+pstring(pvm^.Data.Addr.Instance)^
-                  else
-                    pbomitem.Names:=pstring(pvm^.Data.Addr.Instance)^;
-
-              end;
+                  pbomitem.Names:=pvm^.GetValueAsString;
             end;
           end;
         end;
@@ -145,7 +141,7 @@ begin
         pvm:=pstartsegmentvarext.entityunit.FindVariable('DB_link');
         if pvm<>nil then begin
           begin
-            pbomitem:=bom.findorcreate(pstring(pvm^.Data.Addr.Instance)^);
+            pbomitem:=bom.findorcreate(pvm^.GetValueAsString);
             if pbomitem<>nil then begin
               pbomitem.Amount:=pbomitem.Amount+pcd.length;
             end;

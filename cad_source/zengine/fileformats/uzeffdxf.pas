@@ -818,7 +818,8 @@ begin
         end else
           ti:=ZCDCtx.PDrawing^.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false,LogProc);
       end else begin
-        if ZCDCtx.PDrawing^.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
+          ti:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(FontFile,true);
+        if ti<>nil then begin
           if ZCDCtx.LoadMode=TLOLoad then
             ti:=ZCDCtx.PDrawing^.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
         end else
@@ -836,6 +837,7 @@ begin
             if psp^.param.PstyleIsHandle then
               if psp^.param.PStyle=pointer(DWGHandle) then begin
                 psp^.param.PStyle:=ptstyle;
+                psp^.param.PstyleIsHandle:=false;
                 psp^.FontName:=ptstyle^.FontFile;
                 if assigned(ptstyle^.pfont) then begin
                   psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});

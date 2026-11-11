@@ -161,6 +161,7 @@ var
   EntSourceIncludingVolumeFunction:String;
   EntTypeInclude,EntTypeExclude,EntExtdrInclude,EntExtdrExclude:String;
   CombineVariables,GroupVariable,GroupVariableValues:String;
+
   fltr:ThEntsTypeFilter;
   ents:ThEnts;
   ent,report:PzeEntity;
@@ -176,7 +177,9 @@ var
   groupdic:ThStringDictionary;
   groups,SplitedCombineVariables:array of string;
 
-  SpecXMLTemplateFile:string;
+  TemplateFile:string;
+  TemplateNode:String;
+
   XMLTemplate:ThXMLDocument;
   XMLNode:PDOMNode;
 
@@ -191,10 +194,11 @@ begin
   reportvars.GetVarValue('RPRTFLTR_EntExtdrInclude',EntExtdrInclude);
   reportvars.GetVarValue('RPRTFLTR_EntExtdrExclude',EntExtdrExclude);
   reportvars.GetVarValue('RPRTBUILD_CombineVariables',CombineVariables);
-  reportvars.GetVarValue('RPRTBUILD_CombineVariables',CombineVariables);
   reportvars.GetVarValue('RPRTBUILD_GroupVariable',GroupVariable);
-  reportvars.GetVarValue('SpecXMLTemplateFile',SpecXMLTemplateFile,'specification.xml');
-  SpecXMLTemplateFile:=FindFileInSupportPaths(SpecXMLTemplateFile);
+  reportvars.GetVarValue('RPRTBUILD_TemplateFile',TemplateFile,'specification.xml');
+  reportvars.GetVarValue('RPRTBUILD_TempNode',TemplateNode,'specification');
+
+  TemplateFile:=FindFileInSupportPaths(TemplateFile);
 
   zcUIHistoryOut('EntSourceIncludingVolumeFunction='+EntSourceIncludingVolumeFunction);
   zcUIHistoryOut('EntTypeInclude='+EntTypeInclude);
@@ -203,7 +207,8 @@ begin
   zcUIHistoryOut('EntExtdrExclude='+EntExtdrExclude);
   zcUIHistoryOut('CombineVariables='+CombineVariables);
   zcUIHistoryOut('GroupVariable='+GroupVariable);
-  zcUIHistoryOut('SpecXMLTemplateFile='+SpecXMLTemplateFile);
+  zcUIHistoryOut('TemplateFile='+TemplateFile);
+  zcUIHistoryOut('TemplateNode='+TemplateNode);
 
   fltr:=ThEntsTypeFilter.create;   
   fltr.AddTypeNames(EntTypeInclude.split(','));
@@ -280,11 +285,14 @@ begin
   for i:=low(ccs) to high(ccs) do
     ccs[i].SaveTo(CounterResults[i]);
 
-  XMLTemplate:=ThXMLDocument.CreateFromFile(SpecXMLTemplateFile);
+  zcUIHistoryOut('TemplateFile='+TemplateFile);
+  XMLTemplate:=ThXMLDocument.CreateFromFile(TemplateFile);
   table:=zeEntTable(zeDwgGetTableStyle('Spec'));
-  XMLNode:=XMLTemplate.FindNode('Specification');
+  XMLNode:=XMLTemplate.FindNode(TemplateNode);
   if XMLNode<>nil then
-    ProcessNode(groups,XMLNode.FirstChild,table,CounterResults);
+    ProcessNode(groups,XMLNode.FirstChild,table,CounterResults)
+  else
+    zcUIMessageBox('In file "'+TemplateFile+'" node "'+TemplateNode+'" not found');
 
   zeEntTableAddRow(table,[''],true);
 

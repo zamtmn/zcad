@@ -1669,6 +1669,9 @@ begin
       PGVResult(Result)^:=GVRWrongType;
       pvv^:=PlpString(Params^[3])^;
     end;
+    if PGVResult(Result)^<>GVRWrongType then
+      if pvv^='' then
+        pvv^:=PlpString(Params^[3])^;
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNameTVariablesExtender]);
 end;

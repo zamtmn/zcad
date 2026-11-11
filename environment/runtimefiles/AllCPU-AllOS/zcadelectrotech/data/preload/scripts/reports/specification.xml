@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Specification>
+<specification>
   <Section Caption="ПРИБОРЫ И СРЕДСТВА АВТОМАТИЗАЦИИ">
     <Section Caption="Температура">
       <Section Caption="Термометры">
@@ -55,4 +55,4 @@
   <Section Caption="НИКУДА НЕ ПОПАЛИ">
     <Items Mask="*"/>
   </Section>
-</Specification>
+</specification>

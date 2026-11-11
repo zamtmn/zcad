@@ -1,0 +1,10 @@
+
+#### Cancel
+
+:cmdcommand: Cancel
+
+include::../../_elements/commandsummary.adoc[]
+
+Прерывает текущую выполняемую команду
+
+include::commandsummaryfree.adoc[]

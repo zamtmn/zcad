@@ -1,0 +1,17 @@
+
+#### Layer
+
+:cmdcommand: Layer
+:cmdicon: ../../../../images/actions/layers.png
+:cmdmenu: Format > Слои ...
+
+include::../../_elements/commandsummary.adoc[]
+
+Показ модального окна управления слоями
+
+.Окно управления слоями
+image::zcad_ui_layersform_prepare.png[width=75%,pdfwidth=75%]
+
+!!NEEDDETAILS!!
+
+include::commandsummaryfree.adoc[]

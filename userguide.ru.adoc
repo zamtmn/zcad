@@ -1,0 +1,25 @@
+:lang: ru
+include::attributes.adoc[]
+include::locale/{lang}/gitversion.adoc[]
+= ZCAD Руководство пользователя +
+Андрей Зубарев <zamtmn@yandex.ru>
+{gitversion}
+:toc: left
+:toclevels: 4
+:sectnums:
+:docinfo1:
+
+<<<
+include::locale/{lang}/general_information.adoc[]
+
+<<<
+include::locale/{lang}/getting_started.adoc[]
+
+<<<
+include::locale/{lang}/working_with_program.adoc[]
+
+<<<
+include::locale/{lang}/customization.adoc[]
+
+<<<
+include::locale/{lang}/for_developers.adoc[]

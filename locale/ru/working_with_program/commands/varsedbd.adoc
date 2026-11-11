@@ -1,0 +1,12 @@
+
+#### VarsEdBD
+
+:cmdcommand: VarsEdBD
+:cmdoperands: Обязательный. Имя блока набор переменных которого будет редактироваться
+:cmdexample2: Load(DEVICE_PS_SMOKE)
+
+include::../../_elements/commandsummary.adoc[]
+
+!!NEEDDETAILS!!
+
+include::commandsummaryfree.adoc[]

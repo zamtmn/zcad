@@ -1,0 +1,21 @@
+extends: default
+role:
+  filepath:
+    font-family: M+ 1mn
+    font-style: bold
+    font-color: #101010
+  command:
+    font-style: bold_italic
+    font-color: #0000ff
+  cmdline:
+    font-family: M+ 1mn
+    font-style: bold
+    font-color: #0000ff
+  ent:
+    font-style: bold_italic
+    font-color: #0000ff
+  hl:
+    font-style: bold
+  menu:
+    font-style: bold_italic
+    font-color: #0000ff

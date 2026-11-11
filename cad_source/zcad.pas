@@ -327,7 +327,7 @@ uses
   uzcregelectrotechfeatures,
   //uzccomelectrical,
   uzcCommand_Connection2Dot,uzcCommand_ElAutoGenCableRemove,uzcCommand_ElCableSelect,
-  uzcCommand_ElCableInvert,uzcCommand_ElCableJoin,uzcCommand_ElCableLegend,
+  uzcCommand_ElCableInvert,uzcCommand_ElCableJoin,uzcCommand_ElCableLegend,uzcCommand_ElCableLegend2,
   uzcCommand_ElMaterialLegend,uzcCommand_ElExternalKZ,uzcCommand_KIPCableMark,uzcCommand_ElLeader,
   uzcCommand_ElWire,uzcCommand_ElCable,uzcCommand_KIPLugTableBuild,uzcCommand_KIPCDBuild,
   uzcCommand_RegenZEnts,

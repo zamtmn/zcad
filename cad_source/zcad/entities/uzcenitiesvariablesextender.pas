@@ -226,7 +226,7 @@ begin
                   if entityunit.FindVariable('GC_HeadDevice')<>nil then
                   if entityunit.FindVariable('GC_Metric')=nil then
                   begin
-                       entityunit.setvardesc(vd,'GC_Metric','','String');
+                       entityunit.setvardesc(vd,'GC_Metric','','TCalculatedString');
                        entityunit.InterfaceVariables.createvariable(vd.name,vd);
                   end;
 
@@ -252,7 +252,7 @@ begin
                   if entityunit.FindVariable('GC_Metric')<>nil then
                   if entityunit.FindVariable('GC_InGroup_Metric')=nil then
                   begin
-                       entityunit.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','String');
+                       entityunit.setvardesc(vd,'GC_InGroup_Metric','Метрика нумерации в группе','TCalculatedString');
                        entityunit.InterfaceVariables.createvariable(vd.name,vd);
                   end;
 end;

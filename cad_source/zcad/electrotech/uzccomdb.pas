@@ -51,13 +51,13 @@ begin
            pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
            pvd:=pu^.FindVariable('DBCounter');
            vn:=inttostr(Integer(pvd.data.Addr.Instance^));
+           inc(Integer(pvd.data.Addr.Instance^));
            vn:='_EQ'+dupestring('0',6-length(vn))+vn;
            pu.CreateVariable(vn,PUserTypeDescriptor(PTHardTypedData(commandmanager.ContextCommandParams).ptd)^.TypeName);
            p:=pu.FindVariable(vn).data.Addr.Instance;
            PObjectDescriptor(PTHardTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('initnul',p);
            PUserTypeDescriptor(PTHardTypedData(commandmanager.ContextCommandParams)^.ptd)^.CopyValueToInstance(PTHardTypedData(commandmanager.ContextCommandParams)^.Instance,p);
            //PObjectDescriptor(PTTypedData(commandmanager.ContextCommandParams)^.ptd)^.RunMetod('format',p);
-           inc(Integer(pvd.data.Addr.Instance^));
      end
         else
             zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);

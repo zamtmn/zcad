@@ -1,8 +1,8 @@
 //AddReportEmbededPartslist.lpeis
 //Lape script entity initial setup
-//добавляет к ThisEntity расширение переменных и нужные переменные
-//добавляет к ThisEntity расширение отчетов
-//привязывает скрипт specification_gost21.110-2013.lpr
+//РґРѕР±Р°РІР»СЏРµС‚ Рє ThisEntity СЂР°СЃС€РёСЂРµРЅРёРµ РїРµСЂРµРјРµРЅРЅС‹С… Рё РЅСѓР¶РЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
+//РґРѕР±Р°РІР»СЏРµС‚ Рє ThisEntity СЂР°СЃС€РёСЂРµРЅРёРµ РѕС‚С‡РµС‚РѕРІ
+//РїСЂРёРІСЏР·С‹РІР°РµС‚ СЃРєСЂРёРїС‚ specification_gost21.110-2013.lpr
 var
   Entity:PzeEntity;
   ExtenderClass:TzeEntityExtenderClass;

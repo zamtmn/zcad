@@ -11,7 +11,7 @@ uses
   uzccommandsmanager,
   uzcinterface, uzeentity, uzcimagesmanager,
   uzcenitiesvariablesextender,uzcExtdrSCHConnection,
-  uzsbVarmanDef, uzctreenode,
+  uzsbVarmanDef, uzctreenode,uzbUnits,
   Varman, uzcoimultiproperties,LCLType,LCLVersion;
 
 type
@@ -24,12 +24,13 @@ type
   PTExtTreeParam=^TExtTreeParam;
   TExtTreeParam=record
     ExtColumnsParams:TExtColumnsParams;
+    fmt:TzeUnitsFormat;
   end;
 
   TCreateEntityNodeFunc=function(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode of object;
   TBaseRootNodeDesk=class;
   TFilterEntityProc=function(pent:pGDBObjEntity):Boolean of object;
-  TTraceEntityProc=function(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode of object;
+  TTraceEntityProc=function(const AFmt:TzeUnitsFormat;rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode of object;
   TNodeMode=(TNMGroup,TNMAutoGroup,TNMData,TNMHardGroup);
   TNodePastProcessParam=record
     subNodesCounter:Integer;
@@ -87,7 +88,7 @@ type
     constructor Create(AOwner:TComponent; ATree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF}; AName:string; CreateRootNode:Boolean=False);overload;
     destructor Destroy;override;
     function find(BaseName:string;basenode:PVirtualNode):PVirtualNode;
-    procedure ProcessEntity(CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
+    procedure ProcessEntity(const AFmt:TzeUnitsFormat;CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
     function CreateEntityNode(Tree:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};basenode:PVirtualNode;pent:pGDBObjEntity;Name:string):PVirtualNode;virtual;
     procedure ConvertNameNodeToGroupNode(pnode:PVirtualNode);
     function FindGroupNodeBy(RootNode:PVirtualNode;criteria:string;func:TFindFunc):PVirtualNode;
@@ -490,7 +491,7 @@ begin
   end;
 end;
 
-procedure TBaseRootNodeDesk.ProcessEntity(CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
+procedure TBaseRootNodeDesk.ProcessEntity(const AFmt:TzeUnitsFormat;CreateEntityNode:TCreateEntityNodeFunc;pent:pGDBObjEntity;filterproc:TFilterEntityProc;traceproc:TTraceEntityProc);
 var
   Name:string;
   basenode2,namenode,pnode:PVirtualNode;
@@ -504,7 +505,7 @@ begin
     include:=true;
   if include then begin
     if assigned(traceproc)then
-      basenode2:=traceproc(self,pent,Name)
+      basenode2:=traceproc(AFmt,self,pent,Name)
     else
       basenode2:=DefaultTraceEntity(self,pent,Name);
     if basenode2<>nil then begin

@@ -25,24 +25,21 @@ interface
 uses
   SysUtils,
   uzcLog,
+  uzbPaths,
   uzccommandsabstract,uzccommandsimpl,
   uzeblockdef,uzcdrawing,uzcdrawings,uzcinterface,
   uzctnrVectorStrings,uzegeometrytypes,
   uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,
   uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,uzcutils,
   zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry,
-  URecordDescriptor,uzsbTypeDescriptors,uzsbVarmanDef;
+  URecordDescriptor,uzsbTypeDescriptors,uzsbVarmanDef,uzcScrEntSetup;
 
-type
-  TAfterInsertProc=procedure(PInsert:PGDBObjBlockInsert);
-
-procedure Internal_Insert_com_CommandEnd(const Context:TZCADCommandContext;
-  _self:pointer);
+procedure Internal_Insert_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 function Internal_Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
   mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer;
-  const AIP:TAfterInsertProc):integer;
+  const ESP:TEntitySetupProc;ESD:TEntitySetupData):integer;
 function Internal_Insert_com_CommandStart(const Context:TZCADCommandContext;
-  operands:TCommandOperands):integer;
+  operands:TCommandOperands;const ESP:TEntitySetupProc;ESD:TEntitySetupData):integer;
 
 implementation
 
@@ -56,14 +53,16 @@ type
 var
   BIProp:TBlockInsert;
   pb:PGDBObjBlockInsert;
+  Script:string;
 
-function Internal_Insert_com_CommandStart(const Context:TZCADCommandContext;
-  operands:TCommandOperands):integer;
+function Internal_Insert_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands;
+  const ESP:TEntitySetupProc;ESD:TEntitySetupData):integer;
 var
-  pb:PGDBObjBlockdef;
+  PBlockdef:PGDBObjBlockdef;
   i:integer;
   PInternalRTTITypeDesk:PRecordDescriptor;
   pf:PfieldDescriptor;
+  BlockName:string;
 begin
 
   PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TBlockInsert'));
@@ -71,11 +70,13 @@ begin
     pf:=PInternalRTTITypeDesk^.FindField('Block')
   else
     pf:=nil;
+  Script:=operands;
+  GetPartOfPath(BlockName,Script,',');
 
-  if operands<>'' then begin
-    pb:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(operands);
-    if pb=nil then
-      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,operands);
+  if BlockName<>'' then begin
+    PBlockdef:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(BlockName);
+    if PBlockdef=nil then
+      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,BlockName);
     if pf<>nil then
       pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];
   end else begin
@@ -84,12 +85,12 @@ begin
   end;
 
   BIProp.Blocks.Enums.Free;
-  i:=GetBlockDefNames(BIProp.Blocks.Enums,operands);
+  i:=GetBlockDefNames(BIProp.Blocks.Enums,BlockName);
   if BIProp.Blocks.Enums.Count>0 then begin
     if i>=0 then
       BIProp.Blocks.Selected:=i
-    else if length(operands)<>0 then begin
-      zcUI.TextMessage('Insert:'+SysUtils.format(rscmNoBlockDefInDWG,[operands]),
+    else if length(BlockName)<>0 then begin
+      zcUI.TextMessage('Insert:'+SysUtils.format(rscmNoBlockDefInDWG,[BlockName]),
         TMWOHistoryOut);
       commandmanager.executecommandend;
       exit;
@@ -109,7 +110,7 @@ end;
 
 function Internal_Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
   mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer;
-  const AIP:TAfterInsertProc):integer;
+  const ESP:TEntitySetupProc;ESD:TEntitySetupData):integer;
 var
   tb:PGDBObjSubordinated;
   domethod,undomethod:tmethod;
@@ -158,8 +159,10 @@ begin
     pb^.BuildGeometry(drawings.GetCurrentDWG^);
     pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
 
-    if @aip<>nil then
-      aip(pb);
+    if @ESP<>nil then
+      ESP(ESSSetEntity,pb,esd);
+    if Script<>'' then
+      RunEntityInitialsetup(pb,Script,Context);
 
     pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
     drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
@@ -204,19 +207,18 @@ begin
   end;
 end;
 
-procedure Internal_Insert_com_CommandEnd(const Context:TZCADCommandContext;
-  _self:pointer);
+procedure Internal_Insert_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 begin
   pb:=nil;
+  Script:='';
 end;
 
 
 
 
-function Insert_com_CommandStart(const Context:TZCADCommandContext;
-  operands:TCommandOperands):integer;
+function Insert_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):integer;
 begin
-  Result:=Internal_Insert_com_CommandStart(Context,operands);
+  Result:=Internal_Insert_com_CommandStart(Context,operands,nil,nil);
 end;
 
 
@@ -229,7 +231,7 @@ end;
 function Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
   mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
-  Result:=Internal_Insert_com_BeforeClick(Context,wc,mc,button,osp,mclick,nil);
+  Result:=Internal_Insert_com_BeforeClick(Context,wc,mc,button,osp,mclick,nil,nil);
 end;
 
 

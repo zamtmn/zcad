@@ -40,7 +40,9 @@ uses
   uzeEntBase,gzctnrVectorTypes,uzcEnitiesVariablesExtender,uzcExtdrIncludingVolume,
   uzsbVarmanDef,UBaseTypeDescriptor,uzcregisterenitiesfeatures,
   uzcCounter,varman,uzcdevicebaseabstract,Masks,Generics.Defaults,Generics.Collections,
-  gzctnrSTL,uzeTypes;
+  gzctnrSTL,uzeTypes,
+  zUndoCmdSaveEntityState,gzUndoCmdChgMethods2,uzcdrawings,uzcPropertiesUtils,
+  URecordDescriptor;
 
 type
 
@@ -63,6 +65,8 @@ const
   cZeEntsArrays='zcEntsArrays';
   cZeEntsExtenders='zeEntsExtenders';
   cZeReport='zeReport';
+
+  cZeNeedRenameThis='NeedRenameThis';
 
   cZcBase='zсBase';
   cZcUndo='zcUndo';
@@ -100,8 +104,10 @@ type
 
   TEntityExtentionContext=class(TCurrentDrawingContext)
     FThisEntity:PGDBObjGenericWithSubordinated;
-    PArr:PGDBObjEntityOpenArray;
-    //FThisEntityExtender:TAbstractEntityExtender;
+  end;
+
+  TDeviceExtentionContext=class(TEntityExtentionContext)
+    PVarObjArray:PGDBObjEntityOpenArray;
   end;
 
   ThEnts=class
@@ -119,7 +125,7 @@ type
     class procedure zeGeom2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure ze2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeStyles2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
-    class procedure zeEnt2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure zeEntsCreate2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeEntsArrays2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeEntsExtenders2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zeBehavior2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
@@ -134,6 +140,11 @@ type
   end;
 
   TLapeEntityExtention=class
+    class procedure thisEntity2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+  end;
+
+  TLapeDeviceExtention=class
     class procedure ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
@@ -284,8 +295,8 @@ begin
     if ACtx.Root=nil then
       zcAddEntToDrawingWithOutUndo(AEnt,ACtx.DWG^)
     else begin
-      if ACtx is TEntityExtentionContext then begin
-        PGDBObjDevice(TEntityExtentionContext(ACtx).FThisEntity).VarObjArray.AddPEntity(AEnt^)
+      if ACtx is TDeviceExtentionContext then begin
+        PGDBObjDevice(TDeviceExtentionContext(ACtx).FThisEntity).VarObjArray.AddPEntity(AEnt^)
       end else begin
         if ACtx.Root^.GetObjType=GDBDeviceID then
           PGDBObjDevice(ACtx.Root)^.VarObjArray.AddPEntity(AEnt^)
@@ -303,8 +314,8 @@ end;
 
 function getctxroot(ACtx:TCurrentDrawingContext):pointer;
 begin
-  if ACtx is TEntityExtentionContext then
-    result:=PGDBObjDevice(TEntityExtentionContext(ACtx).FThisEntity)
+  if ACtx is TDeviceExtentionContext then
+    result:=PGDBObjDevice(TDeviceExtentionContext(ACtx).FThisEntity)
   else
     result:=ACtx.Root;
 end;
@@ -655,6 +666,101 @@ begin
   result:=true;
 end;
 
+procedure GetEntityExtenderClass(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  extdrName:string;
+begin
+  extdrName:=PlpString(Params^[0])^;
+  if not EntityExtenders.tryGetValue(uppercase(extdrName),TzeEntityExtenderClass(PPointer(Result)^)) then
+    PPointer(Result)^:=nil;
+end;
+
+procedure PzeEntity_GetExtdr(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  pent:PGDBObjEntity;
+  ExtType:TzeEntityExtenderClass;
+begin
+  pent:=ppointer(Params^[0])^;
+  ExtType:=ppointer(Params^[1])^;
+  if pent<>nil then begin
+    PPointer(Result)^:=pent^.GetExtension(ExtType);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePzeEntity]);
+end;
+
+procedure GetOrCreateExtdr(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  pent:PGDBObjEntity;
+  ExtType:TzeEntityExtenderClass;
+  ext:TAbstractEntityExtender;
+  ctx:TCurrentDrawingContext;
+  DoMethod,UndoMethod:TMethod;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  pent:=ppointer(Params^[1])^;
+  ExtType:=ppointer(Params^[2])^;
+  if pent<>nil then begin
+    PPointer(Result)^:=pent^.GetExtension(ExtType);
+    if PPointer(Result)^=nil then begin
+      ext:=ExtType.Create(pent);
+
+      if ctx.Options.NeedUndo then begin
+        domethod.Code:=pointer(pent^.AddExtension);
+        domethod.Data:=pent;
+        undomethod.Code:=pointer(pent^.RemoveExtension);
+        undomethod.Data:=pent;
+
+        TUndoCmdSaveEntityState.CreateAndPush(pent,ctx.DWG.UndoStack);
+        with GUCmdChgMethods2<TAbstractEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,ctx.DWG.UndoStack,drawings.AfterNotAutoProcessGDB) do
+        begin
+          comit;
+        end;
+      end else begin
+        pent^.AddExtension(ext);
+      end;
+
+    end;
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePzeEntity]);
+end;
+
+procedure SetEntityProperty(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  pent:PGDBObjEntity;
+  prop,value:lpString;
+  extdr:TzeEntityExtenderClass;
+begin
+  //Insert(DEVICE_PS_DAT_SMOKE,addreportembededpartslist)
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  pent:=ppointer(Params^[1])^;
+  prop:=PlpString(Params^[2])^;
+  value:=PlpString(Params^[3])^;
+  extdr:=ppointer(Params^[4])^;
+  if pent<>nil then begin
+    PBoolean(Result)^:=SetProperty(ctx.DWG.GetUnitsFormat,pent,prop,value,extdr);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePzeEntity]);
+end;
+
+procedure GetEntityProperty(const Params: PParamArray;const Result: Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  pent:PGDBObjEntity;
+  prop:lpString;
+  extdr:TzeEntityExtenderClass;
+begin
+  //Insert(DEVICE_PS_DAT_SMOKE,addreportembededpartslist)
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  pent:=ppointer(Params^[1])^;
+  prop:=PlpString(Params^[2])^;
+  extdr:=ppointer(Params^[3])^;
+  if pent<>nil then begin
+    GetProperty(ctx.DWG.GetUnitsFormat,pent,prop,PlpString(Result)^,extdr);
+  end else
+    raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePzeEntity]);
+end;
+
 class procedure TLapeDwg.ze2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
@@ -666,6 +772,15 @@ begin
     cplr.addGlobalType('type Pointer','PzeEntity');
     cplr.addGlobalType('type Pointer','PzeLayer');
     cplr.addGlobalType('type Pointer','PzeTableStyle');
+    cplr.addGlobalType('type Pointer','TzeEntityExtenderClass');
+    cplr.addGlobalType('type Pointer','TzeEntityExtender');
+
+    cplr.addGlobalFunc('function GetEntityExtenderClass(extdrName:string):TzeEntityExtenderClass;',@GetEntityExtenderClass);
+    cplr.addGlobalFunc('function PzeEntity.GetExtdr(AExtdr:TzeEntityExtenderClass):TzeEntityExtender;',@PzeEntity_GetExtdr);
+    cplr.addGlobalMethod('function GetOrCreateExtdr(AEntity:PzeEntity;AExtdr:TzeEntityExtenderClass):TzeEntityExtender;',@GetOrCreateExtdr,ctx);
+    cplr.addGlobalMethod('function SetEntityProperty(const AEntity:PzeEntity;const AProperty,AValue:string;AExtdr:TzeEntityExtender=nil):boolean;',@SetEntityProperty,ctx);
+    cplr.addGlobalMethod('function GetEntityProperty(const AEntity:PzeEntity;const AProperty:string;AExtdr:TzeEntityExtender=nil):boolean;',@GetEntityProperty,ctx);
+
 
     cplr.EndImporting;
   end;
@@ -708,7 +823,7 @@ begin
   end;
 end;
 
-class procedure TLapeDwg.zeEnt2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+class procedure TLapeDwg.zeEntsCreate2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     if CheckBaseDefs(cplr,cZeEnts,[cZeBase,cZeGeometry])then begin
@@ -1117,26 +1232,26 @@ begin
   end;
 end;
 
-procedure ThisReportOwner(const Params: PParamArray;const Result: Pointer); cdecl;
+procedure ThisEntity(const Params: PParamArray;const Result: Pointer); cdecl;
 var
   ctx:TCurrentDrawingContext;
   ents:ThEnts;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx is TEntityExtentionContext then
-    PPointer(Result)^:=TEntityExtentionContext(ctx).FThisEntity
+  if ctx is TDeviceExtentionContext then
+    PPointer(Result)^:=TDeviceExtentionContext(ctx).FThisEntity
   else
     PPointer(Result)^:=nil;
 end;
 
-procedure ThisReportVariableExtdr(const Params: PParamArray;const Result: Pointer); cdecl;
+procedure ThisEntityVariableExtdr(const Params: PParamArray;const Result: Pointer); cdecl;
 var
   ctx:TCurrentDrawingContext;
   ents:ThEnts;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if (ctx is TEntityExtentionContext)and(TEntityExtentionContext(ctx).FThisEntity<>nil) then
-    PPointer(Result)^:=TEntityExtentionContext(ctx).FThisEntity.GetExtension<TVariablesExtender>
+  if (ctx is TDeviceExtentionContext)and(TDeviceExtentionContext(ctx).FThisEntity<>nil) then
+    PPointer(Result)^:=TDeviceExtentionContext(ctx).FThisEntity.GetExtension<TVariablesExtender>
   else
     PPointer(Result)^:=nil;
 end;
@@ -1147,7 +1262,7 @@ var
   counter:TCombineCounter;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  counter:=TCombineCounter.Create;
+  counter:=TCombineCounter.Create(ctx.DWG.GetUnitsFormat);
   ctx.Things.PushBack(counter);
   PThingsIndex(Result)^.Things:=ctx.Things;
   PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
@@ -1611,21 +1726,9 @@ begin
 
       cplr.addGlobalFunc('function PDOMNode.AttrValue(const AAttrName:string;ADefaultValue:string=''''):string;',@PDOMNode_AttrValue);
 
-      cplr.addGlobalMethod('function ThisReport:PzeEntity;',@ThisReportOwner,ctx);
-      cplr.addGlobalMethod('function ThisReportVariableExtdr:TVariablesExtender;',@ThisReportVariableExtdr,ctx);
-
       cplr.EndImporting;
     end;
   end;
-end;
-
-procedure GetEntityExtenderClass(const Params: PParamArray;const Result: Pointer); cdecl;
-var
-  extdrName:string;
-begin
-  extdrName:=PlpString(Params^[0])^;
-  if not EntityExtenders.tryGetValue(uppercase(extdrName),TzeEntityExtenderClass(PPointer(Result)^)) then
-    PPointer(Result)^:=nil;
 end;
 
 procedure PzeEntity_GetVariableExtdr(const Params: PParamArray;const Result: Pointer); cdecl;
@@ -1803,6 +1906,37 @@ begin
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePVarDesk]);
 end;
 
+procedure _AddVariable(const Params:PParamArray;const Result:Pointer); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  VarExt:TVariablesExtender;
+  &Type,TypeDescriptor:PUserTypeDescriptor;
+  vd:vardesk;
+  vn,vt,vv,vun:lpString;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  VarExt:=TVariablesExtender((Params^[1])^);
+  vn:=PlpString(Params^[2])^;
+  vt:=PlpString(Params^[3])^;
+  vv:=PlpString(Params^[4])^;
+  vun:=PlpString(Params^[5])^;
+
+  if VarExt.entityunit.FindVariable(vn)=nil then begin
+    &Type:=VarExt.entityunit.TypeName2PTD(vt);
+    if &Type<>nil then begin
+      TypeDescriptor:=getRecTypeDescriptorOverrider(&Type);
+      VarExt.entityunit.setvardesc(vd,vn,vun,&Type);
+      VarExt.entityunit.InterfaceVariables.createvariable(vd.Name,vd);
+      if TypeDescriptor=nil then
+        &Type^.SetValueFromString(vd.Data.Addr.Instance,vv)
+      else
+        TypeDescriptor^.SetValueFromString(vd.Data.Addr.Instance,vv);
+    end;
+    PBoolean(Result)^:=true;
+  end else
+    PBoolean(Result)^:=false;
+
+end;
 
 class procedure TLapeDwg.zeEntsExtenders2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
@@ -1811,7 +1945,6 @@ begin
       cplr.StartImporting;
       cplr.addBaseDefine(cZeEntsExtenders);
 
-      cplr.addGlobalType('type Pointer','TzeEntityExtenderClass');
       cplr.addGlobalType('type Pointer','TVariablesExtender');
       cplr.addGlobalType('type Pointer','PVarDesk');
 
@@ -1819,7 +1952,6 @@ begin
       cplr.addGlobalType('set of TGVResult','TGVResults');
       cplr.addGlobalVar('TGVResults','[GVRImplicitCast,GVROk]','GVRFounded');
 
-      cplr.addGlobalFunc('function GetEntityExtenderClass(extdrName:string):TzeEntityExtenderClass;',@GetEntityExtenderClass);
       cplr.addGlobalFunc('function PzeEntity.GetVariableExtdr:TVariablesExtender;',@PzeEntity_GetVariableExtdr);
 
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(VarName:string;out VarValue:Int32;ADefaultValue:int32=0;InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_int32);
@@ -1827,6 +1959,8 @@ begin
       cplr.addGlobalFunc('function TVariablesExtender.GetVarValue(AVarName:string;out AValue:string;ADefaultValue:string='''';InInterfaceOnly:boolean=false):TGVResult;overload;',@TVariablesExtender_GetVarValue_string);
       cplr.addGlobalFunc('function TVariablesExtender.GetVarDesk(VarName:string;InInterfaceOnly:boolean=false):PVarDesk;',@TVariablesExtender_GetVarDesk);
       cplr.addGlobalFunc('function TVariablesExtender.GetValueTemplate(PVD:PVarDesk;PEnt:PzeEntity):String;',@TVariablesExtender_GetVarTemplate);
+
+      cplr.addGlobalMethod('function AddVariable(AVExtdr:TVariablesExtender;vn,vt,vv,vun:string):boolean;',@_AddVariable,ctx);
 
       cplr.addGlobalFunc('function TVariablesExtender.GetMainFunction:TVariablesExtender;',@TVariablesExtender_GetMainFunction);
 
@@ -1899,6 +2033,21 @@ begin
     end;
 end;
 
+class procedure TLapeEntityExtention.thisEntity2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    if CheckBaseDefs(cplr,cZeNeedRenameThis,[cZeBase])then begin
+      cplr.StartImporting;
+      cplr.addBaseDefine(cZeNeedRenameThis);
+
+      cplr.addGlobalMethod('function ThisEntity:PzeEntity;',@ThisEntity,ctx);
+      cplr.addGlobalMethod('function ThisEntityVariableExtdr:TVariablesExtender;',@ThisEntityVariableExtdr,ctx);
+
+      cplr.EndImporting;
+    end;
+  end;
+end;
+
 class procedure TLapeDwg.ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMContextSetup in mode then begin
@@ -1914,16 +2063,24 @@ class procedure TLapeEntityExtention.ctxSetup(const ACommandContext:TZCADCommand
 begin
   if LSCMContextSetup in mode then begin
     if ctx is TEntityExtentionContext then begin
-      //(ctx as TCurrentDrawingContext).Root:=pointer(ACommandContext.POwner);
       (ctx as TEntityExtentionContext).FThisEntity:=ACommandContext.POwner;
+    end;
+    (ctx as TCurrentDrawingContext).Options.CreateRec([]);
+  end;
+end;
+
+
+class procedure TLapeDeviceExtention.ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMContextSetup in mode then begin
+    if ctx is TDeviceExtentionContext then begin
       if ACommandContext.POwner<>nil then begin
         if ACommandContext.POwner^.GetObjType=GDBDeviceID then
-          (ctx as TEntityExtentionContext).PArr:=@PGDBObjDevice(ACommandContext.POwner).VarObjArray
+          (ctx as TDeviceExtentionContext).PVarObjArray:=@PGDBObjDevice(ACommandContext.POwner).VarObjArray
         else
-          (ctx as TEntityExtentionContext).PArr:=nil;
+          (ctx as TDeviceExtentionContext).PVarObjArray:=nil;
       end else
-        (ctx as TEntityExtentionContext).PArr:=nil;
-      (ctx as TCurrentDrawingContext).Options.CreateRec([]);
+        (ctx as TDeviceExtentionContext).PVarObjArray:=nil;
     end;
   end;
 end;

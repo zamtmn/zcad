@@ -626,7 +626,7 @@ begin
 
   if (pdev<>nil)and ShowHeader then begin
     if (pvNote<>nil)and(pvNoteFormat<>nil) then
-      pstring(pvNote^.Data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.Data.Addr.Instance)^,SPFSources.GetFull,pdev);
+      pstring(pvNote^.Data.Addr.Instance)^:=textformat(drawing.GetUnitsFormat,pstring(pvNoteFormat^.Data.Addr.Instance)^,SPFSources.GetFull,pdev);
     if (pvNote<>nil)and(pstring(pvNote^.Data.Addr.Instance)^<>'') then
       s:=pvNote^.Data.PTD.GetValueAsString(pvNote^.Data.Addr.Instance)
     else begin

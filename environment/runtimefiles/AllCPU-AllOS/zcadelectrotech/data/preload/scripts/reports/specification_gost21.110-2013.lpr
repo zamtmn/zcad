@@ -185,8 +185,8 @@ var
 
   table:PzeEntity;
 begin
-  report:=ThisReport;
-  reportvars:=ThisReportVariableExtdr;
+  report:=ThisEntity;
+  reportvars:=ThisEntityVariableExtdr;
 
   reportvars.GetVarValue('RPRTSRC_EntSourceIncludingVolumeFunction',EntSourceIncludingVolumeFunction);
   reportvars.GetVarValue('RPRTFLTR_EntTypeInclude',EntTypeInclude);

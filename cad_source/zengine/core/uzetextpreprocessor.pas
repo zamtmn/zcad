@@ -22,7 +22,7 @@ unit uzetextpreprocessor;
 interface
 
 uses
-  uzbSets,uzeTypes,uzbstrproc,sysutils,gzctnrSTL,uzbLogIntf,uzeparser;
+  uzbUnits,uzbSets,uzeTypes,uzbstrproc,sysutils,gzctnrSTL,uzbLogIntf,uzeparser;
 
 type
   TSPFSourceEnum=LongWord;
@@ -32,7 +32,7 @@ type
   TStrProcessAttributes=set of TStrProcessAttribute;
   TInternalCharType=UnicodeChar;
   TInternalStringType=UnicodeString;
-  TStrProcessFunc=function(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var startpos:integer;var SPA:TStrProcessAttributes;pobj:pointer):String;
+  TStrProcessFunc=function(const AFMt:TzeUnitsFormat;const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var startpos:integer;var SPA:TStrProcessAttributes;pobj:pointer):String;
   TStrProcessorData=record
     Id:TInternalStringType;
     OBracket,CBracket:TInternalCharType;
@@ -59,9 +59,9 @@ var
   Parser:TMyParser;
   ZCADToken:TTokenDescription.TEnumItemType;
 
-function textformat(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;overload;
-function TxtFormatAndCountSrcs(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;out ASourcesCounter:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;
-function textformat(const s:string;const EnabledSources:TSPFSourceSet;pobj:Pointer):string;overload;
+function textformat(const fmt:TzeUnitsFormat;const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;overload;
+function TxtFormatAndCountSrcs(const fmt:TzeUnitsFormat;const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;out ASourcesCounter:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;
+function textformat(const fmt:TzeUnitsFormat;const s:string;const EnabledSources:TSPFSourceSet;pobj:Pointer):string;overload;
 implementation
 
 
@@ -85,7 +85,7 @@ begin
   RegisterKey(key,data);
 end;
 
-function TxtFormatAndCountSrcs(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;out ASourcesCounter:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;
+function TxtFormatAndCountSrcs(const fmt:TzeUnitsFormat;const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;out ASourcesCounter:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;
 var
   FindedIdPos,ContinuePos,EndBracketPos,counter:Integer;
   res,operands,sss:TDXFEntsInternalStringType;
@@ -141,9 +141,9 @@ begin
               SPFSources.Include(ASourcesCounter,pair.Value.Source);
               ContinuePos:=EndBracketPos;
               SPA:=[];
-              res:=UTF8Decode(pair.value.func(sss,operands,ContinuePos,SPA,pobj));
+              res:=UTF8Decode(pair.value.func(fmt,sss,operands,ContinuePos,SPA,pobj));
               if SPARecursive in spa then begin
-                res:=TxtFormatAndCountSrcs(res,EnabledSources,RecursiveSourcesCounter,pobj);
+                res:=TxtFormatAndCountSrcs(fmt,res,EnabledSources,RecursiveSourcesCounter,pobj);
                 ASourcesCounter:=RecursiveSourcesCounter or ASourcesCounter;
               end;
               sbAppend(res);
@@ -168,16 +168,16 @@ begin
   end;
 end;
 
-function textformat(const s:string;const EnabledSources:TSPFSourceSet;pobj:Pointer):string;overload;
+function textformat(const fmt:TzeUnitsFormat;const s:string;const EnabledSources:TSPFSourceSet;pobj:Pointer):string;overload;
 begin
-  result:=string(textformat(TDXFEntsInternalStringType(s),EnabledSources,pobj));
+  result:=string(textformat(fmt,TDXFEntsInternalStringType(s),EnabledSources,pobj));
 end;
 
-function textformat(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;overload;
+function textformat(const fmt:TzeUnitsFormat;const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;overload;
 var
   SourcesCounter:TSPFSourceSet;
 begin
-  result:=TxtFormatAndCountSrcs(TDXFEntsInternalStringType(s),EnabledSources,SourcesCounter,pobj);
+  result:=TxtFormatAndCountSrcs(fmt,TDXFEntsInternalStringType(s),EnabledSources,SourcesCounter,pobj);
 end;
 
 initialization

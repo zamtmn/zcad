@@ -78,10 +78,11 @@ begin
     commandmanager.executecommandend;
     exit;
   end;
-  Result:=Internal_Insert_com_CommandStart(Context,delname{'DEVICE_KIP_SENSOR'});
+  Result:=Internal_Insert_com_CommandStart(Context,delname,nil,nil);
 end;
 
-procedure MakeDelegate(PInsert:PGDBObjBlockInsert);
+function MakeDelegate(const AStage:TEntitySetupStage;const PInsert:PGDBObjBlockInsert;
+    const AData:TEntitySetupData):boolean;
 var
   pCentralVarext,pVarext:TVariablesExtender;
 begin
@@ -99,12 +100,13 @@ begin
     zcUI.TextMessage('PlaceDelegate:'+SysUtils.format(
       'Inserted entity has no extension "%s"',[TVariablesExtender.getExtenderName]),
       TMWOHistoryOut);
+  result:=true;
 end;
 
 function PlaceDelegate_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
   mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
-  Result:=Internal_Insert_com_BeforeClick(Context,wc,mc,button,osp,mclick,@MakeDelegate);
+  Result:=Internal_Insert_com_BeforeClick(Context,wc,mc,button,osp,mclick,@MakeDelegate,nil);
   if Result=cmd_ok then
     commandmanager.executecommandend;
 end;

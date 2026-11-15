@@ -22,6 +22,7 @@ unit uzcTextPreprocessorDXFImpl;
 interface
 uses
   sysutils,
+  uzbUnits,
   uzetextpreprocessor,
   uzeTypes,
   LazUTF8;
@@ -34,7 +35,7 @@ begin
   Result:=_SPFSdxf;
 end;
 
-function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
+function EscapeSeq(const AFMt:TzeUnitsFormat;const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   ch,lcch:TDXFEntsInternalCharType;
   value:TDXFEntsInternalStringType;
@@ -75,7 +76,7 @@ begin
     inc(NextSymbolPos);
   end;
 end;
-function BracesArea(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
+function BracesArea(const AFMt:TzeUnitsFormat;const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   CloseBracetPos:integer;
   code,l:integer;

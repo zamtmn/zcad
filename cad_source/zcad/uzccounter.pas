@@ -25,7 +25,8 @@ interface
 uses
   SysUtils,
   LazUTF8,
-  {uzbLogTypes,}uzcLog,
+  uzbUnits,
+  uzcLog,
   gzctnrSTL,
   uzeentity,uzeExtdrAbstractEntityExtender,
   uzeentline,uzeEntSpline,uzeentdevice,
@@ -87,7 +88,7 @@ type
     public
       constructor Create(AVarName:TInternalScriptString);
       destructor Destroy;override;
-      procedure CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
+      procedure CombineAndCount(const AFMt:TzeUnitsFormat;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
       function getNamesLength:integer;
       function getNames:TArrayOfString;
       property OtherNames:TOtherNames read fOtherNames;
@@ -103,12 +104,12 @@ type
       fInteger:Boolean;
       procedure Add(AValue:double);overload;
       procedure Add(AValue:integer);overload;
-      procedure CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
+      procedure CombineAndCount(const AFMt:TzeUnitsFormat;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
     public
       constructor Create(AVarNames:TVarNames);
       destructor Destroy;override;
-      procedure CombineAndCount(Value:integer;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
-      procedure CombineAndCount(Value:double;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
+      procedure CombineAndCount(const AFMt:TzeUnitsFormat;Value:integer;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
+      procedure CombineAndCount(const AFMt:TzeUnitsFormat;Value:double;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
       function getNames:TArrayOfString;
       property Value:Double read fValue;
       property isInteger:Boolean read fInteger;
@@ -118,8 +119,9 @@ type
   var
     fCombineVarNames:TVarNames;
     fContainer:TContainer;
+    fFmt:TzeUnitsFormat;
   public
-    constructor Create;
+    constructor Create(AFmt:TzeUnitsFormat);
     destructor Destroy;override;
     procedure SetCombineVarNames(AVarNames:array of TInternalScriptString);
     procedure CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;ANamePVD:PVarDesk;AKey:GKeyType);
@@ -187,7 +189,7 @@ begin
   fOtherNames.Destroy;
 end;
 
-procedure GCombineCounter<GKeyType,GIndexType>.TVarElement.CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
+procedure GCombineCounter<GKeyType,GIndexType>.TVarElement.CombineAndCount(const AFMt:TzeUnitsFormat;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
 var
   varOffset:integer;
   morpheme:TMorpheme;
@@ -209,8 +211,8 @@ begin
     varOffset:=varOffset;
     TPLMorpheme.Prefix:=copy(ATemplate,1,varOffset-1);
     TPLMorpheme.Suffix:=copy(ATemplate,varOffset+Length(fVarName),Length(ATemplate)-varOffset-Length(fVarName)+1);
-    morpheme.Prefix:=ResolveTemplate(TPLMorpheme.Prefix,AEnt);
-    morpheme.Suffix:=ResolveTemplate(TPLMorpheme.Suffix,AEnt);
+    morpheme.Prefix:=ResolveTemplate(AFMt,TPLMorpheme.Prefix,AEnt);
+    morpheme.Suffix:=ResolveTemplate(AFMt,TPLMorpheme.Suffix,AEnt);
 
     if not fMorphemsContainer.TryGetValue(morpheme,me) then begin
       me:=TMorphemElement.Create;
@@ -314,12 +316,12 @@ begin
   end;
 end;
 
-procedure GCombineCounter<GKeyType,GIndexType>.TKeyElement.CombineAndCount(AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
+procedure GCombineCounter<GKeyType,GIndexType>.TKeyElement.CombineAndCount(const AFMt:TzeUnitsFormat;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);
 var
   i:Integer;
 begin
   for i:=low(fVarElements) to high(fVarElements) do begin
-    fVarElements[i].CombineAndCount(AEnt,AVarExtdr,AName,ATemplate);
+    fVarElements[i].CombineAndCount(AFMt,AEnt,AVarExtdr,AName,ATemplate);
   end;
 end;
 
@@ -347,20 +349,21 @@ begin
   end;
 end;
 
-procedure GCombineCounter<GKeyType,GIndexType>.TKeyElement.CombineAndCount(Value:integer;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
+procedure GCombineCounter<GKeyType,GIndexType>.TKeyElement.CombineAndCount(const AFMt:TzeUnitsFormat;Value:integer;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
 begin
-  CombineAndCount(AEnt,AVarExtdr,AName,ATemplate);
+  CombineAndCount(AFMt,AEnt,AVarExtdr,AName,ATemplate);
   Add(Value);
 end;
 
-procedure GCombineCounter<GKeyType,GIndexType>.TKeyElement.CombineAndCount(Value:double;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
+procedure GCombineCounter<GKeyType,GIndexType>.TKeyElement.CombineAndCount(const AFMt:TzeUnitsFormat;Value:double;AEnt:PGDBObjEntity;AVarExtdr:TVariablesExtender;AName:PVarDesk;ATemplate:String);overload;
 begin
-  CombineAndCount(AEnt,AVarExtdr,AName,ATemplate);
+  CombineAndCount(AFMt,AEnt,AVarExtdr,AName,ATemplate);
   Add(Value);
 end;
 
 constructor GCombineCounter<GKeyType,GIndexType>.Create;
 begin
+  fFmt:=AFmt;
   fCombineVarNames:=[];
   fContainer:=TContainer.Create;
 end;
@@ -398,13 +401,13 @@ begin
   template:=GetVarTemplate(AVarExtdr,ANamePVD,AEnt);
   pvd:=AVarExtdr.EntityUnit.FindVariable('AmountD');
   if pvd<>nil then
-    elm.CombineAndCount(pdouble(pvd.data.Addr.Instance)^,AEnt,AVarExtdr,ANamePVD,template)
+    elm.CombineAndCount(fFmt,pdouble(pvd.data.Addr.Instance)^,AEnt,AVarExtdr,ANamePVD,template)
   else begin
     pvd:=AVarExtdr.EntityUnit.FindVariable('AmountI');
     if pvd<>nil then
-      elm.CombineAndCount(PInteger(pvd.data.Addr.Instance)^,AEnt,AVarExtdr,ANamePVD,template)
+      elm.CombineAndCount(fFmt,PInteger(pvd.data.Addr.Instance)^,AEnt,AVarExtdr,ANamePVD,template)
     else
-      elm.CombineAndCount(1,AEnt,AVarExtdr,ANamePVD,template)
+      elm.CombineAndCount(fFmt,1,AEnt,AVarExtdr,ANamePVD,template)
   end;
 end;
 

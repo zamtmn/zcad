@@ -347,6 +347,7 @@ begin
   dc.DrawMode:=LWDisplay;
   dc.DrawingContext.GlobalLTScale:=LTScale;
   dc.DrawingContext.FrustumCenter.HasValue:=False;
+  dc.DrawingContext.UnitsFormat:=GetUnitsFormat;
 end;
 
 function TSimpleDrawing.GetChangeStampt:boolean;

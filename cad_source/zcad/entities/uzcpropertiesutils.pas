@@ -15,69 +15,81 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzcpropertiesutils;
+unit uzcPropertiesUtils;
 {$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses sysutils,
-     uzeentity,uzsbVarmanDef,uzeentsubordinated,
-     uzcoimultiproperties,uzcoimultipropertiesutil,uzcdrawings,
-     Varman,uzbUnits;
-function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:String; out propertyvalue:String):boolean;
+
+uses
+  SysUtils,
+  uzeentity,uzsbVarmanDef,uzeentsubordinated,
+  uzcoimultiproperties,uzcoimultipropertiesutil,
+  Varman,uzbUnits,uzeBaseExtender,uzeExtdrAbstractEntityExtender;
+
+function GetProperty(const fmt:TzeUnitsFormat;PEnt:PGDBObjGenericWithSubordinated;propertyname:string;out propertyvalue:string;AExtenderClass:TMetaExtender=nil):boolean;
+function SetProperty(const fmt:TzeUnitsFormat;PEnt:PGDBObjGenericWithSubordinated;propertyname:string;const propertyvalue:string;AExtenderClass:TMetaExtender=nil):boolean;
+
 implementation
-var
-  pu:TEntityUnit;
-function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:String; out propertyvalue:String):boolean;
+
+function GetProperty(const fmt:TzeUnitsFormat;PEnt:PGDBObjGenericWithSubordinated;propertyname:string;out propertyvalue:string;AExtenderClass:TMetaExtender=nil):boolean;
 var
   mp:TMultiProperty;
   mpd:TMultiPropertyDataForObjects;
   ChangedData:TChangedData;
-  //ir:itrec;
-  //pdesc: pvardesk;
-  f:TzeUnitsFormat;
 
-  procedure GetPropertyValue;
+  procedure GetPropertyValue(pthing:pointer);
   begin
-    f:=drawings.GetUnitsFormat;
-    //mp.PIiterateData:=mp.BeforeIterateProc(mp,@pu);
-    //ChangedData:=CreateChangedData(PEnt,mpd.GetValueOffset,mpd.SetValueOffset);
-    ChangedData:=CreateChangedData(PEnt,mpd.GSData);
-    propertyvalue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
-    //if @mpd.EntBeforeIterateProc<>nil then
-    //  mpd.EntBeforeIterateProc(mp.PIiterateData,ChangedData);
-    //mpd.EntIterateProc(mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,f);
-    //mp.AfterIterateProc(mp.PIiterateData,mp);
-    //mp.PIiterateData:=nil;
-    //pdesc:=pu.InterfaceVariables.vardescarray.beginiterate(ir);
-    //if pdesc<>nil then begin
-      result:=true;
-    //  propertyvalue:=pdesc.data.PTD.GetDecoratedValueAsString(pdesc.Instance,f);
-    //end else
-    //  result:=false;
-    //pu.InterfaceVariables.vardescarray.Freewithproc(vardeskclear);
-    //pu.InterfaceVariables.vararray.clear;
+    ChangedData:=CreateChangedData(pthing,mpd.GSData);
+    propertyvalue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,fmt);
+    Result:=True;
   end;
 
 begin
-  {result:=true;
-  propertyvalue:='??';
-  exit;}
   if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then begin
-    if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
-      GetPropertyValue;
+    if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(0,AExtenderClass),mpd) then begin
+      if AExtenderClass=nil then
+        GetPropertyValue(PEnt)
+      else
+        GetPropertyValue(PEnt^.GetExtension(TzeEntityExtenderClass(AExtenderClass)));
     end else if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(PEnt^.GetObjType,nil),mpd) then begin
-      GetPropertyValue;
+      GetPropertyValue(PEnt);
     end else
-      result:=false;
+      Result:=False;
   end else
-    result:=false;
+    Result:=False;
 end;
-initialization
-  pu.init('test');
-  pu.InterfaceUses.PushBackIfNotPresent(sysunit);
-finalization
-  //pu.free;
-  pu.done;
-end.
 
+function SetProperty(const fmt:TzeUnitsFormat;PEnt:PGDBObjGenericWithSubordinated;propertyname:string;const propertyvalue:string;AExtenderClass:TMetaExtender=nil):boolean;
+var
+  mp:TMultiProperty;
+  mpd:TMultiPropertyDataForObjects;
+  ChangedData:TChangedData;
+
+  procedure SetPropertyValue(pthing:pointer);
+  begin
+    ChangedData:=CreateChangedData(pthing,mpd.GSData);
+    mp.MPType.SetEditableFromString(ChangedData.PSetDataInEtity,fmt,propertyvalue);
+    Result:=True;
+  end;
+
+begin
+  if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then begin
+    if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(0,AExtenderClass),mpd) then begin
+      if AExtenderClass=nil then
+        setPropertyValue(PEnt)
+      else
+        setPropertyValue(PEnt^.GetExtension(TzeEntityExtenderClass(AExtenderClass)));
+    end else if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(PEnt^.GetObjType,nil),mpd) then begin
+      SetPropertyValue(PEnt);
+    end else
+      Result:=False;
+  end else
+    Result:=False;
+end;
+
+initialization
+
+finalization
+
+end.

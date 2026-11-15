@@ -26,14 +26,14 @@ uses
   uzetextpreprocessor,uzctnrVectorBytesStream,uzeTypes,uzeobjectextender,uzeentsubordinated,
   uzeentity,uzeenttext,uzeblockdef,uzsbVarmanDef,Varman,UUnitManager,URecordDescriptor,
   UBaseTypeDescriptor,uzedrawingdef,uzbstrproc,uzeentitiesprop,uzcentelleader,math,
-  gzctnrVectorTypes,uzccommandsmanager,uzeEntTable;
+  gzctnrVectorTypes,uzccommandsmanager,uzeEntTable,uzbUnits;
 
 var
    PFCTTD:Pointer=nil;
    extvarunit:TUnit;
 
 function GetVarTemplate(varsextdr:TVariablesExtender;pvd:pvardesk;pEntity:PGDBObjEntity):string;
-function ResolveTemplate(const formatstr:String; pEntity:PGDBObjGenericWithSubordinated):string;
+function ResolveTemplate(const AFmt:TzeUnitsFormat;const formatstr:String; pEntity:PGDBObjGenericWithSubordinated):string;
 
 implementation
 type
@@ -236,18 +236,18 @@ else if _Value='BB_EMPTY' then
                                 result:=true;
                           end;
 end;
-function ResolveTemplate(const formatstr:String; pEntity:PGDBObjGenericWithSubordinated):string;
+function ResolveTemplate(const AFmt:TzeUnitsFormat;const formatstr:String; pEntity:PGDBObjGenericWithSubordinated):string;
 begin
   if pEntity<>nil then
-    result:=textformat(formatstr,SPFSources.GetFull,pEntity)
+    result:=textformat(AFmt,formatstr,SPFSources.GetFull,pEntity)
   else
     result:='!!ERR(pEnttity=nil)';
 end;
-procedure DeviceNameSubProcess(pvn:pvardesk; const formatstr:String; pEntity:PGDBObjGenericWithSubordinated);
+procedure DeviceNameSubProcess(const AFmt:TzeUnitsFormat;pvn:pvardesk; const formatstr:String; pEntity:PGDBObjGenericWithSubordinated);
 begin
   if (pvn<>nil) then begin
     if (formatstr<>'') then begin
-      pvn^.SetValueFromString(textformat(formatstr,SPFSources.GetFull,pEntity));
+      pvn^.SetValueFromString(textformat(AFmt,formatstr,SPFSources.GetFull,pEntity));
       {if pEntity<>nil then
         pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,SPFSources.GetFull,pEntity)
       else
@@ -271,7 +271,7 @@ begin
       pvn:=pentvarext.entityunit.FindVariable(VarWithTemplate.Name,true);
       if pvn<>nil then begin
         pvnt:=pentvarext.entityunit.FindVariable(VarWithTemplate.Template,true);
-        DeviceNameSubProcess(pvn,pvnt^.GetValueAsString,pEntity);
+        DeviceNameSubProcess(drawing.GetUnitsFormat,pvn,pvnt^.GetValueAsString,pEntity);
       end;
     end;
   end;
@@ -284,7 +284,7 @@ begin
     if pvn<>nil then repeat
       if pvn.data.PTD=CalculatedStringDesk then begin
         ptcs:=pvn.data.Addr.Instance;
-        ptcs.value:=textformat(ptcs.format,SPFSources.GetFull,pEntity)
+        ptcs.value:=textformat(drawing.GetUnitsFormat,ptcs.format,SPFSources.GetFull,pEntity)
       end;
       pvn:=pentvarext.entityunit.InterfaceVariables.vardescarray.iterate(ir);
     until pvn=nil;
@@ -325,7 +325,7 @@ begin
       pdev:=nil;
     pvn:=pentvarext.entityunit.FindVariable('NMO_Prefix');
     pvnt:=pentvarext.entityunit.FindVariable('NMO_PrefixTemplate');
-    DeviceNameSubProcess(pvn,pvnt^.GetValueAsString,pdev);
+    DeviceNameSubProcess(drawing.GetUnitsFormat,pvn,pvnt^.GetValueAsString,pdev);
 
     if pCable^.NodePropArray.Count>0 then begin
       ptn:=pCable^.NodePropArray.getDataMutable(pCable^.NodePropArray.Count-1);
@@ -334,7 +334,7 @@ begin
       pdev:=nil;
     pvn:=pentvarext.entityunit.FindVariable('NMO_Suffix');
     pvnt:=pentvarext.entityunit.FindVariable('NMO_SuffixTemplate');
-    DeviceNameSubProcess(pvn,pvnt^.GetValueAsString,pdev);
+    DeviceNameSubProcess(drawing.GetUnitsFormat,pvn,pvnt^.GetValueAsString,pdev);
   end;
   GeneralVarsProcess(CableVarsWithTemplates,pCable,pentvarext,drawing);
 end;

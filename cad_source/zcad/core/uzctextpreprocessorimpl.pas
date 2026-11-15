@@ -20,7 +20,9 @@ unit uzctextpreprocessorimpl;
 {$mode objfpc}{$H+}
 
 interface
-uses uzeentity,uzcvariablesutils,uzetextpreprocessor,sysutils,
+uses
+  uzbUnits,
+     uzeentity,uzcvariablesutils,uzetextpreprocessor,sysutils,
      uzsbVarmanDef,uzeTypes,uzcenitiesvariablesextender,languade,
      uzcpropertiesutils,uzeparser,LazUTF8,uzcTextPreprocessorDXFImpl;
 type
@@ -59,6 +61,7 @@ var
   TokenTextInfo:TMyParser.TParserTokenizer.TTokenTextInfo;
   pt:TMyParser.TGeneralParsedText;
   s:UnicodeString;
+  a:integer;
   p:pointer;
 
 function SPFSzcad:TSPFSourceEnum;
@@ -97,6 +100,7 @@ begin
   if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
     Result[ResultParam.P.CodeUnitPos]:='9';
     Result[ResultParam.P.CodeUnitPos+1]:='9';
+    ResultParam.PassRange;
   end;
 end;
 
@@ -123,17 +127,18 @@ begin
   if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
     Result[ResultParam.P.CodeUnitPos]:='0';
     Result[ResultParam.P.CodeUnitPos+1]:='0';
+    ResultParam.PassRange;
   end;
 end;
 
-function prop2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
+function prop2value(const AFMt:TzeUnitsFormat;const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 begin
-  if GetProperty(pobj,operands,result) then
+  if GetProperty(AFMt,pobj,operands,result) then
     else
       result:='!!ERRprop('+operands+')!!';
 end;
 
-function var2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
+function var2value(const AFMt:TzeUnitsFormat;const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   pv:pvardesk;
 begin
@@ -145,7 +150,7 @@ begin
   else
     result:='!!ERR('+operands+')!!';
 end;
-function IfVarPresent2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
+function IfVarPresent2value(const AFMt:TzeUnitsFormat;const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   pv:pvardesk;
   value,prefix,variable,suffix:string;
@@ -179,7 +184,7 @@ begin
     result:='';
 end;
 
-function evaluatesubstr(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
+function evaluatesubstr(const AFMt:TzeUnitsFormat;const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   vd:vardesk;
   pentvarext:TVariablesExtender;
@@ -198,7 +203,7 @@ begin
   end;
 end;
 
-function date2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
+function date2value(const AFMt:TzeUnitsFormat;const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 begin
   result:=datetostr(date);
 end;
@@ -221,13 +226,13 @@ initialization
   //Parser.RegisterToken('\',#0,#0,@EscapeSeq);
   //Parser.RegisterToken('%%DATE',#0,#0,@date2value,[TOVariable]);
   parser.OptimizeTokens;
-  pt:=Parser.GetTokens('(PTR-NUM)');
+  //pt:=Parser.GetTokens('(PTR-NUM)');
   //pt.SetOperands;
   //pt.SetData;
-  p:=nil;
-  s:=pt.GetResult(p);
-  pt.Free;
- { a:=Parser.GetTokenFromSubStr('_@@[Layer]',1,TokenTextInfo);
+  //p:=nil;
+  //s:=pt.GetResult(p);
+  //pt.Free;
+  {a:=Parser.GetTokenFromSubStr('_@@[Layer]',1,TokenTextInfo);
   a:=Parser.GetTokenFromSubStr('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
   a:=Parser.GetTokenFromSubStr('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);
   a:=Parser.GetTokenFromSubStr('_@@[Layer]',TokenTextInfo.NextPos,TokenTextInfo);

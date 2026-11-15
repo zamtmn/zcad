@@ -1,0 +1,28 @@
+//AddReportEmbededPartslist.lpeis
+//Lape script entity initial setup
+//добавляет к ThisEntity расширение переменных и нужные переменные
+//добавляет к ThisEntity расширение отчетов
+//привязывает скрипт specification_gost21.110-2013.lpr
+var
+  Entity:PzeEntity;
+  ExtenderClass:TzeEntityExtenderClass;
+  Extender:TzeEntityExtender;
+  VariableExtender:TVariablesExtender;
+begin
+  Entity:=ThisEntity;
+  ExtenderClass:=GetEntityExtenderClass('extdrVariables');
+  VariableExtender:=GetOrCreateExtdr(Entity,ExtenderClass);
+  AddVariable(VariableExtender,'RPRTSRC_EntSourceIncludingVolumeFunction','String','PrjStructure~Sheet~*','');
+  AddVariable(VariableExtender,'RPRTFLTR_EntTypeInclude','String','Device','');
+  AddVariable(VariableExtender,'RPRTFLTR_EntTypeExclude','String','','');
+  AddVariable(VariableExtender,'RPRTFLTR_EntExtdrInclude','String','extdrVariables','');
+  AddVariable(VariableExtender,'RPRTFLTR_EntExtdrExclude','String','extdrReport','');
+  AddVariable(VariableExtender,'RPRTBUILD_CombineVariables','String','','');
+  AddVariable(VariableExtender,'RPRTBUILD_GroupVariable','String','','');
+  AddVariable(VariableExtender,'RPRTBUILD_TemplateFile','String','','');
+  AddVariable(VariableExtender,'RPRTBUILD_TempNode','String','','');
+
+  ExtenderClass:=GetEntityExtenderClass('extdrReport');
+  Extender:=GetOrCreateExtdr(Entity,ExtenderClass);
+  SetEntityProperty(Entity,'EXTDRREPORT_Scriptname','specification_gost21.110-2013',ExtenderClass);
+end.

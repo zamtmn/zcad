@@ -176,8 +176,8 @@ end;
 procedure TReportExtender.ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMContextSetup in mode then begin
-    TEntityExtentionContext(ctx).FThisEntity:=pThisEntity;
-    //TEntityExtentionContext(ctx).FThisEntityExtender:=self;
+    TDeviceExtentionContext(ctx).FThisEntity:=pThisEntity;
+    //TDeviceExtentionContext(ctx).FThisEntityExtender:=self;
   end;
 end;
 
@@ -185,17 +185,18 @@ procedure TReportExtender.Execute(var Context:TZCADCommandContext);
 var
  scrd:TScriptData;
 begin
-  scrd:=ReportScriptsManager.CreateExternalScriptData(fScriptName,TEntityExtentionContext,[]);
+  scrd:=ReportScriptsManager.CreateExternalScriptData(fScriptName,TDeviceExtentionContext,[]);
   ReportScriptsManager.RunScript(Context,scrd);
   ReportScriptsManager.FreeExternalScriptData(scrd);
 end;
 
 initialization
   //extdrAdd(extdrReport)
-  ReportScriptsManager:=STManager.CreateType('lpr','Script test',TEntityExtentionContext,LSCMCreateOnce,
+  ReportScriptsManager:=STManager.CreateType('lpr','Lape script report',TDeviceExtentionContext,LSCMCreateOnce,
     [TLapeBase.zcBase2cplr,TLapeDwg.zeGeom2cplr,TLapeDwg.ze2cplr,TLapeDwg.zeStyles2cplr,
-    TLapeDwg.zeEnt2cplr,TLapeDwg.zeEntsArrays2cplr,TLapeDwg.zeEntsExtenders2cplr,TLapeDwg.zc2cplr,
-    TLapeDwg.zcReport2cplr,TLapeDwg.ctxSetup,TLapeEntityExtention.ctxSetup]);
+    TLapeDwg.zeEntsCreate2cplr,TLapeDwg.zeEntsArrays2cplr,TLapeDwg.zeEntsExtenders2cplr,TLapeDwg.zc2cplr,
+    TLapeEntityExtention.thisEntity2cplr,
+    TLapeDwg.zcReport2cplr,TLapeDwg.ctxSetup,TLapeEntityExtention.ctxSetup,TLapeDeviceExtention.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);
 

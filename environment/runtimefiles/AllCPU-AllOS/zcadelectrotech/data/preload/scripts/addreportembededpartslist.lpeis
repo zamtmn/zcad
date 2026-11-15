@@ -1,0 +1,25 @@
+//AddReportEmbededPartslist.lpeis
+//Lape script entity initial setup
+//добавляет к ThisEntity расширение переменных и нужные переменные
+//добавляет к ThisEntity расширение отчетов
+//привязывает скрипт embededpartslist_gost2.701-2008.lpr
+var
+  Entity:PzeEntity;
+  ExtenderClass:TzeEntityExtenderClass;
+  Extender:TzeEntityExtender;
+  VariableExtender:TVariablesExtender;
+begin
+  Entity:=ThisEntity;
+  ExtenderClass:=GetEntityExtenderClass('extdrVariables');
+  VariableExtender:=GetOrCreateExtdr(Entity,ExtenderClass);
+  AddVariable(VariableExtender,'RPRTSRC_EntSourceIncludingVolumeFunction','String','PrjStructure~Sheet~*','');
+  AddVariable(VariableExtender,'RPRTFLTR_EntTypeInclude','String','Device','');
+  AddVariable(VariableExtender,'RPRTFLTR_EntTypeExclude','String','','');
+  AddVariable(VariableExtender,'RPRTFLTR_EntExtdrInclude','String','extdrVariables','');
+  AddVariable(VariableExtender,'RPRTFLTR_EntExtdrExclude','String','extdrReport','');
+  AddVariable(VariableExtender,'RPRTBUILD_CombineVariables','String','','');
+
+  ExtenderClass:=GetEntityExtenderClass('extdrReport');
+  Extender:=GetOrCreateExtdr(Entity,ExtenderClass);
+  SetEntityProperty(Entity,'EXTDRREPORT_Scriptname','embededpartslist_gost2.701-2008',ExtenderClass);
+end.

@@ -20,7 +20,7 @@ uses
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
   Masks,garrayutils,LCLType,LCLIntf, Buttons,
   gzctnrSTL,uzcActionsManager,uzglviewareageneral,uzedrawingsimple,
-  uzcFileStructure;
+  uzcFileStructure,uzbUnits;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -163,7 +163,7 @@ type
     procedure AsyncRunCommand(Data: PtrInt);
 
     function EntsFilter(pent:pGDBObjEntity):Boolean;virtual;
-    function TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
+    function TraceEntity(const AFmt:TzeUnitsFormat;rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;virtual;
 
     function GetPartsCount(const parts:string):integer;
     function GetPartState(const parts:string;const nmax,n:integer; out _name:string;out _enabled:boolean):boolean;
@@ -379,7 +379,7 @@ begin
   exit(true);}
 end;
 
-function  TNavigatorDevices.TraceEntity(rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
+function  TNavigatorDevices.TraceEntity(const AFmt:TzeUnitsFormat;rootdesk:TBaseRootNodeDesk;pent:pGDBObjEntity;out name:string):PVirtualNode;
 var
   BaseName:string;
   basenode:PVirtualNode;
@@ -396,7 +396,7 @@ begin
        if Ent2NodeMap.TryGetValue(MainFunction,mainfuncnode) then
          basenode:=mainfuncnode.Parent
        else begin
-          StandaloneNode.ProcessEntity(self.CreateEntityNode,MainFunction,EntsFilter,TraceEntity);
+          StandaloneNode.ProcessEntity(AFmt,self.CreateEntityNode,MainFunction,EntsFilter,TraceEntity);
           if Ent2NodeMap.TryGetValue(MainFunction,mainfuncnode) then
             basenode:=mainfuncnode.Parent
        end;
@@ -428,7 +428,7 @@ begin
     end else if cn<>'' then begin
       if cn[1]<>'-'then begin
        cn:=copy(cn,2,length(cn)-1);
-       Name:=textformat(cn,SPFSources.GetFull,pent)
+       Name:=textformat(AFmt,cn,SPFSources.GetFull,pent)
       end else
        Name:=pent^.GetObjTypeName;
     end;
@@ -931,7 +931,7 @@ begin
           {if assigned(CombinedNode)then
           CombinedNode.ProcessEntity(pv,EntsFilter,TraceEntity);}
           if assigned(StandaloneNode)then
-             StandaloneNode.ProcessEntity(self.CreateEntityNode,pv,EntsFilter,TraceEntity);
+             StandaloneNode.ProcessEntity(drawings.GetUnitsFormat,self.CreateEntityNode,pv,EntsFilter,TraceEntity);
           pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
         until pv=nil;
       end;
@@ -1254,7 +1254,7 @@ begin
     end else
       celltext:='';
   end else
-    celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,SPFSources.GetFull,pnd^.Ident.pent);
+    celltext:=textformat(ExtTreeParam.fmt,ExtTreeParam.ExtColumnsParams[Column].Pattern,SPFSources.GetFull,pnd^.Ident.pent);
   end;
 end;
 procedure TNavigatorDevices.SetDefaultImagesIndex;
@@ -1333,6 +1333,8 @@ end;
 
 procedure TNavigatorDevices.CreateRoots;
 begin
+  //todo: формакт нужно гдето хранить и передавать поумнее
+  ExtTreeParam.fmt:=drawings.GetUnitsFormat;
   CreateFilters;
   StandaloneNode:=TBaseRootNodeDesk.Create(self, NavTree,rsStandaloneDevices);
   StandaloneNode.ficonindex:=ImagesManager.GetImageIndex('basket');

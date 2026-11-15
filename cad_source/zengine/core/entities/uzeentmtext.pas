@@ -318,7 +318,7 @@ begin
     exit;
   if template='' then
     template:=content;
-  content:=textformat(template,SPFSources.GetFull,@self);
+  content:=textformat(drawing.GetUnitsFormat,template,SPFSources.GetFull,@self);
   LdivideS:=linespace/textprop.size;
   if (content='')and(template='') then
     content:=str_empty;
@@ -771,11 +771,11 @@ begin
   dxfIntegerout(outStream,71,j2b[textprop.justify]);
   //проверяем есть ли в шаблоне управляющие последовательности
   //отсутствующие в dxf
-  s:=TxtFormatAndCountSrcs(template,SPFSources.GetFull,ASourcesCounter,@Self);
+  s:=TxtFormatAndCountSrcs(drawing.GetUnitsFormat,template,SPFSources.GetFull,ASourcesCounter,@Self);
   if (ASourcesCounter and (not SPFSdxf))<>0 then begin
     //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
     //пишем dxf совместимое содержимое, шаблом сохраним отдельно
-    quotedcontent:=TxtFormatAndCountSrcs(template,SPFSources.GetFull and
+    quotedcontent:=TxtFormatAndCountSrcs(drawing.GetUnitsFormat,template,SPFSources.GetFull and
       (not SPFSdxf),ASourcesCounter,@Self);
     s:=UTF8Encode(quotedcontent);
   end else begin

@@ -16,8 +16,8 @@ var
 
   table:PzeEntity;
 begin
-  report:=ThisReport;
-  reportvars:=ThisReportVariableExtdr;
+  report:=ThisEntity;
+  reportvars:=ThisEntityVariableExtdr;
 
   reportvars.GetVarValue('RPRTSRC_EntSourceIncludingVolumeFunction',EntSourceIncludingVolumeFunction);
   reportvars.GetVarValue('RPRTFLTR_EntTypeInclude',EntTypeInclude);
@@ -90,7 +90,7 @@ begin
         names:=names+', '+CounterResults[i].names[j];
     end else
       names:='';
-    zeEntTableAddRow(table,[names,CounterResults[i].Key,ToString(CounterResults[i].Value),''],false);
+    zeEntTableAddRow(table,[names,CounterResults[i].name,ToString(CounterResults[i].Value),''],false);
     //zcUIHistoryOut(names+'  '+CounterResults[i].Key+'  '+ToString(CounterResults[i].Value));
   end;
   //zeEntLine(0,0,0,100,100,0);

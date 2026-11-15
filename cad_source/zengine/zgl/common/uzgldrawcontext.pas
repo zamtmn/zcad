@@ -22,7 +22,7 @@ interface
 uses
   SysUtils,Nullable,
   uzepalette,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytypes,
-  uzeTypes,uzecamera;
+  uzeTypes,uzecamera,uzbUnits,uzbUnitsUtils;
 const
   DefaultVP:TzeVector4i=(x:2;y:0;z:100;w:100);
 type
@@ -39,6 +39,7 @@ TDrawingContext=record
                    GlobalLTScale:Double;
                    //DrawHeplGeometryProc:TDrawHeplGeometry;
                    ForeGroundColorIndex:Integer;
+                   UnitsFormat:TzeUnitsFormat;
 end;
 TDContextOption=(DCODrawable);
 TDContextOptions=set of TDContextOption;
@@ -93,6 +94,7 @@ begin
       result.DrawingContext.ForeGroundColorIndex:=ClWhite;
       result.Options:=[];
       result.DrawingContext.FrustumCenter.HasValue:=false;
+      result.DrawingContext.UnitsFormat:=CreateDefaultUnitsFormat;
 end;
 begin
 end.

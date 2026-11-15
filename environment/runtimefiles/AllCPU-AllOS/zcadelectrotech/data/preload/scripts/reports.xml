@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <PalettesContent>
+    <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
+      <ZTreeNode Caption='Reports'>
+        <ZTreeNode Caption='Unsorted'>
+          <ZTreeCommand Command="Insert(DEVICE_TEST,addreportspecification)" Caption='Specification'/>
+          <ZTreeCommand Command="Insert(DEVICE_TEST,addreportembededpartslist)" Caption='Embeded part list'/>
+        </ZTreeNode>
+      </ZTreeNode>
+    </BlockLib>
+  </PalettesContent>
+</CONFIG>

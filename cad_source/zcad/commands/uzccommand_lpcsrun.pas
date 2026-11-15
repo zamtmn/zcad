@@ -53,7 +53,7 @@ initialization
     TCurrentDrawingContext,LSCMRecreate,
     [TLapeBase.zcBase2cplr,
      TLapeDwg.ze2cplr,TLapeDwg.zeGeom2cplr,TLapeDwg.zeStyles2cplr,
-     TLapeDwg.zc2cplr,TLapeDwg.zeEnt2cplr,TLapeDwg.zeBehavior2cplr,
+     TLapeDwg.zc2cplr,TLapeDwg.zeEntsCreate2cplr,TLapeDwg.zeBehavior2cplr,
      TLapeDwg.zcUndo2cplr,TLapeDwg.zcInteractive2cplr,
      TLapeDwg.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then

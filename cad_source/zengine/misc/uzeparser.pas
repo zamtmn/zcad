@@ -16,10 +16,12 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 } 
 unit uzeparser;
+{$inline off}
 {INCLUDE def.inc}
 {$IFDEF FPC}
   {$mode delphi}
   {$CODEPAGE UTF8}
+  {$ModeSwitch advancedrecords}
 {$ENDIF}
 
 {$DEFINE USETDICTIONARY}
@@ -123,6 +125,7 @@ type
         TCharRange= record
                      P:TCharPosition;
                      L:TCharLength;
+                     procedure PassRange;inline;
                    end;
       class function LengthBetweenPos(const APos1:TCharPosition;const APos2:TCharPosition;const ExcludePos2:boolean=False):TCharLength;inline;
       class procedure IncPosition(const AStr:GStingType;var APos1:TCharPosition);inline;
@@ -131,7 +134,7 @@ type
       class procedure AddToPosition2(const AStr:GStingType; var  APos1:TCharPosition;Offset:integer);inline;
       class procedure NextPosition(var Rslt:TCharPosition;const AStr:GStingType; var R:TCharRange);inline;
 
-      class procedure PassRange(var R:TCharRange);inline;
+      //class procedure PassRange(var R:TCharRange);inline;
 
       class procedure CopyStr(const SourceRange:TCharRange;const Source:GStingType;var DestTange:TCharRange;var Result:GStingType);
       class procedure OnlyGetLengthValue(var ARange:TCharRange);inline;
@@ -326,76 +329,90 @@ type
     function GetSymbolData(const Text:GTokenizerString;const CurrentPos:GManipulatorCUIndex):TTokenizerMap.PTValue;//inline;
   end;
 
-  TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>=class
-    public
-      type
-          TParserString=GParserString;
-          TParserTokenizer=TGZTokenizer<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GSymbolToOptChar,GDataType>;
-          TTokenTextInfoQueue=TDeque<TParserTokenizer.TTokenTextInfo>;
+  TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,
+  GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>=class
+  public
+  type
+    TParserString=GParserString;
+    TParserTokenizer=TGZTokenizer<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,
+    GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GSymbolToOptChar,GDataType>;
+    TTokenTextInfoQueue=TDeque<TParserTokenizer.TTokenTextInfo>;
 
-          //TGeneralParsedText=class;
+    //TGeneralParsedText=class;
 
-          //TGetResultWithPart=procedure (const Src:GParserString;var APart:TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
+    //TGetResultWithPart=procedure (const Src:GParserString;var APart:TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
 
-          TTextPartsVector=TVector<TParserTokenizer.TTextPart>;
+    TTextPartsVector=TVector<TParserTokenizer.TTextPart>;
 
-          TGeneralParsedText=class(TAbstractParsedText<GParserString,GDataType>)
-            Source:GParserString;
-            Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>;
-            //procedure SetOperands;virtual;abstract;
-            constructor Create(_Source:GParserString;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
-            destructor Destroy;override;
-            class procedure DoItWithPart(const Src:GParserString;var APart:TParserTokenizer.TTextPart;var data:GDataType);
-            class procedure GetResultWithPart(const Src:GParserString;var APart:TParserTokenizer.TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
-          end;
+    TGeneralParsedText=class(TAbstractParsedText<GParserString,GDataType>)
+      Source:GParserString;
+      Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,
+      GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>;
+      //procedure SetOperands;virtual;abstract;
+      constructor Create(_Source:GParserString;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,
+        GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
+      destructor Destroy;override;
+      class procedure DoItWithPart(const Src:GParserString;var APart:TParserTokenizer.TTextPart;var Data:GDataType);
+      class procedure GetResultWithPart(const Src:GParserString;var APart:TParserTokenizer.TTextPart;Data:GDataType;
+        var Res:GParserString;var ResultParam:GManipulatorCharRange);
+    end;
 
-          TParsedTextWithoutTokens=class(TGeneralParsedText)
-            function GetResult(var data:GDataType):GParserString;override;
-            procedure Doit(var data:GDataType);override;
-          end;
+    TParsedTextWithoutTokens=class(TGeneralParsedText)
+      function GetResult(var Data:GDataType):GParserString;override;
+      procedure Doit(var Data:GDataType);override;
+    end;
 
-          TParsedTextWithOneToken=class(TGeneralParsedText)
-            Part:TParserTokenizer.TTextPart;
-            function GetResult(var data:GDataType):GParserString;override;
-            procedure Doit(var data:GDataType);override;
-            constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
-            destructor Destroy;override;
-          end;
+    TParsedTextWithOneToken=class(TGeneralParsedText)
+      Part:TParserTokenizer.TTextPart;
+      function GetResult(var Data:GDataType):GParserString;override;
+      procedure Doit(var Data:GDataType);override;
+      constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;
+        Operands:TGeneralParsedText;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,
+        GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
+      destructor Destroy;override;
+    end;
 
-          TParsedText=class(TGeneralParsedText)
-            Parts:TTextPartsVector;
-            constructor Create(_Source:GParserString;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
-            constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
-            procedure AddToken(_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText);
-            function GetResult(var data:GDataType):GParserString;override;
-            procedure Doit(var data:GDataType);override;
-            destructor Destroy;override;
-          end;
+    TParsedText=class(TGeneralParsedText)
+      Parts:TTextPartsVector;
+      constructor Create(_Source:GParserString;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,
+        GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
+      constructor CreateWithToken(_Source:GParserString;_TokenTextInfo:TParserTokenizer.TTokenTextInfo;
+        Operands:TGeneralParsedText;_Parser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,
+        GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>);
+      procedure AddToken(_TokenTextInfo:TParserTokenizer.TTokenTextInfo;Operands:TGeneralParsedText);
+      function GetResult(var Data:GDataType):GParserString;override;
+      procedure Doit(var Data:GDataType);override;
+      destructor Destroy;override;
+    end;
+  private
+  var
+    FtkIntNumber,FtkEmpty,FtkEOF,FtkLastPredefToken,FtkRawText:TParserTokenizer.TTokenId;
+    FTokenizer:TParserTokenizer;
+    FIncludedCharsPos:TParserTokenizer.TIncludedChars;
+    FAllChars:TChars;
+    FTokenDataVector:TParserTokenizer.TTokenDataVector;
+    FStoredTokenTextInfo:TTokenTextInfoQueue;
 
-      var
-    IncludedCharsPos:TParserTokenizer.TIncludedChars;
-    AllChars:TChars;
-    Tokenizer:TParserTokenizer;
-    TokenDataVector:TParserTokenizer.TTokenDataVector;
-    tkEmpty,tkRawText,tkEOF,tkLastPredefToken:TParserTokenizer.TTokenId;
-    StoredTokenTextInfo:TTokenTextInfoQueue;
-    constructor create(IgnoreRaw:Boolean=False);
-    destructor Destroy;override;
     procedure clearStoredToken;
-    function RegisterToken(
-                           const Token:GParserString;
-                           const BrackeOpen,BrackeClose:char;
-                           const ProcessorClass:TParserTokenizer.TStrProcessorClass;
-                           InsideBracketParser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>;
-                           Options:TTokenOptions.TSetType=0;
-                           const FollowOperands:TParserTokenizer.TTokenId=0;
-                           Description:TTokenDescription.TSetType=0
-                           ):TParserTokenizer.TTokenId;
-    procedure OptimizeTokens;
-    function GetTokenFromSubStr(Text:GParserString;const SubStr:GManipulatorInterval;CurrentPos:GManipulatorCharIndex;out TokenTextInfo:TParserTokenizer.TTokenTextInfo):TParserTokenizer.TTokenId;
-    function GetTokensFromSubStr(Text:GParserString;const SubStr:GManipulatorInterval):TGeneralParsedText;
-    function GetTokens(Text:GParserString):TGeneralParsedText;
     procedure ReadOperands(Text:GParserString;TokenId:TParserTokenizer.TTokenId;var TokenTextInfo:TParserTokenizer.TTokenTextInfo);
+    function GetTokenFromSubStr(Text:GParserString;const SubStr:GManipulatorInterval;CurrentPos:GManipulatorCharIndex;
+      out TokenTextInfo:TParserTokenizer.TTokenTextInfo):TParserTokenizer.TTokenId;
+    function GetTokensFromSubStr(Text:GParserString;const SubStr:GManipulatorInterval):TGeneralParsedText;
+    function Create1(Text:GParserString;const SubStr:GManipulatorInterval):TGeneralParsedText;
+  public
+    constructor Create(IgnoreRaw:boolean=False;AllowIntNumber:boolean=False);
+    destructor Destroy;override;
+    function RegisterToken(const Token:GParserString;const BrackeOpen,BrackeClose:char;const ProcessorClass:TParserTokenizer.TStrProcessorClass;
+      InsideBracketParser:TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,
+      GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>;
+      Options:TTokenOptions.TSetType=0;const FollowOperands:TParserTokenizer.TTokenId=0;
+      Description:TTokenDescription.TSetType=0):TParserTokenizer.TTokenId;
+    procedure OptimizeTokens;
+    function GetTokens(Text:GParserString):TGeneralParsedText;
+
+    property Tokenizer:TParserTokenizer read FTokenizer;
+    property tkRawText:TParserTokenizer.TTokenId read FtkRawText;
+    property tkIntNumber:TParserTokenizer.TTokenId read FtkIntNumber;
   end;
 
 var
@@ -630,9 +647,16 @@ begin
     IncPosition(AStr,rslt);
   //rslt.CodeUnitPos:=R.P.CodeUnitPos+R.L.CodeUnitLen;
 end;
-class procedure TStringManipulator<GStingType,GCharType,GAdditionalDataManipulator,GAdditionalPositionData,GAdditionalLengthData>.PassRange(var R:TCharRange);inline;
+
+{class procedure TStringManipulator<GStingType,GCharType,GAdditionalDataManipulator,GAdditionalPositionData,GAdditionalLengthData>.PassRange(var R:TCharRange);inline;
 begin
   R.P.CodeUnitPos:=R.P.CodeUnitPos+R.L.CodeUnits;
+end;}
+
+
+procedure TStringManipulator<GStingType,GCharType,GAdditionalDataManipulator,GAdditionalPositionData,GAdditionalLengthData>.TCharRange.PassRange;inline;
+begin
+  P.CodeUnitPos:=P.CodeUnitPos+L.CodeUnits;
 end;
 
 class procedure TStringManipulator<GStingType,GCharType,GAdditionalDataManipulator,GAdditionalPositionData,GAdditionalLengthData>.CopyStr(const SourceRange:TCharRange;const Source:GStingType;var DestTange:TCharRange;var Result:GStingType);
@@ -643,7 +667,7 @@ begin
   if DestTange.P.CodeUnitPos<>OnlyGetLength then begin
     for i:=0 to SourceRange.L.CodeUnits-1 do
       Result[DestTange.P.CodeUnitPos+i]:=Source[SourceRange.P.CodeUnitPos+i];
-    passrange(DestTange);
+    DestTange.passrange;
     GAdditionalDataManipulator.passrange(DestTange.P.AdditionalPosData,SourceRange.L.AdditionalLenData);
   end;
 end;
@@ -998,7 +1022,7 @@ constructor TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUInd
 begin
   Create(_Source,_Parser);
   Part.TextInfo:=_TokenTextInfo;
-  Part.TokenInfo:=_Parser.TokenDataVector[_TokenTextInfo.TokenId] ;
+  Part.TokenInfo:=_Parser.FTokenDataVector[_TokenTextInfo.TokenId] ;
   Part.Processor:=nil;
   Part.Operands:=Operands;
 end;
@@ -1023,7 +1047,7 @@ var
   Part:TParserTokenizer.TTextPart;
 begin
   Part.TextInfo:=_TokenTextInfo;
-  Part.TokenInfo:=Parser.TokenDataVector[_TokenTextInfo.TokenId] ;
+  Part.TokenInfo:=Parser.FTokenDataVector[_TokenTextInfo.TokenId] ;
   Part.Processor:=nil;
   Part.Operands:=Operands;
   Parts.PushBack(Part);
@@ -1276,9 +1300,9 @@ begin
   //inc(debParserGetTonenCount);
 
   //если есть запомненый токен на текущей позиции то возвращаем его и выходим
-  if not StoredTokenTextInfo.IsEmpty then begin
-    TTI:=StoredTokenTextInfo.front;
-    StoredTokenTextInfo.PopFront;
+  if not FStoredTokenTextInfo.IsEmpty then begin
+    TTI:=FStoredTokenTextInfo.front;
+    FStoredTokenTextInfo.PopFront;
     if GManipulator.CompareII(TTI.TokenPos.P,CurrentPos)=0 then begin
       TokenTextInfo:=TTI;
       //clearStoredToken;
@@ -1289,14 +1313,14 @@ begin
   end;
   //пытаемся прочитать новый токен
   startpos:=CurrentPos;
-  result:=Tokenizer.GetToken(Text,SubStr,CurrentPos,TokenTextInfo,IncludedCharsPos,AllChars,TokenDataVector,Tokenizer);
+  result:=FTokenizer.GetToken(Text,SubStr,CurrentPos,TokenTextInfo,FIncludedCharsPos,FAllChars,FTokenDataVector,FTokenizer);
   //пытаемся прочитать операнды токена
   ReadOperands(Text,result,TokenTextInfo);
-  //если прочитаный токен не на стартовой позиции, запоминаем его и возвращаем tkRawText
+  //если прочитаный токен не на стартовой позиции, запоминаем его и возвращаем FtkRawText
   if GManipulator.CompareII(startpos,TokenTextInfo.TokenPos.P)<>0 then begin
     TTI:=TokenTextInfo;
-    StoredTokenTextInfo.PushBack(TokenTextInfo);
-    TokenTextInfo.TokenId:=tkRawText;
+    FStoredTokenTextInfo.PushBack(TokenTextInfo);
+    TokenTextInfo.TokenId:=FtkRawText;
     TokenTextInfo.TokenPos.P:=startpos;
     TokenTextInfo.TokenPos.L:=GManipulator.LengthBetweenPos(startpos,TTI.TokenPos.P,true);
     TokenTextInfo.NextPos:=TTI.TokenPos.P;
@@ -1325,9 +1349,9 @@ end;
 function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.GetTokensFromSubStr(Text:GParserString;const SubStr:GManipulatorInterval):TGeneralParsedText;
 function ParseOperands(TTI:TParserTokenizer.TTokenTextInfo):TGeneralParsedText;
 begin
-  if (TokenDataVector.Mutable[TTI.TokenId].InsideBracketParser<>nil)
+  if (FTokenDataVector.Mutable[TTI.TokenId].InsideBracketParser<>nil)
   and(TTI.OperandsPos.L.CodeUnits>0)then
-    result:=TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>(TokenDataVector.mutable[TTI.TokenId].InsideBracketParser).GetTokensFromSubStr(Text,GManipulator.CharRange2CharInterval(TTI.OperandsPos))
+    result:=TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>(FTokenDataVector.mutable[TTI.TokenId].InsideBracketParser).GetTokensFromSubStr(Text,GManipulator.CharRange2CharInterval(TTI.OperandsPos))
   else
     result:=nil;
 end;
@@ -1340,31 +1364,31 @@ begin
   result:=nil;
   TokenTextInfo.NextPos:=SubStr.P;// GManipulator.SetIndex(TokenTextInfo.NextPos,GManipulator.PosToIndex(SubStr.P));
   //TokenTextInfo.NextPos.index:=SubStr.CU.StartPos;
-  TokenTextInfo.TokenId:=tkEmpty;
+  TokenTextInfo.TokenId:=FtkEmpty;
   TokensCounter:=1;
   repeat
     GetTokenFromSubStr(Text,substr,TokenTextInfo.NextPos,PrevTokenTextInfo);
     TokenTextInfo:=PrevTokenTextInfo;
-  until  not TTokenOptions.IsAllPresent(TokenDataVector.mutable[TokenTextInfo.TokenId].Options,TGOCanBeOmitted);
+  until  not TTokenOptions.IsAllPresent(FTokenDataVector.mutable[TokenTextInfo.TokenId].Options,TGOCanBeOmitted);
   PrevParesdOperands:=ParseOperands(TokenTextInfo);
 
-  while TokenTextInfo.TokenId<>tkEOF do begin
+  while TokenTextInfo.TokenId<>FtkEOF do begin
     inc(TokensCounter);
     //GetTokenFromSubStr(Text,TokenTextInfo.NextPos,TokenTextInfo);
     repeat
       GetTokenFromSubStr(Text,Substr,TokenTextInfo.NextPos,TokenTextInfo);
-    until  not TTokenOptions.IsAllPresent(TokenDataVector.mutable[TokenTextInfo.TokenId].Options,TGOCanBeOmitted);
+    until not TTokenOptions.IsAllPresent(FTokenDataVector.mutable[TokenTextInfo.TokenId].Options,TGOCanBeOmitted);
     ParesdOperands:=ParseOperands(TokenTextInfo);
 
-    if (TokenTextInfo.TokenId=TokenDataVector.mutable[PrevTokenTextInfo.TokenId]^.FollowOperandsId)and(PrevParesdOperands=nil) then begin
+    if (TokenTextInfo.TokenId=FTokenDataVector.mutable[PrevTokenTextInfo.TokenId]^.FollowOperandsId)and(PrevParesdOperands=nil) then begin
       PrevTokenTextInfo.OperandsPos:=TokenTextInfo.OperandsPos;
       PrevTokenTextInfo.NextPos:=TokenTextInfo.NextPos;
       PrevParesdOperands:=ParesdOperands;
       dec(TokensCounter);
     end else begin
-      if (TokenTextInfo.TokenId=tkEOF)and(TokensCounter=2) then begin
-        if PrevTokenTextInfo.TokenId=tkRawText then
-          result:=TParsedTextWithoutTokens.Create(Text,self)
+      if (TokenTextInfo.TokenId=FtkEOF)and(TokensCounter=2) then begin
+        if PrevTokenTextInfo.TokenId=FtkRawText then
+          result:=Create1(Text,Substr)
         else
           result:=TParsedTextWithOneToken.CreateWithToken(Text,PrevTokenTextInfo,PrevParesdOperands,self)
       end else begin
@@ -1379,18 +1403,31 @@ begin
   end;
 end;
 
+function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.Create1(Text:GParserString;const SubStr:GManipulatorInterval):TGeneralParsedText;
+var
+  i:integer;
+begin
+  if FtkIntNumber<>FtkEmpty then begin
+    if TryStrToInt(Text,i)then
+      result:=TParsedTextWithoutTokens.Create(Text,self)
+    else
+      result:=TParsedTextWithoutTokens.Create(Text,self);
+  end else
+    result:=TParsedTextWithoutTokens.Create(Text,self);
+end;
+
 procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.ReadOperands(Text:GParserString;TokenId:TParserTokenizer.TTokenId;var TokenTextInfo:TParserTokenizer.TTokenTextInfo);
 var
   currpos:GManipulatorCharIndex;
   openedbrcount,brcount:integer;
 begin
     currpos:=Default(GManipulatorCharIndex);
-    if (not TTokenOptions.IsAllPresent(TokenDataVector[TokenId].Options,TGOFake))
-      and (TokenDataVector[TokenId].BrackeOpen<>#0)
-      and (TokenDataVector[TokenId].BrackeClose<>#0) then
+    if (not TTokenOptions.IsAllPresent(FTokenDataVector[TokenId].Options,TGOFake))
+      and (FTokenDataVector[TokenId].BrackeOpen<>#0)
+      and (FTokenDataVector[TokenId].BrackeClose<>#0) then
       begin
         GManipulator.NextPosition(currpos,Text,TokenTextInfo.TokenPos);//.CU.StartPos+TokenTextInfo.TokenPos.CU.Length;
-        if TTokenOptions.IsAllPresent(TokenDataVector[TokenId].Options,TGOIncludeBrackeOpen) then begin
+        if TTokenOptions.IsAllPresent(FTokenDataVector[TokenId].Options,TGOIncludeBrackeOpen) then begin
          openedbrcount:=1;
          GManipulator.NextPosition(TokenTextInfo.OperandsPos.P,Text,TokenTextInfo.TokenPos);
         end else begin
@@ -1400,15 +1437,15 @@ begin
         brcount:=0;
         while (GManipulator.PosToIndex(currpos)<=length(Text))and(not((openedbrcount=0)and(brcount>0))) do
         begin
-          if GManipulator.CodeUnitAtPos(Text,currpos)=TokenDataVector[TokenId].BrackeOpen then begin
+          if GManipulator.CodeUnitAtPos(Text,currpos)=FTokenDataVector[TokenId].BrackeOpen then begin
             if GManipulator.PosToIndex(TokenTextInfo.OperandsPos.P)=-1 then
               GManipulator.AddToPosition(TokenTextInfo.OperandsPos.P,Text,currpos,1);
               //TokenTextInfo.OperandsPos.StartPos:=GManipulator.PosToIndex(currpos)+1;
-            if TTokenOptions.IsAllPresent(TokenDataVector[TokenId].Options,TGONestedBracke) then
+            if TTokenOptions.IsAllPresent(FTokenDataVector[TokenId].Options,TGONestedBracke) then
               inc(openedbrcount);
             inc(brcount);
           end;
-          if GManipulator.CodeUnitAtPos(Text,currpos)=TokenDataVector[TokenId].BrackeClose then begin
+          if GManipulator.CodeUnitAtPos(Text,currpos)=FTokenDataVector[TokenId].BrackeClose then begin
             dec(openedbrcount);
             inc(brcount);
             if (openedbrcount=0)and(GManipulator.PosToIndex(TokenTextInfo.OperandsPos.P)>0) then
@@ -1435,37 +1472,42 @@ var
   RawOptions:TTokenOptions.TEnumItemType;
 begin
  for i:=1 to MaxIncludedChars do
-  IncludedCharsPos[i]:=[];
- Tokenizer:=TParserTokenizer.create;
- TokenDataVector:=TParserTokenizer.TTokenDataVector.create;
- StoredTokenTextInfo:=TTokenTextInfoQueue.create;
+  FIncludedCharsPos[i]:=[];
+ FTokenizer:=TParserTokenizer.create;
+ FTokenDataVector:=TParserTokenizer.TTokenDataVector.create;
+ FStoredTokenTextInfo:=TTokenTextInfoQueue.create;
 
  clearStoredToken;
 
- tkEmpty:=RegisterToken('Empty',#0,#0,nil,nil,TGOFake);
- tkEOF:=RegisterToken('EOF',#0,#0,nil,nil,TGOFake);
- GtkEOF:=tkEOF;
+ FtkEmpty:=RegisterToken('Empty',#0,#0,nil,nil,TGOFake);
+ FtkEOF:=RegisterToken('EOF',#0,#0,nil,nil,TGOFake);
+ GtkEOF:=FtkEOF;
+
+ if AllowIntNumber then begin
+   FtkIntNumber:=RegisterToken('IntNumber',#0,#0,nil,nil,TGOFake);
+ end else
+   FtkIntNumber:=FtkEmpty;
 
  RawOptions:=TGOFake;
  if IgnoreRaw then
    TTokenOptions.Include(RawOptions,TGOSeparator);
- tkRawText:=RegisterToken('RawText',#0,#0,TParserTokenizer.TFakeStrProcessor,nil,RawOptions);
- tkLastPredefToken:=tkRawText;
+ FtkRawText:=RegisterToken('RawText',#0,#0,TParserTokenizer.TFakeStrProcessor,nil,RawOptions);
+ FtkLastPredefToken:=FtkRawText;
 end;
 Destructor TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.Destroy;
 begin
   clearStoredToken;
-  FreeAndNil(Tokenizer);
-  FreeAndNil(TokenDataVector);
-  FreeAndNil(StoredTokenTextInfo);
+  FreeAndNil(FTokenizer);
+  FreeAndNil(FTokenDataVector);
+  FreeAndNil(FStoredTokenTextInfo);
 end;
 procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.clearStoredToken;
 begin
-  //while not StoredTokenTextInfo.isempty do
-  //  StoredTokenTextInfo.PopFront;
-  StoredTokenTextInfo.clear;
-  //StoredTokenTextInfo.TokenId:=tkEmpty;
-  //StoredTokenTextInfo.TokenPos.StartPos:=0;
+  //while not FStoredTokenTextInfo.isempty do
+  //  FStoredTokenTextInfo.PopFront;
+  FStoredTokenTextInfo.clear;
+  //FStoredTokenTextInfo.TokenId:=FtkEmpty;
+  //FStoredTokenTextInfo.TokenPos.StartPos:=0;
 end;
 
 function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.RegisterToken(const Token:GParserString;
@@ -1480,7 +1522,7 @@ var
   td:TParserTokenizer.TTokenData;
 begin
 
-  result:=TokenDataVector.Size;
+  result:=FTokenDataVector.Size;
   td.Token:=Token;
   td.BrackeClose:=BrackeClose;
   td.BrackeOpen:=BrackeOpen;
@@ -1491,11 +1533,11 @@ begin
   td.ProcessorClass:=ProcessorClass;
   td.InsideBracketParser:=InsideBracketParser;
 
-  TokenDataVector.PushBack(td);
+  FTokenDataVector.PushBack(td);
 
   if not TTokenOptions.IsAllPresent(Options,TGOFake) then begin
     sym:=GManipulator.StartCharPosition(Token);
-    Tokenizer.SubRegisterToken(Token,sym,result,IncludedCharsPos);
+    FTokenizer.SubRegisterToken(Token,sym,result,FIncludedCharsPos);
   end;
 
 end;
@@ -1505,10 +1547,10 @@ var
   i:integer;
 begin
   for i:=1 to MaxIncludedChars-1 do
-    IncludedCharsPos[i+1]:=IncludedCharsPos[i]+IncludedCharsPos[i+1];
-  AllChars:=IncludedCharsPos[1];
+    FIncludedCharsPos[i+1]:=FIncludedCharsPos[i]+FIncludedCharsPos[i+1];
+  FAllChars:=FIncludedCharsPos[1];
   for i:=2 to MaxIncludedChars do
-    AllChars:=AllChars+IncludedCharsPos[i];
+    FAllChars:=FAllChars+FIncludedCharsPos[i];
 end;
 
 constructor TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>.create;

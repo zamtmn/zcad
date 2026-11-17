@@ -195,7 +195,7 @@ initialization
   ReportScriptsManager:=STManager.CreateType('lpr','Lape script report',TDeviceExtentionContext,LSCMCreateOnce,
     [TLapeBase.zcBase2cplr,TLapeDwg.zeGeom2cplr,TLapeDwg.ze2cplr,TLapeDwg.zeStyles2cplr,
     TLapeDwg.zeEntsCreate2cplr,TLapeDwg.zeEntsArrays2cplr,TLapeDwg.zeEntsExtenders2cplr,TLapeDwg.zc2cplr,
-    TLapeEntityExtention.thisEntity2cplr,
+    TLapeEntityExtention.thisEntity2cplr,TLapeDwg.zcStringUtils2cplr,
     TLapeDwg.zcReport2cplr,TLapeDwg.ctxSetup,TLapeEntityExtention.ctxSetup,TLapeDeviceExtention.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);

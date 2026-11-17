@@ -65,6 +65,7 @@ const
   cZeEntsArrays='zcEntsArrays';
   cZeEntsExtenders='zeEntsExtenders';
   cZeReport='zeReport';
+  cZeStringUtils='ZeStringUtils';
 
   cZeNeedRenameThis='NeedRenameThis';
 
@@ -133,6 +134,8 @@ type
     class procedure zc2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zcUndo2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure zcInteractive2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+
+    class procedure zcStringUtils2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 
     class procedure zcReport2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 
@@ -1667,7 +1670,7 @@ end;
 class procedure TLapeDwg.zcReport2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
-    if CheckBaseDefs(cplr,cZeEntsArrays,[cZeBase])then begin
+    if CheckBaseDefs(cplr,cZeReport,[cZeBase])then begin
       cplr.StartImporting;
       cplr.addBaseDefine(cZeReport);
 
@@ -1725,6 +1728,60 @@ begin
       cplr.addGlobalFunc('function PDOMNode.NextSibling:PDOMNode;',@PDOMNode_NextSibling);
 
       cplr.addGlobalFunc('function PDOMNode.AttrValue(const AAttrName:string;ADefaultValue:string=''''):string;',@PDOMNode_AttrValue);
+
+      cplr.EndImporting;
+    end;
+  end;
+end;
+
+
+procedure string_decorate0ws(const Params: PParamArray;const Result: Pointer); cdecl;
+const
+  CPunctuationSymbol=['.',',','-'];
+  c0ws:shortstring=#$E2#$80#$8B;
+var
+  vstr:lpString;
+  i,count:integer;
+  test:string;
+begin
+  test:='11'+c0ws+'22';
+  vstr:=plpString(Params^[0])^;
+  if length(vstr)>1 then begin
+
+    count:=0;
+    for i:=1 to length(vstr)-1 do
+      if (vstr[i]in CPunctuationSymbol)and not(vstr[i+1]in CPunctuationSymbol)then
+        inc(count);
+
+    if count>0 then begin
+      SetLength(plpString(Result)^,length(vstr)+count*length(c0ws));
+      //plpString(Result)^:=DupeString('*',length(vstr)+count*length(c0ws));
+      count:=1;
+      for i:=1 to length(vstr)-1 do begin
+        plpString(Result)^[count]:=vstr[i];
+        inc(count);
+        if (vstr[i]in CPunctuationSymbol)and not(vstr[i+1]in CPunctuationSymbol)then begin
+          Move(c0ws[1],plpString(Result)^[count],length(c0ws));
+          inc(count,length(c0ws));
+        end;
+      end;
+      plpString(Result)^[count]:=vstr[length(vstr)];
+    end else
+      plpString(Result)^:=vstr;
+
+  end else
+    plpString(Result)^:=vstr;
+end;
+
+
+class procedure TLapeDwg.zcStringUtils2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    if CheckBaseDefs(cplr,cZeStringUtils,[cZeBase])then begin
+      cplr.StartImporting;
+      cplr.addBaseDefine(cZeStringUtils);
+
+      cplr.addGlobalFunc('function string.decorate0ws:string;',@string_decorate0ws);
 
       cplr.EndImporting;
     end;

@@ -178,8 +178,14 @@ function ZCCodePageOrDefault(ZCCP:TZCCodePage):TZCCodePage;
 
 function ZCDxfVer2ACVer(AZCVer:TZCDxfVersion):integer;
 function ZCDxfVer2DXF_ACVer(AZCVer:TZCDxfVersion):TACDWGVer;
+function DecorateTxtForDXF(ATxt:TDXFEntsInternalStringType;var IODXFContext:TIODXFSaveContext):TDXFEntsInternalStringType;
 
 implementation
+
+function DecorateTxtForDXF(ATxt:TDXFEntsInternalStringType;var IODXFContext:TIODXFSaveContext):TDXFEntsInternalStringType;
+begin
+  result:=StringReplace(ATxt,#$200B,'\U+200B',[rfReplaceAll]);
+end;
 
 function ZCDxfVer2ACVer(AZCVer:TZCDxfVersion):integer;
 begin

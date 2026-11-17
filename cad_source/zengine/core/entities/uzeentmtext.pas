@@ -223,12 +223,18 @@ begin
         linewidth:=linewidth-psyminfo.SymMinX;
         newline:=False;
       end;
-      if (sym=32)and(maxlinewidth>0) then begin
+      if ((sym=8203)or(sym=32))and(maxlinewidth>0) then begin
         lastcanbreak:=currsymbol;
         canbreak:=True;
         lastlinewidth:=linewidth;
-        linewidth:=lastsymspace+linewidth+psyminfo.SymMaxX;
-        lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
+        linewidth:=lastsymspace+linewidth{+psyminfo.SymMaxX};
+        lastsymspace:={psyminfo.NextSymX-psyminfo.SymMaxX}0;
+
+        if sym<>8203 then begin
+          linewidth:=linewidth+psyminfo.SymMaxX;
+          lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
+        end;
+
       end else if sym=10 then begin
         currline:=copy(content,lastbreak,currsymbol-lastbreak);
         if sym<>10 then begin
@@ -614,7 +620,7 @@ begin
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
           end;
-        end else begin
+        end else if sym<>8203 then begin
           pfont.CreateSymbol(DC.drawer,textprop.size,Representation.GetGraphix^,
             sym,objmatrix,matr,Bound,ln);
           matr:=CreateTranslationMatrix(pgdbfont(pfont)^.GetOrReplaceSymbolInfo(
@@ -775,15 +781,14 @@ begin
   if (ASourcesCounter and (not SPFSdxf))<>0 then begin
     //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
     //пишем dxf совместимое содержимое, шаблом сохраним отдельно
-    quotedcontent:=TxtFormatAndCountSrcs(drawing.GetUnitsFormat,template,SPFSources.GetFull and
-      (not SPFSdxf),ASourcesCounter,@Self);
+    quotedcontent:=TxtFormatAndCountSrcs(drawing.GetUnitsFormat,DecorateTxtForDXF(template,IODXFContext),
+      SPFSources.GetFull and (not SPFSdxf),ASourcesCounter,@Self);
     s:=UTF8Encode(quotedcontent);
   end else begin
     //шаблон dxf совместим, пишем сразу его,
     //отдельно его дописывать в расширенные данные ненадо
-    s:=UTF8Encode(template);
-    IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or
-      CLEFNotNeedSaveTemplate;
+    s:=UTF8Encode(DecorateTxtForDXF(template,IODXFContext));
+    IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
   end;
   //убираем переносы строки, они портят dxf
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);

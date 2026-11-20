@@ -121,6 +121,7 @@ var
   pdbu:ptunit;
   pum:PTUnitManager;
   pentvarext:TVariablesExtender;
+  dblink:string;
 
   procedure setdbvar(nevValue:string);
   begin
@@ -140,11 +141,15 @@ var
 begin
   pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
   pvn:=pentvarext.entityunit.FindVariable('DB_link');
+  if pvn<>nil then
+    dblink:=pvn.GetValueAsString
+  else
+    dblink:='';
   pum:=drawing.GetDWGUnits;
   if pum<>nil then begin
     pdbu:=pum^.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
     if (pdbu<>nil)and(pvn<>nil) then
-      pdbv:=pdbu^.FindVariable(pstring(pvn.data.Addr.Instance)^)
+      pdbv:=pdbu^.FindVariable(dblink)
     else
       pdbv:=nil;
   end else
@@ -154,13 +159,13 @@ begin
   if pdbv<>nil then
     setdbvar(PDbBaseObject(pdbv.data.Addr.Instance)^.Name)
   else
-    setdbvar('');
+    setdbvar('!!'+dblink);
 
   pvnt:=pentvarext.entityunit.FindVariable('DB_MatNameShort');
   if pdbv<>nil then
     setdbvar(PDbBaseObject(pdbv.data.Addr.Instance)^.NameShort)
   else
-    setdbvar('');
+    setdbvar('!!'+dblink);
 end;
 function DBaseLink_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //t:PUserTypeDescriptor;

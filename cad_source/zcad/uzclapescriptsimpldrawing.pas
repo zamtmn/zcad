@@ -69,7 +69,7 @@ const
 
   cZeNeedRenameThis='NeedRenameThis';
 
-  cZcBase='zсBase';
+  cZcBase='zcBase';
   cZcUndo='zcUndo';
   cZcInteractive='zcInteractive';
 

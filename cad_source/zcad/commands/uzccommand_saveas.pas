@@ -105,8 +105,7 @@ begin
     ProcessFilehistoryProc(AFileName);
 end;
 
-function SaveAs_com(const Context:TZCADCommandContext;
-  operands:TCommandOperands):TCommandResult;
+function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   s:ansistring;
   fileext:ansistring;
@@ -147,8 +146,8 @@ begin
         zcUI.TextMessage(Format(rsunknownFileExt,[fileext]),TMWOShowError);
       end;
     end;
-  finally
     Result:=cmd_ok;
+  finally
     zcUI.Do_AfterShowModal(nil);
   end;
 end;

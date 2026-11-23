@@ -176,7 +176,7 @@ end;
 procedure TReportExtender.ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMContextSetup in mode then begin
-    TDeviceExtentionContext(ctx).FThisEntity:=pThisEntity;
+    TDeviceExtentionContext(ctx).Manipulator.Root{.FThisEntity}:=pointer(pThisEntity);
     //TDeviceExtentionContext(ctx).FThisEntityExtender:=self;
   end;
 end;

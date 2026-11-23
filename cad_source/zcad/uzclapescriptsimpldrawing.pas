@@ -42,12 +42,10 @@ uses
   uzcCounter,varman,uzcdevicebaseabstract,Masks,Generics.Defaults,Generics.Collections,
   gzctnrSTL,uzeTypes,
   zUndoCmdSaveEntityState,gzUndoCmdChgMethods2,uzcdrawings,uzcPropertiesUtils,
-  URecordDescriptor;
+  URecordDescriptor,uzcDrawingManipulator;
 
 type
 
-  TDrawingAction=(DBRedraw,DBUndo);
-  TDrawingBehavior=set of TDrawingAction;
   PGVResult=^TGVResult;
   TGVResult=(GVRNotFound,GVRWrongType,GVRImplicitCast,GVROk);
 
@@ -83,31 +81,32 @@ const
   cNamePDOMNode='PDOMNode';
 type
 
+  TzePoints3d=array of TzePoint3d;
+  PzePoints3d=^TzePoints3d;
+  TSingles=array of Single;
+  PSingles=^TSingles;
+
   EScriptException=class(Exception);
   EScriptAbort=class(EScriptException);
   EScriptAV=class(EScriptException);
   EScriptRange=class(EScriptException);
-  TDrawingContextOptions=record
-  private
-    fEnadleRedrawCounter:integer;
-    fBehavior:TDrawingBehavior;
-  public
-    constructor CreateRec(ABhv:TDrawingBehavior);
-    function NeedRedaraw:Boolean;
-    function NeedUndo:Boolean;
-  end;
 
   TCurrentDrawingContext=class(TBaseScriptContext)
-    Options:TDrawingContextOptions;
-    DWG:PTZCADDrawing;
-    Root:PGDBObjGenericSubEntry;
+    //Options:TDrawingContextOptions;
+    //DWG:PTZCADDrawing;
+    //Root:PGDBObjGenericSubEntry;
+    Manipulator:TDrawingManipulator;
+  public
+    constructor CreateContext;override;
+    constructor Create;
   end;
+
 
   TEntityExtentionContext=class(TCurrentDrawingContext)
     FThisEntity:PGDBObjGenericWithSubordinated;
   end;
 
-  TDeviceExtentionContext=class(TEntityExtentionContext)
+  TDeviceExtentionContext=class(TCurrentDrawingContext)
     PVarObjArray:PGDBObjEntityOpenArray;
   end;
 
@@ -158,13 +157,8 @@ const
   CScriptAbort='Abort in interactive proc';
 
 type
-
-  TzePoints3d=array of TzePoint3d;
   TStringsArray=array of string;
   PStringsArray=^TStringsArray;
-  PzePoints3d=^TzePoints3d;
-  TSingles=array of Single;
-  PSingles=^TSingles;
 
 type
   TNames=array of string;
@@ -192,6 +186,20 @@ type
 
   TPCounter=TMyMapCounter<pointer>;
   TStringCounter=TMyMapCounter<string>;
+
+constructor TCurrentDrawingContext.CreateContext;
+begin
+  inherited;
+  Manipulator:=TDrawingManipulator.create;
+end;
+
+constructor TCurrentDrawingContext.Create;
+begin
+  inherited;
+  Manipulator:=TDrawingManipulator.create;
+end;
+
+
 
 function TCounterResultComparer.Compare({$IF FPC_FULlVERSION>30202}const{$ELSE}constref{$ENDIF}Left,Right:TCounterResult):Integer;overload;
 var
@@ -236,29 +244,12 @@ begin
   result:=fEnts.getData(idx);
 end;
 
-constructor TDrawingContextOptions.CreateRec(ABhv:TDrawingBehavior);
-begin
-  fEnadleRedrawCounter:=1;
-  fBehavior:=ABhv;
-end;
-
-function TDrawingContextOptions.NeedRedaraw:Boolean;
-begin
-  if DBRedraw in fBehavior then
-    result:=fEnadleRedrawCounter>0
-  else
-    result:=false;
-end;
-function TDrawingContextOptions.NeedUndo:Boolean;
-begin
-  result:=DBUndo in fBehavior;
-end;
 procedure zeIncEnableRedrawCounter(const Params: PParamArray);
 var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  inc(ctx.Options.fEnadleRedrawCounter);
+  ctx.Manipulator.EnadleRedraw;
 end;
 
 procedure zeDecEnableRedrawCounter(const Params: PParamArray);
@@ -266,7 +257,7 @@ var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  dec(ctx.Options.fEnadleRedrawCounter);
+  ctx.Manipulator.DisableRedraw;
 end;
 
 procedure zeEnableRedraw(const Params: PParamArray);
@@ -274,7 +265,7 @@ var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  ctx.Options.fBehavior:=ctx.Options.fBehavior+[DBRedraw];
+  ctx.Manipulator.Options.BehaviorSetReset([DBRedraw],[]);
 end;
 
 procedure zeDisableRedraw(const Params: PParamArray);
@@ -282,86 +273,57 @@ var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  ctx.Options.fBehavior:=ctx.Options.fBehavior-[DBRedraw];
+  ctx.Manipulator.Options.BehaviorSetReset([],[DBRedraw]);
 end;
 
 procedure AddEntityToDWG(AEnt:PGDBObjEntity;constref ACtx:TCurrentDrawingContext);
 begin
   //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-  zeSetEntPropFromDrawingProp(AEnt,ACtx.DWG^);
+  zeSetEntPropFromDrawingProp(AEnt,ACtx.Manipulator.DWG^);
   //zcSetEntPropFromCurrentDrawingProp(pline);
 
   //добавляем в чертеж
-  if ACtx.Options.NeedUndo then
-    zcAddEntToDrawingWithUndo(AEnt,ACtx.DWG^)
+  if ACtx.Manipulator.Options.NeedUndo then
+    zcAddEntToDrawingWithUndo(AEnt,ACtx.Manipulator.DWG^)
   else begin
-    if ACtx.Root=nil then
-      zcAddEntToDrawingWithOutUndo(AEnt,ACtx.DWG^)
+    if ACtx.Manipulator.Root=nil then
+      zcAddEntToDrawingWithOutUndo(AEnt,ACtx.Manipulator.DWG^)
     else begin
-      if ACtx is TDeviceExtentionContext then begin
+      {if ACtx is TDeviceExtentionContext then begin
         PGDBObjDevice(TDeviceExtentionContext(ACtx).FThisEntity).VarObjArray.AddPEntity(AEnt^)
-      end else begin
-        if ACtx.Root^.GetObjType=GDBDeviceID then
-          PGDBObjDevice(ACtx.Root)^.VarObjArray.AddPEntity(AEnt^)
+      end else} begin
+        if ACtx.Manipulator.Root^.GetObjType=GDBDeviceID then
+          PGDBObjDevice(ACtx.Manipulator.Root)^.VarObjArray.AddPEntity(AEnt^)
         else
-          ACtx.Root^.GoodAddObjectToObjArray(AEnt);
+          ACtx.Manipulator.Root^.GoodAddObjectToObjArray(AEnt);
       end;
-      AEnt^.YouChanged(ACtx.DWG^);
+      AEnt^.YouChanged(ACtx.Manipulator.DWG^);
     end;
   end;
 
   //перерисовываем
-  if ACtx.Options.NeedRedaraw then
+  if ACtx.Manipulator.Options.NeedRedaraw then
     zcRedrawCurrentDrawing;
-end;
-
-function getctxroot(ACtx:TCurrentDrawingContext):pointer;
-begin
-  if ACtx is TDeviceExtentionContext then
-    result:=PGDBObjDevice(TDeviceExtentionContext(ACtx).FThisEntity)
-  else
-    result:=ACtx.Root;
 end;
 
 procedure zeEntLine(const Params: PParamArray;const Result: Pointer{(x1,y1,z1,x2,y2,z2:double):PzeEntity}); cdecl;
 var
-  x1,y1,z1,x2,y2,z2: double;
   ctx:TCurrentDrawingContext;
-  pline:PGDBObjLine;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then begin
-    x1:=PDouble(Params^[1])^;
-    y1:=PDouble(Params^[2])^;
-    z1:=PDouble(Params^[3])^;
-    x2:=PDouble(Params^[4])^;
-    y2:=PDouble(Params^[5])^;
-    z2:=PDouble(Params^[6])^;
-
-    pline:=AllocEnt(GDBLineID);
-    pline^.init(getctxroot(ctx),nil,LnWtByLayer,TzePoint3d.Make(x1,y1,z1),TzePoint3d.Make(x2,y2,z2));
-    PGDBObjLine(Result^):=pline;
-
-    AddEntityToDWG(pline,ctx);
+  if ctx.Manipulator.DWG<>nil then begin
+    Pointer(Result^):=ctx.Manipulator.AddLine(TzePoint3d.Make(PDouble(Params^[1])^,PDouble(Params^[2])^,
+      PDouble(Params^[3])^),TzePoint3d.Make(PDouble(Params^[4])^,PDouble(Params^[5])^,PDouble(Params^[6])^));
   end;
 end;
 
 procedure zeEntLine2(const Params: PParamArray;const Result: Pointer{(p1,p2:TzePoint3d):PzeEntity}); cdecl;
 var
-  p1,p2:TzePoint3d;
   ctx:TCurrentDrawingContext;
-  pline:PGDBObjLine;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then begin
-    p1:=PzePoint3d(Params^[1])^;
-    p2:=PzePoint3d(Params^[2])^;
-
-    pline:=AllocEnt(GDBLineID);
-    pline^.init(getctxroot(ctx),nil,LnWtByLayer,p1,p2);
-    PGDBObjLine(Result^):=pline;
-
-    AddEntityToDWG(pline,ctx);
+  if ctx.Manipulator.DWG<>nil then begin
+    Pointer(Result^):=ctx.Manipulator.AddLine(PzePoint3d(Params^[1])^,PzePoint3d(Params^[2])^);
   end;
 end;
 
@@ -372,10 +334,10 @@ var
   PushStone:boolean;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then begin
+  if ctx.Manipulator.DWG<>nil then begin
     CommandName:=PlpString(Params^[1])^;
     PushStone:=Pboolean(Params^[2])^;
-    zcStartUndoCommand(ctx.DWG^,CommandName,PushStone);
+    zcStartUndoCommand(ctx.Manipulator.DWG^,CommandName,PushStone);
   end;
 end;
 
@@ -384,8 +346,8 @@ var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then
-    zcEndUndoCommand(ctx.DWG^);
+  if ctx.Manipulator.DWG<>nil then
+    zcEndUndoCommand(ctx.Manipulator.DWG^);
 end;
 
 procedure UndoPushStone(const Params: PParamArray); cdecl;
@@ -393,8 +355,8 @@ var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then
-    zcUndoPushStone(ctx.DWG^);
+  if ctx.Manipulator.DWG<>nil then
+    zcUndoPushStone(ctx.Manipulator.DWG^);
 end;
 
 
@@ -404,8 +366,8 @@ var
   plt:PGDBLayerArray;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then
-    plt:=ctx.DWG^.GetLayerTable
+  if ctx.Manipulator.DWG<>nil then
+    plt:=ctx.Manipulator.DWG^.GetLayerTable
   else
     plt:=nil;
   if plt<>nil then
@@ -420,8 +382,8 @@ var
   plt:PGDBLayerArray;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then
-    plt:=ctx.DWG^.GetLayerTable
+  if ctx.Manipulator.DWG<>nil then
+    plt:=ctx.Manipulator.DWG^.GetLayerTable
   else
     plt:=nil;
   if plt<>nil then
@@ -436,8 +398,8 @@ var
   plt:PGDBLayerArray;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then
-    plt:=ctx.DWG^.GetLayerTable
+  if ctx.Manipulator.DWG<>nil then
+    plt:=ctx.Manipulator.DWG^.GetLayerTable
   else
     plt:=nil;
   if plt<>nil then
@@ -453,8 +415,8 @@ var
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   pl:=PGDBLayerProp(Params^[1]^);
-  if PGDBLayerProp(Params^[1])<>nil then
-     PlpString(Result)^:=PGDBLayerProp(Params^[1]^)^.GetName
+  if pl<>nil then
+     PlpString(Result)^:=pl^.GetName
    else
      PlpString(Result)^:='';
 end;
@@ -465,8 +427,8 @@ var
   ptsa:PGDBTableStyleArray;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then
-    ptsa:=ctx.DWG^.GetTableStyleTable
+  if ctx.Manipulator.DWG<>nil then
+    ptsa:=ctx.Manipulator.DWG^.GetTableStyleTable
   else
     ptsa:=nil;
   if ptsa<>nil then
@@ -481,8 +443,8 @@ var
   ptsa:PGDBTableStyleArray;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then
-    ptsa:=ctx.DWG^.GetTableStyleTable
+  if ctx.Manipulator.DWG<>nil then
+    ptsa:=ctx.Manipulator.DWG^.GetTableStyleTable
   else
     ptsa:=nil;
   if ptsa<>nil then
@@ -497,8 +459,8 @@ var
   ptsa:PGDBTableStyleArray;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then
-    ptsa:=ctx.DWG^.GetTableStyleTable
+  if ctx.Manipulator.DWG<>nil then
+    ptsa:=ctx.Manipulator.DWG^.GetTableStyleTable
   else
     ptsa:=nil;
   if ptsa<>nil then
@@ -554,68 +516,32 @@ procedure zeEntSpline(const Params:PParamArray;const Result:Pointer); cdecl;
                     {(const Degree:integer;const Closed:boolean;ts:TzePoints3d;
                       kts:singles):PzeEntity}
 var
-  i:integer;
   ctx:TCurrentDrawingContext;
-  pspline:PGDBObjSpline;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then begin
-
-    pspline:=AllocEnt(GDBSplineID);
-    pspline^.init(getctxroot(ctx),nil,LnWtByLayer,PBoolean(Params^[2])^);
-    PGDBObjSpline(Result^):=pspline;
-
-    pspline^.Degree:=PInteger(Params^[1])^;
-    //pspline^.Closed:=PBoolean(Params^[1]^)^;
-
-    pspline^.vertexarrayinocs.SetCount(length(PzePoints3d(Params^[3])^));
-    for i:=0 to length(PzePoints3d(Params^[3])^)-1 do
-      pspline^.vertexarrayinocs.getDataMutable(i)^:=PzePoints3d(Params^[3])^[i];
-
-    pspline^.Knots.SetCount(length(PSingles(Params^[4])^));
-    for i:=0 to length(PSingles(Params^[4])^)-1 do
-      pspline^.Knots.getDataMutable(i)^:=PSingles(Params^[4])^[i];
-
-    AddEntityToDWG(pspline,ctx);
+  if ctx.Manipulator.DWG<>nil then begin
+    Pointer(Result^):=ctx.Manipulator.AddSpline(PInteger(Params^[1])^,PBoolean(Params^[2])^,
+      PzePoints3d(Params^[3])^,PSingles(Params^[4])^);
   end;
 end;
 
 procedure zeEntTable(const Params:PParamArray;const Result: Pointer);cdecl;
 var
   ctx:TCurrentDrawingContext;
-  pt:PGDBObjTable;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  //pt:=AllocEnt(GDBTableID);
-  Getmem(pointer(pt),sizeof(GDBObjTable));
-  pt^.initnul;
-  pt^.bp.ListPos.Owner:=getctxroot(ctx);
-  pt^.ptablestyle:=PPointer(Params^[1])^;
-  pt^.tbl.free;
-  PGDBObjTable(Result^):=pt;
-  AddEntityToDWG(pt,ctx);
+  if ctx.Manipulator.DWG<>nil then begin
+    Pointer(Result^):=ctx.Manipulator.AddZTable(PPointer(Params^[1])^);
+  end;
 end;
 
 procedure zeEntTableAddRow(const Params: PParamArray);
 var
   ctx:TCurrentDrawingContext;
-  pt:PGDBObjTable;
-  row:TStringsArray;
-  i:integer;
-  psl:PDXFEntsInternalVectorStrings;
-  DC:TDrawContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  pt:=PPointer(Params^[1])^;
-  row:=PStringArray(Params^[2])^;
-  psl:=pt^.tbl.CreateObject;
-  psl.init(length(row));
-  for i:=low(row) to high(row) do
-    psl^.PushBackData(row[i]);
-  if PBoolean(Params^[3])^ then begin
-    pt^.Build(ctx.DWG^);
-    dc:=ctx.DWG^.CreateDrawingRC;
-    pt^.FormatEntity(ctx.DWG^,dc);
+  if ctx.Manipulator.DWG<>nil then begin
+    ctx.Manipulator.ZTableAddRow(PPointer(Params^[1])^,PStringArray(Params^[2])^,PBoolean(Params^[3])^);
   end;
 end;
 procedure zcGetEntity(const Params:PParamArray;const Result:Pointer); cdecl;
@@ -624,7 +550,7 @@ var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then begin
+  if ctx.Manipulator.DWG<>nil then begin
     PzcInteractiveResult(Result)^:=commandmanager.GetEntity(PlpString(Params^[1])^,PGDBObjEntity(Params^[2]^));
     if PzcInteractiveResult(Result)^=IRAbort then
       raise EScriptAbort.Create(CScriptAbort);
@@ -637,7 +563,7 @@ var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then begin
+  if ctx.Manipulator.DWG<>nil then begin
     PzcInteractiveResult(Result)^:=commandmanager.Get3DPoint(PlpString(Params^[1])^,PzePoint3d(Params^[2])^);
     if PzcInteractiveResult(Result)^=IRAbort then
       raise EScriptAbort.Create(CScriptAbort);
@@ -650,7 +576,7 @@ var
   ctx:TCurrentDrawingContext;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if ctx.DWG<>nil then begin
+  if ctx.Manipulator.DWG<>nil then begin
     PzcInteractiveResult(Result)^:=commandmanager.Get3DPointWithLineFromBase(PlpString(Params^[1])^,PzePoint3d(Params^[2])^,PzePoint3d(Params^[3])^);
     if PzcInteractiveResult(Result)^=IRAbort then
       raise EScriptAbort.Create(CScriptAbort);
@@ -707,14 +633,14 @@ begin
     if PPointer(Result)^=nil then begin
       ext:=ExtType.Create(pent);
 
-      if ctx.Options.NeedUndo then begin
+      if ctx.Manipulator.Options.NeedUndo then begin
         domethod.Code:=pointer(pent^.AddExtension);
         domethod.Data:=pent;
         undomethod.Code:=pointer(pent^.RemoveExtension);
         undomethod.Data:=pent;
 
-        TUndoCmdSaveEntityState.CreateAndPush(pent,ctx.DWG.UndoStack);
-        with GUCmdChgMethods2<TAbstractEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,ctx.DWG.UndoStack,drawings.AfterNotAutoProcessGDB) do
+        TUndoCmdSaveEntityState.CreateAndPush(pent,ctx.Manipulator.DWG.UndoStack);
+        with GUCmdChgMethods2<TAbstractEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,ctx.Manipulator.DWG.UndoStack,drawings.AfterNotAutoProcessGDB) do
         begin
           comit;
         end;
@@ -741,7 +667,7 @@ begin
   value:=PlpString(Params^[3])^;
   extdr:=ppointer(Params^[4])^;
   if pent<>nil then begin
-    PBoolean(Result)^:=SetProperty(ctx.DWG.GetUnitsFormat,pent,prop,value,extdr);
+    PBoolean(Result)^:=SetProperty(ctx.Manipulator.DWG.GetUnitsFormat,pent,prop,value,extdr);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePzeEntity]);
 end;
@@ -759,7 +685,7 @@ begin
   prop:=PlpString(Params^[2])^;
   extdr:=ppointer(Params^[3])^;
   if pent<>nil then begin
-    GetProperty(ctx.DWG.GetUnitsFormat,pent,prop,PlpString(Result)^,extdr);
+    GetProperty(ctx.Manipulator.DWG.GetUnitsFormat,pent,prop,PlpString(Result)^,extdr);
   end else
     raise EScriptAV.CreateFmt(cEScriptAVNil,[cNamePzeEntity]);
 end;
@@ -1053,14 +979,14 @@ begin
 
   entscount:=0;
 
-  pent:=ctx.Root.ObjArray.beginiterate(ir);
+  pent:=ctx.Manipulator.Root.ObjArray.beginiterate(ir);
   if pent<>nil then
     repeat
       if fltr.IsEntytyAccepted(pent) then begin
         ents.PushBack(pent);
         inc(entscount);
       end;
-      pent:=ctx.Root.ObjArray.iterate(ir);
+      pent:=ctx.Manipulator.Root.ObjArray.iterate(ir);
     until pent=nil;
 
   PInt32(Result)^:=entscount;
@@ -1242,7 +1168,7 @@ var
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx is TDeviceExtentionContext then
-    PPointer(Result)^:=TDeviceExtentionContext(ctx).FThisEntity
+    PPointer(Result)^:=ctx.Manipulator.Root// TDeviceExtentionContext(ctx).FThisEntity
   else
     PPointer(Result)^:=nil;
 end;
@@ -1253,8 +1179,8 @@ var
   ents:ThEnts;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  if (ctx is TDeviceExtentionContext)and(TDeviceExtentionContext(ctx).FThisEntity<>nil) then
-    PPointer(Result)^:=TDeviceExtentionContext(ctx).FThisEntity.GetExtension<TVariablesExtender>
+  if (ctx is TDeviceExtentionContext)and(ctx.Manipulator.Root<>nil) then
+    PPointer(Result)^:=ctx.Manipulator.Root.GetExtension<TVariablesExtender>
   else
     PPointer(Result)^:=nil;
 end;
@@ -1265,7 +1191,7 @@ var
   counter:TCombineCounter;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  counter:=TCombineCounter.Create(ctx.DWG.GetUnitsFormat);
+  counter:=TCombineCounter.Create(ctx.Manipulator.DWG.GetUnitsFormat);
   ctx.Things.PushBack(counter);
   PThingsIndex(Result)^.Things:=ctx.Things;
   PThingsIndex(Result)^.Index:=PThingsIndex(Result)^.Things.Size-1;
@@ -2109,9 +2035,8 @@ class procedure TLapeDwg.ctxSetup(const ACommandContext:TZCADCommandContext;mode
 begin
   if LSCMContextSetup in mode then begin
     if ctx is TCurrentDrawingContext then begin
-      (ctx as TCurrentDrawingContext).DWG:=ACommandContext.PDWG;
-      (ctx as TCurrentDrawingContext).Root:=ACommandContext.PRoot;
-      (ctx as TCurrentDrawingContext).Options.CreateRec(cDWGDefaultBehavior);
+      (ctx as TCurrentDrawingContext).Manipulator.setDWG(TDrawingContextOptions.CreateRec(cDWGDefaultBehavior),
+        ACommandContext.PDWG^,ACommandContext.PRoot);
     end;
   end;
 end;
@@ -2122,7 +2047,7 @@ begin
     if ctx is TEntityExtentionContext then begin
       (ctx as TEntityExtentionContext).FThisEntity:=ACommandContext.POwner;
     end;
-    (ctx as TCurrentDrawingContext).Options.CreateRec([]);
+    (ctx as TCurrentDrawingContext).Manipulator.Options.CreateRec([]);
   end;
 end;
 
@@ -2136,6 +2061,7 @@ begin
           (ctx as TDeviceExtentionContext).PVarObjArray:=@PGDBObjDevice(ACommandContext.POwner).VarObjArray
         else
           (ctx as TDeviceExtentionContext).PVarObjArray:=nil;
+        (ctx as TDeviceExtentionContext).Manipulator.Root:=pointer(ACommandContext.POwner);
       end else
         (ctx as TDeviceExtentionContext).PVarObjArray:=nil;
     end;

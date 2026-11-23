@@ -343,9 +343,9 @@ begin
   if SN2SD.tryGetMutableValue(scrname,PSD) then begin
     result.FileData.Name:=PSD^.FileData.Name;
     if AICtxClass<>nil then
-      result.Ctx:=AICtxClass.Create
+      result.Ctx:=AICtxClass.CreateContext
     else if CtxClass<>nil then
-      result.Ctx:=CtxClass.Create
+      result.Ctx:=CtxClass.CreateContext
     else
       result.Ctx:=nil;
   end else begin

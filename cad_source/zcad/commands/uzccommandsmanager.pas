@@ -952,8 +952,8 @@ begin
             //lastcommand := command;
 
             if silent then begin
-              programlog.LogOutFormatStr(
-                'GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],LM_Info);
+              programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',
+                [pfoundcommand^.CommandName],LM_Info);
               Inc(SilentCounter);
             end else begin
               if isBusy then
@@ -961,10 +961,10 @@ begin
               else
                 zcUI.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,
                   TMWOHistoryOut);
-              lastcommand:=command;
+              lastcommand:=comm;
               if not (isBusy) then
                 if assigned(OnCommandRun) then
-                  OnCommandRun(command);
+                  OnCommandRun(comm);
             end;
 
             run(pfoundcommand,operands,pdrawing);

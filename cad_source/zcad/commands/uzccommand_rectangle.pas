@@ -92,6 +92,9 @@ begin
   end else
     CommandParamsShowed:=false;
 
+  polyLWObj:=nil;
+  polyObj:=nil;
+
   if commandmanager.get3dpoint(APrompt1,pe.p1)=IRNormal then begin
     pf:=PInternalRTTITypeDesk^.FindField('ET');
     //находим описание поля ET
@@ -125,8 +128,8 @@ begin
       polyLWObj^.SgmntsParams.PushBackData(widthObj);
 
       InteractiveLWRectangleManipulator(polyLWObj,pe.p1,False,nil);
-      if commandmanager.Get3DPointInteractive(APrompt2,pe.p2,
-           @InteractiveLWRectangleManipulator,polyLWObj,ESP)=IRNormal then begin
+      if commandmanager.Get3DPointInteractive(APrompt2,pe.p2,@InteractiveLWRectangleManipulator,
+        polyLWObj,ESP)=IRNormal then begin
         if assigned(ESP) then
           ESP(ESSSetEntity,polyLWObj,ESD);
         zcAddEntToCurrentDrawingWithUndo(polyLWObj);
@@ -134,7 +137,9 @@ begin
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                   нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
         //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
-        zcClearCurrentDrawingConstructRoot;
+      end else begin
+        zcFreeEntsInCurrentDrawingConstructRoot;
+        polyLWObj:=nil;
       end;
     end else begin
       polyObj:=GDBObjPolyline.CreateInstance;
@@ -156,16 +161,23 @@ begin
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
                   нужно почистить список примитивов конструируемой области, без физического удаления примитивов}
            //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
-        zcClearCurrentDrawingConstructRoot;
+      end else begin
+        zcFreeEntsInCurrentDrawingConstructRoot;
+        polyObj:=nil;
       end;
     end;
   end;
+  zcClearCurrentDrawingConstructRoot;
   //< Возвращает инспектор в значение по умолчанию
   //< если показ команды не был подавлен
   if CommandParamsShowed then
     zcHideCommandParams;
-  if assigned(ESP) then
-    ESP(ESSCommandEnd,polyObj,ESD);
+  if assigned(ESP) then begin
+    if RectangParam.ET=RET_LWPoly then
+      ESP(ESSCommandEnd,polyLWObj,ESD)
+    else
+      ESP(ESSCommandEnd,polyObj,ESD)
+  end;
   Result:=cmd_ok;
 end;
 

@@ -1086,8 +1086,6 @@ begin
       if vp.layer=@DefaultErrorLayer then begin
         vp.Layer:=drawing.getlayertable.getAddres(
           dxfDeCodeString(rdr.ParseShortString,Context.header));
-        if vp.Layer=nil then
-          vp.Layer:=vp.Layer;
       end else
         APP_NAME:=rdr.ParseString;
       Result:=True;

@@ -1,0 +1,19 @@
+
+#### MatchProp
+
+:cmdcommand: MatchProp
+:cmdicon: ../../../../images/actions/matchprop.png
+:cmdexample: MatchProp
+
+include::../../_elements/commandsummary.adoc[]
+
+Перенос свойств примитива на другие примитивы. После запуска предлагается выбрать исходный примитив, чьи свойства
+будут взяты как исходные. После выбора в инспекторе объектов будут показаны опции команды
+
+.Опции команды MatchProp
+image::cmd_params_matchprop.png[width=25%,pdfwidth=25%]
+
+Далее предлагается выбрать целевые примитивы, свойства исходного примитива отмеченые в опциях будут присвоены целевым
+примитивам.
+
+include::commandsummaryfree.adoc[]

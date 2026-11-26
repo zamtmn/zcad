@@ -1,0 +1,13 @@
+
+#### 3DPoly
+
+:cmdcommand: 3DPoly
+:cmdicon: ../../../../images/actions/draw/pline.png
+:cmdmenu: Черчение > 3D Полилиния
+
+include::../../_elements/commandsummary.adoc[]
+
+Черчение примитива [.ent]#3DPolyLine#. После запуска команды последовательно указать мышью вершины полилинии.
+Завершение черчения - ESC или запуск другой команды
+
+include::commandsummaryfree.adoc[]

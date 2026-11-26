@@ -1,0 +1,14 @@
+
+#### MergeBlocks
+
+:cmdcommand: MergeBlocks
+:cmdoperands: Обязательный. Путь и имя DXF файла
+:cmdexample: MergeBlocks (E:\actionscontent.xml)
+
+include::../../_elements/commandsummary.adoc[]
+
+Подгружает файл DXF в библиотеку блоков !!NEEDLINK!!. Повторные определения блоков игнорируются !!NEEDLINK!!.
+Загрузка обычно происходит на стадии запуска программы, поэтому команда обычно используется в скрипте
+[.filepath]#$(ZCADPath)/preload/autorun.cmd# !!NEEDLINK!!.
+
+include::commandsummaryfree.adoc[]

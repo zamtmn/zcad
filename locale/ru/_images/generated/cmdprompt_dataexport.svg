@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg height='174pt' preserveAspectRatio='xMidYMid meet' viewBox='0.00 0.00 1051.00 174.00' width='1051pt' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg'>
+<g class='graph' id='graph0' transform='scale(1 1) rotate(0) translate(4 169.75)'>
+<title>g</title>
+<polygon fill='white' points='-4,4 -4,-169.75 1046.75,-169.75 1046.75,4 -4,4' stroke='none'/>
+
+<g class='node' id='node1'>
+<title>node0</title>
+<polygon fill='none' points='422,-138.5 422,-161.75 548.75,-161.75 548.75,-138.5 422,-138.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='425' y='-145.45'>Configure export</text>
+<polygon fill='gray' points='548.75,-138.5 548.75,-161.75 605,-161.75 605,-138.5 548.75,-138.5' stroke='none'/>
+<polygon fill='none' points='548.75,-138.5 548.75,-161.75 605,-161.75 605,-138.5 548.75,-138.5' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' text-decoration='underline' x='551.75' y='-146.45'>p</text>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='560.75' y='-146.45'>aram,</text>
+<polygon fill='none' points='605,-138.5 605,-161.75 635.75,-161.75 635.75,-138.5 605,-138.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='608' y='-145.45'>run</text>
+<polygon fill='gray' points='635.75,-138.5 635.75,-161.75 712.25,-161.75 712.25,-138.5 635.75,-138.5' stroke='none'/>
+<polygon fill='none' points='635.75,-138.5 635.75,-161.75 712.25,-161.75 712.25,-138.5 635.75,-138.5' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' text-decoration='underline' x='638.75' y='-146.45'>f</text>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='644' y='-146.45'>ile dialog</text>
+<polygon fill='none' points='712.25,-138.5 712.25,-161.75 1034.75,-161.75 1034.75,-138.5 712.25,-138.5' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='715.25' y='-145.45'> or enter file name (empty for default): &gt; (1)</text>
+</g>
+
+<g class='node' id='node2'>
+<title>node1</title>
+<polygon fill='gray' points='286.88,-71.25 286.88,-94.5 328.88,-94.5 328.88,-71.25 286.88,-71.25' stroke='none'/>
+<polygon fill='none' points='286.88,-71.25 286.88,-94.5 328.88,-94.5 328.88,-71.25 286.88,-71.25' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='289.88' y='-78.2'>&lt;&lt;&lt;</text>
+<polygon fill='none' points='328.88,-71.25 328.88,-94.5 358.88,-94.5 358.88,-71.25 328.88,-71.25' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='331.88' y='-78.2'>Set</text>
+<polygon fill='gray' points='358.88,-71.25 358.88,-94.5 418.88,-94.5 418.88,-71.25 358.88,-71.25' stroke='none'/>
+<polygon fill='none' points='358.88,-71.25 358.88,-94.5 418.88,-94.5 418.88,-71.25 358.88,-71.25' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' text-decoration='underline' x='361.88' y='-79.2'>e</text>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='370.12' y='-79.2'>ntities</text>
+<polygon fill='none' points='418.88,-71.25 418.88,-94.5 429.38,-94.5 429.38,-71.25 418.88,-71.25' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='421.88' y='-78.2'>/</text>
+<polygon fill='gray' points='429.38,-71.25 429.38,-94.5 509.62,-94.5 509.62,-71.25 429.38,-71.25' stroke='none'/>
+<polygon fill='none' points='429.38,-71.25 429.38,-94.5 509.62,-94.5 509.62,-71.25 429.38,-71.25' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' text-decoration='underline' x='432.38' y='-79.2'>p</text>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='441.38' y='-79.2'>roperties</text>
+<polygon fill='none' points='509.62,-71.25 509.62,-94.5 620.62,-94.5 620.62,-71.25 509.62,-71.25' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='512.62' y='-78.2'>filter or export</text>
+<polygon fill='gray' points='620.62,-71.25 620.62,-94.5 667.88,-94.5 667.88,-71.25 620.62,-71.25' stroke='none'/>
+<polygon fill='none' points='620.62,-71.25 620.62,-94.5 667.88,-94.5 667.88,-71.25 620.62,-71.25' stroke='black'/>
+<text fill='red' font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' text-decoration='underline' x='623.62' y='-79.2'>s</text>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='631.12' y='-79.2'>cript</text>
+</g>
+
+<g class='edge' id='edge1'>
+<title>node0:f0&#45;&gt;node1</title>
+<path d='M576.88,-137.5C576.88,-122.49 567.99,-111.66 555.53,-103.85' fill='none' stroke='black'/>
+<polygon fill='black' points='557.2,-100.78 546.73,-99.17 553.91,-106.96 557.2,-100.78' stroke='black'/>
+</g>
+
+<g class='node' id='node6'>
+<title>node5</title>
+<polygon fill='none' points='693.62,-70.25 693.62,-95.5 855.12,-95.5 855.12,-70.25 693.62,-70.25' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='middle' x='774.38' y='-78.2'>File select dialog (5)</text>
+</g>
+
+<g class='edge' id='edge2'>
+<title>node0:f1&#45;&gt;node5:f0</title>
+<path d='M674,-137.5C674,-120.57 685.15,-108.86 700.01,-100.77' fill='none' stroke='black'/>
+<polygon fill='black' points='701.31,-104.03 708.87,-96.6 698.33,-97.69 701.31,-104.03' stroke='black'/>
+</g>
+
+<g class='node' id='node3'>
+<title>node2</title>
+<polygon fill='gray' points='8,-4 8,-27.25 50,-27.25 50,-4 8,-4' stroke='none'/>
+<polygon fill='none' points='8,-4 8,-27.25 50,-27.25 50,-4 8,-4' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='11' y='-10.95'>&lt;&lt;&lt;</text>
+<polygon fill='none' points='50,-4 50,-27.25 272.75,-27.25 272.75,-4 50,-4' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='53' y='-10.95'>Enter new entities filter: &gt; (2)</text>
+</g>
+
+<g class='edge' id='edge3'>
+<title>node1:f1&#45;&gt;node2:f1</title>
+<path d='M388.88,-70.25C388.88,-22.75 329.12,-57.26 289.38,-31.25 285.78,-28.9 284.22,-25.61 282.78,-22.66' fill='none' stroke='black'/>
+<polygon fill='black' points='284.98,-19.94 274.94,-16.56 280.68,-25.46 284.98,-19.94' stroke='black'/>
+</g>
+
+<g class='node' id='node4'>
+<title>node3</title>
+<polygon fill='gray' points='306.88,-4 306.88,-27.25 348.88,-27.25 348.88,-4 306.88,-4' stroke='none'/>
+<polygon fill='none' points='306.88,-4 306.88,-27.25 348.88,-27.25 348.88,-4 306.88,-4' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='309.88' y='-10.95'>&lt;&lt;&lt;</text>
+<polygon fill='none' points='348.88,-4 348.88,-27.25 591.88,-27.25 591.88,-4 348.88,-4' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='351.88' y='-10.95'>Enter new properties filter: &gt; (3)</text>
+</g>
+
+<g class='edge' id='edge4'>
+<title>node1:f2&#45;&gt;node3:f1</title>
+<path d='M469.5,-70.25C469.5,-56.1 470,-50 470.25,-39.75' fill='none' stroke='black'/>
+<polygon fill='black' points='473.75,-39.8 470.36,-29.76 466.75,-39.72 473.75,-39.8' stroke='black'/>
+</g>
+
+<g class='node' id='node5'>
+<title>node4</title>
+<polygon fill='gray' points='626.38,-4 626.38,-27.25 668.38,-27.25 668.38,-4 626.38,-4' stroke='none'/>
+<polygon fill='none' points='626.38,-4 626.38,-27.25 668.38,-27.25 668.38,-4 626.38,-4' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='629.38' y='-10.95'>&lt;&lt;&lt;</text>
+<polygon fill='none' points='668.38,-4 668.38,-27.25 890.38,-27.25 890.38,-4 668.38,-4' stroke='black'/>
+<text font-family='Times,serif' font-size='14.00' xml:space='preserve' text-anchor='start' x='671.38' y='-10.95'>Enter new export script: &gt; (4)</text>
+</g>
+
+<g class='edge' id='edge5'>
+<title>node1:f3&#45;&gt;node4:f1</title>
+<path d='M668.88,-82.88C678.66,-82.88 676.24,-72.69 684.38,-67.25 718.61,-44.35 768.41,-68.19 777.81,-39.53' fill='none' stroke='black'/>
+<polygon fill='black' points='781.26,-40.13 779.17,-29.75 774.33,-39.17 781.26,-40.13' stroke='black'/>
+</g>
+</g>
+</svg>

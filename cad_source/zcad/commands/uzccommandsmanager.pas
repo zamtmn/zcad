@@ -582,31 +582,32 @@ function GDBcommandmanager.GetEntity(prompt:string;out p:Pointer):TzcInteractive
 var
   savemode:byte;
 begin
-  savemode:=PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.DefMouseEditorMode(
-    MGetSelectObject,MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or
-                     MGetControlpoint);
-  zcUI.TextMessage(prompt,TMWOHistoryOut);
-  CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWaitEnt;
-  CurrCmd.pcommandrunning^.IData.PInteractiveData:=nil;
-  CurrCmd.pcommandrunning^.IData.PInteractiveProc:=nil;
-  CurrCmd.pcommandrunning^.IData.PInteractiveESP:=nil;
-  while (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMWaitEnt)and
-        (not Application.Terminated) do begin
-    Application.HandleMessage;
-    //Application.ProcessMessages;
-  end;
-  if (CurrCmd.pcommandrunning<>nil)and
-     (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMEnt)and
-     (not Application.Terminated) then begin
-    p:=PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.wa.param.SelDesc.LastSelectedObject;
-    Result:={True}IRNormal;
-  end else begin
-    Result:={False}IRCancel;
-    //HistoryOutStr('cancel');
-  end;
-  PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);
-  //restore editor mode
-  //восстанавливаем сохраненный режим редактора
+  if CurrCmd.pcommandrunning<>nil then begin
+    savemode:=PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.DefMouseEditorMode(MGetSelectObject,
+      MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
+    zcUI.TextMessage(prompt,TMWOHistoryOut);
+    CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWaitEnt;
+    CurrCmd.pcommandrunning^.IData.PInteractiveData:=nil;
+    CurrCmd.pcommandrunning^.IData.PInteractiveProc:=nil;
+    CurrCmd.pcommandrunning^.IData.PInteractiveESP:=nil;
+    while (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMWaitEnt)and
+          (not Application.Terminated) do begin
+      Application.HandleMessage;
+      //Application.ProcessMessages;
+    end;
+    if (CurrCmd.pcommandrunning<>nil)and
+       (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMEnt)and
+       (not Application.Terminated) then begin
+      p:=PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.wa.param.SelDesc.LastSelectedObject;
+      Result:=IRNormal;
+    end else begin
+      Result:=IRCancel;
+    end;
+    PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);
+    //restore editor mode
+    //восстанавливаем сохраненный режим редактора
+  end else
+    Result:=IRCancel;
 end;
 
 function GDBcommandmanager.GetValueHeap:integer;

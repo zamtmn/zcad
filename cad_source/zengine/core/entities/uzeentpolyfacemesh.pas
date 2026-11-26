@@ -97,7 +97,7 @@ type
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     function GetObjTypeName:string;virtual;
     function GetObjType:TObjID;virtual;
-    destructor done;
+    destructor done;virtual;
     
     // Методы для работы с вершинами и гранями
     function GetVertexCount: Integer;

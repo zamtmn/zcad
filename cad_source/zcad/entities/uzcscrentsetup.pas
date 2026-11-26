@@ -42,7 +42,7 @@ procedure Execute(const AScriptName:string;var Context:TZCADCommandContext);
 var
  scrd:TScriptData;
 begin
-  scrd:=EntitySetupScriptsManager.CreateExternalScriptData(AScriptName,TDeviceExtentionContext,[]);
+  scrd:=EntitySetupScriptsManager.CreateExternalScriptData(AScriptName,TEntityExtentionContext,[]);
   EntitySetupScriptsManager.RunScript(Context,scrd);
   EntitySetupScriptsManager.FreeExternalScriptData(scrd);
 end;
@@ -62,9 +62,9 @@ end;
 
 initialization
   EntitySetupScriptsManager:=STManager.CreateType('lpeis','Lape script entity initial setup',
-    TDeviceExtentionContext,LSCMCreateOnce,[TLapeDwg.ze2cplr,TLapeDwg.zeStyles2cplr,
+    TEntityExtentionContext,LSCMCreateOnce,[TLapeDwg.ze2cplr,TLapeDwg.zeStyles2cplr,
     TLapeDwg.zeEntsExtenders2cplr,TLapeEntityExtention.thisEntity2cplr,TLapeDwg.ctxSetup,
-    TLapeDwg.ctxSetup,TLapeEntityExtention.ctxSetup]);
+    TLapeEntityExtention.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     EntitySetupScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);
 finalization

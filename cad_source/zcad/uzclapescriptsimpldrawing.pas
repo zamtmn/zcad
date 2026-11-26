@@ -1169,6 +1169,8 @@ begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx is TDeviceExtentionContext then
     PPointer(Result)^:=ctx.Manipulator.Root// TDeviceExtentionContext(ctx).FThisEntity
+  else if ctx is TEntityExtentionContext then
+    PPointer(Result)^:=(ctx as TEntityExtentionContext).FThisEntity
   else
     PPointer(Result)^:=nil;
 end;
